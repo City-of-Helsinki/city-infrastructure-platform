@@ -15,9 +15,7 @@ import raven
 from django.utils.translation import gettext_lazy as _  # NOQA
 
 # Set up .env file
-checkout_dir = (
-    environ.Path(__file__) - 2
-)
+checkout_dir = environ.Path(__file__) - 2
 assert os.path.exists(checkout_dir("manage.py"))
 
 parent_dir = checkout_dir.path("..")
@@ -34,7 +32,10 @@ env = environ.Env(
     SECRET_KEY=(str, ""),
     VAR_ROOT=(str, default_var_root),
     ALLOWED_HOSTS=(list, []),
-    DATABASE_URL=(str, 'postgis://city-infrastructure-platform:city-infrastructure-platform@localhost/city-infrastructure-platform'),
+    DATABASE_URL=(
+        str,
+        "postgis://city-infrastructure-platform:city-infrastructure-platform@localhost/city-infrastructure-platform",
+    ),
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
     SENTRY_DSN=(str, ""),
@@ -91,7 +92,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'city-infrastructure-platform.urls'
+ROOT_URLCONF = "city-infrastructure-platform.urls"
 
 TEMPLATES = [
     {
@@ -109,7 +110,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = 'city-infrastructure-platform.wsgi.application'
+WSGI_APPLICATION = "city-infrastructure-platform.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -121,7 +122,9 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
