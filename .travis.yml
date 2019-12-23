@@ -1,0 +1,25 @@
+sudo: false
+language: python
+services:
+  - postgresql
+
+cache:
+  directories:
+    - "$HOME/.cache/pip"
+env:
+  global:
+    - DEBUG=1
+    - DATABASE_URL=postgres://postgres:@localhost/city-infrastructure-platform
+
+python: 3.4
+node_js: 10
+install:
+  - pip install -U pip
+  - pip install -r requirements.txt -r requirements-dev.txt
+before_script:
+  - psql -c 'create database city-infrastructure-platform;' -U postgres
+
+script:
+  - flake8
+  - py.test -ra -vvv --cov
+  - isort -c

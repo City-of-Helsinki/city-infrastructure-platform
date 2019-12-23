@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+pip install prequ==1.4.7
+prequ sync requirements.txt
+./manage.py compilemessages
+./manage.py collectstatic --noinput
+./manage.py migrate --noinput
