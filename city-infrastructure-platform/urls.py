@@ -1,7 +1,8 @@
 from django.conf import settings
-from django.urls import include, path
 from django.contrib import admin
+from django.urls import include, path
 from rest_framework import routers
+
 from traffic_control import api as traffic_control_api
 
 router = routers.DefaultRouter()
