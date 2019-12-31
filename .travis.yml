@@ -1,25 +1,40 @@
-sudo: false
-language: python
-services:
-  - postgresql
+dist: xenial
 
-cache:
-  directories:
-    - "$HOME/.cache/pip"
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+
+cache: pip
+
+services:
+   - postgresql
+
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10-postgis-2.5
+      - postgresql-10-postgis-2.5-scripts
+
 env:
   global:
     - DEBUG=1
-    - DATABASE_URL=postgres://postgres:@localhost/city-infrastructure-platform
 
-python: 3.4
-node_js: 10
 install:
-  - pip install -U pip
-  - pip install -r requirements.txt -r requirements-dev.txt
+  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
+
 before_script:
-  - psql -c 'create database city-infrastructure-platform;' -U postgres
+  - psql -U postgres template1 -c 'create extension postgis;'
+  - psql -U postgres -c 'create database "city-infrastructure-platform";'
 
 script:
   - flake8
-  - py.test -ra -vvv --cov
+  - black --check .
   - isort -c
+  - pytest -ra -vvv --cov=.
+
+after_success:
+  - curl -s https://codecov.io/bash | bash
