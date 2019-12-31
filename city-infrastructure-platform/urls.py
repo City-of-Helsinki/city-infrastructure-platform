@@ -9,8 +9,7 @@ router = routers.DefaultRouter()
 
 # traffic sign plans
 router.register(
-    "trafficsignplans",
-    traffic_control_api.TrafficSignPlanViewSet,
+    "trafficsignplans", traffic_control_api.TrafficSignPlanViewSet,
 )
 
 urlpatterns = [

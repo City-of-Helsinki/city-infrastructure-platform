@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 
-from .models import TrafficSignPlan
+from .models import TrafficSignPlan, TrafficSignCode, Lifecycle
 
 
 @admin.register(TrafficSignPlan)
@@ -12,4 +12,26 @@ class TrafficSignPlanAdmin(admin.OSMGeoAdmin):
         "decision_date",
     )
     ordering = ("-created_at",)
+    actions = None
+
+
+@admin.register(TrafficSignCode)
+class TrafficSignCodeAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "code",
+        "description",
+    )
+    ordering = ("-code",)
+    actions = None
+
+
+@admin.register(Lifecycle)
+class LifecycleAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "status",
+        "description",
+    )
+    ordering = ("-status",)
     actions = None
