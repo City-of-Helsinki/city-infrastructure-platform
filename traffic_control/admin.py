@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 
-from .models import TrafficSignPlan, TrafficSignCode, Lifecycle
+from .models import Lifecycle, TrafficSignCode, TrafficSignPlan
 
 
 @admin.register(TrafficSignPlan)
