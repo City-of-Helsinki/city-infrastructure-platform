@@ -4,10 +4,11 @@ from django.urls import include, path
 from rest_framework import routers
 
 from traffic_control import api as traffic_control_api
+from users import api as users_api
 
 router = routers.DefaultRouter()
-
-# traffic sign plans
+router.register("users", users_api.UserViewSet)
+router.register("groups", users_api.GroupViewSet)
 router.register(
     "trafficsignplans", traffic_control_api.TrafficSignPlanViewSet,
 )

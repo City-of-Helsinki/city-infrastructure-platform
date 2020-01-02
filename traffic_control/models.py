@@ -15,6 +15,9 @@ class TrafficSignCode(models.Model):
         _("Description"), max_length=254, blank=True, null=True
     )
 
+    def __str__(self):
+        return "%s - %s" % (self.code, self.description)
+
 
 class Lifecycle(models.Model):
     id = models.UUIDField(
@@ -25,10 +28,13 @@ class Lifecycle(models.Model):
         _("Description"), max_length=254, blank=True, null=True
     )
 
+    def __str__(self):
+        return "%s" % self.description
+
 
 class Size(models.TextChoices):
     SMALL = "S", _("Small")
-    MEDIUM_LARGE = "M", _("Medium large")
+    MEDIUM_LARGE = "M", _("Medium")
     LARGE = "L", _("Large")
 
 
@@ -111,4 +117,4 @@ class TrafficSignPlan(models.Model):
     )
 
     def __str__(self):
-        return "%s %s" % (self.id, self.code)
+        return "%s %s %s" % (self.id, self.code, self.value)
