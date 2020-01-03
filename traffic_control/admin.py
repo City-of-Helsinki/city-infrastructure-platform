@@ -1,14 +1,12 @@
 from django.contrib.gis import admin
-from django.contrib.gis.geos import Point
 
 from .models import Lifecycle, TrafficSignCode, TrafficSignPlan
 
 
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(admin.OSMGeoAdmin):
-    pnt = Point(24.945831, 60.192059, srid=4326)  # Helsinki city coordinates
-    pnt.transform(900913)
-    default_lon, default_lat = pnt.coords
+    default_lon = 2776957.204335059  # Helsinki city coordinates
+    default_lat = 8442622.403718097
     default_zoom = 12
     list_display = (
         "id",
