@@ -34,7 +34,7 @@ class Lifecycle(models.Model):
 
 class Size(models.TextChoices):
     SMALL = "S", _("Small")
-    MEDIUM_LARGE = "M", _("Medium")
+    MEDIUM = "M", _("Medium")
     LARGE = "L", _("Large")
 
 
@@ -99,9 +99,7 @@ class TrafficSignPlan(models.Model):
         _("Decision link"), max_length=254, blank=True, null=True
     )
     plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
-    size = models.CharField(
-        max_length=1, choices=Size.choices, default=Size.MEDIUM_LARGE,
-    )
+    size = models.CharField(max_length=1, choices=Size.choices, default=Size.MEDIUM,)
     reflection_class = models.CharField(
         _("Reflection class"), max_length=32, blank=True, null=True
     )
