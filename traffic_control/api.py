@@ -1,13 +1,8 @@
 from rest_framework import serializers
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Lifecycle, TrafficSignPlan
-
-
-class LifecycleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lifecycle
-        fields = ["id", "code"]
+from .mixins import SoftDeleteMixin
+from .models import TrafficSignPlan
 
 
 class TrafficSignPlanSerializer(serializers.ModelSerializer):
@@ -16,7 +11,7 @@ class TrafficSignPlanSerializer(serializers.ModelSerializer):
         fields = ["id", "location_xy", "code", "decision_date", "lifecycle"]
 
 
-class TrafficSignPlanViewSet(ModelViewSet):
+class TrafficSignPlanViewSet(ModelViewSet, SoftDeleteMixin):
     serializer_class = TrafficSignPlanSerializer
     queryset = TrafficSignPlan.objects.all().order_by("-created_at")
 
