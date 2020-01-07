@@ -11,6 +11,8 @@ class TrafficSignPlanAdmin(admin.OSMGeoAdmin):
     list_display = (
         "id",
         "code",
+        "value",
+        "lifecycle",
         "location_xy",
         "decision_date",
     )
