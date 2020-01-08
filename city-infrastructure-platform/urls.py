@@ -1,9 +1,18 @@
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from rest_framework import routers
+
+from traffic_control import api as traffic_control_api
+
+router = routers.DefaultRouter()
+router.register(
+    "traffic-sign-plans", traffic_control_api.TrafficSignPlanViewSet,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/", include((router.urls, "api"), namespace="api")),
 ]
 
 if settings.DEBUG:
