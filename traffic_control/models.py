@@ -15,6 +15,14 @@ class Structure(models.TextChoices):
     OTHER = "OTHER", _("Other")
 
 
+class InstallationStatus(models.TextChoices):
+    ACTIVE = "ACTIVE", _("Active")
+    COVERED = "COVERED", _("Covered")
+    FALLEN = "FALLEN", _("Fallen")
+    MISSING = "MISSING", _("Missing")
+    OTHER = "OTHER", _("Other")
+
+
 class Size(models.TextChoices):
     SMALL = "S", _("Small")
     MEDIUM = "M", _("Medium")
@@ -32,9 +40,9 @@ class Reflection(models.TextChoices):
     R3 = "R3", _("r3")
 
 
-class Color(models.TextChoices):
-    BLUE = "BLUE", _("Blue")
-    YELLOW = "YELLOW", _("Yellow")
+class Color(models.IntegerChoices):
+    BLUE = 1, _("Blue")
+    YELLOW = 2, _("Yellow")
 
 
 class LocationSpecifier(models.IntegerChoices):
@@ -44,6 +52,14 @@ class LocationSpecifier(models.IntegerChoices):
     MIDDLE = 4, _("Middle")
     VERTICAL = 5, _("Vertical")
     OUTSIDE = 6, _("Outside")
+
+
+class Condition(models.IntegerChoices):
+    VERY_BAD = 1, _("Very bad")
+    BAD = 2, _("Bad")
+    AVERAGE = 3, _("Average")
+    GOOD = 4, _("Good")
+    VERY_GOOD = 5, _("Very good")
 
 
 class TrafficSignCode(models.Model):
@@ -86,7 +102,7 @@ class TrafficSignPlan(models.Model):
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
-    direction = models.IntegerField(_("Direction"), blank=True, null=True)
+    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
     code = models.ForeignKey(TrafficSignCode, on_delete=models.CASCADE)
     value = models.IntegerField(_("Traffic sign code value"), blank=True, null=True)
@@ -100,17 +116,17 @@ class TrafficSignPlan(models.Model):
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
     created_by = models.ForeignKey(
         get_user_model(),
-        related_name="created_by_trafficsignplan_set",
+        related_name="created_by_traffic_sign_plan_set",
         on_delete=models.CASCADE,
     )
     updated_by = models.ForeignKey(
         get_user_model(),
-        related_name="updated_by_trafficsignplan_set",
+        related_name="updated_by_traffic_sign_plan_set",
         on_delete=models.CASCADE,
     )
     deleted_by = models.ForeignKey(
         get_user_model(),
-        related_name="deleted_by_trafficsignplan_set",
+        related_name="deleted_by_traffic_sign_plan_set",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -141,7 +157,7 @@ class TrafficSignPlan(models.Model):
     surface_class = models.CharField(
         max_length=6, choices=Surface.choices, default=Surface.DIRECT
     )
-    color = models.CharField(max_length=10, choices=Color.choices, default=Color.BLUE)
+    color = models.IntegerField(choices=Color.choices, default=Color.BLUE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
@@ -157,6 +173,104 @@ class TrafficSignPlan(models.Model):
 
     class Meta:
         db_table = "traffic_sign_plan"
+
+    def __str__(self):
+        return "%s %s %s" % (self.id, self.code, self.value)
+
+
+class TrafficSignReal(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    traffic_sign_plan = models.ForeignKey(
+        TrafficSignPlan, on_delete=models.CASCADE, blank=True, null=True
+    )
+    location_xy = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    height = models.DecimalField(
+        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
+    code = models.ForeignKey(TrafficSignCode, on_delete=models.CASCADE)
+    value = models.IntegerField(_("Traffic sign code value"), blank=True, null=True)
+    structure_id = models.IntegerField(_("Structure id"), blank=True, null=True)
+    structure_type = models.CharField(
+        max_length=10, choices=Structure.choices, default=Structure.OTHER
+    )
+    lifecycle = models.ForeignKey(Lifecycle, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
+    created_by = models.ForeignKey(
+        get_user_model(),
+        related_name="created_by_traffic_sign_real_set",
+        on_delete=models.CASCADE,
+    )
+    updated_by = models.ForeignKey(
+        get_user_model(),
+        related_name="updated_by_traffic_sign_real_set",
+        on_delete=models.CASCADE,
+    )
+    deleted_by = models.ForeignKey(
+        get_user_model(),
+        related_name="deleted_by_traffic_sign_real_set",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    seasonal_validity_period_start = models.DateField(
+        _("Seasonal validity period start"), blank=True, null=True
+    )
+    seasonal_validity_period_end = models.DateField(
+        _("Seasonal validity period end"), blank=True, null=True
+    )
+    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    manufacturer = models.CharField(
+        _("Manufacturer"), max_length=254, blank=True, null=True
+    )
+    rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
+    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    installation_date = models.DateField(_("Installation date"))
+    installation_status = models.CharField(
+        max_length=10,
+        choices=InstallationStatus.choices,
+        default=InstallationStatus.ACTIVE,
+    )
+    installation_id = models.CharField(_("Installation id"), max_length=254)
+    installation_details = models.CharField(
+        _("Installation details"), max_length=254, blank=True, null=True
+    )
+    condition = models.IntegerField(choices=Condition.choices, default=Condition.GOOD)
+    decision_id = models.CharField(_("Decision id"), max_length=254)
+    size = models.CharField(max_length=1, choices=Size.choices, default=Size.MEDIUM)
+    reflection_class = models.CharField(
+        max_length=2, choices=Reflection.choices, default=Reflection.R1
+    )
+    surface_class = models.CharField(
+        max_length=6, choices=Surface.choices, default=Surface.DIRECT
+    )
+    color = models.IntegerField(choices=Color.choices, default=Color.BLUE)
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
+    lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+    location_specifier = models.IntegerField(
+        choices=LocationSpecifier.choices,
+        default=LocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
+    )
+    affect_area = models.PolygonField(
+        _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
+    )
+
+    class Meta:
+        db_table = "traffic_sign_real"
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.code, self.value)
