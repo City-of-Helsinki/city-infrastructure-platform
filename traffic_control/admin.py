@@ -1,6 +1,9 @@
 from django.contrib.gis import admin
+from django.utils.translation import gettext_lazy as _
 
 from .models import Lifecycle, TrafficSignCode, TrafficSignPlan, TrafficSignReal
+
+admin.site.site_header = _("City Infrastructure Platform Administration")
 
 
 @admin.register(TrafficSignPlan)

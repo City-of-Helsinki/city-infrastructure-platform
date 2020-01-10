@@ -6,11 +6,16 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from traffic_control.models import Lifecycle, TrafficSignCode, TrafficSignPlan
+from traffic_control.models import (
+    Lifecycle,
+    TrafficSignCode,
+    TrafficSignPlan,
+    TrafficSignReal,
+)
 from users.models import User
 
 
-class TrafficSignPlanTests(APITestCase):
+class TrafficControlAPIBaseTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="testuser", password="testpw")
         self.client.login(username="testuser", password="testpw")
@@ -30,6 +35,8 @@ class TrafficSignPlanTests(APITestCase):
             25496366.48055263, 6675573.680776692, srid=settings.SRID
         )
 
+
+class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
     def test_get_all_traffic_sign_plans(self):
         """
         Ensure we can get all traffic sign plan objects.
@@ -123,6 +130,117 @@ class TrafficSignPlanTests(APITestCase):
             code=self.test_code,
             location_xy=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            lifecycle=self.test_lifecycle,
+            created_by=self.user,
+            updated_by=self.user,
+        )
+
+
+class TrafficSignRealTests(TrafficControlAPIBaseTestCase):
+    def test_get_all_traffic_sign_reals(self):
+        """
+        Ensure we can get all traffic sign real objects.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_traffic_sign_real()
+        response = self.client.get(reverse("api:trafficsignreal-list"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+    def test_get_traffic_sign_real_detail(self):
+        """
+        Ensure we can get one traffic sign real object.
+        """
+        traffic_sign_real = self.__create_test_traffic_sign_real()
+        response = self.client.get(
+            "%s%s/" % (reverse("api:trafficsignreal-list"), str(traffic_sign_real.id))
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
+
+    def test_create_traffic_sign_plan(self):
+        """
+        Ensure we can create a new traffic sign real object.
+        """
+        data = {
+            "code": self.test_code.id,
+            "location_xy": self.test_point.ewkt,
+            "installation_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.id,
+        }
+        response = self.client.post(
+            reverse("api:trafficsignreal-list"), data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(TrafficSignReal.objects.count(), 1)
+        traffic_sign_real = TrafficSignReal.objects.first()
+        self.assertEqual(traffic_sign_real.code.id, data["code"])
+        self.assertEqual(traffic_sign_real.location_xy.ewkt, data["location_xy"])
+        self.assertEqual(
+            traffic_sign_real.installation_date.strftime("%Y-%m-%d"),
+            data["installation_date"],
+        )
+        self.assertEqual(traffic_sign_real.lifecycle.id, data["lifecycle"])
+
+    def test_update_traffic_sign_real(self):
+        """
+        Ensure we can update existing traffic sign real object.
+        """
+        traffic_sign_real = self.__create_test_traffic_sign_real()
+        data = {
+            "code": self.test_code_2.id,
+            "location_xy": self.test_point.ewkt,
+            "installation_date": "2020-01-03",
+            "lifecycle": self.test_lifecycle_2.id,
+        }
+        response = self.client.put(
+            "%s%s/" % (reverse("api:trafficsignreal-list"), str(traffic_sign_real.id)),
+            data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(TrafficSignReal.objects.count(), 1)
+        traffic_sign_real = TrafficSignReal.objects.first()
+        self.assertEqual(traffic_sign_real.code.id, data["code"])
+        self.assertEqual(traffic_sign_real.location_xy.ewkt, data["location_xy"])
+        self.assertEqual(
+            traffic_sign_real.installation_date.strftime("%Y-%m-%d"),
+            data["installation_date"],
+        )
+        self.assertEqual(traffic_sign_real.lifecycle.id, data["lifecycle"])
+
+    def test_delete_traffic_sign_real_detail(self):
+        """
+        Ensure we can soft-delete one traffic sign real object.
+        """
+        traffic_sign_real = self.__create_test_traffic_sign_real()
+        response = self.client.delete(
+            "%s%s/" % (reverse("api:trafficsignreal-list"), str(traffic_sign_real.id))
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(TrafficSignReal.objects.count(), 1)
+        deleted_traffic_sign_real = TrafficSignReal.objects.get(
+            id=str(traffic_sign_real.id)
+        )
+        self.assertEqual(deleted_traffic_sign_real.id, traffic_sign_real.id)
+        self.assertEqual(deleted_traffic_sign_real.deleted_by, self.user)
+        self.assertTrue(deleted_traffic_sign_real.deleted_at)
+
+    def __create_test_traffic_sign_real(self):
+        traffic_sign_plan = TrafficSignPlan.objects.create(
+            code=self.test_code,
+            location_xy=self.test_point,
+            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            lifecycle=self.test_lifecycle,
+            created_by=self.user,
+            updated_by=self.user,
+        )
+        return TrafficSignReal.objects.create(
+            traffic_sign_plan=traffic_sign_plan,
+            code=self.test_code,
+            location_xy=self.test_point,
+            installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             created_by=self.user,
             updated_by=self.user,

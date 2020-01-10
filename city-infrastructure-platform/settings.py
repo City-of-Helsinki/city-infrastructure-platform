@@ -2,10 +2,10 @@
 Django settings for city-infrastructure-platform project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/2.1/topics/settings/
+https://docs.djangoproject.com/en/3.0/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/2.1/ref/settings/
+https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
@@ -72,10 +72,9 @@ THIRD_PARTY_APPS = [
     "raven.contrib.django.raven_compat",
     "django_extensions",
     "rest_framework",
-    "rest_framework.authtoken",
     "corsheaders",
 ]
-LOCAL_APPS = ["users", "traffic_control"]
+LOCAL_APPS = ["users.apps.UsersConfig", "traffic_control.apps.TrafficControlConfig"]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 AUTH_USER_MODEL = "users.User"
@@ -89,6 +88,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "city-infrastructure-platform.urls"
@@ -112,13 +112,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "city-infrastructure-platform.wsgi.application"
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -130,8 +130,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
-LANGUAGE_CODE = "en"
+# https://docs.djangoproject.com/en/3.0/topics/i18n/
+LANGUAGE_CODE = "fi"
 LANGUAGES = [("fi", _("Finnish")), ("en", _("English"))]
 TIME_ZONE = "Europe/Helsinki"
 USE_I18N = True
@@ -139,7 +139,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 var_root = env.path("VAR_ROOT")
 MEDIA_ROOT = var_root("media")
