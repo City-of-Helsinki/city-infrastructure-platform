@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  db:
+    image: mdillon/postgis:11-alpine
+    environment:
+        POSTGRES_USER: city-infrastructure-platform
+        POSTGRES_PASSWORD: city-infrastructure-platform
+        POSTGRES_DB: city-infrastructure-platform
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+  api:
+    build:
+      target: development
+      context: "."
+    volumes:
+      - .:/city-infrastructure-platform
+    environment:
+      - DEBUG=1
+      - DEV_SERVER=1
+      - APPLY_MIGRATIONS=1
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5433
+      - DATABASE_URL=postgis://city-infrastructure-platform:city-infrastructure-platform@db/city-infrastructure-platform
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    depends_on:
+      - db
+
+volumes:
+    db_data:
+
