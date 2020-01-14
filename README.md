@@ -67,3 +67,22 @@ Copy .env.example file as .env: `cp .env.example .env`
 * Enable debug `echo 'DEBUG=True' >> .env`
 * Run `python manage.py migrate`
 * Run `python manage.py runserver 0.0.0.0:8000`
+
+#### Docker
+
+Build Docker image: `docker build -t city-infrastructure-platform-api .`
+
+Run container: `docker run -d -p 8000:8000 -e DEBUG=1 city-infrastructure-platform-api`
+
+**Available configs (environment variables):**
+
+To set any of the settings below, use the `-e <ENV_VAR>=<VALUE>` flag when running the Docker container.
+
+* DATABASE_HOST: Set to the host address of the PostgreSQL (with PostGIS) database server, default is empty value.
+* DATABASE_PORT: Set to port of the database server, default is 5432.
+* DEV_SERVER: Set to `1` to run `manage.py runserver` instead of `uwsgi`, default is empty value.
+* APPLY_MIGRATIONS: Set to `1` to run `manage.py migrate` on startup, default is empty value.
+
+### Docker Compose
+
+Run the application `docker-compose up`
