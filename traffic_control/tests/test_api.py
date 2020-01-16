@@ -168,6 +168,8 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase):
             "location_xy": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.id,
+            "installation_id": 123,
+            "allu_decision_id": 456,
         }
         response = self.client.post(
             reverse("api:trafficsignreal-list"), data, format="json"
@@ -193,6 +195,8 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase):
             "location_xy": self.test_point.ewkt,
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.id,
+            "installation_id": 123,
+            "allu_decision_id": 456,
         }
         response = self.client.put(
             "%s%s/" % (reverse("api:trafficsignreal-list"), str(traffic_sign_real.id)),

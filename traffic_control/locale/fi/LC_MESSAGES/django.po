@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-13 15:15+0200\n"
+"POT-Creation-Date: 2020-01-16 11:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -260,7 +260,7 @@ msgstr "Lisätieto"
 msgid "Decision date"
 msgstr "Päätöspvm"
 
-#: traffic_control/models.py:170 traffic_control/models.py:298
+#: traffic_control/models.py:170
 msgid "Decision id"
 msgstr "Päätöksen tunnus"
 
@@ -334,7 +334,7 @@ msgstr "Asennuksen tila"
 
 #: traffic_control/models.py:291
 msgid "Installation id"
-msgstr "Asennuksen tunnistenumero"
+msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
 
 #: traffic_control/models.py:293
 msgid "Installation details"
@@ -343,6 +343,10 @@ msgstr "Asennuksen lisätiedot"
 #: traffic_control/models.py:296
 msgid "Condition"
 msgstr "Kunto"
+
+#: traffic_control/models.py:298
+msgid "Decision id (Allu)"
+msgstr "Lupapäätöksen tunnistenumero (Allu)"
 
 #: traffic_control/models.py:325
 msgid "Traffic Sign Real"
