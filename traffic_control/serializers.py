@@ -6,10 +6,12 @@ from traffic_control.models import TrafficSignPlan, TrafficSignReal
 class TrafficSignPlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrafficSignPlan
-        fields = ["id", "location_xy", "code", "decision_date", "lifecycle"]
+        fields = "__all__"
+        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
 
 class TrafficSignRealSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrafficSignReal
-        fields = ["id", "location_xy", "code", "installation_date", "lifecycle"]
+        fields = "__all__"
+        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")

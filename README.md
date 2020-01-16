@@ -10,12 +10,12 @@ City Infrastructure Platform REST-API backend application.
 
 Install PostgreSQL and PostGIS.
 
-    # Ubuntu 16.04
+    # Ubuntu 18.04
     sudo apt-get install python3-dev libpq-dev postgresql postgis
 
 #### GeoDjango extra packages
 
-    # Ubuntu 16.04
+    # Ubuntu 18.04
     sudo apt-get install binutils libproj-dev gdal-bin
 
 ### Creating a Python virtualenv
@@ -68,7 +68,7 @@ Copy .env.example file as .env: `cp .env.example .env`
 * Run `python manage.py migrate`
 * Run `python manage.py runserver 0.0.0.0:8000`
 
-#### Docker
+### Docker
 
 Build Docker image: `docker build -t city-infrastructure-platform-api .`
 

@@ -295,7 +295,7 @@ class TrafficSignReal(models.Model):
     condition = models.IntegerField(
         _("Condition"), choices=Condition.choices, default=Condition.GOOD
     )
-    decision_id = models.CharField(_("Decision id"), max_length=254)
+    allu_decision_id = models.CharField(_("Decision id (Allu)"), max_length=254)
     size = models.CharField(
         _("Size"), max_length=1, choices=Size.choices, default=Size.MEDIUM
     )
