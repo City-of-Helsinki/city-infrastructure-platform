@@ -5,61 +5,100 @@ from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 
+PORTAL = "PORTAL"
+POST = "POST"
+WALL = "WALL"
+WIRE = "WIRE"
+BRIDGE = "BRIDGE"
+OTHER = "OTHER"
 
-class Structure(models.TextChoices):
-    PORTAL = "PORTAL", _("Portal")
-    POST = "POST", _("Post")
-    WALL = "WALL", _("Wall")
-    WIRE = "WIRE", _("Wire")
-    BRIDGE = "BRIDGE", _("Bridge")
-    OTHER = "OTHER", _("Other")
+MOUNTS = [
+    (PORTAL, _("Portal")),
+    (POST, _("Post")),
+    (WALL, _("Wall")),
+    (WIRE, _("Wire")),
+    (BRIDGE, _("Bridge")),
+    (OTHER, _("Other")),
+]
 
+ACTIVE = "ACTIVE"
+COVERED = "COVERED"
+FALLEN = "FALLEN"
+MISSING = "MISSING"
 
-class InstallationStatus(models.TextChoices):
-    ACTIVE = "ACTIVE", _("Active")
-    COVERED = "COVERED", _("Covered")
-    FALLEN = "FALLEN", _("Fallen")
-    MISSING = "MISSING", _("Missing")
-    OTHER = "OTHER", _("Other")
+INSTALLATION_STATUSES = [
+    (ACTIVE, _("Active")),
+    (COVERED, _("Covered")),
+    (FALLEN, _("Fallen")),
+    (MISSING, _("Missing")),
+    (OTHER, _("Other")),
+]
 
+SMALL = "S"
+MEDIUM = "M"
+LARGE = "L"
 
-class Size(models.TextChoices):
-    SMALL = "S", _("Small")
-    MEDIUM = "M", _("Medium")
-    LARGE = "L", _("Large")
+SIZES = [
+    (SMALL, _("Small")),
+    (MEDIUM, _("Medium")),
+    (LARGE, _("Large")),
+]
 
+CONVEX = "CONVEX"
+FLAT = "FLAT"
 
-class Surface(models.TextChoices):
-    CONVEX = "CONVEX", _("Convex")
-    DIRECT = "FLAT", _("Flat")
+SURFACES = [
+    (CONVEX, _("Convex")),
+    (FLAT, _("Flat")),
+]
 
+R1 = "R1"
+R2 = "R2"
+R3 = "R3"
 
-class Reflection(models.TextChoices):
-    R1 = "R1", _("r1")
-    R2 = "R2", _("r2")
-    R3 = "R3", _("r3")
+REFLECTIONS = [
+    (R1, _("r1")),
+    (R2, _("r2")),
+    (R3, _("r3")),
+]
 
+BLUE = 1
+YELLOW = 2
 
-class Color(models.IntegerChoices):
-    BLUE = 1, _("Blue")
-    YELLOW = 2, _("Yellow")
+COLORS = [
+    (BLUE, _("Blue")),
+    (YELLOW, _("Yellow")),
+]
 
+RIGHT = 1
+LEFT = 2
+ABOVE = 3
+MIDDLE = 4
+VERTICAL = 5
+OUTSIDE = 6
 
-class LocationSpecifier(models.IntegerChoices):
-    RIGHT = 1, _("Right side")
-    LEFT = 2, _("Left side")
-    ABOVE = 3, _("Above")
-    MIDDLE = 4, _("Middle")
-    VERTICAL = 5, _("Vertical")
-    OUTSIDE = 6, _("Outside")
+LOCATION_SPECIFIERS = [
+    (RIGHT, _("Right side")),
+    (LEFT, _("Left side")),
+    (ABOVE, _("Above")),
+    (MIDDLE, _("Middle")),
+    (VERTICAL, _("Vertical")),
+    (OUTSIDE, _("Outside")),
+]
 
+VERY_BAD = 1
+BAD = 2
+AVERAGE = 3
+GOOD = 4
+VERY_GOOD = 5
 
-class Condition(models.IntegerChoices):
-    VERY_BAD = 1, _("Very bad")
-    BAD = 2, _("Bad")
-    AVERAGE = 3, _("Average")
-    GOOD = 4, _("Good")
-    VERY_GOOD = 5, _("Very good")
+CONDITIONS = [
+    (VERY_BAD, _("Very bad")),
+    (BAD, _("Bad")),
+    (AVERAGE, _("Average")),
+    (GOOD, _("Good")),
+    (VERY_GOOD, _("Very good")),
+]
 
 
 class TrafficSignCode(models.Model):
@@ -118,12 +157,9 @@ class TrafficSignPlan(models.Model):
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    structure_id = models.IntegerField(_("Structure id"), blank=True, null=True)
-    structure_type = models.CharField(
-        _("Structure"),
-        max_length=10,
-        choices=Structure.choices,
-        default=Structure.OTHER,
+    mount_id = models.IntegerField(_("Mount id"), blank=True, null=True)
+    mount_type = models.CharField(
+        _("Mount"), max_length=10, choices=MOUNTS, default=OTHER,
     )
     lifecycle = models.ForeignKey(
         Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
@@ -170,23 +206,21 @@ class TrafficSignPlan(models.Model):
         _("Decision id"), max_length=254, blank=True, null=True
     )
     plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
-    size = models.CharField(
-        _("Size"), max_length=1, choices=Size.choices, default=Size.MEDIUM
-    )
+    size = models.CharField(_("Size"), max_length=1, choices=SIZES, default=MEDIUM)
     reflection_class = models.CharField(
-        _("Reflection"), max_length=2, choices=Reflection.choices, default=Reflection.R1
+        _("Reflection"), max_length=2, choices=REFLECTIONS, default=R1
     )
     surface_class = models.CharField(
-        _("Surface"), max_length=6, choices=Surface.choices, default=Surface.DIRECT
+        _("Surface"), max_length=6, choices=SURFACES, default=FLAT
     )
-    color = models.IntegerField(_("Color"), choices=Color.choices, default=Color.BLUE)
+    color = models.IntegerField(_("Color"), choices=COLORS, default=BLUE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
     location_specifier = models.IntegerField(
         _("Location specifier"),
-        choices=LocationSpecifier.choices,
-        default=LocationSpecifier.RIGHT,
+        choices=LOCATION_SPECIFIERS,
+        default=RIGHT,
         blank=True,
         null=True,
     )
@@ -230,12 +264,9 @@ class TrafficSignReal(models.Model):
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    structure_id = models.IntegerField(_("Structure id"), blank=True, null=True)
-    structure_type = models.CharField(
-        _("Structure"),
-        max_length=10,
-        choices=Structure.choices,
-        default=Structure.OTHER,
+    mount_id = models.IntegerField(_("Mount id"), blank=True, null=True)
+    mount_type = models.CharField(
+        _("Mount"), max_length=10, choices=MOUNTS, default=OTHER,
     )
     lifecycle = models.ForeignKey(
         Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
@@ -285,34 +316,30 @@ class TrafficSignReal(models.Model):
     installation_status = models.CharField(
         _("Installation status"),
         max_length=10,
-        choices=InstallationStatus.choices,
-        default=InstallationStatus.ACTIVE,
+        choices=INSTALLATION_STATUSES,
+        default=ACTIVE,
     )
     installation_id = models.CharField(_("Installation id"), max_length=254)
     installation_details = models.CharField(
         _("Installation details"), max_length=254, blank=True, null=True
     )
-    condition = models.IntegerField(
-        _("Condition"), choices=Condition.choices, default=Condition.GOOD
-    )
+    condition = models.IntegerField(_("Condition"), choices=CONDITIONS, default=GOOD)
     allu_decision_id = models.CharField(_("Decision id (Allu)"), max_length=254)
-    size = models.CharField(
-        _("Size"), max_length=1, choices=Size.choices, default=Size.MEDIUM
-    )
+    size = models.CharField(_("Size"), max_length=1, choices=SIZES, default=MEDIUM)
     reflection_class = models.CharField(
-        _("Reflection"), max_length=2, choices=Reflection.choices, default=Reflection.R1
+        _("Reflection"), max_length=2, choices=REFLECTIONS, default=R1
     )
     surface_class = models.CharField(
-        _("Surface"), max_length=6, choices=Surface.choices, default=Surface.DIRECT
+        _("Surface"), max_length=6, choices=SURFACES, default=FLAT
     )
-    color = models.IntegerField(_("Color"), choices=Color.choices, default=Color.BLUE)
+    color = models.IntegerField(_("Color"), choices=COLORS, default=BLUE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
     location_specifier = models.IntegerField(
         _("Location specifier"),
-        choices=LocationSpecifier.choices,
-        default=LocationSpecifier.RIGHT,
+        choices=LOCATION_SPECIFIERS,
+        default=RIGHT,
         blank=True,
         null=True,
     )
