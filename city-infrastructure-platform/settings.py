@@ -73,6 +73,7 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     "rest_framework",
     "corsheaders",
+    "drf_yasg",
 ]
 LOCAL_APPS = ["users.apps.UsersConfig", "traffic_control.apps.TrafficControlConfig"]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
