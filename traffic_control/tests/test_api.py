@@ -8,6 +8,8 @@ from rest_framework.test import APITestCase
 
 from traffic_control.models import (
     Lifecycle,
+    MountPlan,
+    MountType,
     TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
@@ -31,6 +33,8 @@ class TrafficControlAPIBaseTestCase(APITestCase):
         self.test_code_2 = TrafficSignCode.objects.create(
             code="A12", description="Weight limit"
         )
+        self.test_type = MountType.PORTAL
+        self.test_type_2 = MountType.WALL
         self.test_point = Point(
             25496366.48055263, 6675573.680776692, srid=settings.SRID
         )
@@ -245,6 +249,102 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase):
             code=self.test_code,
             location_xy=self.test_point,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            lifecycle=self.test_lifecycle,
+            created_by=self.user,
+            updated_by=self.user,
+        )
+
+
+class MountPlanTests(TrafficControlAPIBaseTestCase):
+    def test_get_all_mount_plans(self):
+        """
+        Ensure we can get all mount plan objects.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_mount_plan()
+        response = self.client.get(reverse("api:mountplan-list"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+    def test_get_mount_plan_detail(self):
+        """
+        Ensure we can get one mount plan object.
+        """
+        mount_plan = self.__create_test_mount_plan()
+        response = self.client.get(
+            "%s%s/" % (reverse("api:mountplan-list"), str(mount_plan.id))
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(mount_plan.id))
+
+    def test_create_mount_plan(self):
+        """
+        Ensure we can create a new mount plan object.
+        """
+        data = {
+            "type": self.test_type.value,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.id,
+        }
+        response = self.client.post(reverse("api:mountplan-list"), data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(MountPlan.objects.count(), 1)
+        mount_plan = MountPlan.objects.first()
+        self.assertEqual(mount_plan.type.value, data["type"])
+        self.assertEqual(mount_plan.location.ewkt, data["location"])
+        self.assertEqual(
+            mount_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(mount_plan.lifecycle.id, data["lifecycle"])
+
+    def test_update_mount_plan(self):
+        """
+        Ensure we can update existing mount plan object.
+        """
+        mount_plan = self.__create_test_mount_plan()
+        data = {
+            "type": self.test_type_2.value,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-03",
+            "lifecycle": self.test_lifecycle_2.id,
+        }
+        response = self.client.put(
+            "%s%s/" % (reverse("api:mountplan-list"), str(mount_plan.id)),
+            data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(MountPlan.objects.count(), 1)
+        mount_plan = MountPlan.objects.first()
+        self.assertEqual(mount_plan.type.value, data["type"])
+        self.assertEqual(mount_plan.location.ewkt, data["location"])
+        self.assertEqual(
+            mount_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(mount_plan.lifecycle.id, data["lifecycle"])
+
+    def test_delete_mount_plan_detail(self):
+        """
+        Ensure we can soft-delete one mount plan object.
+        """
+        mount_plan = self.__create_test_mount_plan()
+        response = self.client.delete(
+            "%s%s/" % (reverse("api:mountplan-list"), str(mount_plan.id))
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(MountPlan.objects.count(), 1)
+        deleted_mount_plan = MountPlan.objects.get(id=str(mount_plan.id))
+        self.assertEqual(deleted_mount_plan.id, mount_plan.id)
+        self.assertEqual(deleted_mount_plan.deleted_by, self.user)
+        self.assertTrue(deleted_mount_plan.deleted_at)
+
+    def __create_test_mount_plan(self):
+        return MountPlan.objects.create(
+            type=self.test_type,
+            location=self.test_point,
+            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             created_by=self.user,
             updated_by=self.user,

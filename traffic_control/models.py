@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
 
-class Mount(Enum):
+class MountType(Enum):
     PORTAL = "PORTAL"
     POST = "POST"
     WALL = "WALL"
@@ -21,6 +21,13 @@ class Mount(Enum):
         WALL = _("Wall")
         WIRE = _("Wire")
         BRIDGE = _("Bridge")
+        OTHER = _("Other")
+
+
+class PortalMountType(Enum):
+    OTHER = "OTHER"
+
+    class Labels:
         OTHER = _("Other")
 
 
@@ -147,6 +154,82 @@ class Lifecycle(models.Model):
         return "%s" % self.description
 
 
+class MountPlan(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
+    height = models.DecimalField(
+        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    type = EnumField(
+        MountType, verbose_name=_("Mount type"), max_length=10, default=MountType.OTHER
+    )
+    portal_type = EnumField(
+        PortalMountType,
+        verbose_name=_("Portal mount type"),
+        max_length=10,
+        default=MountType.OTHER,
+        blank=True,
+        null=True,
+    )
+    lifecycle = models.ForeignKey(
+        Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
+    created_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Created by"),
+        related_name="created_by_mount_plan_set",
+        on_delete=models.CASCADE,
+    )
+    updated_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Updated by"),
+        related_name="updated_by_mount_plan_set",
+        on_delete=models.CASCADE,
+    )
+    deleted_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Deleted by"),
+        related_name="deleted_by_mount_plan_set",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    decision_date = models.DateField(_("Decision date"))
+    decision_id = models.CharField(
+        _("Decision id"), max_length=254, blank=True, null=True
+    )
+    plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
+    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
+    electric_accountable = models.CharField(
+        _("Electric accountable"), max_length=254, blank=True, null=True
+    )
+    cross_bar_length = models.DecimalField(
+        _("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    foldable = models.BooleanField(_("Foldable"), blank=True, null=True)
+
+    class Meta:
+        db_table = "mount_plan"
+        verbose_name = _("Mount Plan")
+        verbose_name_plural = _("Mount Plans")
+
+    def __str__(self):
+        return "%s %s" % (self.id, self.type)
+
+
 class TrafficSignPlan(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -167,9 +250,20 @@ class TrafficSignPlan(models.Model):
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    mount_id = models.IntegerField(_("Mount id"), blank=True, null=True)
+    mount = models.ForeignKey(
+        MountPlan,
+        verbose_name=_("Mount Plan"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     mount_type = EnumField(
-        Mount, verbose_name=_("Mount"), max_length=10, default=Mount.OTHER
+        MountType,
+        verbose_name=_("Mount type"),
+        max_length=10,
+        default=MountType.OTHER,
+        blank=True,
+        null=True,
     )
     lifecycle = models.ForeignKey(
         Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
@@ -276,7 +370,7 @@ class TrafficSignReal(models.Model):
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
     mount_id = models.IntegerField(_("Mount id"), blank=True, null=True)
     mount_type = EnumField(
-        Mount, verbose_name=_("Mount"), max_length=10, default=Mount.OTHER
+        MountType, verbose_name=_("Mount"), max_length=10, default=MountType.OTHER
     )
     lifecycle = models.ForeignKey(
         Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE

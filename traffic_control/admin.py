@@ -1,7 +1,13 @@
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Lifecycle, TrafficSignCode, TrafficSignPlan, TrafficSignReal
+from .models import (
+    Lifecycle,
+    MountPlan,
+    TrafficSignCode,
+    TrafficSignPlan,
+    TrafficSignReal,
+)
 
 admin.site.site_header = _("City Infrastructure Platform Administration")
 
@@ -35,6 +41,21 @@ class TrafficSignRealAdmin(admin.OSMGeoAdmin):
         "lifecycle",
         "location_xy",
         "installation_date",
+    )
+    ordering = ("-created_at",)
+    actions = None
+
+
+@admin.register(MountPlan)
+class MountPlanAdmin(admin.OSMGeoAdmin):
+    default_lon = 2776957.204335059  # Helsinki city coordinates
+    default_lat = 8442622.403718097
+    default_zoom = 12
+    list_display = (
+        "id",
+        "type",
+        "lifecycle",
+        "location",
     )
     ordering = ("-created_at",)
     actions = None
