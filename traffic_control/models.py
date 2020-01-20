@@ -4,62 +4,111 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
+from enumfields import Enum, EnumField, EnumIntegerField
 
 
-class Structure(models.TextChoices):
-    PORTAL = "PORTAL", _("Portal")
-    POST = "POST", _("Post")
-    WALL = "WALL", _("Wall")
-    WIRE = "WIRE", _("Wire")
-    BRIDGE = "BRIDGE", _("Bridge")
-    OTHER = "OTHER", _("Other")
+class Mount(Enum):
+    PORTAL = "PORTAL"
+    POST = "POST"
+    WALL = "WALL"
+    WIRE = "WIRE"
+    BRIDGE = "BRIDGE"
+    OTHER = "OTHER"
+
+    class Labels:
+        PORTAL = _("Portal")
+        POST = _("Post")
+        WALL = _("Wall")
+        WIRE = _("Wire")
+        BRIDGE = _("Bridge")
+        OTHER = _("Other")
 
 
-class InstallationStatus(models.TextChoices):
-    ACTIVE = "ACTIVE", _("Active")
-    COVERED = "COVERED", _("Covered")
-    FALLEN = "FALLEN", _("Fallen")
-    MISSING = "MISSING", _("Missing")
-    OTHER = "OTHER", _("Other")
+class InstallationStatus(Enum):
+    ACTIVE = "ACTIVE"
+    COVERED = "COVERED"
+    FALLEN = "FALLEN"
+    MISSING = "MISSING"
+    OTHER = "OTHER"
+
+    class Labels:
+        ACTIVE = _("Active")
+        COVERED = _("Covered")
+        FALLEN = _("Fallen")
+        MISSING = _("Missing")
+        OTHER = _("Other")
 
 
-class Size(models.TextChoices):
-    SMALL = "S", _("Small")
-    MEDIUM = "M", _("Medium")
-    LARGE = "L", _("Large")
+class Size(Enum):
+    SMALL = "S"
+    MEDIUM = "M"
+    LARGE = "L"
+
+    class Labels:
+        SMALL = _("Small")
+        MEDIUM = _("Medium")
+        LARGE = _("Large")
 
 
-class Surface(models.TextChoices):
-    CONVEX = "CONVEX", _("Convex")
-    DIRECT = "FLAT", _("Flat")
+class Surface(Enum):
+    CONVEX = "CONVEX"
+    FLAT = "FLAT"
+
+    class Labels:
+        CONVEX = _("Convex")
+        FLAT = _("Flat")
 
 
-class Reflection(models.TextChoices):
-    R1 = "R1", _("r1")
-    R2 = "R2", _("r2")
-    R3 = "R3", _("r3")
+class Reflection(Enum):
+    R1 = "R1"
+    R2 = "R2"
+    R3 = "R3"
+
+    class Labels:
+        R1 = _("r1")
+        R2 = _("r2")
+        R3 = _("r3")
 
 
-class Color(models.IntegerChoices):
-    BLUE = 1, _("Blue")
-    YELLOW = 2, _("Yellow")
+class Color(Enum):
+    BLUE = 1
+    YELLOW = 2
+
+    class Labels:
+        BLUE = _("Blue")
+        YELLOW = _("Yellow")
 
 
-class LocationSpecifier(models.IntegerChoices):
-    RIGHT = 1, _("Right side")
-    LEFT = 2, _("Left side")
-    ABOVE = 3, _("Above")
-    MIDDLE = 4, _("Middle")
-    VERTICAL = 5, _("Vertical")
-    OUTSIDE = 6, _("Outside")
+class LocationSpecifier(Enum):
+    RIGHT = 1
+    LEFT = 2
+    ABOVE = 3
+    MIDDLE = 4
+    VERTICAL = 5
+    OUTSIDE = 6
+
+    class Labels:
+        RIGHT = _("Right side")
+        LEFT = _("Left side")
+        ABOVE = _("Above")
+        MIDDLE = _("Middle")
+        VERTICAL = _("Vertical")
+        OUTSIDE = _("Outside")
 
 
-class Condition(models.IntegerChoices):
-    VERY_BAD = 1, _("Very bad")
-    BAD = 2, _("Bad")
-    AVERAGE = 3, _("Average")
-    GOOD = 4, _("Good")
-    VERY_GOOD = 5, _("Very good")
+class Condition(Enum):
+    VERY_BAD = 1
+    BAD = 2
+    AVERAGE = 3
+    GOOD = 4
+    VERY_GOOD = 5
+
+    class Labels:
+        VERY_BAD = _("Very bad")
+        BAD = _("Bad")
+        AVERAGE = _("Average")
+        GOOD = _("Good")
+        VERY_GOOD = _("Very good")
 
 
 class TrafficSignCode(models.Model):
@@ -118,12 +167,9 @@ class TrafficSignPlan(models.Model):
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    structure_id = models.IntegerField(_("Structure id"), blank=True, null=True)
-    structure_type = models.CharField(
-        _("Structure"),
-        max_length=10,
-        choices=Structure.choices,
-        default=Structure.OTHER,
+    mount_id = models.IntegerField(_("Mount id"), blank=True, null=True)
+    mount_type = EnumField(
+        Mount, verbose_name=_("Mount"), max_length=10, default=Mount.OTHER
     )
     lifecycle = models.ForeignKey(
         Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
@@ -170,22 +216,20 @@ class TrafficSignPlan(models.Model):
         _("Decision id"), max_length=254, blank=True, null=True
     )
     plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
-    size = models.CharField(
-        _("Size"), max_length=1, choices=Size.choices, default=Size.MEDIUM
+    size = EnumField(Size, verbose_name=_("Size"), max_length=1, default=Size.MEDIUM)
+    reflection_class = EnumField(
+        Reflection, verbose_name=_("Reflection"), max_length=2, default=Reflection.R1
     )
-    reflection_class = models.CharField(
-        _("Reflection"), max_length=2, choices=Reflection.choices, default=Reflection.R1
+    surface_class = EnumField(
+        Surface, verbose_name=_("Surface"), max_length=6, default=Surface.FLAT
     )
-    surface_class = models.CharField(
-        _("Surface"), max_length=6, choices=Surface.choices, default=Surface.DIRECT
-    )
-    color = models.IntegerField(_("Color"), choices=Color.choices, default=Color.BLUE)
+    color = EnumIntegerField(Color, verbose_name=_("Color"), default=Color.BLUE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
-    location_specifier = models.IntegerField(
-        _("Location specifier"),
-        choices=LocationSpecifier.choices,
+    location_specifier = EnumIntegerField(
+        LocationSpecifier,
+        verbose_name=_("Location specifier"),
         default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
@@ -230,12 +274,9 @@ class TrafficSignReal(models.Model):
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    structure_id = models.IntegerField(_("Structure id"), blank=True, null=True)
-    structure_type = models.CharField(
-        _("Structure"),
-        max_length=10,
-        choices=Structure.choices,
-        default=Structure.OTHER,
+    mount_id = models.IntegerField(_("Mount id"), blank=True, null=True)
+    mount_type = EnumField(
+        Mount, verbose_name=_("Mount"), max_length=10, default=Mount.OTHER
     )
     lifecycle = models.ForeignKey(
         Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
@@ -282,36 +323,34 @@ class TrafficSignReal(models.Model):
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     installation_date = models.DateField(_("Installation date"))
-    installation_status = models.CharField(
-        _("Installation status"),
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
         max_length=10,
-        choices=InstallationStatus.choices,
         default=InstallationStatus.ACTIVE,
     )
     installation_id = models.CharField(_("Installation id"), max_length=254)
     installation_details = models.CharField(
         _("Installation details"), max_length=254, blank=True, null=True
     )
-    condition = models.IntegerField(
-        _("Condition"), choices=Condition.choices, default=Condition.GOOD
+    condition = EnumIntegerField(
+        Condition, verbose_name=_("Condition"), default=Condition.GOOD
     )
     allu_decision_id = models.CharField(_("Decision id (Allu)"), max_length=254)
-    size = models.CharField(
-        _("Size"), max_length=1, choices=Size.choices, default=Size.MEDIUM
+    size = EnumField(Size, verbose_name=_("Size"), max_length=1, default=Size.MEDIUM)
+    reflection_class = EnumField(
+        Reflection, verbose_name=_("Reflection"), max_length=2, default=Reflection.R1
     )
-    reflection_class = models.CharField(
-        _("Reflection"), max_length=2, choices=Reflection.choices, default=Reflection.R1
+    surface_class = EnumField(
+        Surface, verbose_name=_("Surface"), max_length=6, default=Surface.FLAT
     )
-    surface_class = models.CharField(
-        _("Surface"), max_length=6, choices=Surface.choices, default=Surface.DIRECT
-    )
-    color = models.IntegerField(_("Color"), choices=Color.choices, default=Color.BLUE)
+    color = EnumIntegerField(Color, verbose_name=_("Color"), default=Color.BLUE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
-    location_specifier = models.IntegerField(
-        _("Location specifier"),
-        choices=LocationSpecifier.choices,
+    location_specifier = EnumIntegerField(
+        LocationSpecifier,
+        verbose_name=_("Location specifier"),
         default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
