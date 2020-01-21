@@ -24,11 +24,24 @@ class MountType(Enum):
         OTHER = _("Other")
 
 
-class PortalMountType(Enum):
-    OTHER = "OTHER"
+class PortalStructure(Enum):
+    PIPE = "PIPE"
+    GRID = "GRID"
 
     class Labels:
-        OTHER = _("Other")
+        PIPE = _("Pipe")
+        GRID = _("Grid")
+
+
+class PortalBuildType(Enum):
+    SQUARE = "SQUARE"
+    CANTILEVER = "CANTILEVER"
+    HIGH_CANTILEVER = "HIGH_CANTILEVER"
+
+    class Labels:
+        SQUARE = _("Square")
+        CANTILEVER = _("Cantilever")
+        HIGH_CANTILEVER = _("High cantilever")
 
 
 class InstallationStatus(Enum):
@@ -118,6 +131,32 @@ class Condition(Enum):
         VERY_GOOD = _("Very good")
 
 
+class PortalType(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    structure = EnumField(
+        PortalStructure,
+        verbose_name=_("Portal structure"),
+        default=PortalStructure.PIPE,
+    )
+    build_type = EnumField(
+        PortalBuildType,
+        verbose_name=_("Portal build type"),
+        max_length=15,
+        default=PortalBuildType.SQUARE,
+    )
+    model = models.CharField(_("Portal model"), max_length=32)
+
+    class Meta:
+        db_table = "portal_type"
+        verbose_name = _("Portal type")
+        verbose_name_plural = _("Portal types")
+
+    def __str__(self):
+        return "%s - %s - %s" % (self.structure, self.build_type, self.model)
+
+
 class TrafficSignCode(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -163,13 +202,12 @@ class MountPlan(models.Model):
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
     type = EnumField(
-        MountType, verbose_name=_("Mount type"), max_length=10, default=MountType.OTHER
+        MountType, verbose_name=_("Mount type"), max_length=10, default=MountType.PORTAL
     )
-    portal_type = EnumField(
-        PortalMountType,
-        verbose_name=_("Portal mount type"),
-        max_length=10,
-        default=MountType.OTHER,
+    portal_type = models.ForeignKey(
+        PortalType,
+        verbose_name=_("Portal type"),
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
