@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import (
     Lifecycle,
     MountPlan,
+    MountReal,
     PortalType,
     TrafficSignCode,
     TrafficSignPlan,
@@ -23,7 +24,7 @@ class TrafficSignPlanAdmin(admin.OSMGeoAdmin):
         "code",
         "value",
         "lifecycle",
-        "location_xy",
+        "location",
         "decision_date",
     )
     ordering = ("-created_at",)
@@ -40,7 +41,7 @@ class TrafficSignRealAdmin(admin.OSMGeoAdmin):
         "code",
         "value",
         "lifecycle",
-        "location_xy",
+        "location",
         "installation_date",
     )
     ordering = ("-created_at",)
@@ -49,6 +50,21 @@ class TrafficSignRealAdmin(admin.OSMGeoAdmin):
 
 @admin.register(MountPlan)
 class MountPlanAdmin(admin.OSMGeoAdmin):
+    default_lon = 2776957.204335059  # Helsinki city coordinates
+    default_lat = 8442622.403718097
+    default_zoom = 12
+    list_display = (
+        "id",
+        "type",
+        "lifecycle",
+        "location",
+    )
+    ordering = ("-created_at",)
+    actions = None
+
+
+@admin.register(MountReal)
+class MountRealAdmin(admin.OSMGeoAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12

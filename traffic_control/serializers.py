@@ -1,7 +1,12 @@
 from enumfields.drf.serializers import EnumSupportSerializerMixin
 from rest_framework import serializers
 
-from traffic_control.models import MountPlan, TrafficSignPlan, TrafficSignReal
+from traffic_control.models import (
+    MountPlan,
+    MountReal,
+    TrafficSignPlan,
+    TrafficSignReal,
+)
 
 
 class TrafficSignPlanSerializer(
@@ -25,5 +30,12 @@ class TrafficSignRealSerializer(
 class MountPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MountPlan
+        fields = "__all__"
+        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+
+
+class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = MountReal
         fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
