@@ -77,4 +77,3 @@ sftp-config.json
 target/
 var/
 venv/
-/locale/

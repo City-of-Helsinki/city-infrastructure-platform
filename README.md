@@ -86,3 +86,7 @@ To set any of the settings below, use the `-e <ENV_VAR>=<VALUE>` flag when runni
 ### Docker Compose
 
 Run the application `docker-compose up`
+
+### Translations (fi)
+
+Run script `./makemessages.sh`
