@@ -86,3 +86,13 @@ To set any of the settings below, use the `-e <ENV_VAR>=<VALUE>` flag when runni
 ### Docker Compose
 
 Run the application `docker-compose up`
+
+### Translations (fi)
+
+Run script `./makemessages.sh`
+
+### Load static data
+
+Run fixtures with:
+* Lifecycles: `python manage.py loaddata lifecycles.json`
+* Portal types: `python manage.py loaddata portal_types.json`
