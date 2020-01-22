@@ -19,6 +19,9 @@ router.register(
 router.register(
     "mount-plans", traffic_control.views.MountPlanViewSet,
 )
+router.register(
+    "mount-reals", traffic_control.views.MountRealViewSet,
+)
 
 schema_view = get_schema_view(
     openapi.Info(

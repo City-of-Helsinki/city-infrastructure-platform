@@ -268,11 +268,102 @@ class MountPlan(models.Model):
         return "%s %s" % (self.id, self.type)
 
 
+class MountReal(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    mount_plan = models.ForeignKey(
+        MountPlan,
+        verbose_name=_("Mount Plan"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
+    type = EnumField(
+        MountType, verbose_name=_("Mount type"), max_length=10, default=MountType.PORTAL
+    )
+    portal_type = models.ForeignKey(
+        PortalType,
+        verbose_name=_("Portal type"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
+    installation_date = models.DateField(_("Installation date"))
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
+        max_length=10,
+        default=InstallationStatus.ACTIVE,
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    condition = EnumIntegerField(
+        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+    )
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
+    inspected_at = models.DateTimeField(_("Inspected at"), blank=True, null=True)
+    created_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Created by"),
+        related_name="created_by_mount_real_set",
+        on_delete=models.CASCADE,
+    )
+    updated_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Updated by"),
+        related_name="updated_by_mount_real_set",
+        on_delete=models.CASCADE,
+    )
+    deleted_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Deleted by"),
+        related_name="deleted_by_mount_real_set",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    height = models.DecimalField(
+        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    electric_accountable = models.CharField(
+        _("Electric accountable"), max_length=254, blank=True, null=True
+    )
+    foldable = models.BooleanField(_("Foldable"), blank=True, null=True)
+    cross_bar_length = models.DecimalField(
+        _("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    diameter = models.DecimalField(
+        _("Diameter"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    lifecycle = models.ForeignKey(
+        Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
+    )
+
+    class Meta:
+        db_table = "mount_real"
+        verbose_name = _("Mount Real")
+        verbose_name_plural = _("Mount Reals")
+
+    def __str__(self):
+        return "%s %s" % (self.id, self.type)
+
+
 class TrafficSignPlan(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    location_xy = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
@@ -390,7 +481,7 @@ class TrafficSignReal(models.Model):
         blank=True,
         null=True,
     )
-    location_xy = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
@@ -406,7 +497,13 @@ class TrafficSignReal(models.Model):
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    mount_id = models.IntegerField(_("Mount id"), blank=True, null=True)
+    mount = models.ForeignKey(
+        MountReal,
+        verbose_name=_("Mount Real"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     mount_type = EnumField(
         MountType, verbose_name=_("Mount"), max_length=10, default=MountType.OTHER
     )
