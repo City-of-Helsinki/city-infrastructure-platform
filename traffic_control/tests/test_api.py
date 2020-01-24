@@ -7,10 +7,14 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from traffic_control.models import (
+    BarrierPlan,
+    BarrierType,
+    ConnectionType,
     Lifecycle,
     MountPlan,
     MountReal,
     MountType,
+    Reflective,
     SignpostPlan,
     SignpostReal,
     TrafficSignCode,
@@ -40,6 +44,108 @@ class TrafficControlAPIBaseTestCase(APITestCase):
         self.test_type_2 = MountType.WALL
         self.test_point = Point(
             25496366.48055263, 6675573.680776692, srid=settings.SRID
+        )
+
+
+class BarrierPlanTests(TrafficControlAPIBaseTestCase):
+    def test_get_all_barrier_plans(self):
+        """
+        Ensure we can get all barrier plan objects.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_barrier_plan()
+        response = self.client.get(reverse("api:barrierplan-list"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+    def test_get_barrier_plan_detail(self):
+        """
+        Ensure we can get one barrier plan object.
+        """
+        barrier_plan = self.__create_test_barrier_plan()
+        response = self.client.get(
+            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(barrier_plan.id))
+
+    def test_create_barrier_plan(self):
+        """
+        Ensure we can create a new barrier plan object.
+        """
+        data = {
+            "type": BarrierType.FENCE.value,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.id,
+        }
+        response = self.client.post(
+            reverse("api:barrierplan-list"), data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(BarrierPlan.objects.count(), 1)
+        barrier_plan = BarrierPlan.objects.first()
+        self.assertEqual(barrier_plan.type.value, data["type"])
+        self.assertEqual(barrier_plan.location.ewkt, data["location"])
+        self.assertEqual(
+            barrier_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(barrier_plan.lifecycle.id, data["lifecycle"])
+
+    def test_update_barrier_plan(self):
+        """
+        Ensure we can update existing barrier plan object.
+        """
+        barrier_plan = self.__create_test_barrier_plan()
+        data = {
+            "type": BarrierType.CONE.value,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle_2.id,
+        }
+        response = self.client.put(
+            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+            data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(BarrierPlan.objects.count(), 1)
+        barrier_plan = BarrierPlan.objects.first()
+        self.assertEqual(barrier_plan.type.value, data["type"])
+        self.assertEqual(barrier_plan.location.ewkt, data["location"])
+        self.assertEqual(
+            barrier_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(barrier_plan.lifecycle.id, data["lifecycle"])
+
+    def test_delete_barrier_plan_detail(self):
+        """
+        Ensure we can soft-delete one barrier plan object.
+        """
+        barrier_plan = self.__create_test_barrier_plan()
+        response = self.client.delete(
+            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(BarrierPlan.objects.count(), 1)
+        deleted_barrier_plan = BarrierPlan.objects.get(id=str(barrier_plan.id))
+        self.assertEqual(deleted_barrier_plan.id, barrier_plan.id)
+        self.assertEqual(deleted_barrier_plan.deleted_by, self.user)
+        self.assertTrue(deleted_barrier_plan.deleted_at)
+
+    def __create_test_barrier_plan(self):
+        return BarrierPlan.objects.create(
+            type=BarrierType.BOOM,
+            location=self.test_point,
+            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            lifecycle=self.test_lifecycle,
+            material="Betoni",
+            reflective=Reflective.YES,
+            connection_type=ConnectionType.OPEN_OUT,
+            road_name="Testingroad",
+            created_by=self.user,
+            updated_by=self.user,
         )
 
 
