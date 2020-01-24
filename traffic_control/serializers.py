@@ -5,6 +5,7 @@ from traffic_control.models import (
     MountPlan,
     MountReal,
     SignpostPlan,
+    SignpostReal,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -31,6 +32,13 @@ class TrafficSignRealSerializer(
 class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = SignpostPlan
+        fields = "__all__"
+        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+
+
+class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = SignpostReal
         fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
