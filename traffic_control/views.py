@@ -4,12 +4,14 @@ from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateM
 from traffic_control.models import (
     MountPlan,
     MountReal,
+    SignpostPlan,
     TrafficSignPlan,
     TrafficSignReal,
 )
 from traffic_control.serializers import (
     MountPlanSerializer,
     MountRealSerializer,
+    SignpostPlanSerializer,
     TrafficSignPlanSerializer,
     TrafficSignRealSerializer,
 )
@@ -27,6 +29,13 @@ class TrafficSignRealViewSet(
 ):
     serializer_class = TrafficSignRealSerializer
     queryset = TrafficSignReal.objects.all().order_by("-created_at")
+
+
+class SignpostPlanViewSet(
+    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
+):
+    serializer_class = SignpostPlanSerializer
+    queryset = SignpostPlan.objects.all().order_by("-created_at")
 
 
 class MountPlanViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin):
