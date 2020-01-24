@@ -11,6 +11,7 @@ from traffic_control.models import (
     MountPlan,
     MountReal,
     MountType,
+    SignpostPlan,
     TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
@@ -453,6 +454,104 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             type=self.test_type,
             location=self.test_point,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            lifecycle=self.test_lifecycle,
+            created_by=self.user,
+            updated_by=self.user,
+        )
+
+
+class SignpostPlanTests(TrafficControlAPIBaseTestCase):
+    def test_get_all_signpost_plans(self):
+        """
+        Ensure we can get all signpost plan objects.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_signpost_plan()
+        response = self.client.get(reverse("api:signpostplan-list"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+    def test_get_signpost_plan_detail(self):
+        """
+        Ensure we can get one signpost plan object.
+        """
+        signpost_plan = self.__create_test_signpost_plan()
+        response = self.client.get(
+            "%s%s/" % (reverse("api:signpostplan-list"), str(signpost_plan.id))
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(signpost_plan.id))
+
+    def test_create_signpost_plan(self):
+        """
+        Ensure we can create a new signpost plan object.
+        """
+        data = {
+            "code": self.test_code.id,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.id,
+        }
+        response = self.client.post(
+            reverse("api:signpostplan-list"), data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(SignpostPlan.objects.count(), 1)
+        signpost_plan = SignpostPlan.objects.first()
+        self.assertEqual(signpost_plan.code.id, data["code"])
+        self.assertEqual(signpost_plan.location.ewkt, data["location"])
+        self.assertEqual(
+            signpost_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(signpost_plan.lifecycle.id, data["lifecycle"])
+
+    def test_update_signpost_plan(self):
+        """
+        Ensure we can update existing signpost plan object.
+        """
+        signpost_plan = self.__create_test_signpost_plan()
+        data = {
+            "code": self.test_code_2.id,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-03",
+            "lifecycle": self.test_lifecycle_2.id,
+        }
+        response = self.client.put(
+            "%s%s/" % (reverse("api:signpostplan-list"), str(signpost_plan.id)),
+            data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(SignpostPlan.objects.count(), 1)
+        signpost_plan = SignpostPlan.objects.first()
+        self.assertEqual(signpost_plan.code.id, data["code"])
+        self.assertEqual(signpost_plan.location.ewkt, data["location"])
+        self.assertEqual(
+            signpost_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(signpost_plan.lifecycle.id, data["lifecycle"])
+
+    def test_delete_signpost_plan_detail(self):
+        """
+        Ensure we can soft-delete one signpost plan object.
+        """
+        signpost_plan = self.__create_test_signpost_plan()
+        response = self.client.delete(
+            "%s%s/" % (reverse("api:signpostplan-list"), str(signpost_plan.id))
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(SignpostPlan.objects.count(), 1)
+        deleted_signpost_plan = SignpostPlan.objects.get(id=str(signpost_plan.id))
+        self.assertEqual(deleted_signpost_plan.id, signpost_plan.id)
+        self.assertEqual(deleted_signpost_plan.deleted_by, self.user)
+        self.assertTrue(deleted_signpost_plan.deleted_at)
+
+    def __create_test_signpost_plan(self):
+        return SignpostPlan.objects.create(
+            code=self.test_code,
+            location=self.test_point,
+            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             created_by=self.user,
             updated_by=self.user,
