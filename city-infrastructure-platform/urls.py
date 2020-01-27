@@ -25,6 +25,9 @@ router.register(
 router.register(
     "signpost-plans", traffic_control.views.SignpostPlanViewSet,
 )
+router.register(
+    "signpost-reals", traffic_control.views.SignpostRealViewSet,
+)
 schema_view = get_schema_view(
     openapi.Info(
         title="City Infrastructure Platform API",
