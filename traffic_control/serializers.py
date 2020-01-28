@@ -10,9 +10,19 @@ from traffic_control.models import (
     RoadMarkingReal,
     SignpostPlan,
     SignpostReal,
+    TrafficLightPlan,
     TrafficSignPlan,
     TrafficSignReal,
 )
+
+
+class TrafficLightPlanSerializer(
+    EnumSupportSerializerMixin, serializers.ModelSerializer
+):
+    class Meta:
+        model = TrafficLightPlan
+        fields = "__all__"
+        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
 
 class TrafficSignPlanSerializer(

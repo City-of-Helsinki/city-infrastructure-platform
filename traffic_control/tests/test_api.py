@@ -21,6 +21,9 @@ from traffic_control.models import (
     RoadMarkingReal,
     SignpostPlan,
     SignpostReal,
+    TrafficLightPlan,
+    TrafficLightSoundBeaconValue,
+    TrafficLightType,
     TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
@@ -48,6 +51,112 @@ class TrafficControlAPIBaseTestCase(APITestCase):
         self.test_type_2 = MountType.WALL
         self.test_point = Point(
             25496366.48055263, 6675573.680776692, srid=settings.SRID
+        )
+
+
+class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
+    def test_get_all_traffic_light_plans(self):
+        """
+        Ensure we can get all traffic light plan objects.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_traffic_light_plan()
+        response = self.client.get(reverse("api:trafficlightplan-list"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+    def test_get_traffic_light_detail(self):
+        """
+        Ensure we can get one traffic light plan object.
+        """
+        traffic_light = self.__create_test_traffic_light_plan()
+        response = self.client.get(
+            reverse("api:trafficlightplan-detail", kwargs={"pk": traffic_light.id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(traffic_light.id))
+
+    def test_create_traffic_light_plan(self):
+        """
+        Ensure we can create a new traffic light plan object.
+        """
+        data = {
+            "code": self.test_code.id,
+            "type": TrafficLightType.TRAFFICLIGHT.value,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.id,
+        }
+        response = self.client.post(
+            reverse("api:trafficlightplan-list"), data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(TrafficLightPlan.objects.count(), 1)
+        traffic_light = TrafficLightPlan.objects.first()
+        self.assertEqual(traffic_light.code.id, data["code"])
+        self.assertEqual(traffic_light.type.value, data["type"])
+        self.assertEqual(traffic_light.location.ewkt, data["location"])
+        self.assertEqual(
+            traffic_light.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(traffic_light.lifecycle.id, data["lifecycle"])
+
+    def test_update_traffic_light_plan(self):
+        """
+        Ensure we can update existing traffic light plan object.
+        """
+        traffic_light = self.__create_test_traffic_light_plan()
+        data = {
+            "code": self.test_code.id,
+            "type": TrafficLightType.BUTTON.value,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle_2.id,
+        }
+        response = self.client.put(
+            reverse("api:trafficlightplan-detail", kwargs={"pk": traffic_light.id}),
+            data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(TrafficLightPlan.objects.count(), 1)
+        traffic_light = TrafficLightPlan.objects.first()
+        self.assertEqual(traffic_light.code.id, data["code"])
+        self.assertEqual(traffic_light.type.value, data["type"])
+        self.assertEqual(traffic_light.location.ewkt, data["location"])
+        self.assertEqual(
+            traffic_light.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(traffic_light.lifecycle.id, data["lifecycle"])
+
+    def test_delete_traffic_light_plan_detail(self):
+        """
+        Ensure we can soft-delete one traffic light plan object.
+        """
+        traffic_light = self.__create_test_traffic_light_plan()
+        response = self.client.delete(
+            reverse("api:trafficlightplan-detail", kwargs={"pk": traffic_light.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(TrafficLightPlan.objects.count(), 1)
+        deleted_traffic_light = TrafficLightPlan.objects.get(id=str(traffic_light.id))
+        self.assertEqual(deleted_traffic_light.id, traffic_light.id)
+        self.assertEqual(deleted_traffic_light.deleted_by, self.user)
+        self.assertTrue(deleted_traffic_light.deleted_at)
+
+    def __create_test_traffic_light_plan(self):
+        return TrafficLightPlan.objects.create(
+            code=self.test_code,
+            location=self.test_point,
+            type=TrafficLightType.TRAFFICLIGHT,
+            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            lifecycle=self.test_lifecycle,
+            mount_type=MountType.POST,
+            road_name="Testingroad",
+            sound_beacon=TrafficLightSoundBeaconValue.YES,
+            created_by=self.user,
+            updated_by=self.user,
         )
 
 

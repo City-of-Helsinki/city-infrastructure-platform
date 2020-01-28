@@ -181,6 +181,39 @@ class RoadMarkingLocationSpecifier(Enum):
         LEFT_SIDE_OF_LANE_OR_ROAD = _("Left side of lane or road")
 
 
+class TrafficLightSoundBeaconValue(Enum):
+    NO = 1
+    YES = 2
+
+    class Labels:
+        NO = _("No")
+        YES = _("Yes")
+
+
+class TrafficLightLocationSpecifier(Enum):
+    RIGHT = 1
+    LEFT = 2
+    ABOVE = 3
+    MIDDLE = 4
+
+    class Labels:
+        RIGHT = _("Right side of road")
+        LEFT = _("Left side of road")
+        ABOVE = _("Above the road")
+        MIDDLE = _("Middle of road")
+
+
+class TrafficLightType(Enum):
+    TRAFFICLIGHT = 1
+    SOUND_BEACON = 2
+    BUTTON = 3
+
+    class Labels:
+        TRAFFICLIGHT = _("Traffic light")
+        SOUND_BEACON = _("Sound beacon")
+        BUTTON = _("Button")
+
+
 class Condition(Enum):
     VERY_BAD = 1
     BAD = 2
@@ -422,6 +455,98 @@ class MountReal(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.id, self.type)
+
+
+class TrafficLightPlan(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
+    type = EnumField(TrafficLightType, blank=True, null=True,)
+    code = models.ForeignKey(
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+    )
+    mount = models.ForeignKey(
+        MountPlan,
+        verbose_name=_("Mount Plan"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    mount_type = EnumField(
+        MountType,
+        verbose_name=_("Mount type"),
+        max_length=10,
+        default=MountType.OTHER,
+        blank=True,
+        null=True,
+    )
+    decision_date = models.DateField(_("Decision date"))
+    decision_id = models.CharField(
+        _("Decision id"), max_length=254, blank=True, null=True
+    )
+    plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
+    created_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Created by"),
+        related_name="created_by_traffic_light_plan_set",
+        on_delete=models.CASCADE,
+    )
+    updated_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Updated by"),
+        related_name="updated_by_traffic_light_plan_set",
+        on_delete=models.CASCADE,
+    )
+    deleted_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Deleted by"),
+        related_name="deleted_by_traffic_light_plan_set",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    location_specifier = EnumIntegerField(
+        TrafficLightLocationSpecifier,
+        verbose_name=_("Location specifier"),
+        default=TrafficLightLocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
+    )
+    height = models.DecimalField(
+        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    sound_beacon = EnumIntegerField(
+        TrafficLightSoundBeaconValue,
+        verbose_name=_("Sound beacon"),
+        blank=True,
+        null=True,
+    )
+    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    lifecycle = models.ForeignKey(
+        Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
+    )
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
+    lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+
+    class Meta:
+        db_table = "traffic_light_plan"
+        verbose_name = _("Traffic Light Plan")
+        verbose_name_plural = _("Traffic Light Plans")
+
+    def __str__(self):
+        return "%s %s %s" % (self.id, self.type, self.code)
 
 
 class TrafficSignPlan(models.Model):
