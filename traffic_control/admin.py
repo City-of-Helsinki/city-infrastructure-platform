@@ -7,6 +7,7 @@ from .models import (
     MountPlan,
     MountReal,
     PortalType,
+    RoadMarkingPlan,
     SignpostPlan,
     SignpostReal,
     TrafficSignCode,
@@ -126,6 +127,22 @@ class MountRealAdmin(admin.OSMGeoAdmin):
         "type",
         "lifecycle",
         "location",
+    )
+    ordering = ("-created_at",)
+    actions = None
+
+
+@admin.register(RoadMarkingPlan)
+class RoadMarkingPlanAdmin(admin.OSMGeoAdmin):
+    default_lon = 2776957.204335059  # Helsinki city coordinates
+    default_lat = 8442622.403718097
+    default_zoom = 12
+    list_display = (
+        "id",
+        "code",
+        "lifecycle",
+        "location",
+        "decision_date",
     )
     ordering = ("-created_at",)
     actions = None

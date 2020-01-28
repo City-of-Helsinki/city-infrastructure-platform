@@ -15,6 +15,8 @@ from traffic_control.models import (
     MountReal,
     MountType,
     Reflective,
+    RoadMarkingColor,
+    RoadMarkingPlan,
     SignpostPlan,
     SignpostReal,
     TrafficSignCode,
@@ -44,6 +46,111 @@ class TrafficControlAPIBaseTestCase(APITestCase):
         self.test_type_2 = MountType.WALL
         self.test_point = Point(
             25496366.48055263, 6675573.680776692, srid=settings.SRID
+        )
+
+
+class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
+    def test_get_all_road_markings(self):
+        """
+        Ensure we can get all road marking plan objects.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_road_marking_plan()
+        response = self.client.get(reverse("api:roadmarkingplan-list"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+    def test_get_road_marking_detail(self):
+        """
+        Ensure we can get one road marking plan object.
+        """
+        road_marking = self.__create_test_road_marking_plan()
+        response = self.client.get(
+            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(road_marking.id))
+
+    def test_create_road_marking(self):
+        """
+        Ensure we can create a new road marking plan object.
+        """
+        data = {
+            "code": self.test_code.id,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.id,
+        }
+        response = self.client.post(
+            reverse("api:roadmarkingplan-list"), data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(RoadMarkingPlan.objects.count(), 1)
+        road_marking = RoadMarkingPlan.objects.first()
+        self.assertEqual(road_marking.code.id, data["code"])
+        self.assertEqual(road_marking.location.ewkt, data["location"])
+        self.assertEqual(
+            road_marking.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(road_marking.lifecycle.id, data["lifecycle"])
+
+    def test_update_road_marking(self):
+        """
+        Ensure we can update existing road marking plan object.
+        """
+        road_marking = self.__create_test_road_marking_plan()
+        data = {
+            "code": self.test_code_2.id,
+            "location": self.test_point.ewkt,
+            "decision_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle_2.id,
+        }
+        response = self.client.put(
+            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+            data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(RoadMarkingPlan.objects.count(), 1)
+        road_marking = RoadMarkingPlan.objects.first()
+        self.assertEqual(road_marking.code.id, data["code"])
+        self.assertEqual(road_marking.location.ewkt, data["location"])
+        self.assertEqual(
+            road_marking.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
+        )
+        self.assertEqual(road_marking.lifecycle.id, data["lifecycle"])
+
+    def test_delete_road_marking_detail(self):
+        """
+        Ensure we can soft-delete one road marking plan object.
+        """
+        road_marking = self.__create_test_road_marking_plan()
+        response = self.client.delete(
+            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(RoadMarkingPlan.objects.count(), 1)
+        deleted_road_marking = RoadMarkingPlan.objects.get(id=str(road_marking.id))
+        self.assertEqual(deleted_road_marking.id, road_marking.id)
+        self.assertEqual(deleted_road_marking.deleted_by, self.user)
+        self.assertTrue(deleted_road_marking.deleted_at)
+
+    def __create_test_road_marking_plan(self):
+        return RoadMarkingPlan.objects.create(
+            code=self.test_code,
+            value="30",
+            color=RoadMarkingColor.WHITE,
+            location=self.test_point,
+            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            lifecycle=self.test_lifecycle,
+            material="Maali",
+            is_grinded=True,
+            is_raised=False,
+            has_rumble_strips=True,
+            road_name="Testingroad",
+            created_by=self.user,
+            updated_by=self.user,
         )
 
 

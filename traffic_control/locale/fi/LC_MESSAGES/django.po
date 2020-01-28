@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-27 16:04+0200\n"
+"POT-Creation-Date: 2020-01-28 10:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: traffic_control/admin.py:17
+#: traffic_control/admin.py:18
 msgid "City Infrastructure Platform Administration"
 msgstr "Infraomaisuuden hallinta-alusta"
 
@@ -26,641 +26,759 @@ msgstr "Infraomaisuuden hallinta-alusta"
 msgid "Traffic control"
 msgstr "Liikenteenohjauslaitteet"
 
-#: traffic_control/models.py:19
+#: traffic_control/models.py:15
+msgid "Forward"
+msgstr "Eteenpäin"
+
+#: traffic_control/models.py:16
+msgid "Backward"
+msgstr "Taaksepäin"
+
+#: traffic_control/models.py:27
+msgid "Straight"
+msgstr "Suoraan"
+
+#: traffic_control/models.py:28
+msgid "Right"
+msgstr "Oikealle"
+
+#: traffic_control/models.py:29
+msgid "Right and straight"
+msgstr "Oikealle ja suoraan"
+
+#: traffic_control/models.py:30
+msgid "Left"
+msgstr "Vasemmalle"
+
+#: traffic_control/models.py:31
+msgid "Left and straight"
+msgstr "Vasemmalle ja suoraan"
+
+#: traffic_control/models.py:43
 msgid "Portal"
 msgstr "Portaali"
 
-#: traffic_control/models.py:20
+#: traffic_control/models.py:44
 msgid "Post"
 msgstr "Tolppa"
 
-#: traffic_control/models.py:21
+#: traffic_control/models.py:45
 msgid "Wall"
 msgstr "Seinä"
 
-#: traffic_control/models.py:22
+#: traffic_control/models.py:46
 msgid "Wire"
 msgstr "Vaijeri"
 
-#: traffic_control/models.py:23
+#: traffic_control/models.py:47
 msgid "Bridge"
 msgstr "Silta"
 
-#: traffic_control/models.py:24 traffic_control/models.py:59
+#: traffic_control/models.py:48 traffic_control/models.py:83
 msgid "Other"
 msgstr "Muu"
 
-#: traffic_control/models.py:32
+#: traffic_control/models.py:56
 msgid "Pipe"
 msgstr "Putki"
 
-#: traffic_control/models.py:33
+#: traffic_control/models.py:57
 msgid "Grid"
 msgstr "Ristikko"
 
-#: traffic_control/models.py:42
+#: traffic_control/models.py:66
 msgid "Square"
 msgstr "Kehä"
 
-#: traffic_control/models.py:43
+#: traffic_control/models.py:67
 msgid "Cantilever"
 msgstr "Uloke"
 
-#: traffic_control/models.py:44
+#: traffic_control/models.py:68
 msgid "High cantilever"
 msgstr "Korkea uloke"
 
-#: traffic_control/models.py:55
+#: traffic_control/models.py:79
 msgid "Active"
 msgstr "Aktiivinen"
 
-#: traffic_control/models.py:56
+#: traffic_control/models.py:80
 msgid "Covered"
 msgstr "Huputettu"
 
-#: traffic_control/models.py:57
+#: traffic_control/models.py:81
 msgid "Fallen"
 msgstr "Kaatunut"
 
-#: traffic_control/models.py:58
+#: traffic_control/models.py:82
 msgid "Missing"
 msgstr "Kadonnut"
 
-#: traffic_control/models.py:68
+#: traffic_control/models.py:92
 msgid "Small"
 msgstr "Pieni"
 
-#: traffic_control/models.py:69
+#: traffic_control/models.py:93
 msgid "Medium"
 msgstr "Normaali"
 
-#: traffic_control/models.py:70
+#: traffic_control/models.py:94
 msgid "Large"
 msgstr "Suuri"
 
-#: traffic_control/models.py:78
+#: traffic_control/models.py:102
 msgid "Convex"
 msgstr "Kupera"
 
-#: traffic_control/models.py:79
+#: traffic_control/models.py:103
 msgid "Flat"
 msgstr "Suora"
 
-#: traffic_control/models.py:88
+#: traffic_control/models.py:112
 msgid "r1"
 msgstr "r1"
 
-#: traffic_control/models.py:89
+#: traffic_control/models.py:113
 msgid "r2"
 msgstr "r2"
 
-#: traffic_control/models.py:90
+#: traffic_control/models.py:114
 msgid "r3"
 msgstr "r3"
 
-#: traffic_control/models.py:98
+#: traffic_control/models.py:122
 msgid "Blue"
 msgstr "Sininen"
 
-#: traffic_control/models.py:99
+#: traffic_control/models.py:123 traffic_control/models.py:132
 msgid "Yellow"
 msgstr "Keltainen"
 
-#: traffic_control/models.py:111 traffic_control/models.py:127
+#: traffic_control/models.py:131
+msgid "White"
+msgstr "Valkoinen"
+
+#: traffic_control/models.py:144 traffic_control/models.py:160
 msgid "Right side"
 msgstr "Oikea puoli"
 
-#: traffic_control/models.py:112 traffic_control/models.py:128
+#: traffic_control/models.py:145 traffic_control/models.py:161
 msgid "Left side"
 msgstr "Vasen puoli"
 
-#: traffic_control/models.py:113 traffic_control/models.py:129
+#: traffic_control/models.py:146 traffic_control/models.py:162
 msgid "Above"
 msgstr "Kaistan yläpuolella"
 
-#: traffic_control/models.py:114 traffic_control/models.py:130
+#: traffic_control/models.py:147 traffic_control/models.py:163
 msgid "Middle"
 msgstr "Keskisaareke tai liikenteenjakaja"
 
-#: traffic_control/models.py:115 traffic_control/models.py:131
+#: traffic_control/models.py:148 traffic_control/models.py:164
 msgid "Vertical"
 msgstr "Pitkittäin ajosuuntaan nähden"
 
-#: traffic_control/models.py:116
+#: traffic_control/models.py:149
 msgid "Outside"
 msgstr "Tie tai katuverkon ulkopuolella"
 
-#: traffic_control/models.py:142
+#: traffic_control/models.py:176
+msgid "Both sides of road"
+msgstr "Ajoradan molemmissa reunoissa"
+
+#: traffic_control/models.py:177
+msgid "Right side of lane"
+msgstr "Kaistan oikeassa reunassa ajosuuntaan nähden"
+
+#: traffic_control/models.py:178
+msgid "Left side of lane"
+msgstr "Kaistan vasemmassa reunassa ajosuuntaan nähden"
+
+#: traffic_control/models.py:179
+msgid "Both sides of lane "
+msgstr "Kaistan molemmin puolin"
+
+#: traffic_control/models.py:180
+msgid "Middle of lane"
+msgstr "Kaistan keskellä"
+
+#: traffic_control/models.py:181
+msgid "Left side of lane or road"
+msgstr "Ajoradan tai kaistan vasen puoli"
+
+#: traffic_control/models.py:192
 msgid "Very bad"
 msgstr "Erittäin huono"
 
-#: traffic_control/models.py:143
+#: traffic_control/models.py:193
 msgid "Bad"
 msgstr "Huono"
 
-#: traffic_control/models.py:144
+#: traffic_control/models.py:194
 msgid "Average"
 msgstr "Tyydyttävä"
 
-#: traffic_control/models.py:145
+#: traffic_control/models.py:195
 msgid "Good"
 msgstr "Hyvä"
 
-#: traffic_control/models.py:146
+#: traffic_control/models.py:196
 msgid "Very good"
 msgstr "Erittäin hyvä"
 
-#: traffic_control/models.py:155
+#: traffic_control/models.py:205
 msgid "Portal structure"
 msgstr "Rakenne"
 
-#: traffic_control/models.py:160
+#: traffic_control/models.py:210
 msgid "Portal build type"
 msgstr "Tyyppi"
 
-#: traffic_control/models.py:164
+#: traffic_control/models.py:214
 msgid "Portal model"
 msgstr "Malli"
 
-#: traffic_control/models.py:168 traffic_control/models.py:224
-#: traffic_control/models.py:303
+#: traffic_control/models.py:218 traffic_control/models.py:274
+#: traffic_control/models.py:353
 msgid "Portal type"
 msgstr "Portaalityyppi"
 
-#: traffic_control/models.py:169
+#: traffic_control/models.py:219
 msgid "Portal types"
 msgstr "Portaalityypit"
 
-#: traffic_control/models.py:179
+#: traffic_control/models.py:229
 msgid "Code"
 msgstr "Koodi"
 
-#: traffic_control/models.py:181 traffic_control/models.py:199
+#: traffic_control/models.py:231 traffic_control/models.py:249
 msgid "Description"
 msgstr "Kuvaus"
 
-#: traffic_control/models.py:186 traffic_control/models.py:394
-#: traffic_control/models.py:512
+#: traffic_control/models.py:236 traffic_control/models.py:444
+#: traffic_control/models.py:562 traffic_control/models.py:1068
 msgid "Traffic Sign Code"
 msgstr "Merkkikoodi"
 
-#: traffic_control/models.py:187
+#: traffic_control/models.py:237
 msgid "Traffic Sign Codes"
 msgstr "Merkkikoodit"
 
-#: traffic_control/models.py:197
+#: traffic_control/models.py:247
 msgid "Status"
 msgstr "Tila"
 
-#: traffic_control/models.py:204 traffic_control/models.py:230
-#: traffic_control/models.py:365 traffic_control/models.py:413
-#: traffic_control/models.py:526 traffic_control/models.py:710
-#: traffic_control/models.py:846 traffic_control/models.py:997
+#: traffic_control/models.py:254 traffic_control/models.py:280
+#: traffic_control/models.py:415 traffic_control/models.py:463
+#: traffic_control/models.py:576 traffic_control/models.py:760
+#: traffic_control/models.py:896 traffic_control/models.py:1047
+#: traffic_control/models.py:1145
 msgid "Lifecycle"
 msgstr "Elinkaari"
 
-#: traffic_control/models.py:205
+#: traffic_control/models.py:255
 msgid "Lifecycles"
 msgstr "Elinkaaret"
 
-#: traffic_control/models.py:215 traffic_control/models.py:297
-#: traffic_control/models.py:381 traffic_control/models.py:499
-#: traffic_control/models.py:619 traffic_control/models.py:743
-#: traffic_control/models.py:935
+#: traffic_control/models.py:265 traffic_control/models.py:347
+#: traffic_control/models.py:431 traffic_control/models.py:549
+#: traffic_control/models.py:669 traffic_control/models.py:793
+#: traffic_control/models.py:985 traffic_control/models.py:1066
 msgid "Location (2D)"
 msgstr "Sijainti (2D)"
 
-#: traffic_control/models.py:217 traffic_control/models.py:350
-#: traffic_control/models.py:383 traffic_control/models.py:501
-#: traffic_control/models.py:621 traffic_control/models.py:745
+#: traffic_control/models.py:267 traffic_control/models.py:400
+#: traffic_control/models.py:433 traffic_control/models.py:551
+#: traffic_control/models.py:671 traffic_control/models.py:795
 msgid "Height"
 msgstr "Korkeus"
 
-#: traffic_control/models.py:220 traffic_control/models.py:299
-#: traffic_control/models.py:406 traffic_control/models.py:645
-#: traffic_control/models.py:769
+#: traffic_control/models.py:270 traffic_control/models.py:349
+#: traffic_control/models.py:456 traffic_control/models.py:695
+#: traffic_control/models.py:819
 msgid "Mount type"
 msgstr "Kiinnityskohteen tyyppi"
 
-#: traffic_control/models.py:232 traffic_control/models.py:325
-#: traffic_control/models.py:415 traffic_control/models.py:528
-#: traffic_control/models.py:662 traffic_control/models.py:791
-#: traffic_control/models.py:951
+#: traffic_control/models.py:282 traffic_control/models.py:375
+#: traffic_control/models.py:465 traffic_control/models.py:578
+#: traffic_control/models.py:712 traffic_control/models.py:841
+#: traffic_control/models.py:1001 traffic_control/models.py:1109
 msgid "Created at"
 msgstr "Luotu-aikaleima"
 
-#: traffic_control/models.py:233 traffic_control/models.py:326
-#: traffic_control/models.py:416 traffic_control/models.py:529
-#: traffic_control/models.py:663 traffic_control/models.py:792
-#: traffic_control/models.py:952
+#: traffic_control/models.py:283 traffic_control/models.py:376
+#: traffic_control/models.py:466 traffic_control/models.py:579
+#: traffic_control/models.py:713 traffic_control/models.py:842
+#: traffic_control/models.py:1002 traffic_control/models.py:1110
 msgid "Updated at"
 msgstr "Päivitetty-aikaleima"
 
-#: traffic_control/models.py:234 traffic_control/models.py:327
-#: traffic_control/models.py:417 traffic_control/models.py:530
-#: traffic_control/models.py:664 traffic_control/models.py:793
-#: traffic_control/models.py:953
+#: traffic_control/models.py:284 traffic_control/models.py:377
+#: traffic_control/models.py:467 traffic_control/models.py:580
+#: traffic_control/models.py:714 traffic_control/models.py:843
+#: traffic_control/models.py:1003 traffic_control/models.py:1111
 msgid "Deleted at"
 msgstr "Poistettu-aikaleima"
 
-#: traffic_control/models.py:237 traffic_control/models.py:331
-#: traffic_control/models.py:420 traffic_control/models.py:533
-#: traffic_control/models.py:667 traffic_control/models.py:796
-#: traffic_control/models.py:956
+#: traffic_control/models.py:287 traffic_control/models.py:381
+#: traffic_control/models.py:470 traffic_control/models.py:583
+#: traffic_control/models.py:717 traffic_control/models.py:846
+#: traffic_control/models.py:1006 traffic_control/models.py:1114
 msgid "Created by"
 msgstr "Luoja"
 
-#: traffic_control/models.py:243 traffic_control/models.py:337
-#: traffic_control/models.py:426 traffic_control/models.py:539
-#: traffic_control/models.py:673 traffic_control/models.py:802
-#: traffic_control/models.py:962
+#: traffic_control/models.py:293 traffic_control/models.py:387
+#: traffic_control/models.py:476 traffic_control/models.py:589
+#: traffic_control/models.py:723 traffic_control/models.py:852
+#: traffic_control/models.py:1012 traffic_control/models.py:1120
 msgid "Updated by"
 msgstr "Päivittäjä"
 
-#: traffic_control/models.py:249 traffic_control/models.py:343
-#: traffic_control/models.py:432 traffic_control/models.py:545
-#: traffic_control/models.py:679 traffic_control/models.py:808
-#: traffic_control/models.py:968
+#: traffic_control/models.py:299 traffic_control/models.py:393
+#: traffic_control/models.py:482 traffic_control/models.py:595
+#: traffic_control/models.py:729 traffic_control/models.py:858
+#: traffic_control/models.py:1018 traffic_control/models.py:1126
 msgid "Deleted by"
 msgstr "Poistaja"
 
-#: traffic_control/models.py:256 traffic_control/models.py:317
-#: traffic_control/models.py:439 traffic_control/models.py:552
-#: traffic_control/models.py:657 traffic_control/models.py:783
-#: traffic_control/models.py:975
+#: traffic_control/models.py:306 traffic_control/models.py:367
+#: traffic_control/models.py:489 traffic_control/models.py:602
+#: traffic_control/models.py:707 traffic_control/models.py:833
+#: traffic_control/models.py:1025 traffic_control/models.py:1097
 msgid "Validity period start"
 msgstr "Voimassaoloaika alkaa"
 
-#: traffic_control/models.py:259 traffic_control/models.py:320
-#: traffic_control/models.py:442 traffic_control/models.py:555
-#: traffic_control/models.py:660 traffic_control/models.py:786
-#: traffic_control/models.py:978
+#: traffic_control/models.py:309 traffic_control/models.py:370
+#: traffic_control/models.py:492 traffic_control/models.py:605
+#: traffic_control/models.py:710 traffic_control/models.py:836
+#: traffic_control/models.py:1028 traffic_control/models.py:1100
 msgid "Validity period end"
 msgstr "Voimassaoloaika loppuu"
 
-#: traffic_control/models.py:261 traffic_control/models.py:363
-#: traffic_control/models.py:450 traffic_control/models.py:563
-#: traffic_control/models.py:685 traffic_control/models.py:814
-#: traffic_control/models.py:942
+#: traffic_control/models.py:311 traffic_control/models.py:413
+#: traffic_control/models.py:500 traffic_control/models.py:613
+#: traffic_control/models.py:735 traffic_control/models.py:864
+#: traffic_control/models.py:992 traffic_control/models.py:1142
 msgid "Owner"
 msgstr "Omistaja"
 
-#: traffic_control/models.py:262 traffic_control/models.py:352
-#: traffic_control/models.py:451 traffic_control/models.py:568
-#: traffic_control/models.py:1001
+#: traffic_control/models.py:312 traffic_control/models.py:402
+#: traffic_control/models.py:501 traffic_control/models.py:618
+#: traffic_control/models.py:1051
 msgid "Txt"
 msgstr "Lisätieto"
 
-#: traffic_control/models.py:263 traffic_control/models.py:452
-#: traffic_control/models.py:651 traffic_control/models.py:943
+#: traffic_control/models.py:313 traffic_control/models.py:502
+#: traffic_control/models.py:701 traffic_control/models.py:993
+#: traffic_control/models.py:1091
 msgid "Decision date"
 msgstr "Päätöspvm"
 
-#: traffic_control/models.py:265 traffic_control/models.py:454
-#: traffic_control/models.py:653 traffic_control/models.py:945
+#: traffic_control/models.py:315 traffic_control/models.py:504
+#: traffic_control/models.py:703 traffic_control/models.py:995
+#: traffic_control/models.py:1093
 msgid "Decision id"
 msgstr "Päätöksen tunnus"
 
-#: traffic_control/models.py:267 traffic_control/models.py:456
-#: traffic_control/models.py:655 traffic_control/models.py:947
+#: traffic_control/models.py:317 traffic_control/models.py:506
+#: traffic_control/models.py:705 traffic_control/models.py:997
+#: traffic_control/models.py:1095
 msgid "Plan link"
 msgstr "Suunnitelmalinkki"
 
-#: traffic_control/models.py:268 traffic_control/models.py:308
-#: traffic_control/models.py:819 traffic_control/models.py:940
+#: traffic_control/models.py:318 traffic_control/models.py:358
+#: traffic_control/models.py:869 traffic_control/models.py:990
+#: traffic_control/models.py:1087
 msgid "Material"
 msgstr "Materiaali"
 
-#: traffic_control/models.py:270 traffic_control/models.py:354
+#: traffic_control/models.py:320 traffic_control/models.py:404
 msgid "Electric accountable"
 msgstr "Sähköisen vastuutaho"
 
-#: traffic_control/models.py:273 traffic_control/models.py:358
+#: traffic_control/models.py:323 traffic_control/models.py:408
 msgid "Cross bar length"
 msgstr "Poikkiorren pituus"
 
-#: traffic_control/models.py:275 traffic_control/models.py:356
+#: traffic_control/models.py:325 traffic_control/models.py:406
 msgid "Foldable"
 msgstr "Kaadettava/taitettava"
 
-#: traffic_control/models.py:279 traffic_control/models.py:292
-#: traffic_control/models.py:399 traffic_control/models.py:638
-#: traffic_control/models.py:762
+#: traffic_control/models.py:329 traffic_control/models.py:342
+#: traffic_control/models.py:449 traffic_control/models.py:688
+#: traffic_control/models.py:812
 msgid "Mount Plan"
 msgstr "Kiinnityskohde (suunnitelma)"
 
-#: traffic_control/models.py:280
+#: traffic_control/models.py:330
 msgid "Mount Plans"
 msgstr "Kiinnityskohde (suunnitelmat)"
 
-#: traffic_control/models.py:309 traffic_control/models.py:569
-#: traffic_control/models.py:775
+#: traffic_control/models.py:359 traffic_control/models.py:619
+#: traffic_control/models.py:825
 msgid "Installation date"
 msgstr "Asennuspvm"
 
-#: traffic_control/models.py:312 traffic_control/models.py:572
-#: traffic_control/models.py:778
+#: traffic_control/models.py:362 traffic_control/models.py:622
+#: traffic_control/models.py:828
 msgid "Installation status"
 msgstr "Asennuksen tila"
 
-#: traffic_control/models.py:323 traffic_control/models.py:581
-#: traffic_control/models.py:789
+#: traffic_control/models.py:373 traffic_control/models.py:631
+#: traffic_control/models.py:839
 msgid "Condition"
 msgstr "Kunto"
 
-#: traffic_control/models.py:328
+#: traffic_control/models.py:378
 msgid "Inspected at"
 msgstr "Tarkastettu-aikaleima"
 
-#: traffic_control/models.py:361
+#: traffic_control/models.py:411
 msgid "Diameter"
 msgstr "Kantavuus / jalustan halkaisija"
 
-#: traffic_control/models.py:370 traffic_control/models.py:517
+#: traffic_control/models.py:420 traffic_control/models.py:567
 msgid "Mount Real"
 msgstr "Kiinnityskohde (toteuma)"
 
-#: traffic_control/models.py:371
+#: traffic_control/models.py:421
 msgid "Mount Reals"
 msgstr "Kiinnityskohde (toteumat)"
 
-#: traffic_control/models.py:385 traffic_control/models.py:503
-#: traffic_control/models.py:623 traffic_control/models.py:747
+#: traffic_control/models.py:435 traffic_control/models.py:553
+#: traffic_control/models.py:673 traffic_control/models.py:797
 msgid "Direction"
 msgstr "Suunta"
 
-#: traffic_control/models.py:388
+#: traffic_control/models.py:438
 msgid "Parent Traffic Sign Plan"
 msgstr "Isäntäkilpi (suunnitelma)"
 
-#: traffic_control/models.py:396 traffic_control/models.py:514
+#: traffic_control/models.py:446 traffic_control/models.py:564
 msgid "Traffic Sign Code value"
 msgstr "Merkin numeerinen arvo"
 
-#: traffic_control/models.py:445 traffic_control/models.py:558
-#: traffic_control/models.py:691 traffic_control/models.py:821
+#: traffic_control/models.py:495 traffic_control/models.py:608
+#: traffic_control/models.py:741 traffic_control/models.py:871
+#: traffic_control/models.py:1136
 msgid "Seasonal validity period start"
 msgstr "Kausiluontoinen voimassaoloaika alkaa"
 
-#: traffic_control/models.py:448 traffic_control/models.py:561
-#: traffic_control/models.py:694 traffic_control/models.py:824
+#: traffic_control/models.py:498 traffic_control/models.py:611
+#: traffic_control/models.py:744 traffic_control/models.py:874
+#: traffic_control/models.py:1139
 msgid "Seasonal validity period end"
 msgstr "Kausiluontoinen voimassaoloaika loppuu"
 
-#: traffic_control/models.py:457 traffic_control/models.py:584
-#: traffic_control/models.py:686 traffic_control/models.py:815
+#: traffic_control/models.py:507 traffic_control/models.py:634
+#: traffic_control/models.py:736 traffic_control/models.py:865
+#: traffic_control/models.py:1086
 msgid "Size"
 msgstr "Koko"
 
-#: traffic_control/models.py:459 traffic_control/models.py:586
-#: traffic_control/models.py:688 traffic_control/models.py:817
+#: traffic_control/models.py:509 traffic_control/models.py:636
+#: traffic_control/models.py:738 traffic_control/models.py:867
 msgid "Reflection"
 msgstr "Kalvo"
 
-#: traffic_control/models.py:462 traffic_control/models.py:589
+#: traffic_control/models.py:512 traffic_control/models.py:639
 msgid "Surface"
 msgstr "Pinta"
 
-#: traffic_control/models.py:464 traffic_control/models.py:591
+#: traffic_control/models.py:514 traffic_control/models.py:641
+#: traffic_control/models.py:1089
 msgid "Color"
 msgstr "Väri"
 
-#: traffic_control/models.py:465 traffic_control/models.py:592
-#: traffic_control/models.py:712 traffic_control/models.py:848
-#: traffic_control/models.py:980
+#: traffic_control/models.py:515 traffic_control/models.py:642
+#: traffic_control/models.py:762 traffic_control/models.py:898
+#: traffic_control/models.py:1030 traffic_control/models.py:1147
 msgid "Road name"
 msgstr "Kadun/tien nimi"
 
-#: traffic_control/models.py:466 traffic_control/models.py:593
-#: traffic_control/models.py:713 traffic_control/models.py:849
-#: traffic_control/models.py:981
+#: traffic_control/models.py:516 traffic_control/models.py:643
+#: traffic_control/models.py:763 traffic_control/models.py:899
+#: traffic_control/models.py:1031 traffic_control/models.py:1148
 msgid "Lane number"
 msgstr "Kaistanumero"
 
-#: traffic_control/models.py:467 traffic_control/models.py:594
-#: traffic_control/models.py:714 traffic_control/models.py:850
-#: traffic_control/models.py:984
+#: traffic_control/models.py:517 traffic_control/models.py:644
+#: traffic_control/models.py:764 traffic_control/models.py:900
+#: traffic_control/models.py:1034 traffic_control/models.py:1149
 msgid "Lane type"
 msgstr "Kaistatyyppi"
 
-#: traffic_control/models.py:470 traffic_control/models.py:597
-#: traffic_control/models.py:717 traffic_control/models.py:853
-#: traffic_control/models.py:991
+#: traffic_control/models.py:520 traffic_control/models.py:647
+#: traffic_control/models.py:767 traffic_control/models.py:903
+#: traffic_control/models.py:1041 traffic_control/models.py:1152
 msgid "Location specifier"
 msgstr "Sijaintitarkenne"
 
-#: traffic_control/models.py:476 traffic_control/models.py:603
+#: traffic_control/models.py:526 traffic_control/models.py:653
 msgid "Affect area (2D)"
 msgstr "Vaikutusalue (2D)"
 
-#: traffic_control/models.py:481 traffic_control/models.py:494
+#: traffic_control/models.py:531 traffic_control/models.py:544
+#: traffic_control/models.py:1104
 msgid "Traffic Sign Plan"
 msgstr "Liikennemerkki (suunnitelma)"
 
-#: traffic_control/models.py:482
+#: traffic_control/models.py:532
 msgid "Traffic Sign Plans"
 msgstr "Liikennemerkki (suunnitelmat)"
 
-#: traffic_control/models.py:506
+#: traffic_control/models.py:556
 msgid "Parent Traffic Sign Real"
 msgstr "Isäntäkilpi (toteuma)"
 
-#: traffic_control/models.py:523
+#: traffic_control/models.py:573
 msgid "Mount"
 msgstr "Kiinnityskohteen tyyppi"
 
-#: traffic_control/models.py:565 traffic_control/models.py:830
+#: traffic_control/models.py:615 traffic_control/models.py:880
 msgid "Manufacturer"
 msgstr "Valmistaja"
 
-#: traffic_control/models.py:567
+#: traffic_control/models.py:617
 msgid "RFID"
 msgstr "RFID"
 
-#: traffic_control/models.py:576
+#: traffic_control/models.py:626
 msgid "Installation id"
 msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
 
-#: traffic_control/models.py:578
+#: traffic_control/models.py:628
 msgid "Installation details"
 msgstr "Asennuksen lisätiedot"
 
-#: traffic_control/models.py:583
+#: traffic_control/models.py:633
 msgid "Decision id (Allu)"
 msgstr "Lupapäätöksen tunnistenumero (Allu)"
 
-#: traffic_control/models.py:608
+#: traffic_control/models.py:658
 msgid "Traffic Sign Real"
 msgstr "Liikennemerkki (toteuma)"
 
-#: traffic_control/models.py:609
+#: traffic_control/models.py:659
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
 
-#: traffic_control/models.py:625 traffic_control/models.py:749
+#: traffic_control/models.py:675 traffic_control/models.py:799
 msgid "Signpost Code"
 msgstr "Opastetyyppi"
 
-#: traffic_control/models.py:627 traffic_control/models.py:751
+#: traffic_control/models.py:677 traffic_control/models.py:801
 msgid "Signpost value"
 msgstr "Arvo"
 
-#: traffic_control/models.py:628 traffic_control/models.py:752
+#: traffic_control/models.py:678 traffic_control/models.py:802
 msgid "Signpost txt"
 msgstr "Opasteen sisältö"
 
-#: traffic_control/models.py:631
+#: traffic_control/models.py:681
 msgid "Parent Signpost Plan"
 msgstr "Isäntäopaste (suunnitelma)"
 
-#: traffic_control/models.py:697 traffic_control/models.py:833
+#: traffic_control/models.py:747 traffic_control/models.py:883
 msgid "Attachment class"
 msgstr "Kiinnitysluokka"
 
-#: traffic_control/models.py:699 traffic_control/models.py:835
+#: traffic_control/models.py:749 traffic_control/models.py:885
 msgid "Target ID"
 msgstr "Opastettavan kohteen ID"
 
-#: traffic_control/models.py:701 traffic_control/models.py:837
+#: traffic_control/models.py:751 traffic_control/models.py:887
 msgid "Target txt"
 msgstr "Opastettavan kohteen vapaa kuvaus"
 
-#: traffic_control/models.py:704 traffic_control/models.py:840
+#: traffic_control/models.py:754 traffic_control/models.py:890
 msgid "Responsible entity"
 msgstr "Opasteen sisällön vastuutaho"
 
-#: traffic_control/models.py:707 traffic_control/models.py:843
+#: traffic_control/models.py:757 traffic_control/models.py:893
 msgid "Electric maintainer"
 msgstr "Sähköisen opastimen ylläpitäjä"
 
-#: traffic_control/models.py:725 traffic_control/models.py:738
+#: traffic_control/models.py:775 traffic_control/models.py:788
 msgid "Signpost Plan"
 msgstr "Opaste (suunnitelma)"
 
-#: traffic_control/models.py:726
+#: traffic_control/models.py:776
 msgid "Signpost Plans"
 msgstr "Opaste (suunnitelmat)"
 
-#: traffic_control/models.py:755
+#: traffic_control/models.py:805
 msgid "Parent Signpost Real"
 msgstr "Isäntäopaste (toteuma)"
 
-#: traffic_control/models.py:827
+#: traffic_control/models.py:877
 msgid "Organization"
 msgstr "Käyttäjä/organisaatio"
 
-#: traffic_control/models.py:861
+#: traffic_control/models.py:911
 msgid "Signpost Real"
 msgstr "Opaste (toteuma)"
 
-#: traffic_control/models.py:862
+#: traffic_control/models.py:912
 msgid "Signpost Reals"
 msgstr "Opaste (toteumat)"
 
-#: traffic_control/models.py:878
+#: traffic_control/models.py:928
 msgid "Boom"
 msgstr "Sulkupuomi"
 
-#: traffic_control/models.py:879
+#: traffic_control/models.py:929
 msgid "Fence"
 msgstr "Sulkuaita"
 
-#: traffic_control/models.py:880
+#: traffic_control/models.py:930
 msgid "Fence with arrow control"
 msgstr "Sulkuaita nuoliohjaimella"
 
-#: traffic_control/models.py:881
+#: traffic_control/models.py:931
 msgid "Pole"
 msgstr "Sulkupylväs, suora"
 
-#: traffic_control/models.py:882
+#: traffic_control/models.py:932
 msgid "Pole, left side of the lane"
 msgstr "Sulkupylväs, ajokaistan vasen reuna"
 
-#: traffic_control/models.py:883
+#: traffic_control/models.py:933
 msgid "Pole, right side of the lane"
 msgstr "Sulkupylväs, ajokaistan oikea reuna"
 
-#: traffic_control/models.py:884
+#: traffic_control/models.py:934
 msgid "Cone"
 msgstr "Sulkukartio"
 
-#: traffic_control/models.py:892
+#: traffic_control/models.py:942
 msgid "Closed"
 msgstr "Suljettu yhteys"
 
-#: traffic_control/models.py:893
+#: traffic_control/models.py:943
 msgid "Open out"
 msgstr "Avattava yhteys"
 
-#: traffic_control/models.py:902
+#: traffic_control/models.py:952
 msgid "Yes"
 msgstr "Kyllä"
 
-#: traffic_control/models.py:903
+#: traffic_control/models.py:953
 msgid "No"
 msgstr "Ei"
 
-#: traffic_control/models.py:904
+#: traffic_control/models.py:954
 msgid "Red-yellow"
 msgstr "Punakeltainen"
 
-#: traffic_control/models.py:914
+#: traffic_control/models.py:964
 msgid "Main lane"
 msgstr "Pääkaista"
 
-#: traffic_control/models.py:915
+#: traffic_control/models.py:965
 msgid "Fast lane"
 msgstr "Ohituskaista"
 
-#: traffic_control/models.py:916
+#: traffic_control/models.py:966
 msgid "Bus lane"
 msgstr "Joukkoliikennekaista"
 
-#: traffic_control/models.py:917
+#: traffic_control/models.py:967
 msgid "Turn left lane"
 msgstr "Kääntymiskaista vasemmalle"
 
-#: traffic_control/models.py:926
+#: traffic_control/models.py:976
 msgid "Middle of road or lane"
 msgstr "Ajoradan tai kaistan keskellä"
 
-#: traffic_control/models.py:927
+#: traffic_control/models.py:977
 msgid "Right of road or lane"
 msgstr "Ajoradan tai kaistan oikea reuna"
 
-#: traffic_control/models.py:928
+#: traffic_control/models.py:978
 msgid "Left of road or lane"
 msgstr "Ajoradan tai kaistan vasen reuna"
 
-#: traffic_control/models.py:936
+#: traffic_control/models.py:986
 msgid "Barrier type"
-msgstr "Esterakennelman tyyppi"
+msgstr "Ajoesteeen tyyppi"
 
-#: traffic_control/models.py:938
+#: traffic_control/models.py:988
 msgid "Connection type"
 msgstr "Avattava yhteys"
 
-#: traffic_control/models.py:941
+#: traffic_control/models.py:991
 msgid "Is electric"
 msgstr "Sähköinen"
 
-#: traffic_control/models.py:949
+#: traffic_control/models.py:999
 msgid "Reflective"
 msgstr "Heijastava"
 
-#: traffic_control/models.py:999
+#: traffic_control/models.py:1049 traffic_control/models.py:1157
 msgid "Length"
 msgstr "Pituus"
 
-#: traffic_control/models.py:1000
+#: traffic_control/models.py:1050
 msgid "Count"
 msgstr "Määrä"
 
-#: traffic_control/models.py:1005
+#: traffic_control/models.py:1055
 msgid "Barrier plan"
-msgstr "Esterakennelman tyyppi"
+msgstr "Ajoeste (suunnitelma)"
 
-#: traffic_control/models.py:1006
+#: traffic_control/models.py:1056
 msgid "Barrier plans"
-msgstr "Esterakennelman tyypit"
+msgstr "Ajoeste (suunnitelmat)"
+
+#: traffic_control/models.py:1072
+msgid "Line direction"
+msgstr "Viivan piirtosuunta"
+
+#: traffic_control/models.py:1080
+msgid "Arrow direction"
+msgstr "Nuolen suunta"
+
+#: traffic_control/models.py:1085
+msgid "Road Marking value"
+msgstr "Teksti"
+
+#: traffic_control/models.py:1133
+msgid "Type specifier"
+msgstr "Tyypin tarkenne"
+
+#: traffic_control/models.py:1141
+msgid "Has rumble strips"
+msgstr "Heräteraidat"
+
+#: traffic_control/models.py:1143
+msgid "Symbol"
+msgstr "Symboli"
+
+#: traffic_control/models.py:1158
+msgid "Width"
+msgstr "Leveys"
+
+#: traffic_control/models.py:1159
+msgid "Is raised"
+msgstr "Koholla"
+
+#: traffic_control/models.py:1160
+msgid "Is grinded"
+msgstr "Rouhittu"
+
+#: traffic_control/models.py:1161
+msgid "Additional info"
+msgstr "Lisätieto"
+
+#: traffic_control/models.py:1162
+msgid "Amount"
+msgstr "Määrä"
+
+#: traffic_control/models.py:1166
+msgid "Road Marking Plan"
+msgstr "Tiemerkintä (suunnitelma)"
+
+#: traffic_control/models.py:1167
+msgid "Road Marking Plans"
+msgstr "Tiemerkintä (suunnitelmat)"
