@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from traffic_control.models import (
     BarrierPlan,
+    BarrierReal,
     MountPlan,
     MountReal,
     RoadMarkingPlan,
@@ -62,6 +63,13 @@ class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerialize
 class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierPlan
+        fields = "__all__"
+        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+
+
+class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = BarrierReal
         fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
