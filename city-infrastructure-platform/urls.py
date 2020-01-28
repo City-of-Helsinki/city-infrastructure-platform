@@ -11,6 +11,9 @@ import traffic_control.views
 
 router = routers.DefaultRouter()
 router.register(
+    "barrier-plans", traffic_control.views.BarrierPlanViewSet,
+)
+router.register(
     "traffic-sign-plans", traffic_control.views.TrafficSignPlanViewSet,
 )
 router.register(
