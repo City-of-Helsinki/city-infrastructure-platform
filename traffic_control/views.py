@@ -10,6 +10,7 @@ from traffic_control.models import (
     RoadMarkingReal,
     SignpostPlan,
     SignpostReal,
+    TrafficLightPlan,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -22,9 +23,17 @@ from traffic_control.serializers import (
     RoadMarkingRealSerializer,
     SignpostPlanSerializer,
     SignpostRealSerializer,
+    TrafficLightPlanSerializer,
     TrafficSignPlanSerializer,
     TrafficSignRealSerializer,
 )
+
+
+class TrafficLightPlanViewSet(
+    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
+):
+    serializer_class = TrafficLightPlanSerializer
+    queryset = TrafficLightPlan.objects.all().order_by("-created_at")
 
 
 class TrafficSignPlanViewSet(

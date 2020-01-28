@@ -17,6 +17,9 @@ router.register(
     "barrier-reals", traffic_control.views.BarrierRealViewSet,
 )
 router.register(
+    "traffic-light-plans", traffic_control.views.TrafficLightPlanViewSet,
+)
+router.register(
     "traffic-sign-plans", traffic_control.views.TrafficSignPlanViewSet,
 )
 router.register(
