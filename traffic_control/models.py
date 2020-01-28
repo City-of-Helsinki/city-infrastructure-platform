@@ -1059,6 +1059,99 @@ class BarrierPlan(models.Model):
         return "%s %s" % (self.id, self.type)
 
 
+class BarrierReal(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    barrier_plan = models.ForeignKey(
+        BarrierPlan,
+        verbose_name=_("Barrier plan"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
+    type = EnumField(BarrierType, verbose_name=_("Barrier type"))
+    connection_type = EnumIntegerField(
+        ConnectionType, verbose_name=_("Connection type"), blank=True, null=True
+    )
+    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
+    is_electric = models.BooleanField(_("Is electric"), default=False)
+    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    installation_date = models.DateField(_("Installation date"))
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
+        max_length=10,
+        default=InstallationStatus.ACTIVE,
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    condition = EnumIntegerField(
+        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+    )
+    reflective = EnumField(
+        Reflective, verbose_name=_("Reflective"), blank=True, null=True
+    )
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
+    created_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Created by"),
+        related_name="created_by_barrier_real_set",
+        on_delete=models.CASCADE,
+    )
+    updated_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Updated by"),
+        related_name="updated_by_barrier_real_set",
+        on_delete=models.CASCADE,
+    )
+    deleted_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Deleted by"),
+        related_name="deleted_by_barrier_real_set",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
+    lane_type = EnumIntegerField(
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
+        null=True,
+    )
+    location_specifier = EnumIntegerField(
+        BarrierLocationSpecifier,
+        verbose_name=_("Location specifier"),
+        default=BarrierLocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
+    )
+    lifecycle = models.ForeignKey(
+        Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
+    )
+    length = models.IntegerField(_("Length"), blank=True, null=True)
+    count = models.IntegerField(_("Count"), blank=True, null=True)
+    txt = models.TextField(_("Txt"), blank=True, null=True)
+
+    class Meta:
+        db_table = "barrier_real"
+        verbose_name = _("Barrier real")
+        verbose_name_plural = _("Barrier reals")
+
+    def __str__(self):
+        return "%s %s" % (self.id, self.type)
+
+
 class RoadMarkingPlan(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4

@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.models import (
     BarrierPlan,
+    BarrierReal,
     MountPlan,
     MountReal,
     RoadMarkingPlan,
@@ -13,6 +14,7 @@ from traffic_control.models import (
 )
 from traffic_control.serializers import (
     BarrierPlanSerializer,
+    BarrierRealSerializer,
     MountPlanSerializer,
     MountRealSerializer,
     RoadMarkingPlanSerializer,
@@ -66,6 +68,13 @@ class BarrierPlanViewSet(
 ):
     serializer_class = BarrierPlanSerializer
     queryset = BarrierPlan.objects.all().order_by("-created_at")
+
+
+class BarrierRealViewSet(
+    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
+):
+    serializer_class = BarrierRealSerializer
+    queryset = BarrierReal.objects.all().order_by("-created_at")
 
 
 class RoadMarkingPlanViewSet(
