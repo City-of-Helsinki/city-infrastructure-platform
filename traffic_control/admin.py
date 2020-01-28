@@ -13,6 +13,7 @@ from .models import (
     SignpostPlan,
     SignpostReal,
     TrafficLightPlan,
+    TrafficLightReal,
     TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
@@ -65,6 +66,23 @@ class TrafficLightPlanAdmin(admin.OSMGeoAdmin):
         "lifecycle",
         "location",
         "decision_date",
+    )
+    ordering = ("-created_at",)
+    actions = None
+
+
+@admin.register(TrafficLightReal)
+class TrafficLightRealAdmin(admin.OSMGeoAdmin):
+    default_lon = 2776957.204335059  # Helsinki city coordinates
+    default_lat = 8442622.403718097
+    default_zoom = 12
+    list_display = (
+        "id",
+        "code",
+        "txt",
+        "lifecycle",
+        "location",
+        "installation_date",
     )
     ordering = ("-created_at",)
     actions = None

@@ -204,12 +204,12 @@ class TrafficLightLocationSpecifier(Enum):
 
 
 class TrafficLightType(Enum):
-    TRAFFICLIGHT = 1
+    TRAFFIC_LIGHT = 1
     SOUND_BEACON = 2
     BUTTON = 3
 
     class Labels:
-        TRAFFICLIGHT = _("Traffic light")
+        TRAFFIC_LIGHT = _("Traffic light")
         SOUND_BEACON = _("Sound beacon")
         BUTTON = _("Button")
 
@@ -658,6 +658,110 @@ class TrafficSignPlan(models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.code, self.value)
+
+
+class TrafficLightReal(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    traffic_light_plan = models.ForeignKey(
+        TrafficLightPlan,
+        verbose_name=_("Traffic Light Plan"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
+    type = EnumField(TrafficLightType, blank=True, null=True,)
+    code = models.ForeignKey(
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+    )
+    mount = models.ForeignKey(
+        MountReal,
+        verbose_name=_("Mount Real"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    mount_type = EnumField(
+        MountType,
+        verbose_name=_("Mount type"),
+        max_length=10,
+        default=MountType.OTHER,
+        blank=True,
+        null=True,
+    )
+    installation_date = models.DateField(_("Installation date"))
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
+        max_length=10,
+        default=InstallationStatus.ACTIVE,
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
+    created_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Created by"),
+        related_name="created_by_traffic_light_real_set",
+        on_delete=models.CASCADE,
+    )
+    updated_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Updated by"),
+        related_name="updated_by_traffic_light_real_set",
+        on_delete=models.CASCADE,
+    )
+    deleted_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Deleted by"),
+        related_name="deleted_by_traffic_light_real_set",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    condition = EnumIntegerField(
+        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+    )
+    lifecycle = models.ForeignKey(
+        Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
+    )
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
+    lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+    location_specifier = EnumIntegerField(
+        TrafficLightLocationSpecifier,
+        verbose_name=_("Location specifier"),
+        default=TrafficLightLocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
+    )
+    height = models.DecimalField(
+        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    sound_beacon = EnumIntegerField(
+        TrafficLightSoundBeaconValue,
+        verbose_name=_("Sound beacon"),
+        blank=True,
+        null=True,
+    )
+    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+
+    class Meta:
+        db_table = "traffic_light_real"
+        verbose_name = _("Traffic Light Real")
+        verbose_name_plural = _("Traffic Light Reals")
+
+    def __str__(self):
+        return "%s %s %s" % (self.id, self.type, self.code)
 
 
 class TrafficSignReal(models.Model):

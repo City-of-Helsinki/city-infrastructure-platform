@@ -11,6 +11,7 @@ from traffic_control.models import (
     SignpostPlan,
     SignpostReal,
     TrafficLightPlan,
+    TrafficLightReal,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -21,6 +22,15 @@ class TrafficLightPlanSerializer(
 ):
     class Meta:
         model = TrafficLightPlan
+        fields = "__all__"
+        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+
+
+class TrafficLightRealSerializer(
+    EnumSupportSerializerMixin, serializers.ModelSerializer
+):
+    class Meta:
+        model = TrafficLightReal
         fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 

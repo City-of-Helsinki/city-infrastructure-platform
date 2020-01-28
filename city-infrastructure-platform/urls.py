@@ -20,6 +20,9 @@ router.register(
     "traffic-light-plans", traffic_control.views.TrafficLightPlanViewSet,
 )
 router.register(
+    "traffic-light-reals", traffic_control.views.TrafficLightRealViewSet,
+)
+router.register(
     "traffic-sign-plans", traffic_control.views.TrafficSignPlanViewSet,
 )
 router.register(
