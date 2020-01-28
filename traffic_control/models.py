@@ -1263,3 +1263,131 @@ class RoadMarkingPlan(models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.code, self.value)
+
+
+class RoadMarkingReal(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    road_marking_plan = models.ForeignKey(
+        RoadMarkingPlan,
+        verbose_name=_("Road Marking Plan"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
+    code = models.ForeignKey(
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+    )
+    line_direction = EnumField(
+        LineDirection,
+        verbose_name=_("Line direction"),
+        max_length=10,
+        default=LineDirection.FORWARD,
+        blank=True,
+        null=True,
+    )
+    arrow_direction = EnumField(
+        ArrowDirection,
+        verbose_name=_("Arrow direction"),
+        max_length=10,
+        blank=True,
+        null=True,
+    )
+    value = models.CharField(
+        _("Road Marking value"), max_length=254, blank=True, null=True
+    )
+    size = models.CharField(_("Size"), max_length=254, blank=True, null=True)
+    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
+    color = EnumIntegerField(
+        RoadMarkingColor, verbose_name=_("Color"), default=RoadMarkingColor.WHITE
+    )
+    installation_date = models.DateField(_("Installation date"))
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
+        max_length=10,
+        default=InstallationStatus.ACTIVE,
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    traffic_sign_real = models.ForeignKey(
+        TrafficSignReal,
+        verbose_name=_("Traffic Sign Real"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    missing_traffic_sign_real_txt = models.CharField(
+        _("Missing Traffic Sign Real txt"), max_length=254, blank=True, null=True
+    )
+    condition = EnumIntegerField(
+        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+    )
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
+    created_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Created by"),
+        related_name="created_by_road_marking_real_set",
+        on_delete=models.CASCADE,
+    )
+    updated_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Updated by"),
+        related_name="updated_by_road_marking_real_set",
+        on_delete=models.CASCADE,
+    )
+    deleted_by = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("Deleted by"),
+        related_name="deleted_by_road_marking_real_set",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    type_specifier = models.CharField(
+        _("Type specifier"), max_length=254, blank=True, null=True
+    )
+    seasonal_validity_period_start = models.DateField(
+        _("Seasonal validity period start"), blank=True, null=True
+    )
+    seasonal_validity_period_end = models.DateField(
+        _("Seasonal validity period end"), blank=True, null=True
+    )
+    has_rumble_strips = models.BooleanField(_("Has rumble strips"), null=True)
+    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
+    lifecycle = models.ForeignKey(
+        Lifecycle, verbose_name=_("Lifecycle"), on_delete=models.CASCADE
+    )
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
+    lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+    location_specifier = EnumIntegerField(
+        RoadMarkingLocationSpecifier,
+        verbose_name=_("Location specifier"),
+        default=RoadMarkingLocationSpecifier.RIGHT_SIDE_OF_LANE,
+        blank=True,
+        null=True,
+    )
+    length = models.IntegerField(_("Length"), blank=True, null=True)
+    width = models.IntegerField(_("Width"), blank=True, null=True)
+    is_raised = models.BooleanField(_("Is raised"), null=True)
+    is_grinded = models.BooleanField(_("Is grinded"), null=True)
+    additional_info = models.TextField(_("Additional info"), blank=True, null=True)
+    amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
+
+    class Meta:
+        db_table = "road_marking_real"
+        verbose_name = _("Road Marking Real")
+        verbose_name_plural = _("Road Marking Reals")
+
+    def __str__(self):
+        return "%s %s %s" % (self.id, self.code, self.value)

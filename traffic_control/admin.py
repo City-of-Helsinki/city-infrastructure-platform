@@ -3,11 +3,13 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import (
     BarrierPlan,
+    BarrierReal,
     Lifecycle,
     MountPlan,
     MountReal,
     PortalType,
     RoadMarkingPlan,
+    RoadMarkingReal,
     SignpostPlan,
     SignpostReal,
     TrafficSignCode,
@@ -29,6 +31,22 @@ class BarrierPlanAdmin(admin.OSMGeoAdmin):
         "lifecycle",
         "location",
         "decision_date",
+    )
+    ordering = ("-created_at",)
+    actions = None
+
+
+@admin.register(BarrierReal)
+class BarrierRealAdmin(admin.OSMGeoAdmin):
+    default_lon = 2776957.204335059  # Helsinki city coordinates
+    default_lat = 8442622.403718097
+    default_zoom = 12
+    list_display = (
+        "id",
+        "type",
+        "lifecycle",
+        "location",
+        "installation_date",
     )
     ordering = ("-created_at",)
     actions = None
@@ -143,6 +161,22 @@ class RoadMarkingPlanAdmin(admin.OSMGeoAdmin):
         "lifecycle",
         "location",
         "decision_date",
+    )
+    ordering = ("-created_at",)
+    actions = None
+
+
+@admin.register(RoadMarkingReal)
+class RoadMarkingRealAdmin(admin.OSMGeoAdmin):
+    default_lon = 2776957.204335059  # Helsinki city coordinates
+    default_lat = 8442622.403718097
+    default_zoom = 12
+    list_display = (
+        "id",
+        "code",
+        "lifecycle",
+        "location",
+        "installation_date",
     )
     ordering = ("-created_at",)
     actions = None
