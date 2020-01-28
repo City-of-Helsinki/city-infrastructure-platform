@@ -7,6 +7,7 @@ from traffic_control.models import (
     MountPlan,
     MountReal,
     RoadMarkingPlan,
+    RoadMarkingReal,
     SignpostPlan,
     SignpostReal,
     TrafficSignPlan,
@@ -79,5 +80,14 @@ class RoadMarkingPlanSerializer(
 ):
     class Meta:
         model = RoadMarkingPlan
+        fields = "__all__"
+        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+
+
+class RoadMarkingRealSerializer(
+    EnumSupportSerializerMixin, serializers.ModelSerializer
+):
+    class Meta:
+        model = RoadMarkingReal
         fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")

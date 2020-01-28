@@ -37,6 +37,9 @@ router.register(
 router.register(
     "road-marking-plans", traffic_control.views.RoadMarkingPlanViewSet,
 )
+router.register(
+    "road-marking-reals", traffic_control.views.RoadMarkingRealViewSet,
+)
 schema_view = get_schema_view(
     openapi.Info(
         title="City Infrastructure Platform API",

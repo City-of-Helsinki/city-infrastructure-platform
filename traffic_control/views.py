@@ -7,6 +7,7 @@ from traffic_control.models import (
     MountPlan,
     MountReal,
     RoadMarkingPlan,
+    RoadMarkingReal,
     SignpostPlan,
     SignpostReal,
     TrafficSignPlan,
@@ -18,6 +19,7 @@ from traffic_control.serializers import (
     MountPlanSerializer,
     MountRealSerializer,
     RoadMarkingPlanSerializer,
+    RoadMarkingRealSerializer,
     SignpostPlanSerializer,
     SignpostRealSerializer,
     TrafficSignPlanSerializer,
@@ -82,3 +84,10 @@ class RoadMarkingPlanViewSet(
 ):
     serializer_class = RoadMarkingPlanSerializer
     queryset = RoadMarkingPlan.objects.all().order_by("-created_at")
+
+
+class RoadMarkingRealViewSet(
+    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
+):
+    serializer_class = RoadMarkingRealSerializer
+    queryset = RoadMarkingReal.objects.all().order_by("-created_at")
