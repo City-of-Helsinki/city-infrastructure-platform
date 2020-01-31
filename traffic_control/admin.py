@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from .models import (
     BarrierPlan,
     BarrierReal,
-    Lifecycle,
     MountPlan,
     MountReal,
     PortalType,
@@ -225,16 +224,6 @@ class TrafficSignCodeAdmin(admin.ModelAdmin):
         "description",
     )
     ordering = ("-code",)
-    actions = None
-
-
-@admin.register(Lifecycle)
-class LifecycleAdmin(admin.ModelAdmin):
-    list_display = (
-        "status",
-        "description",
-    )
-    ordering = ("-status",)
     actions = None
 
 
