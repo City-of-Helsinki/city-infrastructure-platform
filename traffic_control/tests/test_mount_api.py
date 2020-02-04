@@ -26,7 +26,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         """
         mount_plan = self.__create_test_mount_plan()
         response = self.client.get(
-            "%s%s/" % (reverse("api:mountplan-list"), str(mount_plan.id))
+            reverse("api:mountplan-detail", kwargs={"pk": mount_plan.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_plan.id))
@@ -40,6 +40,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner,
         }
         response = self.client.post(reverse("api:mountplan-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -62,9 +63,10 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
+            "owner": self.test_owner,
         }
         response = self.client.put(
-            "%s%s/" % (reverse("api:mountplan-list"), str(mount_plan.id)),
+            reverse("api:mountplan-detail", kwargs={"pk": mount_plan.id}),
             data,
             format="json",
         )
@@ -84,7 +86,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         """
         mount_plan = self.__create_test_mount_plan()
         response = self.client.delete(
-            "%s%s/" % (reverse("api:mountplan-list"), str(mount_plan.id))
+            reverse("api:mountplan-detail", kwargs={"pk": mount_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(MountPlan.objects.count(), 1)
@@ -122,7 +124,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         """
         mount_real = self.__create_test_mount_real()
         response = self.client.get(
-            "%s%s/" % (reverse("api:mountreal-list"), str(mount_real.id))
+            reverse("api:mountreal-detail", kwargs={"pk": mount_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_real.id))
@@ -136,6 +138,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner,
         }
         response = self.client.post(reverse("api:mountreal-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -159,9 +162,10 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
+            "owner": self.test_owner,
         }
         response = self.client.put(
-            "%s%s/" % (reverse("api:mountreal-list"), str(mount_real.id)),
+            reverse("api:mountreal-detail", kwargs={"pk": mount_real.id}),
             data,
             format="json",
         )
@@ -182,7 +186,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         """
         mount_real = self.__create_test_mount_real()
         response = self.client.delete(
-            "%s%s/" % (reverse("api:mountreal-list"), str(mount_real.id))
+            reverse("api:mountreal-detail", kwargs={"pk": mount_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(MountReal.objects.count(), 1)
