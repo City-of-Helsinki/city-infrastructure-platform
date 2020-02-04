@@ -44,7 +44,11 @@ class TrafficSignPlan(models.Model):
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
-    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
+    direction = models.IntegerField(_("Direction"), default=0)
+    code = models.ForeignKey(
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+    )
+    value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
     parent = models.ForeignKey(
         "self",
         verbose_name=_("Parent Traffic Sign Plan"),
@@ -52,11 +56,9 @@ class TrafficSignPlan(models.Model):
         blank=True,
         null=True,
     )
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
-    )
-    value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    mount = models.ForeignKey(
+    order = models.IntegerField(_("Order"), default=1)
+    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
         on_delete=models.CASCADE,
@@ -71,8 +73,19 @@ class TrafficSignPlan(models.Model):
         blank=True,
         null=True,
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
+    decision_date = models.DateField(_("Decision date"))
+    decision_id = models.CharField(
+        _("Decision id"), max_length=254, blank=True, null=True
+    )
+    plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    affect_area = models.PolygonField(
+        _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
@@ -97,11 +110,29 @@ class TrafficSignPlan(models.Model):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
+    size = EnumField(
+        Size,
+        verbose_name=_("Size"),
+        max_length=1,
+        default=Size.MEDIUM,
+        blank=True,
+        null=True,
     )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
+    reflection_class = EnumField(
+        Reflection,
+        verbose_name=_("Reflection"),
+        max_length=2,
+        default=Reflection.R1,
+        blank=True,
+        null=True,
+    )
+    surface_class = EnumField(
+        Surface,
+        verbose_name=_("Surface"),
+        max_length=6,
+        default=Surface.FLAT,
+        blank=True,
+        null=True,
     )
     seasonal_validity_period_start = models.DateField(
         _("Seasonal validity period start"), blank=True, null=True
@@ -109,21 +140,13 @@ class TrafficSignPlan(models.Model):
     seasonal_validity_period_end = models.DateField(
         _("Seasonal validity period end"), blank=True, null=True
     )
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    decision_date = models.DateField(_("Decision date"))
-    decision_id = models.CharField(
-        _("Decision id"), max_length=254, blank=True, null=True
+    owner = models.CharField(_("Owner"), max_length=254)
+    color = EnumIntegerField(
+        Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True
     )
-    plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
-    size = EnumField(Size, verbose_name=_("Size"), max_length=1, default=Size.MEDIUM)
-    reflection_class = EnumField(
-        Reflection, verbose_name=_("Reflection"), max_length=2, default=Reflection.R1
+    lifecycle = EnumIntegerField(
+        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
-    surface_class = EnumField(
-        Surface, verbose_name=_("Surface"), max_length=6, default=Surface.FLAT
-    )
-    color = EnumIntegerField(Color, verbose_name=_("Color"), default=Color.BLUE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
@@ -133,9 +156,6 @@ class TrafficSignPlan(models.Model):
         default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
-    )
-    affect_area = models.PolygonField(
-        _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
 
     class Meta:
@@ -162,7 +182,11 @@ class TrafficSignReal(models.Model):
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
-    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
+    direction = models.IntegerField(_("Direction"), default=0)
+    code = models.ForeignKey(
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+    )
+    value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
     parent = models.ForeignKey(
         "self",
         verbose_name=_("Parent Traffic Sign Real"),
@@ -170,11 +194,9 @@ class TrafficSignReal(models.Model):
         blank=True,
         null=True,
     )
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
-    )
-    value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    mount = models.ForeignKey(
+    order = models.IntegerField(_("Order"), default=1)
+    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
         on_delete=models.CASCADE,
@@ -184,8 +206,39 @@ class TrafficSignReal(models.Model):
     mount_type = EnumField(
         MountType, verbose_name=_("Mount"), max_length=10, default=MountType.OTHER
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
+    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
+        max_length=10,
+        default=InstallationStatus.IN_USE,
+        blank=True,
+        null=True,
+    )
+    installation_id = models.CharField(
+        _("Installation id"), max_length=254, blank=True, null=True
+    )
+    installation_details = models.CharField(
+        _("Installation details"), max_length=254, blank=True, null=True
+    )
+    allu_decision_id = models.CharField(
+        _("Decision id (Allu)"), max_length=254, blank=True, null=True
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
+    condition = EnumIntegerField(
+        Condition,
+        verbose_name=_("Condition"),
+        default=Condition.VERY_GOOD,
+        blank=True,
+        null=True,
+    )
+    affect_area = models.PolygonField(
+        _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
@@ -210,11 +263,29 @@ class TrafficSignReal(models.Model):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
+    size = EnumField(
+        Size,
+        verbose_name=_("Size"),
+        max_length=1,
+        default=Size.MEDIUM,
+        blank=True,
+        null=True,
     )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
+    reflection_class = EnumField(
+        Reflection,
+        verbose_name=_("Reflection"),
+        max_length=2,
+        default=Reflection.R1,
+        blank=True,
+        null=True,
+    )
+    surface_class = EnumField(
+        Surface,
+        verbose_name=_("Surface"),
+        max_length=6,
+        default=Surface.FLAT,
+        blank=True,
+        null=True,
     )
     seasonal_validity_period_start = models.DateField(
         _("Seasonal validity period start"), blank=True, null=True
@@ -222,35 +293,17 @@ class TrafficSignReal(models.Model):
     seasonal_validity_period_end = models.DateField(
         _("Seasonal validity period end"), blank=True, null=True
     )
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    owner = models.CharField(_("Owner"), max_length=254)
     manufacturer = models.CharField(
         _("Manufacturer"), max_length=254, blank=True, null=True
     )
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    installation_date = models.DateField(_("Installation date"))
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        default=InstallationStatus.IN_USE,
+    color = EnumIntegerField(
+        Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True
     )
-    installation_id = models.CharField(_("Installation id"), max_length=254)
-    installation_details = models.CharField(
-        _("Installation details"), max_length=254, blank=True, null=True
+    lifecycle = EnumIntegerField(
+        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
-    condition = EnumIntegerField(
-        Condition, verbose_name=_("Condition"), default=Condition.GOOD
-    )
-    allu_decision_id = models.CharField(_("Decision id (Allu)"), max_length=254)
-    size = EnumField(Size, verbose_name=_("Size"), max_length=1, default=Size.MEDIUM)
-    reflection_class = EnumField(
-        Reflection, verbose_name=_("Reflection"), max_length=2, default=Reflection.R1
-    )
-    surface_class = EnumField(
-        Surface, verbose_name=_("Surface"), max_length=6, default=Surface.FLAT
-    )
-    color = EnumIntegerField(Color, verbose_name=_("Color"), default=Color.BLUE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
@@ -260,9 +313,6 @@ class TrafficSignReal(models.Model):
         default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
-    )
-    affect_area = models.PolygonField(
-        _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
 
     class Meta:
