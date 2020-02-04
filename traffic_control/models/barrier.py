@@ -6,26 +6,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from .common import Condition, InstallationStatus, Lifecycle
-
-
-class BarrierType(Enum):
-    BOOM = "BOOM"
-    FENCE = "FENCE"
-    FENCE_WITH_ARROW = "FENCE_WITH_ARROW"
-    POLE = "POLE"
-    POLE_LEFT_OF_LANE = "POLE_LEFT_OF_LANE"
-    POLE_RIGHT_OF_LANE = "POLE_RIGHT_OF_LANE"
-    CONE = "CONE"
-
-    class Labels:
-        BOOM = _("Boom")
-        FENCE = _("Fence")
-        FENCE_WITH_ARROW = _("Fence with arrow control")
-        POLE = _("Pole")
-        POLE_LEFT_OF_LANE = _("Pole, left side of the lane")
-        POLE_RIGHT_OF_LANE = _("Pole, right side of the lane")
-        CONE = _("Cone")
+from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
 
 
 class ConnectionType(Enum):
@@ -77,13 +58,15 @@ class BarrierPlan(models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = EnumField(BarrierType, verbose_name=_("Barrier type"), max_length=20)
+    type = models.ForeignKey(
+        TrafficSignCode, verbose_name=_("Barrier type"), on_delete=models.CASCADE
+    )
     connection_type = EnumIntegerField(
-        ConnectionType, verbose_name=_("Connection type"), blank=True, null=True
+        ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED
     )
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     is_electric = models.BooleanField(_("Is electric"), default=False)
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    owner = models.CharField(_("Owner"), max_length=254)
     decision_date = models.DateField(_("Decision date"))
     decision_id = models.CharField(
         _("Decision id"), max_length=254, blank=True, null=True
@@ -115,13 +98,7 @@ class BarrierPlan(models.Model):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    road_name = models.CharField(_("Road name"), max_length=254)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = EnumIntegerField(
         LaneType,
@@ -139,6 +116,12 @@ class BarrierPlan(models.Model):
     )
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
     )
     length = models.IntegerField(_("Length"), blank=True, null=True)
     count = models.IntegerField(_("Count"), blank=True, null=True)
@@ -165,28 +148,23 @@ class BarrierReal(models.Model):
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = EnumField(BarrierType, verbose_name=_("Barrier type"), max_length=20)
+    type = models.ForeignKey(
+        TrafficSignCode, verbose_name=_("Barrier type"), on_delete=models.CASCADE
+    )
     connection_type = EnumIntegerField(
-        ConnectionType, verbose_name=_("Connection type"), blank=True, null=True
+        ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED
     )
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     is_electric = models.BooleanField(_("Is electric"), default=False)
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
-    installation_date = models.DateField(_("Installation date"))
+    owner = models.CharField(_("Owner"), max_length=254)
+    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
         InstallationStatus,
         verbose_name=_("Installation status"),
         max_length=10,
         default=InstallationStatus.IN_USE,
-    )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
-    condition = EnumIntegerField(
-        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+        blank=True,
+        null=True,
     )
     reflective = EnumField(
         Reflective, verbose_name=_("Reflective"), blank=True, null=True
@@ -214,7 +192,7 @@ class BarrierReal(models.Model):
         blank=True,
         null=True,
     )
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    road_name = models.CharField(_("Road name"), max_length=254)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = EnumIntegerField(
         LaneType,
@@ -233,9 +211,22 @@ class BarrierReal(models.Model):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
+    )
     length = models.IntegerField(_("Length"), blank=True, null=True)
     count = models.IntegerField(_("Count"), blank=True, null=True)
     txt = models.TextField(_("Txt"), blank=True, null=True)
+    condition = EnumIntegerField(
+        Condition,
+        verbose_name=_("Condition"),
+        default=Condition.VERY_GOOD,
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         db_table = "barrier_real"

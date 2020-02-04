@@ -2,7 +2,6 @@
 from .barrier import (
     BarrierPlan,
     BarrierReal,
-    BarrierType,
     ConnectionType,
     LaneType,
     LocationSpecifier,
