@@ -48,12 +48,12 @@ class TrafficLightPlan(models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
-    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
-    type = EnumField(TrafficLightType, blank=True, null=True,)
+    direction = models.IntegerField(_("Direction"), default=0)
+    type = EnumField(TrafficLightType, blank=True, null=True)
     code = models.ForeignKey(
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
-    mount = models.ForeignKey(
+    mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
         on_delete=models.CASCADE,
@@ -64,7 +64,7 @@ class TrafficLightPlan(models.Model):
         MountType,
         verbose_name=_("Mount type"),
         max_length=10,
-        default=MountType.OTHER,
+        default=MountType.POST,
         blank=True,
         null=True,
     )
@@ -122,9 +122,10 @@ class TrafficLightPlan(models.Model):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    owner = models.CharField(_("Owner"), max_length=254)
 
     class Meta:
         db_table = "traffic_light_plan"
@@ -147,12 +148,12 @@ class TrafficLightReal(models.Model):
         null=True,
     )
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
-    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
-    type = EnumField(TrafficLightType, blank=True, null=True,)
+    direction = models.IntegerField(_("Direction"), default=0)
+    type = EnumField(TrafficLightType, blank=True, null=True)
     code = models.ForeignKey(
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
-    mount = models.ForeignKey(
+    mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
         on_delete=models.CASCADE,
@@ -163,16 +164,18 @@ class TrafficLightReal(models.Model):
         MountType,
         verbose_name=_("Mount type"),
         max_length=10,
-        default=MountType.OTHER,
+        default=MountType.POST,
         blank=True,
         null=True,
     )
-    installation_date = models.DateField(_("Installation date"))
+    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
         InstallationStatus,
         verbose_name=_("Installation status"),
         max_length=10,
         default=InstallationStatus.IN_USE,
+        blank=True,
+        null=True,
     )
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
@@ -204,7 +207,11 @@ class TrafficLightReal(models.Model):
         null=True,
     )
     condition = EnumIntegerField(
-        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+        Condition,
+        verbose_name=_("Condition"),
+        default=Condition.VERY_GOOD,
+        blank=True,
+        null=True,
     )
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
@@ -229,6 +236,7 @@ class TrafficLightReal(models.Model):
         null=True,
     )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    owner = models.CharField(_("Owner"), max_length=254)
 
     class Meta:
         db_table = "traffic_light_real"

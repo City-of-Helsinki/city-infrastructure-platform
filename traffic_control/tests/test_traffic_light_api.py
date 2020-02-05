@@ -47,6 +47,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner,
         }
         response = self.client.post(
             reverse("api:trafficlightplan-list"), data, format="json"
@@ -73,6 +74,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
+            "owner": self.test_owner,
         }
         response = self.client.put(
             reverse("api:trafficlightplan-detail", kwargs={"pk": traffic_light.id}),
@@ -153,6 +155,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner,
         }
         response = self.client.post(
             reverse("api:trafficlightreal-list"), data, format="json"
@@ -180,6 +183,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-21",
             "lifecycle": self.test_lifecycle_2.value,
+            "owner": self.test_owner,
         }
         response = self.client.put(
             reverse(
