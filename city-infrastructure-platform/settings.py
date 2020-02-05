@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
     "raven.contrib.django.raven_compat",
     "django_extensions",
     "rest_framework",
+    "rest_framework_gis",
     "corsheaders",
     "drf_yasg",
     "django_filters",
@@ -154,7 +155,7 @@ STATICFILES_DIRS = [checkout_dir("static")]
 # Django REST Framework
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "PAGE_SIZE": 10,
 }
 
