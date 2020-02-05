@@ -1,6 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
+from traffic_control.filters import TrafficSignPlanFilterSet
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.models import (
     BarrierPlan,
@@ -35,7 +37,7 @@ from traffic_control.serializers import (
 class TrafficControlViewSet(
     ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
 ):
-    filter_backends = [OrderingFilter]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["-created_at"]
 
@@ -53,6 +55,7 @@ class TrafficLightRealViewSet(TrafficControlViewSet):
 class TrafficSignPlanViewSet(TrafficControlViewSet):
     serializer_class = TrafficSignPlanSerializer
     queryset = TrafficSignPlan.objects.all()
+    filterset_class = TrafficSignPlanFilterSet
 
 
 class TrafficSignRealViewSet(TrafficControlViewSet):
