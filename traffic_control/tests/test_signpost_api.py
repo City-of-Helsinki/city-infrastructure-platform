@@ -26,7 +26,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         """
         signpost_plan = self.__create_test_signpost_plan()
         response = self.client.get(
-            "%s%s/" % (reverse("api:signpostplan-list"), str(signpost_plan.id))
+            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(signpost_plan.id))
@@ -40,6 +40,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner,
         }
         response = self.client.post(
             reverse("api:signpostplan-list"), data, format="json"
@@ -64,9 +65,10 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
+            "owner": self.test_owner,
         }
         response = self.client.put(
-            "%s%s/" % (reverse("api:signpostplan-list"), str(signpost_plan.id)),
+            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
             data,
             format="json",
         )
@@ -86,7 +88,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         """
         signpost_plan = self.__create_test_signpost_plan()
         response = self.client.delete(
-            "%s%s/" % (reverse("api:signpostplan-list"), str(signpost_plan.id))
+            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(SignpostPlan.objects.count(), 1)
@@ -124,7 +126,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         """
         signpost_real = self.__create_test_signpost_real()
         response = self.client.get(
-            "%s%s/" % (reverse("api:signpostreal-list"), str(signpost_real.id))
+            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(signpost_real.id))
@@ -138,6 +140,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner,
         }
         response = self.client.post(
             reverse("api:signpostreal-list"), data, format="json"
@@ -163,9 +166,10 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
+            "owner": self.test_owner,
         }
         response = self.client.put(
-            "%s%s/" % (reverse("api:signpostreal-list"), str(signpost_real.id)),
+            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
             data,
             format="json",
         )
@@ -186,7 +190,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         """
         signpost_real = self.__create_test_signpost_real()
         response = self.client.delete(
-            "%s%s/" % (reverse("api:signpostreal-list"), str(signpost_real.id))
+            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(SignpostReal.objects.count(), 1)

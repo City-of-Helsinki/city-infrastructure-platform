@@ -77,9 +77,6 @@ class MountPlan(models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
     type = EnumField(
         MountType, verbose_name=_("Mount type"), max_length=10, default=MountType.PORTAL
     )
@@ -90,8 +87,17 @@ class MountPlan(models.Model):
         blank=True,
         null=True,
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
+    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
+    decision_date = models.DateField(_("Decision date"))
+    decision_id = models.CharField(
+        _("Decision id"), max_length=254, blank=True, null=True
+    )
+    plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
+    validity_period_start = models.DateField(
+        _("Validity period start"), blank=True, null=True
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"), blank=True, null=True
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
@@ -116,27 +122,21 @@ class MountPlan(models.Model):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
+    height = models.DecimalField(
+        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    decision_date = models.DateField(_("Decision date"))
-    decision_id = models.CharField(
-        _("Decision id"), max_length=254, blank=True, null=True
-    )
-    plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
-    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     electric_accountable = models.CharField(
         _("Electric accountable"), max_length=254, blank=True, null=True
     )
+    is_foldable = models.BooleanField(_("Is foldable"), blank=True, null=True)
     cross_bar_length = models.DecimalField(
         _("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True
     )
-    foldable = models.BooleanField(_("Foldable"), blank=True, null=True)
+    owner = models.CharField(_("Owner"), max_length=254)
+    lifecycle = EnumIntegerField(
+        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
+    )
 
     class Meta:
         db_table = "mount_plan"
@@ -170,12 +170,14 @@ class MountReal(models.Model):
         null=True,
     )
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
-    installation_date = models.DateField(_("Installation date"))
+    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
         InstallationStatus,
         verbose_name=_("Installation status"),
         max_length=10,
         default=InstallationStatus.IN_USE,
+        blank=True,
+        null=True,
     )
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
@@ -184,7 +186,11 @@ class MountReal(models.Model):
         _("Validity period end"), blank=True, null=True
     )
     condition = EnumIntegerField(
-        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+        Condition,
+        verbose_name=_("Condition"),
+        default=Condition.VERY_GOOD,
+        blank=True,
+        null=True,
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
@@ -217,14 +223,14 @@ class MountReal(models.Model):
     electric_accountable = models.CharField(
         _("Electric accountable"), max_length=254, blank=True, null=True
     )
-    foldable = models.BooleanField(_("Foldable"), blank=True, null=True)
+    is_foldable = models.BooleanField(_("Is foldable"), blank=True, null=True)
     cross_bar_length = models.DecimalField(
         _("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True
     )
     diameter = models.DecimalField(
         _("Diameter"), max_digits=5, decimal_places=2, blank=True, null=True
     )
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    owner = models.CharField(_("Owner"), max_length=254)
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )

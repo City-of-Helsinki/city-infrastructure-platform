@@ -89,7 +89,11 @@ class RoadMarkingPlan(models.Model):
     size = models.CharField(_("Size"), max_length=254, blank=True, null=True)
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     color = EnumIntegerField(
-        RoadMarkingColor, verbose_name=_("Color"), default=RoadMarkingColor.WHITE
+        RoadMarkingColor,
+        verbose_name=_("Color"),
+        default=RoadMarkingColor.WHITE,
+        blank=True,
+        null=True,
     )
     decision_date = models.DateField(_("Decision date"))
     decision_id = models.CharField(
@@ -142,7 +146,7 @@ class RoadMarkingPlan(models.Model):
         _("Seasonal validity period end"), blank=True, null=True
     )
     has_rumble_strips = models.BooleanField(_("Has rumble strips"), null=True)
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    owner = models.CharField(_("Owner"), max_length=254)
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
@@ -209,14 +213,20 @@ class RoadMarkingReal(models.Model):
     size = models.CharField(_("Size"), max_length=254, blank=True, null=True)
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     color = EnumIntegerField(
-        RoadMarkingColor, verbose_name=_("Color"), default=RoadMarkingColor.WHITE
+        RoadMarkingColor,
+        verbose_name=_("Color"),
+        default=RoadMarkingColor.WHITE,
+        blank=True,
+        null=True,
     )
-    installation_date = models.DateField(_("Installation date"))
+    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
         InstallationStatus,
         verbose_name=_("Installation status"),
         max_length=10,
         default=InstallationStatus.IN_USE,
+        blank=True,
+        null=True,
     )
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
@@ -235,7 +245,11 @@ class RoadMarkingReal(models.Model):
         _("Missing Traffic Sign Real txt"), max_length=254, blank=True, null=True
     )
     condition = EnumIntegerField(
-        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+        Condition,
+        verbose_name=_("Condition"),
+        default=Condition.VERY_GOOD,
+        blank=True,
+        null=True,
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
@@ -270,7 +284,7 @@ class RoadMarkingReal(models.Model):
         _("Seasonal validity period end"), blank=True, null=True
     )
     has_rumble_strips = models.BooleanField(_("Has rumble strips"), null=True)
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
+    owner = models.CharField(_("Owner"), max_length=254)
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE

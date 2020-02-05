@@ -40,7 +40,7 @@ class SignpostPlan(models.Model):
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
-    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
+    direction = models.IntegerField(_("Direction"), default=0)
     code = models.ForeignKey(
         TrafficSignCode, verbose_name=_("Signpost Code"), on_delete=models.CASCADE
     )
@@ -53,7 +53,8 @@ class SignpostPlan(models.Model):
         blank=True,
         null=True,
     )
-    mount = models.ForeignKey(
+    order = models.IntegerField(_("Order"), default=1)
+    mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
         on_delete=models.CASCADE,
@@ -102,10 +103,22 @@ class SignpostPlan(models.Model):
         blank=True,
         null=True,
     )
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
-    size = EnumField(Size, verbose_name=_("Size"), max_length=1, default=Size.MEDIUM)
+    owner = models.CharField(_("Owner"), max_length=254)
+    size = EnumField(
+        Size,
+        verbose_name=_("Size"),
+        max_length=1,
+        default=Size.MEDIUM,
+        blank=True,
+        null=True,
+    )
     reflection_class = EnumField(
-        Reflection, verbose_name=_("Reflection"), max_length=2, default=Reflection.R1
+        Reflection,
+        verbose_name=_("Reflection"),
+        max_length=2,
+        default=Reflection.R1,
+        blank=True,
+        null=True,
     )
     seasonal_validity_period_start = models.DateField(
         _("Seasonal validity period start"), blank=True, null=True
@@ -164,7 +177,7 @@ class SignpostReal(models.Model):
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
-    direction = models.IntegerField(_("Direction"), default=0, blank=True, null=True)
+    direction = models.IntegerField(_("Direction"), default=0)
     code = models.ForeignKey(
         TrafficSignCode, verbose_name=_("Signpost Code"), on_delete=models.CASCADE
     )
@@ -177,7 +190,8 @@ class SignpostReal(models.Model):
         blank=True,
         null=True,
     )
-    mount = models.ForeignKey(
+    order = models.IntegerField(_("Order"), default=1)
+    mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
         on_delete=models.CASCADE,
@@ -192,12 +206,14 @@ class SignpostReal(models.Model):
         blank=True,
         null=True,
     )
-    installation_date = models.DateField(_("Installation date"))
+    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
         InstallationStatus,
         verbose_name=_("Installation status"),
         max_length=10,
         default=InstallationStatus.IN_USE,
+        blank=True,
+        null=True,
     )
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
@@ -206,7 +222,11 @@ class SignpostReal(models.Model):
         _("Validity period end"), blank=True, null=True
     )
     condition = EnumIntegerField(
-        Condition, verbose_name=_("Condition"), default=Condition.GOOD
+        Condition,
+        verbose_name=_("Condition"),
+        default=Condition.VERY_GOOD,
+        blank=True,
+        null=True,
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
@@ -231,10 +251,22 @@ class SignpostReal(models.Model):
         blank=True,
         null=True,
     )
-    owner = models.CharField(_("Owner"), max_length=254, blank=True, null=True)
-    size = EnumField(Size, verbose_name=_("Size"), max_length=1, default=Size.MEDIUM)
+    owner = models.CharField(_("Owner"), max_length=254)
+    size = EnumField(
+        Size,
+        verbose_name=_("Size"),
+        max_length=1,
+        default=Size.MEDIUM,
+        blank=True,
+        null=True,
+    )
     reflection_class = EnumField(
-        Reflection, verbose_name=_("Reflection"), max_length=2, default=Reflection.R1
+        Reflection,
+        verbose_name=_("Reflection"),
+        max_length=2,
+        default=Reflection.R1,
+        blank=True,
+        null=True,
     )
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     seasonal_validity_period_start = models.DateField(

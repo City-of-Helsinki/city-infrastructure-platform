@@ -23,3 +23,4 @@ class TrafficControlAPIBaseTestCase(APITestCase):
         self.test_point = Point(
             25496366.48055263, 6675573.680776692, srid=settings.SRID
         )
+        self.test_owner = "City of Helsinki"
