@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-05 09:16+0200\n"
+"POT-Creation-Date: 2020-02-06 13:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -999,3 +999,8 @@ msgstr "RFID"
 #: traffic_control/models/traffic_sign.py:321
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
+
+#: traffic_control/views.py:136
+#, python-format
+msgid "Code '%s' already exists"
+msgstr "Koodi '%s' on jo olemassa"
