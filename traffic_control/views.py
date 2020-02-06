@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
 from traffic_control.filters import TrafficSignPlanFilterSet
@@ -40,6 +41,7 @@ class TrafficControlViewSet(
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["-created_at"]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class TrafficLightPlanViewSet(TrafficControlViewSet):
