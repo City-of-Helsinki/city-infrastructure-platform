@@ -5,6 +5,8 @@ from rest_framework_gis.filters import GeometryFilter
 from traffic_control.models import (
     BarrierPlan,
     BarrierReal,
+    MountPlan,
+    MountReal,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -29,6 +31,16 @@ class BarrierPlanFilterSet(FilterSet):
 class BarrierRealFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = BarrierReal
+
+
+class MountPlanFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = MountPlan
+
+
+class MountRealFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = MountReal
 
 
 class TrafficSignPlanFilterSet(FilterSet):

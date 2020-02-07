@@ -1,11 +1,37 @@
 import datetime
 
+import pytest
 from django.urls import reverse
 from rest_framework import status
 
 from traffic_control.models import MountPlan, MountReal
 
-from .test_base_api import TrafficControlAPIBaseTestCase
+from .factories import get_api_client, get_mount_plan, get_mount_real
+from .test_base_api import (
+    line_location_test_data,
+    point_location_test_data,
+    TrafficControlAPIBaseTestCase,
+)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,query_location,expected",
+    [*point_location_test_data, *line_location_test_data],
+)
+def test_filter_mount_plans_location(location, query_location, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_mount_plan(location)
+    response = api_client.get(
+        reverse("api:mountplan-list"), {"location": query_location.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
 
 
 class MountPlanTests(TrafficControlAPIBaseTestCase):
@@ -104,6 +130,26 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
             created_by=self.user,
             updated_by=self.user,
         )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,query_location,expected",
+    [*point_location_test_data, *line_location_test_data],
+)
+def test_filter_mount_reals_location(location, query_location, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_mount_real(location)
+    response = api_client.get(
+        reverse("api:mountreal-list"), {"location": query_location.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
 
 
 class MountRealTests(TrafficControlAPIBaseTestCase):

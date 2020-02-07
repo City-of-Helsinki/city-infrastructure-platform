@@ -6,6 +6,8 @@ from rest_framework.viewsets import ModelViewSet
 from traffic_control.filters import (
     BarrierPlanFilterSet,
     BarrierRealFilterSet,
+    MountPlanFilterSet,
+    MountRealFilterSet,
     TrafficSignPlanFilterSet,
     TrafficSignRealFilterSet,
 )
@@ -68,11 +70,13 @@ class BarrierRealViewSet(TrafficControlViewSet):
 class MountPlanViewSet(TrafficControlViewSet):
     serializer_class = MountPlanSerializer
     queryset = MountPlan.objects.all()
+    filterset_class = MountPlanFilterSet
 
 
 class MountRealViewSet(TrafficControlViewSet):
     serializer_class = MountRealSerializer
     queryset = MountReal.objects.all()
+    filterset_class = MountRealFilterSet
 
 
 class RoadMarkingPlanViewSet(TrafficControlViewSet):

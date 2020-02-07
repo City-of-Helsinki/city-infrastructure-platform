@@ -9,6 +9,9 @@ from traffic_control.models import (
     BarrierReal,
     ConnectionType,
     Lifecycle,
+    MountPlan,
+    MountReal,
+    MountType,
     Reflective,
     TrafficSignCode,
     TrafficSignPlan,
@@ -63,6 +66,33 @@ def get_barrier_real(location=""):
         created_by=user,
         updated_by=user,
     )
+
+
+def get_mount_plan(location=""):
+    user = get_user("test_user")
+
+    return MountPlan.objects.get_or_create(
+        type=MountType.PORTAL,
+        location=location or test_point,
+        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        lifecycle=Lifecycle.ACTIVE,
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_mount_real(location=""):
+    user = get_user("test_user")
+
+    return MountReal.objects.get_or_create(
+        mount_plan=get_mount_plan(),
+        type=MountType.PORTAL,
+        location=location or test_point,
+        installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        lifecycle=Lifecycle.ACTIVE,
+        created_by=user,
+        updated_by=user,
+    )[0]
 
 
 def get_traffic_sign_code():
