@@ -3,7 +3,12 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
-from traffic_control.filters import TrafficSignPlanFilterSet, TrafficSignRealFilterSet
+from traffic_control.filters import (
+    BarrierPlanFilterSet,
+    BarrierRealFilterSet,
+    TrafficSignPlanFilterSet,
+    TrafficSignRealFilterSet,
+)
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.models import (
     BarrierPlan,
@@ -51,11 +56,13 @@ class TrafficControlViewSet(
 class BarrierPlanViewSet(TrafficControlViewSet):
     serializer_class = BarrierPlanSerializer
     queryset = BarrierPlan.objects.all()
+    filterset_class = BarrierPlanFilterSet
 
 
 class BarrierRealViewSet(TrafficControlViewSet):
     serializer_class = BarrierRealSerializer
     queryset = BarrierReal.objects.all()
+    filterset_class = BarrierRealFilterSet
 
 
 class MountPlanViewSet(TrafficControlViewSet):

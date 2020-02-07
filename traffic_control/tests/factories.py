@@ -5,7 +5,11 @@ from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
 from traffic_control.models import (
+    BarrierPlan,
+    BarrierReal,
+    ConnectionType,
     Lifecycle,
+    Reflective,
     TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
@@ -25,6 +29,40 @@ def get_user(username=None, admin=False):
         is_staff=admin,
         is_superuser=admin,
     )[0]
+
+
+def get_barrier_plan(location=""):
+    user = get_user("test_user")
+    return BarrierPlan.objects.get_or_create(
+        type=get_traffic_sign_code(),
+        location=location or test_point,
+        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        lifecycle=Lifecycle.ACTIVE,
+        material="Betoni",
+        reflective=Reflective.YES,
+        connection_type=ConnectionType.OPEN_OUT,
+        road_name="Testingroad",
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_barrier_real(location=""):
+    user = get_user("test_user")
+
+    return BarrierReal.objects.create(
+        type=get_traffic_sign_code(),
+        barrier_plan=get_barrier_plan(),
+        location=location or test_point,
+        installation_date=datetime.strptime("20012020", "%d%m%Y").date(),
+        lifecycle=Lifecycle.ACTIVE,
+        material="Betoni",
+        reflective=Reflective.YES,
+        connection_type=ConnectionType.OPEN_OUT,
+        road_name="Testingroad",
+        created_by=user,
+        updated_by=user,
+    )
 
 
 def get_traffic_sign_code():
