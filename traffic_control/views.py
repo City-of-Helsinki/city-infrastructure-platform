@@ -3,7 +3,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
-from traffic_control.filters import TrafficSignPlanFilterSet
+from traffic_control.filters import TrafficSignPlanFilterSet, TrafficSignRealFilterSet
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.models import (
     BarrierPlan,
@@ -48,35 +48,14 @@ class TrafficControlViewSet(
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class TrafficLightPlanViewSet(TrafficControlViewSet):
-    serializer_class = TrafficLightPlanSerializer
-    queryset = TrafficLightPlan.objects.all()
+class BarrierPlanViewSet(TrafficControlViewSet):
+    serializer_class = BarrierPlanSerializer
+    queryset = BarrierPlan.objects.all()
 
 
-class TrafficLightRealViewSet(TrafficControlViewSet):
-    serializer_class = TrafficLightRealSerializer
-    queryset = TrafficLightReal.objects.all()
-
-
-class TrafficSignPlanViewSet(TrafficControlViewSet):
-    serializer_class = TrafficSignPlanSerializer
-    queryset = TrafficSignPlan.objects.all()
-    filterset_class = TrafficSignPlanFilterSet
-
-
-class TrafficSignRealViewSet(TrafficControlViewSet):
-    serializer_class = TrafficSignRealSerializer
-    queryset = TrafficSignReal.objects.all()
-
-
-class SignpostPlanViewSet(TrafficControlViewSet):
-    serializer_class = SignpostPlanSerializer
-    queryset = SignpostPlan.objects.all()
-
-
-class SignpostRealViewSet(TrafficControlViewSet):
-    serializer_class = SignpostRealSerializer
-    queryset = SignpostReal.objects.all()
+class BarrierRealViewSet(TrafficControlViewSet):
+    serializer_class = BarrierRealSerializer
+    queryset = BarrierReal.objects.all()
 
 
 class MountPlanViewSet(TrafficControlViewSet):
@@ -89,16 +68,6 @@ class MountRealViewSet(TrafficControlViewSet):
     queryset = MountReal.objects.all()
 
 
-class BarrierPlanViewSet(TrafficControlViewSet):
-    serializer_class = BarrierPlanSerializer
-    queryset = BarrierPlan.objects.all()
-
-
-class BarrierRealViewSet(TrafficControlViewSet):
-    serializer_class = BarrierRealSerializer
-    queryset = BarrierReal.objects.all()
-
-
 class RoadMarkingPlanViewSet(TrafficControlViewSet):
     serializer_class = RoadMarkingPlanSerializer
     queryset = RoadMarkingPlan.objects.all()
@@ -109,6 +78,26 @@ class RoadMarkingRealViewSet(TrafficControlViewSet):
     queryset = RoadMarkingReal.objects.all()
 
 
+class SignpostPlanViewSet(TrafficControlViewSet):
+    serializer_class = SignpostPlanSerializer
+    queryset = SignpostPlan.objects.all()
+
+
+class SignpostRealViewSet(TrafficControlViewSet):
+    serializer_class = SignpostRealSerializer
+    queryset = SignpostReal.objects.all()
+
+
+class TrafficLightPlanViewSet(TrafficControlViewSet):
+    serializer_class = TrafficLightPlanSerializer
+    queryset = TrafficLightPlan.objects.all()
+
+
+class TrafficLightRealViewSet(TrafficControlViewSet):
+    serializer_class = TrafficLightRealSerializer
+    queryset = TrafficLightReal.objects.all()
+
+
 class TrafficSignCodeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
@@ -116,6 +105,18 @@ class TrafficSignCodeViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = TrafficSignCodeSerializer
     queryset = TrafficSignCode.objects.all()
+
+
+class TrafficSignPlanViewSet(TrafficControlViewSet):
+    serializer_class = TrafficSignPlanSerializer
+    queryset = TrafficSignPlan.objects.all()
+    filterset_class = TrafficSignPlanFilterSet
+
+
+class TrafficSignRealViewSet(TrafficControlViewSet):
+    serializer_class = TrafficSignRealSerializer
+    queryset = TrafficSignReal.objects.all()
+    filterset_class = TrafficSignRealFilterSet
 
 
 class PortalTypeViewSet(ModelViewSet):

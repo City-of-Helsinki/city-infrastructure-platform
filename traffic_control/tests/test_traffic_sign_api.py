@@ -6,21 +6,19 @@ from rest_framework import status
 
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
 
-from .factories import get_api_client, get_traffic_sign
+from .factories import get_api_client, get_traffic_sign_plan, get_traffic_sign_real
 from .test_base_api import point_location_test_data, TrafficControlAPIBaseTestCase
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "sign_location,query_location,expected", point_location_test_data
-)
-def test_filter_traffic_sign_plans_location(sign_location, query_location, expected):
+@pytest.mark.parametrize("location,query_location,expected", point_location_test_data)
+def test_filter_traffic_sign_plans_location(location, query_location, expected):
     """
     Ensure that filtering with location is working correctly.
     """
     api_client = get_api_client()
 
-    get_traffic_sign(sign_location)
+    get_traffic_sign_plan(location)
     response = api_client.get(
         reverse("api:trafficsignplan-list"), {"location": query_location.ewkt}
     )
@@ -129,6 +127,23 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
             created_by=self.user,
             updated_by=self.user,
         )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("location,query_location,expected", point_location_test_data)
+def test_filter_traffic_sign_reals_location(location, query_location, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_traffic_sign_real(location)
+    response = api_client.get(
+        reverse("api:trafficsignreal-list"), {"location": query_location.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
 
 
 class TrafficSignRealTests(TrafficControlAPIBaseTestCase):

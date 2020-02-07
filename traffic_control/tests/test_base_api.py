@@ -26,14 +26,14 @@ test_polygon_2 = Polygon(
     srid=settings.SRID,
 )
 
-point_location_test_data = (
+point_location_test_data = [
     (test_point, test_polygon, 1),
     (test_point_2, test_polygon, 1),
     (test_point_3, test_polygon, 0),
     (test_point, test_polygon_2, 0),
     (test_point_2, test_polygon_2, 0),
     (test_point_3, test_polygon_2, 0),
-)
+]
 
 line_location_test_data = [
     (test_line, test_polygon, 1),

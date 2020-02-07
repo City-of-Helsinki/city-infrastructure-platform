@@ -2,7 +2,7 @@ from django.contrib.gis.db.models import GeometryField
 from django_filters.filterset import FilterSet
 from rest_framework_gis.filters import GeometryFilter
 
-from traffic_control.models import TrafficSignPlan
+from traffic_control.models import TrafficSignPlan, TrafficSignReal
 
 
 class GenericMeta:
@@ -19,3 +19,8 @@ class GenericMeta:
 class TrafficSignPlanFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = TrafficSignPlan
+
+
+class TrafficSignRealFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = TrafficSignReal
