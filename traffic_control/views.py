@@ -1,5 +1,9 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
+from traffic_control.filters import TrafficSignPlanFilterSet
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.models import (
     BarrierPlan,
@@ -31,81 +35,71 @@ from traffic_control.serializers import (
 )
 
 
-class TrafficLightPlanViewSet(
+class TrafficControlViewSet(
     ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
 ):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = "__all__"
+    ordering = ["-created_at"]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class TrafficLightPlanViewSet(TrafficControlViewSet):
     serializer_class = TrafficLightPlanSerializer
-    queryset = TrafficLightPlan.objects.all().order_by("-created_at")
+    queryset = TrafficLightPlan.objects.all()
 
 
-class TrafficLightRealViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class TrafficLightRealViewSet(TrafficControlViewSet):
     serializer_class = TrafficLightRealSerializer
-    queryset = TrafficLightReal.objects.all().order_by("-created_at")
+    queryset = TrafficLightReal.objects.all()
 
 
-class TrafficSignPlanViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class TrafficSignPlanViewSet(TrafficControlViewSet):
     serializer_class = TrafficSignPlanSerializer
-    queryset = TrafficSignPlan.objects.all().order_by("-created_at")
+    queryset = TrafficSignPlan.objects.all()
+    filterset_class = TrafficSignPlanFilterSet
 
 
-class TrafficSignRealViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class TrafficSignRealViewSet(TrafficControlViewSet):
     serializer_class = TrafficSignRealSerializer
-    queryset = TrafficSignReal.objects.all().order_by("-created_at")
+    queryset = TrafficSignReal.objects.all()
 
 
-class SignpostPlanViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class SignpostPlanViewSet(TrafficControlViewSet):
     serializer_class = SignpostPlanSerializer
-    queryset = SignpostPlan.objects.all().order_by("-created_at")
+    queryset = SignpostPlan.objects.all()
 
 
-class SignpostRealViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class SignpostRealViewSet(TrafficControlViewSet):
     serializer_class = SignpostRealSerializer
-    queryset = SignpostReal.objects.all().order_by("-created_at")
+    queryset = SignpostReal.objects.all()
 
 
-class MountPlanViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin):
+class MountPlanViewSet(TrafficControlViewSet):
     serializer_class = MountPlanSerializer
-    queryset = MountPlan.objects.all().order_by("-created_at")
+    queryset = MountPlan.objects.all()
 
 
-class MountRealViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin):
+class MountRealViewSet(TrafficControlViewSet):
     serializer_class = MountRealSerializer
-    queryset = MountReal.objects.all().order_by("-created_at")
+    queryset = MountReal.objects.all()
 
 
-class BarrierPlanViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class BarrierPlanViewSet(TrafficControlViewSet):
     serializer_class = BarrierPlanSerializer
-    queryset = BarrierPlan.objects.all().order_by("-created_at")
+    queryset = BarrierPlan.objects.all()
 
 
-class BarrierRealViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class BarrierRealViewSet(TrafficControlViewSet):
     serializer_class = BarrierRealSerializer
-    queryset = BarrierReal.objects.all().order_by("-created_at")
+    queryset = BarrierReal.objects.all()
 
 
-class RoadMarkingPlanViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class RoadMarkingPlanViewSet(TrafficControlViewSet):
     serializer_class = RoadMarkingPlanSerializer
-    queryset = RoadMarkingPlan.objects.all().order_by("-created_at")
+    queryset = RoadMarkingPlan.objects.all()
 
 
-class RoadMarkingRealViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class RoadMarkingRealViewSet(TrafficControlViewSet):
     serializer_class = RoadMarkingRealSerializer
-    queryset = RoadMarkingReal.objects.all().order_by("-created_at")
+    queryset = RoadMarkingReal.objects.all()

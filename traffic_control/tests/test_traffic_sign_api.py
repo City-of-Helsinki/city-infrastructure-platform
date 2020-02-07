@@ -1,11 +1,32 @@
 import datetime
 
+import pytest
 from django.urls import reverse
 from rest_framework import status
 
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
 
-from .test_base_api import TrafficControlAPIBaseTestCase
+from .factories import get_api_client, get_traffic_sign
+from .test_base_api import point_location_test_data, TrafficControlAPIBaseTestCase
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "sign_location,query_location,expected", point_location_test_data
+)
+def test_filter_traffic_sign_plans_location(sign_location, query_location, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_traffic_sign(sign_location)
+    response = api_client.get(
+        reverse("api:trafficsignplan-list"), {"location": query_location.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
 
 
 class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
