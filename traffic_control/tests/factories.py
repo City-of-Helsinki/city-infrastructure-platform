@@ -12,7 +12,7 @@ from traffic_control.models import Lifecycle, TrafficSignCode, TrafficSignPlan
 def get_user(username=None, admin=False):
     if not username:
         username = get_random_string()  # pragma: no cover
-    return get_user_model().objects.create_user(
+    return get_user_model().objects.get_or_create(
         username=username,
         password="x",
         first_name="John",
@@ -20,7 +20,7 @@ def get_user(username=None, admin=False):
         email="test@example.com",
         is_staff=admin,
         is_superuser=admin,
-    )
+    )[0]
 
 
 def get_traffic_sign_code():
