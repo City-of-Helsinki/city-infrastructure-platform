@@ -70,9 +70,9 @@ Copy .env.example file as .env: `cp .env.example .env`
 
 ### Docker
 
-Build Docker image: `docker build -t city-infrastructure-platform-api .`
+Build Docker image: `docker build -t city-infrastructure-platform .`
 
-Run container: `docker run -d -p 8000:8000 -e DEBUG=1 city-infrastructure-platform-api`
+Run container: `docker run -d -p 8000:8000 -e DEBUG=1 city-infrastructure-platform`
 
 **Available configs (environment variables):**
 
@@ -94,5 +94,4 @@ Run script `./makemessages.sh`
 ### Load static data
 
 Run fixtures with:
-* Lifecycles: `python manage.py loaddata lifecycles.json`
 * Portal types: `python manage.py loaddata portal_types.json`
