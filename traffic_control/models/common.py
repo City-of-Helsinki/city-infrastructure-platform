@@ -92,7 +92,7 @@ class TrafficSignCode(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    code = models.CharField(_("Code"), max_length=32)
+    code = models.CharField(_("Code"), unique=True, max_length=32)
     description = models.CharField(
         _("Description"), max_length=254, blank=True, null=True
     )

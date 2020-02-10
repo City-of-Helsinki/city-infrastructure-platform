@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
 from traffic_control.filters import TrafficSignPlanFilterSet
@@ -16,6 +16,7 @@ from traffic_control.models import (
     SignpostReal,
     TrafficLightPlan,
     TrafficLightReal,
+    TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -30,6 +31,7 @@ from traffic_control.serializers import (
     SignpostRealSerializer,
     TrafficLightPlanSerializer,
     TrafficLightRealSerializer,
+    TrafficSignCodeSerializer,
     TrafficSignPlanSerializer,
     TrafficSignRealSerializer,
 )
@@ -103,3 +105,12 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet):
 class RoadMarkingRealViewSet(TrafficControlViewSet):
     serializer_class = RoadMarkingRealSerializer
     queryset = RoadMarkingReal.objects.all()
+
+
+class TrafficSignCodeViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = "__all__"
+    ordering = ["code"]
+    permission_classes = [IsAdminUser]
+    serializer_class = TrafficSignCodeSerializer
+    queryset = TrafficSignCode.objects.all()

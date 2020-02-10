@@ -12,6 +12,7 @@ from traffic_control.models import (
     SignpostReal,
     TrafficLightPlan,
     TrafficLightReal,
+    TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -111,3 +112,9 @@ class RoadMarkingRealSerializer(
         model = RoadMarkingReal
         fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+
+
+class TrafficSignCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrafficSignCode
+        fields = "__all__"
