@@ -9,7 +9,7 @@ from traffic_control.models import (
     MountReal,
     TrafficSignPlan,
     TrafficSignReal,
-)
+    RoadMarkingPlan, RoadMarkingReal)
 
 
 class GenericMeta:
@@ -41,6 +41,16 @@ class MountPlanFilterSet(FilterSet):
 class MountRealFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = MountReal
+
+
+class RoadMarkingPlanFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = RoadMarkingPlan
+
+
+class RoadMarkingRealFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = RoadMarkingReal
 
 
 class TrafficSignPlanFilterSet(FilterSet):

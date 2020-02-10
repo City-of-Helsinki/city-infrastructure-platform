@@ -10,7 +10,7 @@ from traffic_control.filters import (
     MountRealFilterSet,
     TrafficSignPlanFilterSet,
     TrafficSignRealFilterSet,
-)
+    RoadMarkingPlanFilterSet, RoadMarkingRealFilterSet)
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.models import (
     BarrierPlan,
@@ -82,11 +82,13 @@ class MountRealViewSet(TrafficControlViewSet):
 class RoadMarkingPlanViewSet(TrafficControlViewSet):
     serializer_class = RoadMarkingPlanSerializer
     queryset = RoadMarkingPlan.objects.all()
+    filterset_class = RoadMarkingPlanFilterSet
 
 
 class RoadMarkingRealViewSet(TrafficControlViewSet):
     serializer_class = RoadMarkingRealSerializer
     queryset = RoadMarkingReal.objects.all()
+    filterset_class = RoadMarkingRealFilterSet
 
 
 class SignpostPlanViewSet(TrafficControlViewSet):
