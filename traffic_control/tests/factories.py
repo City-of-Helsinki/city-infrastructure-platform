@@ -13,10 +13,15 @@ from traffic_control.models import (
     MountReal,
     MountType,
     Reflective,
+    RoadMarkingColor,
+    RoadMarkingPlan,
+    RoadMarkingReal,
+    SignpostPlan,
+    SignpostReal,
     TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
-    RoadMarkingPlan, RoadMarkingReal, RoadMarkingColor)
+)
 from traffic_control.tests.test_base_api import test_point
 
 
@@ -131,6 +136,33 @@ def get_road_marking_real(location=""):
         is_raised=False,
         has_rumble_strips=True,
         road_name="Testingroad",
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_signpost_plan(location=""):
+    user = get_user("test_user")
+
+    return SignpostPlan.objects.get_or_create(
+        code=get_traffic_sign_code(),
+        location=location or test_point,
+        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        lifecycle=Lifecycle.ACTIVE,
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_signpost_real(location=""):
+    user = get_user("test_user")
+
+    return SignpostReal.objects.get_or_create(
+        code=get_traffic_sign_code(),
+        signpost_plan=get_signpost_plan(),
+        location=location or test_point,
+        installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        lifecycle=Lifecycle.ACTIVE,
         created_by=user,
         updated_by=user,
     )[0]

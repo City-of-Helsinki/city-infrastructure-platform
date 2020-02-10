@@ -5,9 +5,13 @@ from django.urls import reverse
 from rest_framework import status
 
 from traffic_control.models import RoadMarkingColor, RoadMarkingPlan, RoadMarkingReal
-from .factories import get_api_client, get_road_marking_real, get_road_marking_plan
 
-from .test_base_api import TrafficControlAPIBaseTestCase, point_location_test_data, line_location_test_data
+from .factories import get_api_client, get_road_marking_plan, get_road_marking_real
+from .test_base_api import (
+    line_location_test_data,
+    point_location_test_data,
+    TrafficControlAPIBaseTestCase,
+)
 
 
 @pytest.mark.django_db

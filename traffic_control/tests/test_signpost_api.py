@@ -1,11 +1,32 @@
 import datetime
 
+import pytest
 from django.urls import reverse
 from rest_framework import status
 
 from traffic_control.models import SignpostPlan, SignpostReal
 
-from .test_base_api import TrafficControlAPIBaseTestCase
+from .factories import get_api_client, get_signpost_plan, get_signpost_real
+from .test_base_api import point_location_test_data, TrafficControlAPIBaseTestCase
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,query_location,expected", point_location_test_data,
+)
+def test_filter_signpost_plan_location(location, query_location, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_signpost_plan(location)
+    response = api_client.get(
+        reverse("api:signpostplan-list"), {"location": query_location.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
 
 
 class SignpostPlanTests(TrafficControlAPIBaseTestCase):
@@ -106,6 +127,25 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             created_by=self.user,
             updated_by=self.user,
         )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,query_location,expected", point_location_test_data,
+)
+def test_filter_signpost_reals_location(location, query_location, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_signpost_real(location)
+    response = api_client.get(
+        reverse("api:signpostreal-list"), {"location": query_location.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
 
 
 class SignPostRealTests(TrafficControlAPIBaseTestCase):
