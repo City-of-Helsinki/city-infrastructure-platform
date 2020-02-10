@@ -1,5 +1,6 @@
 import datetime
 
+import pytest
 from django.urls import reverse
 from rest_framework import status
 
@@ -11,7 +12,27 @@ from traffic_control.models import (
     TrafficLightType,
 )
 
-from .test_base_api import TrafficControlAPIBaseTestCase
+from .factories import get_api_client, get_traffic_light_plan, get_traffic_light_real
+from .test_base_api import point_location_test_data, TrafficControlAPIBaseTestCase
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,query_location,expected", point_location_test_data,
+)
+def test_filter_traffic_light_plans_location(location, query_location, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_traffic_light_plan(location)
+    response = api_client.get(
+        reverse("api:trafficlightplan-list"), {"location": query_location.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
 
 
 class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
@@ -120,6 +141,25 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             created_by=self.user,
             updated_by=self.user,
         )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,query_location,expected", point_location_test_data,
+)
+def test_filter_traffic_light_reals_location(location, query_location, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_traffic_light_real(location)
+    response = api_client.get(
+        reverse("api:trafficlightreal-list"), {"location": query_location.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
 
 
 class TrafficLightRealTests(TrafficControlAPIBaseTestCase):

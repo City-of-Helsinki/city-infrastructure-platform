@@ -12,6 +12,8 @@ from traffic_control.filters import (
     RoadMarkingRealFilterSet,
     SignpostPlanFilterSet,
     SignpostRealFilterSet,
+    TrafficLightPlanFilterSet,
+    TrafficLightRealFilterSet,
     TrafficSignPlanFilterSet,
     TrafficSignRealFilterSet,
 )
@@ -110,11 +112,13 @@ class SignpostRealViewSet(TrafficControlViewSet):
 class TrafficLightPlanViewSet(TrafficControlViewSet):
     serializer_class = TrafficLightPlanSerializer
     queryset = TrafficLightPlan.objects.all()
+    filterset_class = TrafficLightPlanFilterSet
 
 
 class TrafficLightRealViewSet(TrafficControlViewSet):
     serializer_class = TrafficLightRealSerializer
     queryset = TrafficLightReal.objects.all()
+    filterset_class = TrafficLightRealFilterSet
 
 
 class TrafficSignCodeViewSet(ModelViewSet):

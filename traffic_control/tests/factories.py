@@ -18,6 +18,10 @@ from traffic_control.models import (
     RoadMarkingReal,
     SignpostPlan,
     SignpostReal,
+    TrafficLightPlan,
+    TrafficLightReal,
+    TrafficLightSoundBeaconValue,
+    TrafficLightType,
     TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
@@ -163,6 +167,41 @@ def get_signpost_real(location=""):
         location=location or test_point,
         installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_traffic_light_plan(location=""):
+    user = get_user("test_user")
+
+    return TrafficLightPlan.objects.get_or_create(
+        code=get_traffic_sign_code(),
+        location=location or test_point,
+        type=TrafficLightType.TRAFFIC_LIGHT,
+        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        lifecycle=Lifecycle.ACTIVE,
+        mount_type=MountType.POST,
+        road_name="Testingroad",
+        sound_beacon=TrafficLightSoundBeaconValue.YES,
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_traffic_light_real(location=""):
+    user = get_user("test_user")
+
+    return TrafficLightReal.objects.get_or_create(
+        code=get_traffic_sign_code(),
+        traffic_light_plan=get_traffic_light_plan(),
+        location=location or test_point,
+        type=TrafficLightType.TRAFFIC_LIGHT,
+        installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        lifecycle=Lifecycle.ACTIVE,
+        mount_type=MountType.POST,
+        road_name="Testingroad",
+        sound_beacon=TrafficLightSoundBeaconValue.YES,
         created_by=user,
         updated_by=user,
     )[0]
