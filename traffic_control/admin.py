@@ -234,5 +234,5 @@ class PortalTypeAdmin(admin.ModelAdmin):
         "build_type",
         "model",
     )
-    ordering = ("-structure", "-build_type", "-model")
+    ordering = ("structure", "build_type", "model")
     actions = None

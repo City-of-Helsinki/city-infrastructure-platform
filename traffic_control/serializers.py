@@ -6,6 +6,7 @@ from traffic_control.models import (
     BarrierReal,
     MountPlan,
     MountReal,
+    PortalType,
     RoadMarkingPlan,
     RoadMarkingReal,
     SignpostPlan,
@@ -117,4 +118,10 @@ class RoadMarkingRealSerializer(
 class TrafficSignCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrafficSignCode
+        fields = "__all__"
+
+
+class PortalTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PortalType
         fields = "__all__"

@@ -49,6 +49,9 @@ router.register(
 router.register(
     "traffic-sign-codes", traffic_control.views.TrafficSignCodeViewSet,
 )
+router.register(
+    "portal-types", traffic_control.views.PortalTypeViewSet,
+)
 schema_view = get_schema_view(
     openapi.Info(
         title="City Infrastructure Platform API",
