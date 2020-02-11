@@ -49,7 +49,7 @@ class TrafficLightPlan(models.Model):
     )
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
-    type = EnumField(TrafficLightType, blank=True, null=True)
+    type = EnumIntegerField(TrafficLightType, blank=True, null=True)
     code = models.ForeignKey(
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
@@ -149,7 +149,7 @@ class TrafficLightReal(models.Model):
     )
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
-    type = EnumField(TrafficLightType, blank=True, null=True)
+    type = EnumIntegerField(TrafficLightType, blank=True, null=True)
     code = models.ForeignKey(
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )

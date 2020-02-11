@@ -1,11 +1,63 @@
 import datetime
 
+import pytest
 from django.urls import reverse
 from rest_framework import status
 
 from traffic_control.models import RoadMarkingColor, RoadMarkingPlan, RoadMarkingReal
 
-from .test_base_api import TrafficControlAPIBaseTestCase
+from .factories import get_api_client, get_road_marking_plan, get_road_marking_real
+from .test_base_api import (
+    line_location_error_test_data,
+    line_location_test_data,
+    point_location_error_test_data,
+    point_location_test_data,
+    TrafficControlAPIBaseTestCase,
+)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected",
+    [*point_location_test_data, *line_location_test_data],
+)
+def test_filter_road_markings_plans_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    road_marking_plan = get_road_marking_plan(location)
+    response = api_client.get(
+        reverse("api:roadmarkingplan-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(road_marking_plan.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected",
+    [*point_location_error_test_data, *line_location_error_test_data],
+)
+def test_filter_error_road_markings_plans_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_road_marking_plan(location)
+    response = api_client.get(
+        reverse("api:roadmarkingplan-list"), {"location": location_query}
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
@@ -113,6 +165,50 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             created_by=self.user,
             updated_by=self.user,
         )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected",
+    [*point_location_test_data, *line_location_test_data],
+)
+def test_filter_road_markings_reals_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    road_marking_real = get_road_marking_real(location)
+    response = api_client.get(
+        reverse("api:roadmarkingreal-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(road_marking_real.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected",
+    [*point_location_error_test_data, *line_location_error_test_data],
+)
+def test_filter_error_road_markings_reals_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_road_marking_real(location)
+    response = api_client.get(
+        reverse("api:roadmarkingreal-list"), {"location": location_query}
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):

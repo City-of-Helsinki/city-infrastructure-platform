@@ -8,6 +8,7 @@ from users.models import User
 test_point = Point(10.0, 10.0, srid=settings.SRID)
 test_point_2 = Point(0.0, 0.0, srid=settings.SRID)
 test_point_3 = Point(100.0, 100.0, srid=settings.SRID)
+test_point_4 = Point(-44.3, 60.1, srid=4326)
 test_line = LineString((0.0, 0.0), (50.0, 0.0), srid=settings.SRID)
 test_line_2 = LineString((20.0, 20.0), (30.0, 30.0), srid=settings.SRID)
 test_line_3 = LineString((40.0, 40.0), (60.0, 60.0), srid=settings.SRID)
@@ -26,14 +27,20 @@ test_polygon_2 = Polygon(
     srid=settings.SRID,
 )
 
-point_location_test_data = (
+point_location_test_data = [
     (test_point, test_polygon, 1),
     (test_point_2, test_polygon, 1),
     (test_point_3, test_polygon, 0),
+    (test_point_4, test_polygon, 0),
     (test_point, test_polygon_2, 0),
     (test_point_2, test_polygon_2, 0),
     (test_point_3, test_polygon_2, 0),
-)
+]
+
+point_location_error_test_data = [
+    (test_point, "invalid_test_string", "Virheellinen geometria-arvo."),
+    (test_point, 123123, "Virheellinen geometria-arvo."),
+]
 
 line_location_test_data = [
     (test_line, test_polygon, 1),
@@ -44,6 +51,11 @@ line_location_test_data = [
     (test_line_2, test_polygon_2, 0),
     (test_line_3, test_polygon_2, 0),
     (test_line_4, test_polygon_2, 0),
+]
+
+line_location_error_test_data = [
+    (test_line, "invalid_test_string", "Virheellinen geometria-arvo."),
+    (test_line, 123123, "Virheellinen geometria-arvo."),
 ]
 
 
