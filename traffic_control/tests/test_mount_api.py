@@ -8,7 +8,9 @@ from traffic_control.models import MountPlan, MountReal
 
 from .factories import get_api_client, get_mount_plan, get_mount_real
 from .test_base_api import (
+    line_location_error_test_data,
     line_location_test_data,
+    point_location_error_test_data,
     point_location_test_data,
     TrafficControlAPIBaseTestCase,
 )
@@ -16,10 +18,34 @@ from .test_base_api import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,query_location,expected",
+    "location,location_query,expected",
     [*point_location_test_data, *line_location_test_data],
 )
-def test_filter_mount_plans_location(location, query_location, expected):
+def test_filter_mount_plans_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    mount_plan = get_mount_plan(location)
+    response = api_client.get(
+        reverse("api:mountplan-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(mount_plan.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected",
+    [*point_location_error_test_data, *line_location_error_test_data],
+)
+def test_filter_error_mount_plans_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
     """
@@ -27,11 +53,11 @@ def test_filter_mount_plans_location(location, query_location, expected):
 
     get_mount_plan(location)
     response = api_client.get(
-        reverse("api:mountplan-list"), {"location": query_location.ewkt}
+        reverse("api:mountplan-list"), {"location": location_query}
     )
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data.get("count") == expected
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class MountPlanTests(TrafficControlAPIBaseTestCase):
@@ -134,10 +160,34 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,query_location,expected",
+    "location,location_query,expected",
     [*point_location_test_data, *line_location_test_data],
 )
-def test_filter_mount_reals_location(location, query_location, expected):
+def test_filter_mount_reals_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    mount_real = get_mount_real(location)
+    response = api_client.get(
+        reverse("api:mountreal-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(mount_real.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected",
+    [*point_location_error_test_data, *line_location_error_test_data],
+)
+def test_filter_error_mount_reals_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
     """
@@ -145,11 +195,11 @@ def test_filter_mount_reals_location(location, query_location, expected):
 
     get_mount_real(location)
     response = api_client.get(
-        reverse("api:mountreal-list"), {"location": query_location.ewkt}
+        reverse("api:mountreal-list"), {"location": location_query}
     )
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data.get("count") == expected
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class MountRealTests(TrafficControlAPIBaseTestCase):

@@ -7,12 +7,39 @@ from rest_framework import status
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
 
 from .factories import get_api_client, get_traffic_sign_plan, get_traffic_sign_real
-from .test_base_api import point_location_test_data, TrafficControlAPIBaseTestCase
+from .test_base_api import (
+    point_location_error_test_data,
+    point_location_test_data,
+    TrafficControlAPIBaseTestCase,
+)
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("location,query_location,expected", point_location_test_data)
-def test_filter_traffic_sign_plans_location(location, query_location, expected):
+@pytest.mark.parametrize("location,location_query,expected", point_location_test_data)
+def test_filter_traffic_sign_plans_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    traffic_sign_plan = get_traffic_sign_plan(location)
+    response = api_client.get(
+        reverse("api:trafficsignplan-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(traffic_sign_plan.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected", point_location_error_test_data,
+)
+def test_filter_error_traffic_sign_plans_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
     """
@@ -20,11 +47,11 @@ def test_filter_traffic_sign_plans_location(location, query_location, expected):
 
     get_traffic_sign_plan(location)
     response = api_client.get(
-        reverse("api:trafficsignplan-list"), {"location": query_location.ewkt}
+        reverse("api:trafficsignplan-list"), {"location": location_query}
     )
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data.get("count") == expected
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
@@ -130,8 +157,31 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("location,query_location,expected", point_location_test_data)
-def test_filter_traffic_sign_reals_location(location, query_location, expected):
+@pytest.mark.parametrize("location,location_query,expected", point_location_test_data)
+def test_filter_traffic_sign_reals_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    traffic_sign_real = get_traffic_sign_real(location)
+    response = api_client.get(
+        reverse("api:trafficsignreal-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(traffic_sign_real.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected", point_location_error_test_data,
+)
+def test_filter_error_traffic_sign_reals_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
     """
@@ -139,11 +189,11 @@ def test_filter_traffic_sign_reals_location(location, query_location, expected):
 
     get_traffic_sign_real(location)
     response = api_client.get(
-        reverse("api:trafficsignreal-list"), {"location": query_location.ewkt}
+        reverse("api:trafficsignreal-list"), {"location": location_query}
     )
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data.get("count") == expected
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class TrafficSignRealTests(TrafficControlAPIBaseTestCase):

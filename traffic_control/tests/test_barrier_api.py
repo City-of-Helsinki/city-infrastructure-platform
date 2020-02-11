@@ -8,7 +8,9 @@ from traffic_control.models import BarrierPlan, BarrierReal, ConnectionType, Ref
 
 from .factories import get_api_client, get_barrier_plan, get_barrier_real
 from .test_base_api import (
+    line_location_error_test_data,
     line_location_test_data,
+    point_location_error_test_data,
     point_location_test_data,
     TrafficControlAPIBaseTestCase,
 )
@@ -16,10 +18,33 @@ from .test_base_api import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,query_location,expected",
+    "location,location_query,expected",
     [*point_location_test_data, *line_location_test_data],
 )
-def test_filter_barrier_plans_location(location, query_location, expected):
+def test_filter_barrier_plans_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    barrier_plan = get_barrier_plan(location)
+    response = api_client.get(
+        reverse("api:barrierplan-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(barrier_plan.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected",
+    [*point_location_error_test_data, *line_location_error_test_data],
+)
+def test_filter_error_barrier_plans_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
     """
@@ -27,11 +52,11 @@ def test_filter_barrier_plans_location(location, query_location, expected):
 
     get_barrier_plan(location)
     response = api_client.get(
-        reverse("api:barrierplan-list"), {"location": query_location.ewkt}
+        reverse("api:barrierplan-list"), {"location": location_query}
     )
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data.get("count") == expected
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class BarrierPlanTests(TrafficControlAPIBaseTestCase):
@@ -142,22 +167,46 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,query_location,expected",
+    "location,location_query,expected",
     [*point_location_test_data, *line_location_test_data],
 )
-def test_filter_barrier_reals_location(location, query_location, expected):
+def test_filter_barrier_reals_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
     """
     api_client = get_api_client()
 
-    get_barrier_real(location)
+    barrier_real = get_barrier_real(location)
     response = api_client.get(
-        reverse("api:barrierreal-list"), {"location": query_location.ewkt}
+        reverse("api:barrierreal-list"), {"location": location_query.ewkt}
     )
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(barrier_real.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected",
+    [*point_location_error_test_data, *line_location_error_test_data],
+)
+def test_filter_error_barrier_reals_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    get_barrier_plan(location)
+    response = api_client.get(
+        reverse("api:barrierreal-list"), {"location": location_query}
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class BarrierRealTests(TrafficControlAPIBaseTestCase):

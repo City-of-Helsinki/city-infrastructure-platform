@@ -7,14 +7,41 @@ from rest_framework import status
 from traffic_control.models import SignpostPlan, SignpostReal
 
 from .factories import get_api_client, get_signpost_plan, get_signpost_real
-from .test_base_api import point_location_test_data, TrafficControlAPIBaseTestCase
+from .test_base_api import (
+    point_location_error_test_data,
+    point_location_test_data,
+    TrafficControlAPIBaseTestCase,
+)
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,query_location,expected", point_location_test_data,
+    "location,location_query,expected", point_location_test_data,
 )
-def test_filter_signpost_plan_location(location, query_location, expected):
+def test_filter_signpost_plan_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    signpost_plan = get_signpost_plan(location)
+    response = api_client.get(
+        reverse("api:signpostplan-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(signpost_plan.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected", point_location_error_test_data,
+)
+def test_filter_error_signpost_plans_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
     """
@@ -22,11 +49,11 @@ def test_filter_signpost_plan_location(location, query_location, expected):
 
     get_signpost_plan(location)
     response = api_client.get(
-        reverse("api:signpostplan-list"), {"location": query_location.ewkt}
+        reverse("api:signpostplan-list"), {"location": location_query}
     )
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data.get("count") == expected
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class SignpostPlanTests(TrafficControlAPIBaseTestCase):
@@ -131,9 +158,32 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,query_location,expected", point_location_test_data,
+    "location,location_query,expected", point_location_test_data,
 )
-def test_filter_signpost_reals_location(location, query_location, expected):
+def test_filter_signpost_reals_location(location, location_query, expected):
+    """
+    Ensure that filtering with location is working correctly.
+    """
+    api_client = get_api_client()
+
+    signpost_real = get_signpost_real(location)
+    response = api_client.get(
+        reverse("api:signpostreal-list"), {"location": location_query.ewkt}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == expected
+
+    if expected == 1:
+        data = response.data.get("results")[0]
+        assert str(signpost_real.id) == data.get("id")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "location,location_query,expected", point_location_error_test_data,
+)
+def test_filter_error_signpost_reals_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
     """
@@ -141,11 +191,11 @@ def test_filter_signpost_reals_location(location, query_location, expected):
 
     get_signpost_real(location)
     response = api_client.get(
-        reverse("api:signpostreal-list"), {"location": query_location.ewkt}
+        reverse("api:signpostreal-list"), {"location": location_query}
     )
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data.get("count") == expected
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data.get("location")[0] == expected
 
 
 class SignPostRealTests(TrafficControlAPIBaseTestCase):
