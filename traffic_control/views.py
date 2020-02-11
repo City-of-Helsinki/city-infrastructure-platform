@@ -10,6 +10,7 @@ from traffic_control.models import (
     BarrierReal,
     MountPlan,
     MountReal,
+    PortalType,
     RoadMarkingPlan,
     RoadMarkingReal,
     SignpostPlan,
@@ -25,6 +26,7 @@ from traffic_control.serializers import (
     BarrierRealSerializer,
     MountPlanSerializer,
     MountRealSerializer,
+    PortalTypeSerializer,
     RoadMarkingPlanSerializer,
     RoadMarkingRealSerializer,
     SignpostPlanSerializer,
@@ -114,3 +116,12 @@ class TrafficSignCodeViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = TrafficSignCodeSerializer
     queryset = TrafficSignCode.objects.all()
+
+
+class PortalTypeViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = "__all__"
+    ordering = ["structure", "build_type", "model"]
+    permission_classes = [IsAdminUser]
+    serializer_class = PortalTypeSerializer
+    queryset = PortalType.objects.all()

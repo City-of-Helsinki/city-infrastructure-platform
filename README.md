@@ -90,8 +90,3 @@ Run the application `docker-compose up`
 ### Translations (fi)
 
 Run script `./makemessages.sh`
-
-### Load static data
-
-Run fixtures with:
-* Portal types: `python manage.py loaddata portal_types.json`

@@ -26,47 +26,19 @@ class MountType(Enum):
         OTHER = _("Other")
 
 
-class PortalStructure(Enum):
-    PIPE = "PIPE"
-    GRID = "GRID"
-
-    class Labels:
-        PIPE = _("Pipe")
-        GRID = _("Grid")
-
-
-class PortalBuildType(Enum):
-    SQUARE = "SQUARE"
-    CANTILEVER = "CANTILEVER"
-    HIGH_CANTILEVER = "HIGH_CANTILEVER"
-
-    class Labels:
-        SQUARE = _("Square")
-        CANTILEVER = _("Cantilever")
-        HIGH_CANTILEVER = _("High cantilever")
-
-
 class PortalType(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    structure = EnumField(
-        PortalStructure,
-        verbose_name=_("Portal structure"),
-        default=PortalStructure.PIPE,
-    )
-    build_type = EnumField(
-        PortalBuildType,
-        verbose_name=_("Portal build type"),
-        max_length=15,
-        default=PortalBuildType.SQUARE,
-    )
-    model = models.CharField(_("Portal model"), max_length=32)
+    structure = models.CharField(_("Portal structure"), max_length=64)
+    build_type = models.CharField(_("Portal build type"), max_length=64)
+    model = models.CharField(_("Portal model"), max_length=64)
 
     class Meta:
         db_table = "portal_type"
         verbose_name = _("Portal type")
         verbose_name_plural = _("Portal types")
+        unique_together = ("structure", "build_type", "model")
 
     def __str__(self):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
