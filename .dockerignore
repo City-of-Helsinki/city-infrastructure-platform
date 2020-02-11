@@ -1,0 +1,9 @@
+# python
+**/.python-version
+**/__pycache__
+**/*.pyc
+venv/
+var/
+*.csv
+/tmp/*
+.*

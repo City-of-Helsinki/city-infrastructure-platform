@@ -8,6 +8,12 @@ if [[ "$APPLY_MIGRATIONS" = "1" ]]; then
     python ./manage.py migrate --noinput
 fi
 
+# Collect static files
+if [[ "$COLLECT_STATIC" = "1" ]]; then
+    echo "Collecting static files..."
+    ./manage.py collectstatic --noinput
+fi
+
 # Start server
 if [[ ! -z "$@" ]]; then
     "$@"

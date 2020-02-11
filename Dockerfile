@@ -44,6 +44,7 @@ RUN pip install --no-cache-dir -r requirements-dev.txt
 
 # Set up start command
 ENV APPLY_MIGRATIONS=1
+ENV COLLECT_STATIC=1
 ENV DEV_SERVER=1
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
