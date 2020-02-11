@@ -38,7 +38,7 @@ if not os.path.exists(filename):
 
 with open(filename, mode="r", encoding="utf-8-sig") as csv_file:
     auth = HTTPBasicAuth(args.username, args.password)
-    csv_reader = csv.DictReader(csv_file, delimiter=";")
+    csv_reader = csv.DictReader(csv_file, delimiter=",")
     counter = 0
     for row in csv_reader:
         code = row["MerkkiKoodi"].strip()

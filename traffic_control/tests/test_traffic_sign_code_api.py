@@ -62,7 +62,10 @@ class TrafficSignCodeTests(APITestCase):
             "code": "L3",
             "description": "Suojatie",
         }
-        self.client.post(reverse("api:trafficsigncode-list"), data, format="json")
+        response = self.client.post(
+            reverse("api:trafficsigncode-list"), data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         response = self.client.post(
             reverse("api:trafficsigncode-list"), data, format="json"
         )
