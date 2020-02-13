@@ -76,6 +76,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_yasg",
     "django_filters",
+    "auditlog",
 ]
 LOCAL_APPS = ["users.apps.UsersConfig", "traffic_control.apps.TrafficControlConfig"]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -92,6 +93,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "auditlog.middleware.AuditlogMiddleware",
 ]
 
 ROOT_URLCONF = "city-infrastructure-platform.urls"

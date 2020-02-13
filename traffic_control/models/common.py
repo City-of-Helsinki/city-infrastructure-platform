@@ -1,5 +1,6 @@
 import uuid
 
+from auditlog.registry import auditlog
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum
@@ -104,3 +105,6 @@ class TrafficSignCode(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.code, self.description)
+
+
+auditlog.register(TrafficSignCode)
