@@ -1,5 +1,6 @@
 import uuid
 
+from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
@@ -322,3 +323,7 @@ class TrafficSignReal(models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.code, self.value)
+
+
+auditlog.register(TrafficSignPlan)
+auditlog.register(TrafficSignReal)
