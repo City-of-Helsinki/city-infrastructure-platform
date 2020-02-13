@@ -1,4 +1,7 @@
+from django.contrib.admin.utils import unquote
 from django.contrib.gis import admin
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from .models import (
@@ -21,8 +24,18 @@ from .models import (
 admin.site.site_header = _("City Infrastructure Platform Administration")
 
 
+class AuditLogHistoryAdmin(admin.ModelAdmin):
+    def history_view(self, request, object_id, extra_context=None):
+        return HttpResponseRedirect(
+            "{url}?object_repr={object_repr}".format(
+                url=reverse("admin:auditlog_logentry_changelist", args=()),
+                object_repr=self.get_object(request, unquote(object_id)),
+            )
+        )
+
+
 @admin.register(BarrierPlan)
-class BarrierPlanAdmin(admin.OSMGeoAdmin):
+class BarrierPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -38,7 +51,7 @@ class BarrierPlanAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(BarrierReal)
-class BarrierRealAdmin(admin.OSMGeoAdmin):
+class BarrierRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -54,7 +67,7 @@ class BarrierRealAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(TrafficLightPlan)
-class TrafficLightPlanAdmin(admin.OSMGeoAdmin):
+class TrafficLightPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -71,7 +84,7 @@ class TrafficLightPlanAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(TrafficLightReal)
-class TrafficLightRealAdmin(admin.OSMGeoAdmin):
+class TrafficLightRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -88,7 +101,7 @@ class TrafficLightRealAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(TrafficSignPlan)
-class TrafficSignPlanAdmin(admin.OSMGeoAdmin):
+class TrafficSignPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -105,7 +118,7 @@ class TrafficSignPlanAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(TrafficSignReal)
-class TrafficSignRealAdmin(admin.OSMGeoAdmin):
+class TrafficSignRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -122,7 +135,7 @@ class TrafficSignRealAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(SignpostPlan)
-class SignpostPlanAdmin(admin.OSMGeoAdmin):
+class SignpostPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -139,7 +152,7 @@ class SignpostPlanAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(SignpostReal)
-class SignpostRealAdmin(admin.OSMGeoAdmin):
+class SignpostRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -156,7 +169,7 @@ class SignpostRealAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(MountPlan)
-class MountPlanAdmin(admin.OSMGeoAdmin):
+class MountPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -171,7 +184,7 @@ class MountPlanAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(MountReal)
-class MountRealAdmin(admin.OSMGeoAdmin):
+class MountRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -186,7 +199,7 @@ class MountRealAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(RoadMarkingPlan)
-class RoadMarkingPlanAdmin(admin.OSMGeoAdmin):
+class RoadMarkingPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -202,7 +215,7 @@ class RoadMarkingPlanAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(RoadMarkingReal)
-class RoadMarkingRealAdmin(admin.OSMGeoAdmin):
+class RoadMarkingRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -218,7 +231,7 @@ class RoadMarkingRealAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(TrafficSignCode)
-class TrafficSignCodeAdmin(admin.ModelAdmin):
+class TrafficSignCodeAdmin(AuditLogHistoryAdmin):
     list_display = (
         "code",
         "description",
@@ -228,7 +241,7 @@ class TrafficSignCodeAdmin(admin.ModelAdmin):
 
 
 @admin.register(PortalType)
-class PortalTypeAdmin(admin.ModelAdmin):
+class PortalTypeAdmin(AuditLogHistoryAdmin):
     list_display = (
         "structure",
         "build_type",
