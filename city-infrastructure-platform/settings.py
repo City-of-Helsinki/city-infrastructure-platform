@@ -152,7 +152,6 @@ STATIC_ROOT = var_root("static")
 MEDIA_URL = "/media/"
 STATIC_URL = "/static/"
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-STATICFILES_DIRS = [checkout_dir("static")]
 
 # Django REST Framework
 REST_FRAMEWORK = {
