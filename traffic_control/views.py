@@ -8,6 +8,7 @@ from traffic_control.filters import (
     BarrierRealFilterSet,
     MountPlanFilterSet,
     MountRealFilterSet,
+    PortalTypeFilterSet,
     RoadMarkingPlanFilterSet,
     RoadMarkingRealFilterSet,
     SignpostPlanFilterSet,
@@ -149,3 +150,4 @@ class PortalTypeViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = PortalTypeSerializer
     queryset = PortalType.objects.all()
+    filterset_class = PortalTypeFilterSet

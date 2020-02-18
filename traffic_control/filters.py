@@ -1,5 +1,5 @@
 from django.contrib.gis.db.models import GeometryField
-from django_filters.filterset import FilterSet
+from django_filters.rest_framework import FilterSet
 from rest_framework_gis.filters import GeometryFilter
 
 from traffic_control.models import (
@@ -7,6 +7,7 @@ from traffic_control.models import (
     BarrierReal,
     MountPlan,
     MountReal,
+    PortalType,
     RoadMarkingPlan,
     RoadMarkingReal,
     SignpostPlan,
@@ -47,6 +48,11 @@ class MountPlanFilterSet(FilterSet):
 class MountRealFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = MountReal
+
+
+class PortalTypeFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = PortalType
 
 
 class RoadMarkingPlanFilterSet(FilterSet):
