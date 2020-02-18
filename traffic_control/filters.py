@@ -14,6 +14,7 @@ from traffic_control.models import (
     SignpostReal,
     TrafficLightPlan,
     TrafficLightReal,
+    TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -70,6 +71,11 @@ class SignpostPlanFilterSet(FilterSet):
         model = SignpostPlan
 
 
+class SignpostRealFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = SignpostReal
+
+
 class TrafficLightPlanFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = TrafficLightPlan
@@ -80,9 +86,9 @@ class TrafficLightRealFilterSet(FilterSet):
         model = TrafficLightReal
 
 
-class SignpostRealFilterSet(FilterSet):
+class TrafficSignCodeFilterSet(FilterSet):
     class Meta(GenericMeta):
-        model = SignpostReal
+        model = TrafficSignCode
 
 
 class TrafficSignPlanFilterSet(FilterSet):
