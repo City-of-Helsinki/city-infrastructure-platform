@@ -128,7 +128,7 @@ class TrafficSignCodeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["code"]
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = TrafficSignCodeSerializer
     queryset = TrafficSignCode.objects.all()
     filterset_class = TrafficSignCodeFilterSet
