@@ -8,15 +8,16 @@ from users.models import User
 
 class TrafficSignCodeTests(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_superuser(
+        self.admin_user = User.objects.create_superuser(
             username="testadmin", password="testpw", email="testadmin@anders.fi"
         )
-        self.client.login(username="testadmin", password="testpw")
+        self.user = User.objects.create_user(username="testuser", password="testpw")
 
-    def test_get_all_traffic_sign_codes(self):
+    def test__list__as_user__ok(self):
         """
-        Ensure we can get all traffic sign code objects.
+        Ensure that user can get list of traffic sign code objects.
         """
+        self.client.force_login(self.user)
         count = 3
         for i in range(count):
             TrafficSignCode.objects.create(
@@ -26,10 +27,25 @@ class TrafficSignCodeTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
-    def test_get_traffic_sign_code_detail(self):
+    def test__list__as_admin__ok(self):
         """
-        Ensure we can get one traffic sign code object.
+        Ensure that admin can get list of traffic sign code objects.
         """
+        self.client.force_login(self.admin_user)
+        count = 3
+        for i in range(count):
+            TrafficSignCode.objects.create(
+                code=i, description="Test description %s" % i,
+            )
+        response = self.client.get(reverse("api:trafficsigncode-list"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+    def test__retrieve__as_user__ok(self):
+        """
+        Ensure that user can get one traffic sign code object.
+        """
+        self.client.force_login(self.user)
         traffic_sign_code = self.__create_test_traffic_sign_code()
         response = self.client.get(
             reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id})
@@ -37,10 +53,38 @@ class TrafficSignCodeTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_code.id))
 
-    def test_create_traffic_sign_code(self):
+    def test__retrieve__as_admin__ok(self):
         """
-        Ensure we can create a new traffic sign code object.
+        Ensure that admin can get one traffic sign code object.
         """
+        self.client.force_login(self.admin_user)
+        traffic_sign_code = self.__create_test_traffic_sign_code()
+        response = self.client.get(
+            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(traffic_sign_code.id))
+
+    def test__create__as_user__forbidden(self):
+        """
+        Ensure that user cannot create a new traffic sign code object.
+        """
+        self.client.force_login(self.user)
+        data = {
+            "code": "L3",
+            "description": "Suojatie",
+        }
+        response = self.client.post(
+            reverse("api:trafficsigncode-list"), data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(TrafficSignCode.objects.count(), 0)
+
+    def test__create__as_admin__created(self):
+        """
+        Ensure admin can create a new traffic sign code object.
+        """
+        self.client.force_login(self.admin_user)
         data = {
             "code": "L3",
             "description": "Suojatie",
@@ -54,10 +98,11 @@ class TrafficSignCodeTests(APITestCase):
         self.assertEqual(traffic_sign_code.code, data["code"])
         self.assertEqual(traffic_sign_code.description, data["description"])
 
-    def test_create_existing_traffic_sign_code(self):
+    def test__create_existing__bad_request(self):
         """
-        Ensure that we cannot create a new traffic sign code object with same code-value.
+        Ensure that API will not create a new traffic sign code object with duplicated code-value.
         """
+        self.client.force_login(self.admin_user)
         data = {
             "code": "L3",
             "description": "Suojatie",
@@ -75,10 +120,29 @@ class TrafficSignCodeTests(APITestCase):
         self.assertEqual(traffic_sign_code.code, data["code"])
         self.assertEqual(traffic_sign_code.description, data["description"])
 
-    def test_update_traffic_sign_code(self):
+    def test__update__as_user__forbidden(self):
         """
-        Ensure we can update existing traffic sign code object.
+        Ensure that user cannot update existing traffic sign code object.
         """
+        self.client.force_login(self.user)
+        traffic_sign_code = self.__create_test_traffic_sign_code()
+        data = {
+            "code": "L3",
+            "description": "Suojatie",
+        }
+        response = self.client.put(
+            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
+            data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(TrafficSignCode.objects.count(), 1)
+
+    def test__update__as_admin__ok(self):
+        """
+        Ensure that admin can update existing traffic sign code object.
+        """
+        self.client.force_login(self.admin_user)
         traffic_sign_code = self.__create_test_traffic_sign_code()
         data = {
             "code": "L3",
@@ -95,10 +159,23 @@ class TrafficSignCodeTests(APITestCase):
         self.assertEqual(traffic_sign_code.code, data["code"])
         self.assertEqual(traffic_sign_code.description, data["description"])
 
-    def test_delete_traffic_sign_code_detail(self):
+    def test__destroy__as_user__forbidden(self):
         """
-        Ensure we can delete one traffic sign code object.
+        Ensure user cannot delete traffic sign code object.
         """
+        self.client.force_login(self.user)
+        traffic_sign_code = self.__create_test_traffic_sign_code()
+        response = self.client.delete(
+            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(TrafficSignCode.objects.count(), 1)
+
+    def test__destroy__as_admin__success(self):
+        """
+        Ensure that admin can delete traffic sign code object.
+        """
+        self.client.force_login(self.admin_user)
         traffic_sign_code = self.__create_test_traffic_sign_code()
         response = self.client.delete(
             reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
@@ -106,5 +183,6 @@ class TrafficSignCodeTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TrafficSignCode.objects.count(), 0)
 
-    def __create_test_traffic_sign_code(self):
+    @staticmethod
+    def __create_test_traffic_sign_code():
         return TrafficSignCode.objects.create(code="M16", description="Nopeusrajoitus",)
