@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 import environ
-import raven
 from django.utils.translation import gettext_lazy as _  # NOQA
 
 # Set up .env file
@@ -41,11 +40,6 @@ env = environ.Env(
 if os.path.exists(env_file):
     env.read_env(env_file)
 
-try:
-    version = raven.fetch_git_sha(checkout_dir())
-except Exception:
-    version = None
-
 # General settings
 DEBUG = env.bool("DEBUG")
 TIER = env.str("TIER")
@@ -57,7 +51,6 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 CACHES = {"default": env.cache()}
 vars().update(env.email_url())  # EMAIL_BACKEND etc.
-RAVEN_CONFIG = {"dsn": env.str("SENTRY_DSN"), "release": version}
 
 # Application definition
 DJANGO_APPS = [
@@ -70,7 +63,6 @@ DJANGO_APPS = [
     "django.contrib.gis",
 ]
 THIRD_PARTY_APPS = [
-    "raven.contrib.django.raven_compat",
     "django_extensions",
     "rest_framework",
     "rest_framework_gis",
