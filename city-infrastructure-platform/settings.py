@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 import environ
+import sentry_sdk
 from django.utils.translation import gettext_lazy as _  # NOQA
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Set up .env file
 checkout_dir = environ.Path(__file__) - 2
@@ -161,6 +163,11 @@ if DEBUG:
 
 # Azure CLIENT_IP middleware
 AZURE_DEPLOYMENT = env.bool("AZURE_DEPLOYMENT")
+
+# Sentry-SDK
+SENTRY_DSN = env.str("SENTRY_DSN")
+if SENTRY_DSN:
+    sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()])
 
 # Custom settings
 SRID = 3879  # the spatial reference id used for geometries
