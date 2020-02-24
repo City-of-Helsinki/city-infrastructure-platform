@@ -36,6 +36,7 @@ env = environ.Env(
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
     SENTRY_DSN=(str, ""),
+    AZURE_DEPLOYMENT=(bool, False),
 )
 if os.path.exists(env_file):
     env.read_env(env_file)
@@ -85,6 +86,7 @@ AUTH_USER_MODEL = "users.User"
 
 MIDDLEWARE = [
     "deployment.middleware.HealthCheckMiddleware",
+    "azure_client_ip.middleware.AzureClientIPMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -164,6 +166,9 @@ REST_FRAMEWORK = {
 # django-cors
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
+
+# Azure CLIENT_IP middleware
+AZURE_DEPLOYMENT = env.bool("AZURE_DEPLOYMENT")
 
 # Custom settings
 SRID = 3879  # the spatial reference id used for geometries
