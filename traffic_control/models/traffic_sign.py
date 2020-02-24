@@ -17,7 +17,7 @@ from .common import (
     Surface,
     TrafficSignCode,
 )
-from .mount import MountPlan, MountReal, MountType
+from .mount import MountPlan, MountReal
 
 
 class LocationSpecifier(Enum):
@@ -66,13 +66,9 @@ class TrafficSignPlan(models.Model):
         blank=True,
         null=True,
     )
-    mount_type = EnumField(
-        MountType,
-        verbose_name=_("Mount type"),
-        max_length=10,
-        default=MountType.OTHER,
-        blank=True,
-        null=True,
+    mount_type = models.CharField(_("Mount"), max_length=254, blank=True, null=True)
+    mount_type_fi = models.CharField(
+        _("Mount (fi)"), max_length=254, blank=True, null=True
     )
     decision_date = models.DateField(_("Decision date"))
     decision_id = models.CharField(
@@ -158,6 +154,10 @@ class TrafficSignPlan(models.Model):
         blank=True,
         null=True,
     )
+    source_id = models.CharField(_("Source id"), max_length=64, blank=True, null=True)
+    source_name = models.CharField(
+        _("Source name"), max_length=254, blank=True, null=True
+    )
 
     class Meta:
         db_table = "traffic_sign_plan"
@@ -181,13 +181,20 @@ class TrafficSignReal(models.Model):
     )
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
+        _("Height"), max_digits=20, decimal_places=6, blank=True, null=True
     )
     direction = models.IntegerField(_("Direction"), default=0)
     code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+        TrafficSignCode,
+        verbose_name=_("Traffic Sign Code"),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
+    legacy_code = models.CharField(
+        _("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True
+    )
     parent = models.ForeignKey(
         "self",
         verbose_name=_("Parent Traffic Sign Real"),
@@ -204,8 +211,9 @@ class TrafficSignReal(models.Model):
         blank=True,
         null=True,
     )
-    mount_type = EnumField(
-        MountType, verbose_name=_("Mount"), max_length=10, default=MountType.OTHER
+    mount_type = models.CharField(_("Mount"), max_length=254, blank=True, null=True)
+    mount_type_fi = models.CharField(
+        _("Mount (fi)"), max_length=254, blank=True, null=True
     )
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
@@ -244,6 +252,7 @@ class TrafficSignReal(models.Model):
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
+    scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
     created_by = models.ForeignKey(
         get_user_model(),
         verbose_name=_("Created by"),
@@ -315,6 +324,10 @@ class TrafficSignReal(models.Model):
         blank=True,
         null=True,
     )
+    source_id = models.CharField(_("Source id"), max_length=64, blank=True, null=True)
+    source_name = models.CharField(
+        _("Source name"), max_length=254, blank=True, null=True
+    )
 
     class Meta:
         db_table = "traffic_sign_real"
@@ -323,6 +336,15 @@ class TrafficSignReal(models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.code, self.value)
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = (
+                TrafficSignCode.objects.filter(legacy_code=self.legacy_code)
+                .order_by("code")
+                .first()
+            )
+        super().save(*args, **kwargs)
 
 
 auditlog.register(TrafficSignPlan)

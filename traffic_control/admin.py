@@ -232,11 +232,8 @@ class RoadMarkingRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
 
 @admin.register(TrafficSignCode)
 class TrafficSignCodeAdmin(AuditLogHistoryAdmin):
-    list_display = (
-        "code",
-        "description",
-    )
-    ordering = ("-code",)
+    list_display = ("code", "description", "legacy_code", "legacy_description")
+    ordering = ("code",)
     actions = None
 
 

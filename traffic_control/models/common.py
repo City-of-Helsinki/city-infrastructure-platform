@@ -97,6 +97,12 @@ class TrafficSignCode(models.Model):
     description = models.CharField(
         _("Description"), max_length=254, blank=True, null=True
     )
+    legacy_code = models.CharField(
+        _("Legacy code"), max_length=32, blank=True, null=True
+    )
+    legacy_description = models.CharField(
+        _("Legacy description"), max_length=254, blank=True, null=True
+    )
 
     class Meta:
         db_table = "traffic_sign_code"
