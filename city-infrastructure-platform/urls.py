@@ -82,6 +82,8 @@ urlpatterns = i18n_patterns(
     ),
 )
 
+urlpatterns.append(path("sentry-debug/", lambda a: 1 / 0))
+
 if settings.DEBUG:
     from django.conf.urls.static import static
 

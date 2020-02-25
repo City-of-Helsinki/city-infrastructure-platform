@@ -11,8 +11,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 import environ
-import raven
+import sentry_sdk
 from django.utils.translation import gettext_lazy as _  # NOQA
+from sentry_sdk.integrations.django import DjangoIntegration
+
+from .utils import git_version
 
 # Set up .env file
 checkout_dir = environ.Path(__file__) - 2
@@ -41,11 +44,6 @@ env = environ.Env(
 if os.path.exists(env_file):
     env.read_env(env_file)
 
-try:
-    version = raven.fetch_git_sha(checkout_dir())
-except Exception:
-    version = None
-
 # General settings
 DEBUG = env.bool("DEBUG")
 TIER = env.str("TIER")
@@ -57,7 +55,6 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 CACHES = {"default": env.cache()}
 vars().update(env.email_url())  # EMAIL_BACKEND etc.
-RAVEN_CONFIG = {"dsn": env.str("SENTRY_DSN"), "release": version}
 
 # Application definition
 DJANGO_APPS = [
@@ -70,7 +67,6 @@ DJANGO_APPS = [
     "django.contrib.gis",
 ]
 THIRD_PARTY_APPS = [
-    "raven.contrib.django.raven_compat",
     "django_extensions",
     "rest_framework",
     "rest_framework_gis",
@@ -169,6 +165,12 @@ if DEBUG:
 
 # Azure CLIENT_IP middleware
 AZURE_DEPLOYMENT = env.bool("AZURE_DEPLOYMENT")
+
+# Sentry-SDK
+SENTRY_DSN = env.str("SENTRY_DSN")
+VERSION = git_version()
+if SENTRY_DSN:
+    sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()], release=VERSION)
 
 # Custom settings
 SRID = 3879  # the spatial reference id used for geometries
