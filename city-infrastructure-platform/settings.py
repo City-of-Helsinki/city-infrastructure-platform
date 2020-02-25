@@ -15,6 +15,8 @@ import sentry_sdk
 from django.utils.translation import gettext_lazy as _  # NOQA
 from sentry_sdk.integrations.django import DjangoIntegration
 
+from .utils import git_version
+
 # Set up .env file
 checkout_dir = environ.Path(__file__) - 2
 assert os.path.exists(checkout_dir("manage.py"))
@@ -166,8 +168,9 @@ AZURE_DEPLOYMENT = env.bool("AZURE_DEPLOYMENT")
 
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
+VERSION = git_version()
 if SENTRY_DSN:
-    sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()])
+    sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()], release=VERSION)
 
 # Custom settings
 SRID = 3879  # the spatial reference id used for geometries
