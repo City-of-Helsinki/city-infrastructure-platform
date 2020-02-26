@@ -8,11 +8,14 @@ from requests.auth import HTTPBasicAuth
 SOURCE_SRID = 3879
 SOURCE_NAME = "BLOM streetview2019"
 OWNER = "Helsingin kaupunki"
-
-
-def strip_or_none(prop):
-    return prop.strip() if prop else None  # noqa
-
+MOUNT_TYPES_EN_FI = {
+    "Lightpole": "Katuvalopylväs",
+    "Other": "Muu",
+    "Pole": "Tolppa",
+    "Portal": "Portaali",
+    "Trafficlight": "Liikennevalopylväs",
+    "Wall": "Seinä",
+}
 
 parser = argparse.ArgumentParser(
     description="""
@@ -67,18 +70,18 @@ layer.ResetReading()
 for feature in layer:
     print("Processing Feature ID: {0}".format(feature.GetFID()))
     feature_json = feature.ExportToJson(as_object=True)
-    geometry = feature_json["geometry"]
+    geometry = feature_json.get("geometry")
     point = ogr.Geometry(ogr.wkbPoint)
-    point.AddPoint_2D(geometry["coordinates"][0], geometry["coordinates"][1])
-    properties = feature_json["properties"]
+    point.AddPoint_2D(geometry.get("coordinates")[0], geometry.get("coordinates")[1])
+    properties = feature_json.get("properties")
     data = {
         "location": "SRID={0};{1}".format(SOURCE_SRID, point.ExportToWkt()),
-        "height": round(geometry["coordinates"][2], 6),
-        "legacy_code": strip_or_none(properties["type"]),
-        "txt": strip_or_none(properties["text"]),
-        "mount_type": strip_or_none(properties["mount_type"]),
-        "direction": strip_or_none(properties["direction"]),
-        "scanned_at": strip_or_none(properties["date"]),
+        "legacy_code": properties.get("type"),
+        "txt": properties.get("text"),
+        "mount_type": properties.get("mount_type"),
+        "mount_type_fi": MOUNT_TYPES_EN_FI.get(properties.get("mount_type")),
+        "direction": properties.get("direction"),
+        "scanned_at": properties.get("date"),
         "owner": OWNER,
         "source_id": feature.GetFID(),
         "source_name": SOURCE_NAME,
