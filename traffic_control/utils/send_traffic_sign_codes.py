@@ -43,7 +43,14 @@ with open(filename, mode="r", encoding="utf-8-sig") as csv_file:
     for row in csv_reader:
         code = row["MerkkiKoodi"].strip()
         description = row["Kuvaus"].strip()
-        data = {"code": code, "description": description}
+        legacy_code = row["NykyinenLiisussaTunnus"].strip()
+        legacy_description = row["NykyinenLiisussaNimi"].strip()
+        data = {
+            "code": code,
+            "description": description,
+            "legacy_code": legacy_code,
+            "legacy_description": legacy_description,
+        }
         print("Sending Traffic Sign Code: {0} - {1}".format(code, description))
         r = requests.post(url=args.url, data=data, auth=auth)
         print("{0} - {1} - {2}".format(r.status_code, r.reason, r.text))
