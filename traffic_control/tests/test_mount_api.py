@@ -1,4 +1,5 @@
 import datetime
+import io
 
 import pytest
 from django.urls import reverse
@@ -146,6 +147,27 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(deleted_mount_plan.id, mount_plan.id)
         self.assertEqual(deleted_mount_plan.deleted_by, self.user)
         self.assertTrue(deleted_mount_plan.deleted_at)
+
+    def test_upload_mount_plan_document(self):
+        """
+        Ensure that mount plan document can be uploaded to system.
+        """
+        mount_plan = self.__create_test_mount_plan()
+
+        data = {"plan_document": io.BytesIO(b"File contents")}
+
+        response = self.client.put(
+            reverse("api:mountplan-upload-plan", kwargs={"pk": mount_plan.id}),
+            data=data,
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(MountPlan.objects.count(), 1)
+        changed_mount_plan = MountPlan.objects.get(id=str(mount_plan.id))
+        self.assertTrue(changed_mount_plan.plan_document)
+        self.assertEqual(changed_mount_plan.updated_by, self.user)
+        self.assertTrue(changed_mount_plan.updated_at)
 
     def __create_test_mount_plan(self):
         return MountPlan.objects.create(

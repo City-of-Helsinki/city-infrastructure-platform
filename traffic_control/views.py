@@ -45,6 +45,7 @@ from traffic_control.serializers import (
     BarrierPlanUploadSerializer,
     BarrierRealSerializer,
     MountPlanSerializer,
+    MountPlanUploadSerializer,
     MountRealSerializer,
     PortalTypeSerializer,
     RoadMarkingPlanSerializer,
@@ -99,6 +100,21 @@ class MountPlanViewSet(TrafficControlViewSet):
     serializer_class = MountPlanSerializer
     queryset = MountPlan.objects.all()
     filterset_class = MountPlanFilterSet
+
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=MountPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
 
 class MountRealViewSet(TrafficControlViewSet):

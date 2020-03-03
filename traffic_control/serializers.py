@@ -69,11 +69,23 @@ class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerial
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
 
+class MountPlanUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MountPlan
+        fields = ("plan_document",)
+
+
 class MountPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MountPlan
         fields = "__all__"
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+            "plan_document",
+        )
 
 
 class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
