@@ -19,13 +19,25 @@ from traffic_control.models import (
 )
 
 
+class TrafficLightPlanUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrafficLightPlan
+        fields = ("plan_document",)
+
+
 class TrafficLightPlanSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     class Meta:
         model = TrafficLightPlan
         fields = "__all__"
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+            "plan_document",
+        )
 
 
 class TrafficLightRealSerializer(
