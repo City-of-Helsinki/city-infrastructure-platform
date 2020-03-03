@@ -55,11 +55,23 @@ class TrafficSignRealSerializer(
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
 
+class SignpostPlanUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SignpostPlan
+        fields = ("plan_document",)
+
+
 class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = SignpostPlan
         fields = "__all__"
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+            "plan_document",
+        )
 
 
 class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):

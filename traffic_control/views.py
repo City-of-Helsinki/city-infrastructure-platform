@@ -52,6 +52,7 @@ from traffic_control.serializers import (
     RoadMarkingPlanUploadSerializer,
     RoadMarkingRealSerializer,
     SignpostPlanSerializer,
+    SignpostPlanUploadSerializer,
     SignpostRealSerializer,
     TrafficLightPlanSerializer,
     TrafficLightRealSerializer,
@@ -155,6 +156,21 @@ class SignpostPlanViewSet(TrafficControlViewSet):
     serializer_class = SignpostPlanSerializer
     queryset = SignpostPlan.objects.all()
     filterset_class = SignpostPlanFilterSet
+
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=SignpostPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
 
 class SignpostRealViewSet(TrafficControlViewSet):
