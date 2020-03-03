@@ -83,11 +83,23 @@ class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerialize
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
 
+class BarrierPlanUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarrierPlan
+        fields = ("plan_document",)
+
+
 class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierPlan
         fields = "__all__"
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+            "plan_document",
+        )
 
 
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):

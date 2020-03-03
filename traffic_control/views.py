@@ -1,6 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from traffic_control.filters import (
@@ -39,6 +42,7 @@ from traffic_control.models import (
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.serializers import (
     BarrierPlanSerializer,
+    BarrierPlanUploadSerializer,
     BarrierRealSerializer,
     MountPlanSerializer,
     MountRealSerializer,
@@ -68,6 +72,21 @@ class BarrierPlanViewSet(TrafficControlViewSet):
     serializer_class = BarrierPlanSerializer
     queryset = BarrierPlan.objects.all()
     filterset_class = BarrierPlanFilterSet
+
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=BarrierPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
 
 class BarrierRealViewSet(TrafficControlViewSet):
