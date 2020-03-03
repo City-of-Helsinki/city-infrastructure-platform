@@ -1,4 +1,5 @@
 import datetime
+import io
 
 import pytest
 from django.urls import reverse
@@ -148,6 +149,31 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(deleted_road_marking.id, road_marking.id)
         self.assertEqual(deleted_road_marking.deleted_by, self.user)
         self.assertTrue(deleted_road_marking.deleted_at)
+
+    def test_upload_road_marking_plan_document(self):
+        """
+        Ensure that road marking plan document can be uploaded to system.
+        """
+        road_marking_plan = self.__create_test_road_marking_plan()
+
+        data = {"plan_document": io.BytesIO(b"File contents")}
+
+        response = self.client.put(
+            reverse(
+                "api:roadmarkingplan-upload-plan", kwargs={"pk": road_marking_plan.id}
+            ),
+            data=data,
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(RoadMarkingPlan.objects.count(), 1)
+        changed_road_marking_plan = RoadMarkingPlan.objects.get(
+            id=str(road_marking_plan.id)
+        )
+        self.assertTrue(changed_road_marking_plan.plan_document)
+        self.assertEqual(changed_road_marking_plan.updated_by, self.user)
+        self.assertTrue(changed_road_marking_plan.updated_at)
 
     def __create_test_road_marking_plan(self):
         return RoadMarkingPlan.objects.create(

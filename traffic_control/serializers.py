@@ -121,13 +121,25 @@ class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSeriali
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
 
+class RoadMarkingPlanUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoadMarkingPlan
+        fields = ("plan_document",)
+
+
 class RoadMarkingPlanSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     class Meta:
         model = RoadMarkingPlan
         fields = "__all__"
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+            "plan_document",
+        )
 
 
 class RoadMarkingRealSerializer(
