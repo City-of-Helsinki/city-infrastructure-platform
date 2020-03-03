@@ -49,13 +49,25 @@ class TrafficLightRealSerializer(
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
 
 
+class TrafficSignPlanUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrafficSignPlan
+        fields = ("plan_document",)
+
+
 class TrafficSignPlanSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     class Meta:
         model = TrafficSignPlan
         fields = "__all__"
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+            "plan_document",
+        )
 
 
 class TrafficSignRealSerializer(
