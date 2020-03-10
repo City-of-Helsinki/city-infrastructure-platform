@@ -41,25 +41,37 @@ from traffic_control.models import (
 )
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.serializers import (
+    BarrierPlanGeoJSONSerializer,
     BarrierPlanSerializer,
     BarrierPlanUploadSerializer,
+    BarrierRealGeoJSONSerializer,
     BarrierRealSerializer,
+    MountPlanGeoJSONSerializer,
     MountPlanSerializer,
     MountPlanUploadSerializer,
+    MountRealGeoJSONSerializer,
     MountRealSerializer,
     PortalTypeSerializer,
+    RoadMarkingPlanGeoJSONSerializer,
     RoadMarkingPlanSerializer,
     RoadMarkingPlanUploadSerializer,
+    RoadMarkingRealGeoJSONSerializer,
     RoadMarkingRealSerializer,
+    SignpostPlanGeoJSONSerializer,
     SignpostPlanSerializer,
     SignpostPlanUploadSerializer,
+    SignpostRealGeoJSONSerializer,
     SignpostRealSerializer,
+    TrafficLightPlanGeoJSONSerializer,
     TrafficLightPlanSerializer,
     TrafficLightPlanUploadSerializer,
+    TrafficLightRealGeoJSONSerializer,
     TrafficLightRealSerializer,
     TrafficSignCodeSerializer,
+    TrafficSignPlanGeoJSONSerializer,
     TrafficSignPlanSerializer,
     TrafficSignPlanUploadSerializer,
+    TrafficSignRealGeoJSONSerializer,
     TrafficSignRealSerializer,
 )
 
@@ -71,10 +83,20 @@ class TrafficControlViewSet(
     ordering_fields = "__all__"
     ordering = ["-created_at"]
     permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_classes = {}
+
+    def get_serializer_class(self):
+        geo_format = self.request.query_params.get("geo_format")
+        if geo_format == "geojson":
+            return self.serializer_classes.get("geojson")
+        return self.serializer_classes.get("default")
 
 
 class BarrierPlanViewSet(TrafficControlViewSet):
-    serializer_class = BarrierPlanSerializer
+    serializer_classes = {
+        "default": BarrierPlanSerializer,
+        "geojson": BarrierPlanGeoJSONSerializer,
+    }
     queryset = BarrierPlan.objects.all()
     filterset_class = BarrierPlanFilterSet
 
@@ -95,12 +117,19 @@ class BarrierPlanViewSet(TrafficControlViewSet):
 
 
 class BarrierRealViewSet(TrafficControlViewSet):
-    serializer_class = BarrierRealSerializer
+    serializer_classes = {
+        "default": BarrierRealSerializer,
+        "geojson": BarrierRealGeoJSONSerializer,
+    }
     queryset = BarrierReal.objects.all()
     filterset_class = BarrierRealFilterSet
 
 
 class MountPlanViewSet(TrafficControlViewSet):
+    serializer_classes = {
+        "default": MountPlanSerializer,
+        "geojson": MountPlanGeoJSONSerializer,
+    }
     serializer_class = MountPlanSerializer
     queryset = MountPlan.objects.all()
     filterset_class = MountPlanFilterSet
@@ -122,13 +151,20 @@ class MountPlanViewSet(TrafficControlViewSet):
 
 
 class MountRealViewSet(TrafficControlViewSet):
+    serializer_classes = {
+        "default": MountRealSerializer,
+        "geojson": MountRealGeoJSONSerializer,
+    }
     serializer_class = MountRealSerializer
     queryset = MountReal.objects.all()
     filterset_class = MountRealFilterSet
 
 
 class RoadMarkingPlanViewSet(TrafficControlViewSet):
-    serializer_class = RoadMarkingPlanSerializer
+    serializer_classes = {
+        "default": RoadMarkingPlanSerializer,
+        "geojson": RoadMarkingPlanGeoJSONSerializer,
+    }
     queryset = RoadMarkingPlan.objects.all()
     filterset_class = RoadMarkingPlanFilterSet
 
@@ -149,13 +185,19 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet):
 
 
 class RoadMarkingRealViewSet(TrafficControlViewSet):
-    serializer_class = RoadMarkingRealSerializer
+    serializer_classes = {
+        "default": RoadMarkingRealSerializer,
+        "geojson": RoadMarkingRealGeoJSONSerializer,
+    }
     queryset = RoadMarkingReal.objects.all()
     filterset_class = RoadMarkingRealFilterSet
 
 
 class SignpostPlanViewSet(TrafficControlViewSet):
-    serializer_class = SignpostPlanSerializer
+    serializer_classes = {
+        "default": SignpostPlanSerializer,
+        "geojson": SignpostPlanGeoJSONSerializer,
+    }
     queryset = SignpostPlan.objects.all()
     filterset_class = SignpostPlanFilterSet
 
@@ -176,13 +218,19 @@ class SignpostPlanViewSet(TrafficControlViewSet):
 
 
 class SignpostRealViewSet(TrafficControlViewSet):
-    serializer_class = SignpostRealSerializer
+    serializer_classes = {
+        "default": SignpostRealSerializer,
+        "geojson": SignpostRealGeoJSONSerializer,
+    }
     queryset = SignpostReal.objects.all()
     filterset_class = SignpostRealFilterSet
 
 
 class TrafficLightPlanViewSet(TrafficControlViewSet):
-    serializer_class = TrafficLightPlanSerializer
+    serializer_classes = {
+        "default": TrafficLightPlanSerializer,
+        "geojson": TrafficLightPlanGeoJSONSerializer,
+    }
     queryset = TrafficLightPlan.objects.all()
     filterset_class = TrafficLightPlanFilterSet
 
@@ -203,7 +251,10 @@ class TrafficLightPlanViewSet(TrafficControlViewSet):
 
 
 class TrafficLightRealViewSet(TrafficControlViewSet):
-    serializer_class = TrafficLightRealSerializer
+    serializer_classes = {
+        "default": TrafficLightRealSerializer,
+        "geojson": TrafficLightRealGeoJSONSerializer,
+    }
     queryset = TrafficLightReal.objects.all()
     filterset_class = TrafficLightRealFilterSet
 
@@ -219,7 +270,10 @@ class TrafficSignCodeViewSet(ModelViewSet):
 
 
 class TrafficSignPlanViewSet(TrafficControlViewSet):
-    serializer_class = TrafficSignPlanSerializer
+    serializer_classes = {
+        "default": TrafficSignPlanSerializer,
+        "geojson": TrafficSignPlanGeoJSONSerializer,
+    }
     queryset = TrafficSignPlan.objects.all()
     filterset_class = TrafficSignPlanFilterSet
 
@@ -240,7 +294,10 @@ class TrafficSignPlanViewSet(TrafficControlViewSet):
 
 
 class TrafficSignRealViewSet(TrafficControlViewSet):
-    serializer_class = TrafficSignRealSerializer
+    serializer_classes = {
+        "default": TrafficSignRealSerializer,
+        "geojson": TrafficSignRealGeoJSONSerializer,
+    }
     queryset = TrafficSignReal.objects.all()
     filterset_class = TrafficSignRealFilterSet
 
