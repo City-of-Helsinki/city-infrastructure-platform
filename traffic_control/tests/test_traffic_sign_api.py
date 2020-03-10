@@ -1,4 +1,5 @@
 import datetime
+import io
 
 import pytest
 from django.urls import reverse
@@ -144,6 +145,31 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(deleted_traffic_sign_plan.id, traffic_sign_plan.id)
         self.assertEqual(deleted_traffic_sign_plan.deleted_by, self.user)
         self.assertTrue(deleted_traffic_sign_plan.deleted_at)
+
+    def test_upload_traffic_sign_plan_document(self):
+        """
+        Ensure that traffic sign plan document can be uploaded to system.
+        """
+        traffic_sign_plan = self.__create_test_traffic_sign_plan()
+
+        data = {"plan_document": io.BytesIO(b"File contents")}
+
+        response = self.client.put(
+            reverse(
+                "api:trafficsignplan-upload-plan", kwargs={"pk": traffic_sign_plan.id}
+            ),
+            data=data,
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(TrafficSignPlan.objects.count(), 1)
+        changed_traffic_sign_plan = TrafficSignPlan.objects.get(
+            id=str(traffic_sign_plan.id)
+        )
+        self.assertTrue(changed_traffic_sign_plan.plan_document)
+        self.assertEqual(changed_traffic_sign_plan.updated_by, self.user)
+        self.assertTrue(changed_traffic_sign_plan.updated_at)
 
     def __create_test_traffic_sign_plan(self):
         return TrafficSignPlan.objects.create(

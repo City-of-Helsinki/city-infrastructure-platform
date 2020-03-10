@@ -72,7 +72,7 @@ class BarrierPlan(models.Model):
     decision_id = models.CharField(
         _("Decision id"), max_length=254, blank=True, null=True
     )
-    plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
+    plan_document = models.FileField(_("Plan document"), blank=True, null=True)
     reflective = EnumField(
         Reflective, verbose_name=_("Reflective"), blank=True, null=True
     )

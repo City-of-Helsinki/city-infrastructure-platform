@@ -23,6 +23,7 @@ from traffic_control.models import (
 class GenericMeta:
     model = None
     fields = "__all__"
+    exclude = ("plan_document",)
     filter_overrides = {
         GeometryField: {
             "filter_class": GeometryFilter,

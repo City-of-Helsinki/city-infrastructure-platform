@@ -1,4 +1,5 @@
 import datetime
+import io
 
 import pytest
 from django.urls import reverse
@@ -149,6 +150,27 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(deleted_barrier_plan.id, barrier_plan.id)
         self.assertEqual(deleted_barrier_plan.deleted_by, self.user)
         self.assertTrue(deleted_barrier_plan.deleted_at)
+
+    def test_upload_barrier_plan_document(self):
+        """
+        Ensure that barrier plan document can be uploaded to system.
+        """
+        barrier_plan = self.__create_test_barrier_plan()
+
+        data = {"plan_document": io.BytesIO(b"File contents")}
+
+        response = self.client.put(
+            reverse("api:barrierplan-upload-plan", kwargs={"pk": barrier_plan.id}),
+            data=data,
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(BarrierPlan.objects.count(), 1)
+        changed_barrier_plan = BarrierPlan.objects.get(id=str(barrier_plan.id))
+        self.assertTrue(changed_barrier_plan.plan_document)
+        self.assertEqual(changed_barrier_plan.updated_by, self.user)
+        self.assertTrue(changed_barrier_plan.updated_at)
 
     def __create_test_barrier_plan(self):
         return BarrierPlan.objects.create(

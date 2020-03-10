@@ -1,4 +1,5 @@
 import datetime
+import io
 
 import pytest
 from django.urls import reverse
@@ -144,6 +145,27 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(deleted_signpost_plan.id, signpost_plan.id)
         self.assertEqual(deleted_signpost_plan.deleted_by, self.user)
         self.assertTrue(deleted_signpost_plan.deleted_at)
+
+    def test_upload_signpost_plan_document(self):
+        """
+        Ensure that signpost plan document can be uploaded to system.
+        """
+        signpost_plan = self.__create_test_signpost_plan()
+
+        data = {"plan_document": io.BytesIO(b"File contents")}
+
+        response = self.client.put(
+            reverse("api:signpostplan-upload-plan", kwargs={"pk": signpost_plan.id}),
+            data=data,
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(SignpostPlan.objects.count(), 1)
+        changed_signpost_plan = SignpostPlan.objects.get(id=str(signpost_plan.id))
+        self.assertTrue(changed_signpost_plan.plan_document)
+        self.assertEqual(changed_signpost_plan.updated_by, self.user)
+        self.assertTrue(changed_signpost_plan.updated_at)
 
     def __create_test_signpost_plan(self):
         return SignpostPlan.objects.create(

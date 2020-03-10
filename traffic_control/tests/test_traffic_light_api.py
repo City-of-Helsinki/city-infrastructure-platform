@@ -1,4 +1,5 @@
 import datetime
+import io
 
 import pytest
 from django.urls import reverse
@@ -154,6 +155,31 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(deleted_traffic_light.id, traffic_light.id)
         self.assertEqual(deleted_traffic_light.deleted_by, self.user)
         self.assertTrue(deleted_traffic_light.deleted_at)
+
+    def test_upload_traffic_light_plan_document(self):
+        """
+        Ensure that traffic light plan document can be uploaded to system.
+        """
+        traffic_light_plan = self.__create_test_traffic_light_plan()
+
+        data = {"plan_document": io.BytesIO(b"File contents")}
+
+        response = self.client.put(
+            reverse(
+                "api:trafficlightplan-upload-plan", kwargs={"pk": traffic_light_plan.id}
+            ),
+            data=data,
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(TrafficLightPlan.objects.count(), 1)
+        changed_traffic_light_plan = TrafficLightPlan.objects.get(
+            id=str(traffic_light_plan.id)
+        )
+        self.assertTrue(changed_traffic_light_plan.plan_document)
+        self.assertEqual(changed_traffic_light_plan.updated_by, self.user)
+        self.assertTrue(changed_traffic_light_plan.updated_at)
 
     def __create_test_traffic_light_plan(self):
         return TrafficLightPlan.objects.create(

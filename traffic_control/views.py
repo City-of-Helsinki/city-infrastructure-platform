@@ -1,6 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from traffic_control.filters import (
@@ -39,18 +42,24 @@ from traffic_control.models import (
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.serializers import (
     BarrierPlanSerializer,
+    BarrierPlanUploadSerializer,
     BarrierRealSerializer,
     MountPlanSerializer,
+    MountPlanUploadSerializer,
     MountRealSerializer,
     PortalTypeSerializer,
     RoadMarkingPlanSerializer,
+    RoadMarkingPlanUploadSerializer,
     RoadMarkingRealSerializer,
     SignpostPlanSerializer,
+    SignpostPlanUploadSerializer,
     SignpostRealSerializer,
     TrafficLightPlanSerializer,
+    TrafficLightPlanUploadSerializer,
     TrafficLightRealSerializer,
     TrafficSignCodeSerializer,
     TrafficSignPlanSerializer,
+    TrafficSignPlanUploadSerializer,
     TrafficSignRealSerializer,
 )
 
@@ -69,6 +78,21 @@ class BarrierPlanViewSet(TrafficControlViewSet):
     queryset = BarrierPlan.objects.all()
     filterset_class = BarrierPlanFilterSet
 
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=BarrierPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
 
 class BarrierRealViewSet(TrafficControlViewSet):
     serializer_class = BarrierRealSerializer
@@ -80,6 +104,21 @@ class MountPlanViewSet(TrafficControlViewSet):
     serializer_class = MountPlanSerializer
     queryset = MountPlan.objects.all()
     filterset_class = MountPlanFilterSet
+
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=MountPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
 
 class MountRealViewSet(TrafficControlViewSet):
@@ -93,6 +132,21 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet):
     queryset = RoadMarkingPlan.objects.all()
     filterset_class = RoadMarkingPlanFilterSet
 
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=RoadMarkingPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
 
 class RoadMarkingRealViewSet(TrafficControlViewSet):
     serializer_class = RoadMarkingRealSerializer
@@ -105,6 +159,21 @@ class SignpostPlanViewSet(TrafficControlViewSet):
     queryset = SignpostPlan.objects.all()
     filterset_class = SignpostPlanFilterSet
 
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=SignpostPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
 
 class SignpostRealViewSet(TrafficControlViewSet):
     serializer_class = SignpostRealSerializer
@@ -116,6 +185,21 @@ class TrafficLightPlanViewSet(TrafficControlViewSet):
     serializer_class = TrafficLightPlanSerializer
     queryset = TrafficLightPlan.objects.all()
     filterset_class = TrafficLightPlanFilterSet
+
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=TrafficLightPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
 
 class TrafficLightRealViewSet(TrafficControlViewSet):
@@ -138,6 +222,21 @@ class TrafficSignPlanViewSet(TrafficControlViewSet):
     serializer_class = TrafficSignPlanSerializer
     queryset = TrafficSignPlan.objects.all()
     filterset_class = TrafficSignPlanFilterSet
+
+    @action(
+        methods=("PUT",),
+        detail=True,
+        parser_classes=(MultiPartParser,),
+        serializer_class=TrafficSignPlanUploadSerializer,
+    )
+    def upload_plan(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.serializer_class(obj, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
 
 class TrafficSignRealViewSet(TrafficControlViewSet):

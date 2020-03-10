@@ -73,7 +73,7 @@ class TrafficLightPlan(models.Model):
     decision_id = models.CharField(
         _("Decision id"), max_length=254, blank=True, null=True
     )
-    plan_link = models.CharField(_("Plan link"), max_length=254, blank=True, null=True)
+    plan_document = models.FileField(_("Plan document"), blank=True, null=True)
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
     )
