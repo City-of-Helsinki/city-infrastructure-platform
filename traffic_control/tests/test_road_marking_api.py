@@ -4,6 +4,7 @@ import io
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import RoadMarkingColor, RoadMarkingPlan, RoadMarkingReal
 
@@ -73,6 +74,31 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            road_marking_plan = RoadMarkingPlan.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), road_marking_plan.location.ewkt)
+
+    def test_get_all_road_markings__geojson(self):
+        """
+        Ensure we can get all road marking plan objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_road_marking_plan()
+        response = self.client.get(
+            reverse("api:roadmarkingplan-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            road_marking_plan = RoadMarkingPlan.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(road_marking_plan.location.json)
+            )
+
     def test_get_road_marking_detail(self):
         """
         Ensure we can get one road marking plan object.
@@ -83,6 +109,21 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(road_marking.id))
+        self.assertEqual(road_marking.location.ewkt, response.data.get("location"))
+
+    def test_get_road_marking_detail__geojson(self):
+        """
+        Ensure we can get one road marking plan object with GeoJSON location.
+        """
+        road_marking = self.__create_test_road_marking_plan()
+        response = self.client.get(
+            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(road_marking.id))
+        road_marking_geojson = GeoJsonDict(road_marking.location.json)
+        self.assertEqual(road_marking_geojson, response.data.get("location"))
 
     def test_create_road_marking(self):
         """
@@ -100,6 +141,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(RoadMarkingPlan.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         road_marking = RoadMarkingPlan.objects.first()
         self.assertEqual(road_marking.code.id, data["code"])
         self.assertEqual(road_marking.location.ewkt, data["location"])
@@ -249,6 +291,31 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            road_marking_plan = RoadMarkingReal.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), road_marking_plan.location.ewkt)
+
+    def test_get_all_road_marking_reals__geojson(self):
+        """
+        Ensure we can get all real road marking objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_road_marking_real()
+        response = self.client.get(
+            reverse("api:roadmarkingreal-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            road_marking_plan = RoadMarkingReal.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(road_marking_plan.location.json)
+            )
+
     def test_get_road_marking_real_detail(self):
         """
         Ensure we can get one real road marking object.
@@ -259,6 +326,21 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(road_marking_real.id))
+        self.assertEqual(road_marking_real.location.ewkt, response.data.get("location"))
+
+    def test_get_road_marking_real_detail__geojson(self):
+        """
+        Ensure we can get one real road marking object with GeoJSON location.
+        """
+        road_marking_real = self.__create_test_road_marking_real()
+        response = self.client.get(
+            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(road_marking_real.id))
+        road_marking_real_geojson = GeoJsonDict(road_marking_real.location.json)
+        self.assertEqual(road_marking_real_geojson, response.data.get("location"))
 
     def test_create_road_marking_real(self):
         """
@@ -276,6 +358,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(RoadMarkingReal.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         road_marking_real = RoadMarkingReal.objects.first()
         self.assertEqual(road_marking_real.code.id, data["code"])
         self.assertEqual(road_marking_real.location.ewkt, data["location"])
