@@ -4,6 +4,7 @@ import io
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
 
@@ -67,6 +68,31 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            traffic_sign_plan = TrafficSignPlan.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), traffic_sign_plan.location.ewkt)
+
+    def test_get_all_traffic_sign_plans__geojson(self):
+        """
+        Ensure we can get all traffic sign plan objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_traffic_sign_plan()
+        response = self.client.get(
+            reverse("api:trafficsignplan-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            traffic_sign_plan = TrafficSignPlan.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(traffic_sign_plan.location.json)
+            )
+
     def test_get_traffic_sign_plan_detail(self):
         """
         Ensure we can get one traffic sign plan object.
@@ -77,6 +103,21 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_plan.id))
+        self.assertEqual(traffic_sign_plan.location.ewkt, response.data.get("location"))
+
+    def test_get_traffic_sign_plan_detail__geojson(self):
+        """
+        Ensure we can get one traffic sign plan object with GeoJSON location.
+        """
+        traffic_sign_plan = self.__create_test_traffic_sign_plan()
+        response = self.client.get(
+            reverse("api:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(traffic_sign_plan.id))
+        traffic_sign_plan_geojson = GeoJsonDict(traffic_sign_plan.location.json)
+        self.assertEqual(traffic_sign_plan_geojson, response.data.get("location"))
 
     def test_create_traffic_sign_plan(self):
         """
@@ -94,6 +135,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficSignPlan.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         traffic_sign_plan = TrafficSignPlan.objects.first()
         self.assertEqual(traffic_sign_plan.code.id, data["code"])
         self.assertEqual(traffic_sign_plan.location.ewkt, data["location"])
@@ -234,6 +276,31 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), traffic_sign_real.location.ewkt)
+
+    def test_get_all_traffic_sign_reals__geojson(self):
+        """
+        Ensure we can get all traffic sign real objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_traffic_sign_real()
+        response = self.client.get(
+            reverse("api:trafficsignreal-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(traffic_sign_real.location.json)
+            )
+
     def test_get_traffic_sign_real_detail(self):
         """
         Ensure we can get one traffic sign real object.
@@ -244,6 +311,21 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
+        self.assertEqual(traffic_sign_real.location.ewkt, response.data.get("location"))
+
+    def test_get_traffic_sign_real_detail__geojson(self):
+        """
+        Ensure we can get one traffic sign real object with GeoJSON location.
+        """
+        traffic_sign_real = self.__create_test_traffic_sign_real()
+        response = self.client.get(
+            reverse("api:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
+        traffic_sign_real_geojson = GeoJsonDict(traffic_sign_real.location.json)
+        self.assertEqual(traffic_sign_real_geojson, response.data.get("location"))
 
     def test_create_traffic_sign_plan(self):
         """
@@ -263,6 +345,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficSignReal.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         traffic_sign_real = TrafficSignReal.objects.first()
         self.assertEqual(traffic_sign_real.code.id, data["code"])
         self.assertEqual(traffic_sign_real.location.ewkt, data["location"])
