@@ -4,6 +4,7 @@ import io
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import (
     MountType,
@@ -75,6 +76,31 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            traffic_light_plan = TrafficLightPlan.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), traffic_light_plan.location.ewkt)
+
+    def test_get_all_traffic_light_plans__geojson(self):
+        """
+        Ensure we can get all traffic light plan objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_traffic_light_plan()
+        response = self.client.get(
+            reverse("api:trafficlightplan-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            traffic_light_plan = TrafficLightPlan.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(traffic_light_plan.location.json)
+            )
+
     def test_get_traffic_light_detail(self):
         """
         Ensure we can get one traffic light plan object.
@@ -85,6 +111,21 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_light.id))
+        self.assertEqual(traffic_light.location.ewkt, response.data.get("location"))
+
+    def test_get_traffic_light_detail__geojson(self):
+        """
+        Ensure we can get one traffic light plan object with GeoJSON location.
+        """
+        traffic_light = self.__create_test_traffic_light_plan()
+        response = self.client.get(
+            reverse("api:trafficlightplan-detail", kwargs={"pk": traffic_light.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(traffic_light.id))
+        traffic_light_geojson = GeoJsonDict(traffic_light.location.json)
+        self.assertEqual(traffic_light_geojson, response.data.get("location"))
 
     def test_create_traffic_light_plan(self):
         """
@@ -103,6 +144,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficLightPlan.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         traffic_light = TrafficLightPlan.objects.first()
         self.assertEqual(traffic_light.code.id, data["code"])
         self.assertEqual(traffic_light.type.value, data["type"])
@@ -250,6 +292,31 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            traffic_light_real = TrafficLightReal.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), traffic_light_real.location.ewkt)
+
+    def test_get_all_traffic_light_reals__geojson(self):
+        """
+        Ensure we can get all real traffic light objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_traffic_light_real()
+        response = self.client.get(
+            reverse("api:trafficlightreal-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            traffic_light_real = TrafficLightReal.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(traffic_light_real.location.json)
+            )
+
     def test_get_traffic_light_real_detail(self):
         """
         Ensure we can get one real traffic light object.
@@ -260,6 +327,25 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_light_real.id))
+        self.assertEqual(
+            traffic_light_real.location.ewkt, response.data.get("location")
+        )
+
+    def test_get_traffic_light_real_detail__geojson(self):
+        """
+        Ensure we can get one real traffic light object with GeoJSON location.
+        """
+        traffic_light_real = self.__create_test_traffic_light_real()
+        response = self.client.get(
+            reverse(
+                "api:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}
+            ),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(traffic_light_real.id))
+        traffic_light_real_geojson = GeoJsonDict(traffic_light_real.location.json)
+        self.assertEqual(traffic_light_real_geojson, response.data.get("location"))
 
     def test_create_traffic_light_real(self):
         """
@@ -278,6 +364,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficLightReal.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         traffic_light_real = TrafficLightReal.objects.first()
         self.assertEqual(traffic_light_real.code.id, data["code"])
         self.assertEqual(traffic_light_real.type.value, data["type"])
