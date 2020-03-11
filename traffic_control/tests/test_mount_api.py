@@ -4,6 +4,7 @@ import io
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import MountPlan, MountReal
 
@@ -73,6 +74,31 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            mount_plan = MountPlan.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), mount_plan.location.ewkt)
+
+    def test_get_all_mount_plans__geojson(self):
+        """
+        Ensure we can get all mount plan objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_mount_plan()
+        response = self.client.get(
+            reverse("api:mountplan-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            mount_plan = MountPlan.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(mount_plan.location.json)
+            )
+
     def test_get_mount_plan_detail(self):
         """
         Ensure we can get one mount plan object.
@@ -83,6 +109,21 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_plan.id))
+        self.assertEqual(mount_plan.location.ewkt, response.data.get("location"))
+
+    def test_get_mount_plan_detail__geojson(self):
+        """
+        Ensure we can get one mount plan object with GeoJSON location.
+        """
+        mount_plan = self.__create_test_mount_plan()
+        response = self.client.get(
+            reverse("api:mountplan-detail", kwargs={"pk": mount_plan.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(mount_plan.id))
+        mount_plan_geojson = GeoJsonDict(mount_plan.location.json)
+        self.assertEqual(mount_plan_geojson, response.data.get("location"))
 
     def test_create_mount_plan(self):
         """
@@ -98,6 +139,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         response = self.client.post(reverse("api:mountplan-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(MountPlan.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         mount_plan = MountPlan.objects.first()
         self.assertEqual(mount_plan.type.value, data["type"])
         self.assertEqual(mount_plan.location.ewkt, data["location"])
@@ -236,6 +278,31 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            mount_real = MountReal.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), mount_real.location.ewkt)
+
+    def test_get_all_mount_reals__geojson(self):
+        """
+        Ensure we can get all mount real objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_mount_real()
+        response = self.client.get(
+            reverse("api:mountreal-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            mount_real = MountReal.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(mount_real.location.json)
+            )
+
     def test_get_mount_real_detail(self):
         """
         Ensure we can get one mount real object.
@@ -246,6 +313,20 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_real.id))
+
+    def test_get_mount_real_detail__geojson(self):
+        """
+        Ensure we can get one mount real object.
+        """
+        mount_real = self.__create_test_mount_real()
+        response = self.client.get(
+            reverse("api:mountreal-detail", kwargs={"pk": mount_real.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(mount_real.id))
+        mount_real_geojson = GeoJsonDict(mount_real.location.json)
+        self.assertEqual(mount_real_geojson, response.data.get("location"))
 
     def test_create_mount_plan(self):
         """
@@ -261,6 +342,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         response = self.client.post(reverse("api:mountreal-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(MountReal.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         mount_real = MountReal.objects.first()
         self.assertEqual(mount_real.type.value, data["type"])
         self.assertEqual(mount_real.location.ewkt, data["location"])

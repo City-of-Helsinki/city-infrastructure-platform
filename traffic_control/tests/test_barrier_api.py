@@ -4,6 +4,7 @@ import io
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import BarrierPlan, BarrierReal, ConnectionType, Reflective
 
@@ -72,6 +73,31 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            barrier_plan = BarrierPlan.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), barrier_plan.location.ewkt)
+
+    def test_get_all_barrier_plans__geojson(self):
+        """
+        Ensure we can get all barrier plan objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_barrier_plan()
+        response = self.client.get(
+            reverse("api:barrierplan-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            barrier_plan = BarrierPlan.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(barrier_plan.location.json)
+            )
+
     def test_get_barrier_plan_detail(self):
         """
         Ensure we can get one barrier plan object.
@@ -82,6 +108,21 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(barrier_plan.id))
+        self.assertEqual(barrier_plan.location.ewkt, response.data.get("location"))
+
+    def test_get_barrier_plan_detail__geojson(self):
+        """
+        Ensure we can get one barrier plan object with GeoJSON location.
+        """
+        barrier_plan = self.__create_test_barrier_plan()
+        response = self.client.get(
+            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(barrier_plan.id))
+        barrier_plan_geojson = GeoJsonDict(barrier_plan.location.json)
+        self.assertEqual(barrier_plan_geojson, response.data.get("location"))
 
     def test_create_barrier_plan(self):
         """
@@ -100,6 +141,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(BarrierPlan.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         barrier_plan = BarrierPlan.objects.first()
         self.assertEqual(barrier_plan.type.id, data["type"])
         self.assertEqual(barrier_plan.location.ewkt, data["location"])
@@ -243,6 +285,31 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
+        results = response.data.get("results")
+        for result in results:
+            barrier_real = BarrierReal.objects.get(id=result.get("id"))
+            self.assertEqual(result.get("location"), barrier_real.location.ewkt)
+
+    def test_get_all_barrier_real__geojson(self):
+        """
+        Ensure we can get all barrier real objects with GeoJSON location.
+        """
+        count = 3
+        for i in range(count):
+            self.__create_test_barrier_real()
+        response = self.client.get(
+            reverse("api:barrierreal-list"), data={"geo_format": "geojson"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("count"), count)
+
+        results = response.data.get("results")
+        for result in results:
+            barrier_real = BarrierReal.objects.get(id=result.get("id"))
+            self.assertEqual(
+                result.get("location"), GeoJsonDict(barrier_real.location.json)
+            )
+
     def test_get_barrier_real_detail(self):
         """
         Ensure we can get one real barrier object.
@@ -253,6 +320,21 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(barrier_real.id))
+        self.assertEqual(barrier_real.location.ewkt, response.data.get("location"))
+
+    def test_get_barrier_real_detail__geojson(self):
+        """
+        Ensure we can get one real barrier object with GeoJSON location.
+        """
+        barrier_real = self.__create_test_barrier_real()
+        response = self.client.get(
+            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+            data={"geo_format": "geojson"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), str(barrier_real.id))
+        barrier_real_geojson = GeoJsonDict(barrier_real.location.json)
+        self.assertEqual(barrier_real_geojson, response.data.get("location"))
 
     def test_create_barrier_real(self):
         """
@@ -271,6 +353,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(BarrierReal.objects.count(), 1)
+        self.assertEqual(response.data.get("location"), data["location"])
         barrier_real = BarrierReal.objects.first()
         self.assertEqual(barrier_real.type.id, data["type"])
         self.assertEqual(barrier_real.location.ewkt, data["location"])

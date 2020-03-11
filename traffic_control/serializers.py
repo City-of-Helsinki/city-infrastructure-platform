@@ -1,5 +1,6 @@
 from enumfields.drf.serializers import EnumSupportSerializerMixin
 from rest_framework import serializers
+from rest_framework_gis.fields import GeometryField
 
 from traffic_control.models import (
     BarrierPlan,
@@ -40,6 +41,10 @@ class TrafficLightPlanSerializer(
         )
 
 
+class TrafficLightPlanGeoJSONSerializer(TrafficLightPlanSerializer):
+    location = GeometryField()
+
+
 class TrafficLightRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -53,6 +58,10 @@ class TrafficSignPlanUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrafficSignPlan
         fields = ("plan_document",)
+
+
+class TrafficLightRealGeoJSONSerializer(TrafficLightRealSerializer):
+    location = GeometryField()
 
 
 class TrafficSignPlanSerializer(
@@ -70,6 +79,11 @@ class TrafficSignPlanSerializer(
         )
 
 
+class TrafficSignPlanGeoJSONSerializer(TrafficSignPlanSerializer):
+    location = GeometryField()
+    affect_area = GeometryField()
+
+
 class TrafficSignRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -85,6 +99,11 @@ class SignpostPlanUploadSerializer(serializers.ModelSerializer):
         fields = ("plan_document",)
 
 
+class TrafficSignRealGeoJSONSerializer(TrafficSignRealSerializer):
+    location = GeometryField()
+    affect_area = GeometryField()
+
+
 class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = SignpostPlan
@@ -96,6 +115,10 @@ class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerial
             "deleted_at",
             "plan_document",
         )
+
+
+class SignpostPlanGeoJSONSerializer(SignpostPlanSerializer):
+    location = GeometryField()
 
 
 class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
@@ -111,6 +134,10 @@ class MountPlanUploadSerializer(serializers.ModelSerializer):
         fields = ("plan_document",)
 
 
+class SignpostRealGeoJSONSerializer(SignpostRealSerializer):
+    location = GeometryField()
+
+
 class MountPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MountPlan
@@ -122,6 +149,10 @@ class MountPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerialize
             "deleted_at",
             "plan_document",
         )
+
+
+class MountPlanGeoJSONSerializer(MountPlanSerializer):
+    location = GeometryField()
 
 
 class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
@@ -137,6 +168,10 @@ class BarrierPlanUploadSerializer(serializers.ModelSerializer):
         fields = ("plan_document",)
 
 
+class MountRealGeoJSONSerializer(MountRealSerializer):
+    location = GeometryField()
+
+
 class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierPlan
@@ -150,6 +185,10 @@ class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSeriali
         )
 
 
+class BarrierPlanGeoJSONSerializer(BarrierPlanSerializer):
+    location = GeometryField()
+
+
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierReal
@@ -161,6 +200,10 @@ class RoadMarkingPlanUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoadMarkingPlan
         fields = ("plan_document",)
+
+
+class BarrierRealGeoJSONSerializer(BarrierRealSerializer):
+    location = GeometryField()
 
 
 class RoadMarkingPlanSerializer(
@@ -178,6 +221,10 @@ class RoadMarkingPlanSerializer(
         )
 
 
+class RoadMarkingPlanGeoJSONSerializer(RoadMarkingPlanSerializer):
+    location = GeometryField()
+
+
 class RoadMarkingRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -185,6 +232,10 @@ class RoadMarkingRealSerializer(
         model = RoadMarkingReal
         fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+
+
+class RoadMarkingRealGeoJSONSerializer(RoadMarkingRealSerializer):
+    location = GeometryField()
 
 
 class TrafficSignCodeSerializer(serializers.ModelSerializer):
