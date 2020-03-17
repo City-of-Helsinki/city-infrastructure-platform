@@ -72,7 +72,11 @@ for feature in layer:
     feature_json = feature.ExportToJson(as_object=True)
     geometry = feature_json.get("geometry")
     point = ogr.Geometry(ogr.wkbPoint)
-    point.AddPoint_2D(geometry.get("coordinates")[0], geometry.get("coordinates")[1])
+    point.AddPoint(
+        geometry.get("coordinates")[0],
+        geometry.get("coordinates")[1],
+        geometry.get("coordinates")[2],
+    )
     properties = feature_json.get("properties")
     data = {
         "location": "SRID={0};{1}".format(SOURCE_SRID, point.ExportToWkt()),
@@ -85,6 +89,13 @@ for feature in layer:
         "owner": OWNER,
         "source_id": feature.GetFID(),
         "source_name": SOURCE_NAME,
+        "height": None,
+        "condition": None,
+        "size": None,
+        "reflection_class": None,
+        "surface_class": None,
+        "color": None,
+        "location_specifier": None,
     }
     print("Sending Traffic Sign Real: {0}".format(data))
     r = requests.post(url=args.url, data=data, auth=auth)
