@@ -41,9 +41,9 @@ class TrafficSignPlan(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
+        _("Height"), max_digits=20, decimal_places=6, blank=True, null=True
     )
     direction = models.IntegerField(_("Direction"), default=0)
     code = models.ForeignKey(
@@ -179,7 +179,7 @@ class TrafficSignReal(models.Model):
         blank=True,
         null=True,
     )
-    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.DecimalField(
         _("Height"), max_digits=20, decimal_places=6, blank=True, null=True
     )
