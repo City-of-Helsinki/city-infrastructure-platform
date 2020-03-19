@@ -14,8 +14,12 @@ COPY requirements-prod.txt /city-infrastructure-platform/
 
 RUN apt-get update && \
     mkdir -p /usr/share/man/man1/ /usr/share/man/man3/ /usr/share/man/man7/ && \
-    apt-get install -y --no-install-recommends libpq-dev build-essential && \
-    apt-get install -y --no-install-recommends gdal-bin postgresql-client && \
+    apt-get install -y --no-install-recommends \
+        libpq-dev \
+        build-essential \
+        gdal-bin \
+        postgresql-client \
+        gettext && \
     pip install --no-cache-dir -r requirements.txt -r requirements-prod.txt && \
     apt-get remove -y build-essential libpq-dev && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
