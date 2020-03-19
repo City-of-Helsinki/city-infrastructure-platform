@@ -14,6 +14,9 @@ if [[ "$COLLECT_STATIC" = "1" ]]; then
     ./manage.py collectstatic --noinput
 fi
 
+echo "Updating translations..."
+./manage.py compilemessages -l fi
+
 # Start server
 if [[ ! -z "$@" ]]; then
     "$@"
