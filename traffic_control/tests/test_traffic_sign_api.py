@@ -9,15 +9,17 @@ from rest_framework_gis.fields import GeoJsonDict
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
 
 from .factories import get_api_client, get_traffic_sign_plan, get_traffic_sign_real
-from .test_base_api import (
-    point_location_error_test_data,
-    point_location_test_data,
-    TrafficControlAPIBaseTestCase,
+from .test_base_api_3d import (
+    point_location_error_test_data_3d,
+    point_location_test_data_3d,
+    TrafficControlAPIBaseTestCase3D,
 )
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("location,location_query,expected", point_location_test_data)
+@pytest.mark.parametrize(
+    "location,location_query,expected", point_location_test_data_3d
+)
 def test_filter_traffic_sign_plans_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
@@ -39,7 +41,7 @@ def test_filter_traffic_sign_plans_location(location, location_query, expected):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,location_query,expected", point_location_error_test_data,
+    "location,location_query,expected", point_location_error_test_data_3d,
 )
 def test_filter_error_traffic_sign_plans_location(location, location_query, expected):
     """
@@ -56,7 +58,7 @@ def test_filter_error_traffic_sign_plans_location(location, location_query, expe
     assert response.data.get("location")[0] == expected
 
 
-class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
+class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
     def test_get_all_traffic_sign_plans(self):
         """
         Ensure we can get all traffic sign plan objects.
@@ -225,7 +227,9 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("location,location_query,expected", point_location_test_data)
+@pytest.mark.parametrize(
+    "location,location_query,expected", point_location_test_data_3d
+)
 def test_filter_traffic_sign_reals_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
@@ -247,7 +251,7 @@ def test_filter_traffic_sign_reals_location(location, location_query, expected):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,location_query,expected", point_location_error_test_data,
+    "location,location_query,expected", point_location_error_test_data_3d,
 )
 def test_filter_error_traffic_sign_reals_location(location, location_query, expected):
     """
@@ -264,7 +268,7 @@ def test_filter_error_traffic_sign_reals_location(location, location_query, expe
     assert response.data.get("location")[0] == expected
 
 
-class TrafficSignRealTests(TrafficControlAPIBaseTestCase):
+class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
     def test_get_all_traffic_sign_reals(self):
         """
         Ensure we can get all traffic sign real objects.

@@ -27,6 +27,7 @@ from traffic_control.models import (
     TrafficSignReal,
 )
 from traffic_control.tests.test_base_api import test_point
+from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
 def get_user(username=None, admin=False):
@@ -216,7 +217,7 @@ def get_traffic_sign_plan(location=""):
 
     return TrafficSignPlan.objects.get_or_create(
         code=get_traffic_sign_code(),
-        location=location or test_point,
+        location=location or test_point_3d,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
         created_by=user,
@@ -230,7 +231,7 @@ def get_traffic_sign_real(location=""):
     return TrafficSignReal.objects.get_or_create(
         traffic_sign_plan=get_traffic_sign_plan(),
         code=get_traffic_sign_code(),
-        location=location or test_point,
+        location=location or test_point_3d,
         installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
         created_by=user,
