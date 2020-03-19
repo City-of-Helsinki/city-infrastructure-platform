@@ -17,6 +17,8 @@ Install PostgreSQL and PostGIS.
 
     # Ubuntu 18.04
     sudo apt-get install binutils libproj-dev gdal-bin
+    export CPLUS_INCLUDE_PATH=/usr/include/gdal
+    export C_INCLUDE_PATH=/usr/include/gdal
 
 ### Creating a Python virtualenv
 
