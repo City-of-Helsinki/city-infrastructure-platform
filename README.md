@@ -93,3 +93,4 @@ Run the application `docker-compose up`
 ### Translations (fi)
 
 Run script `./makemessages.sh`
+
