@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from .forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
+from .mixins import Point3DFieldAdminMixin
 from .models import (
     BarrierPlan,
     BarrierReal,
@@ -101,7 +103,49 @@ class TrafficLightRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
 
 
 @admin.register(TrafficSignPlan)
-class TrafficSignPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class TrafficSignPlanAdmin(
+    Point3DFieldAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
+    form = TrafficSignPlanModelForm
+    fields = (
+        ("location", "z_coord"),
+        "height",
+        "direction",
+        "code",
+        "value",
+        "parent",
+        "order",
+        "txt",
+        "mount_plan",
+        "mount_type",
+        "mount_type_fi",
+        "decision_date",
+        "decision_id",
+        "plan_document",
+        "validity_period_start",
+        "validity_period_end",
+        "affect_area",
+        "created_at",
+        "updated_at",
+        "deleted_at",
+        "created_by",
+        "updated_by",
+        "deleted_by",
+        "size",
+        "reflection_class",
+        "surface_class",
+        "seasonal_validity_period_start",
+        "seasonal_validity_period_end",
+        "owner",
+        "color",
+        "lifecycle",
+        "road_name",
+        "lane_number",
+        "lane_type",
+        "location_specifier",
+        "source_id",
+        "source_name",
+    )
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -113,12 +157,66 @@ class TrafficSignPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "location",
         "decision_date",
     )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
     ordering = ("-created_at",)
     actions = None
 
 
 @admin.register(TrafficSignReal)
-class TrafficSignRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class TrafficSignRealAdmin(
+    Point3DFieldAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
+    form = TrafficSignRealModelForm
+    fields = (
+        "traffic_sign_plan",
+        ("location", "z_coord"),
+        "height",
+        "direction",
+        "code",
+        "value",
+        "legacy_code",
+        "parent",
+        "order",
+        "txt",
+        "mount_real",
+        "mount_type",
+        "mount_type_fi",
+        "installation_date",
+        "installation_status",
+        "installation_id",
+        "installation_details",
+        "allu_decision_id",
+        "validity_period_start",
+        "validity_period_end",
+        "condition",
+        "affect_area",
+        "created_at",
+        "updated_at",
+        "deleted_at",
+        "scanned_at",
+        "created_by",
+        "updated_by",
+        "deleted_by",
+        "size",
+        "reflection_class",
+        "surface_class",
+        "seasonal_validity_period_start",
+        "seasonal_validity_period_end",
+        "owner",
+        "manufacturer",
+        "rfid",
+        "color",
+        "lifecycle",
+        "road_name",
+        "lane_number",
+        "lane_type",
+        "location_specifier",
+        "source_id",
+        "source_name",
+    )
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -129,6 +227,10 @@ class TrafficSignRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "lifecycle",
         "location",
         "installation_date",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
     )
     ordering = ("-created_at",)
     actions = None

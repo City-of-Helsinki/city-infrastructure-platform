@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-18 16:26+0200\n"
+"POT-Creation-Date: 2020-03-20 09:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: traffic_control/admin.py:24
+#: traffic_control/admin.py:26
 msgid "City Infrastructure Platform Administration"
 msgstr "Infraomaisuuden hallinta-alusta"
 
 #: traffic_control/apps.py:7
 msgid "Traffic control"
 msgstr "Liikenteenohjauslaitteet"
+
+#: traffic_control/forms.py:12
+msgid "Location (z)"
+msgstr "Sijainti (z)"
+
+#: traffic_control/forms.py:16
+msgid "Location (x,y)"
+msgstr "Sijainti (x,y)"
 
 #: traffic_control/models/barrier.py:18
 msgid "Closed"
