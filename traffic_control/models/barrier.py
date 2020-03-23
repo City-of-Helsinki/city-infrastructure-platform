@@ -72,7 +72,6 @@ class BarrierPlan(models.Model):
     decision_id = models.CharField(
         _("Decision id"), max_length=254, blank=True, null=True
     )
-    plan_document = models.FileField(_("Plan document"), blank=True, null=True)
     reflective = EnumField(
         Reflective, verbose_name=_("Reflective"), blank=True, null=True
     )
@@ -135,6 +134,26 @@ class BarrierPlan(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.id, self.type)
+
+
+class BarrierPlanFile(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    file = models.FileField(
+        _("File"), blank=False, null=False, upload_to="planfiles/barrier/"
+    )
+    barrier_plan = models.ForeignKey(
+        BarrierPlan, on_delete=models.CASCADE, related_name="files"
+    )
+
+    class Meta:
+        db_table = "barrier_plan_file"
+        verbose_name = _("Barrier Plan File")
+        verbose_name_plural = _("Barrier Plan Files")
+
+    def __str__(self):
+        return "%s" % self.file
 
 
 class BarrierReal(models.Model):
