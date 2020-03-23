@@ -64,7 +64,7 @@ class TrafficLightPlan(models.Model):
     mount_type = EnumField(
         MountType,
         verbose_name=_("Mount type"),
-        max_length=10,
+        max_length=20,
         default=MountType.POST,
         blank=True,
         null=True,
@@ -164,7 +164,7 @@ class TrafficLightReal(models.Model):
     mount_type = EnumField(
         MountType,
         verbose_name=_("Mount type"),
-        max_length=10,
+        max_length=20,
         default=MountType.POST,
         blank=True,
         null=True,

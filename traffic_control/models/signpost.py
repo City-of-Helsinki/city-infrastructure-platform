@@ -65,7 +65,7 @@ class SignpostPlan(models.Model):
     mount_type = EnumField(
         MountType,
         verbose_name=_("Mount type"),
-        max_length=10,
+        max_length=20,
         default=MountType.OTHER,
         blank=True,
         null=True,
@@ -202,7 +202,7 @@ class SignpostReal(models.Model):
     mount_type = EnumField(
         MountType,
         verbose_name=_("Mount type"),
-        max_length=10,
+        max_length=20,
         default=MountType.OTHER,
         blank=True,
         null=True,

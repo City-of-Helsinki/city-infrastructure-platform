@@ -17,6 +17,9 @@ class MountType(Enum):
     WIRE = "WIRE"
     BRIDGE = "BRIDGE"
     OTHER = "OTHER"
+    LIGHTPOLE = "LIGHTPOLE"
+    POLE = "POLE"
+    TRAFFICLIGHT = "TRAFFICLIGHT"
 
     class Labels:
         PORTAL = _("Portal")
@@ -25,6 +28,9 @@ class MountType(Enum):
         WIRE = _("Wire")
         BRIDGE = _("Bridge")
         OTHER = _("Other")
+        LIGHTPOLE = _("Lightpole")
+        POLE = _("Pole")
+        TRAFFICLIGHT = _("Trafficlight")
 
 
 class PortalType(models.Model):
@@ -51,7 +57,7 @@ class MountPlan(models.Model):
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
     type = EnumField(
-        MountType, verbose_name=_("Mount type"), max_length=10, default=MountType.PORTAL
+        MountType, verbose_name=_("Mount type"), max_length=20, default=MountType.PORTAL
     )
     portal_type = models.ForeignKey(
         PortalType,
@@ -133,7 +139,7 @@ class MountReal(models.Model):
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
     type = EnumField(
-        MountType, verbose_name=_("Mount type"), max_length=10, default=MountType.PORTAL
+        MountType, verbose_name=_("Mount type"), max_length=20, default=MountType.PORTAL
     )
     portal_type = models.ForeignKey(
         PortalType,
