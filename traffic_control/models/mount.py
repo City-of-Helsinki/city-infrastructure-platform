@@ -71,7 +71,6 @@ class MountPlan(models.Model):
     decision_id = models.CharField(
         _("Decision id"), max_length=254, blank=True, null=True
     )
-    plan_document = models.FileField(_("Plan document"), blank=True, null=True)
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
     )
@@ -124,6 +123,26 @@ class MountPlan(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.id, self.type)
+
+
+class MountPlanFile(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    file = models.FileField(
+        _("File"), blank=False, null=False, upload_to="planfiles/mount/"
+    )
+    mount_plan = models.ForeignKey(
+        MountPlan, on_delete=models.CASCADE, related_name="files"
+    )
+
+    class Meta:
+        db_table = "mount_plan_file"
+        verbose_name = _("Mount Plan File")
+        verbose_name_plural = _("Mount Plan Files")
+
+    def __str__(self):
+        return "%s" % self.file
 
 
 class MountReal(models.Model):
@@ -224,4 +243,5 @@ class MountReal(models.Model):
 
 
 auditlog.register(MountPlan)
+auditlog.register(MountPlanFile)
 auditlog.register(MountReal)

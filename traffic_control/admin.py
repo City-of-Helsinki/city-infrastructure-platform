@@ -8,18 +8,24 @@ from .forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
 from .mixins import Point3DFieldAdminMixin
 from .models import (
     BarrierPlan,
+    BarrierPlanFile,
     BarrierReal,
     MountPlan,
+    MountPlanFile,
     MountReal,
     PortalType,
     RoadMarkingPlan,
+    RoadMarkingPlanFile,
     RoadMarkingReal,
     SignpostPlan,
+    SignpostPlanFile,
     SignpostReal,
     TrafficLightPlan,
+    TrafficLightPlanFile,
     TrafficLightReal,
     TrafficSignCode,
     TrafficSignPlan,
+    TrafficSignPlanFile,
     TrafficSignReal,
 )
 
@@ -36,6 +42,10 @@ class AuditLogHistoryAdmin(admin.ModelAdmin):
         )
 
 
+class BarrierPlanFileInline(admin.TabularInline):
+    model = BarrierPlanFile
+
+
 @admin.register(BarrierPlan)
 class BarrierPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
@@ -50,6 +60,7 @@ class BarrierPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     )
     ordering = ("-created_at",)
     actions = None
+    inlines = (BarrierPlanFileInline,)
 
 
 @admin.register(BarrierReal)
@@ -68,6 +79,10 @@ class BarrierRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     actions = None
 
 
+class TrafficLightPlanFileInline(admin.TabularInline):
+    model = TrafficLightPlanFile
+
+
 @admin.register(TrafficLightPlan)
 class TrafficLightPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
@@ -83,6 +98,7 @@ class TrafficLightPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     )
     ordering = ("-created_at",)
     actions = None
+    inlines = (TrafficLightPlanFileInline,)
 
 
 @admin.register(TrafficLightReal)
@@ -100,6 +116,10 @@ class TrafficLightRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     )
     ordering = ("-created_at",)
     actions = None
+
+
+class TrafficSignPlanFileInline(admin.TabularInline):
+    model = TrafficSignPlanFile
 
 
 @admin.register(TrafficSignPlan)
@@ -121,7 +141,6 @@ class TrafficSignPlanAdmin(
         "mount_type_fi",
         "decision_date",
         "decision_id",
-        "plan_document",
         "validity_period_start",
         "validity_period_end",
         "affect_area",
@@ -163,6 +182,7 @@ class TrafficSignPlanAdmin(
     )
     ordering = ("-created_at",)
     actions = None
+    inlines = (TrafficSignPlanFileInline,)
 
 
 @admin.register(TrafficSignReal)
@@ -236,6 +256,10 @@ class TrafficSignRealAdmin(
     actions = None
 
 
+class SignpostPlanFileInline(admin.TabularInline):
+    model = SignpostPlanFile
+
+
 @admin.register(SignpostPlan)
 class SignpostPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
@@ -251,6 +275,7 @@ class SignpostPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     )
     ordering = ("-created_at",)
     actions = None
+    inlines = (SignpostPlanFileInline,)
 
 
 @admin.register(SignpostReal)
@@ -270,6 +295,10 @@ class SignpostRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     actions = None
 
 
+class MountPlanFileInline(admin.TabularInline):
+    model = MountPlanFile
+
+
 @admin.register(MountPlan)
 class MountPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
@@ -283,6 +312,7 @@ class MountPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     )
     ordering = ("-created_at",)
     actions = None
+    inlines = (MountPlanFileInline,)
 
 
 @admin.register(MountReal)
@@ -300,6 +330,10 @@ class MountRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     actions = None
 
 
+class RoadMarkingPlanFileInline(admin.TabularInline):
+    model = RoadMarkingPlanFile
+
+
 @admin.register(RoadMarkingPlan)
 class RoadMarkingPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
@@ -314,6 +348,7 @@ class RoadMarkingPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     )
     ordering = ("-created_at",)
     actions = None
+    inlines = (RoadMarkingPlanFileInline,)
 
 
 @admin.register(RoadMarkingReal)

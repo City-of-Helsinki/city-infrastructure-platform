@@ -1,5 +1,12 @@
 # flake8: noqa
-from .barrier import BarrierPlan, BarrierReal, ConnectionType, LaneType, Reflective
+from .barrier import (
+    BarrierPlan,
+    BarrierPlanFile,
+    BarrierReal,
+    ConnectionType,
+    LaneType,
+    Reflective,
+)
 from .common import (
     Color,
     Condition,
@@ -10,19 +17,21 @@ from .common import (
     Surface,
     TrafficSignCode,
 )
-from .mount import MountPlan, MountReal, MountType, PortalType
+from .mount import MountPlan, MountPlanFile, MountReal, MountType, PortalType
 from .road_marking import (
     ArrowDirection,
     LineDirection,
     RoadMarkingColor,
     RoadMarkingPlan,
+    RoadMarkingPlanFile,
     RoadMarkingReal,
 )
-from .signpost import SignpostPlan, SignpostReal
+from .signpost import SignpostPlan, SignpostPlanFile, SignpostReal
 from .traffic_light import (
     TrafficLightPlan,
+    TrafficLightPlanFile,
     TrafficLightReal,
     TrafficLightSoundBeaconValue,
     TrafficLightType,
 )
-from .traffic_sign import TrafficSignPlan, TrafficSignReal
+from .traffic_sign import TrafficSignPlan, TrafficSignPlanFile, TrafficSignReal
