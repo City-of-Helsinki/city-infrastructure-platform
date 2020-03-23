@@ -190,26 +190,64 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(deleted_mount_plan.deleted_by, self.user)
         self.assertTrue(deleted_mount_plan.deleted_at)
 
-    def test_upload_mount_plan_document(self):
+    def test_mount_plan_files(self):
         """
-        Ensure that mount plan document can be uploaded to system.
+        Ensure that mount plan document can be uploaded, rewritten and deleted.
         """
         mount_plan = self.__create_test_mount_plan()
 
-        data = {"plan_document": io.BytesIO(b"File contents")}
+        # Upload
+        data = {"file": io.BytesIO(b"File contents")}
 
-        response = self.client.put(
-            reverse("api:mountplan-upload-plan", kwargs={"pk": mount_plan.id}),
+        post_response = self.client.post(
+            reverse("api:mountplan-post-file", kwargs={"pk": mount_plan.id}),
             data=data,
             format="multipart",
         )
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(post_response.status_code, status.HTTP_200_OK)
         self.assertEqual(MountPlan.objects.count(), 1)
         changed_mount_plan = MountPlan.objects.get(id=str(mount_plan.id))
-        self.assertTrue(changed_mount_plan.plan_document)
-        self.assertEqual(changed_mount_plan.updated_by, self.user)
-        self.assertTrue(changed_mount_plan.updated_at)
+        self.assertEqual(changed_mount_plan.files.count(), 1)
+
+        # Rewrite
+        data = {"file": io.BytesIO(b"Rewritten file contents")}
+
+        patch_response = self.client.patch(
+            reverse(
+                "api:mountplan-change-file",
+                kwargs={
+                    "pk": mount_plan.id,
+                    "file_pk": changed_mount_plan.files.first().id,
+                },
+            ),
+            data=data,
+            format="multipart",
+        )
+
+        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(MountPlan.objects.count(), 1)
+        rewritten_mount_plan = MountPlan.objects.get(id=str(mount_plan.id))
+        self.assertEqual(rewritten_mount_plan.files.count(), 1)
+        self.assertNotEqual(
+            post_response.data.get("file"), patch_response.data.get("file")
+        )
+
+        # Delete
+        delete_response = self.client.delete(
+            reverse(
+                "api:mountplan-change-file",
+                kwargs={
+                    "pk": mount_plan.id,
+                    "file_pk": changed_mount_plan.files.first().id,
+                },
+            ),
+        )
+
+        self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(MountPlan.objects.count(), 1)
+        deleted_mount_plan_file = MountPlan.objects.get(id=str(mount_plan.id))
+        self.assertEqual(deleted_mount_plan_file.files.count(), 0)
 
     def __create_test_mount_plan(self):
         return MountPlan.objects.create(

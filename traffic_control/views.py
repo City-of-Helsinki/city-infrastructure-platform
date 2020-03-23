@@ -1,6 +1,7 @@
 from django.core import exceptions
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
@@ -28,6 +29,7 @@ from traffic_control.filters import (
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.models import (
     BarrierPlan,
+    BarrierPlanFile,
     BarrierReal,
     MountPlan,
     MountReal,
@@ -35,45 +37,56 @@ from traffic_control.models import (
     RoadMarkingPlan,
     RoadMarkingReal,
     SignpostPlan,
+    SignpostPlanFile,
     SignpostReal,
     TrafficLightPlan,
+    TrafficLightPlanFile,
     TrafficLightReal,
     TrafficSignCode,
     TrafficSignPlan,
+    TrafficSignPlanFile,
     TrafficSignReal,
 )
+from traffic_control.models.mount import MountPlanFile
+from traffic_control.models.road_marking import RoadMarkingPlanFile
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.serializers import (
+    BarrierPlanFileSerializer,
     BarrierPlanGeoJSONSerializer,
+    BarrierPlanPostFileSerializer,
     BarrierPlanSerializer,
-    BarrierPlanUploadSerializer,
     BarrierRealGeoJSONSerializer,
     BarrierRealSerializer,
+    MountPlanFileSerializer,
     MountPlanGeoJSONSerializer,
+    MountPlanPostFileSerializer,
     MountPlanSerializer,
-    MountPlanUploadSerializer,
     MountRealGeoJSONSerializer,
     MountRealSerializer,
     PortalTypeSerializer,
+    RoadMarkingPlanFileSerializer,
     RoadMarkingPlanGeoJSONSerializer,
+    RoadMarkingPlanPostFileSerializer,
     RoadMarkingPlanSerializer,
-    RoadMarkingPlanUploadSerializer,
     RoadMarkingRealGeoJSONSerializer,
     RoadMarkingRealSerializer,
+    SignpostPlanFileSerializer,
     SignpostPlanGeoJSONSerializer,
+    SignpostPlanPostFileSerializer,
     SignpostPlanSerializer,
-    SignpostPlanUploadSerializer,
     SignpostRealGeoJSONSerializer,
     SignpostRealSerializer,
+    TrafficLightPlanFileSerializer,
     TrafficLightPlanGeoJSONSerializer,
+    TrafficLightPlanPostFileSerializer,
     TrafficLightPlanSerializer,
-    TrafficLightPlanUploadSerializer,
     TrafficLightRealGeoJSONSerializer,
     TrafficLightRealSerializer,
     TrafficSignCodeSerializer,
+    TrafficSignPlanFileSerializer,
     TrafficSignPlanGeoJSONSerializer,
+    TrafficSignPlanPostFileSerializer,
     TrafficSignPlanSerializer,
-    TrafficSignPlanUploadSerializer,
     TrafficSignRealGeoJSONSerializer,
     TrafficSignRealSerializer,
 )
@@ -141,7 +154,7 @@ class FileUploadViews(GenericViewSet):
                 )
 
             instance.delete()
-            return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
         if request.method == "PATCH":
             instance = self.file_queryset.get(id=file_pk)
@@ -158,28 +171,45 @@ class FileUploadViews(GenericViewSet):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class BarrierPlanViewSet(TrafficControlViewSet):
+class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": BarrierPlanSerializer,
         "geojson": BarrierPlanGeoJSONSerializer,
     }
     queryset = BarrierPlan.objects.all()
     filterset_class = BarrierPlanFilterSet
+    file_queryset = BarrierPlanFile.objects.all()
+    file_serializer = BarrierPlanFileSerializer
+    file_relation = "barrier_plan"
 
-    @action(
-        methods=("PUT",),
-        detail=True,
-        parser_classes=(MultiPartParser,),
-        serializer_class=BarrierPlanUploadSerializer,
+    @swagger_auto_schema(
+        method="post",
+        request_body=BarrierPlanPostFileSerializer,
+        responses={200: BarrierPlanFileSerializer},
     )
-    def upload_plan(self, request, *args, **kwargs):
-        obj = self.get_object()
-        serializer = self.serializer_class(obj, data=request.data)
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
 
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
+    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="patch",
+        request_body=BarrierPlanPostFileSerializer,
+        responses={200: BarrierPlanFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
 
 
 class BarrierRealViewSet(TrafficControlViewSet):
@@ -191,29 +221,45 @@ class BarrierRealViewSet(TrafficControlViewSet):
     filterset_class = BarrierRealFilterSet
 
 
-class MountPlanViewSet(TrafficControlViewSet):
+class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": MountPlanSerializer,
         "geojson": MountPlanGeoJSONSerializer,
     }
-    serializer_class = MountPlanSerializer
     queryset = MountPlan.objects.all()
     filterset_class = MountPlanFilterSet
+    file_queryset = MountPlanFile.objects.all()
+    file_serializer = MountPlanFileSerializer
+    file_relation = "mount_plan"
 
-    @action(
-        methods=("PUT",),
-        detail=True,
-        parser_classes=(MultiPartParser,),
-        serializer_class=MountPlanUploadSerializer,
+    @swagger_auto_schema(
+        method="post",
+        request_body=MountPlanPostFileSerializer,
+        responses={200: MountPlanFileSerializer},
     )
-    def upload_plan(self, request, *args, **kwargs):
-        obj = self.get_object()
-        serializer = self.serializer_class(obj, data=request.data)
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
 
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
+    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="patch",
+        request_body=MountPlanPostFileSerializer,
+        responses={200: MountPlanFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
 
 
 class MountRealViewSet(TrafficControlViewSet):
@@ -226,28 +272,45 @@ class MountRealViewSet(TrafficControlViewSet):
     filterset_class = MountRealFilterSet
 
 
-class RoadMarkingPlanViewSet(TrafficControlViewSet):
+class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": RoadMarkingPlanSerializer,
         "geojson": RoadMarkingPlanGeoJSONSerializer,
     }
     queryset = RoadMarkingPlan.objects.all()
     filterset_class = RoadMarkingPlanFilterSet
+    file_queryset = RoadMarkingPlanFile.objects.all()
+    file_serializer = RoadMarkingPlanFileSerializer
+    file_relation = "road_marking_plan"
 
-    @action(
-        methods=("PUT",),
-        detail=True,
-        parser_classes=(MultiPartParser,),
-        serializer_class=RoadMarkingPlanUploadSerializer,
+    @swagger_auto_schema(
+        method="post",
+        request_body=RoadMarkingPlanPostFileSerializer,
+        responses={200: RoadMarkingPlanFileSerializer},
     )
-    def upload_plan(self, request, *args, **kwargs):
-        obj = self.get_object()
-        serializer = self.serializer_class(obj, data=request.data)
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
 
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
+    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="patch",
+        request_body=RoadMarkingPlanPostFileSerializer,
+        responses={200: RoadMarkingPlanFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
 
 
 class RoadMarkingRealViewSet(TrafficControlViewSet):
@@ -259,28 +322,45 @@ class RoadMarkingRealViewSet(TrafficControlViewSet):
     filterset_class = RoadMarkingRealFilterSet
 
 
-class SignpostPlanViewSet(TrafficControlViewSet):
+class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": SignpostPlanSerializer,
         "geojson": SignpostPlanGeoJSONSerializer,
     }
     queryset = SignpostPlan.objects.all()
     filterset_class = SignpostPlanFilterSet
+    file_queryset = SignpostPlanFile.objects.all()
+    file_serializer = SignpostPlanFileSerializer
+    file_relation = "signpost_plan"
 
-    @action(
-        methods=("PUT",),
-        detail=True,
-        parser_classes=(MultiPartParser,),
-        serializer_class=SignpostPlanUploadSerializer,
+    @swagger_auto_schema(
+        method="post",
+        request_body=SignpostPlanPostFileSerializer,
+        responses={200: SignpostPlanFileSerializer},
     )
-    def upload_plan(self, request, *args, **kwargs):
-        obj = self.get_object()
-        serializer = self.serializer_class(obj, data=request.data)
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
 
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
+    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="patch",
+        request_body=SignpostPlanPostFileSerializer,
+        responses={200: SignpostPlanFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
 
 
 class SignpostRealViewSet(TrafficControlViewSet):
@@ -292,28 +372,45 @@ class SignpostRealViewSet(TrafficControlViewSet):
     filterset_class = SignpostRealFilterSet
 
 
-class TrafficLightPlanViewSet(TrafficControlViewSet):
+class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": TrafficLightPlanSerializer,
         "geojson": TrafficLightPlanGeoJSONSerializer,
     }
     queryset = TrafficLightPlan.objects.all()
     filterset_class = TrafficLightPlanFilterSet
+    file_queryset = TrafficLightPlanFile.objects.all()
+    file_serializer = TrafficLightPlanFileSerializer
+    file_relation = "traffic_light_plan"
 
-    @action(
-        methods=("PUT",),
-        detail=True,
-        parser_classes=(MultiPartParser,),
-        serializer_class=TrafficLightPlanUploadSerializer,
+    @swagger_auto_schema(
+        method="post",
+        request_body=TrafficLightPlanPostFileSerializer,
+        responses={200: TrafficLightPlanFileSerializer},
     )
-    def upload_plan(self, request, *args, **kwargs):
-        obj = self.get_object()
-        serializer = self.serializer_class(obj, data=request.data)
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
 
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
+    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="patch",
+        request_body=TrafficLightPlanPostFileSerializer,
+        responses={200: TrafficLightPlanFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
 
 
 class TrafficLightRealViewSet(TrafficControlViewSet):
@@ -335,28 +432,45 @@ class TrafficSignCodeViewSet(ModelViewSet):
     filterset_class = TrafficSignCodeFilterSet
 
 
-class TrafficSignPlanViewSet(TrafficControlViewSet):
+class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": TrafficSignPlanSerializer,
         "geojson": TrafficSignPlanGeoJSONSerializer,
     }
     queryset = TrafficSignPlan.objects.all()
     filterset_class = TrafficSignPlanFilterSet
+    file_queryset = TrafficSignPlanFile.objects.all()
+    file_serializer = TrafficSignPlanFileSerializer
+    file_relation = "traffic_sign_plan"
 
-    @action(
-        methods=("PUT",),
-        detail=True,
-        parser_classes=(MultiPartParser,),
-        serializer_class=TrafficSignPlanUploadSerializer,
+    @swagger_auto_schema(
+        method="post",
+        request_body=TrafficSignPlanPostFileSerializer,
+        responses={200: TrafficSignPlanFileSerializer},
     )
-    def upload_plan(self, request, *args, **kwargs):
-        obj = self.get_object()
-        serializer = self.serializer_class(obj, data=request.data)
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
 
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
+    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="patch",
+        request_body=TrafficSignPlanPostFileSerializer,
+        responses={200: TrafficSignPlanFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
 
 
 class TrafficSignRealViewSet(TrafficControlViewSet):
