@@ -14,8 +14,11 @@ if [[ "$COLLECT_STATIC" = "1" ]]; then
     ./manage.py collectstatic --noinput
 fi
 
+# Only translate traffic_control module for now
 echo "Updating translations..."
-./manage.py compilemessages -l fi
+cd traffic_control
+../manage.py compilemessages -l fi
+cd ..
 
 # Start server
 if [[ ! -z "$@" ]]; then
