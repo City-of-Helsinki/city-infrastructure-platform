@@ -4,10 +4,15 @@
 #
 --no-binary psycopg2
 
+azure-common==1.1.25
+azure-storage-blob==2.1.0
+azure-storage-common==2.1.0
 certifi==2019.11.28
+cffi==1.14.0
 chardet==3.0.4
 coreapi==2.3.3
 coreschema==0.0.4
+cryptography==2.8
 django==2.2.10
 django-auditlog==0.4.7
 django-cors-headers==3.2.0
@@ -16,6 +21,7 @@ django-environ==0.4.5
 django-extensions==2.2.5
 django-filter==2.2.0
 django-jsonfield==1.4.0
+django-storages[azure]==1.9.1
 djangorestframework==3.11.0
 djangorestframework-gis==0.15
 drf-yasg==1.17.0
@@ -26,6 +32,7 @@ jinja2==2.10.3
 markupsafe==1.1.1
 packaging==20.0
 psycopg2==2.8.4
+pycparser==2.20
 pyparsing==2.4.6
 python-dateutil==2.6.0
 pytz==2019.3
