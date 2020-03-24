@@ -165,7 +165,7 @@ class TrafficSignPlan(models.Model):
         verbose_name_plural = _("Traffic Sign Plans")
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.code, self.value)
+        return "%s %s" % (self.id, self.code)
 
 
 class TrafficSignPlanFile(models.Model):
@@ -356,7 +356,7 @@ class TrafficSignReal(models.Model):
         verbose_name_plural = _("Traffic Sign Reals")
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.code, self.value)
+        return "%s %s" % (self.id, self.code)
 
     def save(self, *args, **kwargs):
         if not self.code:
