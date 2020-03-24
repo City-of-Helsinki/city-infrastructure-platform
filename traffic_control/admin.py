@@ -3,6 +3,7 @@ from django.contrib.gis import admin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from enumfields.admin import EnumFieldListFilter
 
 from .forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
 from .mixins import Point3DFieldAdminMixin
@@ -254,6 +255,15 @@ class TrafficSignRealAdmin(
     )
     ordering = ("-created_at",)
     actions = None
+    list_filter = [("lifecycle", EnumFieldListFilter)]
+    search_fields = (
+        "traffic_sign_plan__id",
+        "code__code",
+        "value",
+        "installation_date",
+        "size",
+        "mount_real__id",
+    )
 
 
 class SignpostPlanFileInline(admin.TabularInline):
