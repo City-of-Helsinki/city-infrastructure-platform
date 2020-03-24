@@ -40,6 +40,9 @@ env = environ.Env(
     EMAIL_URL=(str, "consolemail://"),
     SENTRY_DSN=(str, ""),
     AZURE_DEPLOYMENT=(bool, False),
+    AZURE_ACCOUNT_KEY=(str, False),
+    AZURE_CONTAINER=(str, False),
+    AZURE_ACCOUNT_NAME=(str, False),
 )
 if os.path.exists(env_file):
     env.read_env(env_file)
@@ -164,6 +167,12 @@ if DEBUG:
 
 # Azure CLIENT_IP middleware
 AZURE_DEPLOYMENT = env.bool("AZURE_DEPLOYMENT")
+
+if AZURE_DEPLOYMENT:
+    AZURE_ACCOUNT_KEY = env.str("AZURE_ACCOUNT_KEY")
+    AZURE_CONTAINER = env.str("AZURE_CONTAINER")
+    AZURE_ACCOUNT_NAME = env.str("AZURE_ACCOUNT_NAME")
+    DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
 
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
