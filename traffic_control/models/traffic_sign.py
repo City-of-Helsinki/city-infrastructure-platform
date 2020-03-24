@@ -54,6 +54,7 @@ class TrafficSignPlan(models.Model):
         "self",
         verbose_name=_("Parent Traffic Sign Plan"),
         on_delete=models.CASCADE,
+        related_name="children",
         blank=True,
         null=True,
     )
@@ -199,6 +200,7 @@ class TrafficSignReal(models.Model):
         "self",
         verbose_name=_("Parent Traffic Sign Real"),
         on_delete=models.CASCADE,
+        related_name="children",
         blank=True,
         null=True,
     )
