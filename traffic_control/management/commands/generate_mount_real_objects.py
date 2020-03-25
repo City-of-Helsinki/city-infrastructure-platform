@@ -28,7 +28,7 @@ class Command(BaseCommand):
                 mount_real = MountReal.objects.create(
                     location=Point(
                         main_traffic_sign.location.x,
-                        main_traffic_sign.location.x,
+                        main_traffic_sign.location.y,
                         srid=settings.SRID,
                     ),
                     type=MountType[main_traffic_sign.mount_type.upper()].value,
