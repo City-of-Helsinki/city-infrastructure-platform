@@ -3,6 +3,7 @@ from django.contrib.gis import admin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from enumfields.admin import EnumFieldListFilter
 
 from .forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
 from .mixins import Point3DFieldAdminMixin
@@ -242,11 +243,30 @@ class TrafficSignRealAdmin(
     default_zoom = 12
     list_display = (
         "id",
+        "traffic_sign_plan",
         "code",
         "value",
-        "lifecycle",
-        "location",
         "installation_date",
+        "size",
+        "mount_real",
+        "mount_type",
+        "height",
+        "parent",
+        "installation_status",
+        "validity_period_start",
+        "validity_period_end",
+        "condition",
+        "deleted_at",
+        "reflection_class",
+        "surface_class",
+        "seasonal_validity_period_start",
+        "seasonal_validity_period_end",
+        "owner",
+        "lifecycle",
+        "road_name",
+        "lane_number",
+        "lane_type",
+        "location_specifier",
     )
     readonly_fields = (
         "created_at",
@@ -254,6 +274,37 @@ class TrafficSignRealAdmin(
     )
     ordering = ("-created_at",)
     actions = None
+    list_filter = [
+        ("lifecycle", EnumFieldListFilter),
+        ("installation_status", EnumFieldListFilter),
+        ("condition", EnumFieldListFilter),
+        ("reflection_class", EnumFieldListFilter),
+        ("surface_class", EnumFieldListFilter),
+        ("location_specifier", EnumFieldListFilter),
+    ]
+    search_fields = (
+        "traffic_sign_plan__id",
+        "code__code",
+        "code__description",
+        "value",
+        "installation_date",
+        "size",
+        "mount_real__id",
+        "mount_type",
+        "height",
+        "parent__id",
+        "validity_period_start",
+        "validity_period_end",
+        "deleted_at",
+        "reflection_class",
+        "surface_class",
+        "seasonal_validity_period_start",
+        "seasonal_validity_period_end",
+        "owner",
+        "road_name",
+        "lane_number",
+        "lane_type",
+    )
 
 
 class SignpostPlanFileInline(admin.TabularInline):
