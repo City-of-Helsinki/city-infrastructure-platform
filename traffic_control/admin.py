@@ -236,6 +236,8 @@ class TrafficSignRealAdmin(
         "lane_number",
         "lane_type",
         "location_specifier",
+        "operation",
+        "attachment_url",
         "source_id",
         "source_name",
     )

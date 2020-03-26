@@ -241,7 +241,6 @@ class TrafficSignReal(models.Model):
         InstallationStatus,
         verbose_name=_("Installation status"),
         max_length=10,
-        default=InstallationStatus.IN_USE,
         blank=True,
         null=True,
     )
@@ -261,11 +260,7 @@ class TrafficSignReal(models.Model):
         _("Validity period end"), blank=True, null=True
     )
     condition = EnumIntegerField(
-        Condition,
-        verbose_name=_("Condition"),
-        default=Condition.VERY_GOOD,
-        blank=True,
-        null=True,
+        Condition, verbose_name=_("Condition"), blank=True, null=True,
     )
     affect_area = models.PolygonField(
         _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
@@ -294,29 +289,12 @@ class TrafficSignReal(models.Model):
         blank=True,
         null=True,
     )
-    size = EnumField(
-        Size,
-        verbose_name=_("Size"),
-        max_length=1,
-        default=Size.MEDIUM,
-        blank=True,
-        null=True,
-    )
+    size = EnumField(Size, verbose_name=_("Size"), max_length=1, blank=True, null=True,)
     reflection_class = EnumField(
-        Reflection,
-        verbose_name=_("Reflection"),
-        max_length=2,
-        default=Reflection.R1,
-        blank=True,
-        null=True,
+        Reflection, verbose_name=_("Reflection"), max_length=2, blank=True, null=True,
     )
     surface_class = EnumField(
-        Surface,
-        verbose_name=_("Surface"),
-        max_length=6,
-        default=Surface.FLAT,
-        blank=True,
-        null=True,
+        Surface, verbose_name=_("Surface"), max_length=6, blank=True, null=True,
     )
     seasonal_validity_period_start = models.DateField(
         _("Seasonal validity period start"), blank=True, null=True
@@ -329,9 +307,7 @@ class TrafficSignReal(models.Model):
         _("Manufacturer"), max_length=254, blank=True, null=True
     )
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    color = EnumIntegerField(
-        Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True
-    )
+    color = EnumIntegerField(Color, verbose_name=_("Color"), blank=True, null=True)
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
@@ -339,11 +315,11 @@ class TrafficSignReal(models.Model):
     lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
     location_specifier = EnumIntegerField(
-        LocationSpecifier,
-        verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
-        blank=True,
-        null=True,
+        LocationSpecifier, verbose_name=_("Location specifier"), blank=True, null=True,
+    )
+    operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
+    attachment_url = models.URLField(
+        _("Attachment url"), max_length=500, blank=True, null=True
     )
     source_id = models.CharField(_("Source id"), max_length=64, blank=True, null=True)
     source_name = models.CharField(
