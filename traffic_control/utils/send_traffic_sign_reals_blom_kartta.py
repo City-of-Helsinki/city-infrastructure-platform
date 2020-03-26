@@ -89,13 +89,6 @@ for feature in layer:
         "owner": OWNER,
         "source_id": feature.GetFID(),
         "source_name": SOURCE_NAME,
-        "height": None,
-        "condition": None,
-        "size": None,
-        "reflection_class": None,
-        "surface_class": None,
-        "color": None,
-        "location_specifier": None,
     }
     print("Sending Traffic Sign Real: {0}".format(data))
     r = requests.post(url=args.url, data=data, auth=auth)
