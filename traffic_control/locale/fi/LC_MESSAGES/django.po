@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-26 13:23+0200\n"
+"POT-Creation-Date: 2020-03-26 18:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1083,6 +1083,15 @@ msgid "RFID"
 msgstr "RFID"
 
 #: traffic_control/models/traffic_sign.py:356
+#: traffic_control/models/traffic_sign.py:320
+msgid "Operation"
+msgstr "Toimenpide"
+
+#: traffic_control/models/traffic_sign.py:322
+msgid "Attachment url"
+msgstr "Liite (url)"
+
+#: traffic_control/models/traffic_sign.py:332
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
 
