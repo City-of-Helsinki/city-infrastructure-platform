@@ -367,6 +367,9 @@ class TrafficSignReal(models.Model):
             )
         super().save(*args, **kwargs)
 
+    def has_additional_signs(self):
+        return self.children.all().exists()
+
 
 auditlog.register(TrafficSignPlan)
 auditlog.register(TrafficSignReal)
