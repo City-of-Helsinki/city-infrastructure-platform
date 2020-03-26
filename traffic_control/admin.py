@@ -199,6 +199,7 @@ class TrafficSignRealAdmin(
         "code",
         "value",
         "legacy_code",
+        "has_additional_signs",
         "parent",
         "order",
         "txt",
@@ -269,6 +270,7 @@ class TrafficSignRealAdmin(
         "location_specifier",
     )
     readonly_fields = (
+        "has_additional_signs",
         "created_at",
         "updated_at",
     )
@@ -305,6 +307,11 @@ class TrafficSignRealAdmin(
         "lane_number",
         "lane_type",
     )
+
+    def has_additional_signs(self, obj):
+        return (_("No"), _("Yes"))[obj.has_additional_signs()]
+
+    has_additional_signs.short_description = _("has additional signs")
 
 
 class SignpostPlanFileInline(admin.TabularInline):
