@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from .forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
-from .mixins import Point3DFieldAdminMixin
+from .mixins import Point3DFieldAdminMixin, UserStampedAdminMixin
 from .models import (
     BarrierPlan,
     BarrierPlanFile,
@@ -48,7 +48,7 @@ class BarrierPlanFileInline(admin.TabularInline):
 
 
 @admin.register(BarrierPlan)
-class BarrierPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class BarrierPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -59,13 +59,19 @@ class BarrierPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "location",
         "decision_date",
     )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
+    )
     ordering = ("-created_at",)
     actions = None
     inlines = (BarrierPlanFileInline,)
 
 
 @admin.register(BarrierReal)
-class BarrierRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class BarrierRealAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -75,6 +81,12 @@ class BarrierRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "lifecycle",
         "location",
         "installation_date",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
     )
     ordering = ("-created_at",)
     actions = None
@@ -85,7 +97,9 @@ class TrafficLightPlanFileInline(admin.TabularInline):
 
 
 @admin.register(TrafficLightPlan)
-class TrafficLightPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class TrafficLightPlanAdmin(
+    UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -97,13 +111,21 @@ class TrafficLightPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "location",
         "decision_date",
     )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
+    )
     ordering = ("-created_at",)
     actions = None
     inlines = (TrafficLightPlanFileInline,)
 
 
 @admin.register(TrafficLightReal)
-class TrafficLightRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class TrafficLightRealAdmin(
+    UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -114,6 +136,12 @@ class TrafficLightRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "lifecycle",
         "location",
         "installation_date",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
     )
     ordering = ("-created_at",)
     actions = None
@@ -125,7 +153,10 @@ class TrafficSignPlanFileInline(admin.TabularInline):
 
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(
-    Point3DFieldAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    UserStampedAdminMixin,
+    Point3DFieldAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     form = TrafficSignPlanModelForm
     fields = (
@@ -180,6 +211,8 @@ class TrafficSignPlanAdmin(
     readonly_fields = (
         "created_at",
         "updated_at",
+        "created_by",
+        "updated_by",
     )
     ordering = ("-created_at",)
     actions = None
@@ -188,7 +221,10 @@ class TrafficSignPlanAdmin(
 
 @admin.register(TrafficSignReal)
 class TrafficSignRealAdmin(
-    Point3DFieldAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    UserStampedAdminMixin,
+    Point3DFieldAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     form = TrafficSignRealModelForm
     fields = (
@@ -275,6 +311,8 @@ class TrafficSignRealAdmin(
         "has_additional_signs",
         "created_at",
         "updated_at",
+        "created_by",
+        "updated_by",
     )
     ordering = ("-created_at",)
     actions = None
@@ -321,7 +359,7 @@ class SignpostPlanFileInline(admin.TabularInline):
 
 
 @admin.register(SignpostPlan)
-class SignpostPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class SignpostPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -333,13 +371,19 @@ class SignpostPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "location",
         "decision_date",
     )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
+    )
     ordering = ("-created_at",)
     actions = None
     inlines = (SignpostPlanFileInline,)
 
 
 @admin.register(SignpostReal)
-class SignpostRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class SignpostRealAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -350,6 +394,12 @@ class SignpostRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "lifecycle",
         "location",
         "installation_date",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
     )
     ordering = ("-created_at",)
     actions = None
@@ -360,7 +410,7 @@ class MountPlanFileInline(admin.TabularInline):
 
 
 @admin.register(MountPlan)
-class MountPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class MountPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -370,13 +420,19 @@ class MountPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "lifecycle",
         "location",
     )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
+    )
     ordering = ("-created_at",)
     actions = None
     inlines = (MountPlanFileInline,)
 
 
 @admin.register(MountReal)
-class MountRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class MountRealAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -385,6 +441,12 @@ class MountRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "type",
         "lifecycle",
         "location",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
     )
     ordering = ("-created_at",)
     actions = None
@@ -395,7 +457,9 @@ class RoadMarkingPlanFileInline(admin.TabularInline):
 
 
 @admin.register(RoadMarkingPlan)
-class RoadMarkingPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class RoadMarkingPlanAdmin(
+    UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -406,13 +470,21 @@ class RoadMarkingPlanAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "location",
         "decision_date",
     )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
+    )
     ordering = ("-created_at",)
     actions = None
     inlines = (RoadMarkingPlanFileInline,)
 
 
 @admin.register(RoadMarkingReal)
-class RoadMarkingRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class RoadMarkingRealAdmin(
+    UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -422,6 +494,12 @@ class RoadMarkingRealAdmin(admin.OSMGeoAdmin, AuditLogHistoryAdmin):
         "lifecycle",
         "location",
         "installation_date",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
     )
     ordering = ("-created_at",)
     actions = None
