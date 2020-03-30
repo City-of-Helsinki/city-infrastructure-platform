@@ -185,8 +185,20 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(SignpostPlan.objects.count(), 1)
         deleted_signpost_plan = SignpostPlan.objects.get(id=str(signpost_plan.id))
         self.assertEqual(deleted_signpost_plan.id, signpost_plan.id)
+        self.assertFalse(deleted_signpost_plan.is_active)
         self.assertEqual(deleted_signpost_plan.deleted_by, self.user)
         self.assertTrue(deleted_signpost_plan.deleted_at)
+
+    def test_get_deleted_signpost_plan_returns_not_found(self):
+        signpost_plan = self.__create_test_signpost_plan()
+        response = self.client.delete(
+            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_signpost_plan_files(self):
         """
@@ -429,8 +441,20 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(SignpostReal.objects.count(), 1)
         deleted_signpost_real = SignpostReal.objects.get(id=str(signpost_real.id))
         self.assertEqual(deleted_signpost_real.id, signpost_real.id)
+        self.assertFalse(deleted_signpost_real.is_active)
         self.assertEqual(deleted_signpost_real.deleted_by, self.user)
         self.assertTrue(deleted_signpost_real.deleted_at)
+
+    def test_get_deleted_signpost_real_returns_not_found(self):
+        signpost_real = self.__create_test_signpost_real()
+        response = self.client.delete(
+            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def __create_test_signpost_real(self):
         signpost_plan = SignpostPlan.objects.create(

@@ -195,8 +195,20 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(TrafficLightPlan.objects.count(), 1)
         deleted_traffic_light = TrafficLightPlan.objects.get(id=str(traffic_light.id))
         self.assertEqual(deleted_traffic_light.id, traffic_light.id)
+        self.assertFalse(deleted_traffic_light.is_active)
         self.assertEqual(deleted_traffic_light.deleted_by, self.user)
         self.assertTrue(deleted_traffic_light.deleted_at)
+
+    def test_get_deleted_traffic_light_plan_return_not_found(self):
+        traffic_light = self.__create_test_traffic_light_plan()
+        response = self.client.delete(
+            reverse("api:trafficlightplan-detail", kwargs={"pk": traffic_light.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:trafficlightplan-detail", kwargs={"pk": traffic_light.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_traffic_light_plan_files(self):
         """
@@ -465,8 +477,24 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             id=str(traffic_light_real.id)
         )
         self.assertEqual(deleted_traffic_light_real.id, traffic_light_real.id)
+        self.assertFalse(deleted_traffic_light_real.is_active)
         self.assertEqual(deleted_traffic_light_real.deleted_by, self.user)
         self.assertTrue(deleted_traffic_light_real.deleted_at)
+
+    def test_get_deleted_traffic_light_real_returns_not_found(self):
+        traffic_light_real = self.__create_test_traffic_light_real()
+        response = self.client.delete(
+            reverse(
+                "api:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse(
+                "api:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def __create_test_traffic_light_real(self):
         traffic_light_plan = TrafficLightPlan.objects.create(

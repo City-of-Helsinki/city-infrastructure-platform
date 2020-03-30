@@ -176,7 +176,7 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": BarrierPlanSerializer,
         "geojson": BarrierPlanGeoJSONSerializer,
     }
-    queryset = BarrierPlan.objects.all()
+    queryset = BarrierPlan.objects.active()
     filterset_class = BarrierPlanFilterSet
     file_queryset = BarrierPlanFile.objects.all()
     file_serializer = BarrierPlanFileSerializer
@@ -217,7 +217,7 @@ class BarrierRealViewSet(TrafficControlViewSet):
         "default": BarrierRealSerializer,
         "geojson": BarrierRealGeoJSONSerializer,
     }
-    queryset = BarrierReal.objects.all()
+    queryset = BarrierReal.objects.active()
     filterset_class = BarrierRealFilterSet
 
 
@@ -226,7 +226,7 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": MountPlanSerializer,
         "geojson": MountPlanGeoJSONSerializer,
     }
-    queryset = MountPlan.objects.all()
+    queryset = MountPlan.objects.active()
     filterset_class = MountPlanFilterSet
     file_queryset = MountPlanFile.objects.all()
     file_serializer = MountPlanFileSerializer
@@ -268,7 +268,7 @@ class MountRealViewSet(TrafficControlViewSet):
         "geojson": MountRealGeoJSONSerializer,
     }
     serializer_class = MountRealSerializer
-    queryset = MountReal.objects.all()
+    queryset = MountReal.objects.active()
     filterset_class = MountRealFilterSet
 
 
@@ -277,7 +277,7 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": RoadMarkingPlanSerializer,
         "geojson": RoadMarkingPlanGeoJSONSerializer,
     }
-    queryset = RoadMarkingPlan.objects.all()
+    queryset = RoadMarkingPlan.objects.active()
     filterset_class = RoadMarkingPlanFilterSet
     file_queryset = RoadMarkingPlanFile.objects.all()
     file_serializer = RoadMarkingPlanFileSerializer
@@ -318,7 +318,7 @@ class RoadMarkingRealViewSet(TrafficControlViewSet):
         "default": RoadMarkingRealSerializer,
         "geojson": RoadMarkingRealGeoJSONSerializer,
     }
-    queryset = RoadMarkingReal.objects.all()
+    queryset = RoadMarkingReal.objects.active()
     filterset_class = RoadMarkingRealFilterSet
 
 
@@ -327,7 +327,7 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": SignpostPlanSerializer,
         "geojson": SignpostPlanGeoJSONSerializer,
     }
-    queryset = SignpostPlan.objects.all()
+    queryset = SignpostPlan.objects.active()
     filterset_class = SignpostPlanFilterSet
     file_queryset = SignpostPlanFile.objects.all()
     file_serializer = SignpostPlanFileSerializer
@@ -368,7 +368,7 @@ class SignpostRealViewSet(TrafficControlViewSet):
         "default": SignpostRealSerializer,
         "geojson": SignpostRealGeoJSONSerializer,
     }
-    queryset = SignpostReal.objects.all()
+    queryset = SignpostReal.objects.active()
     filterset_class = SignpostRealFilterSet
 
 
@@ -377,7 +377,7 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": TrafficLightPlanSerializer,
         "geojson": TrafficLightPlanGeoJSONSerializer,
     }
-    queryset = TrafficLightPlan.objects.all()
+    queryset = TrafficLightPlan.objects.active()
     filterset_class = TrafficLightPlanFilterSet
     file_queryset = TrafficLightPlanFile.objects.all()
     file_serializer = TrafficLightPlanFileSerializer
@@ -418,7 +418,7 @@ class TrafficLightRealViewSet(TrafficControlViewSet):
         "default": TrafficLightRealSerializer,
         "geojson": TrafficLightRealGeoJSONSerializer,
     }
-    queryset = TrafficLightReal.objects.all()
+    queryset = TrafficLightReal.objects.active()
     filterset_class = TrafficLightRealFilterSet
 
 
@@ -437,7 +437,7 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": TrafficSignPlanSerializer,
         "geojson": TrafficSignPlanGeoJSONSerializer,
     }
-    queryset = TrafficSignPlan.objects.all()
+    queryset = TrafficSignPlan.objects.active()
     filterset_class = TrafficSignPlanFilterSet
     file_queryset = TrafficSignPlanFile.objects.all()
     file_serializer = TrafficSignPlanFileSerializer
@@ -478,7 +478,7 @@ class TrafficSignRealViewSet(TrafficControlViewSet):
         "default": TrafficSignRealSerializer,
         "geojson": TrafficSignRealGeoJSONSerializer,
     }
-    queryset = TrafficSignReal.objects.all()
+    queryset = TrafficSignReal.objects.active()
     filterset_class = TrafficSignRealFilterSet
 
 
