@@ -79,6 +79,7 @@ class TrafficLightPlan(models.Model):
     validity_period_end = models.DateField(
         _("Validity period end"), blank=True, null=True
     )
+    is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
@@ -203,6 +204,7 @@ class TrafficLightReal(models.Model):
     validity_period_end = models.DateField(
         _("Validity period end"), blank=True, null=True
     )
+    is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
