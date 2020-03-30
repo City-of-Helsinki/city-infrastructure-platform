@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
+from .utils import SoftDeleteQuerySet
 
 
 class ConnectionType(Enum):
@@ -127,6 +128,8 @@ class BarrierPlan(models.Model):
     length = models.IntegerField(_("Length"), blank=True, null=True)
     count = models.IntegerField(_("Count"), blank=True, null=True)
     txt = models.TextField(_("Txt"), blank=True, null=True)
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "barrier_plan"
@@ -249,6 +252,8 @@ class BarrierReal(models.Model):
         blank=True,
         null=True,
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "barrier_real"

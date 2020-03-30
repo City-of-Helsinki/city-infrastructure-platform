@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from .common import Condition, InstallationStatus, Lifecycle
+from .utils import SoftDeleteQuerySet
 
 
 class MountType(Enum):
@@ -116,6 +117,8 @@ class MountPlan(models.Model):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "mount_plan"
@@ -234,6 +237,8 @@ class MountReal(models.Model):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "mount_real"

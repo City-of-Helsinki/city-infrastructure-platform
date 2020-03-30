@@ -9,6 +9,7 @@ from enumfields import Enum, EnumField, EnumIntegerField
 
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
 from .mount import MountPlan, MountReal, MountType
+from .utils import SoftDeleteQuerySet
 
 
 class TrafficLightSoundBeaconValue(Enum):
@@ -127,6 +128,8 @@ class TrafficLightPlan(models.Model):
     lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     owner = models.CharField(_("Owner"), max_length=254)
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_light_plan"
@@ -259,6 +262,8 @@ class TrafficLightReal(models.Model):
     )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     owner = models.CharField(_("Owner"), max_length=254)
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_light_real"

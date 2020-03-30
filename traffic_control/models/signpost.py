@@ -16,6 +16,7 @@ from .common import (
     TrafficSignCode,
 )
 from .mount import MountPlan, MountReal, MountType
+from .utils import SoftDeleteQuerySet
 
 
 class LocationSpecifier(Enum):
@@ -153,6 +154,8 @@ class SignpostPlan(models.Model):
         blank=True,
         null=True,
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "signpost_plan"
@@ -329,6 +332,8 @@ class SignpostReal(models.Model):
         blank=True,
         null=True,
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "signpost_real"

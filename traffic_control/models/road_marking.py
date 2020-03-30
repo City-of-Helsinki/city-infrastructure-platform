@@ -9,6 +9,7 @@ from enumfields import Enum, EnumField, EnumIntegerField
 
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
 from .traffic_sign import TrafficSignPlan, TrafficSignReal
+from .utils import SoftDeleteQuerySet
 
 
 class LineDirection(Enum):
@@ -169,6 +170,8 @@ class RoadMarkingPlan(models.Model):
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
     amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
 
+    objects = SoftDeleteQuerySet.as_manager()
+
     class Meta:
         db_table = "road_marking_plan"
         verbose_name = _("Road Marking Plan")
@@ -327,6 +330,8 @@ class RoadMarkingReal(models.Model):
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
     amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "road_marking_real"

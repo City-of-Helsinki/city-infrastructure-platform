@@ -18,6 +18,7 @@ from .common import (
     TrafficSignCode,
 )
 from .mount import MountPlan, MountReal
+from .utils import SoftDeleteQuerySet
 
 
 class LocationSpecifier(Enum):
@@ -159,6 +160,8 @@ class TrafficSignPlan(models.Model):
     source_name = models.CharField(
         _("Source name"), max_length=254, blank=True, null=True
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_sign_plan"
@@ -327,6 +330,8 @@ class TrafficSignReal(models.Model):
     source_name = models.CharField(
         _("Source name"), max_length=254, blank=True, null=True
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_sign_real"
