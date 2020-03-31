@@ -31,8 +31,6 @@ from .models import (
 )
 from .models.utils import order_queryset_by_z_coord_desc
 
-admin.site.site_header = _("City Infrastructure Platform Administration")
-
 
 class AuditLogHistoryAdmin(admin.ModelAdmin):
     def history_view(self, request, object_id, extra_context=None):
