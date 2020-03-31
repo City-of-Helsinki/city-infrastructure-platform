@@ -7,6 +7,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
+from ..mixins.models import SoftDeleteModelMixin
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
 from .traffic_sign import TrafficSignPlan, TrafficSignReal
 from .utils import SoftDeleteQuerySet
@@ -62,7 +63,7 @@ class LocationSpecifier(Enum):
         LEFT_SIDE_OF_LANE_OR_ROAD = _("Left side of lane or road")
 
 
-class RoadMarkingPlan(models.Model):
+class RoadMarkingPlan(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -201,7 +202,7 @@ class RoadMarkingPlanFile(models.Model):
         return "%s" % self.file
 
 
-class RoadMarkingReal(models.Model):
+class RoadMarkingReal(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )

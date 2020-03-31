@@ -1,6 +1,3 @@
-from django.utils import timezone
-
-
 class Point3DFieldAdminMixin:
     """A mixin class that shows a map for 3d geometries.
 
@@ -33,7 +30,4 @@ class SoftDeleteAdminMixin:
         return qs.active()
 
     def delete_model(self, request, obj):
-        obj.is_active = False
-        obj.deleted_at = timezone.now()
-        obj.deleted_by = request.user
-        obj.save()
+        obj.soft_delete(request.user)

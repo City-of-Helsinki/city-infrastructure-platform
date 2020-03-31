@@ -7,6 +7,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
+from ..mixins.models import SoftDeleteModelMixin
 from .common import (
     Color,
     Condition,
@@ -38,7 +39,7 @@ class LocationSpecifier(Enum):
         OUTSIDE = _("Outside")
 
 
-class TrafficSignPlan(models.Model):
+class TrafficSignPlan(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -192,7 +193,7 @@ class TrafficSignPlanFile(models.Model):
         return "%s" % self.file
 
 
-class TrafficSignReal(models.Model):
+class TrafficSignReal(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
