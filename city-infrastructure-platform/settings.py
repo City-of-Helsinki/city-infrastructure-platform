@@ -61,7 +61,9 @@ vars().update(env.email_url())  # EMAIL_BACKEND etc.
 
 # Application definition
 DJANGO_APPS = [
-    "django.contrib.admin",
+    "helusers",
+    "social_django",
+    "helusers.apps.HelusersAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -80,7 +82,23 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = ["users.apps.UsersConfig", "traffic_control.apps.TrafficControlConfig"]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
+AUTHENTICATION_BACKENDS = (
+    # "helusers.tunnistamo_oidc.TunnistamoOIDCAuth", # disable OIDC-provider for now
+    "django.contrib.auth.backends.ModelBackend",
+)
+
 AUTH_USER_MODEL = "users.User"
+LOGIN_REDIRECT_URL = "/admin/"
+LOGOUT_REDIRECT_URL = "/admin/login/"
+SOCIAL_AUTH_TUNNISTAMO_AUTH_EXTRA_ARGUMENTS = {"ui_locales": "fi"}
+WAGTAIL_SITE_NAME = _("City Infrastructure Platform Administration")
+
+TUNNISTAMO_BASE_URL = "https://api.hel.fi/sso"
+SOCIAL_AUTH_TUNNISTAMO_KEY = "12082ae5-f104-45f3-990e-a030e9bcb60"
+SOCIAL_AUTH_TUNNISTAMO_SECRET = "abcd1234abcd1234abcd1234abcd1234"
+SOCIAL_AUTH_TUNNISTAMO_OIDC_ENDPOINT = TUNNISTAMO_BASE_URL + "/openid"
+
+SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
 
 MIDDLEWARE = [
     "deployment.middleware.HealthCheckMiddleware",
