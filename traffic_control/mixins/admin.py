@@ -31,3 +31,11 @@ class SoftDeleteAdminMixin:
 
     def delete_model(self, request, obj):
         obj.soft_delete(request.user)
+
+    def delete_queryset(self, request, queryset):
+        # audit log entries are created via saving signals,
+        # using bulk operations will not trigger the signals
+        # and will skip the auditing. Thus soft delete
+        # objects in queryset one by one.
+        for obj in queryset:
+            obj.soft_delete(request.user)
