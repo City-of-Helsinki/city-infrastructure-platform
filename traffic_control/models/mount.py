@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from .common import Condition, InstallationStatus, Lifecycle
+from .utils import SoftDeleteQuerySet
 
 
 class MountType(Enum):
@@ -77,6 +78,7 @@ class MountPlan(models.Model):
     validity_period_end = models.DateField(
         _("Validity period end"), blank=True, null=True
     )
+    is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
@@ -115,6 +117,8 @@ class MountPlan(models.Model):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "mount_plan"
@@ -190,6 +194,7 @@ class MountReal(models.Model):
         blank=True,
         null=True,
     )
+    is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
@@ -232,6 +237,8 @@ class MountReal(models.Model):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "mount_real"

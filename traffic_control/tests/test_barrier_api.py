@@ -190,8 +190,20 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(BarrierPlan.objects.count(), 1)
         deleted_barrier_plan = BarrierPlan.objects.get(id=str(barrier_plan.id))
         self.assertEqual(deleted_barrier_plan.id, barrier_plan.id)
+        self.assertFalse(deleted_barrier_plan.is_active)
         self.assertEqual(deleted_barrier_plan.deleted_by, self.user)
         self.assertTrue(deleted_barrier_plan.deleted_at)
+
+    def test_get_deleted_barrier_plan_returns_not_found(self):
+        barrier_plan = self.__create_test_barrier_plan()
+        response = self.client.delete(
+            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_barrier_plan_files(self):
         """
@@ -442,8 +454,20 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(BarrierPlan.objects.count(), 1)
         deleted_barrier_real = BarrierReal.objects.get(id=str(barrier_real.id))
         self.assertEqual(deleted_barrier_real.id, barrier_real.id)
+        self.assertFalse(deleted_barrier_real.is_active)
         self.assertEqual(deleted_barrier_real.deleted_by, self.user)
         self.assertTrue(deleted_barrier_real.deleted_at)
+
+    def test_get_deleted_barrier_real_returns_not_found(self):
+        barrier_real = self.__create_test_barrier_real()
+        response = self.client.delete(
+            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def __create_test_barrier_real(self):
         barrier_plan = BarrierPlan.objects.create(

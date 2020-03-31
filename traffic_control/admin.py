@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from .forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
-from .mixins import Point3DFieldAdminMixin, UserStampedAdminMixin
+from .mixins import Point3DFieldAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
 from .models import (
     BarrierPlan,
     BarrierPlanFile,
@@ -48,7 +48,9 @@ class BarrierPlanFileInline(admin.TabularInline):
 
 
 @admin.register(BarrierPlan)
-class BarrierPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class BarrierPlanAdmin(
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -71,7 +73,9 @@ class BarrierPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistory
 
 
 @admin.register(BarrierReal)
-class BarrierRealAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class BarrierRealAdmin(
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -98,7 +102,7 @@ class TrafficLightPlanFileInline(admin.TabularInline):
 
 @admin.register(TrafficLightPlan)
 class TrafficLightPlanAdmin(
-    UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
 ):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
@@ -124,7 +128,7 @@ class TrafficLightPlanAdmin(
 
 @admin.register(TrafficLightReal)
 class TrafficLightRealAdmin(
-    UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
 ):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
@@ -153,6 +157,7 @@ class TrafficSignPlanFileInline(admin.TabularInline):
 
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(
+    SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Point3DFieldAdminMixin,
     admin.OSMGeoAdmin,
@@ -221,6 +226,7 @@ class TrafficSignPlanAdmin(
 
 @admin.register(TrafficSignReal)
 class TrafficSignRealAdmin(
+    SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Point3DFieldAdminMixin,
     admin.OSMGeoAdmin,
@@ -359,7 +365,9 @@ class SignpostPlanFileInline(admin.TabularInline):
 
 
 @admin.register(SignpostPlan)
-class SignpostPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class SignpostPlanAdmin(
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -383,7 +391,9 @@ class SignpostPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistor
 
 
 @admin.register(SignpostReal)
-class SignpostRealAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class SignpostRealAdmin(
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -410,7 +420,9 @@ class MountPlanFileInline(admin.TabularInline):
 
 
 @admin.register(MountPlan)
-class MountPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class MountPlanAdmin(
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -432,7 +444,9 @@ class MountPlanAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAd
 
 
 @admin.register(MountReal)
-class MountRealAdmin(UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin):
+class MountRealAdmin(
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
     default_zoom = 12
@@ -458,7 +472,7 @@ class RoadMarkingPlanFileInline(admin.TabularInline):
 
 @admin.register(RoadMarkingPlan)
 class RoadMarkingPlanAdmin(
-    UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
 ):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097
@@ -483,7 +497,7 @@ class RoadMarkingPlanAdmin(
 
 @admin.register(RoadMarkingReal)
 class RoadMarkingRealAdmin(
-    UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
 ):
     default_lon = 2776957.204335059  # Helsinki city coordinates
     default_lat = 8442622.403718097

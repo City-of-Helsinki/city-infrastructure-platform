@@ -187,8 +187,20 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(MountPlan.objects.count(), 1)
         deleted_mount_plan = MountPlan.objects.get(id=str(mount_plan.id))
         self.assertEqual(deleted_mount_plan.id, mount_plan.id)
+        self.assertFalse(deleted_mount_plan.is_active)
         self.assertEqual(deleted_mount_plan.deleted_by, self.user)
         self.assertTrue(deleted_mount_plan.deleted_at)
+
+    def test_get_deleted_mount_plan_returns_not_found(self):
+        mount_plan = self.__create_test_mount_plan()
+        response = self.client.delete(
+            reverse("api:mountplan-detail", kwargs={"pk": mount_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:mountplan-detail", kwargs={"pk": mount_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_mount_plan_files(self):
         """
@@ -430,8 +442,20 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(MountReal.objects.count(), 1)
         deleted_mount_real = MountReal.objects.get(id=str(mount_real.id))
         self.assertEqual(deleted_mount_real.id, mount_real.id)
+        self.assertFalse(deleted_mount_real.is_active)
         self.assertEqual(deleted_mount_real.deleted_by, self.user)
         self.assertTrue(deleted_mount_real.deleted_at)
+
+    def test_get_deleted_mount_real_returns_not_found(self):
+        mount_real = self.__create_test_mount_real()
+        response = self.client.delete(
+            reverse("api:mountreal-detail", kwargs={"pk": mount_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:mountreal-detail", kwargs={"pk": mount_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def __create_test_mount_real(self):
         mount_plan = MountPlan.objects.create(

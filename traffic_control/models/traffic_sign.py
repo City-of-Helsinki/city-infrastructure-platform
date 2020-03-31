@@ -18,6 +18,7 @@ from .common import (
     TrafficSignCode,
 )
 from .mount import MountPlan, MountReal
+from .utils import SoftDeleteQuerySet
 
 
 class LocationSpecifier(Enum):
@@ -84,6 +85,7 @@ class TrafficSignPlan(models.Model):
     affect_area = models.PolygonField(
         _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
+    is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
@@ -158,6 +160,8 @@ class TrafficSignPlan(models.Model):
     source_name = models.CharField(
         _("Source name"), max_length=254, blank=True, null=True
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_sign_plan"
@@ -265,6 +269,7 @@ class TrafficSignReal(models.Model):
     affect_area = models.PolygonField(
         _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
+    is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
@@ -325,6 +330,8 @@ class TrafficSignReal(models.Model):
     source_name = models.CharField(
         _("Source name"), max_length=254, blank=True, null=True
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_sign_real"

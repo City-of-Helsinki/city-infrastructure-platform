@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
+from .utils import SoftDeleteQuerySet
 
 
 class ConnectionType(Enum):
@@ -75,6 +76,7 @@ class BarrierPlan(models.Model):
     reflective = EnumField(
         Reflective, verbose_name=_("Reflective"), blank=True, null=True
     )
+    is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
@@ -126,6 +128,8 @@ class BarrierPlan(models.Model):
     length = models.IntegerField(_("Length"), blank=True, null=True)
     count = models.IntegerField(_("Count"), blank=True, null=True)
     txt = models.TextField(_("Txt"), blank=True, null=True)
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "barrier_plan"
@@ -189,6 +193,7 @@ class BarrierReal(models.Model):
     reflective = EnumField(
         Reflective, verbose_name=_("Reflective"), blank=True, null=True
     )
+    is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
@@ -247,6 +252,8 @@ class BarrierReal(models.Model):
         blank=True,
         null=True,
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "barrier_real"

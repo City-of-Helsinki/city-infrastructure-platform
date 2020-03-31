@@ -83,3 +83,22 @@ class TrafficSignRealAdminTestCase(TestCase):
         ma.save_model(request, self.traffic_sign_real, None, None)
         self.assertEqual(self.traffic_sign_real.created_by, self.user)
         self.assertEqual(self.traffic_sign_real.updated_by, self.admin)
+
+    def test_delete_model_soft_delete_instance(self):
+        ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
+        request = MockRequest()
+        request.user = self.admin
+        ma.delete_model(request, self.traffic_sign_real)
+        self.traffic_sign_real.refresh_from_db()
+        self.assertFalse(self.traffic_sign_real.is_active)
+        self.assertEqual(self.traffic_sign_real.deleted_by, self.admin)
+
+    def test_get_queryset_exclude_soft_deleted(self):
+        ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
+        request = MockRequest()
+        request.user = self.admin
+        qs = ma.get_queryset(request)
+        self.assertEqual(qs.count(), 1)
+        ma.delete_model(request, self.traffic_sign_real)
+        qs = ma.get_queryset(request)
+        self.assertEqual(qs.count(), 0)

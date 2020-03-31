@@ -189,8 +189,20 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(RoadMarkingPlan.objects.count(), 1)
         deleted_road_marking = RoadMarkingPlan.objects.get(id=str(road_marking.id))
         self.assertEqual(deleted_road_marking.id, road_marking.id)
+        self.assertFalse(deleted_road_marking.is_active)
         self.assertEqual(deleted_road_marking.deleted_by, self.user)
         self.assertTrue(deleted_road_marking.deleted_at)
+
+    def test_get_deleted_road_marking_return_not_found(self):
+        road_marking = self.__create_test_road_marking_plan()
+        response = self.client.delete(
+            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_road_marking_plan_files(self):
         """
@@ -452,8 +464,20 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             id=str(road_marking_real.id)
         )
         self.assertEqual(deleted_road_marking_real.id, road_marking_real.id)
+        self.assertFalse(deleted_road_marking_real.is_active)
         self.assertEqual(deleted_road_marking_real.deleted_by, self.user)
         self.assertTrue(deleted_road_marking_real.deleted_at)
+
+    def test_get_deleted_road_marking_real_returns_not_found(self):
+        road_marking_real = self.__create_test_road_marking_real()
+        response = self.client.delete(
+            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def __create_test_road_marking_real(self):
         road_marking_plan = RoadMarkingPlan.objects.create(

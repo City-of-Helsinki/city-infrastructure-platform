@@ -187,8 +187,20 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
             id=str(traffic_sign_plan.id)
         )
         self.assertEqual(deleted_traffic_sign_plan.id, traffic_sign_plan.id)
+        self.assertFalse(deleted_traffic_sign_plan.is_active)
         self.assertEqual(deleted_traffic_sign_plan.deleted_by, self.user)
         self.assertTrue(deleted_traffic_sign_plan.deleted_at)
+
+    def test_get_deleted_traffic_sign_plan_returns_not_found(self):
+        traffic_sign_plan = self.__create_test_traffic_sign_plan()
+        response = self.client.delete(
+            reverse("api:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_traffic_sign_plan_files(self):
         """
@@ -445,8 +457,20 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             id=str(traffic_sign_real.id)
         )
         self.assertEqual(deleted_traffic_sign_real.id, traffic_sign_real.id)
+        self.assertFalse(deleted_traffic_sign_real.is_active)
         self.assertEqual(deleted_traffic_sign_real.deleted_by, self.user)
         self.assertTrue(deleted_traffic_sign_real.deleted_at)
+
+    def test_get_deleted_traffic_sign_real_returns_not_found(self):
+        traffic_sign_real = self.__create_test_traffic_sign_real()
+        response = self.client.delete(
+            reverse("api:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.get(
+            reverse("api:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def __create_test_traffic_sign_real(self):
         traffic_sign_plan = TrafficSignPlan.objects.create(
