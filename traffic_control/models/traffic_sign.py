@@ -352,7 +352,7 @@ class TrafficSignReal(SoftDeleteModelMixin, models.Model):
         super().save(*args, **kwargs)
 
     def has_additional_signs(self):
-        return self.children.all().exists()
+        return self.children.active().exists()
 
 
 auditlog.register(TrafficSignPlan)
