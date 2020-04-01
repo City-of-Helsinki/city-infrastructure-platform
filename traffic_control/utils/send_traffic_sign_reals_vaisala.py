@@ -64,9 +64,7 @@ with open(filename, mode="r", encoding="utf-8-sig") as csv_file:
     for row in csv_reader:
         point = ogr.Geometry(ogr.wkbPoint)
         point.AddPoint(
-            float(row["longitude"].strip()),
-            float(row["latitude"].strip()),
-            float(row["elevation"].strip()),
+            float(row["longitude"].strip()), float(row["latitude"].strip()), 0.0
         )
         point.Transform(transform)
         try:
