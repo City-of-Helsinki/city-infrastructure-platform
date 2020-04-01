@@ -4,6 +4,7 @@ from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
+from django.db import transaction
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
@@ -352,7 +353,13 @@ class TrafficSignReal(SoftDeleteModelMixin, models.Model):
         super().save(*args, **kwargs)
 
     def has_additional_signs(self):
-        return self.children.all().exists()
+        return self.children.active().exists()
+
+    @transaction.atomic
+    def soft_delete(self, user):
+        super().soft_delete(user)
+        for additional_sign in self.children.active():
+            additional_sign.soft_delete(user)
 
 
 auditlog.register(TrafficSignPlan)
