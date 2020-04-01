@@ -7,6 +7,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
+from ..mixins.models import SoftDeleteModelMixin
 from .common import (
     Condition,
     InstallationStatus,
@@ -34,7 +35,7 @@ class LocationSpecifier(Enum):
         VERTICAL = _("Vertical")
 
 
-class SignpostPlan(models.Model):
+class SignpostPlan(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -186,7 +187,7 @@ class SignpostPlanFile(models.Model):
         return "%s" % self.file
 
 
-class SignpostReal(models.Model):
+class SignpostReal(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )

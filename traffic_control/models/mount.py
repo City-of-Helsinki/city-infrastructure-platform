@@ -7,6 +7,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
+from ..mixins.models import SoftDeleteModelMixin
 from .common import Condition, InstallationStatus, Lifecycle
 from .utils import SoftDeleteQuerySet
 
@@ -52,7 +53,7 @@ class PortalType(models.Model):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
 
 
-class MountPlan(models.Model):
+class MountPlan(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -149,7 +150,7 @@ class MountPlanFile(models.Model):
         return "%s" % self.file
 
 
-class MountReal(models.Model):
+class MountReal(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )

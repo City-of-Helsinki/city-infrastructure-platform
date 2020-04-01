@@ -102,3 +102,12 @@ class TrafficSignRealAdminTestCase(TestCase):
         ma.delete_model(request, self.traffic_sign_real)
         qs = ma.get_queryset(request)
         self.assertEqual(qs.count(), 0)
+
+    def test_delete_queryset_soft_delete_objects_in_queryset(self):
+        ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
+        request = MockRequest()
+        request.user = self.admin
+        ma.delete_model(request, self.traffic_sign_real)
+        ma.delete_queryset(request, TrafficSignReal.objects.all())
+        self.traffic_sign_real.refresh_from_db()
+        self.assertFalse(self.traffic_sign_real.is_active)

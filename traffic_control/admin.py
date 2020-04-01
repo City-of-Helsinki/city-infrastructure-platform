@@ -68,7 +68,6 @@ class BarrierPlanAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
     inlines = (BarrierPlanFileInline,)
 
 
@@ -93,7 +92,6 @@ class BarrierRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
 
 
 class TrafficLightPlanFileInline(admin.TabularInline):
@@ -122,7 +120,6 @@ class TrafficLightPlanAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
     inlines = (TrafficLightPlanFileInline,)
 
 
@@ -148,7 +145,6 @@ class TrafficLightRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
 
 
 class TrafficSignPlanFileInline(admin.TabularInline):
@@ -220,7 +216,6 @@ class TrafficSignPlanAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
     inlines = (TrafficSignPlanFileInline,)
 
 
@@ -321,7 +316,6 @@ class TrafficSignRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
     list_filter = [
         ("lifecycle", EnumFieldListFilter),
         ("installation_status", EnumFieldListFilter),
@@ -386,7 +380,6 @@ class SignpostPlanAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
     inlines = (SignpostPlanFileInline,)
 
 
@@ -412,7 +405,6 @@ class SignpostRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
 
 
 class MountPlanFileInline(admin.TabularInline):
@@ -439,7 +431,6 @@ class MountPlanAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
     inlines = (MountPlanFileInline,)
 
 
@@ -463,7 +454,6 @@ class MountRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
 
 
 class RoadMarkingPlanFileInline(admin.TabularInline):
@@ -491,7 +481,6 @@ class RoadMarkingPlanAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
     inlines = (RoadMarkingPlanFileInline,)
 
 
@@ -516,7 +505,6 @@ class RoadMarkingRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    actions = None
 
 
 @admin.register(TrafficSignCode)

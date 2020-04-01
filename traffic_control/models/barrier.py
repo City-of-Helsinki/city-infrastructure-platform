@@ -7,6 +7,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
+from ..mixins.models import SoftDeleteModelMixin
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
 from .utils import SoftDeleteQuerySet
 
@@ -55,7 +56,7 @@ class LocationSpecifier(Enum):
         LEFT = _("Left of road or lane")
 
 
-class BarrierPlan(models.Model):
+class BarrierPlan(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -160,7 +161,7 @@ class BarrierPlanFile(models.Model):
         return "%s" % self.file
 
 
-class BarrierReal(models.Model):
+class BarrierReal(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )

@@ -7,6 +7,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from enumfields import Enum, EnumField, EnumIntegerField
 
+from ..mixins.models import SoftDeleteModelMixin
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
 from .mount import MountPlan, MountReal, MountType
 from .utils import SoftDeleteQuerySet
@@ -45,7 +46,7 @@ class TrafficLightType(Enum):
         BUTTON = _("Button")
 
 
-class TrafficLightPlan(models.Model):
+class TrafficLightPlan(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -160,7 +161,7 @@ class TrafficLightPlanFile(models.Model):
         return "%s" % self.file
 
 
-class TrafficLightReal(models.Model):
+class TrafficLightReal(SoftDeleteModelMixin, models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
