@@ -49,3 +49,19 @@ class TrafficSignRealTestCase(TestCase):
             owner="test owner",
         )
         self.assertFalse(self.main_sign.has_additional_signs())
+
+    def test_soft_delete_main_traffic_sign_also_soft_delete_additional_sign(self):
+        additional_sign = TrafficSignReal.objects.create(
+            parent=self.main_sign,
+            location=Point(1, 1, 5, srid=settings.SRID),
+            legacy_code="800",
+            direction=0,
+            order=1,
+            created_by=self.user,
+            updated_by=self.user,
+            owner="test owner",
+        )
+        self.main_sign.soft_delete(self.user)
+        additional_sign.refresh_from_db()
+        self.assertFalse(additional_sign.is_active)
+        self.assertEqual(additional_sign.deleted_by, self.user)
