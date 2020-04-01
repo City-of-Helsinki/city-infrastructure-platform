@@ -25,6 +25,8 @@ class UserStampedAdminMixin:
 
 
 class SoftDeleteAdminMixin:
+    exclude = ("is_active", "deleted_at", "deleted_by")
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.active()
