@@ -29,6 +29,7 @@ from .models import (
     TrafficSignPlanFile,
     TrafficSignReal,
 )
+from .models.utils import order_queryset_by_z_coord_desc
 
 admin.site.site_header = _("City Infrastructure Platform Administration")
 
@@ -449,6 +450,28 @@ class MountPlanAdmin(
     inlines = (MountPlanFileInline,)
 
 
+class OrderedTrafficSignRealInline(admin.TabularInline):
+    model = TrafficSignReal
+    fields = ("id", "parent", "z_coord")
+    readonly_fields = ("id", "parent", "z_coord")
+    show_change_link = True
+    can_delete = False
+    verbose_name = _("Ordered traffic sign")
+    verbose_name_plural = _("Ordered traffic signs")
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return order_queryset_by_z_coord_desc(qs)
+
+    def z_coord(self, obj):
+        return obj.location.z
+
+    z_coord.short_description = _("location (z)")
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(MountReal)
 class MountRealAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
@@ -469,6 +492,7 @@ class MountRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
+    inlines = (OrderedTrafficSignRealInline,)
 
 
 class RoadMarkingPlanFileInline(admin.TabularInline):
