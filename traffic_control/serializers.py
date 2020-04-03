@@ -190,6 +190,10 @@ class MountPlanGeoJSONSerializer(MountPlanSerializer):
 
 
 class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+    ordered_traffic_signs = serializers.PrimaryKeyRelatedField(
+        read_only=True, many=True
+    )
+
     class Meta:
         model = MountReal
         fields = "__all__"

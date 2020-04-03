@@ -9,7 +9,7 @@ from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
 from .common import Condition, InstallationStatus, Lifecycle
-from .utils import SoftDeleteQuerySet
+from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
 
 
 class MountType(Enum):
@@ -248,6 +248,12 @@ class MountReal(SoftDeleteModelMixin, models.Model):
 
     def __str__(self):
         return "%s %s" % (self.id, self.type)
+
+    @property
+    def ordered_traffic_signs(self):
+        """traffic sign reals ordered by z coordinate from top down"""
+        qs = self.trafficsignreal_set.active()
+        return order_queryset_by_z_coord_desc(qs)
 
 
 auditlog.register(MountPlan)
