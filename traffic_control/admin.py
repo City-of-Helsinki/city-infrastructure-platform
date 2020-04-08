@@ -468,7 +468,7 @@ class OrderedTrafficSignRealInline(admin.TabularInline):
     def z_coord(self, obj):
         return obj.location.z
 
-    z_coord.short_description = _("location (z)")
+    z_coord.short_description = _("Location (z)")
 
     def has_add_permission(self, request, obj=None):
         return False
