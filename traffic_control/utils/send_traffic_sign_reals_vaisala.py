@@ -67,6 +67,8 @@ with open(filename, mode="r", encoding="utf-8-sig") as csv_file:
             float(row["longitude"].strip()), float(row["latitude"].strip()), 0.0
         )
         point.Transform(transform)
+        point.SetCoordinateDimension(2)
+        point.SetCoordinateDimension(3)
         try:
             location_specifier = LocationSpecifier[row["side"].strip().upper()].value
         except KeyError:
@@ -80,6 +82,7 @@ with open(filename, mode="r", encoding="utf-8-sig") as csv_file:
             "owner": OWNER,
             "operation": row["action"].strip(),
             "attachment_url": row["frame_url"].strip(),
+            "is_active": True,
             "source_id": row["id"].strip(),
             "source_name": SOURCE_NAME,
         }

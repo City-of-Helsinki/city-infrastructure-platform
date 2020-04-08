@@ -308,8 +308,6 @@ class TrafficSignRealAdmin(
         "lane_type",
         "location_specifier",
         "rfid",
-        "source_id",
-        "source_name",
         "order",
         "direction",
         "operation",
@@ -323,6 +321,8 @@ class TrafficSignRealAdmin(
         "created_by",
         "updated_at",
         "updated_by",
+        "source_id",
+        "source_name",
     )
     readonly_fields = (
         "has_additional_signs",
@@ -362,6 +362,8 @@ class TrafficSignRealAdmin(
         "road_name",
         "lane_number",
         "lane_type",
+        "source_id",
+        "source_name",
     )
 
     def has_additional_signs(self, obj):
