@@ -45,13 +45,13 @@ class TrafficLightPlanSerializer(
 
     class Meta:
         model = TrafficLightPlan
-        fields = "__all__"
         read_only_fields = (
             "created_by",
             "updated_by",
             "deleted_by",
             "deleted_at",
         )
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class TrafficLightPlanGeoJSONSerializer(TrafficLightPlanSerializer):
@@ -63,8 +63,8 @@ class TrafficLightRealSerializer(
 ):
     class Meta:
         model = TrafficLightReal
-        fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class TrafficLightRealGeoJSONSerializer(TrafficLightRealSerializer):
@@ -90,13 +90,13 @@ class TrafficSignPlanSerializer(
 
     class Meta:
         model = TrafficSignPlan
-        fields = "__all__"
         read_only_fields = (
             "created_by",
             "updated_by",
             "deleted_by",
             "deleted_at",
         )
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class TrafficSignPlanGeoJSONSerializer(TrafficSignPlanSerializer):
@@ -109,8 +109,8 @@ class TrafficSignRealSerializer(
 ):
     class Meta:
         model = TrafficSignReal
-        fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class TrafficSignRealGeoJSONSerializer(TrafficSignRealSerializer):
@@ -135,13 +135,13 @@ class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerial
 
     class Meta:
         model = SignpostPlan
-        fields = "__all__"
         read_only_fields = (
             "created_by",
             "updated_by",
             "deleted_by",
             "deleted_at",
         )
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class SignpostPlanGeoJSONSerializer(SignpostPlanSerializer):
@@ -151,8 +151,8 @@ class SignpostPlanGeoJSONSerializer(SignpostPlanSerializer):
 class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = SignpostReal
-        fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class SignpostRealGeoJSONSerializer(SignpostRealSerializer):
@@ -176,13 +176,13 @@ class MountPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerialize
 
     class Meta:
         model = MountPlan
-        fields = "__all__"
         read_only_fields = (
             "created_by",
             "updated_by",
             "deleted_by",
             "deleted_at",
         )
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class MountPlanGeoJSONSerializer(MountPlanSerializer):
@@ -196,8 +196,8 @@ class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerialize
 
     class Meta:
         model = MountReal
-        fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class MountRealGeoJSONSerializer(MountRealSerializer):
@@ -221,13 +221,13 @@ class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSeriali
 
     class Meta:
         model = BarrierPlan
-        fields = "__all__"
         read_only_fields = (
             "created_by",
             "updated_by",
             "deleted_by",
             "deleted_at",
         )
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class BarrierPlanGeoJSONSerializer(BarrierPlanSerializer):
@@ -237,8 +237,8 @@ class BarrierPlanGeoJSONSerializer(BarrierPlanSerializer):
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierReal
-        fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class BarrierRealGeoJSONSerializer(BarrierRealSerializer):
@@ -264,13 +264,13 @@ class RoadMarkingPlanSerializer(
 
     class Meta:
         model = RoadMarkingPlan
-        fields = "__all__"
         read_only_fields = (
             "created_by",
             "updated_by",
             "deleted_by",
             "deleted_at",
         )
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class RoadMarkingPlanGeoJSONSerializer(RoadMarkingPlanSerializer):
@@ -282,8 +282,8 @@ class RoadMarkingRealSerializer(
 ):
     class Meta:
         model = RoadMarkingReal
-        fields = "__all__"
         read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        exclude = ("is_active", "deleted_at", "deleted_by")
 
 
 class RoadMarkingRealGeoJSONSerializer(RoadMarkingRealSerializer):
