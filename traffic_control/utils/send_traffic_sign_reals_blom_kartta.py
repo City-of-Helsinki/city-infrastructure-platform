@@ -87,7 +87,6 @@ for feature in layer:
         "direction": properties.get("direction"),
         "scanned_at": properties.get("date"),
         "owner": OWNER,
-        "is_active": True,
         "source_id": feature.GetFID(),
         "source_name": SOURCE_NAME,
     }

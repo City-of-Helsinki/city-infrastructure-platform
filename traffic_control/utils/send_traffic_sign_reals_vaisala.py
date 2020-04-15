@@ -82,7 +82,6 @@ with open(filename, mode="r", encoding="utf-8-sig") as csv_file:
             "owner": OWNER,
             "operation": row["action"].strip(),
             "attachment_url": row["frame_url"].strip(),
-            "is_active": True,
             "source_id": row["id"].strip(),
             "source_name": SOURCE_NAME,
         }
