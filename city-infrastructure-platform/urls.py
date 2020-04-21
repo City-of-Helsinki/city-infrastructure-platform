@@ -55,13 +55,14 @@ router.register(
 schema_view = get_schema_view(
     openapi.Info(
         title="City Infrastructure Platform API",
-        default_version="0.0.1",
+        default_version="v1",
         description="REST API for City Infrastructure Platform",
         terms_of_service="https://opensource.org/licenses/MIT",
         license=openapi.License(name="MIT"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+    validators=["ssv"],
 )
 
 urlpatterns = i18n_patterns(
