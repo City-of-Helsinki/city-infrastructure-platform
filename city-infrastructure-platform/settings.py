@@ -91,7 +91,7 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "/admin/"
 LOGOUT_REDIRECT_URL = "/admin/login/"
 SOCIAL_AUTH_TUNNISTAMO_AUTH_EXTRA_ARGUMENTS = {"ui_locales": "fi"}
-WAGTAIL_SITE_NAME = _("City Infrastructure Platform Administration")
+WAGTAIL_SITE_NAME = _("City Infrastructure Platform")
 
 TUNNISTAMO_BASE_URL = "https://api.hel.fi/sso"
 SOCIAL_AUTH_TUNNISTAMO_KEY = "12082ae5-f104-45f3-990e-a030e9bcb60"
