@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-08 11:10+0300\n"
+"POT-Creation-Date: 2020-04-22 12:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,33 +18,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: traffic_control/admin.py:34
-msgid "City Infrastructure Platform Administration"
-msgstr "Infraomaisuuden hallinta-alusta"
-
-#: traffic_control/admin.py:370 traffic_control/models/barrier.py:31
+#: traffic_control/admin.py:368 traffic_control/models/barrier.py:31
 #: traffic_control/models/traffic_light.py:21
 msgid "No"
 msgstr "Ei"
 
-#: traffic_control/admin.py:370 traffic_control/models/barrier.py:30
+#: traffic_control/admin.py:368 traffic_control/models/barrier.py:30
 #: traffic_control/models/traffic_light.py:22
 msgid "Yes"
 msgstr "Kyllä"
 
-#: traffic_control/admin.py:372
+#: traffic_control/admin.py:370
 msgid "has additional signs"
 msgstr "Sisältää lisämerkkejä"
 
-#: traffic_control/admin.py:461
+#: traffic_control/admin.py:459
 msgid "Ordered traffic sign"
 msgstr "Järjestetty liikennemerkki"
 
-#: traffic_control/admin.py:462
+#: traffic_control/admin.py:460
 msgid "Ordered traffic signs"
 msgstr "Järjestetyt liikennemerkit"
 
-#: traffic_control/admin.py:471 traffic_control/forms.py:12
+#: traffic_control/admin.py:469 traffic_control/forms.py:12
 msgid "Location (z)"
 msgstr "Sijainti (z)"
 
@@ -1111,6 +1107,6 @@ msgstr "Liite (url)"
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
 
-#: traffic_control/views.py:153
+#: traffic_control/views.py:163
 msgid "File not found."
 msgstr "Tiedostoa ei löytynyt."
