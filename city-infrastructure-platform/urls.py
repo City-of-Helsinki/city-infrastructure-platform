@@ -54,9 +54,20 @@ router.register(
 )
 schema_view = get_schema_view(
     openapi.Info(
-        title="City Infrastructure Platform API",
+        title="City Infrastructure Platform REST API",
         default_version="v1",
-        description="REST API for City Infrastructure Platform",
+        description="""
+            <b>Traffic Control devices</b>
+
+            Provides REST API for Traffic Control devices, such as Traffic Signs, Traffic Lights, Barriers,
+            SignPosts, Mounts and Road Markings.
+
+            These devices have planned and realized entities in the platform and therefore also equivalent
+            REST-endpoints.
+
+            Entity location output format can be controlled via "geo_format" GET-parameter.
+            Supported formats are ewkt and geojson. EWKT is the default format.
+        """,
         terms_of_service="https://opensource.org/licenses/MIT",
         license=openapi.License(name="MIT"),
     ),

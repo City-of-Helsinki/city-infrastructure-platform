@@ -1,6 +1,8 @@
 from django.core import exceptions
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _  # NOQA
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action
@@ -91,6 +93,14 @@ from traffic_control.serializers import (
     TrafficSignRealSerializer,
 )
 
+location_parameter = openapi.Parameter(
+    "location",
+    openapi.IN_QUERY,
+    type=openapi.TYPE_STRING,
+    description="Location (2D or 3D) to search from in WKT-format (EPSG:3879)",
+    format="WKT",
+)
+
 
 class TrafficControlViewSet(
     ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
@@ -171,6 +181,37 @@ class FileUploadViews(GenericViewSet):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new Barrier Plan"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all Barrier Plans",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(operation_description="Retrieve single Barrier Plan"),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(operation_description="Update single Barrier Plan"),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single Barrier Plan"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single Barrier Plan"
+    ),
+)
 class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": BarrierPlanSerializer,
@@ -184,6 +225,7 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
+        operation_description="Add single file to Barrier Plan",
         request_body=BarrierPlanPostFileSerializer,
         responses={200: BarrierPlanFileSerializer},
     )
@@ -196,9 +238,15 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_file(self, request, *args, **kwargs):
         return super().post_file(request, *args, **kwargs)
 
-    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from Barrier Plan",
+        request_body=None,
+        responses={204: ""},
+    )
     @swagger_auto_schema(
         method="patch",
+        operation_description="Update single file from Barrier Plan",
         request_body=BarrierPlanPostFileSerializer,
         responses={200: BarrierPlanFileSerializer},
     )
@@ -212,6 +260,37 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new Barrier Real"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all Barrier Reals",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(operation_description="Retrieve single Barrier Real"),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(operation_description="Update single Barrier Real"),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single Barrier Real"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single Barrier Real"
+    ),
+)
 class BarrierRealViewSet(TrafficControlViewSet):
     serializer_classes = {
         "default": BarrierRealSerializer,
@@ -221,6 +300,37 @@ class BarrierRealViewSet(TrafficControlViewSet):
     filterset_class = BarrierRealFilterSet
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new Mount Plan"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all Mount Plans",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(operation_description="Retrieve single Mount Plan"),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(operation_description="Update single Mount Plan"),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single Mount Plan"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single Mount Plan"
+    ),
+)
 class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": MountPlanSerializer,
@@ -234,6 +344,7 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
+        operation_description="Add single file to Mount Plan",
         request_body=MountPlanPostFileSerializer,
         responses={200: MountPlanFileSerializer},
     )
@@ -246,9 +357,15 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_file(self, request, *args, **kwargs):
         return super().post_file(request, *args, **kwargs)
 
-    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from Mount Plan",
+        request_body=None,
+        responses={204: ""},
+    )
     @swagger_auto_schema(
         method="patch",
+        operation_description="Update single file from Mount Plan",
         request_body=MountPlanPostFileSerializer,
         responses={200: MountPlanFileSerializer},
     )
@@ -262,6 +379,37 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new Mount Real"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all Mount Reals",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(operation_description="Retrieve single Mount Real"),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(operation_description="Update single Mount Real"),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single Mount Real"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single Mount Real"
+    ),
+)
 class MountRealViewSet(TrafficControlViewSet):
     serializer_classes = {
         "default": MountRealSerializer,
@@ -272,6 +420,41 @@ class MountRealViewSet(TrafficControlViewSet):
     filterset_class = MountRealFilterSet
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new RoadMarking Plan"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all RoadMarking Plans",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single RoadMarking Plan"
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(
+        operation_description="Update single RoadMarking Plan"
+    ),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single RoadMarking Plan"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single RoadMarking Plan"
+    ),
+)
 class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": RoadMarkingPlanSerializer,
@@ -285,6 +468,7 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
+        operation_description="Add single file to RoadMarking Plan",
         request_body=RoadMarkingPlanPostFileSerializer,
         responses={200: RoadMarkingPlanFileSerializer},
     )
@@ -297,9 +481,15 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_file(self, request, *args, **kwargs):
         return super().post_file(request, *args, **kwargs)
 
-    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from RoadMarking Plan",
+        request_body=None,
+        responses={204: ""},
+    )
     @swagger_auto_schema(
         method="patch",
+        operation_description="Update single file from RoadMarking Plan",
         request_body=RoadMarkingPlanPostFileSerializer,
         responses={200: RoadMarkingPlanFileSerializer},
     )
@@ -313,6 +503,41 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new RoadMarking Real"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all RoadMarking Reals",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single RoadMarking Real"
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(
+        operation_description="Update single RoadMarking Real"
+    ),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single RoadMarking Real"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single RoadMarking Real"
+    ),
+)
 class RoadMarkingRealViewSet(TrafficControlViewSet):
     serializer_classes = {
         "default": RoadMarkingRealSerializer,
@@ -322,6 +547,37 @@ class RoadMarkingRealViewSet(TrafficControlViewSet):
     filterset_class = RoadMarkingRealFilterSet
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new Signpost Plan"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(operation_description="Retrieve all Signpost Plans"),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single Signpost Plan",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(operation_description="Update single Signpost Plan"),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single Signpost Plan"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single Signpost Plan"
+    ),
+)
 class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": SignpostPlanSerializer,
@@ -335,6 +591,7 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
+        operation_description="Add single file to Signpost Plan",
         request_body=SignpostPlanPostFileSerializer,
         responses={200: SignpostPlanFileSerializer},
     )
@@ -347,9 +604,15 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_file(self, request, *args, **kwargs):
         return super().post_file(request, *args, **kwargs)
 
-    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from Signpost Plan",
+        request_body=None,
+        responses={204: ""},
+    )
     @swagger_auto_schema(
         method="patch",
+        operation_description="Update single file from Signpost Plan",
         request_body=SignpostPlanPostFileSerializer,
         responses={200: SignpostPlanFileSerializer},
     )
@@ -363,6 +626,39 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new Signpost Real"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all Signpost Reals",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single Signpost Real"
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(operation_description="Update single Signpost Real"),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single Signpost Real"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single Signpost Real"
+    ),
+)
 class SignpostRealViewSet(TrafficControlViewSet):
     serializer_classes = {
         "default": SignpostRealSerializer,
@@ -372,6 +668,41 @@ class SignpostRealViewSet(TrafficControlViewSet):
     filterset_class = SignpostRealFilterSet
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new TrafficLight Plan"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all TrafficLight Plans",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single TrafficLight Plan"
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(
+        operation_description="Update single TrafficLight Plan"
+    ),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single TrafficLight Plan"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single TrafficLight Plan"
+    ),
+)
 class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": TrafficLightPlanSerializer,
@@ -385,6 +716,7 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
+        operation_description="Add single file to TrafficLight Plan",
         request_body=TrafficLightPlanPostFileSerializer,
         responses={200: TrafficLightPlanFileSerializer},
     )
@@ -397,9 +729,15 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_file(self, request, *args, **kwargs):
         return super().post_file(request, *args, **kwargs)
 
-    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from TrafficLight Plan",
+        request_body=None,
+        responses={204: ""},
+    )
     @swagger_auto_schema(
         method="patch",
+        operation_description="Update single file from TrafficLight Plan",
         request_body=TrafficLightPlanPostFileSerializer,
         responses={200: TrafficLightPlanFileSerializer},
     )
@@ -413,6 +751,41 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new TrafficLight Real"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all TrafficLight Reals",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single TrafficLight Real"
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(
+        operation_description="Update single TrafficLight Real"
+    ),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single TrafficLight Real"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single TrafficLight Real"
+    ),
+)
 class TrafficLightRealViewSet(TrafficControlViewSet):
     serializer_classes = {
         "default": TrafficLightRealSerializer,
@@ -422,6 +795,40 @@ class TrafficLightRealViewSet(TrafficControlViewSet):
     filterset_class = TrafficLightRealFilterSet
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new TrafficSign Code"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all TrafficSign Codes"
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single TrafficSign Code"
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(
+        operation_description="Update single TrafficSign Code"
+    ),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single TrafficSign Code"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Delete single TrafficSign Code"
+    ),
+)
 class TrafficSignCodeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
@@ -432,6 +839,41 @@ class TrafficSignCodeViewSet(ModelViewSet):
     filterset_class = TrafficSignCodeFilterSet
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new TrafficSign Plan"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all TrafficSign Plans",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single TrafficSign Plan"
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(
+        operation_description="Update single TrafficSign Plan"
+    ),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single TrafficSign Plan"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single TrafficSign Plan"
+    ),
+)
 class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": TrafficSignPlanSerializer,
@@ -445,6 +887,7 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
+        operation_description="Add single file to TrafficSign Plan",
         request_body=TrafficSignPlanPostFileSerializer,
         responses={200: TrafficSignPlanFileSerializer},
     )
@@ -457,9 +900,15 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_file(self, request, *args, **kwargs):
         return super().post_file(request, *args, **kwargs)
 
-    @swagger_auto_schema(method="delete", request_body=None, responses={204: ""})
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from TrafficSign Plan",
+        request_body=None,
+        responses={204: ""},
+    )
     @swagger_auto_schema(
         method="patch",
+        operation_description="Update single file from TrafficSign Plan",
         request_body=TrafficSignPlanPostFileSerializer,
         responses={200: TrafficSignPlanFileSerializer},
     )
@@ -473,6 +922,41 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new TrafficSign Real"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve all TrafficSign Reals",
+        manual_parameters=[location_parameter],
+    ),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(
+        operation_description="Retrieve single TrafficSign Real"
+    ),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(
+        operation_description="Update single TrafficSign Real"
+    ),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single TrafficSign Real"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single TrafficSign Real"
+    ),
+)
 class TrafficSignRealViewSet(TrafficControlViewSet):
     serializer_classes = {
         "default": TrafficSignRealSerializer,
@@ -482,6 +966,32 @@ class TrafficSignRealViewSet(TrafficControlViewSet):
     filterset_class = TrafficSignRealFilterSet
 
 
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new PortalType"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(operation_description="Retrieve all PortalTypes"),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(operation_description="Retrieve single PortalType"),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(operation_description="Update single PortalType"),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single PortalType"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(operation_description="Delete single PortalType"),
+)
 class PortalTypeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
