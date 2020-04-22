@@ -76,8 +76,7 @@ schema_view = get_schema_view(
     validators=["ssv"],
 )
 
-urlpatterns = i18n_patterns(
-    path("admin/", admin.site.urls),
+urlpatterns = [
     path("ha/", include("helusers.urls", namespace="helusers")),
     path("api/", include((router.urls, "api"), namespace="api")),
     path("auth/", include("social_django.urls", namespace="social")),
@@ -94,9 +93,10 @@ urlpatterns = i18n_patterns(
     url(
         r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
     ),
-)
+    path("sentry-debug/", lambda a: 1 / 0),
+]
 
-urlpatterns.append(path("sentry-debug/", lambda a: 1 / 0))
+urlpatterns += i18n_patterns(path("admin/", admin.site.urls),)
 
 if settings.DEBUG:
     from django.conf.urls.static import static
