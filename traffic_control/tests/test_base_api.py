@@ -61,7 +61,9 @@ line_location_error_test_data = [
 
 class TrafficControlAPIBaseTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="testuser", password="testpw")
+        self.user = User.objects.create_superuser(
+            username="testuser", password="testpw", email="testuser@example.com"
+        )
         self.client.login(username="testuser", password="testpw")
         self.test_lifecycle = Lifecycle.ACTIVE
         self.test_lifecycle_2 = Lifecycle.INACTIVE
