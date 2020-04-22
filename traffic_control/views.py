@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
@@ -98,7 +98,7 @@ class TrafficControlViewSet(
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["-created_at"]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
     serializer_classes = {}
 
     def get_serializer_class(self):
