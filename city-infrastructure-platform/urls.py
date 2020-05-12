@@ -7,50 +7,57 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-import traffic_control.views
+from traffic_control.views import (
+    barrier as barrier_views,
+    mount as mount_views,
+    road_marking as road_marking_views,
+    signpost as signpost_views,
+    traffic_light as traffic_light_views,
+    traffic_sign as traffic_sign_views,
+)
 
 router = routers.DefaultRouter()
 router.register(
-    "barrier-plans", traffic_control.views.BarrierPlanViewSet,
+    "barrier-plans", barrier_views.BarrierPlanViewSet,
 )
 router.register(
-    "barrier-reals", traffic_control.views.BarrierRealViewSet,
+    "barrier-reals", barrier_views.BarrierRealViewSet,
 )
 router.register(
-    "traffic-light-plans", traffic_control.views.TrafficLightPlanViewSet,
+    "traffic-light-plans", traffic_light_views.TrafficLightPlanViewSet,
 )
 router.register(
-    "traffic-light-reals", traffic_control.views.TrafficLightRealViewSet,
+    "traffic-light-reals", traffic_light_views.TrafficLightRealViewSet,
 )
 router.register(
-    "traffic-sign-plans", traffic_control.views.TrafficSignPlanViewSet,
+    "traffic-sign-plans", traffic_sign_views.TrafficSignPlanViewSet,
 )
 router.register(
-    "traffic-sign-reals", traffic_control.views.TrafficSignRealViewSet,
+    "traffic-sign-reals", traffic_sign_views.TrafficSignRealViewSet,
 )
 router.register(
-    "mount-plans", traffic_control.views.MountPlanViewSet,
+    "mount-plans", mount_views.MountPlanViewSet,
 )
 router.register(
-    "mount-reals", traffic_control.views.MountRealViewSet,
+    "mount-reals", mount_views.MountRealViewSet,
 )
 router.register(
-    "signpost-plans", traffic_control.views.SignpostPlanViewSet,
+    "signpost-plans", signpost_views.SignpostPlanViewSet,
 )
 router.register(
-    "signpost-reals", traffic_control.views.SignpostRealViewSet,
+    "signpost-reals", signpost_views.SignpostRealViewSet,
 )
 router.register(
-    "road-marking-plans", traffic_control.views.RoadMarkingPlanViewSet,
+    "road-marking-plans", road_marking_views.RoadMarkingPlanViewSet,
 )
 router.register(
-    "road-marking-reals", traffic_control.views.RoadMarkingRealViewSet,
+    "road-marking-reals", road_marking_views.RoadMarkingRealViewSet,
 )
 router.register(
-    "traffic-sign-codes", traffic_control.views.TrafficSignCodeViewSet,
+    "traffic-sign-codes", traffic_sign_views.TrafficSignCodeViewSet,
 )
 router.register(
-    "portal-types", traffic_control.views.PortalTypeViewSet,
+    "portal-types", mount_views.PortalTypeViewSet,
 )
 schema_view = get_schema_view(
     openapi.Info(
