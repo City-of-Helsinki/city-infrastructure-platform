@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.gis import forms
 from django.contrib.gis.geos import Point
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .models import TrafficSignPlan, TrafficSignReal
 

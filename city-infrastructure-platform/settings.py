@@ -12,7 +12,7 @@ import os
 
 import environ
 import sentry_sdk
-from django.utils.translation import gettext_lazy as _  # NOQA
+from django.utils.translation import gettext_lazy as _
 from sentry_sdk.integrations.django import DjangoIntegration
 
 from .utils import git_version
