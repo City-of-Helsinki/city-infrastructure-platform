@@ -345,5 +345,25 @@ class SignpostReal(SoftDeleteModelMixin, models.Model):
         return "%s %s %s" % (self.id, self.code, self.txt)
 
 
+class SignpostRealFile(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    file = models.FileField(
+        _("File"), blank=False, null=False, upload_to="realfiles/signpost/"
+    )
+    signpost_real = models.ForeignKey(
+        SignpostReal, on_delete=models.CASCADE, related_name="files"
+    )
+
+    class Meta:
+        db_table = "signpost_real_file"
+        verbose_name = _("Signpost Real File")
+        verbose_name_plural = _("Signpost Real Files")
+
+    def __str__(self):
+        return f"{self.file}"
+
+
 auditlog.register(SignpostPlan)
 auditlog.register(SignpostReal)

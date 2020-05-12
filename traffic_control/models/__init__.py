@@ -3,6 +3,7 @@ from .barrier import (
     BarrierPlan,
     BarrierPlanFile,
     BarrierReal,
+    BarrierRealFile,
     ConnectionType,
     LaneType,
     Reflective,
@@ -17,7 +18,14 @@ from .common import (
     Surface,
     TrafficSignCode,
 )
-from .mount import MountPlan, MountPlanFile, MountReal, MountType, PortalType
+from .mount import (
+    MountPlan,
+    MountPlanFile,
+    MountReal,
+    MountRealFile,
+    MountType,
+    PortalType,
+)
 from .road_marking import (
     ArrowDirection,
     LineDirection,
@@ -25,13 +33,20 @@ from .road_marking import (
     RoadMarkingPlan,
     RoadMarkingPlanFile,
     RoadMarkingReal,
+    RoadMarkingRealFile,
 )
-from .signpost import SignpostPlan, SignpostPlanFile, SignpostReal
+from .signpost import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
 from .traffic_light import (
     TrafficLightPlan,
     TrafficLightPlanFile,
     TrafficLightReal,
+    TrafficLightRealFile,
     TrafficLightSoundBeaconValue,
     TrafficLightType,
 )
-from .traffic_sign import TrafficSignPlan, TrafficSignPlanFile, TrafficSignReal
+from .traffic_sign import (
+    TrafficSignPlan,
+    TrafficSignPlanFile,
+    TrafficSignReal,
+    TrafficSignRealFile,
+)
