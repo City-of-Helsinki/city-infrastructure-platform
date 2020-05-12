@@ -4,7 +4,7 @@ from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
-from django.utils.translation import ugettext_lazy as _  # NOQA
+from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
@@ -273,6 +273,26 @@ class TrafficLightReal(SoftDeleteModelMixin, models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.type, self.code)
+
+
+class TrafficLightRealFile(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    file = models.FileField(
+        _("File"), blank=False, null=False, upload_to="realfiles/traffic_light/"
+    )
+    traffic_light_real = models.ForeignKey(
+        TrafficLightReal, on_delete=models.CASCADE, related_name="files"
+    )
+
+    class Meta:
+        db_table = "traffic_light_real_file"
+        verbose_name = _("Traffic Light Real File")
+        verbose_name_plural = _("Traffic Light Real Files")
+
+    def __str__(self):
+        return f"{self.file}"
 
 
 auditlog.register(TrafficLightPlan)

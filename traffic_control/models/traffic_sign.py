@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
 from django.db import transaction
-from django.utils.translation import ugettext_lazy as _  # NOQA
+from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
@@ -360,6 +360,26 @@ class TrafficSignReal(SoftDeleteModelMixin, models.Model):
         super().soft_delete(user)
         for additional_sign in self.children.active():
             additional_sign.soft_delete(user)
+
+
+class TrafficSignRealFile(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    file = models.FileField(
+        _("File"), blank=False, null=False, upload_to="realfiles/traffic_sign/"
+    )
+    traffic_sign_real = models.ForeignKey(
+        TrafficSignReal, on_delete=models.CASCADE, related_name="files"
+    )
+
+    class Meta:
+        db_table = "traffic_sign_real_file"
+        verbose_name = _("Traffic Sign Real File")
+        verbose_name_plural = _("Traffic Sign Real Files")
+
+    def __str__(self):
+        return f"{self.file}"
 
 
 auditlog.register(TrafficSignPlan)

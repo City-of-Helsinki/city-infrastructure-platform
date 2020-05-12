@@ -1,5 +1,4 @@
 import datetime
-import io
 
 import pytest
 from django.urls import reverse
@@ -199,65 +198,6 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_signpost_plan_files(self):
-        """
-        Ensure that signpost plan document can be uploaded, rewritten and deleted.
-        """
-        signpost_plan = self.__create_test_signpost_plan()
-
-        # Upload
-        data = {"file": io.BytesIO(b"File contents")}
-
-        post_response = self.client.post(
-            reverse("api:signpostplan-post-file", kwargs={"pk": signpost_plan.id}),
-            data=data,
-            format="multipart",
-        )
-
-        self.assertEqual(post_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(SignpostPlan.objects.count(), 1)
-        changed_signpost_plan = SignpostPlan.objects.get(id=str(signpost_plan.id))
-        self.assertEqual(changed_signpost_plan.files.count(), 1)
-
-        # Rewrite
-        data = {"file": io.BytesIO(b"Rewritten file contents")}
-
-        patch_response = self.client.patch(
-            reverse(
-                "api:signpostplan-change-file",
-                kwargs={
-                    "pk": signpost_plan.id,
-                    "file_pk": changed_signpost_plan.files.first().id,
-                },
-            ),
-            data=data,
-            format="multipart",
-        )
-
-        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(SignpostPlan.objects.count(), 1)
-        rewritten_signpost_plan = SignpostPlan.objects.get(id=str(signpost_plan.id))
-        self.assertEqual(rewritten_signpost_plan.files.count(), 1)
-        self.assertNotEqual(
-            post_response.data.get("file"), patch_response.data.get("file")
-        )
-
-        # Delete
-        delete_response = self.client.delete(
-            reverse(
-                "api:signpostplan-change-file",
-                kwargs={
-                    "pk": signpost_plan.id,
-                    "file_pk": changed_signpost_plan.files.first().id,
-                },
-            ),
-        )
-
-        self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(SignpostPlan.objects.count(), 1)
-        deleted_signpost_plan_file = SignpostPlan.objects.get(id=str(signpost_plan.id))
-        self.assertEqual(deleted_signpost_plan_file.files.count(), 0)
 
     def __create_test_signpost_plan(self):
         return SignpostPlan.objects.create(

@@ -1,5 +1,4 @@
 import datetime
-import io
 
 import pytest
 from django.urls import reverse
@@ -204,65 +203,6 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
             reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_barrier_plan_files(self):
-        """
-        Ensure that barrier plan document can be uploaded, rewritten and deleted.
-        """
-        barrier_plan = self.__create_test_barrier_plan()
-
-        # Upload
-        data = {"file": io.BytesIO(b"File contents")}
-
-        post_response = self.client.post(
-            reverse("api:barrierplan-post-file", kwargs={"pk": barrier_plan.id}),
-            data=data,
-            format="multipart",
-        )
-
-        self.assertEqual(post_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(BarrierPlan.objects.count(), 1)
-        changed_barrier_plan = BarrierPlan.objects.get(id=str(barrier_plan.id))
-        self.assertEqual(changed_barrier_plan.files.count(), 1)
-
-        # Rewrite
-        data = {"file": io.BytesIO(b"Rewritten file contents")}
-
-        patch_response = self.client.patch(
-            reverse(
-                "api:barrierplan-change-file",
-                kwargs={
-                    "pk": barrier_plan.id,
-                    "file_pk": changed_barrier_plan.files.first().id,
-                },
-            ),
-            data=data,
-            format="multipart",
-        )
-
-        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(BarrierPlan.objects.count(), 1)
-        rewritten_barrier_plan = BarrierPlan.objects.get(id=str(barrier_plan.id))
-        self.assertEqual(rewritten_barrier_plan.files.count(), 1)
-        self.assertNotEqual(
-            post_response.data.get("file"), patch_response.data.get("file")
-        )
-
-        # Delete
-        delete_response = self.client.delete(
-            reverse(
-                "api:barrierplan-change-file",
-                kwargs={
-                    "pk": barrier_plan.id,
-                    "file_pk": changed_barrier_plan.files.first().id,
-                },
-            ),
-        )
-
-        self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(BarrierPlan.objects.count(), 1)
-        deleted_barrier_plan_file = BarrierPlan.objects.get(id=str(barrier_plan.id))
-        self.assertEqual(deleted_barrier_plan_file.files.count(), 0)
 
     def __create_test_barrier_plan(self):
         return BarrierPlan.objects.create(
