@@ -16,6 +16,7 @@ from ..models import (
     TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,
+    TrafficSignRealFile,
 )
 from ..permissions import IsAdminUserOrReadOnly
 from ..serializers import (
@@ -24,7 +25,9 @@ from ..serializers import (
     TrafficSignPlanGeoJSONSerializer,
     TrafficSignPlanPostFileSerializer,
     TrafficSignPlanSerializer,
+    TrafficSignRealFileSerializer,
     TrafficSignRealGeoJSONSerializer,
+    TrafficSignRealPostFileSerializer,
     TrafficSignRealSerializer,
 )
 from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
@@ -194,10 +197,49 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
         operation_description="Soft-delete single TrafficSign Real"
     ),
 )
-class TrafficSignRealViewSet(TrafficControlViewSet):
+class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": TrafficSignRealSerializer,
         "geojson": TrafficSignRealGeoJSONSerializer,
     }
     queryset = TrafficSignReal.objects.active()
     filterset_class = TrafficSignRealFilterSet
+    file_queryset = TrafficSignRealFile.objects.all()
+    file_serializer = TrafficSignRealFileSerializer
+    file_relation = "traffic_sign_real"
+
+    @swagger_auto_schema(
+        method="post",
+        operation_description="Add single file to TrafficSign Real",
+        request_body=TrafficSignRealPostFileSerializer,
+        responses={200: TrafficSignRealFileSerializer},
+    )
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from TrafficSign Real",
+        request_body=None,
+        responses={204: ""},
+    )
+    @swagger_auto_schema(
+        method="patch",
+        operation_description="Update single file from TrafficSign Real",
+        request_body=TrafficSignRealPostFileSerializer,
+        responses={200: TrafficSignRealFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)

@@ -7,14 +7,16 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
 from ..filters import MountPlanFilterSet, MountRealFilterSet, PortalTypeFilterSet
-from ..models import MountPlan, MountPlanFile, MountReal, PortalType
+from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, PortalType
 from ..permissions import IsAdminUserOrReadOnly
 from ..serializers import (
     MountPlanFileSerializer,
     MountPlanGeoJSONSerializer,
     MountPlanPostFileSerializer,
     MountPlanSerializer,
+    MountRealFileSerializer,
     MountRealGeoJSONSerializer,
+    MountRealPostFileSerializer,
     MountRealSerializer,
     PortalTypeSerializer,
 )
@@ -133,7 +135,7 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
         operation_description="Soft-delete single Mount Real"
     ),
 )
-class MountRealViewSet(TrafficControlViewSet):
+class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": MountRealSerializer,
         "geojson": MountRealGeoJSONSerializer,
@@ -141,6 +143,45 @@ class MountRealViewSet(TrafficControlViewSet):
     serializer_class = MountRealSerializer
     queryset = MountReal.objects.active()
     filterset_class = MountRealFilterSet
+    file_queryset = MountRealFile.objects.all()
+    file_serializer = MountRealFileSerializer
+    file_relation = "mount_real"
+
+    @swagger_auto_schema(
+        method="post",
+        operation_description="Add single file to Mount Real",
+        request_body=MountRealPostFileSerializer,
+        responses={200: MountRealFileSerializer},
+    )
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from Mount Real",
+        request_body=None,
+        responses={204: ""},
+    )
+    @swagger_auto_schema(
+        method="patch",
+        operation_description="Update single file from Mount Real",
+        request_body=MountRealPostFileSerializer,
+        responses={200: MountRealFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
 
 
 @method_decorator(

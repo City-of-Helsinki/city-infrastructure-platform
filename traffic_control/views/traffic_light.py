@@ -4,13 +4,20 @@ from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
 from ..filters import TrafficLightPlanFilterSet, TrafficLightRealFilterSet
-from ..models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal
+from ..models import (
+    TrafficLightPlan,
+    TrafficLightPlanFile,
+    TrafficLightReal,
+    TrafficLightRealFile,
+)
 from ..serializers import (
     TrafficLightPlanFileSerializer,
     TrafficLightPlanGeoJSONSerializer,
     TrafficLightPlanPostFileSerializer,
     TrafficLightPlanSerializer,
+    TrafficLightRealFileSerializer,
     TrafficLightRealGeoJSONSerializer,
+    TrafficLightRealPostFileSerializer,
     TrafficLightRealSerializer,
 )
 from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
@@ -136,10 +143,49 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
         operation_description="Soft-delete single TrafficLight Real"
     ),
 )
-class TrafficLightRealViewSet(TrafficControlViewSet):
+class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": TrafficLightRealSerializer,
         "geojson": TrafficLightRealGeoJSONSerializer,
     }
     queryset = TrafficLightReal.objects.active()
     filterset_class = TrafficLightRealFilterSet
+    file_queryset = TrafficLightRealFile.objects.all()
+    file_serializer = TrafficLightRealFileSerializer
+    file_relation = "traffic_light_real"
+
+    @swagger_auto_schema(
+        method="post",
+        operation_description="Add single file to TrafficLight Real",
+        request_body=TrafficLightRealPostFileSerializer,
+        responses={200: TrafficLightRealFileSerializer},
+    )
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from TrafficLight Real",
+        request_body=None,
+        responses={204: ""},
+    )
+    @swagger_auto_schema(
+        method="patch",
+        operation_description="Update single file from TrafficLight Real",
+        request_body=TrafficLightRealPostFileSerializer,
+        responses={200: TrafficLightRealFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)

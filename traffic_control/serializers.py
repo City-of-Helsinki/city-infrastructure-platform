@@ -6,21 +6,27 @@ from traffic_control.models import (
     BarrierPlan,
     BarrierPlanFile,
     BarrierReal,
+    BarrierRealFile,
     MountPlan,
     MountReal,
+    MountRealFile,
     PortalType,
     RoadMarkingPlan,
     RoadMarkingReal,
+    RoadMarkingRealFile,
     SignpostPlan,
     SignpostPlanFile,
     SignpostReal,
+    SignpostRealFile,
     TrafficLightPlan,
     TrafficLightPlanFile,
     TrafficLightReal,
+    TrafficLightRealFile,
     TrafficSignCode,
     TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,
+    TrafficSignRealFile,
 )
 from traffic_control.models.mount import MountPlanFile
 from traffic_control.models.road_marking import RoadMarkingPlanFile
@@ -58,12 +64,31 @@ class TrafficLightPlanGeoJSONSerializer(TrafficLightPlanSerializer):
     location = GeometryField()
 
 
+class TrafficLightRealFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrafficLightRealFile
+        fields = "__all__"
+
+
+class TrafficLightRealPostFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrafficLightRealFile
+        fields = ("file",)
+
+
 class TrafficLightRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
+    files = TrafficLightRealFileSerializer(many=True, read_only=True)
+
     class Meta:
         model = TrafficLightReal
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 
@@ -104,12 +129,31 @@ class TrafficSignPlanGeoJSONSerializer(TrafficSignPlanSerializer):
     affect_area = GeometryField()
 
 
+class TrafficSignRealFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrafficSignRealFile
+        fields = "__all__"
+
+
+class TrafficSignRealPostFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrafficSignRealFile
+        fields = ("file",)
+
+
 class TrafficSignRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
+    files = TrafficSignRealFileSerializer(many=True, read_only=True)
+
     class Meta:
         model = TrafficSignReal
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 
@@ -148,10 +192,29 @@ class SignpostPlanGeoJSONSerializer(SignpostPlanSerializer):
     location = GeometryField()
 
 
+class SignpostRealFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SignpostRealFile
+        fields = "__all__"
+
+
+class SignpostRealPostFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SignpostRealFile
+        fields = ("file",)
+
+
 class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+    files = SignpostRealFileSerializer(many=True, read_only=True)
+
     class Meta:
         model = SignpostReal
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 
@@ -189,14 +252,32 @@ class MountPlanGeoJSONSerializer(MountPlanSerializer):
     location = GeometryField()
 
 
+class MountRealFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MountRealFile
+        fields = "__all__"
+
+
+class MountRealPostFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MountRealFile
+        fields = ("file",)
+
+
 class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     ordered_traffic_signs = serializers.PrimaryKeyRelatedField(
         read_only=True, many=True
     )
+    files = MountRealFileSerializer(many=True, read_only=True)
 
     class Meta:
         model = MountReal
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 
@@ -234,10 +315,29 @@ class BarrierPlanGeoJSONSerializer(BarrierPlanSerializer):
     location = GeometryField()
 
 
+class BarrierRealFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarrierRealFile
+        fields = "__all__"
+
+
+class BarrierRealPostFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarrierRealFile
+        fields = ("file",)
+
+
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+    files = BarrierRealFileSerializer(many=True, read_only=True)
+
     class Meta:
         model = BarrierReal
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 
@@ -277,12 +377,31 @@ class RoadMarkingPlanGeoJSONSerializer(RoadMarkingPlanSerializer):
     location = GeometryField()
 
 
+class RoadMarkingRealFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoadMarkingRealFile
+        fields = "__all__"
+
+
+class RoadMarkingRealPostFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoadMarkingRealFile
+        fields = ("file",)
+
+
 class RoadMarkingRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
+    files = RoadMarkingRealFileSerializer(many=True, read_only=True)
+
     class Meta:
         model = RoadMarkingReal
-        read_only_fields = ("created_by", "updated_by", "deleted_by", "deleted_at")
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 

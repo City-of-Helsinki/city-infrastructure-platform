@@ -4,13 +4,15 @@ from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
 from ..filters import SignpostPlanFilterSet, SignpostRealFilterSet
-from ..models import SignpostPlan, SignpostPlanFile, SignpostReal
+from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
 from ..serializers import (
     SignpostPlanFileSerializer,
     SignpostPlanGeoJSONSerializer,
     SignpostPlanPostFileSerializer,
     SignpostPlanSerializer,
+    SignpostRealFileSerializer,
     SignpostRealGeoJSONSerializer,
+    SignpostRealPostFileSerializer,
     SignpostRealSerializer,
 )
 from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
@@ -130,10 +132,49 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         operation_description="Soft-delete single Signpost Real"
     ),
 )
-class SignpostRealViewSet(TrafficControlViewSet):
+class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": SignpostRealSerializer,
         "geojson": SignpostRealGeoJSONSerializer,
     }
     queryset = SignpostReal.objects.active()
     filterset_class = SignpostRealFilterSet
+    file_queryset = SignpostRealFile.objects.all()
+    file_serializer = SignpostRealFileSerializer
+    file_relation = "signpost_real"
+
+    @swagger_auto_schema(
+        method="post",
+        operation_description="Add single file to Signpost Real",
+        request_body=SignpostRealPostFileSerializer,
+        responses={200: SignpostRealFileSerializer},
+    )
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_file(self, request, *args, **kwargs):
+        return super().post_file(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        method="delete",
+        operation_description="Delete single file from Signpost Real",
+        request_body=None,
+        responses={204: ""},
+    )
+    @swagger_auto_schema(
+        method="patch",
+        operation_description="Update single file from Signpost Real",
+        request_body=SignpostRealPostFileSerializer,
+        responses={200: SignpostRealFileSerializer},
+    )
+    @action(
+        methods=("PATCH", "DELETE",),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
