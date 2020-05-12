@@ -2,16 +2,18 @@ from enumfields.drf.serializers import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from traffic_control.models import (
+from .models import (
     BarrierPlan,
     BarrierPlanFile,
     BarrierReal,
     BarrierRealFile,
     MountPlan,
+    MountPlanFile,
     MountReal,
     MountRealFile,
     PortalType,
     RoadMarkingPlan,
+    RoadMarkingPlanFile,
     RoadMarkingReal,
     RoadMarkingRealFile,
     SignpostPlan,
@@ -28,8 +30,6 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
-from traffic_control.models.mount import MountPlanFile
-from traffic_control.models.road_marking import RoadMarkingPlanFile
 
 
 class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
