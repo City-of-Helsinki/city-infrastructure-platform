@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-22 12:28+0300\n"
+"POT-Creation-Date: 2020-05-08 15:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,29 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: traffic_control/admin.py:368 traffic_control/models/barrier.py:31
+#: traffic_control/admin/traffic_sign.py:259
+#: traffic_control/models/barrier.py:31
 #: traffic_control/models/traffic_light.py:21
 msgid "No"
 msgstr "Ei"
 
-#: traffic_control/admin.py:368 traffic_control/models/barrier.py:30
+#: traffic_control/admin/traffic_sign.py:259
+#: traffic_control/models/barrier.py:30
 #: traffic_control/models/traffic_light.py:22
 msgid "Yes"
 msgstr "Kyllä"
 
-#: traffic_control/admin.py:370
+#: traffic_control/admin/traffic_sign.py:261
 msgid "has additional signs"
 msgstr "Sisältää lisämerkkejä"
 
-#: traffic_control/admin.py:459
+#: traffic_control/admin/traffic_sign.py:270
 msgid "Ordered traffic sign"
 msgstr "Järjestetty liikennemerkki"
 
-#: traffic_control/admin.py:460
+#: traffic_control/admin/traffic_sign.py:271
 msgid "Ordered traffic signs"
 msgstr "Järjestetyt liikennemerkit"
 
-#: traffic_control/admin.py:469 traffic_control/forms.py:12
+#: traffic_control/admin/traffic_sign.py:280 traffic_control/forms.py:12
 msgid "Location (z)"
 msgstr "Sijainti (z)"
 
@@ -353,11 +355,16 @@ msgstr "Ajoeste (suunnitelma)"
 msgid "Barrier plans"
 msgstr "Ajoeste (suunnitelmat)"
 
-#: traffic_control/models/barrier.py:149 traffic_control/models/mount.py:138
+#: traffic_control/models/barrier.py:149 traffic_control/models/barrier.py:273
+#: traffic_control/models/mount.py:138 traffic_control/models/mount.py:264
 #: traffic_control/models/road_marking.py:190
+#: traffic_control/models/road_marking.py:351
 #: traffic_control/models/signpost.py:175
+#: traffic_control/models/signpost.py:353
 #: traffic_control/models/traffic_light.py:149
+#: traffic_control/models/traffic_light.py:283
 #: traffic_control/models/traffic_sign.py:182
+#: traffic_control/models/traffic_sign.py:370
 msgid "File"
 msgstr "Tiedosto"
 
@@ -400,6 +407,14 @@ msgstr "Ajoeste (toteuma)"
 #: traffic_control/models/barrier.py:262
 msgid "Barrier reals"
 msgstr "Ajoeste (toteumat)"
+
+#: traffic_control/models/barrier.py:281
+msgid "Barrier Real File"
+msgstr "Toteumadokumentti (ajoeste)"
+
+#: traffic_control/models/barrier.py:282
+msgid "Barrier Real Files"
+msgstr "Toteumadokumentit (ajoeste)"
 
 #: traffic_control/models/common.py:17
 msgid "In use"
@@ -642,6 +657,14 @@ msgstr "Kiinnityskohde (toteuma)"
 msgid "Mount Reals"
 msgstr "Kiinnityskohde (toteumat)"
 
+#: traffic_control/models/mount.py:272
+msgid "Mount Real File"
+msgstr "Toteumadokumentti (kiinnityskohde)"
+
+#: traffic_control/models/mount.py:273
+msgid "Mount Real Files"
+msgstr "Toteumadokumentit (kiinnityskohde)"
+
 #: traffic_control/models/road_marking.py:21
 msgid "Forward"
 msgstr "Eteenpäin"
@@ -827,6 +850,14 @@ msgstr "Tiemerkintä (toteuma)"
 msgid "Road Marking Reals"
 msgstr "Tiemerkintä (toteumat)"
 
+#: traffic_control/models/road_marking.py:359
+msgid "RoadMarking Real File"
+msgstr "Toteumadokumentti (tiemerkintä)"
+
+#: traffic_control/models/road_marking.py:360
+msgid "RoadMarking Real Files"
+msgstr "Toteumadokumentit (tiemerkintä)"
+
 #: traffic_control/models/signpost.py:31
 #: traffic_control/models/traffic_sign.py:35
 msgid "Right side"
@@ -952,6 +983,14 @@ msgstr "Opaste (toteuma)"
 msgid "Signpost Reals"
 msgstr "Opaste (toteumat)"
 
+#: traffic_control/models/signpost.py:361
+msgid "Signpost Real File"
+msgstr "Toteumadokumentti (opaste)"
+
+#: traffic_control/models/signpost.py:362
+msgid "Signpost Real Files"
+msgstr "Toteumadokumentit (opaste)"
+
 #: traffic_control/models/traffic_light.py:32
 msgid "Right side of road"
 msgstr "Ajoradan oikea puoli (ajosuuntaan nähden)"
@@ -1006,6 +1045,14 @@ msgstr "Liikennevalo (toteuma)"
 #: traffic_control/models/traffic_light.py:272
 msgid "Traffic Light Reals"
 msgstr "Liikennevalo (toteumat)"
+
+#: traffic_control/models/traffic_light.py:291
+msgid "Traffic Light Real File"
+msgstr "Toteumadokumentti (liikennevalo)"
+
+#: traffic_control/models/traffic_light.py:292
+msgid "Traffic Light Real Files"
+msgstr "Toteumadokumentit (liikennevalo)"
 
 #: traffic_control/models/traffic_sign.py:40
 msgid "Outside"
@@ -1107,6 +1154,14 @@ msgstr "Liite (url)"
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
 
-#: traffic_control/views.py:163
+#: traffic_control/models/traffic_sign.py:378
+msgid "Traffic Sign Real File"
+msgstr "Toteumadokumentti (liikennemerkki)"
+
+#: traffic_control/models/traffic_sign.py:379
+msgid "Traffic Sign Real Files"
+msgstr "Toteumadokumentit (liikennemerkki)"
+
+#: traffic_control/views/_common.py:84
 msgid "File not found."
 msgstr "Tiedostoa ei löytynyt."
