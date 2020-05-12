@@ -1,5 +1,6 @@
 from django.contrib.gis import admin
 
+from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
 from ..models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal
 from .audit_log import AuditLogHistoryAdmin
@@ -19,8 +20,8 @@ class TrafficLightPlanFileInline(admin.TabularInline):
 class TrafficLightPlanAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
 ):
-    default_lon = 2776957.204335059  # Helsinki city coordinates
-    default_lat = 8442622.403718097
+    default_lon = HELSINKI_LONGITUDE
+    default_lat = HELSINKI_LATITUDE
     default_zoom = 12
     list_display = (
         "id",
@@ -44,8 +45,8 @@ class TrafficLightPlanAdmin(
 class TrafficLightRealAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
 ):
-    default_lon = 2776957.204335059  # Helsinki city coordinates
-    default_lat = 8442622.403718097
+    default_lon = HELSINKI_LONGITUDE
+    default_lat = HELSINKI_LATITUDE
     default_zoom = 12
     list_display = (
         "id",

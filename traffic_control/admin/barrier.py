@@ -1,5 +1,6 @@
 from django.contrib.gis import admin
 
+from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
 from ..models import BarrierPlan, BarrierPlanFile, BarrierReal
 from .audit_log import AuditLogHistoryAdmin
@@ -19,8 +20,8 @@ class BarrierPlanFileInline(admin.TabularInline):
 class BarrierPlanAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
 ):
-    default_lon = 2776957.204335059  # Helsinki city coordinates
-    default_lat = 8442622.403718097
+    default_lon = HELSINKI_LONGITUDE
+    default_lat = HELSINKI_LATITUDE
     default_zoom = 12
     list_display = (
         "id",
@@ -43,8 +44,8 @@ class BarrierPlanAdmin(
 class BarrierRealAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
 ):
-    default_lon = 2776957.204335059  # Helsinki city coordinates
-    default_lat = 8442622.403718097
+    default_lon = HELSINKI_LONGITUDE
+    default_lat = HELSINKI_LATITUDE
     default_zoom = 12
     list_display = (
         "id",

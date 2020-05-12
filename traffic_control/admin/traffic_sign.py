@@ -2,6 +2,7 @@ from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
+from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
 from ..mixins import Point3DFieldAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
 from ..models import (
@@ -78,8 +79,8 @@ class TrafficSignPlanAdmin(
         "source_id",
         "source_name",
     )
-    default_lon = 2776957.204335059  # Helsinki city coordinates
-    default_lat = 8442622.403718097
+    default_lon = HELSINKI_LONGITUDE
+    default_lat = HELSINKI_LATITUDE
     default_zoom = 12
     list_display = (
         "id",
@@ -156,8 +157,8 @@ class TrafficSignRealAdmin(
         "source_id",
         "source_name",
     )
-    default_lon = 2776957.204335059  # Helsinki city coordinates
-    default_lat = 8442622.403718097
+    default_lon = HELSINKI_LONGITUDE
+    default_lat = HELSINKI_LATITUDE
     default_zoom = 12
     list_display = (
         "id",
