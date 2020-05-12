@@ -35,6 +35,7 @@ env = environ.Env(
     SECRET_KEY=(str, ""),
     VAR_ROOT=(str, default_var_root),
     ALLOWED_HOSTS=(list, []),
+    TRUST_X_FORWARDED_HOST=(bool, False),
     DATABASE_URL=(str, "postgis:///city-infrastructure-platform",),
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
@@ -171,6 +172,12 @@ STATIC_ROOT = var_root("static")
 MEDIA_URL = "/media/"
 STATIC_URL = "/static/"
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+
+# Whether to trust X-Forwarded-Host headers for all purposes
+# where Django would need to make use of its own hostname
+# fe. generating absolute URLs pointing to itself
+# Most often used in reverse proxy setups
+USE_X_FORWARDED_HOST = env("TRUST_X_FORWARDED_HOST")
 
 # Django REST Framework
 REST_FRAMEWORK = {
