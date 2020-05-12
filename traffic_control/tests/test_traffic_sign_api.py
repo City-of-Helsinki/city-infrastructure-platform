@@ -1,5 +1,4 @@
 import datetime
-import io
 
 import pytest
 from django.urls import reverse
@@ -201,73 +200,6 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
             reverse("api:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_traffic_sign_plan_files(self):
-        """
-        Ensure that traffic sign plan document can be uploaded, rewritten and deleted.
-        """
-        traffic_sign_plan = self.__create_test_traffic_sign_plan()
-
-        # Upload
-        data = {"file": io.BytesIO(b"File contents")}
-
-        post_response = self.client.post(
-            reverse(
-                "api:trafficsignplan-post-file", kwargs={"pk": traffic_sign_plan.id}
-            ),
-            data=data,
-            format="multipart",
-        )
-
-        self.assertEqual(post_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(TrafficSignPlan.objects.count(), 1)
-        changed_traffic_sign_plan = TrafficSignPlan.objects.get(
-            id=str(traffic_sign_plan.id)
-        )
-        self.assertEqual(changed_traffic_sign_plan.files.count(), 1)
-
-        # Rewrite
-        data = {"file": io.BytesIO(b"Rewritten file contents")}
-
-        patch_response = self.client.patch(
-            reverse(
-                "api:trafficsignplan-change-file",
-                kwargs={
-                    "pk": traffic_sign_plan.id,
-                    "file_pk": changed_traffic_sign_plan.files.first().id,
-                },
-            ),
-            data=data,
-            format="multipart",
-        )
-
-        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(TrafficSignPlan.objects.count(), 1)
-        rewritten_traffic_sign_plan = TrafficSignPlan.objects.get(
-            id=str(traffic_sign_plan.id)
-        )
-        self.assertEqual(rewritten_traffic_sign_plan.files.count(), 1)
-        self.assertNotEqual(
-            post_response.data.get("file"), patch_response.data.get("file")
-        )
-
-        # Delete
-        delete_response = self.client.delete(
-            reverse(
-                "api:trafficsignplan-change-file",
-                kwargs={
-                    "pk": traffic_sign_plan.id,
-                    "file_pk": changed_traffic_sign_plan.files.first().id,
-                },
-            ),
-        )
-
-        self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(TrafficSignPlan.objects.count(), 1)
-        deleted_traffic_sign_plan_file = TrafficSignPlan.objects.get(
-            id=str(traffic_sign_plan.id)
-        )
-        self.assertEqual(deleted_traffic_sign_plan_file.files.count(), 0)
 
     def __create_test_traffic_sign_plan(self):
         return TrafficSignPlan.objects.create(
