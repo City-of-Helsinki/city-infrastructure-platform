@@ -2,13 +2,14 @@ from django.contrib.gis import admin
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
-from ..models import BarrierPlan, BarrierPlanFile, BarrierReal
+from ..models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
 from .audit_log import AuditLogHistoryAdmin
 
 __all__ = (
     "BarrierPlanAdmin",
     "BarrierPlanFileInline",
     "BarrierRealAdmin",
+    "BarrierRealFileInline",
 )
 
 
@@ -40,6 +41,10 @@ class BarrierPlanAdmin(
     inlines = (BarrierPlanFileInline,)
 
 
+class BarrierRealFileInline(admin.TabularInline):
+    model = BarrierRealFile
+
+
 @admin.register(BarrierReal)
 class BarrierRealAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
@@ -61,3 +66,4 @@ class BarrierRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
+    inlines = (BarrierRealFileInline,)

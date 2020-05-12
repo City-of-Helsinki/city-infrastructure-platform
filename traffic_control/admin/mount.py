@@ -2,7 +2,7 @@ from django.contrib.gis import admin
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
-from ..models import MountPlan, MountPlanFile, MountReal, PortalType
+from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, PortalType
 from .audit_log import AuditLogHistoryAdmin
 from .traffic_sign import OrderedTrafficSignRealInline
 
@@ -10,6 +10,7 @@ __all__ = (
     "MountPlanAdmin",
     "MountPlanFileInline",
     "MountRealAdmin",
+    "MountRealFileInline",
     "PortalTypeAdmin",
 )
 
@@ -41,6 +42,10 @@ class MountPlanAdmin(
     inlines = (MountPlanFileInline,)
 
 
+class MountRealFileInline(admin.TabularInline):
+    model = MountRealFile
+
+
 @admin.register(MountReal)
 class MountRealAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
@@ -61,7 +66,7 @@ class MountRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    inlines = (OrderedTrafficSignRealInline,)
+    inlines = (MountRealFileInline, OrderedTrafficSignRealInline)
 
 
 @admin.register(PortalType)

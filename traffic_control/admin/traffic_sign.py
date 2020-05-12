@@ -10,6 +10,7 @@ from ..models import (
     TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,
+    TrafficSignRealFile,
 )
 from ..models.utils import order_queryset_by_z_coord_desc
 from .audit_log import AuditLogHistoryAdmin
@@ -20,6 +21,7 @@ __all__ = (
     "TrafficSignPlanAdmin",
     "TrafficSignPlanFileInline",
     "TrafficSignRealAdmin",
+    "TrafficSignRealFileInline",
 )
 
 
@@ -98,6 +100,10 @@ class TrafficSignPlanAdmin(
     )
     ordering = ("-created_at",)
     inlines = (TrafficSignPlanFileInline,)
+
+
+class TrafficSignRealFileInline(admin.TabularInline):
+    model = TrafficSignRealFile
 
 
 @admin.register(TrafficSignReal)
@@ -247,6 +253,7 @@ class TrafficSignRealAdmin(
         "source_id",
         "source_name",
     )
+    inlines = (TrafficSignRealFileInline,)
 
     def has_additional_signs(self, obj):
         return (_("No"), _("Yes"))[obj.has_additional_signs()]

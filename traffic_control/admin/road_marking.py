@@ -2,13 +2,19 @@ from django.contrib.gis import admin
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
-from ..models import RoadMarkingPlan, RoadMarkingPlanFile, RoadMarkingReal
+from ..models import (
+    RoadMarkingPlan,
+    RoadMarkingPlanFile,
+    RoadMarkingReal,
+    RoadMarkingRealFile,
+)
 from .audit_log import AuditLogHistoryAdmin
 
 __all__ = (
     "RoadMarkingPlanAdmin",
     "RoadMarkingPlanFileInline",
     "RoadMarkingRealAdmin",
+    "RoadMarkingRealFileInline",
 )
 
 
@@ -40,6 +46,10 @@ class RoadMarkingPlanAdmin(
     inlines = (RoadMarkingPlanFileInline,)
 
 
+class RoadMarkingRealFileInline(admin.TabularInline):
+    model = RoadMarkingRealFile
+
+
 @admin.register(RoadMarkingReal)
 class RoadMarkingRealAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
@@ -61,3 +71,4 @@ class RoadMarkingRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
+    inlines = (RoadMarkingRealFileInline,)

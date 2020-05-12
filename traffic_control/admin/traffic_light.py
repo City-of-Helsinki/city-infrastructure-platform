@@ -2,13 +2,19 @@ from django.contrib.gis import admin
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
-from ..models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal
+from ..models import (
+    TrafficLightPlan,
+    TrafficLightPlanFile,
+    TrafficLightReal,
+    TrafficLightRealFile,
+)
 from .audit_log import AuditLogHistoryAdmin
 
 __all__ = (
     "TrafficLightPlanAdmin",
     "TrafficLightPlanFileInline",
     "TrafficLightRealAdmin",
+    "TrafficLightRealFileInline",
 )
 
 
@@ -41,6 +47,10 @@ class TrafficLightPlanAdmin(
     inlines = (TrafficLightPlanFileInline,)
 
 
+class TrafficLightRealFileInline(admin.TabularInline):
+    model = TrafficLightRealFile
+
+
 @admin.register(TrafficLightReal)
 class TrafficLightRealAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
@@ -63,3 +73,4 @@ class TrafficLightRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
+    inlines = (TrafficLightRealFileInline,)

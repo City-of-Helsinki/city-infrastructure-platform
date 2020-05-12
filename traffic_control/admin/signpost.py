@@ -2,13 +2,14 @@ from django.contrib.gis import admin
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
-from ..models import SignpostPlan, SignpostPlanFile, SignpostReal
+from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
 from .audit_log import AuditLogHistoryAdmin
 
 __all__ = (
     "SignpostPlanAdmin",
     "SignpostPlanFileInline",
     "SignpostRealAdmin",
+    "SignpostRealFileInline",
 )
 
 
@@ -41,6 +42,10 @@ class SignpostPlanAdmin(
     inlines = (SignpostPlanFileInline,)
 
 
+class SignpostRealFileInline(admin.TabularInline):
+    model = SignpostRealFile
+
+
 @admin.register(SignpostReal)
 class SignpostRealAdmin(
     SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
@@ -63,3 +68,4 @@ class SignpostRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
+    inline = (SignpostRealFileInline,)
