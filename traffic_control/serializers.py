@@ -38,12 +38,6 @@ class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TrafficLightPlanPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TrafficLightPlanFile
-        fields = ("file",)
-
-
 class TrafficLightPlanSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -70,12 +64,6 @@ class TrafficLightRealFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TrafficLightRealPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TrafficLightRealFile
-        fields = ("file",)
-
-
 class TrafficLightRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -100,12 +88,6 @@ class TrafficSignPlanFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrafficSignPlanFile
         fields = "__all__"
-
-
-class TrafficSignPlanPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TrafficSignPlanFile
-        fields = ("file",)
 
 
 class TrafficSignPlanSerializer(
@@ -135,12 +117,6 @@ class TrafficSignRealFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TrafficSignRealPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TrafficSignRealFile
-        fields = ("file",)
-
-
 class TrafficSignRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -168,12 +144,6 @@ class SignpostPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SignpostPlanPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SignpostPlanFile
-        fields = ("file",)
-
-
 class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = SignpostPlanFileSerializer(many=True, read_only=True)
 
@@ -196,12 +166,6 @@ class SignpostRealFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SignpostRealFile
         fields = "__all__"
-
-
-class SignpostRealPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SignpostRealFile
-        fields = ("file",)
 
 
 class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
@@ -228,12 +192,6 @@ class MountPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MountPlanPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MountPlanFile
-        fields = ("file",)
-
-
 class MountPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = MountPlanFileSerializer(many=True, read_only=True)
 
@@ -256,12 +214,6 @@ class MountRealFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = MountRealFile
         fields = "__all__"
-
-
-class MountRealPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MountRealFile
-        fields = ("file",)
 
 
 class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
@@ -291,12 +243,6 @@ class BarrierPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BarrierPlanPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BarrierPlanFile
-        fields = ("file",)
-
-
 class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = BarrierPlanFileSerializer(many=True, read_only=True)
 
@@ -319,12 +265,6 @@ class BarrierRealFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = BarrierRealFile
         fields = "__all__"
-
-
-class BarrierRealPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BarrierRealFile
-        fields = ("file",)
 
 
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
@@ -351,12 +291,6 @@ class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class RoadMarkingPlanPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RoadMarkingPlanFile
-        fields = ("file",)
-
-
 class RoadMarkingPlanSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -381,12 +315,6 @@ class RoadMarkingRealFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoadMarkingRealFile
         fields = "__all__"
-
-
-class RoadMarkingRealPostFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RoadMarkingRealFile
-        fields = ("file",)
 
 
 class RoadMarkingRealSerializer(

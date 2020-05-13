@@ -5,14 +5,17 @@ from rest_framework.parsers import MultiPartParser
 
 from ..filters import SignpostPlanFilterSet, SignpostRealFilterSet
 from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
+from ..schema import (
+    file_uuid_parameter,
+    FileUploadSchema,
+    MultiFileUploadSchema,
+)
 from ..serializers import (
     SignpostPlanFileSerializer,
     SignpostPlanGeoJSONSerializer,
-    SignpostPlanPostFileSerializer,
     SignpostPlanSerializer,
     SignpostRealFileSerializer,
     SignpostRealGeoJSONSerializer,
-    SignpostRealPostFileSerializer,
     SignpostRealSerializer,
 )
 from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
@@ -64,9 +67,9 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to Signpost Plan",
-        request_body=SignpostPlanPostFileSerializer,
-        responses={200: SignpostPlanFileSerializer},
+        operation_description="Add one or more files to Signpost Plan",
+        request_body=MultiFileUploadSchema,
+        responses={200: SignpostPlanFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -86,7 +89,8 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from Signpost Plan",
-        request_body=SignpostPlanPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: SignpostPlanFileSerializer},
     )
     @action(
@@ -145,9 +149,9 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to Signpost Real",
-        request_body=SignpostRealPostFileSerializer,
-        responses={200: SignpostRealFileSerializer},
+        operation_description="Add one or more files to Signpost Real",
+        request_body=MultiFileUploadSchema,
+        responses={200: SignpostRealFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -167,7 +171,8 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from Signpost Real",
-        request_body=SignpostRealPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: SignpostRealFileSerializer},
     )
     @action(

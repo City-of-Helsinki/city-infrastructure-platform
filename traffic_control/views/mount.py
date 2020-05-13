@@ -9,14 +9,17 @@ from rest_framework.viewsets import ModelViewSet
 from ..filters import MountPlanFilterSet, MountRealFilterSet, PortalTypeFilterSet
 from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, PortalType
 from ..permissions import IsAdminUserOrReadOnly
+from ..schema import (
+    file_uuid_parameter,
+    FileUploadSchema,
+    MultiFileUploadSchema,
+)
 from ..serializers import (
     MountPlanFileSerializer,
     MountPlanGeoJSONSerializer,
-    MountPlanPostFileSerializer,
     MountPlanSerializer,
     MountRealFileSerializer,
     MountRealGeoJSONSerializer,
-    MountRealPostFileSerializer,
     MountRealSerializer,
     PortalTypeSerializer,
 )
@@ -69,9 +72,9 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to Mount Plan",
-        request_body=MountPlanPostFileSerializer,
-        responses={200: MountPlanFileSerializer},
+        operation_description="Add one or more files to Mount Plan",
+        request_body=MultiFileUploadSchema,
+        responses={200: MountPlanFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -91,7 +94,8 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from Mount Plan",
-        request_body=MountPlanPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: MountPlanFileSerializer},
     )
     @action(
@@ -149,9 +153,9 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to Mount Real",
-        request_body=MountRealPostFileSerializer,
-        responses={200: MountRealFileSerializer},
+        operation_description="Add one or more files to Mount Real",
+        request_body=MultiFileUploadSchema,
+        responses={200: MountRealFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -171,7 +175,8 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from Mount Real",
-        request_body=MountRealPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: MountRealFileSerializer},
     )
     @action(
