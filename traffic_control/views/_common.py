@@ -56,18 +56,26 @@ class FileUploadViews(GenericViewSet):
         url_path="files",
         parser_classes=(MultiPartParser,),
     )
-    def post_file(self, request, *args, **kwargs):
-        obj = self.get_object()
-
-        data = request.data.dict()
-        data[self.get_file_relation()] = obj.id
-
+    def post_files(self, request, *args, **kwargs):
         serializer_class = self.get_file_serializer()
-        serializer = serializer_class(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        obj = self.get_object()
+        serializer_cache = []
+        files = []
 
-        return Response(serializer.data)
+        # Validate request data
+        for _filename, file in request.data.items():
+            serializer = serializer_class(
+                data={self.get_file_relation(): obj.id, "file": file}
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer_cache.append(serializer)
+
+        # Validation passed - Proceed with saving everything
+        for serializer in serializer_cache:
+            serializer.save()
+            files.append(serializer.data)
+
+        return Response({"files": files})
 
     @action(
         methods=("PATCH", "DELETE",),
