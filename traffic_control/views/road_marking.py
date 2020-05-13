@@ -10,14 +10,17 @@ from ..models import (
     RoadMarkingReal,
     RoadMarkingRealFile,
 )
+from ..schema import (
+    file_uuid_parameter,
+    FileUploadSchema,
+    MultiFileUploadSchema,
+)
 from ..serializers import (
     RoadMarkingPlanFileSerializer,
     RoadMarkingPlanGeoJSONSerializer,
-    RoadMarkingPlanPostFileSerializer,
     RoadMarkingPlanSerializer,
     RoadMarkingRealFileSerializer,
     RoadMarkingRealGeoJSONSerializer,
-    RoadMarkingRealPostFileSerializer,
     RoadMarkingRealSerializer,
 )
 from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
@@ -73,9 +76,9 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to RoadMarking Plan",
-        request_body=RoadMarkingPlanPostFileSerializer,
-        responses={200: RoadMarkingPlanFileSerializer},
+        operation_description="Add one or more files to RoadMarking Plan",
+        request_body=MultiFileUploadSchema,
+        responses={200: RoadMarkingPlanFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -95,7 +98,8 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from RoadMarking Plan",
-        request_body=RoadMarkingPlanPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: RoadMarkingPlanFileSerializer},
     )
     @action(
@@ -156,9 +160,9 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to RoadMarking Real",
-        request_body=RoadMarkingRealPostFileSerializer,
-        responses={200: RoadMarkingRealFileSerializer},
+        operation_description="Add one or more files to RoadMarking Real",
+        request_body=MultiFileUploadSchema,
+        responses={200: RoadMarkingRealFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -178,7 +182,8 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from RoadMarking Real",
-        request_body=RoadMarkingRealPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: RoadMarkingRealFileSerializer},
     )
     @action(

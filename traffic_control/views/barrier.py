@@ -5,14 +5,17 @@ from rest_framework.parsers import MultiPartParser
 
 from ..filters import BarrierPlanFilterSet, BarrierRealFilterSet
 from ..models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
+from ..schema import (
+    file_uuid_parameter,
+    FileUploadSchema,
+    MultiFileUploadSchema,
+)
 from ..serializers import (
     BarrierPlanFileSerializer,
     BarrierPlanGeoJSONSerializer,
-    BarrierPlanPostFileSerializer,
     BarrierPlanSerializer,
     BarrierRealFileSerializer,
     BarrierRealGeoJSONSerializer,
-    BarrierRealPostFileSerializer,
     BarrierRealSerializer,
 )
 from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
@@ -64,9 +67,9 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to Barrier Plan",
-        request_body=BarrierPlanPostFileSerializer,
-        responses={200: BarrierPlanFileSerializer},
+        operation_description="Add one or more files to Barrier Plan",
+        request_body=MultiFileUploadSchema,
+        responses={200: BarrierPlanFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -86,7 +89,8 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from Barrier Plan",
-        request_body=BarrierPlanPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: BarrierPlanFileSerializer},
     )
     @action(
@@ -143,9 +147,9 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to Barrier Real",
-        request_body=BarrierRealPostFileSerializer,
-        responses={200: BarrierRealFileSerializer},
+        operation_description="Add one or more files to Barrier Real",
+        request_body=MultiFileUploadSchema,
+        responses={200: BarrierRealFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -165,7 +169,8 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from Barrier Real",
-        request_body=BarrierRealPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: BarrierRealFileSerializer},
     )
     @action(

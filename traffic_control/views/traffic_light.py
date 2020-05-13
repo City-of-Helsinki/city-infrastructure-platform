@@ -10,14 +10,17 @@ from ..models import (
     TrafficLightReal,
     TrafficLightRealFile,
 )
+from ..schema import (
+    file_uuid_parameter,
+    FileUploadSchema,
+    MultiFileUploadSchema,
+)
 from ..serializers import (
     TrafficLightPlanFileSerializer,
     TrafficLightPlanGeoJSONSerializer,
-    TrafficLightPlanPostFileSerializer,
     TrafficLightPlanSerializer,
     TrafficLightRealFileSerializer,
     TrafficLightRealGeoJSONSerializer,
-    TrafficLightRealPostFileSerializer,
     TrafficLightRealSerializer,
 )
 from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
@@ -73,9 +76,9 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to TrafficLight Plan",
-        request_body=TrafficLightPlanPostFileSerializer,
-        responses={200: TrafficLightPlanFileSerializer},
+        operation_description="Add one or more files to TrafficLight Plan",
+        request_body=MultiFileUploadSchema,
+        responses={200: TrafficLightPlanFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -95,7 +98,8 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from TrafficLight Plan",
-        request_body=TrafficLightPlanPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: TrafficLightPlanFileSerializer},
     )
     @action(
@@ -156,9 +160,9 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
 
     @swagger_auto_schema(
         method="post",
-        operation_description="Add single file to TrafficLight Real",
-        request_body=TrafficLightRealPostFileSerializer,
-        responses={200: TrafficLightRealFileSerializer},
+        operation_description="Add one or more files to TrafficLight Real",
+        request_body=MultiFileUploadSchema,
+        responses={200: TrafficLightRealFileSerializer(many=True)},
     )
     @action(
         methods=("POST",),
@@ -178,7 +182,8 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     @swagger_auto_schema(
         method="patch",
         operation_description="Update single file from TrafficLight Real",
-        request_body=TrafficLightRealPostFileSerializer,
+        manual_parameters=[file_uuid_parameter],
+        request_body=FileUploadSchema,
         responses={200: TrafficLightRealFileSerializer},
     )
     @action(
