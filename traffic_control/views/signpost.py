@@ -74,8 +74,8 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         url_path="files",
         parser_classes=(MultiPartParser,),
     )
-    def post_file(self, request, *args, **kwargs):
-        return super().post_file(request, *args, **kwargs)
+    def post_files(self, request, *args, **kwargs):
+        return super().post_files(request, *args, **kwargs)
 
     @swagger_auto_schema(
         method="delete",
@@ -155,8 +155,8 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         url_path="files",
         parser_classes=(MultiPartParser,),
     )
-    def post_file(self, request, *args, **kwargs):
-        return super().post_file(request, *args, **kwargs)
+    def post_files(self, request, *args, **kwargs):
+        return super().post_files(request, *args, **kwargs)
 
     @swagger_auto_schema(
         method="delete",

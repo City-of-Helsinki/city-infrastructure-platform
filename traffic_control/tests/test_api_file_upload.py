@@ -89,17 +89,57 @@ def test_file_upload(factory, model_class, url_name):
     obj = factory()
 
     post_response = api_client.post(
-        reverse(f"api:{url_name}-post-file", kwargs={"pk": obj.pk}),
-        data={"file": io.BytesIO(b"File contents")},
+        reverse(f"api:{url_name}-post-files", kwargs={"pk": obj.pk}),
+        data={
+            "file1": io.BytesIO(b"File 1 contents"),
+            "file2": io.BytesIO(b"File 2 contents"),
+        },
         format="multipart",
     )
 
     obj.refresh_from_db()
     assert post_response.status_code == status.HTTP_200_OK
     assert model_class.objects.count() == 1
-    assert obj.files.count() == 1
-    with open(obj.files.first().file.path, "r") as f:
-        assert f.read() == "File contents"
+    assert obj.files.count() == 2
+    with open(obj.files.get(file__endswith="file1").file.path, "r") as f:
+        assert f.read() == "File 1 contents"
+    with open(obj.files.get(file__endswith="file2").file.path, "r") as f:
+        assert f.read() == "File 2 contents"
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "factory,model_class,url_name",
+    (
+        (get_barrier_plan, BarrierPlan, "barrierplan"),
+        (get_barrier_real, BarrierReal, "barrierreal"),
+        (get_mount_plan, MountPlan, "mountplan"),
+        (get_mount_real, MountReal, "mountreal"),
+        (get_road_marking_plan, RoadMarkingPlan, "roadmarkingplan"),
+        (get_road_marking_real, RoadMarkingReal, "roadmarkingreal"),
+        (get_signpost_plan, SignpostPlan, "signpostplan"),
+        (get_signpost_real, SignpostReal, "signpostreal"),
+        (get_traffic_light_plan, TrafficLightPlan, "trafficlightplan"),
+        (get_traffic_light_real, TrafficLightReal, "trafficlightreal"),
+        (get_traffic_sign_plan, TrafficSignPlan, "trafficsignplan"),
+        (get_traffic_sign_real, TrafficSignReal, "trafficsignreal"),
+    ),
+)
+def test_invalid_file_upload(factory, model_class, url_name):
+    user = get_user("test_superuser", admin=True)
+    api_client = get_api_client(user)
+    obj = factory()
+
+    post_response = api_client.post(
+        reverse(f"api:{url_name}-post-files", kwargs={"pk": obj.pk}),
+        data={"file1": io.BytesIO(b"File contents"), "file2": "This is not a file"},
+        format="multipart",
+    )
+
+    obj.refresh_from_db()
+    assert post_response.status_code == status.HTTP_400_BAD_REQUEST
+    assert model_class.objects.count() == 1
+    assert obj.files.count() == 0
 
 
 @pytest.mark.django_db
