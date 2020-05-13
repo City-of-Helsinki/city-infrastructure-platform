@@ -1,7 +1,6 @@
 from django.core import exceptions
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg import openapi
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
@@ -12,15 +11,7 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from ..mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 
-__all__ = ("FileUploadViews", "location_parameter", "TrafficControlViewSet")
-
-location_parameter = openapi.Parameter(
-    "location",
-    openapi.IN_QUERY,
-    type=openapi.TYPE_STRING,
-    description="Location (2D or 3D) to search from in WKT-format (EPSG:3879)",
-    format="WKT",
-)
+__all__ = ("FileUploadViews", "TrafficControlViewSet")
 
 
 class TrafficControlViewSet(

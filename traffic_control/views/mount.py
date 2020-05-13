@@ -12,6 +12,7 @@ from ..permissions import IsAdminUserOrReadOnly
 from ..schema import (
     file_uuid_parameter,
     FileUploadSchema,
+    location_parameter,
     MultiFileUploadSchema,
 )
 from ..serializers import (
@@ -23,7 +24,7 @@ from ..serializers import (
     MountRealSerializer,
     PortalTypeSerializer,
 )
-from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
+from ._common import FileUploadViews, TrafficControlViewSet
 
 __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
 
