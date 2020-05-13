@@ -13,6 +13,7 @@ from ..models import (
 from ..schema import (
     file_uuid_parameter,
     FileUploadSchema,
+    location_parameter,
     MultiFileUploadSchema,
 )
 from ..serializers import (
@@ -23,7 +24,7 @@ from ..serializers import (
     RoadMarkingRealGeoJSONSerializer,
     RoadMarkingRealSerializer,
 )
-from ._common import FileUploadViews, location_parameter, TrafficControlViewSet
+from ._common import FileUploadViews, TrafficControlViewSet
 
 __all__ = ("RoadMarkingPlanViewSet", "RoadMarkingRealViewSet")
 
