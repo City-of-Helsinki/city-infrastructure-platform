@@ -18,7 +18,7 @@ parser.add_argument(
     "--url",
     required=True,
     type=str,
-    default="http://localhost:8000/fi/api/traffic-sign-codes/",
+    default="http://localhost:8000/v1/traffic-sign-codes/",
     help="API-endpoint url where to post the data",
 )
 parser.add_argument(

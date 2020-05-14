@@ -27,7 +27,7 @@ def test_filter_signpost_plan_location(location, location_query, expected):
 
     signpost_plan = get_signpost_plan(location)
     response = api_client.get(
-        reverse("api:signpostplan-list"), {"location": location_query.ewkt}
+        reverse("v1:signpostplan-list"), {"location": location_query.ewkt}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -50,7 +50,7 @@ def test_filter_error_signpost_plans_location(location, location_query, expected
 
     get_signpost_plan(location)
     response = api_client.get(
-        reverse("api:signpostplan-list"), {"location": location_query}
+        reverse("v1:signpostplan-list"), {"location": location_query}
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -65,7 +65,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_signpost_plan()
-        response = self.client.get(reverse("api:signpostplan-list"))
+        response = self.client.get(reverse("v1:signpostplan-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -82,7 +82,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         for i in range(count):
             self.__create_test_signpost_plan()
         response = self.client.get(
-            reverse("api:signpostplan-list"), data={"geo_format": "geojson"}
+            reverse("v1:signpostplan-list"), data={"geo_format": "geojson"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -100,7 +100,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         """
         signpost_plan = self.__create_test_signpost_plan()
         response = self.client.get(
-            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id})
+            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(signpost_plan.id))
@@ -112,7 +112,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         """
         signpost_plan = self.__create_test_signpost_plan()
         response = self.client.get(
-            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -132,7 +132,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.post(
-            reverse("api:signpostplan-list"), data, format="json"
+            reverse("v1:signpostplan-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(SignpostPlan.objects.count(), 1)
@@ -158,7 +158,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.put(
-            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
             data,
             format="json",
         )
@@ -178,7 +178,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         """
         signpost_plan = self.__create_test_signpost_plan()
         response = self.client.delete(
-            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(SignpostPlan.objects.count(), 1)
@@ -191,11 +191,11 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
     def test_get_deleted_signpost_plan_returns_not_found(self):
         signpost_plan = self.__create_test_signpost_plan()
         response = self.client.delete(
-            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(
-            reverse("api:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -222,7 +222,7 @@ def test_filter_signpost_reals_location(location, location_query, expected):
 
     signpost_real = get_signpost_real(location)
     response = api_client.get(
-        reverse("api:signpostreal-list"), {"location": location_query.ewkt}
+        reverse("v1:signpostreal-list"), {"location": location_query.ewkt}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -245,7 +245,7 @@ def test_filter_error_signpost_reals_location(location, location_query, expected
 
     get_signpost_real(location)
     response = api_client.get(
-        reverse("api:signpostreal-list"), {"location": location_query}
+        reverse("v1:signpostreal-list"), {"location": location_query}
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -260,7 +260,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_signpost_real()
-        response = self.client.get(reverse("api:signpostreal-list"))
+        response = self.client.get(reverse("v1:signpostreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -277,7 +277,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         for i in range(count):
             self.__create_test_signpost_real()
         response = self.client.get(
-            reverse("api:signpostreal-list"), data={"geo_format": "geojson"}
+            reverse("v1:signpostreal-list"), data={"geo_format": "geojson"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -295,7 +295,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         """
         signpost_real = self.__create_test_signpost_real()
         response = self.client.get(
-            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id})
+            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(signpost_real.id))
@@ -307,7 +307,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         """
         signpost_real = self.__create_test_signpost_real()
         response = self.client.get(
-            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -327,7 +327,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.post(
-            reverse("api:signpostreal-list"), data, format="json"
+            reverse("v1:signpostreal-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(SignpostReal.objects.count(), 1)
@@ -354,7 +354,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.put(
-            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
             data,
             format="json",
         )
@@ -375,7 +375,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         """
         signpost_real = self.__create_test_signpost_real()
         response = self.client.delete(
-            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(SignpostReal.objects.count(), 1)
@@ -388,11 +388,11 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
     def test_get_deleted_signpost_real_returns_not_found(self):
         signpost_real = self.__create_test_signpost_real()
         response = self.client.delete(
-            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(
-            reverse("api:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 

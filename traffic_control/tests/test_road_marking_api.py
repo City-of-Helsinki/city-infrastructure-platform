@@ -30,7 +30,7 @@ def test_filter_road_markings_plans_location(location, location_query, expected)
 
     road_marking_plan = get_road_marking_plan(location)
     response = api_client.get(
-        reverse("api:roadmarkingplan-list"), {"location": location_query.ewkt}
+        reverse("v1:roadmarkingplan-list"), {"location": location_query.ewkt}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -54,7 +54,7 @@ def test_filter_error_road_markings_plans_location(location, location_query, exp
 
     get_road_marking_plan(location)
     response = api_client.get(
-        reverse("api:roadmarkingplan-list"), {"location": location_query}
+        reverse("v1:roadmarkingplan-list"), {"location": location_query}
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -69,7 +69,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_road_marking_plan()
-        response = self.client.get(reverse("api:roadmarkingplan-list"))
+        response = self.client.get(reverse("v1:roadmarkingplan-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -86,7 +86,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         for i in range(count):
             self.__create_test_road_marking_plan()
         response = self.client.get(
-            reverse("api:roadmarkingplan-list"), data={"geo_format": "geojson"}
+            reverse("v1:roadmarkingplan-list"), data={"geo_format": "geojson"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -104,7 +104,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         """
         road_marking = self.__create_test_road_marking_plan()
         response = self.client.get(
-            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id})
+            reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(road_marking.id))
@@ -116,7 +116,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         """
         road_marking = self.__create_test_road_marking_plan()
         response = self.client.get(
-            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+            reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -136,7 +136,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.post(
-            reverse("api:roadmarkingplan-list"), data, format="json"
+            reverse("v1:roadmarkingplan-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(RoadMarkingPlan.objects.count(), 1)
@@ -162,7 +162,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.put(
-            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+            reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
             data,
             format="json",
         )
@@ -182,7 +182,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         """
         road_marking = self.__create_test_road_marking_plan()
         response = self.client.delete(
-            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+            reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(RoadMarkingPlan.objects.count(), 1)
@@ -195,11 +195,11 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
     def test_get_deleted_road_marking_return_not_found(self):
         road_marking = self.__create_test_road_marking_plan()
         response = self.client.delete(
-            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+            reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(
-            reverse("api:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
+            reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -234,7 +234,7 @@ def test_filter_road_markings_reals_location(location, location_query, expected)
 
     road_marking_real = get_road_marking_real(location)
     response = api_client.get(
-        reverse("api:roadmarkingreal-list"), {"location": location_query.ewkt}
+        reverse("v1:roadmarkingreal-list"), {"location": location_query.ewkt}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -258,7 +258,7 @@ def test_filter_error_road_markings_reals_location(location, location_query, exp
 
     get_road_marking_real(location)
     response = api_client.get(
-        reverse("api:roadmarkingreal-list"), {"location": location_query}
+        reverse("v1:roadmarkingreal-list"), {"location": location_query}
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -273,7 +273,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_road_marking_real()
-        response = self.client.get(reverse("api:roadmarkingreal-list"))
+        response = self.client.get(reverse("v1:roadmarkingreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -290,7 +290,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         for i in range(count):
             self.__create_test_road_marking_real()
         response = self.client.get(
-            reverse("api:roadmarkingreal-list"), data={"geo_format": "geojson"}
+            reverse("v1:roadmarkingreal-list"), data={"geo_format": "geojson"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -308,7 +308,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         """
         road_marking_real = self.__create_test_road_marking_real()
         response = self.client.get(
-            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id})
+            reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(road_marking_real.id))
@@ -320,7 +320,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         """
         road_marking_real = self.__create_test_road_marking_real()
         response = self.client.get(
-            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
+            reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -340,7 +340,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.post(
-            reverse("api:roadmarkingreal-list"), data, format="json"
+            reverse("v1:roadmarkingreal-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(RoadMarkingReal.objects.count(), 1)
@@ -367,7 +367,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.put(
-            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
+            reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
             data,
             format="json",
         )
@@ -388,7 +388,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         """
         road_marking_real = self.__create_test_road_marking_real()
         response = self.client.delete(
-            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
+            reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(RoadMarkingReal.objects.count(), 1)
@@ -403,11 +403,11 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
     def test_get_deleted_road_marking_real_returns_not_found(self):
         road_marking_real = self.__create_test_road_marking_real()
         response = self.client.delete(
-            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
+            reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(
-            reverse("api:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
+            reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
