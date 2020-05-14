@@ -22,6 +22,7 @@ fi
 
 # Start server
 if [[ ! -z "$@" ]]; then
+    echo "Running command $@"
     "$@"
 elif [[ "$DEV_SERVER" = "1" ]]; then
     echo "Starting dev-server..."
