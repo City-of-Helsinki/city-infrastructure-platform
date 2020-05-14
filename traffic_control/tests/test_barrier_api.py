@@ -30,7 +30,7 @@ def test_filter_barrier_plans_location(location, location_query, expected):
 
     barrier_plan = get_barrier_plan(location)
     response = api_client.get(
-        reverse("api:barrierplan-list"), {"location": location_query.ewkt}
+        reverse("v1:barrierplan-list"), {"location": location_query.ewkt}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -53,7 +53,7 @@ def test_filter_error_barrier_plans_location(location, location_query, expected)
 
     get_barrier_plan(location)
     response = api_client.get(
-        reverse("api:barrierplan-list"), {"location": location_query}
+        reverse("v1:barrierplan-list"), {"location": location_query}
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -68,7 +68,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_barrier_plan()
-        response = self.client.get(reverse("api:barrierplan-list"))
+        response = self.client.get(reverse("v1:barrierplan-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -85,7 +85,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         for i in range(count):
             self.__create_test_barrier_plan()
         response = self.client.get(
-            reverse("api:barrierplan-list"), data={"geo_format": "geojson"}
+            reverse("v1:barrierplan-list"), data={"geo_format": "geojson"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -103,7 +103,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         """
         barrier_plan = self.__create_test_barrier_plan()
         response = self.client.get(
-            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id})
+            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(barrier_plan.id))
@@ -115,7 +115,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         """
         barrier_plan = self.__create_test_barrier_plan()
         response = self.client.get(
-            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -136,7 +136,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
             "road_name": "Test street 1",
         }
         response = self.client.post(
-            reverse("api:barrierplan-list"), data, format="json"
+            reverse("v1:barrierplan-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(BarrierPlan.objects.count(), 1)
@@ -163,7 +163,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
             "road_name": "Test street 1",
         }
         response = self.client.put(
-            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
             data,
             format="json",
         )
@@ -183,7 +183,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         """
         barrier_plan = self.__create_test_barrier_plan()
         response = self.client.delete(
-            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(BarrierPlan.objects.count(), 1)
@@ -196,11 +196,11 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
     def test_get_deleted_barrier_plan_returns_not_found(self):
         barrier_plan = self.__create_test_barrier_plan()
         response = self.client.delete(
-            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(
-            reverse("api:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -232,7 +232,7 @@ def test_filter_barrier_reals_location(location, location_query, expected):
 
     barrier_real = get_barrier_real(location)
     response = api_client.get(
-        reverse("api:barrierreal-list"), {"location": location_query.ewkt}
+        reverse("v1:barrierreal-list"), {"location": location_query.ewkt}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -256,7 +256,7 @@ def test_filter_error_barrier_reals_location(location, location_query, expected)
 
     get_barrier_plan(location)
     response = api_client.get(
-        reverse("api:barrierreal-list"), {"location": location_query}
+        reverse("v1:barrierreal-list"), {"location": location_query}
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -271,7 +271,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_barrier_real()
-        response = self.client.get(reverse("api:barrierreal-list"))
+        response = self.client.get(reverse("v1:barrierreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -288,7 +288,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         for i in range(count):
             self.__create_test_barrier_real()
         response = self.client.get(
-            reverse("api:barrierreal-list"), data={"geo_format": "geojson"}
+            reverse("v1:barrierreal-list"), data={"geo_format": "geojson"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -306,7 +306,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         """
         barrier_real = self.__create_test_barrier_real()
         response = self.client.get(
-            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id})
+            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(barrier_real.id))
@@ -318,7 +318,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         """
         barrier_real = self.__create_test_barrier_real()
         response = self.client.get(
-            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -339,7 +339,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             "road_name": "Test street 1",
         }
         response = self.client.post(
-            reverse("api:barrierreal-list"), data, format="json"
+            reverse("v1:barrierreal-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(BarrierReal.objects.count(), 1)
@@ -367,7 +367,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             "road_name": "Test street 1",
         }
         response = self.client.put(
-            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
             data,
             format="json",
         )
@@ -388,7 +388,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         """
         barrier_real = self.__create_test_barrier_real()
         response = self.client.delete(
-            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(BarrierPlan.objects.count(), 1)
@@ -401,11 +401,11 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
     def test_get_deleted_barrier_real_returns_not_found(self):
         barrier_real = self.__create_test_barrier_real()
         response = self.client.delete(
-            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(
-            reverse("api:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 

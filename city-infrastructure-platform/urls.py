@@ -85,7 +85,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("ha/", include("helusers.urls", namespace="helusers")),
-    path("api/", include((router.urls, "api"), namespace="api")),
+    path("v1/", include((router.urls, "traffic_control"), namespace="v1")),
     path("auth/", include("social_django.urls", namespace="social")),
     url(
         r"^swagger(?P<format>\.json|\.yaml)$",

@@ -24,7 +24,7 @@ class PortalTypeTests(APITestCase):
             PortalType.objects.create(
                 structure="Test structure", build_type="Test build type", model=i
             )
-        response = self.client.get(reverse("api:portaltype-list"))
+        response = self.client.get(reverse("v1:portaltype-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -38,7 +38,7 @@ class PortalTypeTests(APITestCase):
             PortalType.objects.create(
                 structure="Test structure", build_type="Test build type", model=i
             )
-        response = self.client.get(reverse("api:portaltype-list"))
+        response = self.client.get(reverse("v1:portaltype-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -49,7 +49,7 @@ class PortalTypeTests(APITestCase):
         self.client.force_login(self.user)
         portal_type = self.__create_test_portal_type()
         response = self.client.get(
-            reverse("api:portaltype-detail", kwargs={"pk": portal_type.id})
+            reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(portal_type.id))
@@ -61,7 +61,7 @@ class PortalTypeTests(APITestCase):
         self.client.force_login(self.admin_user)
         portal_type = self.__create_test_portal_type()
         response = self.client.get(
-            reverse("api:portaltype-detail", kwargs={"pk": portal_type.id})
+            reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(portal_type.id))
@@ -72,7 +72,7 @@ class PortalTypeTests(APITestCase):
         """
         self.client.force_login(self.user)
         data = {"structure": "Putki", "build_type": "kehä", "model": "tyyppi I"}
-        response = self.client.post(reverse("api:portaltype-list"), data, format="json")
+        response = self.client.post(reverse("v1:portaltype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(PortalType.objects.count(), 0)
 
@@ -82,7 +82,7 @@ class PortalTypeTests(APITestCase):
         """
         self.client.force_login(self.admin_user)
         data = {"structure": "Putki", "build_type": "kehä", "model": "tyyppi I"}
-        response = self.client.post(reverse("api:portaltype-list"), data, format="json")
+        response = self.client.post(reverse("v1:portaltype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(PortalType.objects.count(), 1)
         portal_type = PortalType.objects.first()
@@ -95,9 +95,9 @@ class PortalTypeTests(APITestCase):
         Ensure that API will not create a new portal type object with same values.
         """
         data = {"structure": "Putki", "build_type": "kehä", "model": "tyyppi I"}
-        response = self.client.post(reverse("api:portaltype-list"), data, format="json")
+        response = self.client.post(reverse("v1:portaltype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response = self.client.post(reverse("api:portaltype-list"), data, format="json")
+        response = self.client.post(reverse("v1:portaltype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(PortalType.objects.count(), 1)
         portal_type = PortalType.objects.first()
@@ -113,7 +113,7 @@ class PortalTypeTests(APITestCase):
         portal_type = self.__create_test_portal_type()
         data = {"structure": "Putki", "build_type": "kehä", "model": "tyyppi I"}
         response = self.client.put(
-            reverse("api:portaltype-detail", kwargs={"pk": portal_type.id}),
+            reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id}),
             data,
             format="json",
         )
@@ -127,7 +127,7 @@ class PortalTypeTests(APITestCase):
         portal_type = self.__create_test_portal_type()
         data = {"structure": "Putki", "build_type": "kehä", "model": "tyyppi I"}
         response = self.client.put(
-            reverse("api:portaltype-detail", kwargs={"pk": portal_type.id}),
+            reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id}),
             data,
             format="json",
         )
@@ -145,7 +145,7 @@ class PortalTypeTests(APITestCase):
         self.client.force_login(self.user)
         portal_type = self.__create_test_portal_type()
         response = self.client.delete(
-            reverse("api:portaltype-detail", kwargs={"pk": portal_type.id}),
+            reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(PortalType.objects.count(), 1)
@@ -157,7 +157,7 @@ class PortalTypeTests(APITestCase):
         self.client.force_login(self.admin_user)
         portal_type = self.__create_test_portal_type()
         response = self.client.delete(
-            reverse("api:portaltype-detail", kwargs={"pk": portal_type.id}),
+            reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(PortalType.objects.count(), 0)

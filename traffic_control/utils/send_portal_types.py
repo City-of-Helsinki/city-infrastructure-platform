@@ -18,7 +18,7 @@ parser.add_argument(
     "--url",
     required=True,
     type=str,
-    default="http://localhost:8000/fi/api/portal-types/",
+    default="http://localhost:8000/v1/portal-types/",
     help="API-endpoint url where to post the data",
 )
 parser.add_argument(

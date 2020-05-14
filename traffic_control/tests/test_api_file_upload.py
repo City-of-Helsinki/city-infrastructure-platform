@@ -89,7 +89,7 @@ def test_file_upload(factory, model_class, url_name):
     obj = factory()
 
     post_response = api_client.post(
-        reverse(f"api:{url_name}-post-files", kwargs={"pk": obj.pk}),
+        reverse(f"v1:{url_name}-post-files", kwargs={"pk": obj.pk}),
         data={
             "file1": io.BytesIO(b"File 1 contents"),
             "file2": io.BytesIO(b"File 2 contents"),
@@ -131,7 +131,7 @@ def test_invalid_file_upload(factory, model_class, url_name):
     obj = factory()
 
     post_response = api_client.post(
-        reverse(f"api:{url_name}-post-files", kwargs={"pk": obj.pk}),
+        reverse(f"v1:{url_name}-post-files", kwargs={"pk": obj.pk}),
         data={"file1": io.BytesIO(b"File contents"), "file2": "This is not a file"},
         format="multipart",
     )
@@ -221,7 +221,7 @@ def test_file_rewrite(factory, model_class, file_model_class, related_name, url_
 
     patch_response = api_client.patch(
         reverse(
-            f"api:{url_name}-change-file",
+            f"v1:{url_name}-change-file",
             kwargs={"pk": obj.id, "file_pk": file_obj.id},
         ),
         data={"file": io.BytesIO(b"Rewritten file contents")},
@@ -316,7 +316,7 @@ def test_file_delete(factory, model_class, file_model_class, related_name, url_n
 
     delete_response = api_client.delete(
         reverse(
-            f"api:{url_name}-change-file",
+            f"v1:{url_name}-change-file",
             kwargs={"pk": obj.id, "file_pk": file_obj.id},
         ),
     )

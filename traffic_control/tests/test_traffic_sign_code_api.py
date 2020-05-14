@@ -23,7 +23,7 @@ class TrafficSignCodeTests(APITestCase):
             TrafficSignCode.objects.create(
                 code=i, description="Test description %s" % i,
             )
-        response = self.client.get(reverse("api:trafficsigncode-list"))
+        response = self.client.get(reverse("v1:trafficsigncode-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -37,7 +37,7 @@ class TrafficSignCodeTests(APITestCase):
             TrafficSignCode.objects.create(
                 code=i, description="Test description %s" % i,
             )
-        response = self.client.get(reverse("api:trafficsigncode-list"))
+        response = self.client.get(reverse("v1:trafficsigncode-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
@@ -48,7 +48,7 @@ class TrafficSignCodeTests(APITestCase):
         self.client.force_login(self.user)
         traffic_sign_code = self.__create_test_traffic_sign_code()
         response = self.client.get(
-            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id})
+            reverse("v1:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_code.id))
@@ -60,7 +60,7 @@ class TrafficSignCodeTests(APITestCase):
         self.client.force_login(self.admin_user)
         traffic_sign_code = self.__create_test_traffic_sign_code()
         response = self.client.get(
-            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id})
+            reverse("v1:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_code.id))
@@ -75,7 +75,7 @@ class TrafficSignCodeTests(APITestCase):
             "description": "Suojatie",
         }
         response = self.client.post(
-            reverse("api:trafficsigncode-list"), data, format="json"
+            reverse("v1:trafficsigncode-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(TrafficSignCode.objects.count(), 0)
@@ -90,7 +90,7 @@ class TrafficSignCodeTests(APITestCase):
             "description": "Suojatie",
         }
         response = self.client.post(
-            reverse("api:trafficsigncode-list"), data, format="json"
+            reverse("v1:trafficsigncode-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficSignCode.objects.count(), 1)
@@ -108,11 +108,11 @@ class TrafficSignCodeTests(APITestCase):
             "description": "Suojatie",
         }
         response = self.client.post(
-            reverse("api:trafficsigncode-list"), data, format="json"
+            reverse("v1:trafficsigncode-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         response = self.client.post(
-            reverse("api:trafficsigncode-list"), data, format="json"
+            reverse("v1:trafficsigncode-list"), data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(TrafficSignCode.objects.count(), 1)
@@ -131,7 +131,7 @@ class TrafficSignCodeTests(APITestCase):
             "description": "Suojatie",
         }
         response = self.client.put(
-            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
+            reverse("v1:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
             data,
             format="json",
         )
@@ -149,7 +149,7 @@ class TrafficSignCodeTests(APITestCase):
             "description": "Suojatie",
         }
         response = self.client.put(
-            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
+            reverse("v1:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
             data,
             format="json",
         )
@@ -166,7 +166,7 @@ class TrafficSignCodeTests(APITestCase):
         self.client.force_login(self.user)
         traffic_sign_code = self.__create_test_traffic_sign_code()
         response = self.client.delete(
-            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
+            reverse("v1:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(TrafficSignCode.objects.count(), 1)
@@ -178,7 +178,7 @@ class TrafficSignCodeTests(APITestCase):
         self.client.force_login(self.admin_user)
         traffic_sign_code = self.__create_test_traffic_sign_code()
         response = self.client.delete(
-            reverse("api:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
+            reverse("v1:trafficsigncode-detail", kwargs={"pk": traffic_sign_code.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TrafficSignCode.objects.count(), 0)
