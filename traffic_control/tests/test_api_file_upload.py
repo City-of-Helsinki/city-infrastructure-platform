@@ -221,8 +221,7 @@ def test_file_rewrite(factory, model_class, file_model_class, related_name, url_
 
     patch_response = api_client.patch(
         reverse(
-            f"v1:{url_name}-change-file",
-            kwargs={"pk": obj.id, "file_pk": file_obj.id},
+            f"v1:{url_name}-change-file", kwargs={"pk": obj.id, "file_pk": file_obj.id},
         ),
         data={"file": io.BytesIO(b"Rewritten file contents")},
         format="multipart",
@@ -316,8 +315,7 @@ def test_file_delete(factory, model_class, file_model_class, related_name, url_n
 
     delete_response = api_client.delete(
         reverse(
-            f"v1:{url_name}-change-file",
-            kwargs={"pk": obj.id, "file_pk": file_obj.id},
+            f"v1:{url_name}-change-file", kwargs={"pk": obj.id, "file_pk": file_obj.id},
         ),
     )
 

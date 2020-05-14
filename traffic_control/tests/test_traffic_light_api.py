@@ -323,9 +323,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         """
         traffic_light_real = self.__create_test_traffic_light_real()
         response = self.client.get(
-            reverse(
-                "v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}
-            ),
+            reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -375,9 +373,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
         }
         response = self.client.put(
-            reverse(
-                "v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}
-            ),
+            reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}),
             data,
             format="json",
         )
@@ -399,9 +395,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         """
         traffic_light_real = self.__create_test_traffic_light_real()
         response = self.client.delete(
-            reverse(
-                "v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}
-            ),
+            reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TrafficLightReal.objects.count(), 1)
@@ -416,15 +410,11 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
     def test_get_deleted_traffic_light_real_returns_not_found(self):
         traffic_light_real = self.__create_test_traffic_light_real()
         response = self.client.delete(
-            reverse(
-                "v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}
-            ),
+            reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(
-            reverse(
-                "v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}
-            ),
+            reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 

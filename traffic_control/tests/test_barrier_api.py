@@ -135,9 +135,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
             "road_name": "Test street 1",
         }
-        response = self.client.post(
-            reverse("v1:barrierplan-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:barrierplan-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(BarrierPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -338,9 +336,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             "owner": self.test_owner,
             "road_name": "Test street 1",
         }
-        response = self.client.post(
-            reverse("v1:barrierreal-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:barrierreal-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(BarrierReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
