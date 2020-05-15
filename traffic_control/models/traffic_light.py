@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
+from . import Plan
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
 from .mount import MountPlan, MountReal, MountType
 from .utils import SoftDeleteQuerySet
@@ -80,6 +81,14 @@ class TrafficLightPlan(SoftDeleteModelMixin, models.Model):
     )
     validity_period_end = models.DateField(
         _("Validity period end"), blank=True, null=True
+    )
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.CASCADE,
+        related_name="traffic_light_plans",
+        blank=True,
+        null=True,
     )
     is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)

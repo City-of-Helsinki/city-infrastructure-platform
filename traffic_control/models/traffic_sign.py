@@ -20,6 +20,7 @@ from .common import (
     TrafficSignCode,
 )
 from .mount import MountPlan, MountReal
+from .plan import Plan
 from .utils import SoftDeleteQuerySet
 
 
@@ -86,6 +87,14 @@ class TrafficSignPlan(SoftDeleteModelMixin, models.Model):
     )
     affect_area = models.PolygonField(
         _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
+    )
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.CASCADE,
+        related_name="traffic_sign_plans",
+        blank=True,
+        null=True,
     )
     is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
