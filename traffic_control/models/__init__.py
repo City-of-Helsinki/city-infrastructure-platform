@@ -26,6 +26,7 @@ from .mount import (
     MountType,
     PortalType,
 )
+from .plan import Plan
 from .road_marking import (
     ArrowDirection,
     LineDirection,

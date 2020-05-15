@@ -9,6 +9,7 @@ from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
+from .plan import Plan
 from .utils import SoftDeleteQuerySet
 
 
@@ -76,6 +77,14 @@ class BarrierPlan(SoftDeleteModelMixin, models.Model):
     )
     reflective = EnumField(
         Reflective, verbose_name=_("Reflective"), blank=True, null=True
+    )
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.CASCADE,
+        related_name="barrier_plans",
+        blank=True,
+        null=True,
     )
     is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)

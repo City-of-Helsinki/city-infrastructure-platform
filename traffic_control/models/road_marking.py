@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
+from . import Plan
 from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
 from .traffic_sign import TrafficSignPlan, TrafficSignReal
 from .utils import SoftDeleteQuerySet
@@ -112,6 +113,14 @@ class RoadMarkingPlan(SoftDeleteModelMixin, models.Model):
         TrafficSignPlan,
         verbose_name=_("Traffic Sign Plan"),
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.CASCADE,
+        related_name="road_marking_plans",
         blank=True,
         null=True,
     )

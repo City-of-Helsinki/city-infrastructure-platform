@@ -9,6 +9,7 @@ from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
 from .common import Condition, InstallationStatus, Lifecycle
+from .plan import Plan
 from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
 
 
@@ -78,6 +79,14 @@ class MountPlan(SoftDeleteModelMixin, models.Model):
     )
     validity_period_end = models.DateField(
         _("Validity period end"), blank=True, null=True
+    )
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.CASCADE,
+        related_name="mount_plans",
+        blank=True,
+        null=True,
     )
     is_active = models.BooleanField(_("Active"), default=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
