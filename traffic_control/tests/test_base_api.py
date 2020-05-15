@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.gis.geos import LineString, Point, Polygon
+from django.contrib.gis.geos import LineString, MultiPolygon, Point, Polygon
 from rest_framework.test import APITestCase
 
 from traffic_control.models import Lifecycle, MountType, TrafficSignCode
@@ -26,6 +26,7 @@ test_polygon_2 = Polygon(
     ),
     srid=settings.SRID,
 )
+test_multi_polygon = MultiPolygon(test_polygon, test_polygon_2, srid=settings.SRID)
 
 point_location_test_data = [
     (test_point, test_polygon, 1),

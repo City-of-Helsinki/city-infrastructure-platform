@@ -1,0 +1,45 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+    {{ form.media }}
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        <form method="post" id="plan_relations_form" novalidate>
+            {% csrf_token %}
+            <fieldset class="module aligned">
+                {% for field in form %}
+                    <div class="form-row field-{{ field.name }}">
+                        <div>
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <div class="submit-row">
+                <input type="submit" value="{% trans 'Save' %}" class="default" name="_save">
+                <input type="submit" value="{% trans 'Save and continue editing' %}">
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans "Home" %}</a>
+        &rsaquo; <a href="{% url 'admin:app_list' app_label='traffic_control' %}">{% trans "Traffic control" %}</a>
+        &rsaquo; <a href="{% url 'admin:traffic_control_plan_changelist' %}">{% trans "Plans" %}</a>
+        &rsaquo; <a href="{% url 'admin:traffic_control_plan_change' object_id=plan.pk %}">{{ plan }}</a>
+        &rsaquo; {% trans "Set related plans" %}
+    </div>
+{% endblock %}

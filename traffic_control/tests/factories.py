@@ -12,6 +12,7 @@ from traffic_control.models import (
     MountPlan,
     MountReal,
     MountType,
+    Plan,
     Reflective,
     RoadMarkingColor,
     RoadMarkingPlan,
@@ -26,7 +27,7 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.tests.test_base_api import test_point
+from traffic_control.tests.test_base_api import test_multi_polygon, test_point
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
@@ -41,6 +42,20 @@ def get_user(username=None, admin=False):
         email="test@example.com",
         is_staff=admin,
         is_superuser=admin,
+    )[0]
+
+
+def get_plan(location=""):
+    user = get_user("test_user")
+    superuser = get_user("super user", admin=True)
+    return Plan.objects.get_or_create(
+        name="Test plan",
+        plan_number="2020_1",
+        location=location or test_multi_polygon,
+        planner=user,
+        decision_maker=superuser,
+        created_by=user,
+        updated_by=user,
     )[0]
 
 
