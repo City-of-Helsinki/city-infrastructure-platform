@@ -1,9 +1,19 @@
 from django.conf import settings
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.gis import forms
 from django.contrib.gis.geos import Point
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-from .models import TrafficSignPlan, TrafficSignReal
+from .models import (
+    BarrierPlan,
+    MountPlan,
+    RoadMarkingPlan,
+    SignpostPlan,
+    TrafficLightPlan,
+    TrafficSignPlan,
+    TrafficSignReal,
+)
 
 
 class Point3DFieldForm(forms.ModelForm):
@@ -37,3 +47,55 @@ class TrafficSignPlanModelForm(Point3DFieldForm):
     class Meta:
         model = TrafficSignPlan
         fields = "__all__"
+
+
+class PlanRelationsForm(forms.Form):
+    barrier_plans = forms.ModelMultipleChoiceField(
+        BarrierPlan.objects.active(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name=_("Barrier Plans"), is_stacked=False
+        ),
+    )
+    mount_plans = forms.ModelMultipleChoiceField(
+        MountPlan.objects.active(),
+        required=False,
+        widget=FilteredSelectMultiple(verbose_name=_("Mount Plans"), is_stacked=False),
+    )
+    road_marking_plans = forms.ModelMultipleChoiceField(
+        RoadMarkingPlan.objects.active(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name=_("Road Marking Plans"), is_stacked=False
+        ),
+    )
+    signpost_plans = forms.ModelMultipleChoiceField(
+        SignpostPlan.objects.active(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name=_("Signpost Plans"), is_stacked=False
+        ),
+    )
+    traffic_light_plans = forms.ModelMultipleChoiceField(
+        TrafficLightPlan.objects.active(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name=_("Traffic Light Plans"), is_stacked=False
+        ),
+    )
+    traffic_sign_plans = forms.ModelMultipleChoiceField(
+        TrafficSignPlan.objects.active(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name=_("Traffic Sign Plans"), is_stacked=False
+        ),
+    )
+
+    def __init__(self, *args, **kwargs):
+        plan = kwargs.pop("plan")
+
+        super().__init__(*args, **kwargs)
+
+        # Omit instances related to other plans from choices.
+        for field_name, field in self.fields.items():
+            field.queryset = field.queryset.filter(Q(plan=None) | Q(plan=plan))

@@ -11,6 +11,12 @@ from ..models.utils import SoftDeleteQuerySet
 
 
 class Plan(SoftDeleteModelMixin, models.Model):
+    # Permissions
+    ADD_PERMISSION = "traffic_control.add_plan"
+    CHANGE_PERMISSION = "traffic_control.change_plan"
+    DELETE_PERMISSION = "traffic_control.delete_plan"
+    VIEW_PERMISSION = "traffic_control.view_plan"
+
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )

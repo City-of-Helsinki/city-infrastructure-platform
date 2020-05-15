@@ -13,6 +13,7 @@ from .mount import (
     MountRealFileInline,
     PortalTypeAdmin,
 )
+from .plan import PlanAdmin
 from .road_marking import (
     RoadMarkingPlanAdmin,
     RoadMarkingPlanFileInline,
