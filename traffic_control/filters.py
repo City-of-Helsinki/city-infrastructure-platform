@@ -7,6 +7,7 @@ from traffic_control.models import (
     BarrierReal,
     MountPlan,
     MountReal,
+    Plan,
     PortalType,
     RoadMarkingPlan,
     RoadMarkingReal,
@@ -49,6 +50,11 @@ class MountPlanFilterSet(FilterSet):
 class MountRealFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = MountReal
+
+
+class PlanFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = Plan
 
 
 class PortalTypeFilterSet(FilterSet):

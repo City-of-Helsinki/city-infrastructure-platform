@@ -26,6 +26,10 @@ test_polygon_2 = Polygon(
     ),
     srid=settings.SRID,
 )
+test_polygon_3 = Polygon(
+    ((100.0, 100.0), (100.0, 150.0), (150.0, 150.0), (150.0, 100.0), (100.0, 100.0),),
+    srid=settings.SRID,
+)
 test_multi_polygon = MultiPolygon(test_polygon, test_polygon_2, srid=settings.SRID)
 
 point_location_test_data = [
