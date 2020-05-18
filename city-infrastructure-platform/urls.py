@@ -10,6 +10,7 @@ from rest_framework import permissions, routers
 from traffic_control.views import (
     barrier as barrier_views,
     mount as mount_views,
+    plan as plan_views,
     road_marking as road_marking_views,
     signpost as signpost_views,
     traffic_light as traffic_light_views,
@@ -55,6 +56,9 @@ router.register(
 )
 router.register(
     "traffic-sign-codes", traffic_sign_views.TrafficSignCodeViewSet,
+)
+router.register(
+    "plans", plan_views.PlanViewSet,
 )
 router.register(
     "portal-types", mount_views.PortalTypeViewSet,
