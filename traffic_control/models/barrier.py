@@ -143,8 +143,8 @@ class BarrierPlan(SoftDeleteModelMixin, models.Model):
 
     class Meta:
         db_table = "barrier_plan"
-        verbose_name = _("Barrier plan")
-        verbose_name_plural = _("Barrier plans")
+        verbose_name = _("Barrier Plan")
+        verbose_name_plural = _("Barrier Plans")
 
     def __str__(self):
         return "%s %s" % (self.id, self.type)
@@ -182,7 +182,7 @@ class BarrierReal(SoftDeleteModelMixin, models.Model):
     )
     barrier_plan = models.ForeignKey(
         BarrierPlan,
-        verbose_name=_("Barrier plan"),
+        verbose_name=_("Barrier Plan"),
         on_delete=models.CASCADE,
         blank=True,
         null=True,
