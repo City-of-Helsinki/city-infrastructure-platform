@@ -1,9 +1,12 @@
 import uuid
+from itertools import chain
+from typing import List
 
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import MultiPolygon, Point
 from django.utils.translation import gettext_lazy as _
 
 from ..mixins.models import SoftDeleteModelMixin
@@ -79,6 +82,37 @@ class Plan(SoftDeleteModelMixin, models.Model):
 
     def __str__(self):
         return f"{self.plan_number} {self.name}"
+
+    def _get_related_locations(self) -> List[Point]:
+        """
+        Get list of Points related to plan instance
+        """
+        return list(
+            chain(
+                self.barrier_plans.values_list("location", flat=True),
+                self.mount_plans.values_list("location", flat=True),
+                self.road_marking_plans.values_list("location", flat=True),
+                self.signpost_plans.values_list("location", flat=True),
+                self.traffic_light_plans.values_list("location", flat=True),
+                self.traffic_sign_plans.values_list("location", flat=True),
+            )
+        )
+
+    def derive_location_from_related_plans(self, buffer: int = 5):
+        """
+        Derive unified location polygon based on related plan models.
+        Buffer the individual points with N meters.
+
+        :param buffer: Buffer radius
+        """
+        location_polygons = MultiPolygon(
+            [p.buffer(buffer) for p in self._get_related_locations()],
+            srid=settings.SRID,
+        )
+        area = location_polygons.convex_hull
+
+        self.location = MultiPolygon(area, srid=settings.SRID)
+        self.save(update_fields=["location"])
 
 
 auditlog.register(Plan)

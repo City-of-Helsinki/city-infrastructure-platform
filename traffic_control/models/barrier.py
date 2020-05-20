@@ -149,6 +149,12 @@ class BarrierPlan(SoftDeleteModelMixin, models.Model):
     def __str__(self):
         return "%s %s" % (self.id, self.type)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.plan:
+            self.plan.derive_location_from_related_plans()
+
 
 class BarrierPlanFile(models.Model):
     id = models.UUIDField(

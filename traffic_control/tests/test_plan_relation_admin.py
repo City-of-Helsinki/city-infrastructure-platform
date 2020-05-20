@@ -170,16 +170,12 @@ def test_plan_relation_admin_view_available_choices(admin_client):
         (plan_1, test_point, test_point_3d),
         (plan_2, test_point_2, test_point_2_3d),
     ]:
-        bp = get_barrier_plan(location=loc)
-        mp = get_mount_plan(location=loc)
-        rmp = get_road_marking_plan(location=loc)
-        sp = get_signpost_plan(location=loc)
-        tlp = get_traffic_light_plan(location=loc)
-        tsp = get_traffic_sign_plan(location=loc_3d)
-
-        for p in [bp, mp, rmp, sp, tlp, tsp]:
-            p.plan = plan
-            p.save(update_fields=["plan"])
+        get_barrier_plan(location=loc, plan=plan)
+        get_mount_plan(location=loc, plan=plan)
+        get_road_marking_plan(location=loc, plan=plan)
+        get_signpost_plan(location=loc, plan=plan)
+        get_traffic_light_plan(location=loc, plan=plan)
+        get_traffic_sign_plan(location=loc_3d, plan=plan)
 
     plan_1.refresh_from_db()
     plan_2.refresh_from_db()
