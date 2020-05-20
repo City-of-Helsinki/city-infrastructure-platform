@@ -59,7 +59,7 @@ def get_plan(location=""):
     )[0]
 
 
-def get_barrier_plan(location=""):
+def get_barrier_plan(location="", plan=None):
     user = get_user("test_user")
     return BarrierPlan.objects.get_or_create(
         type=get_traffic_sign_code(),
@@ -70,6 +70,7 @@ def get_barrier_plan(location=""):
         reflective=Reflective.YES,
         connection_type=ConnectionType.OPEN_OUT,
         road_name="Testingroad",
+        plan=plan,
         created_by=user,
         updated_by=user,
     )[0]
@@ -93,7 +94,7 @@ def get_barrier_real(location=""):
     )
 
 
-def get_mount_plan(location=""):
+def get_mount_plan(location="", plan=None):
     user = get_user("test_user")
 
     return MountPlan.objects.get_or_create(
@@ -101,6 +102,7 @@ def get_mount_plan(location=""):
         location=location or test_point,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
+        plan=plan,
         created_by=user,
         updated_by=user,
     )[0]
@@ -120,7 +122,7 @@ def get_mount_real(location=""):
     )[0]
 
 
-def get_road_marking_plan(location=""):
+def get_road_marking_plan(location="", plan=None):
     user = get_user("test_user")
 
     return RoadMarkingPlan.objects.get_or_create(
@@ -135,6 +137,7 @@ def get_road_marking_plan(location=""):
         is_raised=False,
         has_rumble_strips=True,
         road_name="Testingroad",
+        plan=plan,
         created_by=user,
         updated_by=user,
     )[0]
@@ -161,7 +164,7 @@ def get_road_marking_real(location=""):
     )[0]
 
 
-def get_signpost_plan(location=""):
+def get_signpost_plan(location="", plan=None):
     user = get_user("test_user")
 
     return SignpostPlan.objects.get_or_create(
@@ -169,6 +172,7 @@ def get_signpost_plan(location=""):
         location=location or test_point,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
+        plan=plan,
         created_by=user,
         updated_by=user,
     )[0]
@@ -188,7 +192,7 @@ def get_signpost_real(location=""):
     )[0]
 
 
-def get_traffic_light_plan(location=""):
+def get_traffic_light_plan(location="", plan=None):
     user = get_user("test_user")
 
     return TrafficLightPlan.objects.get_or_create(
@@ -200,6 +204,7 @@ def get_traffic_light_plan(location=""):
         mount_type=MountType.POST,
         road_name="Testingroad",
         sound_beacon=TrafficLightSoundBeaconValue.YES,
+        plan=plan,
         created_by=user,
         updated_by=user,
     )[0]
@@ -227,7 +232,7 @@ def get_traffic_sign_code():
     return TrafficSignCode.objects.get_or_create(code="A11", description="Test")[0]
 
 
-def get_traffic_sign_plan(location=""):
+def get_traffic_sign_plan(location="", plan=None):
     user = get_user("test_user")
 
     return TrafficSignPlan.objects.get_or_create(
@@ -235,6 +240,7 @@ def get_traffic_sign_plan(location=""):
         location=location or test_point_3d,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
+        plan=plan,
         created_by=user,
         updated_by=user,
     )[0]

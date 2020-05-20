@@ -149,6 +149,12 @@ class TrafficLightPlan(SoftDeleteModelMixin, models.Model):
     def __str__(self):
         return "%s %s %s" % (self.id, self.type, self.code)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.plan:
+            self.plan.derive_location_from_related_plans()
+
 
 class TrafficLightPlanFile(models.Model):
     id = models.UUIDField(

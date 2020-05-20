@@ -190,6 +190,12 @@ class RoadMarkingPlan(SoftDeleteModelMixin, models.Model):
     def __str__(self):
         return "%s %s %s" % (self.id, self.code, self.value)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.plan:
+            self.plan.derive_location_from_related_plans()
+
 
 class RoadMarkingPlanFile(models.Model):
     id = models.UUIDField(
