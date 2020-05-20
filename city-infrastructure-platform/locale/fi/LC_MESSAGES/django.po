@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-22 12:28+0300\n"
+"POT-Creation-Date: 2020-05-20 12:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: city-infrastructure-platform/settings.py:94
+#: city-infrastructure-platform/settings.py:95
 msgid "City Infrastructure Platform"
 msgstr "Infraomaisuuden hallinta-alusta"
 
-#: city-infrastructure-platform/settings.py:159
+#: city-infrastructure-platform/settings.py:160
 msgid "Finnish"
 msgstr "Suomi"
 
-#: city-infrastructure-platform/settings.py:159
+#: city-infrastructure-platform/settings.py:160
 msgid "English"
 msgstr "Englanti"

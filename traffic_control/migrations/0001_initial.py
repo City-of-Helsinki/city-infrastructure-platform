@@ -183,8 +183,8 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "verbose_name": "Barrier plan",
-                "verbose_name_plural": "Barrier plans",
+                "verbose_name": "Barrier Plan",
+                "verbose_name_plural": "Barrier Plans",
                 "db_table": "barrier_plan",
             },
         ),
@@ -2970,7 +2970,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         to="traffic_control.BarrierPlan",
-                        verbose_name="Barrier plan",
+                        verbose_name="Barrier Plan",
                     ),
                 ),
                 (
