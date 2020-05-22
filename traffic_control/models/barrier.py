@@ -8,7 +8,14 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
-from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
+from .common import (
+    Condition,
+    InstallationStatus,
+    LaneNumber,
+    LaneType,
+    Lifecycle,
+    TrafficSignCode,
+)
 from .plan import Plan
 from .utils import SoftDeleteQuerySet
 
@@ -31,19 +38,6 @@ class Reflective(Enum):
         YES = _("Yes")
         NO = _("No")
         RED_YELLOW = _("Red-yellow")
-
-
-class LaneType(Enum):
-    MAIN = 1
-    FAST = 2
-    BUS = 3
-    TURN_LEFT = 4
-
-    class Labels:
-        MAIN = _("Main lane")
-        FAST = _("Fast lane")
-        BUS = _("Bus lane")
-        TURN_LEFT = _("Turn left lane")
 
 
 class LocationSpecifier(Enum):
@@ -111,13 +105,14 @@ class BarrierPlan(SoftDeleteModelMixin, models.Model):
         null=True,
     )
     road_name = models.CharField(_("Road name"), max_length=254)
-    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
-    lane_type = EnumIntegerField(
-        LaneType,
-        verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
+    lane_number = EnumField(
+        LaneNumber,
+        verbose_name=_("Lane number"),
+        default=LaneNumber.MAIN_1,
         blank=True,
-        null=True,
+    )
+    lane_type = EnumField(
+        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
@@ -234,13 +229,11 @@ class BarrierReal(SoftDeleteModelMixin, models.Model):
         null=True,
     )
     road_name = models.CharField(_("Road name"), max_length=254)
-    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
-    lane_type = EnumIntegerField(
-        LaneType,
-        verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
-        blank=True,
-        null=True,
+    lane_number = EnumField(
+        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
+    )
+    lane_type = EnumField(
+        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,

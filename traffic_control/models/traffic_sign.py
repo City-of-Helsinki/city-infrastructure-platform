@@ -13,6 +13,8 @@ from .common import (
     Color,
     Condition,
     InstallationStatus,
+    LaneNumber,
+    LaneType,
     Lifecycle,
     Reflection,
     Size,
@@ -158,8 +160,12 @@ class TrafficSignPlan(SoftDeleteModelMixin, models.Model):
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
-    lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+    lane_number = EnumField(
+        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
+    )
+    lane_type = EnumField(
+        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+    )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
@@ -334,8 +340,12 @@ class TrafficSignReal(SoftDeleteModelMixin, models.Model):
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
-    lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+    lane_number = EnumField(
+        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
+    )
+    lane_type = EnumField(
+        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+    )
     location_specifier = EnumIntegerField(
         LocationSpecifier, verbose_name=_("Location specifier"), blank=True, null=True,
     )
