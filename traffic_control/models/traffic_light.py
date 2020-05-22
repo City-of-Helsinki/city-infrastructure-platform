@@ -8,9 +8,16 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
-from . import Plan
-from .common import Condition, InstallationStatus, Lifecycle, TrafficSignCode
+from .common import (
+    Condition,
+    InstallationStatus,
+    LaneNumber,
+    LaneType,
+    Lifecycle,
+    TrafficSignCode,
+)
 from .mount import MountPlan, MountReal, MountType
+from .plan import Plan
 from .utils import SoftDeleteQuerySet
 
 
@@ -134,8 +141,12 @@ class TrafficLightPlan(SoftDeleteModelMixin, models.Model):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
-    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
-    lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+    lane_number = EnumField(
+        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
+    )
+    lane_type = EnumField(
+        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+    )
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     owner = models.CharField(_("Owner"), max_length=254)
 
@@ -258,8 +269,12 @@ class TrafficLightReal(SoftDeleteModelMixin, models.Model):
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = models.IntegerField(_("Lane number"), blank=True, null=True)
-    lane_type = models.IntegerField(_("Lane type"), blank=True, null=True)
+    lane_number = EnumField(
+        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
+    )
+    lane_type = EnumField(
+        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+    )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),

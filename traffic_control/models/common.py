@@ -89,6 +89,66 @@ class Condition(Enum):
         VERY_GOOD = _("Very good")
 
 
+class LaneType(Enum):
+    MAIN = 1
+    FAST = 2
+    TURN_RIGHT = 3
+    TURN_LEFT = 4
+    AUXILIARY = 5
+    MERGE = 6
+    EXIT = 7
+    WEAVE = 8
+    PUBLIC = 9
+    HEAVY = 10
+    REVERSIBLE = 11
+    LIGHT = 20
+    PEDESTRIAN = 21
+    BIKE = 22
+
+    class Labels:
+        MAIN = _("Main lane")
+        FAST = _("Fast lane")
+        TURN_RIGHT = _("Turn right lane")
+        TURN_LEFT = _("Turn left lane")
+        AUXILIARY = _("Auxiliary straight lane")
+        MERGE = _("Merge lane")
+        EXIT = _("Exit lane")
+        WEAVE = _("Weaving lane")
+        PUBLIC = _("Public transport lane / taxi lane")
+        HEAVY = _("Heavy vehicle lane")
+        REVERSIBLE = _("Reversible lane")
+        LIGHT = _("Pedestrian and bike lane")
+        PEDESTRIAN = _("Pedestrian lane")
+        BIKE = _("Bike lane")
+
+
+class LaneNumber(Enum):
+    MAIN_1 = "11"
+    MAIN_2 = "21"
+    REVERSIBLE = "31"
+    ADDITIONAL_LEFT_1 = "X2"
+    ADDITIONAL_RIGHT_1 = "X3"
+    ADDITIONAL_LEFT_2 = "X4"
+    ADDITIONAL_RIGHT_2 = "X5"
+    ADDITIONAL_LEFT_3 = "X6"
+    ADDITIONAL_RIGHT_3 = "X7"
+    ADDITIONAL_LEFT_4 = "X8"
+    ADDITIONAL_RIGHT_4 = "X9"
+
+    class Labels:
+        MAIN_1 = _("Main lane")
+        MAIN_2 = _("Main lane")
+        REVERSIBLE = _("Lane allowing traffic to both directions")
+        ADDITIONAL_LEFT_1 = _("First left additional lane")
+        ADDITIONAL_RIGHT_1 = _("First right additional lane")
+        ADDITIONAL_LEFT_2 = _("Second left additional lane")
+        ADDITIONAL_RIGHT_2 = _("Second right additional lane")
+        ADDITIONAL_LEFT_3 = _("Third left additional lane")
+        ADDITIONAL_RIGHT_3 = _("Third right additional lane")
+        ADDITIONAL_LEFT_4 = _("Fourth left additional lane")
+        ADDITIONAL_RIGHT_4 = _("Fourth right additional lane")
+
+
 class TrafficSignCode(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
