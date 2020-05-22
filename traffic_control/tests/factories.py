@@ -228,8 +228,8 @@ def get_traffic_light_real(location=""):
     )[0]
 
 
-def get_traffic_sign_code():
-    return TrafficSignCode.objects.get_or_create(code="A11", description="Test")[0]
+def get_traffic_sign_code(code: str = "A11", description: str = "Test"):
+    return TrafficSignCode.objects.get_or_create(code=code, description=description)[0]
 
 
 def get_traffic_sign_plan(location="", plan=None):
