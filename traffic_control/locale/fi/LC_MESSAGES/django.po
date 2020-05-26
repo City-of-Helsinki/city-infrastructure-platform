@@ -1117,35 +1117,81 @@ msgstr "Toteumadokumentti (opaste)"
 msgid "Signpost Real Files"
 msgstr "Toteumadokumentit (opaste)"
 
-#: traffic_control/models/traffic_light.py:40
-msgid "Right side of road"
+#: traffic_control/models/traffic_light.py:39
+msgid "Right side of the road (relative to traffic direction)"
 msgstr "Ajoradan oikea puoli (ajosuuntaan nähden)"
 
-#: traffic_control/models/traffic_light.py:41
-msgid "Left side of road"
-msgstr "Ajoradan vasen puoli (ajosuuntaan nähden)"
-
-#: traffic_control/models/traffic_light.py:42
-msgid "Above the road"
+#: traffic_control/models/traffic_light.py:40
+msgid "Above the lanes"
 msgstr "Kaistojen yläpuolella"
 
-#: traffic_control/models/traffic_light.py:43
-msgid "Middle of road"
+#: traffic_control/models/traffic_light.py:41
+msgid "Island"
 msgstr "Keskisaareke tai liikenteenjakaja"
 
-#: traffic_control/models/traffic_light.py:52
-msgid "Traffic light"
-msgstr "Opastin"
+#: traffic_control/models/traffic_light.py:56
+msgid "Traffic signal"
+msgstr "Valo-opastin"
+
+#: traffic_control/models/traffic_light.py:57
+msgid "Right-turn arrow signal"
+msgstr "Nuolivalo oikealle"
+
+#: traffic_control/models/traffic_light.py:58
+msgid "Left-turn arrow signal"
+msgstr "Nuolivalo vasemmalle"
+
+#: traffic_control/models/traffic_light.py:59
+msgid "Triangle signal"
+msgstr "Kolmio-opastin"
+
+#: traffic_control/models/traffic_light.py:60
+msgid "Public transport signal"
+msgstr "Joukkoliikenneopastin"
+
+#: traffic_control/models/traffic_light.py:61
+msgid "Bicycle signal"
+msgstr "Polkupyöräopastin"
+
+#: traffic_control/models/traffic_light.py:62
+msgid "Bicycle turn arrow signal"
+msgstr "Polkupyörän nuolivalo"
+
+#: traffic_control/models/traffic_light.py:63
+msgid "Pedestrian signal"
+msgstr "Jalankulkijan opastin"
+
+#: traffic_control/models/traffic_light.py:64
+msgid "Lane signal"
+msgstr "Ajokaistaopastin"
+
+#: traffic_control/models/traffic_light.py:74
+msgid "Loop sensor"
+msgstr "Silmukka"
+
+#: traffic_control/models/traffic_light.py:75
+msgid "Infrared sensor"
+msgstr "Infrapunailmaisin"
+
+#: traffic_control/models/traffic_light.py:76
+msgid "Radar i.e. microwave sensor"
+msgstr "Tutka eli mikroaaltoilmaisin"
+
+#: traffic_control/models/traffic_light.py:168
+#: traffic_control/models/traffic_light.py:331
+msgid "Vehicle recognition"
+msgstr "Ajoneuvon tunnistin"
+
+#: traffic_control/models/traffic_light.py:173
+#: traffic_control/models/traffic_light.py:336
+msgid "Push button"
+msgstr "Painonappi"
 
 #: traffic_control/models/traffic_light.py:53
 #: traffic_control/models/traffic_light.py:136
 #: traffic_control/models/traffic_light.py:286
 msgid "Sound beacon"
 msgstr "Äänimajakka"
-
-#: traffic_control/models/traffic_light.py:54
-msgid "Button"
-msgstr "Painonappi"
 
 #: traffic_control/models/traffic_light.py:155
 #: traffic_control/models/traffic_light.py:194
