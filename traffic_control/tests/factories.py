@@ -198,7 +198,7 @@ def get_traffic_light_plan(location="", plan=None):
     return TrafficLightPlan.objects.get_or_create(
         code=get_traffic_sign_code(),
         location=location or test_point,
-        type=TrafficLightType.TRAFFIC_LIGHT,
+        type=TrafficLightType.SIGNAL,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
         mount_type=MountType.POST,
@@ -217,7 +217,7 @@ def get_traffic_light_real(location=""):
         code=get_traffic_sign_code(),
         traffic_light_plan=get_traffic_light_plan(),
         location=location or test_point,
-        type=TrafficLightType.TRAFFIC_LIGHT,
+        type=TrafficLightType.SIGNAL,
         installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
         mount_type=MountType.POST,

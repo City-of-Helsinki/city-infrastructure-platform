@@ -132,7 +132,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         """
         data = {
             "code": self.test_code.id,
-            "type": TrafficLightType.TRAFFIC_LIGHT.value,
+            "type": TrafficLightType.SIGNAL.value,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -160,7 +160,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         traffic_light = self.__create_test_traffic_light_plan()
         data = {
             "code": self.test_code.id,
-            "type": TrafficLightType.BUTTON.value,
+            "type": TrafficLightType.ARROW_RIGHT.value,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
@@ -213,7 +213,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         return TrafficLightPlan.objects.create(
             code=self.test_code,
             location=self.test_point,
-            type=TrafficLightType.TRAFFIC_LIGHT,
+            type=TrafficLightType.SIGNAL,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             mount_type=MountType.POST,
@@ -337,7 +337,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         """
         data = {
             "code": self.test_code.id,
-            "type": TrafficLightType.TRAFFIC_LIGHT.value,
+            "type": TrafficLightType.SIGNAL.value,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -366,7 +366,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         traffic_light_real = self.__create_test_traffic_light_real()
         data = {
             "code": self.test_code_2.id,
-            "type": TrafficLightType.SOUND_BEACON.value,
+            "type": TrafficLightType.PEDESTRIAN.value,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-21",
             "lifecycle": self.test_lifecycle_2.value,
@@ -422,7 +422,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         traffic_light_plan = TrafficLightPlan.objects.create(
             code=self.test_code,
             location=self.test_point,
-            type=TrafficLightType.TRAFFIC_LIGHT,
+            type=TrafficLightType.SIGNAL,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             mount_type=MountType.POST,
@@ -436,7 +436,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             code=self.test_code,
             traffic_light_plan=traffic_light_plan,
             location=self.test_point,
-            type=TrafficLightType.TRAFFIC_LIGHT,
+            type=TrafficLightType.SIGNAL,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             mount_type=MountType.POST,
