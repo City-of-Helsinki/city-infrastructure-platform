@@ -32,26 +32,58 @@ class TrafficLightSoundBeaconValue(Enum):
 
 class LocationSpecifier(Enum):
     RIGHT = 1
-    LEFT = 2
-    ABOVE = 3
-    MIDDLE = 4
+    ABOVE = 2
+    ISLAND = 3
 
     class Labels:
-        RIGHT = _("Right side of road")
-        LEFT = _("Left side of road")
-        ABOVE = _("Above the road")
-        MIDDLE = _("Middle of road")
+        RIGHT = _("Right side of the road (relative to traffic direction)")
+        ABOVE = _("Above the lanes")
+        ISLAND = _("Island")
 
 
 class TrafficLightType(Enum):
-    TRAFFIC_LIGHT = 1
-    SOUND_BEACON = 2
-    BUTTON = 3
+    SIGNAL = "1"
+    ARROW_RIGHT = "4.1"
+    ARROW_LEFT = "4.2"
+    TRIANGLE = "5"
+    PUBLIC_TRANSPORT = "8"
+    BICYCLE = "9.1"
+    BICYCLE_ARROW = "9.2"
+    PEDESTRIAN = "10"
+    LANE = "11"
 
     class Labels:
-        TRAFFIC_LIGHT = _("Traffic light")
-        SOUND_BEACON = _("Sound beacon")
-        BUTTON = _("Button")
+        SIGNAL = _("Traffic signal")
+        ARROW_RIGHT = _("Right-turn arrow signal")
+        ARROW_LEFT = _("Left-turn arrow signal")
+        TRIANGLE = _("Triangle signal")
+        PUBLIC_TRANSPORT = _("Public transport signal")
+        BICYCLE = _("Bicycle signal")
+        BICYCLE_ARROW = _("Bicycle turn arrow signal")
+        PEDESTRIAN = _("Pedestrian signal")
+        LANE = _("Lane signal")
+
+
+class VehicleRecognition(Enum):
+    LOOP = 1
+    INFRARED = 2
+    RADAR = 3
+    OTHER = 4
+
+    class Labels:
+        LOOP = _("Loop sensor")
+        INFRARED = _("Infrared sensor")
+        RADAR = _("Radar i.e. microwave sensor")
+        OTHER = _("Other")
+
+
+class PushButton(Enum):
+    NO = 1
+    YES = 2
+
+    class Labels:
+        NO = _("No")
+        YES = _("Yes")
 
 
 class TrafficLightPlan(SoftDeleteModelMixin, models.Model):
@@ -60,7 +92,7 @@ class TrafficLightPlan(SoftDeleteModelMixin, models.Model):
     )
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
-    type = EnumIntegerField(TrafficLightType, blank=True, null=True)
+    type = EnumField(TrafficLightType, blank=True, null=True)
     code = models.ForeignKey(
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
@@ -131,6 +163,15 @@ class TrafficLightPlan(SoftDeleteModelMixin, models.Model):
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
+    vehicle_recognition = EnumIntegerField(
+        VehicleRecognition,
+        verbose_name=_("Vehicle recognition"),
+        blank=True,
+        null=True,
+    )
+    push_button = EnumIntegerField(
+        PushButton, verbose_name=_("Push button"), blank=True, null=True,
+    )
     sound_beacon = EnumIntegerField(
         TrafficLightSoundBeaconValue,
         verbose_name=_("Sound beacon"),
@@ -200,7 +241,7 @@ class TrafficLightReal(SoftDeleteModelMixin, models.Model):
     )
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
-    type = EnumIntegerField(TrafficLightType, blank=True, null=True)
+    type = EnumField(TrafficLightType, blank=True, null=True)
     code = models.ForeignKey(
         TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
     )
@@ -284,6 +325,15 @@ class TrafficLightReal(SoftDeleteModelMixin, models.Model):
     )
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
+    )
+    vehicle_recognition = EnumIntegerField(
+        VehicleRecognition,
+        verbose_name=_("Vehicle recognition"),
+        blank=True,
+        null=True,
+    )
+    push_button = EnumIntegerField(
+        PushButton, verbose_name=_("Push button"), blank=True, null=True,
     )
     sound_beacon = EnumIntegerField(
         TrafficLightSoundBeaconValue,
