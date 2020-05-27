@@ -78,8 +78,12 @@ class TrafficControlAPIBaseTestCase(APITestCase):
         self.test_code_2 = TrafficSignCode.objects.create(
             code="A12", description="Weight limit"
         )
-        self.test_type = MountType.PORTAL
-        self.test_type_2 = MountType.WALL
+        self.test_mount_type = MountType.objects.create(
+            code="PORTAL", description="Portal"
+        )
+        self.test_mount_type_2 = MountType.objects.create(
+            code="WALL", description="Wall"
+        )
         self.test_point = test_point
         self.test_point_2 = test_point_2
         self.test_owner = "City of Helsinki"

@@ -4,18 +4,20 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from traffic_control.models import MountReal, TrafficSignReal
-from traffic_control.tests.factories import get_user
+from traffic_control.tests.factories import get_mount_type, get_user
 
 
 class GenerateMountRealObjectsTestCase(TestCase):
     def setUp(self):
         self.user = get_user()
+        self.mount_type = get_mount_type(code="LIGHTPOLE", description="Lightpole")
+        self.mount_type_2 = get_mount_type(code="POLE", description="Pole")
 
     def test_create_a_single_mount_real_for_main_and_additional_traffic_signs(self):
         main_sign = TrafficSignReal.objects.create(
             location=Point(0, 0, 10, srid=settings.SRID),
             legacy_code="100",
-            mount_type="Lightpole",
+            mount_type=self.mount_type,
             direction=0,
             order=1,
             created_by=self.user,
@@ -26,7 +28,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             location=Point(0.5, 0.5, 5, srid=settings.SRID),
             parent=main_sign,
             legacy_code="800",
-            mount_type="Lightpole",
+            mount_type=self.mount_type,
             direction=0,
             order=1,
             created_by=self.user,
@@ -45,7 +47,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
         main_sign_1 = TrafficSignReal.objects.create(
             location=Point(1, 1, 10, srid=settings.SRID),
             legacy_code="100",
-            mount_type="Lightpole",
+            mount_type=self.mount_type,
             direction=0,
             order=1,
             created_by=self.user,
@@ -55,7 +57,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
         main_sign_2 = TrafficSignReal.objects.create(
             location=Point(1, 0.8, 5, srid=settings.SRID),
             legacy_code="100",
-            mount_type="Lightpole",
+            mount_type=self.mount_type,
             direction=0,
             order=1,
             created_by=self.user,
@@ -74,7 +76,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
         TrafficSignReal.objects.create(
             location=Point(1, 1, 10, srid=settings.SRID),
             legacy_code="100",
-            mount_type="Lightpole",
+            mount_type=self.mount_type,
             direction=0,
             order=1,
             created_by=self.user,
@@ -84,7 +86,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
         TrafficSignReal.objects.create(
             location=Point(2, 2, 5, srid=settings.SRID),
             legacy_code="100",
-            mount_type="Lightpole",
+            mount_type=self.mount_type,
             direction=0,
             order=1,
             created_by=self.user,
@@ -98,7 +100,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
         TrafficSignReal.objects.create(
             location=Point(1, 1, 10, srid=settings.SRID),
             legacy_code="100",
-            mount_type="Lightpole",
+            mount_type=self.mount_type,
             direction=0,
             order=1,
             created_by=self.user,
@@ -108,7 +110,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
         TrafficSignReal.objects.create(
             location=Point(1, 0.8, 5, srid=settings.SRID),
             legacy_code="100",
-            mount_type="Pole",
+            mount_type=self.mount_type_2,
             direction=0,
             order=1,
             created_by=self.user,

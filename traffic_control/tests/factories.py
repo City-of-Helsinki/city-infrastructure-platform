@@ -94,11 +94,15 @@ def get_barrier_real(location=""):
     )
 
 
+def get_mount_type(code="POST", description="Post"):
+    return MountType.objects.get_or_create(code=code, description=description)[0]
+
+
 def get_mount_plan(location="", plan=None):
     user = get_user("test_user")
 
     return MountPlan.objects.get_or_create(
-        type=MountType.PORTAL,
+        type=get_mount_type(code="PORTAL", description="Portal"),
         location=location or test_point,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
@@ -113,7 +117,7 @@ def get_mount_real(location=""):
 
     return MountReal.objects.get_or_create(
         mount_plan=get_mount_plan(),
-        type=MountType.PORTAL,
+        type=get_mount_type(code="PORTAL", description="Portal"),
         location=location or test_point,
         installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
@@ -201,7 +205,7 @@ def get_traffic_light_plan(location="", plan=None):
         type=TrafficLightType.SIGNAL,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
-        mount_type=MountType.POST,
+        mount_type=get_mount_type(),
         road_name="Testingroad",
         sound_beacon=TrafficLightSoundBeaconValue.YES,
         plan=plan,
@@ -220,7 +224,7 @@ def get_traffic_light_real(location=""):
         type=TrafficLightType.SIGNAL,
         installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
-        mount_type=MountType.POST,
+        mount_type=get_mount_type(),
         road_name="Testingroad",
         sound_beacon=TrafficLightSoundBeaconValue.YES,
         created_by=user,

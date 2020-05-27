@@ -129,7 +129,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         Ensure we can create a new mount plan object.
         """
         data = {
-            "type": self.test_type.value,
+            "type": self.test_mount_type.pk,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -140,7 +140,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(MountPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         mount_plan = MountPlan.objects.first()
-        self.assertEqual(mount_plan.type.value, data["type"])
+        self.assertEqual(mount_plan.type.pk, data["type"])
         self.assertEqual(mount_plan.location.ewkt, data["location"])
         self.assertEqual(
             mount_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
@@ -153,7 +153,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         """
         mount_plan = self.__create_test_mount_plan()
         data = {
-            "type": self.test_type_2.value,
+            "type": self.test_mount_type_2.pk,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
@@ -167,7 +167,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(MountPlan.objects.count(), 1)
         mount_plan = MountPlan.objects.first()
-        self.assertEqual(mount_plan.type.value, data["type"])
+        self.assertEqual(mount_plan.type.pk, data["type"])
         self.assertEqual(mount_plan.location.ewkt, data["location"])
         self.assertEqual(
             mount_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
@@ -203,7 +203,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
 
     def __create_test_mount_plan(self):
         return MountPlan.objects.create(
-            type=self.test_type,
+            type=self.test_mount_type,
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
@@ -323,7 +323,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can create a new mount real object.
         """
         data = {
-            "type": self.test_type.value,
+            "type": self.test_mount_type.pk,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -334,7 +334,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(MountReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         mount_real = MountReal.objects.first()
-        self.assertEqual(mount_real.type.value, data["type"])
+        self.assertEqual(mount_real.type.pk, data["type"])
         self.assertEqual(mount_real.location.ewkt, data["location"])
         self.assertEqual(
             mount_real.installation_date.strftime("%Y-%m-%d"),
@@ -348,7 +348,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         """
         mount_real = self.__create_test_mount_real()
         data = {
-            "type": self.test_type_2.value,
+            "type": self.test_mount_type_2.pk,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
@@ -362,7 +362,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(MountReal.objects.count(), 1)
         mount_real = MountReal.objects.first()
-        self.assertEqual(mount_real.type.value, data["type"])
+        self.assertEqual(mount_real.type.pk, data["type"])
         self.assertEqual(mount_real.location.ewkt, data["location"])
         self.assertEqual(
             mount_real.installation_date.strftime("%Y-%m-%d"),
@@ -399,7 +399,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
 
     def __create_test_mount_real(self):
         mount_plan = MountPlan.objects.create(
-            type=self.test_type,
+            type=self.test_mount_type,
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
@@ -408,7 +408,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         )
         return MountReal.objects.create(
             mount_plan=mount_plan,
-            type=self.test_type,
+            type=self.test_mount_type,
             location=self.test_point,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,

@@ -21,7 +21,7 @@ from .common import (
     Surface,
     TrafficSignCode,
 )
-from .mount import MountPlan, MountReal
+from .mount import MountPlan, MountReal, MountType
 from .plan import Plan
 from .utils import SoftDeleteQuerySet
 
@@ -73,9 +73,16 @@ class TrafficSignPlan(SoftDeleteModelMixin, models.Model):
         blank=True,
         null=True,
     )
-    mount_type = models.CharField(_("Mount"), max_length=254, blank=True, null=True)
-    mount_type_fi = models.CharField(
+    _mount_type = models.CharField(_("Mount"), max_length=254, blank=True, null=True)
+    _mount_type_fi = models.CharField(
         _("Mount (fi)"), max_length=254, blank=True, null=True
+    )
+    mount_type = models.ForeignKey(
+        MountType,
+        verbose_name=_("Mount type"),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
     )
     decision_date = models.DateField(_("Decision date"))
     decision_id = models.CharField(
@@ -259,9 +266,16 @@ class TrafficSignReal(SoftDeleteModelMixin, models.Model):
         blank=True,
         null=True,
     )
-    mount_type = models.CharField(_("Mount"), max_length=254, blank=True, null=True)
-    mount_type_fi = models.CharField(
+    _mount_type = models.CharField(_("Mount"), max_length=254, blank=True, null=True)
+    _mount_type_fi = models.CharField(
         _("Mount (fi)"), max_length=254, blank=True, null=True
+    )
+    mount_type = models.ForeignKey(
+        MountType,
+        verbose_name=_("Mount type"),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
     )
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
