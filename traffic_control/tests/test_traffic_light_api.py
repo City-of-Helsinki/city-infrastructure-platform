@@ -6,14 +6,18 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import (
-    MountType,
     TrafficLightPlan,
     TrafficLightReal,
     TrafficLightSoundBeaconValue,
     TrafficLightType,
 )
 
-from .factories import get_api_client, get_traffic_light_plan, get_traffic_light_real
+from .factories import (
+    get_api_client,
+    get_mount_type,
+    get_traffic_light_plan,
+    get_traffic_light_real,
+)
 from .test_base_api import (
     point_location_error_test_data,
     point_location_test_data,
@@ -216,7 +220,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             type=TrafficLightType.SIGNAL,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
-            mount_type=MountType.POST,
+            mount_type=get_mount_type(),
             road_name="Testingroad",
             sound_beacon=TrafficLightSoundBeaconValue.YES,
             created_by=self.user,
@@ -425,7 +429,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             type=TrafficLightType.SIGNAL,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
-            mount_type=MountType.POST,
+            mount_type=get_mount_type(),
             road_name="Testingroad",
             sound_beacon=TrafficLightSoundBeaconValue.YES,
             created_by=self.user,
@@ -439,7 +443,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             type=TrafficLightType.SIGNAL,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
-            mount_type=MountType.POST,
+            mount_type=get_mount_type(),
             road_name="Testingroad",
             sound_beacon=TrafficLightSoundBeaconValue.YES,
             created_by=self.user,

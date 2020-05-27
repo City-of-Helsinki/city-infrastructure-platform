@@ -4,7 +4,7 @@ from django.contrib.gis.measure import D
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from traffic_control.models import MountReal, MountType, TrafficSignReal
+from traffic_control.models import MountReal, TrafficSignReal
 
 OWNER = "Helsingin kaupunki"
 
@@ -52,11 +52,11 @@ class Command(BaseCommand):
         mount real object using the same location (x, y) as the
         traffic sign
         """
-        mount_type = MountType[traffic_sign.mount_type.upper()].value
         mount_real = (
             MountReal.objects.active()
             .filter(
-                location__dwithin=(traffic_sign.location, D(m=radius)), type=mount_type,
+                location__dwithin=(traffic_sign.location, D(m=radius)),
+                type=traffic_sign.mount_type,
             )
             .first()
         )
@@ -67,7 +67,7 @@ class Command(BaseCommand):
                     traffic_sign.location.y,
                     srid=settings.SRID,
                 ),
-                type=mount_type,
+                type=traffic_sign.mount_type,
                 owner=OWNER,
                 created_by=traffic_sign.created_by,
                 updated_by=traffic_sign.updated_by,

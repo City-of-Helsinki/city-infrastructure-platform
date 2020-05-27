@@ -13,6 +13,32 @@ from .plan import Plan
 from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
 
 
+class MountType(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    code = models.CharField(
+        verbose_name=_("Code"), max_length=128, blank=False, null=False,
+    )
+    description = models.CharField(
+        verbose_name=_("Description"), max_length=256, blank=False, null=False,
+    )
+    digiroad_code = models.IntegerField(
+        verbose_name=_("Digiroad code"), blank=True, null=True,
+    )
+    digiroad_description = models.CharField(
+        verbose_name=_("Digiroad description"), max_length=256, blank=True,
+    )
+
+    class Meta:
+        db_table = "mount_type"
+        verbose_name = _("Mount type")
+        verbose_name_plural = _("Mount types")
+
+    def __str__(self):
+        return f"{self.description} ({self.code})"
+
+
 class PortalType(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -36,8 +62,15 @@ class MountPlan(SoftDeleteModelMixin, models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = models.CharField(
+    _type = models.CharField(
         verbose_name=_("Mount type"), max_length=20, default="PORTAL"
+    )
+    type = models.ForeignKey(
+        MountType,
+        verbose_name=_("Mount type"),
+        blank=False,
+        null=True,
+        on_delete=models.PROTECT,
     )
     portal_type = models.ForeignKey(
         PortalType,
@@ -154,8 +187,15 @@ class MountReal(SoftDeleteModelMixin, models.Model):
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = models.CharField(
+    _type = models.CharField(
         verbose_name=_("Mount type"), max_length=20, default="PORTAL"
+    )
+    type = models.ForeignKey(
+        MountType,
+        verbose_name=_("Mount type"),
+        blank=False,
+        null=True,
+        on_delete=models.PROTECT,
     )
     portal_type = models.ForeignKey(
         PortalType,
@@ -268,6 +308,7 @@ class MountRealFile(models.Model):
         return f"{self.file}"
 
 
+auditlog.register(MountType)
 auditlog.register(MountPlan)
 auditlog.register(MountPlanFile)
 auditlog.register(MountReal)
