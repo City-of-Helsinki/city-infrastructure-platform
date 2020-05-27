@@ -67,11 +67,10 @@ class SignpostPlan(SoftDeleteModelMixin, models.Model):
         blank=True,
         null=True,
     )
-    mount_type = EnumField(
-        MountType,
+    mount_type = models.CharField(
         verbose_name=_("Mount type"),
         max_length=20,
-        default=MountType.OTHER,
+        default="OTHER",
         blank=True,
         null=True,
     )
@@ -244,11 +243,10 @@ class SignpostReal(SoftDeleteModelMixin, models.Model):
         blank=True,
         null=True,
     )
-    mount_type = EnumField(
-        MountType,
+    mount_type = models.CharField(
         verbose_name=_("Mount type"),
         max_length=20,
-        default=MountType.OTHER,
+        default="OTHER",
         blank=True,
         null=True,
     )

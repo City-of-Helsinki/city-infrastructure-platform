@@ -103,11 +103,10 @@ class TrafficLightPlan(SoftDeleteModelMixin, models.Model):
         blank=True,
         null=True,
     )
-    mount_type = EnumField(
-        MountType,
+    mount_type = models.CharField(
         verbose_name=_("Mount type"),
         max_length=20,
-        default=MountType.POST,
+        default="POST",
         blank=True,
         null=True,
     )
@@ -252,11 +251,10 @@ class TrafficLightReal(SoftDeleteModelMixin, models.Model):
         blank=True,
         null=True,
     )
-    mount_type = EnumField(
-        MountType,
+    mount_type = models.CharField(
         verbose_name=_("Mount type"),
         max_length=20,
-        default=MountType.POST,
+        default="POST",
         blank=True,
         null=True,
     )
