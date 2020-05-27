@@ -73,10 +73,6 @@ class TrafficSignPlan(SoftDeleteModelMixin, models.Model):
         blank=True,
         null=True,
     )
-    _mount_type = models.CharField(_("Mount"), max_length=254, blank=True, null=True)
-    _mount_type_fi = models.CharField(
-        _("Mount (fi)"), max_length=254, blank=True, null=True
-    )
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
@@ -265,10 +261,6 @@ class TrafficSignReal(SoftDeleteModelMixin, models.Model):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
-    )
-    _mount_type = models.CharField(_("Mount"), max_length=254, blank=True, null=True)
-    _mount_type_fi = models.CharField(
-        _("Mount (fi)"), max_length=254, blank=True, null=True
     )
     mount_type = models.ForeignKey(
         MountType,
