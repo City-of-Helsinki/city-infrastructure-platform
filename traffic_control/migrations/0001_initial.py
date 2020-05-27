@@ -209,11 +209,8 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "type",
-                    enumfields.fields.EnumField(
-                        default="PORTAL",
-                        enum=traffic_control.models.mount.MountType,
-                        max_length=10,
-                        verbose_name="Mount type",
+                    models.CharField(
+                        default="PORTAL", max_length=10, verbose_name="Mount type",
                     ),
                 ),
                 (
@@ -362,11 +359,8 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "type",
-                    enumfields.fields.EnumField(
-                        default="PORTAL",
-                        enum=traffic_control.models.mount.MountType,
-                        max_length=10,
-                        verbose_name="Mount type",
+                    models.CharField(
+                        default="PORTAL", max_length=10, verbose_name="Mount type",
                     ),
                 ),
                 (
@@ -796,10 +790,9 @@ class Migration(migrations.Migration):
                 ("order", models.IntegerField(default=1, verbose_name="Order")),
                 (
                     "mount_type",
-                    enumfields.fields.EnumField(
+                    models.CharField(
                         blank=True,
                         default="OTHER",
-                        enum=traffic_control.models.mount.MountType,
                         max_length=10,
                         null=True,
                         verbose_name="Mount type",
@@ -998,10 +991,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "mount_type",
-                    enumfields.fields.EnumField(
+                    models.CharField(
                         blank=True,
                         default="POST",
-                        enum=traffic_control.models.mount.MountType,
                         max_length=10,
                         null=True,
                         verbose_name="Mount type",
@@ -1196,10 +1188,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "mount_type",
-                    enumfields.fields.EnumField(
+                    models.CharField(
                         blank=True,
                         default="OTHER",
-                        enum=traffic_control.models.mount.MountType,
                         max_length=10,
                         null=True,
                         verbose_name="Mount type",
@@ -1461,11 +1452,8 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "mount_type",
-                    enumfields.fields.EnumField(
-                        default="OTHER",
-                        enum=traffic_control.models.mount.MountType,
-                        max_length=10,
-                        verbose_name="Mount",
+                    models.CharField(
+                        default="OTHER", max_length=10, verbose_name="Mount",
                     ),
                 ),
                 (
@@ -1772,10 +1760,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "mount_type",
-                    enumfields.fields.EnumField(
+                    models.CharField(
                         blank=True,
                         default="POST",
-                        enum=traffic_control.models.mount.MountType,
                         max_length=10,
                         null=True,
                         verbose_name="Mount type",
@@ -2060,10 +2047,9 @@ class Migration(migrations.Migration):
                 ("order", models.IntegerField(default=1, verbose_name="Order")),
                 (
                     "mount_type",
-                    enumfields.fields.EnumField(
+                    models.CharField(
                         blank=True,
                         default="OTHER",
-                        enum=traffic_control.models.mount.MountType,
                         max_length=10,
                         null=True,
                         verbose_name="Mount type",

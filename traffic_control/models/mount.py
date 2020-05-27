@@ -5,35 +5,12 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumField, EnumIntegerField
+from enumfields import EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModelMixin
 from .common import Condition, InstallationStatus, Lifecycle
 from .plan import Plan
 from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
-
-
-class MountType(Enum):
-    PORTAL = "PORTAL"
-    POST = "POST"
-    WALL = "WALL"
-    WIRE = "WIRE"
-    BRIDGE = "BRIDGE"
-    OTHER = "OTHER"
-    LIGHTPOLE = "LIGHTPOLE"
-    POLE = "POLE"
-    TRAFFICLIGHT = "TRAFFICLIGHT"
-
-    class Labels:
-        PORTAL = _("Portal")
-        POST = _("Post")
-        WALL = _("Wall")
-        WIRE = _("Wire")
-        BRIDGE = _("Bridge")
-        OTHER = _("Other")
-        LIGHTPOLE = _("Lightpole")
-        POLE = _("Pole")
-        TRAFFICLIGHT = _("Trafficlight")
 
 
 class PortalType(models.Model):
@@ -59,8 +36,8 @@ class MountPlan(SoftDeleteModelMixin, models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = EnumField(
-        MountType, verbose_name=_("Mount type"), max_length=20, default=MountType.PORTAL
+    type = models.CharField(
+        verbose_name=_("Mount type"), max_length=20, default="PORTAL"
     )
     portal_type = models.ForeignKey(
         PortalType,
@@ -177,8 +154,8 @@ class MountReal(SoftDeleteModelMixin, models.Model):
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = EnumField(
-        MountType, verbose_name=_("Mount type"), max_length=20, default=MountType.PORTAL
+    type = models.CharField(
+        verbose_name=_("Mount type"), max_length=20, default="PORTAL"
     )
     portal_type = models.ForeignKey(
         PortalType,
