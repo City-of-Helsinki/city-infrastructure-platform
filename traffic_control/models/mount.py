@@ -62,9 +62,6 @@ class MountPlan(SoftDeleteModelMixin, models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    _type = models.CharField(
-        verbose_name=_("Mount type"), max_length=20, default="PORTAL"
-    )
     type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
@@ -187,9 +184,6 @@ class MountReal(SoftDeleteModelMixin, models.Model):
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    _type = models.CharField(
-        verbose_name=_("Mount type"), max_length=20, default="PORTAL"
-    )
     type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
