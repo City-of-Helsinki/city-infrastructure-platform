@@ -652,37 +652,27 @@ msgstr "Merkkikoodi"
 msgid "Traffic Sign Codes"
 msgstr "Merkkikoodit"
 
-#: traffic_control/models/mount.py:28
-msgid "Portal"
-msgstr "Portaali"
-
-#: traffic_control/models/mount.py:29
-msgid "Post"
-msgstr "Tolppa"
+#: traffic_control/models/mount.py:27
+msgid "Digiroad code"
+msgstr "Digiroad koodi"
 
 #: traffic_control/models/mount.py:30
-msgid "Wall"
-msgstr "Seinä"
+msgid "Digiroad description"
+msgstr "Digiroad selite"
 
-#: traffic_control/models/mount.py:31
-msgid "Wire"
-msgstr "Vaijeri"
-
-#: traffic_control/models/mount.py:32
-msgid "Bridge"
-msgstr "Silta"
-
-#: traffic_control/models/mount.py:34
-msgid "Lightpole"
-msgstr "Katuvalopylväs"
-
-#: traffic_control/models/mount.py:35
-msgid "Pole"
-msgstr "Yhteiskäyttöpylväs"
+#: traffic_control/models/mount.py:35 traffic_control/models/mount.py:67
+#: traffic_control/models/mount.py:189 traffic_control/models/signpost.py:72
+#: traffic_control/models/signpost.py:248
+#: traffic_control/models/traffic_light.py:108
+#: traffic_control/models/traffic_light.py:256
+#: traffic_control/models/traffic_sign.py:78
+#: traffic_control/models/traffic_sign.py:267
+msgid "Mount type"
+msgstr "Kiinnityskohteen tyyppi"
 
 #: traffic_control/models/mount.py:36
-msgid "Trafficlight"
-msgstr "Liikennevalopylväs"
+msgid "Mount types"
+msgstr "Kiinnityskohteen tyypit"
 
 #: traffic_control/models/mount.py:43
 msgid "Portal structure"
@@ -704,13 +694,6 @@ msgstr "Portaalityyppi"
 #: traffic_control/models/mount.py:50
 msgid "Portal types"
 msgstr "Portaalityypit"
-
-#: traffic_control/models/mount.py:63 traffic_control/models/mount.py:181
-#: traffic_control/models/signpost.py:72 traffic_control/models/signpost.py:247
-#: traffic_control/models/traffic_light.py:76
-#: traffic_control/models/traffic_light.py:214
-msgid "Mount type"
-msgstr "Kiinnityskohteen tyyppi"
 
 #: traffic_control/models/mount.py:116 traffic_control/models/mount.py:239
 #: traffic_control/models/signpost.py:47 traffic_control/models/signpost.py:222
@@ -1239,16 +1222,6 @@ msgstr "Merkin numeerinen arvo"
 #: traffic_control/models/traffic_sign.py:61
 msgid "Parent Traffic Sign Plan"
 msgstr "Isäntäkilpi (suunnitelma)"
-
-#: traffic_control/models/traffic_sign.py:76
-#: traffic_control/models/traffic_sign.py:260
-msgid "Mount"
-msgstr "Kiinnityskohteen tyyppi (en)"
-
-#: traffic_control/models/traffic_sign.py:78
-#: traffic_control/models/traffic_sign.py:262
-msgid "Mount (fi)"
-msgstr "Kiinnityskohteen tyyppi (fi)"
 
 #: traffic_control/models/traffic_sign.py:91
 #: traffic_control/models/traffic_sign.py:291
