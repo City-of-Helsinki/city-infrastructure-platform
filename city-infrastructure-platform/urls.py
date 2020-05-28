@@ -63,6 +63,9 @@ router.register(
 router.register(
     "portal-types", mount_views.PortalTypeViewSet,
 )
+router.register(
+    "mount-types", mount_views.MountTypeViewSet,
+)
 schema_view = get_schema_view(
     openapi.Info(
         title="City Infrastructure Platform REST API",

@@ -11,6 +11,7 @@ from .models import (
     MountPlanFile,
     MountReal,
     MountRealFile,
+    MountType,
     Plan,
     PortalType,
     RoadMarkingPlan,
@@ -403,4 +404,10 @@ class TrafficSignCodeSerializer(serializers.ModelSerializer):
 class PortalTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PortalType
+        fields = "__all__"
+
+
+class MountTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MountType
         fields = "__all__"
