@@ -318,7 +318,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         mount_real_geojson = GeoJsonDict(mount_real.location.json)
         self.assertEqual(mount_real_geojson, response.data.get("location"))
 
-    def test_create_mount_plan(self):
+    def test_create_mount_real(self):
         """
         Ensure we can create a new mount real object.
         """
