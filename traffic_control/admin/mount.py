@@ -2,7 +2,14 @@ from django.contrib.gis import admin
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
-from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, PortalType
+from ..models import (
+    MountPlan,
+    MountPlanFile,
+    MountReal,
+    MountRealFile,
+    MountType,
+    PortalType,
+)
 from .audit_log import AuditLogHistoryAdmin
 from .traffic_sign import OrderedTrafficSignRealInline
 
@@ -67,6 +74,12 @@ class MountRealAdmin(
     )
     ordering = ("-created_at",)
     inlines = (MountRealFileInline, OrderedTrafficSignRealInline)
+
+
+@admin.register(MountType)
+class MountTypeAdmin(AuditLogHistoryAdmin):
+    list_display = ("code", "description", "digiroad_code", "digiroad_description")
+    ordering = ("code", "description")
 
 
 @admin.register(PortalType)
