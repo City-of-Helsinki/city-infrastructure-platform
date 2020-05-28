@@ -6,8 +6,20 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
-from ..filters import MountPlanFilterSet, MountRealFilterSet, PortalTypeFilterSet
-from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, PortalType
+from ..filters import (
+    MountPlanFilterSet,
+    MountRealFilterSet,
+    MountTypeFilterSet,
+    PortalTypeFilterSet,
+)
+from ..models import (
+    MountPlan,
+    MountPlanFile,
+    MountReal,
+    MountRealFile,
+    MountType,
+    PortalType,
+)
 from ..permissions import IsAdminUserOrReadOnly
 from ..schema import (
     file_uuid_parameter,
@@ -22,6 +34,7 @@ from ..serializers import (
     MountRealFileSerializer,
     MountRealGeoJSONSerializer,
     MountRealSerializer,
+    MountTypeSerializer,
     PortalTypeSerializer,
 )
 from ._common import FileUploadViews, TrafficControlViewSet
@@ -224,3 +237,39 @@ class PortalTypeViewSet(ModelViewSet):
     serializer_class = PortalTypeSerializer
     queryset = PortalType.objects.all()
     filterset_class = PortalTypeFilterSet
+
+
+@method_decorator(
+    name="create",
+    decorator=swagger_auto_schema(operation_description="Create new MountType"),
+)
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(operation_description="Retrieve all MountTypes"),
+)
+@method_decorator(
+    name="retrieve",
+    decorator=swagger_auto_schema(operation_description="Retrieve single MountType"),
+)
+@method_decorator(
+    name="update",
+    decorator=swagger_auto_schema(operation_description="Update single MountType"),
+)
+@method_decorator(
+    name="partial_update",
+    decorator=swagger_auto_schema(
+        operation_description="Partially update single MountType"
+    ),
+)
+@method_decorator(
+    name="destroy",
+    decorator=swagger_auto_schema(operation_description="Delete single MountType"),
+)
+class MountTypeViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = "__all__"
+    ordering = ["code", "description"]
+    permission_classes = [IsAdminUserOrReadOnly]
+    serializer_class = MountTypeSerializer
+    queryset = MountType.objects.all()
+    filterset_class = MountTypeFilterSet
