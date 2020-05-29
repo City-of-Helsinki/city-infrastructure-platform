@@ -12,6 +12,7 @@ import os
 
 import environ
 import sentry_sdk
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -44,18 +45,46 @@ env = environ.Env(
     AZURE_ACCOUNT_KEY=(str, False),
     AZURE_CONTAINER=(str, False),
     AZURE_ACCOUNT_NAME=(str, False),
+    OIDC_AUTHENTICATION_ENABLED=(bool, True),
+    SOCIAL_AUTH_TUNNISTAMO_KEY=(str, None),
+    SOCIAL_AUTH_TUNNISTAMO_SECRET=(str, None),
+    OIDC_API_TOKEN_AUTH_AUDIENCE=(str, None),
+    OIDC_API_TOKEN_AUTH_ISSUER=(str, None),
+    OIDC_ENDPOINT=(str, None),
 )
+
 if os.path.exists(env_file):
     env.read_env(env_file)
 
+SOCIAL_AUTH_TUNNISTAMO_KEY = env("SOCIAL_AUTH_TUNNISTAMO_KEY")
+SOCIAL_AUTH_TUNNISTAMO_SECRET = env("SOCIAL_AUTH_TUNNISTAMO_SECRET")
+
+if env("OIDC_ENDPOINT"):
+    SOCIAL_AUTH_TUNNISTAMO_OIDC_ENDPOINT = env("OIDC_ENDPOINT")
+
+OIDC_API_TOKEN_AUTH = {
+    "AUDIENCE": env("OIDC_API_TOKEN_AUTH_AUDIENCE"),
+    "ISSUER": env("OIDC_API_TOKEN_AUTH_ISSUER"),
+}
+
 # General settings
-DEBUG = env.bool("DEBUG")
-TIER = env.str("TIER")
-SECRET_KEY = env.str("SECRET_KEY")
+DEBUG = env("DEBUG")
+OIDC_AUTHENTICATION_ENABLED = env("OIDC_AUTHENTICATION_ENABLED")
+TIER = env("TIER")
+SECRET_KEY = env("SECRET_KEY")
 if DEBUG and not SECRET_KEY:
     SECRET_KEY = "xxx"
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+
+if OIDC_AUTHENTICATION_ENABLED and (
+    not SOCIAL_AUTH_TUNNISTAMO_KEY
+    or not SOCIAL_AUTH_TUNNISTAMO_SECRET
+    or not OIDC_API_TOKEN_AUTH["AUDIENCE"]
+    or not OIDC_API_TOKEN_AUTH["ISSUER"]
+):
+    raise ImproperlyConfigured("Authentication not configured properly")
+
 
 CACHES = {"default": env.cache()}
 vars().update(env.email_url())  # EMAIL_BACKEND etc.
@@ -84,7 +113,7 @@ LOCAL_APPS = ["users.apps.UsersConfig", "traffic_control.apps.TrafficControlConf
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 AUTHENTICATION_BACKENDS = (
-    # "helusers.tunnistamo_oidc.TunnistamoOIDCAuth", # disable OIDC-provider for now
+    "helusers.tunnistamo_oidc.TunnistamoOIDCAuth",
     "django.contrib.auth.backends.ModelBackend",
 )
 

@@ -21,6 +21,7 @@ addons:
 env:
   global:
     - DEBUG=1
+    - OIDC_AUTHENTICATION_ENABLED=0
 
 install:
   - pip install -r requirements.txt
