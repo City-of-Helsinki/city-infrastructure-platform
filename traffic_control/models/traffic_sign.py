@@ -2,13 +2,12 @@ import uuid
 
 from auditlog.registry import auditlog
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModelMixin
+from ..mixins.models import SoftDeleteModel, UserControlModel
 from .common import (
     Color,
     Condition,
@@ -43,7 +42,7 @@ class LocationSpecifier(Enum):
         OUTSIDE = _("Outside")
 
 
-class TrafficSignPlan(SoftDeleteModelMixin, models.Model):
+class TrafficSignPlan(SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -98,30 +97,6 @@ class TrafficSignPlan(SoftDeleteModelMixin, models.Model):
         verbose_name=_("Plan"),
         on_delete=models.CASCADE,
         related_name="traffic_sign_plans",
-        blank=True,
-        null=True,
-    )
-    is_active = models.BooleanField(_("Active"), default=True)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
-    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
-    created_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Created by"),
-        related_name="created_by_traffic_sign_plan_set",
-        on_delete=models.CASCADE,
-    )
-    updated_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Updated by"),
-        related_name="updated_by_traffic_sign_plan_set",
-        on_delete=models.CASCADE,
-    )
-    deleted_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Deleted by"),
-        related_name="deleted_by_traffic_sign_plan_set",
-        on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
@@ -218,7 +193,7 @@ class TrafficSignPlanFile(models.Model):
         return "%s" % self.file
 
 
-class TrafficSignReal(SoftDeleteModelMixin, models.Model):
+class TrafficSignReal(SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -298,31 +273,7 @@ class TrafficSignReal(SoftDeleteModelMixin, models.Model):
     affect_area = models.PolygonField(
         _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
-    is_active = models.BooleanField(_("Active"), default=True)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
-    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
     scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
-    created_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Created by"),
-        related_name="created_by_traffic_sign_real_set",
-        on_delete=models.CASCADE,
-    )
-    updated_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Updated by"),
-        related_name="updated_by_traffic_sign_real_set",
-        on_delete=models.CASCADE,
-    )
-    deleted_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Deleted by"),
-        related_name="deleted_by_traffic_sign_real_set",
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-    )
     size = EnumField(Size, verbose_name=_("Size"), max_length=1, blank=True, null=True,)
     reflection_class = EnumField(
         Reflection, verbose_name=_("Reflection"), max_length=2, blank=True, null=True,

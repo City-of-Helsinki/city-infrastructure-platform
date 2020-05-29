@@ -9,11 +9,11 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import MultiPolygon, Point
 from django.utils.translation import gettext_lazy as _
 
-from ..mixins.models import SoftDeleteModelMixin
+from ..mixins.models import SoftDeleteModel, UserControlModel
 from ..models.utils import SoftDeleteQuerySet
 
 
-class Plan(SoftDeleteModelMixin, models.Model):
+class Plan(SoftDeleteModel, UserControlModel):
     # Permissions
     ADD_PERMISSION = "traffic_control.add_plan"
     CHANGE_PERMISSION = "traffic_control.change_plan"
@@ -46,31 +46,6 @@ class Plan(SoftDeleteModelMixin, models.Model):
         on_delete=models.PROTECT,
         null=False,
         blank=False,
-    )
-
-    is_active = models.BooleanField(_("Active"), default=True)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
-    deleted_at = models.DateTimeField(_("Deleted at"), blank=True, null=True)
-    created_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Created by"),
-        related_name="created_by_plan_set",
-        on_delete=models.PROTECT,
-    )
-    updated_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Updated by"),
-        related_name="updated_by_plan_set",
-        on_delete=models.PROTECT,
-    )
-    deleted_by = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Deleted by"),
-        related_name="deleted_by_plan_set",
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
     )
 
     objects = SoftDeleteQuerySet.as_manager()
