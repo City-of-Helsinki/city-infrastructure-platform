@@ -62,13 +62,14 @@ class MountPlan(SoftDeleteModelMixin, models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = models.ForeignKey(
+    mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
         blank=False,
         null=True,
         on_delete=models.PROTECT,
     )
+    base = models.CharField(verbose_name=_("Base"), max_length=128, blank=True)
     portal_type = models.ForeignKey(
         PortalType,
         verbose_name=_("Portal type"),
@@ -143,7 +144,7 @@ class MountPlan(SoftDeleteModelMixin, models.Model):
         verbose_name_plural = _("Mount Plans")
 
     def __str__(self):
-        return "%s %s" % (self.id, self.type)
+        return "%s %s" % (self.id, self.mount_type)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -184,13 +185,14 @@ class MountReal(SoftDeleteModelMixin, models.Model):
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = models.ForeignKey(
+    mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
         blank=False,
         null=True,
         on_delete=models.PROTECT,
     )
+    base = models.CharField(verbose_name=_("Base"), max_length=128, blank=True)
     portal_type = models.ForeignKey(
         PortalType,
         verbose_name=_("Portal type"),
@@ -273,7 +275,7 @@ class MountReal(SoftDeleteModelMixin, models.Model):
         verbose_name_plural = _("Mount Reals")
 
     def __str__(self):
-        return "%s %s" % (self.id, self.type)
+        return "%s %s" % (self.id, self.mount_type)
 
     @property
     def ordered_traffic_signs(self):
