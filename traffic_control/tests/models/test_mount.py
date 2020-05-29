@@ -12,7 +12,7 @@ class MountRealTestCase(TestCase):
         self.mount_type = get_mount_type(code="LIGHTPOLE", description="Lightpole")
         self.mount_real = MountReal.objects.create(
             location=Point(1, 1, srid=settings.SRID),
-            type=self.mount_type,
+            mount_type=self.mount_type,
             owner="test owner",
             created_by=self.user,
             updated_by=self.user,

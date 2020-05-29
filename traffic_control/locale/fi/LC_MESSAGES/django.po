@@ -695,6 +695,10 @@ msgstr "Portaalityyppi"
 msgid "Portal types"
 msgstr "Portaalityypit"
 
+#: traffic_control/models/mount.py:72 traffic_control/models/mount.py:195
+msgid "Base"
+msgstr "Jalusta"
+
 #: traffic_control/models/mount.py:116 traffic_control/models/mount.py:239
 #: traffic_control/models/signpost.py:47 traffic_control/models/signpost.py:222
 #: traffic_control/models/traffic_light.py:132

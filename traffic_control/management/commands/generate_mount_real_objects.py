@@ -56,7 +56,7 @@ class Command(BaseCommand):
             MountReal.objects.active()
             .filter(
                 location__dwithin=(traffic_sign.location, D(m=radius)),
-                type=traffic_sign.mount_type,
+                mount_type=traffic_sign.mount_type,
             )
             .first()
         )
@@ -67,7 +67,7 @@ class Command(BaseCommand):
                     traffic_sign.location.y,
                     srid=settings.SRID,
                 ),
-                type=traffic_sign.mount_type,
+                mount_type=traffic_sign.mount_type,
                 owner=OWNER,
                 created_by=traffic_sign.created_by,
                 updated_by=traffic_sign.updated_by,

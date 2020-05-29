@@ -35,7 +35,7 @@ class MountPlanAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "type",
+        "mount_type",
         "lifecycle",
         "location",
     )
@@ -62,7 +62,7 @@ class MountRealAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "type",
+        "mount_type",
         "lifecycle",
         "location",
     )
