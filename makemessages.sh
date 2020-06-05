@@ -1,1 +1,1 @@
-python manage.py makemessages -i "venv/*" -l fi
+python manage.py makemessages -i "venv/*" -l fi --no-location
