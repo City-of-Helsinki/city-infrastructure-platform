@@ -15,7 +15,6 @@ class TrafficSignRealModelFormTestCase(TestCase):
             "location": Point(5, 5, srid=settings.SRID),
             "z_coord": 20,
             "direction": 0,
-            "order": 1,
             "created_by": user.id,
             "updated_by": user.id,
             "owner": "test owner",
@@ -25,7 +24,6 @@ class TrafficSignRealModelFormTestCase(TestCase):
         traffic_sign_real = TrafficSignReal.objects.create(
             location=Point(10, 10, 5, srid=settings.SRID),
             direction=0,
-            order=1,
             created_by=user,
             updated_by=user,
             owner="test owner",
@@ -44,7 +42,6 @@ class TrafficSignRealModelFormTestCase(TestCase):
             "location": Point(10, 10, srid=settings.SRID),
             "z_coord": 20,
             "direction": 0,
-            "order": 1,
             "created_by": user.id,
             "updated_by": user.id,
             "owner": "test owner",
