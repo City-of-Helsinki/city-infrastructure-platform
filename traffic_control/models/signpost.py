@@ -58,7 +58,6 @@ class SignpostPlan(SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    order = models.IntegerField(_("Order"), default=1)
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -210,7 +209,6 @@ class SignpostReal(SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    order = models.IntegerField(_("Order"), default=1)
     mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),

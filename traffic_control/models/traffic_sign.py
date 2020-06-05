@@ -63,7 +63,6 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    order = models.IntegerField(_("Order"), default=1)
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     mount_plan = models.ForeignKey(
         MountPlan,
@@ -228,7 +227,6 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    order = models.IntegerField(_("Order"), default=1)
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     mount_real = models.ForeignKey(
         MountReal,

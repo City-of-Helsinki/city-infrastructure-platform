@@ -21,7 +21,6 @@ class TrafficSignRealAdminTestCase(TestCase):
             location=Point(10, 10, 5, srid=settings.SRID),
             legacy_code="100",
             direction=0,
-            order=1,
             created_by=self.user,
             updated_by=self.user,
             owner="test owner",
@@ -49,7 +48,6 @@ class TrafficSignRealAdminTestCase(TestCase):
             location=Point(1, 1, 5, srid=settings.SRID),
             legacy_code="800",
             direction=0,
-            order=1,
             created_by=self.user,
             updated_by=self.user,
             owner="test owner",
@@ -69,7 +67,6 @@ class TrafficSignRealAdminTestCase(TestCase):
             location=Point(1, 1, 5, srid=settings.SRID),
             legacy_code="100",
             direction=0,
-            order=1,
             owner="test owner",
         )
         ma.save_model(request, traffic_sign_real, None, None)
