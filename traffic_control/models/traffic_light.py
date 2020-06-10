@@ -102,13 +102,6 @@ class TrafficLightPlan(SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
     decision_date = models.DateField(_("Decision date"))
     decision_id = models.CharField(
         _("Decision id"), max_length=254, blank=True, null=True
@@ -225,13 +218,6 @@ class TrafficLightReal(SoftDeleteModel, UserControlModel):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
-    )
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
     )
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
