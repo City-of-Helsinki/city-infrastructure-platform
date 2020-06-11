@@ -50,6 +50,7 @@ env = environ.Env(
     SOCIAL_AUTH_TUNNISTAMO_SECRET=(str, None),
     OIDC_API_TOKEN_AUTH_AUDIENCE=(str, None),
     OIDC_API_TOKEN_AUTH_ISSUER=(str, None),
+    TOKEN_AUTH_MAX_TOKEN_AGE=(int, 600),
     OIDC_ENDPOINT=(str, None),
 )
 
@@ -218,6 +219,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "PAGE_SIZE": 20,
+    "OIDC_LEEWAY": env("TOKEN_AUTH_MAX_TOKEN_AGE"),
+    "GROUP_CLAIM_NAME": "groups",
 }
 
 # django-cors
