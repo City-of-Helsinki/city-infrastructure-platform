@@ -11,7 +11,7 @@ class SoftDeleteModel(models.Model):
         get_user_model(),
         verbose_name=_("Deleted by"),
         related_name="deleted_by_%(class)s_set",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -33,13 +33,13 @@ class UserControlModel(models.Model):
         get_user_model(),
         verbose_name=_("Created by"),
         related_name="created_by_%(class)s_set",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
     )
     updated_by = models.ForeignKey(
         get_user_model(),
         verbose_name=_("Updated by"),
         related_name="updated_by_%(class)s_set",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
     )
 
     class Meta:

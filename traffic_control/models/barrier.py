@@ -56,7 +56,7 @@ class BarrierPlan(SoftDeleteModel, UserControlModel):
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
     type = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Barrier type"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Barrier type"), on_delete=models.PROTECT
     )
     connection_type = EnumIntegerField(
         ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED
@@ -74,7 +74,7 @@ class BarrierPlan(SoftDeleteModel, UserControlModel):
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="barrier_plans",
         blank=True,
         null=True,
@@ -153,13 +153,13 @@ class BarrierReal(SoftDeleteModel, UserControlModel):
     barrier_plan = models.ForeignKey(
         BarrierPlan,
         verbose_name=_("Barrier Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
     type = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Barrier type"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Barrier type"), on_delete=models.PROTECT
     )
     connection_type = EnumIntegerField(
         ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED

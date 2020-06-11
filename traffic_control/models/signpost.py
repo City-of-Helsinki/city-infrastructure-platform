@@ -47,21 +47,21 @@ class SignpostPlan(SoftDeleteModel, UserControlModel):
     )
     direction = models.IntegerField(_("Direction"), default=0)
     code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Signpost Code"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Signpost Code"), on_delete=models.PROTECT
     )
     value = models.IntegerField(_("Signpost value"), blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
     parent = models.ForeignKey(
         "self",
         verbose_name=_("Parent Signpost Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -85,7 +85,7 @@ class SignpostPlan(SoftDeleteModel, UserControlModel):
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="signpost_plans",
         blank=True,
         null=True,
@@ -188,7 +188,7 @@ class SignpostReal(SoftDeleteModel, UserControlModel):
     signpost_plan = models.ForeignKey(
         SignpostPlan,
         verbose_name=_("Signpost Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -198,21 +198,21 @@ class SignpostReal(SoftDeleteModel, UserControlModel):
     )
     direction = models.IntegerField(_("Direction"), default=0)
     code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Signpost Code"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Signpost Code"), on_delete=models.PROTECT
     )
     value = models.IntegerField(_("Signpost value"), blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
     parent = models.ForeignKey(
         "self",
         verbose_name=_("Parent Signpost Real"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
     mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )

@@ -52,13 +52,13 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
     )
     direction = models.IntegerField(_("Direction"), default=0)
     code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
     parent = models.ForeignKey(
         "self",
         verbose_name=_("Parent Traffic Sign Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="children",
         blank=True,
         null=True,
@@ -67,7 +67,7 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -94,7 +94,7 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="traffic_sign_plans",
         blank=True,
         null=True,
@@ -199,7 +199,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
     traffic_sign_plan = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Traffic Sign Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -211,7 +211,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
     code = models.ForeignKey(
         TrafficSignCode,
         verbose_name=_("Traffic Sign Code"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -222,7 +222,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
     parent = models.ForeignKey(
         "self",
         verbose_name=_("Parent Traffic Sign Real"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="children",
         blank=True,
         null=True,
@@ -231,7 +231,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
     mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )

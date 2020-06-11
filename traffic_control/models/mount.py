@@ -72,7 +72,7 @@ class MountPlan(SoftDeleteModel, UserControlModel):
     portal_type = models.ForeignKey(
         PortalType,
         verbose_name=_("Portal type"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -90,7 +90,7 @@ class MountPlan(SoftDeleteModel, UserControlModel):
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="mount_plans",
         blank=True,
         null=True,
@@ -155,7 +155,7 @@ class MountReal(SoftDeleteModel, UserControlModel):
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -171,7 +171,7 @@ class MountReal(SoftDeleteModel, UserControlModel):
     portal_type = models.ForeignKey(
         PortalType,
         verbose_name=_("Portal type"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )

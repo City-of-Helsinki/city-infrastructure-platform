@@ -93,12 +93,12 @@ class TrafficLightPlan(SoftDeleteModel, UserControlModel):
     direction = models.IntegerField(_("Direction"), default=0)
     type = EnumField(TrafficLightType, blank=True, null=True)
     code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
     )
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -122,7 +122,7 @@ class TrafficLightPlan(SoftDeleteModel, UserControlModel):
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="traffic_light_plans",
         blank=True,
         null=True,
@@ -209,7 +209,7 @@ class TrafficLightReal(SoftDeleteModel, UserControlModel):
     traffic_light_plan = models.ForeignKey(
         TrafficLightPlan,
         verbose_name=_("Traffic Light Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -217,12 +217,12 @@ class TrafficLightReal(SoftDeleteModel, UserControlModel):
     direction = models.IntegerField(_("Direction"), default=0)
     type = EnumField(TrafficLightType, blank=True, null=True)
     code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
     )
     mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
