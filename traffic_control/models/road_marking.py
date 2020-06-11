@@ -76,7 +76,7 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
     code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
     )
     line_direction = EnumField(
         LineDirection,
@@ -118,14 +118,14 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
     traffic_sign_plan = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Traffic Sign Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="road_marking_plans",
         blank=True,
         null=True,
@@ -210,13 +210,13 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
     road_marking_plan = models.ForeignKey(
         RoadMarkingPlan,
         verbose_name=_("Road Marking Plan"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
     code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.CASCADE
+        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
     )
     line_direction = EnumField(
         LineDirection,
@@ -263,7 +263,7 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
     traffic_sign_real = models.ForeignKey(
         TrafficSignReal,
         verbose_name=_("Traffic Sign Real"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
