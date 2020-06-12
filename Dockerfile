@@ -19,6 +19,7 @@ RUN apt-get update && \
         build-essential \
         gdal-bin \
         postgresql-client \
+        git \
         gettext && \
     pip install --no-cache-dir -r requirements.txt -r requirements-prod.txt && \
     apt-get remove -y build-essential libpq-dev && \
