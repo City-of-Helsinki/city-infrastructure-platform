@@ -55,7 +55,7 @@ router.register(
     "road-marking-reals", road_marking_views.RoadMarkingRealViewSet,
 )
 router.register(
-    "traffic-sign-codes", traffic_sign_views.TrafficSignCodeViewSet,
+    "traffic-control-device-types", traffic_sign_views.TrafficControlDeviceTypeViewSet,
 )
 router.register(
     "plans", plan_views.PlanViewSet,

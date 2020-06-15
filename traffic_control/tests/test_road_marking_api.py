@@ -129,7 +129,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         Ensure we can create a new road marking plan object.
         """
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -142,7 +142,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(RoadMarkingPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         road_marking = RoadMarkingPlan.objects.first()
-        self.assertEqual(road_marking.code.id, data["code"])
+        self.assertEqual(road_marking.device_type.id, data["device_type"])
         self.assertEqual(road_marking.location.ewkt, data["location"])
         self.assertEqual(
             road_marking.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
@@ -155,7 +155,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         """
         road_marking = self.__create_test_road_marking_plan()
         data = {
-            "code": self.test_code_2.id,
+            "device_type": self.test_device_type_2.id,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
@@ -169,7 +169,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(RoadMarkingPlan.objects.count(), 1)
         road_marking = RoadMarkingPlan.objects.first()
-        self.assertEqual(road_marking.code.id, data["code"])
+        self.assertEqual(road_marking.device_type.id, data["device_type"])
         self.assertEqual(road_marking.location.ewkt, data["location"])
         self.assertEqual(
             road_marking.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
@@ -205,7 +205,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
 
     def __create_test_road_marking_plan(self):
         return RoadMarkingPlan.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             value="30",
             color=RoadMarkingColor.WHITE,
             location=self.test_point,
@@ -333,7 +333,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can create a new real road marking object.
         """
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -346,7 +346,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(RoadMarkingReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         road_marking_real = RoadMarkingReal.objects.first()
-        self.assertEqual(road_marking_real.code.id, data["code"])
+        self.assertEqual(road_marking_real.device_type.id, data["device_type"])
         self.assertEqual(road_marking_real.location.ewkt, data["location"])
         self.assertEqual(
             road_marking_real.installation_date.strftime("%Y-%m-%d"),
@@ -360,7 +360,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         """
         road_marking_real = self.__create_test_road_marking_real()
         data = {
-            "code": self.test_code_2.id,
+            "device_type": self.test_device_type_2.id,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-21",
             "lifecycle": self.test_lifecycle_2.value,
@@ -374,7 +374,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(RoadMarkingReal.objects.count(), 1)
         road_marking_real = RoadMarkingReal.objects.first()
-        self.assertEqual(road_marking_real.code.id, data["code"])
+        self.assertEqual(road_marking_real.device_type.id, data["device_type"])
         self.assertEqual(road_marking_real.location.ewkt, data["location"])
         self.assertEqual(
             road_marking_real.installation_date.strftime("%Y-%m-%d"),
@@ -413,7 +413,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
 
     def __create_test_road_marking_real(self):
         road_marking_plan = RoadMarkingPlan.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             value="30",
             color=RoadMarkingColor.WHITE,
             location=self.test_point,
@@ -429,7 +429,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         )
 
         return RoadMarkingReal.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             road_marking_plan=road_marking_plan,
             value="30",
             color=RoadMarkingColor.WHITE,

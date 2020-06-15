@@ -26,7 +26,7 @@ class SignpostPlanAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "code",
+        "device_type",
         "txt",
         "lifecycle",
         "location",
@@ -55,7 +55,7 @@ class SignpostRealAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "code",
+        "device_type",
         "txt",
         "lifecycle",
         "location",

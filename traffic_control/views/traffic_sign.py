@@ -7,12 +7,12 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
 from ..filters import (
-    TrafficSignCodeFilterSet,
+    TrafficControlDeviceTypeFilterSet,
     TrafficSignPlanFilterSet,
     TrafficSignRealFilterSet,
 )
 from ..models import (
-    TrafficSignCode,
+    TrafficControlDeviceType,
     TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,
@@ -26,7 +26,7 @@ from ..schema import (
     MultiFileUploadSchema,
 )
 from ..serializers import (
-    TrafficSignCodeSerializer,
+    TrafficControlDeviceTypeSerializer,
     TrafficSignPlanFileSerializer,
     TrafficSignPlanGeoJSONSerializer,
     TrafficSignPlanSerializer,
@@ -36,7 +36,11 @@ from ..serializers import (
 )
 from ._common import FileUploadViews, TrafficControlViewSet
 
-__all__ = ("TrafficSignCodeViewSet", "TrafficSignPlanViewSet", "TrafficSignRealViewSet")
+__all__ = (
+    "TrafficControlDeviceTypeViewSet",
+    "TrafficSignPlanViewSet",
+    "TrafficSignRealViewSet",
+)
 
 
 @method_decorator(
@@ -73,14 +77,14 @@ __all__ = ("TrafficSignCodeViewSet", "TrafficSignPlanViewSet", "TrafficSignRealV
         operation_description="Delete single TrafficSign Code"
     ),
 )
-class TrafficSignCodeViewSet(ModelViewSet):
+class TrafficControlDeviceTypeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["code"]
     permission_classes = [IsAdminUserOrReadOnly]
-    serializer_class = TrafficSignCodeSerializer
-    queryset = TrafficSignCode.objects.all()
-    filterset_class = TrafficSignCodeFilterSet
+    serializer_class = TrafficControlDeviceTypeSerializer
+    queryset = TrafficControlDeviceType.objects.all()
+    filterset_class = TrafficControlDeviceTypeFilterSet
 
 
 @method_decorator(

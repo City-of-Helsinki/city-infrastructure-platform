@@ -13,7 +13,7 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
-    TrafficSignCode,
+    TrafficControlDeviceType,
 )
 from .mount import MountPlan, MountReal, MountType
 from .plan import Plan
@@ -92,8 +92,10 @@ class TrafficLightPlan(SoftDeleteModel, UserControlModel):
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
     type = EnumField(TrafficLightType, blank=True, null=True)
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
     )
     mount_plan = models.ForeignKey(
         MountPlan,
@@ -173,7 +175,7 @@ class TrafficLightPlan(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Traffic Light Plans")
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.type, self.code)
+        return f"{self.id} {self.type} {self.device_type}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -216,8 +218,10 @@ class TrafficLightReal(SoftDeleteModel, UserControlModel):
     location = models.PointField(_("Location (2D)"), srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
     type = EnumField(TrafficLightType, blank=True, null=True)
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
     )
     mount_real = models.ForeignKey(
         MountReal,
@@ -301,7 +305,7 @@ class TrafficLightReal(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Traffic Light Reals")
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.type, self.code)
+        return f"{self.id} {self.type} {self.device_type}"
 
 
 class TrafficLightRealFile(models.Model):

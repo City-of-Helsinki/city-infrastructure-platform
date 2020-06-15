@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.gis.geos import LineString, Point, Polygon
 from rest_framework.test import APITestCase
 
-from traffic_control.models import Lifecycle, MountType, TrafficSignCode
+from traffic_control.models import Lifecycle, MountType, TrafficControlDeviceType
 from users.models import User
 
 test_point_3d = Point(10.0, 10.0, 0.0, srid=settings.SRID)
@@ -76,10 +76,10 @@ class TrafficControlAPIBaseTestCase3D(APITestCase):
         self.client.login(username="testuser", password="testpw")
         self.test_lifecycle = Lifecycle.ACTIVE
         self.test_lifecycle_2 = Lifecycle.INACTIVE
-        self.test_code = TrafficSignCode.objects.create(
+        self.test_device_type = TrafficControlDeviceType.objects.create(
             code="A11", description="Speed limit"
         )
-        self.test_code_2 = TrafficSignCode.objects.create(
+        self.test_device_type_2 = TrafficControlDeviceType.objects.create(
             code="A12", description="Weight limit"
         )
         self.test_type = MountType.objects.create(code="PORTAL", description="Portal")

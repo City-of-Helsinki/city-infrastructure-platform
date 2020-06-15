@@ -26,7 +26,7 @@ class BarrierPlanAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "type",
+        "device_type",
         "lifecycle",
         "location",
         "decision_date",
@@ -54,7 +54,7 @@ class BarrierRealAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "type",
+        "device_type",
         "lifecycle",
         "location",
         "installation_date",

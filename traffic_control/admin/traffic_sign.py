@@ -6,7 +6,7 @@ from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
 from ..mixins import Point3DFieldAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
 from ..models import (
-    TrafficSignCode,
+    TrafficControlDeviceType,
     TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,
@@ -17,7 +17,7 @@ from .audit_log import AuditLogHistoryAdmin
 
 __all__ = (
     "OrderedTrafficSignRealInline",
-    "TrafficSignCodeAdmin",
+    "TrafficControlDeviceTypeAdmin",
     "TrafficSignPlanAdmin",
     "TrafficSignPlanFileInline",
     "TrafficSignRealAdmin",
@@ -25,8 +25,8 @@ __all__ = (
 )
 
 
-@admin.register(TrafficSignCode)
-class TrafficSignCodeAdmin(AuditLogHistoryAdmin):
+@admin.register(TrafficControlDeviceType)
+class TrafficControlDeviceTypeAdmin(AuditLogHistoryAdmin):
     list_display = ("code", "description", "legacy_code", "legacy_description")
     ordering = ("code",)
     actions = None
@@ -49,7 +49,7 @@ class TrafficSignPlanAdmin(
         ("location", "z_coord"),
         "height",
         "direction",
-        "code",
+        "device_type",
         "value",
         "parent",
         "txt",
@@ -84,7 +84,7 @@ class TrafficSignPlanAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "code",
+        "device_type",
         "value",
         "lifecycle",
         "location",
@@ -118,7 +118,7 @@ class TrafficSignRealAdmin(
         ("location", "z_coord"),
         "height",
         "direction",
-        "code",
+        "device_type",
         "value",
         "legacy_code",
         "has_additional_signs",
@@ -165,7 +165,7 @@ class TrafficSignRealAdmin(
     list_display = (
         "id",
         "traffic_sign_plan",
-        "code",
+        "device_type",
         "legacy_code",
         "value",
         "installation_id",
@@ -225,8 +225,8 @@ class TrafficSignRealAdmin(
     ]
     search_fields = (
         "traffic_sign_plan__id",
-        "code__code",
-        "code__description",
+        "device_type__code",
+        "device_type__description",
         "value",
         "installation_date",
         "size",

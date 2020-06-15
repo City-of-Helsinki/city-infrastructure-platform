@@ -18,7 +18,7 @@ from .common import (
     Reflection,
     Size,
     Surface,
-    TrafficSignCode,
+    TrafficControlDeviceType,
 )
 from .mount import MountPlan, MountReal, MountType
 from .plan import Plan
@@ -51,8 +51,10 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
         _("Height"), max_digits=20, decimal_places=6, blank=True, null=True
     )
     direction = models.IntegerField(_("Direction"), default=0)
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
     parent = models.ForeignKey(
@@ -163,7 +165,7 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Traffic Sign Plans")
 
     def __str__(self):
-        return "%s %s" % (self.id, self.code)
+        return f"{self.id} {self.device_type}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -208,9 +210,9 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         _("Height"), max_digits=20, decimal_places=6, blank=True, null=True
     )
     direction = models.IntegerField(_("Direction"), default=0)
-    code = models.ForeignKey(
-        TrafficSignCode,
-        verbose_name=_("Traffic Sign Code"),
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
         on_delete=models.PROTECT,
         blank=True,
         null=True,
@@ -321,12 +323,12 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Traffic Sign Reals")
 
     def __str__(self):
-        return "%s %s" % (self.id, self.code)
+        return f"{self.id} {self.device_type}"
 
     def save(self, *args, **kwargs):
-        if not self.code:
-            self.code = (
-                TrafficSignCode.objects.filter(legacy_code=self.legacy_code)
+        if not self.device_type:
+            self.device_type = (
+                TrafficControlDeviceType.objects.filter(legacy_code=self.legacy_code)
                 .order_by("code")
                 .first()
             )
