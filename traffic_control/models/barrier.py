@@ -13,7 +13,7 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
-    TrafficSignCode,
+    TrafficControlDeviceType,
 )
 from .plan import Plan
 from .utils import SoftDeleteQuerySet
@@ -55,8 +55,10 @@ class BarrierPlan(SoftDeleteModel, UserControlModel):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Barrier type"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
     )
     connection_type = EnumIntegerField(
         ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED
@@ -117,7 +119,7 @@ class BarrierPlan(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Barrier Plans")
 
     def __str__(self):
-        return "%s %s" % (self.id, self.type)
+        return f"{self.id} {self.device_type}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -158,8 +160,10 @@ class BarrierReal(SoftDeleteModel, UserControlModel):
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    type = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Barrier type"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
     )
     connection_type = EnumIntegerField(
         ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED
@@ -221,7 +225,7 @@ class BarrierReal(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Barrier reals")
 
     def __str__(self):
-        return "%s %s" % (self.id, self.type)
+        return f"{self.id} {self.device_type}"
 
 
 class BarrierRealFile(models.Model):

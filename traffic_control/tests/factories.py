@@ -19,11 +19,11 @@ from traffic_control.models import (
     RoadMarkingReal,
     SignpostPlan,
     SignpostReal,
+    TrafficControlDeviceType,
     TrafficLightPlan,
     TrafficLightReal,
     TrafficLightSoundBeaconValue,
     TrafficLightType,
-    TrafficSignCode,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -62,7 +62,7 @@ def get_plan(location=""):
 def get_barrier_plan(location="", plan=None):
     user = get_user("test_user")
     return BarrierPlan.objects.get_or_create(
-        type=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         location=location or test_point,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
@@ -80,7 +80,7 @@ def get_barrier_real(location=""):
     user = get_user("test_user")
 
     return BarrierReal.objects.create(
-        type=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         barrier_plan=get_barrier_plan(),
         location=location or test_point,
         installation_date=datetime.strptime("20012020", "%d%m%Y").date(),
@@ -130,7 +130,7 @@ def get_road_marking_plan(location="", plan=None):
     user = get_user("test_user")
 
     return RoadMarkingPlan.objects.get_or_create(
-        code=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         value="30",
         color=RoadMarkingColor.WHITE,
         location=location or test_point,
@@ -151,7 +151,7 @@ def get_road_marking_real(location=""):
     user = get_user("test_user")
 
     return RoadMarkingReal.objects.get_or_create(
-        code=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         road_marking_plan=get_road_marking_plan(),
         value="30",
         color=RoadMarkingColor.WHITE,
@@ -172,7 +172,7 @@ def get_signpost_plan(location="", plan=None):
     user = get_user("test_user")
 
     return SignpostPlan.objects.get_or_create(
-        code=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         location=location or test_point,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
@@ -186,7 +186,7 @@ def get_signpost_real(location=""):
     user = get_user("test_user")
 
     return SignpostReal.objects.get_or_create(
-        code=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         signpost_plan=get_signpost_plan(),
         location=location or test_point,
         installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
@@ -200,7 +200,7 @@ def get_traffic_light_plan(location="", plan=None):
     user = get_user("test_user")
 
     return TrafficLightPlan.objects.get_or_create(
-        code=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
@@ -218,7 +218,7 @@ def get_traffic_light_real(location=""):
     user = get_user("test_user")
 
     return TrafficLightReal.objects.get_or_create(
-        code=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         traffic_light_plan=get_traffic_light_plan(),
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
@@ -232,15 +232,17 @@ def get_traffic_light_real(location=""):
     )[0]
 
 
-def get_traffic_sign_code(code: str = "A11", description: str = "Test"):
-    return TrafficSignCode.objects.get_or_create(code=code, description=description)[0]
+def get_traffic_control_device_type(code: str = "A11", description: str = "Test"):
+    return TrafficControlDeviceType.objects.get_or_create(
+        code=code, description=description
+    )[0]
 
 
 def get_traffic_sign_plan(location="", plan=None):
     user = get_user("test_user")
 
     return TrafficSignPlan.objects.get_or_create(
-        code=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         location=location or test_point_3d,
         decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,
@@ -255,7 +257,7 @@ def get_traffic_sign_real(location=""):
 
     return TrafficSignReal.objects.get_or_create(
         traffic_sign_plan=get_traffic_sign_plan(),
-        code=get_traffic_sign_code(),
+        device_type=get_traffic_control_device_type(),
         location=location or test_point_3d,
         installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
         lifecycle=Lifecycle.ACTIVE,

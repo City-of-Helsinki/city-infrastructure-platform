@@ -149,7 +149,7 @@ class LaneNumber(Enum):
         ADDITIONAL_RIGHT_4 = _("Fourth right additional lane")
 
 
-class TrafficSignCode(models.Model):
+class TrafficControlDeviceType(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -165,12 +165,12 @@ class TrafficSignCode(models.Model):
     )
 
     class Meta:
-        db_table = "traffic_sign_code"
-        verbose_name = _("Traffic Sign Code")
-        verbose_name_plural = _("Traffic Sign Codes")
+        db_table = "traffic_control_device_type"
+        verbose_name = _("Traffic Control Device Type")
+        verbose_name_plural = _("Traffic Control Device Types")
 
     def __str__(self):
         return "%s - %s" % (self.code, self.description)
 
 
-auditlog.register(TrafficSignCode)
+auditlog.register(TrafficControlDeviceType)

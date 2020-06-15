@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from .factories import get_api_client, get_traffic_sign_code
+from .factories import get_api_client, get_traffic_control_device_type
 
 
 @pytest.mark.django_db
@@ -15,14 +15,14 @@ def test_limit_offset_pagination():
     updates.
     """
     api_client = get_api_client()
-    tsc_1 = get_traffic_sign_code(code="A1", description="foo")
-    tsc_2 = get_traffic_sign_code(code="A2", description="bar")
-    tsc_3 = get_traffic_sign_code(code="A3", description="baz")
-    tsc_4 = get_traffic_sign_code(code="A4", description="qux")
-    tsc_5 = get_traffic_sign_code(code="A5", description="quux")
+    tsc_1 = get_traffic_control_device_type(code="A1", description="foo")
+    tsc_2 = get_traffic_control_device_type(code="A2", description="bar")
+    tsc_3 = get_traffic_control_device_type(code="A3", description="baz")
+    tsc_4 = get_traffic_control_device_type(code="A4", description="qux")
+    tsc_5 = get_traffic_control_device_type(code="A5", description="quux")
 
     response = api_client.get(
-        reverse("v1:trafficsigncode-list"), {"limit": 2, "offset": 2}
+        reverse("v1:trafficcontroldevicetype-list"), {"limit": 2, "offset": 2}
     )
 
     result_pks = [r["id"] for r in response.data["results"]]

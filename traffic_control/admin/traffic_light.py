@@ -31,7 +31,7 @@ class TrafficLightPlanAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "code",
+        "device_type",
         "txt",
         "lifecycle",
         "location",
@@ -60,7 +60,7 @@ class TrafficLightRealAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "code",
+        "device_type",
         "txt",
         "lifecycle",
         "location",

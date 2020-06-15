@@ -31,7 +31,7 @@ class RoadMarkingPlanAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "code",
+        "device_type",
         "lifecycle",
         "location",
         "decision_date",
@@ -59,7 +59,7 @@ class RoadMarkingRealAdmin(
     default_zoom = 12
     list_display = (
         "id",
-        "code",
+        "device_type",
         "lifecycle",
         "location",
         "installation_date",

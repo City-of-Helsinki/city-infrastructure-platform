@@ -22,11 +22,11 @@ from .models import (
     SignpostPlanFile,
     SignpostReal,
     SignpostRealFile,
+    TrafficControlDeviceType,
     TrafficLightPlan,
     TrafficLightPlanFile,
     TrafficLightReal,
     TrafficLightRealFile,
-    TrafficSignCode,
     TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,
@@ -395,9 +395,9 @@ class PlanGeoJSONSerializer(PlanSerializer):
     location = GeometryField()
 
 
-class TrafficSignCodeSerializer(serializers.ModelSerializer):
+class TrafficControlDeviceTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TrafficSignCode
+        model = TrafficControlDeviceType
         fields = "__all__"
 
 

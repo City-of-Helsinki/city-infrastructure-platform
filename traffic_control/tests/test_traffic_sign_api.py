@@ -125,7 +125,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         Ensure we can create a new traffic sign plan object.
         """
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -138,7 +138,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(TrafficSignPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         traffic_sign_plan = TrafficSignPlan.objects.first()
-        self.assertEqual(traffic_sign_plan.code.id, data["code"])
+        self.assertEqual(traffic_sign_plan.device_type.id, data["device_type"])
         self.assertEqual(traffic_sign_plan.location.ewkt, data["location"])
         self.assertEqual(
             traffic_sign_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
@@ -151,7 +151,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         """
         traffic_sign_plan = self.__create_test_traffic_sign_plan()
         data = {
-            "code": self.test_code_2.id,
+            "device_type": self.test_device_type_2.id,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
@@ -165,7 +165,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(TrafficSignPlan.objects.count(), 1)
         traffic_sign_plan = TrafficSignPlan.objects.first()
-        self.assertEqual(traffic_sign_plan.code.id, data["code"])
+        self.assertEqual(traffic_sign_plan.device_type.id, data["device_type"])
         self.assertEqual(traffic_sign_plan.location.ewkt, data["location"])
         self.assertEqual(
             traffic_sign_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
@@ -203,7 +203,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
 
     def __create_test_traffic_sign_plan(self):
         return TrafficSignPlan.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
@@ -322,7 +322,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         Ensure we can create a new traffic sign real object.
         """
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -337,7 +337,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(TrafficSignReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         traffic_sign_real = TrafficSignReal.objects.first()
-        self.assertEqual(traffic_sign_real.code.id, data["code"])
+        self.assertEqual(traffic_sign_real.device_type.id, data["device_type"])
         self.assertEqual(traffic_sign_real.location.ewkt, data["location"])
         self.assertEqual(
             traffic_sign_real.installation_date.strftime("%Y-%m-%d"),
@@ -351,7 +351,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         """
         traffic_sign_real = self.__create_test_traffic_sign_real()
         data = {
-            "code": self.test_code_2.id,
+            "device_type": self.test_device_type_2.id,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
@@ -367,7 +367,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(TrafficSignReal.objects.count(), 1)
         traffic_sign_real = TrafficSignReal.objects.first()
-        self.assertEqual(traffic_sign_real.code.id, data["code"])
+        self.assertEqual(traffic_sign_real.device_type.id, data["device_type"])
         self.assertEqual(traffic_sign_real.location.ewkt, data["location"])
         self.assertEqual(
             traffic_sign_real.installation_date.strftime("%Y-%m-%d"),
@@ -406,7 +406,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
 
     def __create_test_traffic_sign_real(self):
         traffic_sign_plan = TrafficSignPlan.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
@@ -415,7 +415,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         )
         return TrafficSignReal.objects.create(
             traffic_sign_plan=traffic_sign_plan,
-            code=self.test_code,
+            device_type=self.test_device_type,
             location=self.test_point,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,

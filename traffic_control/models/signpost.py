@@ -15,7 +15,7 @@ from .common import (
     Lifecycle,
     Reflection,
     Size,
-    TrafficSignCode,
+    TrafficControlDeviceType,
 )
 from .mount import MountPlan, MountReal, MountType
 from .plan import Plan
@@ -46,8 +46,10 @@ class SignpostPlan(SoftDeleteModel, UserControlModel):
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
     direction = models.IntegerField(_("Direction"), default=0)
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Signpost Code"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
     )
     value = models.IntegerField(_("Signpost value"), blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
@@ -152,7 +154,7 @@ class SignpostPlan(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Signpost Plans")
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.code, self.txt)
+        return f"{self.id} {self.device_type} {self.txt}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -197,8 +199,10 @@ class SignpostReal(SoftDeleteModel, UserControlModel):
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
     direction = models.IntegerField(_("Direction"), default=0)
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Signpost Code"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
     )
     value = models.IntegerField(_("Signpost value"), blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
@@ -314,7 +318,7 @@ class SignpostReal(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Signpost Reals")
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.code, self.txt)
+        return f"{self.id} {self.device_type} {self.txt}"
 
 
 class SignpostRealFile(models.Model):

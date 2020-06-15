@@ -13,7 +13,7 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
-    TrafficSignCode,
+    TrafficControlDeviceType,
 )
 from .plan import Plan
 from .traffic_sign import TrafficSignPlan, TrafficSignReal
@@ -75,8 +75,10 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device Type"),
+        on_delete=models.PROTECT,
     )
     line_direction = EnumField(
         LineDirection,
@@ -174,7 +176,7 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Road Marking Plans")
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.code, self.value)
+        return f"{self.id} {self.device_type} {self.value}"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -215,8 +217,10 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
         null=True,
     )
     location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
-    code = models.ForeignKey(
-        TrafficSignCode, verbose_name=_("Traffic Sign Code"), on_delete=models.PROTECT
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
     )
     line_direction = EnumField(
         LineDirection,
@@ -321,7 +325,7 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
         verbose_name_plural = _("Road Marking Reals")
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.code, self.value)
+        return f"{self.id} {self.device_type} {self.value}"
 
 
 class RoadMarkingRealFile(models.Model):

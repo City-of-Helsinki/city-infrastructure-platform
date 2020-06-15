@@ -16,7 +16,7 @@ from .common import (
     Reflection,
     Size,
     Surface,
-    TrafficSignCode,
+    TrafficControlDeviceType,
 )
 from .mount import (
     MountPlan,

@@ -135,7 +135,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         Ensure we can create a new traffic light plan object.
         """
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "type": TrafficLightType.SIGNAL.value,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
@@ -149,7 +149,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(TrafficLightPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         traffic_light = TrafficLightPlan.objects.first()
-        self.assertEqual(traffic_light.code.id, data["code"])
+        self.assertEqual(traffic_light.device_type.id, data["device_type"])
         self.assertEqual(traffic_light.type.value, data["type"])
         self.assertEqual(traffic_light.location.ewkt, data["location"])
         self.assertEqual(
@@ -163,7 +163,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         """
         traffic_light = self.__create_test_traffic_light_plan()
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "type": TrafficLightType.ARROW_RIGHT.value,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
@@ -178,7 +178,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(TrafficLightPlan.objects.count(), 1)
         traffic_light = TrafficLightPlan.objects.first()
-        self.assertEqual(traffic_light.code.id, data["code"])
+        self.assertEqual(traffic_light.device_type.id, data["device_type"])
         self.assertEqual(traffic_light.type.value, data["type"])
         self.assertEqual(traffic_light.location.ewkt, data["location"])
         self.assertEqual(
@@ -215,7 +215,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
 
     def __create_test_traffic_light_plan(self):
         return TrafficLightPlan.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             location=self.test_point,
             type=TrafficLightType.SIGNAL,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
@@ -340,7 +340,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can create a new real traffic light object.
         """
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "type": TrafficLightType.SIGNAL.value,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
@@ -354,7 +354,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(TrafficLightReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         traffic_light_real = TrafficLightReal.objects.first()
-        self.assertEqual(traffic_light_real.code.id, data["code"])
+        self.assertEqual(traffic_light_real.device_type.id, data["device_type"])
         self.assertEqual(traffic_light_real.type.value, data["type"])
         self.assertEqual(traffic_light_real.location.ewkt, data["location"])
         self.assertEqual(
@@ -369,7 +369,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         """
         traffic_light_real = self.__create_test_traffic_light_real()
         data = {
-            "code": self.test_code_2.id,
+            "device_type": self.test_device_type_2.id,
             "type": TrafficLightType.PEDESTRIAN.value,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-21",
@@ -384,7 +384,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(TrafficLightReal.objects.count(), 1)
         traffic_light_real = TrafficLightReal.objects.first()
-        self.assertEqual(traffic_light_real.code.id, data["code"])
+        self.assertEqual(traffic_light_real.device_type.id, data["device_type"])
         self.assertEqual(traffic_light_real.type.value, data["type"])
         self.assertEqual(traffic_light_real.location.ewkt, data["location"])
         self.assertEqual(
@@ -424,7 +424,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
 
     def __create_test_traffic_light_real(self):
         traffic_light_plan = TrafficLightPlan.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             location=self.test_point,
             type=TrafficLightType.SIGNAL,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
@@ -437,7 +437,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         )
 
         return TrafficLightReal.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             traffic_light_plan=traffic_light_plan,
             location=self.test_point,
             type=TrafficLightType.SIGNAL,

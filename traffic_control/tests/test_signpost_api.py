@@ -125,7 +125,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         Ensure we can create a new signpost plan object.
         """
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -138,7 +138,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(SignpostPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         signpost_plan = SignpostPlan.objects.first()
-        self.assertEqual(signpost_plan.code.id, data["code"])
+        self.assertEqual(signpost_plan.device_type.id, data["device_type"])
         self.assertEqual(signpost_plan.location.ewkt, data["location"])
         self.assertEqual(
             signpost_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
@@ -151,7 +151,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         """
         signpost_plan = self.__create_test_signpost_plan()
         data = {
-            "code": self.test_code_2.id,
+            "device_type": self.test_device_type_2.id,
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
@@ -165,7 +165,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(SignpostPlan.objects.count(), 1)
         signpost_plan = SignpostPlan.objects.first()
-        self.assertEqual(signpost_plan.code.id, data["code"])
+        self.assertEqual(signpost_plan.device_type.id, data["device_type"])
         self.assertEqual(signpost_plan.location.ewkt, data["location"])
         self.assertEqual(
             signpost_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
@@ -201,7 +201,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
 
     def __create_test_signpost_plan(self):
         return SignpostPlan.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
@@ -320,7 +320,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can create a new signpost real object.
         """
         data = {
-            "code": self.test_code.id,
+            "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
@@ -333,7 +333,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(SignpostReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
         signpost_real = SignpostReal.objects.first()
-        self.assertEqual(signpost_real.code.id, data["code"])
+        self.assertEqual(signpost_real.device_type.id, data["device_type"])
         self.assertEqual(signpost_real.location.ewkt, data["location"])
         self.assertEqual(
             signpost_real.installation_date.strftime("%Y-%m-%d"),
@@ -347,7 +347,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         """
         signpost_real = self.__create_test_signpost_real()
         data = {
-            "code": self.test_code_2.id,
+            "device_type": self.test_device_type_2.id,
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
@@ -361,7 +361,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(SignpostReal.objects.count(), 1)
         signpost_real = SignpostReal.objects.first()
-        self.assertEqual(signpost_real.code.id, data["code"])
+        self.assertEqual(signpost_real.device_type.id, data["device_type"])
         self.assertEqual(signpost_real.location.ewkt, data["location"])
         self.assertEqual(
             signpost_real.installation_date.strftime("%Y-%m-%d"),
@@ -398,7 +398,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
 
     def __create_test_signpost_real(self):
         signpost_plan = SignpostPlan.objects.create(
-            code=self.test_code,
+            device_type=self.test_device_type,
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
@@ -407,7 +407,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         )
         return SignpostReal.objects.create(
             signpost_plan=signpost_plan,
-            code=self.test_code,
+            device_type=self.test_device_type,
             location=self.test_point,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
