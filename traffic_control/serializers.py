@@ -110,7 +110,7 @@ class TrafficSignPlanSerializer(
 
 class TrafficSignPlanGeoJSONSerializer(TrafficSignPlanSerializer):
     location = GeometryField()
-    affect_area = GeometryField()
+    affect_area = GeometryField(required=False)
 
 
 class TrafficSignRealFileSerializer(serializers.ModelSerializer):
@@ -137,7 +137,7 @@ class TrafficSignRealSerializer(
 
 class TrafficSignRealGeoJSONSerializer(TrafficSignRealSerializer):
     location = GeometryField()
-    affect_area = GeometryField()
+    affect_area = GeometryField(required=False)
 
 
 class SignpostPlanFileSerializer(serializers.ModelSerializer):
