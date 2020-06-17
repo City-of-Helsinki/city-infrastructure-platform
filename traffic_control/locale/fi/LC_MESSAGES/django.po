@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-05 15:13+0300\n"
+"POT-Creation-Date: 2020-06-17 16:24+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,8 +106,8 @@ msgstr "Ajoradan tai kaistan vasen reuna"
 msgid "Location (2D)"
 msgstr "Sijainti (2D)"
 
-msgid "Barrier type"
-msgstr "Ajoesteen tyyppi"
+msgid "Device type"
+msgstr "Laitteen tyyppi"
 
 msgid "Connection type"
 msgstr "Avattava yhteys"
@@ -334,6 +334,21 @@ msgstr "Neljäs lisäkaista pääkaistan vasemmalla puolella"
 msgid "Fourth right additional lane"
 msgstr "Neljäs lisäkaista pääkaistan oikealla puolella"
 
+msgid "Barrier"
+msgstr "Ajoeste"
+
+msgid "Road marking"
+msgstr "Tiemerkintä"
+
+msgid "Signpost"
+msgstr "Opaste"
+
+msgid "Traffic light"
+msgstr "Liikennevalo"
+
+msgid "Traffic sign"
+msgstr "Liikennemerkki"
+
 msgid "Code"
 msgstr "Koodi"
 
@@ -346,11 +361,14 @@ msgstr "Vanha merkkikoodi"
 msgid "Legacy description"
 msgstr "Vanha kuvaus"
 
-msgid "Traffic Sign Code"
-msgstr "Merkkikoodi"
+msgid "Target data model"
+msgstr "Kohde tietomalli"
 
-msgid "Traffic Sign Codes"
-msgstr "Merkkikoodit"
+msgid "Traffic Control Device Type"
+msgstr "Liikenteenohjauslaitteen tyyppi"
+
+msgid "Traffic Control Device Types"
+msgstr "Liikenteenohjauslaitteiden tyypit"
 
 msgid "Digiroad code"
 msgstr "Digiroad koodi"
@@ -481,6 +499,9 @@ msgstr "Kaistan keskellä"
 msgid "Left side of lane or road"
 msgstr "Ajoradan tai kaistan vasen puoli"
 
+msgid "Device Type"
+msgstr "Laitteen tyyppi"
+
 msgid "Line direction"
 msgstr "Viivan piirtosuunta"
 
@@ -573,9 +594,6 @@ msgstr "Pitkittäin ajosuuntaan nähden"
 
 msgid "Direction"
 msgstr "Suunta"
-
-msgid "Signpost Code"
-msgstr "Opastetyyppi"
 
 msgid "Signpost value"
 msgstr "Arvo"
