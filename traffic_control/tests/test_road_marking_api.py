@@ -7,7 +7,14 @@ from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import RoadMarkingColor, RoadMarkingPlan, RoadMarkingReal
 
-from .factories import get_api_client, get_road_marking_plan, get_road_marking_real
+from ..models.common import DeviceTypeTargetModel
+from .factories import (
+    get_api_client,
+    get_road_marking_plan,
+    get_road_marking_real,
+    get_traffic_control_device_type,
+    get_user,
+)
 from .test_base_api import (
     line_location_error_test_data,
     line_location_test_data,
@@ -59,6 +66,62 @@ def test_filter_error_road_markings_plans_location(location, location_query, exp
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("target_model", (None, DeviceTypeTargetModel.ROAD_MARKING))
+def test__road_marking_plan__valid_device_type(target_model):
+    """
+    Ensure that device types with supported target_model value are allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    road_marking_plan = get_road_marking_plan()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking_plan.pk}),
+        data,
+        format="json",
+    )
+
+    road_marking_plan.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert road_marking_plan.device_type == device_type
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "target_model",
+    (
+        DeviceTypeTargetModel.BARRIER,
+        DeviceTypeTargetModel.SIGNPOST,
+        DeviceTypeTargetModel.TRAFFIC_LIGHT,
+        DeviceTypeTargetModel.TRAFFIC_SIGN,
+    ),
+)
+def test__road_marking_plan__invalid_device_type(target_model):
+    """
+    Ensure that device types with unsupported target_model value are not allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    road_marking_plan = get_road_marking_plan()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking_plan.pk}),
+        data,
+        format="json",
+    )
+
+    road_marking_plan.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert road_marking_plan.device_type != device_type
 
 
 class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
@@ -263,6 +326,62 @@ def test_filter_error_road_markings_reals_location(location, location_query, exp
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("target_model", (None, DeviceTypeTargetModel.ROAD_MARKING))
+def test__road_marking_real__valid_device_type(target_model):
+    """
+    Ensure that device types with supported target_model value are allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    road_marking_real = get_road_marking_real()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.pk}),
+        data,
+        format="json",
+    )
+
+    road_marking_real.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert road_marking_real.device_type == device_type
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "target_model",
+    (
+        DeviceTypeTargetModel.BARRIER,
+        DeviceTypeTargetModel.SIGNPOST,
+        DeviceTypeTargetModel.TRAFFIC_LIGHT,
+        DeviceTypeTargetModel.TRAFFIC_SIGN,
+    ),
+)
+def test__road_marking_real__invalid_device_type(target_model):
+    """
+    Ensure that device types with unsupported target_model value are not allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    road_marking_real = get_road_marking_real()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.pk}),
+        data,
+        format="json",
+    )
+
+    road_marking_real.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert road_marking_real.device_type != device_type
 
 
 class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):

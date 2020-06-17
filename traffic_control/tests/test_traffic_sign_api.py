@@ -7,7 +7,14 @@ from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
 
-from .factories import get_api_client, get_traffic_sign_plan, get_traffic_sign_real
+from ..models.common import DeviceTypeTargetModel
+from .factories import (
+    get_api_client,
+    get_traffic_control_device_type,
+    get_traffic_sign_plan,
+    get_traffic_sign_real,
+    get_user,
+)
 from .test_base_api_3d import (
     point_location_error_test_data_3d,
     point_location_test_data_3d,
@@ -55,6 +62,62 @@ def test_filter_error_traffic_sign_plans_location(location, location_query, expe
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("target_model", (None, DeviceTypeTargetModel.TRAFFIC_SIGN))
+def test__traffic_sign_plan__valid_device_type(target_model):
+    """
+    Ensure that device types with supported target_model value are allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    traffic_sign_plan = get_traffic_sign_plan()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.pk}),
+        data,
+        format="json",
+    )
+
+    traffic_sign_plan.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert traffic_sign_plan.device_type == device_type
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "target_model",
+    (
+        DeviceTypeTargetModel.BARRIER,
+        DeviceTypeTargetModel.ROAD_MARKING,
+        DeviceTypeTargetModel.SIGNPOST,
+        DeviceTypeTargetModel.TRAFFIC_LIGHT,
+    ),
+)
+def test__traffic_sign_plan__invalid_device_type(target_model):
+    """
+    Ensure that device types with unsupported target_model value are not allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    traffic_sign_plan = get_traffic_sign_plan()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.pk}),
+        data,
+        format="json",
+    )
+
+    traffic_sign_plan.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert traffic_sign_plan.device_type != device_type
 
 
 class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
@@ -252,6 +315,62 @@ def test_filter_error_traffic_sign_reals_location(location, location_query, expe
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("target_model", (None, DeviceTypeTargetModel.TRAFFIC_SIGN))
+def test__traffic_sign_real__valid_device_type(target_model):
+    """
+    Ensure that device types with supported target_model value are allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    traffic_sign_real = get_traffic_sign_real()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.pk}),
+        data,
+        format="json",
+    )
+
+    traffic_sign_real.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert traffic_sign_real.device_type == device_type
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "target_model",
+    (
+        DeviceTypeTargetModel.BARRIER,
+        DeviceTypeTargetModel.ROAD_MARKING,
+        DeviceTypeTargetModel.SIGNPOST,
+        DeviceTypeTargetModel.TRAFFIC_LIGHT,
+    ),
+)
+def test__traffic_sign_real__invalid_device_type(target_model):
+    """
+    Ensure that device types with unsupported target_model value are not allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    traffic_sign_real = get_traffic_sign_real()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.pk}),
+        data,
+        format="json",
+    )
+
+    traffic_sign_real.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert traffic_sign_real.device_type != device_type
 
 
 class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):

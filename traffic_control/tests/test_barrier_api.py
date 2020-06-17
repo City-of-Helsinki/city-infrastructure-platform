@@ -7,7 +7,14 @@ from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import BarrierPlan, BarrierReal, ConnectionType, Reflective
 
-from .factories import get_api_client, get_barrier_plan, get_barrier_real
+from ..models.common import DeviceTypeTargetModel
+from .factories import (
+    get_api_client,
+    get_barrier_plan,
+    get_barrier_real,
+    get_traffic_control_device_type,
+    get_user,
+)
 from .test_base_api import (
     line_location_error_test_data,
     line_location_test_data,
@@ -58,6 +65,62 @@ def test_filter_error_barrier_plans_location(location, location_query, expected)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("target_model", (None, DeviceTypeTargetModel.BARRIER))
+def test__barrier_plan__valid_device_type(target_model):
+    """
+    Ensure that device types with supported target_model value are allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    barrier_plan = get_barrier_plan()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.pk}),
+        data,
+        format="json",
+    )
+
+    barrier_plan.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert barrier_plan.device_type == device_type
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "target_model",
+    (
+        DeviceTypeTargetModel.ROAD_MARKING,
+        DeviceTypeTargetModel.SIGNPOST,
+        DeviceTypeTargetModel.TRAFFIC_LIGHT,
+        DeviceTypeTargetModel.TRAFFIC_SIGN,
+    ),
+)
+def test__barrier_plan__invalid_device_type(target_model):
+    """
+    Ensure that device types with unsupported target_model value are not allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    barrier_plan = get_barrier_plan()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.pk}),
+        data,
+        format="json",
+    )
+
+    barrier_plan.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert barrier_plan.device_type != device_type
 
 
 class BarrierPlanTests(TrafficControlAPIBaseTestCase):
@@ -259,6 +322,62 @@ def test_filter_error_barrier_reals_location(location, location_query, expected)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("target_model", (None, DeviceTypeTargetModel.BARRIER))
+def test__barrier_real__valid_device_type(target_model):
+    """
+    Ensure that device types with supported target_model value are allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    barrier_real = get_barrier_real()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.pk}),
+        data,
+        format="json",
+    )
+
+    barrier_real.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert barrier_real.device_type == device_type
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "target_model",
+    (
+        DeviceTypeTargetModel.ROAD_MARKING,
+        DeviceTypeTargetModel.SIGNPOST,
+        DeviceTypeTargetModel.TRAFFIC_LIGHT,
+        DeviceTypeTargetModel.TRAFFIC_SIGN,
+    ),
+)
+def test__barrier_real__invalid_device_type(target_model):
+    """
+    Ensure that device types with unsupported target_model value are not allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    barrier_real = get_barrier_real()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.pk}),
+        data,
+        format="json",
+    )
+
+    barrier_real.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert barrier_real.device_type != device_type
 
 
 class BarrierRealTests(TrafficControlAPIBaseTestCase):

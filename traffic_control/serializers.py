@@ -48,6 +48,11 @@ class TrafficLightPlanSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     files = TrafficLightPlanFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.TRAFFIC_LIGHT
+        )
+    )
 
     class Meta:
         model = TrafficLightPlan
@@ -74,6 +79,11 @@ class TrafficLightRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     files = TrafficLightRealFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.TRAFFIC_LIGHT
+        )
+    )
 
     class Meta:
         model = TrafficLightReal
@@ -100,6 +110,11 @@ class TrafficSignPlanSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     files = TrafficSignPlanFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.TRAFFIC_SIGN
+        )
+    )
 
     class Meta:
         model = TrafficSignPlan
@@ -127,6 +142,11 @@ class TrafficSignRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     files = TrafficSignRealFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.TRAFFIC_SIGN
+        )
+    )
 
     class Meta:
         model = TrafficSignReal
@@ -152,6 +172,11 @@ class SignpostPlanFileSerializer(serializers.ModelSerializer):
 
 class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = SignpostPlanFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.SIGNPOST
+        )
+    )
 
     class Meta:
         model = SignpostPlan
@@ -176,6 +201,11 @@ class SignpostRealFileSerializer(serializers.ModelSerializer):
 
 class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = SignpostRealFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.SIGNPOST
+        )
+    )
 
     class Meta:
         model = SignpostReal
@@ -251,6 +281,11 @@ class BarrierPlanFileSerializer(serializers.ModelSerializer):
 
 class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = BarrierPlanFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.BARRIER
+        )
+    )
 
     class Meta:
         model = BarrierPlan
@@ -275,6 +310,11 @@ class BarrierRealFileSerializer(serializers.ModelSerializer):
 
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = BarrierRealFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.BARRIER
+        )
+    )
 
     class Meta:
         model = BarrierReal
@@ -301,6 +341,11 @@ class RoadMarkingPlanSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     files = RoadMarkingPlanFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.ROAD_MARKING
+        )
+    )
 
     class Meta:
         model = RoadMarkingPlan
@@ -327,6 +372,11 @@ class RoadMarkingRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
     files = RoadMarkingRealFileSerializer(many=True, read_only=True)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.ROAD_MARKING
+        )
+    )
 
     class Meta:
         model = RoadMarkingReal
