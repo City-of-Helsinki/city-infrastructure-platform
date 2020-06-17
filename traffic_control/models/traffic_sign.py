@@ -3,6 +3,7 @@ import uuid
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -173,6 +174,11 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
         return f"{self.id} {self.device_type}"
 
     def save(self, *args, **kwargs):
+        if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
+            raise ValidationError(
+                f'Device type "{self.device_type}" is not allowed for traffic signs'
+            )
+
         super().save(*args, **kwargs)
 
         if self.plan:
@@ -334,12 +340,23 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         return f"{self.id} {self.device_type}"
 
     def save(self, *args, **kwargs):
+        if self.device_type and not self.device_type.validate_relation(
+            DeviceTypeTargetModel.TRAFFIC_SIGN
+        ):
+            raise ValidationError(
+                f'Device type "{self.device_type}" is not allowed for traffic signs'
+            )
+
         if not self.device_type:
             self.device_type = (
-                TrafficControlDeviceType.objects.filter(legacy_code=self.legacy_code)
+                TrafficControlDeviceType.objects.for_target_model(
+                    DeviceTypeTargetModel.TRAFFIC_SIGN
+                )
+                .filter(legacy_code=self.legacy_code)
                 .order_by("code")
                 .first()
             )
+
         super().save(*args, **kwargs)
 
     def has_additional_signs(self):

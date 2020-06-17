@@ -3,6 +3,7 @@ import uuid
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
@@ -183,6 +184,11 @@ class TrafficLightPlan(SoftDeleteModel, UserControlModel):
         return f"{self.id} {self.type} {self.device_type}"
 
     def save(self, *args, **kwargs):
+        if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_LIGHT):
+            raise ValidationError(
+                f'Device type "{self.device_type}" is not allowed for traffic lights'
+            )
+
         super().save(*args, **kwargs)
 
         if self.plan:
@@ -314,6 +320,14 @@ class TrafficLightReal(SoftDeleteModel, UserControlModel):
 
     def __str__(self):
         return f"{self.id} {self.type} {self.device_type}"
+
+    def save(self, *args, **kwargs):
+        if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_LIGHT):
+            raise ValidationError(
+                f'Device type "{self.device_type}" is not allowed for traffic lights'
+            )
+
+        super().save(*args, **kwargs)
 
 
 class TrafficLightRealFile(models.Model):
