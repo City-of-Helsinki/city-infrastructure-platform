@@ -3,6 +3,7 @@ import uuid
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
@@ -184,6 +185,11 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
         return f"{self.id} {self.device_type} {self.value}"
 
     def save(self, *args, **kwargs):
+        if not self.device_type.validate_relation(DeviceTypeTargetModel.ROAD_MARKING):
+            raise ValidationError(
+                f'Device type "{self.device_type}" is not allowed for road markings'
+            )
+
         super().save(*args, **kwargs)
 
         if self.plan:
@@ -334,6 +340,14 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
 
     def __str__(self):
         return f"{self.id} {self.device_type} {self.value}"
+
+    def save(self, *args, **kwargs):
+        if not self.device_type.validate_relation(DeviceTypeTargetModel.ROAD_MARKING):
+            raise ValidationError(
+                f'Device type "{self.device_type}" is not allowed for road markings'
+            )
+
+        super().save(*args, **kwargs)
 
 
 class RoadMarkingRealFile(models.Model):

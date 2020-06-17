@@ -232,9 +232,13 @@ def get_traffic_light_real(location=""):
     )[0]
 
 
-def get_traffic_control_device_type(code: str = "A11", description: str = "Test"):
+def get_traffic_control_device_type(
+    code: str = "A11",
+    description: str = "Test",
+    target_model: Optional[DeviceTypeTargetModel] = None,
+):
     return TrafficControlDeviceType.objects.get_or_create(
-        code=code, description=description
+        code=code, description=description, target_model=target_model
     )[0]
 
 

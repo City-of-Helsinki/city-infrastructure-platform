@@ -2,6 +2,7 @@ import uuid
 
 from auditlog.registry import auditlog
 from django.contrib.gis.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField
 
@@ -164,6 +165,11 @@ class DeviceTypeTargetModel(Enum):
         TRAFFIC_SIGN = _("Traffic sign")
 
 
+class TrafficControlDeviceTypeQuerySet(models.QuerySet):
+    def for_target_model(self, target_model: DeviceTypeTargetModel):
+        return self.filter(Q(target_model=None) | Q(target_model=target_model))
+
+
 class TrafficControlDeviceType(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -186,6 +192,8 @@ class TrafficControlDeviceType(models.Model):
         null=True,
     )
 
+    objects = TrafficControlDeviceTypeQuerySet.as_manager()
+
     class Meta:
         db_table = "traffic_control_device_type"
         verbose_name = _("Traffic Control Device Type")
@@ -193,6 +201,16 @@ class TrafficControlDeviceType(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.code, self.description)
+
+    def validate_relation(self, model: DeviceTypeTargetModel):
+        """
+        Validate that the related model is allowed to have relationship
+        to this TrafficControlDeviceType instance.
+        """
+        if self.target_model and self.target_model is not model:
+            return False
+
+        return True
 
 
 auditlog.register(TrafficControlDeviceType)
