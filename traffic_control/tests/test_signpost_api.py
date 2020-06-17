@@ -7,7 +7,14 @@ from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import SignpostPlan, SignpostReal
 
-from .factories import get_api_client, get_signpost_plan, get_signpost_real
+from ..models.common import DeviceTypeTargetModel
+from .factories import (
+    get_api_client,
+    get_signpost_plan,
+    get_signpost_real,
+    get_traffic_control_device_type,
+    get_user,
+)
 from .test_base_api import (
     point_location_error_test_data,
     point_location_test_data,
@@ -55,6 +62,62 @@ def test_filter_error_signpost_plans_location(location, location_query, expected
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("target_model", (None, DeviceTypeTargetModel.SIGNPOST))
+def test__signpost_plan__valid_device_type(target_model):
+    """
+    Ensure that device types with supported target_model value are allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    signpost_plan = get_signpost_plan()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.pk}),
+        data,
+        format="json",
+    )
+
+    signpost_plan.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert signpost_plan.device_type == device_type
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "target_model",
+    (
+        DeviceTypeTargetModel.BARRIER,
+        DeviceTypeTargetModel.ROAD_MARKING,
+        DeviceTypeTargetModel.TRAFFIC_LIGHT,
+        DeviceTypeTargetModel.TRAFFIC_SIGN,
+    ),
+)
+def test__signpost_plan__invalid_device_type(target_model):
+    """
+    Ensure that device types with unsupported target_model value are not allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    signpost_plan = get_signpost_plan()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.pk}),
+        data,
+        format="json",
+    )
+
+    signpost_plan.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert signpost_plan.device_type != device_type
 
 
 class SignpostPlanTests(TrafficControlAPIBaseTestCase):
@@ -250,6 +313,62 @@ def test_filter_error_signpost_reals_location(location, location_query, expected
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("target_model", (None, DeviceTypeTargetModel.SIGNPOST))
+def test__signpost_real__valid_device_type(target_model):
+    """
+    Ensure that device types with supported target_model value are allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    signpost_real = get_signpost_real()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.pk}),
+        data,
+        format="json",
+    )
+
+    signpost_real.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert signpost_real.device_type == device_type
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "target_model",
+    (
+        DeviceTypeTargetModel.BARRIER,
+        DeviceTypeTargetModel.ROAD_MARKING,
+        DeviceTypeTargetModel.TRAFFIC_LIGHT,
+        DeviceTypeTargetModel.TRAFFIC_SIGN,
+    ),
+)
+def test__signpost_real__invalid_device_type(target_model):
+    """
+    Ensure that device types with unsupported target_model value are not allowed.
+    """
+    client = get_api_client(user=get_user(admin=True))
+    signpost_real = get_signpost_real()
+    device_type = get_traffic_control_device_type(
+        code="123", description="test", target_model=target_model
+    )
+    data = {"device_type": device_type.id}
+
+    response = client.patch(
+        reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.pk}),
+        data,
+        format="json",
+    )
+
+    signpost_real.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert signpost_real.device_type != device_type
 
 
 class SignPostRealTests(TrafficControlAPIBaseTestCase):
