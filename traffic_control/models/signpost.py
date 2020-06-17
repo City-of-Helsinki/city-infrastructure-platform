@@ -3,12 +3,14 @@ import uuid
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModel, UserControlModel
 from .common import (
     Condition,
+    DeviceTypeTargetModel,
     InstallationStatus,
     LaneNumber,
     LaneType,
@@ -50,6 +52,9 @@ class SignpostPlan(SoftDeleteModel, UserControlModel):
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
+        limit_choices_to=Q(
+            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)
+        ),
     )
     value = models.IntegerField(_("Signpost value"), blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
@@ -203,6 +208,9 @@ class SignpostReal(SoftDeleteModel, UserControlModel):
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
+        limit_choices_to=Q(
+            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)
+        ),
     )
     value = models.IntegerField(_("Signpost value"), blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)

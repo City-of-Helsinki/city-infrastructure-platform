@@ -3,7 +3,7 @@ import uuid
 from auditlog.registry import auditlog
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum
+from enumfields import Enum, EnumField
 
 
 class InstallationStatus(Enum):
@@ -149,6 +149,21 @@ class LaneNumber(Enum):
         ADDITIONAL_RIGHT_4 = _("Fourth right additional lane")
 
 
+class DeviceTypeTargetModel(Enum):
+    BARRIER = "barrier"
+    ROAD_MARKING = "road_marking"
+    SIGNPOST = "signpost"
+    TRAFFIC_LIGHT = "traffic_light"
+    TRAFFIC_SIGN = "traffic_sign"
+
+    class Labels:
+        BARRIER = _("Barrier")
+        ROAD_MARKING = _("Road marking")
+        SIGNPOST = _("Signpost")
+        TRAFFIC_LIGHT = _("Traffic light")
+        TRAFFIC_SIGN = _("Traffic sign")
+
+
 class TrafficControlDeviceType(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -162,6 +177,13 @@ class TrafficControlDeviceType(models.Model):
     )
     legacy_description = models.CharField(
         _("Legacy description"), max_length=254, blank=True, null=True
+    )
+    target_model = EnumField(
+        DeviceTypeTargetModel,
+        verbose_name=_("Target data model"),
+        max_length=32,
+        blank=True,
+        null=True,
     )
 
     class Meta:

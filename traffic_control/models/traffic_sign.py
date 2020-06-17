@@ -4,6 +4,7 @@ from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.db import transaction
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
@@ -11,6 +12,7 @@ from ..mixins.models import SoftDeleteModel, UserControlModel
 from .common import (
     Color,
     Condition,
+    DeviceTypeTargetModel,
     InstallationStatus,
     LaneNumber,
     LaneType,
@@ -55,6 +57,9 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
+        limit_choices_to=Q(
+            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
+        ),
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
     parent = models.ForeignKey(
@@ -214,6 +219,9 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
+        limit_choices_to=Q(
+            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
+        ),
         blank=True,
         null=True,
     )
