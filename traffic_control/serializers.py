@@ -1,3 +1,6 @@
+from typing import Optional
+
+from django.core.exceptions import ValidationError
 from enumfields.drf.serializers import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
@@ -32,6 +35,7 @@ from .models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
+from .models.common import DeviceTypeTargetModel
 
 
 class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
@@ -395,10 +399,22 @@ class PlanGeoJSONSerializer(PlanSerializer):
     location = GeometryField()
 
 
-class TrafficControlDeviceTypeSerializer(serializers.ModelSerializer):
+class TrafficControlDeviceTypeSerializer(
+    EnumSupportSerializerMixin, serializers.ModelSerializer
+):
     class Meta:
         model = TrafficControlDeviceType
         fields = "__all__"
+
+    def validate_target_model(
+        self, value: Optional[DeviceTypeTargetModel]
+    ) -> Optional[DeviceTypeTargetModel]:
+        try:
+            self.instance.validate_change_target_model(value, raise_exception=True)
+        except ValidationError as error:
+            raise serializers.ValidationError(error.message)
+
+        return value
 
 
 class PortalTypeSerializer(serializers.ModelSerializer):

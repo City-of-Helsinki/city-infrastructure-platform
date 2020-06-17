@@ -1,7 +1,9 @@
 import uuid
+from typing import Optional
 
 from auditlog.registry import auditlog
 from django.contrib.gis.db import models
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField
@@ -201,6 +203,72 @@ class TrafficControlDeviceType(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.code, self.description)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            self.validate_change_target_model(self.target_model, raise_exception=True)
+
+        super().save(*args, **kwargs)
+
+    def _has_invalid_related_models(self, target_type: DeviceTypeTargetModel) -> bool:
+        """
+        Check if instance has related models that are invalid with given target
+        type value.
+        """
+        relations = [
+            "barrierplan",
+            "barrierreal",
+            "roadmarkingplan",
+            "roadmarkingreal",
+            "signpostplan",
+            "signpostreal",
+            "trafficlightplan",
+            "trafficlightreal",
+            "trafficsignplan",
+            "trafficsignreal",
+        ]
+        ignore_prefix = target_type.value.replace("_", "")
+        relevant_relations = [
+            relation for relation in relations if not relation.startswith(ignore_prefix)
+        ]
+
+        related_pks = []
+        queryset = TrafficControlDeviceType.objects.filter(pk=self.pk).values_list(
+            *relevant_relations
+        )
+        if queryset.exists():
+            related_pks = queryset.first()
+
+        return any(related_pks)
+
+    def validate_change_target_model(
+        self,
+        new_target_type: Optional[DeviceTypeTargetModel],
+        raise_exception: bool = False,
+    ) -> bool:
+        """
+        Validate if instance target_model value can be changed to the given new_value.
+
+        Validate that relations on other models do not become non-allowed after changing
+        instance target_model to the new value.
+
+        Returns boolean value indicating if change is valid or raises ValidationError if
+        raise_exception is True
+        """
+        if not new_target_type:
+            return True  # None is always valid value
+
+        has_invalid_relations = self._has_invalid_related_models(new_target_type)
+
+        if raise_exception and has_invalid_relations:
+            raise ValidationError(
+                f"Some traffic control devices related to this device type instance "
+                f"will become invalid if target_model value is changed to "
+                f"{new_target_type.value}. target_model can not be changed until this "
+                f"is resolved."
+            )
+
+        return True
 
     def validate_relation(self, model: DeviceTypeTargetModel):
         """
