@@ -1,8 +1,24 @@
+import pytest
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from traffic_control.models import TrafficControlDeviceType
+from traffic_control.models.common import DeviceTypeTargetModel
+from traffic_control.tests.factories import (
+    get_api_client,
+    get_barrier_plan,
+    get_barrier_real,
+    get_road_marking_plan,
+    get_road_marking_real,
+    get_signpost_plan,
+    get_signpost_real,
+    get_traffic_light_plan,
+    get_traffic_light_real,
+    get_traffic_sign_plan,
+    get_traffic_sign_real,
+    get_user,
+)
 from users.models import User
 
 
@@ -196,3 +212,83 @@ class TrafficControlDeviceTypeTests(APITestCase):
         return TrafficControlDeviceType.objects.create(
             code="M16", description="Nopeusrajoitus",
         )
+
+
+@pytest.mark.parametrize(
+    "target_model,factory",
+    (
+        (DeviceTypeTargetModel.BARRIER, get_barrier_plan),
+        (DeviceTypeTargetModel.BARRIER, get_barrier_real),
+        (DeviceTypeTargetModel.ROAD_MARKING, get_road_marking_plan),
+        (DeviceTypeTargetModel.ROAD_MARKING, get_road_marking_real),
+        (DeviceTypeTargetModel.SIGNPOST, get_signpost_plan),
+        (DeviceTypeTargetModel.SIGNPOST, get_signpost_real),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_plan),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_real),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
+    ),
+)
+@pytest.mark.django_db
+def test__device_type__target_model__valid(target_model, factory):
+    client = get_api_client(user=get_user(admin=True))
+    related_model = factory()
+    device_type = related_model.device_type
+    data = {
+        "target_model": target_model.value,
+    }
+
+    response = client.patch(
+        reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
+        data,
+        format="json",
+    )
+
+    device_type.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert device_type.target_model == target_model
+
+
+@pytest.mark.parametrize(
+    "target_model,factory",
+    (
+        (DeviceTypeTargetModel.ROAD_MARKING, get_barrier_plan),
+        (DeviceTypeTargetModel.ROAD_MARKING, get_barrier_real),
+        (DeviceTypeTargetModel.SIGNPOST, get_road_marking_plan),
+        (DeviceTypeTargetModel.SIGNPOST, get_road_marking_real),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_signpost_plan),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_signpost_real),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_plan),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_real),
+        (DeviceTypeTargetModel.BARRIER, get_traffic_sign_plan),
+        (DeviceTypeTargetModel.BARRIER, get_traffic_sign_real),
+    ),
+)
+@pytest.mark.django_db
+def test__device_type__target_model__invalid(target_model, factory):
+    client = get_api_client(user=get_user(admin=True))
+    related_model = factory()
+    device_type = related_model.device_type
+    data = {
+        "target_model": target_model.value,
+    }
+
+    response = client.patch(
+        reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
+        data,
+        format="json",
+    )
+
+    device_type.refresh_from_db()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json() == {
+        "target_model": [
+            (
+                f"Some traffic control devices related to this device type instance "
+                f"will become invalid if target_model value is changed to "
+                f"{target_model.value}. target_model can not be changed until this "
+                f"is resolved."
+            ),
+        ]
+    }
+    assert not device_type.target_model
