@@ -15,10 +15,21 @@ if [[ "$COLLECT_STATIC" = "1" ]]; then
 fi
 
 # Only translate traffic_control module for now
-# echo "Updating translations..."
-# cd traffic_control
-# ../manage.py compilemessages -l fi
-# cd ..
+echo "Updating translations..."
+cd traffic_control
+../manage.py compilemessages -l fi
+cd ..
+
+echo "Checking for odd ENTRYPOINT line in arguments"
+echo "Arguments are:"
+echo $@
+echo
+if [[ $@ == *"(nop)  ENTRYPOINT" ]]; then
+    echo "ENTRYPOINT found in arguments. Emptying arguments."
+    set --
+else
+    echo "No ENTRYPOINT found in arguments, continuing as is"
+fi
 
 # Start server
 if [[ ! -z "$@" ]]; then
