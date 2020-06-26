@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 16:24+0300\n"
+"POT-Creation-Date: 2020-06-26 15:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,6 +349,15 @@ msgstr "Liikennevalo"
 msgid "Traffic sign"
 msgstr "Liikennemerkki"
 
+msgid "Longitudinal"
+msgstr "Pituussuuntainen"
+
+msgid "Transverse"
+msgstr "Poikkisuuntainen"
+
+msgid "Other road marking"
+msgstr "Muu tiemerkintä"
+
 msgid "Code"
 msgstr "Koodi"
 
@@ -363,6 +372,9 @@ msgstr "Vanha kuvaus"
 
 msgid "Target data model"
 msgstr "Kohde tietomalli"
+
+msgid "Type"
+msgstr "Tyyppi"
 
 msgid "Traffic Control Device Type"
 msgstr "Liikenteenohjauslaitteen tyyppi"
