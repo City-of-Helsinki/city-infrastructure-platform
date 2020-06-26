@@ -167,6 +167,18 @@ class DeviceTypeTargetModel(Enum):
         TRAFFIC_SIGN = _("Traffic sign")
 
 
+class TrafficControlDeviceTypeType(Enum):
+    # road marking types
+    LONGITUDINAL = "longitudinal"
+    TRANSVERSE = "transverse"
+    OTHER = "other"
+
+    class Labels:
+        LONGITUDINAL = _("Longitudinal")
+        TRANSVERSE = _("Transverse")
+        OTHER = _("Other road marking")
+
+
 class TrafficControlDeviceTypeQuerySet(models.QuerySet):
     def for_target_model(self, target_model: DeviceTypeTargetModel):
         return self.filter(Q(target_model=None) | Q(target_model=target_model))
@@ -190,6 +202,13 @@ class TrafficControlDeviceType(models.Model):
         DeviceTypeTargetModel,
         verbose_name=_("Target data model"),
         max_length=32,
+        blank=True,
+        null=True,
+    )
+    type = EnumField(
+        TrafficControlDeviceTypeType,
+        verbose_name=_("Type"),
+        max_length=50,
         blank=True,
         null=True,
     )
