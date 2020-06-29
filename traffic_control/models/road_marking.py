@@ -17,6 +17,7 @@ from .common import (
     LaneType,
     Lifecycle,
     TrafficControlDeviceType,
+    TrafficControlDeviceTypeType,
 )
 from .plan import Plan
 from .traffic_sign import TrafficSignPlan, TrafficSignReal
@@ -193,6 +194,14 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
 
         super().save(*args, **kwargs)
 
+        if (
+            self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE
+            and self.road_name == ""
+        ):
+            raise ValidationError(
+                f'Road name is required for "{TrafficControlDeviceTypeType.TRANSVERSE.value}" road marking'
+            )
+
         if self.plan:
             self.plan.derive_location_from_related_plans()
 
@@ -345,6 +354,14 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.ROAD_MARKING):
             raise ValidationError(
                 f'Device type "{self.device_type}" is not allowed for road markings'
+            )
+
+        if (
+            self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE
+            and self.road_name == ""
+        ):
+            raise ValidationError(
+                f'Road name is required for "{TrafficControlDeviceTypeType.TRANSVERSE.value}" road marking'
             )
 
         super().save(*args, **kwargs)
