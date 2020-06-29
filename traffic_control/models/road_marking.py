@@ -38,6 +38,7 @@ class ArrowDirection(Enum):
     RIGHT_AND_STRAIGHT = 2
     LEFT = 4
     LEFT_AND_STRAIGHT = 5
+    LANE_ENDS = 6
 
     class Labels:
         STRAIGHT = _("Straight")
@@ -45,6 +46,7 @@ class ArrowDirection(Enum):
         RIGHT_AND_STRAIGHT = _("Right and straight")
         LEFT = _("Left")
         LEFT_AND_STRAIGHT = _("Left and straight")
+        LANE_ENDS = _("Lane ends")
 
 
 class RoadMarkingColor(Enum):
