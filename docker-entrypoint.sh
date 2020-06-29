@@ -24,7 +24,7 @@ echo "Checking for odd ENTRYPOINT line in arguments"
 echo "Arguments are:"
 echo $@
 echo
-if [[ $@ == *"(nop)  ENTRYPOINT" ]]; then
+if [[ $@ == *"(nop)  ENTRYPOINT"* ]]; then
     echo "ENTRYPOINT found in arguments. Emptying arguments."
     set --
 else
