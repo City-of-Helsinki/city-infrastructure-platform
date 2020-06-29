@@ -149,7 +149,6 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
     seasonal_validity_period_end = models.DateField(
         _("Seasonal validity period end"), blank=True, null=True
     )
-    has_rumble_strips = models.BooleanField(_("Has rumble strips"), null=True)
     owner = models.CharField(_("Owner"), max_length=254)
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
     lifecycle = EnumIntegerField(
@@ -306,7 +305,6 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
     seasonal_validity_period_end = models.DateField(
         _("Seasonal validity period end"), blank=True, null=True
     )
-    has_rumble_strips = models.BooleanField(_("Has rumble strips"), null=True)
     owner = models.CharField(_("Owner"), max_length=254)
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
     lifecycle = EnumIntegerField(
