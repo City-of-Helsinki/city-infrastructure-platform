@@ -197,6 +197,16 @@ class TrafficSignPlanFile(models.Model):
         return "%s" % self.file
 
 
+class TrafficSignRealQuerySet(SoftDeleteQuerySet):
+    def soft_delete(self, user):
+        from .additional_sign import AdditionalSignReal
+
+        additional_signs = AdditionalSignReal.objects.filter(parent__in=self).active()
+
+        super().soft_delete(user)
+        additional_signs.soft_delete(user)
+
+
 class TrafficSignReal(SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -313,7 +323,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         _("Source name"), max_length=254, blank=True, null=True
     )
 
-    objects = SoftDeleteQuerySet.as_manager()
+    objects = TrafficSignRealQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_sign_real"
@@ -349,8 +359,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
     @transaction.atomic
     def soft_delete(self, user):
         super().soft_delete(user)
-        for additional_sign in self.children.active():
-            additional_sign.soft_delete(user)
+        self.additional_signs.soft_delete(user)
 
 
 class TrafficSignRealFile(models.Model):

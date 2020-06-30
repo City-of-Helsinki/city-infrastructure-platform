@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 
-from traffic_control.models import TrafficSignReal
+from traffic_control.models import AdditionalSignReal, TrafficSignReal
 from traffic_control.tests.factories import get_additional_sign_real, get_user
 
 
@@ -30,16 +30,27 @@ class TrafficSignRealTestCase(TestCase):
         additional_sign.soft_delete(self.user)
         self.assertFalse(self.main_sign.has_additional_signs())
 
+    def test_queryset_soft_delete_handles_additional_signs(self):
+        get_additional_sign_real()
+        additional_sign = get_additional_sign_real(parent=self.main_sign)
+        self.assertEqual(TrafficSignReal.objects.count(), 2)
+        TrafficSignReal.objects.filter(pk=self.main_sign.pk).soft_delete(self.user)
+        self.main_sign.refresh_from_db()
+        additional_sign.refresh_from_db()
+        self.assertFalse(self.main_sign.is_active)
+        self.assertEqual(self.main_sign.deleted_by, self.user)
+        self.assertFalse(additional_sign.is_active)
+        self.assertEqual(additional_sign.deleted_by, self.user)
+        self.assertEqual(TrafficSignReal.objects.active().count(), 1)
+        self.assertEqual(AdditionalSignReal.objects.active().count(), 1)
+
+    def test_soft_delete_without_additional_signs(self):
+        self.main_sign.soft_delete(self.user)
+        self.main_sign.refresh_from_db()
+        self.assertFalse(self.main_sign.is_active)
+
     def test_soft_delete_main_traffic_sign_also_soft_delete_additional_sign(self):
-        additional_sign = TrafficSignReal.objects.create(
-            parent=self.main_sign,
-            location=Point(1, 1, 5, srid=settings.SRID),
-            legacy_code="800",
-            direction=0,
-            created_by=self.user,
-            updated_by=self.user,
-            owner="test owner",
-        )
+        additional_sign = get_additional_sign_real(parent=self.main_sign)
         self.main_sign.soft_delete(self.user)
         additional_sign.refresh_from_db()
         self.assertFalse(additional_sign.is_active)
