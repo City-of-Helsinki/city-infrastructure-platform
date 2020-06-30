@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 
 from traffic_control.tests.factories import (
+    get_additional_sign_plan,
     get_barrier_plan,
     get_mount_plan,
     get_plan,
@@ -40,6 +41,10 @@ def test_plan_get_related_locations():
     tsp_2 = get_traffic_sign_plan(
         location=Point(95.0, 110.0, 0.0, srid=settings.SRID), plan=plan
     )
+    asp_1 = get_additional_sign_plan(
+        location=Point(80.0, 120.0, srid=settings.SRID), plan=plan
+    )
+    asp_2 = get_additional_sign_plan(location=None, parent=tsp_2, plan=plan)
 
     locations = plan._get_related_locations()
 
@@ -55,6 +60,8 @@ def test_plan_get_related_locations():
     assert tlp_2.location in locations
     assert tsp_1.location in locations
     assert tsp_2.location in locations
+    assert asp_1.location in locations
+    assert asp_2.location in locations
 
 
 @pytest.mark.django_db
@@ -84,6 +91,8 @@ def test_plan_derive_location_from_related_plans():
     tsp_2 = get_traffic_sign_plan(
         location=Point(95.0, 110.0, 0.0, srid=settings.SRID), plan=plan
     )
+    asp_1 = get_additional_sign_plan(location=Point(80.0, 120.0, srid=settings.SRID))
+    asp_2 = get_additional_sign_plan(location=None, parent=tsp_2)
 
     noise_bp = get_barrier_plan(location=Point(150.0, 150.0, srid=settings.SRID))
     noise_mp = get_mount_plan(location=Point(150.0, 150.0, srid=settings.SRID))
@@ -92,6 +101,9 @@ def test_plan_derive_location_from_related_plans():
     noise_tlp = get_traffic_light_plan(location=Point(150.0, 150.0, srid=settings.SRID))
     noise_tsp = get_traffic_sign_plan(
         location=Point(150.0, 150.0, 0.0, srid=settings.SRID)
+    )
+    noise_asp = get_additional_sign_plan(
+        location=Point(150.0, 150.0, srid=settings.SRID)
     )
 
     plan.refresh_from_db()
@@ -109,12 +121,15 @@ def test_plan_derive_location_from_related_plans():
     assert plan.location.contains(tlp_2.location)
     assert plan.location.contains(tsp_1.location)
     assert plan.location.contains(tsp_2.location)
+    assert plan.location.contains(asp_1.location)
+    assert plan.location.contains(asp_2.location)
     assert not plan.location.contains(noise_bp.location)
     assert not plan.location.contains(noise_mp.location)
     assert not plan.location.contains(noise_rmp.location)
     assert not plan.location.contains(noise_sp.location)
     assert not plan.location.contains(noise_tlp.location)
     assert not plan.location.contains(noise_tsp.location)
+    assert not plan.location.contains(noise_asp.location)
 
 
 @pytest.mark.django_db

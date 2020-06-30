@@ -70,6 +70,7 @@ class Plan(SoftDeleteModel, UserControlModel):
                 self.signpost_plans.values_list("location", flat=True),
                 self.traffic_light_plans.values_list("location", flat=True),
                 self.traffic_sign_plans.values_list("location", flat=True),
+                self.additional_sign_plans.values_list("location", flat=True),
             )
         )
 

@@ -9,6 +9,7 @@ from rest_framework_gis.fields import GeoJsonDict
 
 from ..models import Plan
 from .factories import (
+    get_additional_sign_plan,
     get_api_client,
     get_barrier_plan,
     get_mount_plan,
@@ -84,6 +85,7 @@ def test_plan_create():
     signpost_plan = get_signpost_plan()
     traffic_light_plan = get_traffic_light_plan()
     traffic_sign_plan = get_traffic_sign_plan()
+    additional_sign_plan = get_additional_sign_plan()
 
     response = api_client.post(
         reverse("v1:plan-list"),
@@ -102,6 +104,7 @@ def test_plan_create():
                 "signpost": [signpost_plan.pk],
                 "traffic_light": [traffic_light_plan.pk],
                 "traffic_sign": [traffic_sign_plan.pk],
+                "additional_sign": [additional_sign_plan.pk],
             },
         },
         format="json",
@@ -124,6 +127,7 @@ def test_plan_create():
     assert signpost_plan in plan.signpost_plans.all()
     assert traffic_light_plan in plan.traffic_light_plans.all()
     assert traffic_sign_plan in plan.traffic_sign_plans.all()
+    assert additional_sign_plan in plan.additional_sign_plans.all()
 
 
 @pytest.mark.django_db
