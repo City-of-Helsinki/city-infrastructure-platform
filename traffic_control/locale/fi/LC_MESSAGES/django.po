@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-26 15:59+0300\n"
+"POT-Creation-Date: 2020-06-30 10:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Additional sign content"
+msgstr "Lisäkilven sisältö"
+
+msgid "Additional sign contents"
+msgstr "Lisäkilven sisällöt"
 
 #, python-format
 msgid "Set related plans for plan %s"
@@ -64,6 +70,9 @@ msgstr "Liikennevalo (suunnitelmat)"
 msgid "Traffic Sign Plans"
 msgstr "Liikennemerkki (suunnitelmat)"
 
+msgid "Additional Sign Plans"
+msgstr "Lisäkilpi (suunnitelmat)"
+
 msgid "Active"
 msgstr "Pysyvä laite"
 
@@ -85,6 +94,123 @@ msgstr "Luoja"
 msgid "Updated by"
 msgstr "Päivittäjä"
 
+msgid "Location (2D)"
+msgstr "Sijainti (2D)"
+
+msgid "Affect area (2D)"
+msgstr "Vaikutusalue (2D)"
+
+msgid "Reflection"
+msgstr "Kalvo"
+
+msgid "Surface"
+msgstr "Pinta"
+
+msgid "Color"
+msgstr "Väri"
+
+msgid "Road name"
+msgstr "Kadun/tien nimi"
+
+msgid "Lane number"
+msgstr "Kaistanumero"
+
+msgid "Lane type"
+msgstr "Kaistatyyppi"
+
+msgid "Location specifier"
+msgstr "Sijaintitarkenne"
+
+msgid "Decision id"
+msgstr "Päätöksen tunnus"
+
+msgid "Decision date"
+msgstr "Päätöspvm"
+
+msgid "Installation id"
+msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
+
+msgid "Installation date"
+msgstr "Asennuspvm"
+
+msgid "Installation status"
+msgstr "Asennuksen tila"
+
+msgid "Installed by"
+msgstr "Asentaja"
+
+msgid "Owner"
+msgstr "Omistaja"
+
+msgid "Validity period start"
+msgstr "Voimassaoloaika alkaa"
+
+msgid "Validity period end"
+msgstr "Voimassaoloaika loppuu"
+
+msgid "Seasonal validity period start"
+msgstr "Kausiluontoinen voimassaoloaika alkaa"
+
+msgid "Seasonal validity period end"
+msgstr "Kausiluontoinen voimassaoloaika loppuu"
+
+msgid "Lifecycle"
+msgstr "Elinkaari"
+
+msgid "Parent Traffic Sign Plan"
+msgstr "Isäntäkilpi (suunnitelma)"
+
+msgid "Plan"
+msgstr "Suunnitelma"
+
+msgid "Additional Sign Plan"
+msgstr "Lisäkilpi (suunnitelma)"
+
+msgid "Parent Traffic Sign Real"
+msgstr "Isäntäkilpi (toteuma)"
+
+msgid "Condition"
+msgstr "Kunto"
+
+msgid "Manufacturer"
+msgstr "Valmistaja"
+
+msgid "RFID"
+msgstr "RFID"
+
+msgid "Additional Sign Real"
+msgstr "Lisäkilpi (toteuma)"
+
+msgid "Additional Sign Reals"
+msgstr "Lisäkilpi (toteumat)"
+
+msgid "Device type"
+msgstr "Laitteen tyyppi"
+
+msgid "Content text"
+msgstr "Sisältöteksti"
+
+msgid "Order"
+msgstr "Järjestys"
+
+msgid "Parent Additional Sign Plan"
+msgstr "Isäntäkilpi (suunnitelma)"
+
+msgid "Additional Sign Content Plan"
+msgstr "Lisäkilven sisältö (suunnitelma)"
+
+msgid "Additional Sign Content Plans"
+msgstr "Lisäkilpien sisällöt (suunnitelmat)"
+
+msgid "Parent Additional Sign Real"
+msgstr "Isäntäkilpi (toteuma)"
+
+msgid "Additional Sign Content Real"
+msgstr "Lisäkilven sisältö (toteuma)"
+
+msgid "Additional Sign Content Reals"
+msgstr "Lisäkilpien sisällöt (toteumat)"
+
 msgid "Closed"
 msgstr "Suljettu yhteys"
 
@@ -103,12 +229,6 @@ msgstr "Ajoradan tai kaistan oikea reuna"
 msgid "Left of road or lane"
 msgstr "Ajoradan tai kaistan vasen reuna"
 
-msgid "Location (2D)"
-msgstr "Sijainti (2D)"
-
-msgid "Device type"
-msgstr "Laitteen tyyppi"
-
 msgid "Connection type"
 msgstr "Avattava yhteys"
 
@@ -118,41 +238,8 @@ msgstr "Materiaali"
 msgid "Is electric"
 msgstr "Sähköinen"
 
-msgid "Owner"
-msgstr "Omistaja"
-
-msgid "Decision date"
-msgstr "Päätöspvm"
-
-msgid "Decision id"
-msgstr "Päätöksen tunnus"
-
 msgid "Reflective"
 msgstr "Heijastava"
-
-msgid "Plan"
-msgstr "Suunnitelma"
-
-msgid "Road name"
-msgstr "Kadun/tien nimi"
-
-msgid "Lane number"
-msgstr "Kaistanumero"
-
-msgid "Lane type"
-msgstr "Kaistatyyppi"
-
-msgid "Location specifier"
-msgstr "Sijaintitarkenne"
-
-msgid "Lifecycle"
-msgstr "Elinkaari"
-
-msgid "Validity period start"
-msgstr "Voimassaoloaika alkaa"
-
-msgid "Validity period end"
-msgstr "Voimassaoloaika loppuu"
 
 msgid "Length"
 msgstr "Pituus"
@@ -174,15 +261,6 @@ msgstr "Suunnitelmadokumentti (ajoeste)"
 
 msgid "Barrier Plan Files"
 msgstr "Suunnitelmadokumentit (ajoeste)"
-
-msgid "Installation date"
-msgstr "Asennuspvm"
-
-msgid "Installation status"
-msgstr "Asennuksen tila"
-
-msgid "Condition"
-msgstr "Kunto"
 
 msgid "Barrier real"
 msgstr "Ajoeste (toteuma)"
@@ -526,20 +604,11 @@ msgstr "Teksti"
 msgid "Size"
 msgstr "Koko"
 
-msgid "Color"
-msgstr "Väri"
-
 msgid "Traffic Sign Plan"
 msgstr "Liikennemerkki (suunnitelma)"
 
 msgid "Type specifier"
 msgstr "Tyypin tarkenne"
-
-msgid "Seasonal validity period start"
-msgstr "Kausiluontoinen voimassaoloaika alkaa"
-
-msgid "Seasonal validity period end"
-msgstr "Kausiluontoinen voimassaoloaika loppuu"
 
 msgid "Has rumble strips"
 msgstr "Heräteraidat"
@@ -616,9 +685,6 @@ msgstr "Opasteen sisältö"
 msgid "Parent Signpost Plan"
 msgstr "Isäntäopaste (suunnitelma)"
 
-msgid "Reflection"
-msgstr "Kalvo"
-
 msgid "Attachment class"
 msgstr "Kiinnitysluokka"
 
@@ -648,9 +714,6 @@ msgstr "Isäntäopaste (toteuma)"
 
 msgid "Organization"
 msgstr "Käyttäjä/organisaatio"
-
-msgid "Manufacturer"
-msgstr "Valmistaja"
 
 msgid "Signpost Real"
 msgstr "Opaste (toteuma)"
@@ -748,15 +811,6 @@ msgstr "Sijainti (3D)"
 msgid "Traffic Sign Code value"
 msgstr "Merkin numeerinen arvo"
 
-msgid "Parent Traffic Sign Plan"
-msgstr "Isäntäkilpi (suunnitelma)"
-
-msgid "Affect area (2D)"
-msgstr "Vaikutusalue (2D)"
-
-msgid "Surface"
-msgstr "Pinta"
-
 msgid "Source id"
 msgstr "Lähteen id"
 
@@ -772,12 +826,6 @@ msgstr "Suunnitelmadokumentit (liikennemerkki)"
 msgid "Legacy Traffic Sign Code"
 msgstr "Vanha merkkikoodi"
 
-msgid "Parent Traffic Sign Real"
-msgstr "Isäntäkilpi (toteuma)"
-
-msgid "Installation id"
-msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
-
 msgid "Installation details"
 msgstr "Asennuksen lisätiedot"
 
@@ -786,9 +834,6 @@ msgstr "Lupapäätöksen tunnistenumero (Allu)"
 
 msgid "Scanned at"
 msgstr "Kuvattu-aikaleima"
-
-msgid "RFID"
-msgstr "RFID"
 
 msgid "Operation"
 msgstr "Toimenpide"
