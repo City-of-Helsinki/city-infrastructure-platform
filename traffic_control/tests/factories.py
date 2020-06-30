@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from typing import Optional
 
 from django.contrib.auth import get_user_model
@@ -66,7 +66,7 @@ def get_barrier_plan(location="", plan=None, device_type=None):
     return BarrierPlan.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point,
-        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         material="Betoni",
         reflective=Reflective.YES,
@@ -85,7 +85,7 @@ def get_barrier_real(location="", device_type=None):
         device_type=device_type or get_traffic_control_device_type(),
         barrier_plan=get_barrier_plan(),
         location=location or test_point,
-        installation_date=datetime.strptime("20012020", "%d%m%Y").date(),
+        installation_date=datetime.date(2020, 1, 20),
         lifecycle=Lifecycle.ACTIVE,
         material="Betoni",
         reflective=Reflective.YES,
@@ -106,7 +106,7 @@ def get_mount_plan(location="", plan=None):
     return MountPlan.objects.get_or_create(
         mount_type=get_mount_type(code="PORTAL", description="Portal"),
         location=location or test_point,
-        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         created_by=user,
@@ -121,7 +121,7 @@ def get_mount_real(location=""):
         mount_plan=get_mount_plan(),
         mount_type=get_mount_type(code="PORTAL", description="Portal"),
         location=location or test_point,
-        installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         created_by=user,
         updated_by=user,
@@ -136,7 +136,7 @@ def get_road_marking_plan(location="", plan=None, device_type=None):
         value="30",
         color=RoadMarkingColor.WHITE,
         location=location or test_point,
-        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         material="Maali",
         is_grinded=True,
@@ -157,7 +157,7 @@ def get_road_marking_real(location="", device_type=None):
         value="30",
         color=RoadMarkingColor.WHITE,
         location=location or test_point,
-        installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         material="Maali",
         is_grinded=True,
@@ -174,7 +174,7 @@ def get_signpost_plan(location="", plan=None, device_type=None):
     return SignpostPlan.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point,
-        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         created_by=user,
@@ -189,7 +189,7 @@ def get_signpost_real(location="", device_type=None):
         device_type=device_type or get_traffic_control_device_type(),
         signpost_plan=get_signpost_plan(),
         location=location or test_point,
-        installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         created_by=user,
         updated_by=user,
@@ -203,7 +203,7 @@ def get_traffic_light_plan(location="", plan=None, device_type=None):
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
-        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         mount_type=get_mount_type(),
         road_name="Testingroad",
@@ -222,7 +222,7 @@ def get_traffic_light_real(location="", device_type=None):
         traffic_light_plan=get_traffic_light_plan(),
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
-        installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         mount_type=get_mount_type(),
         road_name="Testingroad",
@@ -248,7 +248,7 @@ def get_traffic_sign_plan(location="", plan=None, device_type=None):
     return TrafficSignPlan.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point_3d,
-        decision_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         created_by=user,
@@ -263,7 +263,7 @@ def get_traffic_sign_real(location="", device_type=None):
         traffic_sign_plan=get_traffic_sign_plan(),
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point_3d,
-        installation_date=datetime.strptime("01012020", "%d%m%Y").date(),
+        installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         created_by=user,
         updated_by=user,
