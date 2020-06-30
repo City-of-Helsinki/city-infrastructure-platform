@@ -8,6 +8,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
 from traffic_control.views import (
+    additional_sign as additional_sign_views,
     barrier as barrier_views,
     mount as mount_views,
     plan as plan_views,
@@ -35,6 +36,20 @@ router.register(
 )
 router.register(
     "traffic-sign-reals", traffic_sign_views.TrafficSignRealViewSet,
+)
+router.register(
+    "additional-sign-plans", additional_sign_views.AdditionalSignPlanViewSet,
+)
+router.register(
+    "additional-sign-reals", additional_sign_views.AdditionalSignRealViewSet,
+)
+router.register(
+    "additional-sign-content-plans",
+    additional_sign_views.AdditionalSignContentPlanViewSet,
+)
+router.register(
+    "additional-sign-content-reals",
+    additional_sign_views.AdditionalSignContentRealViewSet,
 )
 router.register(
     "mount-plans", mount_views.MountPlanViewSet,

@@ -3,6 +3,10 @@ from django_filters.rest_framework import FilterSet
 from rest_framework_gis.filters import GeometryFilter
 
 from traffic_control.models import (
+    AdditionalSignContentPlan,
+    AdditionalSignContentReal,
+    AdditionalSignPlan,
+    AdditionalSignReal,
     BarrierPlan,
     BarrierReal,
     MountPlan,
@@ -31,6 +35,26 @@ class GenericMeta:
             "extra": lambda f: {"lookup_expr": "intersects"},
         },
     }
+
+
+class AdditionalSignContentPlanFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = AdditionalSignContentPlan
+
+
+class AdditionalSignContentRealFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = AdditionalSignContentReal
+
+
+class AdditionalSignPlanFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = AdditionalSignPlan
+
+
+class AdditionalSignRealFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = AdditionalSignReal
 
 
 class BarrierPlanFilterSet(FilterSet):
