@@ -6,7 +6,7 @@ from django.test import TestCase
 from traffic_control.admin import TrafficSignRealAdmin
 from traffic_control.models import TrafficSignReal
 from traffic_control.models.common import Lifecycle
-from traffic_control.tests.factories import get_user
+from traffic_control.tests.factories import get_additional_sign_real, get_user
 
 
 class MockRequest:
@@ -43,15 +43,7 @@ class TrafficSignRealAdminTestCase(TestCase):
         self.assertIn("z_coord", form.base_fields)
 
     def test_has_additional_signs_return_yes(self):
-        TrafficSignReal.objects.create(
-            parent=self.traffic_sign_real,
-            location=Point(1, 1, 5, srid=settings.SRID),
-            legacy_code="800",
-            direction=0,
-            created_by=self.user,
-            updated_by=self.user,
-            owner="test owner",
-        )
+        get_additional_sign_real(parent=self.traffic_sign_real)
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
         self.assertEqual(ma.has_additional_signs(self.traffic_sign_real), "Kyllä")
 
