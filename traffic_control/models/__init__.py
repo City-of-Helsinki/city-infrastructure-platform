@@ -1,4 +1,10 @@
 # flake8: noqa
+from .additional_sign import (
+    AdditionalSignContentPlan,
+    AdditionalSignContentReal,
+    AdditionalSignPlan,
+    AdditionalSignReal,
+)
 from .barrier import (
     BarrierPlan,
     BarrierPlanFile,

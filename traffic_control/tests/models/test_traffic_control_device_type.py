@@ -4,6 +4,8 @@ from django.utils.crypto import get_random_string
 
 from traffic_control.models.common import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
+    get_additional_sign_content_plan,
+    get_additional_sign_content_real,
     get_barrier_plan,
     get_barrier_real,
     get_road_marking_plan,
@@ -31,6 +33,8 @@ from traffic_control.tests.factories import (
         (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_real),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_additional_sign_content_plan),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_additional_sign_content_real),
     ),
 )
 @pytest.mark.django_db
@@ -68,6 +72,8 @@ def test__traffic_control_device_type__target_model__restricts_relations(
         (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_real),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_additional_sign_content_plan),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_additional_sign_content_real),
     ),
 )
 @pytest.mark.django_db
@@ -97,6 +103,8 @@ def test__traffic_control_device_type__target_model__update_is_valid(
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_real),
         (DeviceTypeTargetModel.BARRIER, get_traffic_sign_plan),
         (DeviceTypeTargetModel.BARRIER, get_traffic_sign_real),
+        (DeviceTypeTargetModel.SIGNPOST, get_additional_sign_content_plan),
+        (DeviceTypeTargetModel.SIGNPOST, get_additional_sign_content_real),
     ),
 )
 @pytest.mark.django_db
