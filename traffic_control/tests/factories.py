@@ -6,6 +6,10 @@ from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
 from traffic_control.models import (
+    AdditionalSignContentPlan,
+    AdditionalSignContentReal,
+    AdditionalSignPlan,
+    AdditionalSignReal,
     BarrierPlan,
     BarrierReal,
     ConnectionType,
@@ -29,7 +33,11 @@ from traffic_control.models import (
     TrafficSignReal,
 )
 from traffic_control.models.common import DeviceTypeTargetModel
-from traffic_control.tests.test_base_api import test_multi_polygon, test_point
+from traffic_control.tests.test_base_api import (
+    test_multi_polygon,
+    test_point,
+    test_polygon,
+)
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
@@ -259,12 +267,78 @@ def get_traffic_sign_plan(location="", plan=None, device_type=None):
 def get_traffic_sign_real(location="", device_type=None):
     user = get_user("test_user")
 
+    if not device_type:
+        device_type = get_traffic_control_device_type()
+
     return TrafficSignReal.objects.get_or_create(
-        traffic_sign_plan=get_traffic_sign_plan(),
-        device_type=device_type or get_traffic_control_device_type(),
+        traffic_sign_plan=get_traffic_sign_plan(device_type=device_type),
+        device_type=device_type,
         location=location or test_point_3d,
         installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_additional_sign_plan(
+    location=test_point, parent=None, owner="Test owner", plan=None
+):
+    user = get_user("test_user")
+
+    return AdditionalSignPlan.objects.get_or_create(
+        parent=parent or get_traffic_sign_plan(),
+        location=location,
+        affect_area=test_polygon,
+        owner=owner,
+        decision_date=datetime.date(2020, 1, 1),
+        plan=plan,
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_additional_sign_real(parent=None, owner="Test owner"):
+    user = get_user("test_user")
+
+    return AdditionalSignReal.objects.get_or_create(
+        parent=parent or get_traffic_sign_real(),
+        location=test_point,
+        affect_area=test_polygon,
+        owner=owner,
+        decision_date=datetime.date(2020, 1, 1),
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_additional_sign_content_plan(parent=None, device_type=None, order=1):
+    user = get_user("test_user")
+
+    if not device_type:
+        device_type = get_traffic_control_device_type()
+
+    return AdditionalSignContentPlan.objects.get_or_create(
+        parent=parent or get_additional_sign_plan(),
+        order=order,
+        text="Content",
+        device_type=device_type,
+        created_by=user,
+        updated_by=user,
+    )[0]
+
+
+def get_additional_sign_content_real(parent=None, device_type=None, order=1):
+    user = get_user("test_user")
+
+    if not device_type:
+        device_type = get_traffic_control_device_type()
+
+    return AdditionalSignContentReal.objects.get_or_create(
+        parent=parent or get_additional_sign_real(),
+        order=order,
+        text="Content",
+        device_type=device_type,
         created_by=user,
         updated_by=user,
     )[0]
