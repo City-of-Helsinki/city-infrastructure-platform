@@ -12,6 +12,7 @@ from django.urls import reverse
 
 from ..models import Plan
 from .factories import (
+    get_additional_sign_plan,
     get_barrier_plan,
     get_mount_plan,
     get_plan,
@@ -86,6 +87,7 @@ def test_plan_relation_admin_view_requires_change_permission(client):
             "singpost_plans": [],
             "traffic_light_plans": [],
             "traffic_sign_plans": [],
+            "additional_sign_plans": [],
         },
     )
 
@@ -104,6 +106,7 @@ def test_plan_relation_admin_view_requires_change_permission(client):
             "singpost_plans": [],
             "traffic_light_plans": [],
             "traffic_sign_plans": [],
+            "additional_sign_plans": [],
         },
     )
 
@@ -122,8 +125,14 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
     signpost_plan = get_signpost_plan()
     traffic_light_plan = get_traffic_light_plan()
     traffic_sign_plan = get_traffic_sign_plan()
+    additional_sign_plan = get_additional_sign_plan()
 
-    for p in [signpost_plan, traffic_light_plan, traffic_sign_plan]:
+    for p in [
+        signpost_plan,
+        traffic_light_plan,
+        traffic_sign_plan,
+        additional_sign_plan,
+    ]:
         p.plan = plan
         p.save(update_fields=["plan"])
 
@@ -135,6 +144,7 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
         "singpost_plans": [],
         "traffic_light_plans": [],
         "traffic_sign_plans": [],
+        "additional_sign_plans": [],
     }
 
     if redirect_after_save:
@@ -154,6 +164,7 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
     assert plan.signpost_plans.count() == 0
     assert plan.traffic_light_plans.count() == 0
     assert plan.traffic_sign_plans.count() == 0
+    assert plan.additional_sign_plans.count() == 0
 
 
 @pytest.mark.django_db
@@ -176,6 +187,7 @@ def test_plan_relation_admin_view_available_choices(admin_client):
         get_signpost_plan(location=loc, plan=plan)
         get_traffic_light_plan(location=loc, plan=plan)
         get_traffic_sign_plan(location=loc_3d, plan=plan)
+        get_additional_sign_plan(location=loc, plan=plan)
 
     plan_1.refresh_from_db()
     plan_2.refresh_from_db()
@@ -200,4 +212,8 @@ def test_plan_relation_admin_view_available_choices(admin_client):
     assert (
         plan_2.traffic_sign_plans.first()
         not in form.fields["traffic_sign_plans"].queryset
+    )
+    assert (
+        plan_2.additional_sign_plans.first()
+        not in form.fields["additional_sign_plans"].queryset
     )

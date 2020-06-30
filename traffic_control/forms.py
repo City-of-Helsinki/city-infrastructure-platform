@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from .models import (
+    AdditionalSignPlan,
     BarrierPlan,
     MountPlan,
     RoadMarkingPlan,
@@ -88,6 +89,13 @@ class PlanRelationsForm(forms.Form):
         required=False,
         widget=FilteredSelectMultiple(
             verbose_name=_("Traffic Sign Plans"), is_stacked=False
+        ),
+    )
+    additional_sign_plans = forms.ModelMultipleChoiceField(
+        AdditionalSignPlan.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name=_("Additional Sign Plans"), is_stacked=False
         ),
     )
 

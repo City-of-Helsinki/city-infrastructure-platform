@@ -484,6 +484,11 @@ class PlanRelationSerializer(serializers.ModelSerializer):
         many=True,
         queryset=TrafficSignPlan.objects.active(),
     )
+    additional_sign = serializers.PrimaryKeyRelatedField(
+        source="additional_sign_plans",
+        many=True,
+        queryset=AdditionalSignPlan.objects.all(),
+    )
 
     class Meta:
         model = Plan
@@ -494,6 +499,7 @@ class PlanRelationSerializer(serializers.ModelSerializer):
             "signpost",
             "traffic_light",
             "traffic_sign",
+            "additional_sign",
         )
 
 
