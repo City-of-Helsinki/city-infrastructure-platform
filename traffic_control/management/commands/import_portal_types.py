@@ -7,7 +7,7 @@ from traffic_control.models import PortalType
 
 
 class Command(BaseCommand):
-    help = "Import Categories from a csv file"
+    help = "Import portal types from a csv file"
 
     def add_arguments(self, parser):
         parser.add_argument("filename", help="Path to the portal types csv file")
