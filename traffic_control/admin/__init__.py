@@ -1,4 +1,5 @@
 # flake8: noqa
+from .additional_sign import AdditionalSignPlanAdmin, AdditionalSignRealAdmin
 from .audit_log import AuditLogHistoryAdmin
 from .barrier import (
     BarrierPlanAdmin,
