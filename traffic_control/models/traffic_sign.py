@@ -344,7 +344,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         super().save(*args, **kwargs)
 
     def has_additional_signs(self):
-        return self.children.active().exists()
+        return self.additional_signs.active().exists()
 
     @transaction.atomic
     def soft_delete(self, user):
