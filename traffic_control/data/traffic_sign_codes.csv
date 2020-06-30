@@ -1,413 +1,413 @@
-﻿MerkkiKoodi,Kuvaus,NykyinenLiisussaTunnus,NykyinenLiisussaNimi
-1,Kiinteä punainen valo ,,
-2,Kiinteä vihreä valo ,,
-3,Kiinteä keltainen valo ,,
-4,Nuolivalo ,,
-5,Vilkkuva punainen valo ,,
-6,Vilkkuva valkoinen valo ,,
-7,Vilkkuva keltainen valo ,,
-8,Joukkoliikenneopastin ,,
-9,Polkupyöräopastin,,
-10,Jalankulkijaopastin ,,
-11,Ajokaistaopastin ,,
-A1.1,"Mutka, oikea",111,Mutka oikealle
-A1.2,"Mutka, vasen",112,Mutka vasemmalle
-A2.1,"Mutkia , oikealle",113,"Mutkia, joista ensimmäinen oikealle"
-A2.2,"Mutkia , vasemmalle",114,"Mutkia, joista ensimmäinen vasemmaalle"
-A3.1,Jyrkkä mäki ,115,Jyrkkä alamäki
-A3.2,Jyrkkä mäki ,116,Jyrkkä ylämäki
-A4,Kapeneva tie ,121,Kapeneva tie
-A5,Kaksisuuntainen liikenne ,122,Kaksisuuntainen liikenne
-A6,Avattava silta ,131,Avattava silta
-A7,"Lautta, laituri tai ranta ",132,"Lautta, laituri tai ranta"
-A8,Liikenneruuhka ,133,Liikenneruuhka
-A9,Epätasainen tie ,141,Epätasainen tie
-A10,Töyssyjä ,141a,Töyssyjä
-A11,Tietyö ,142,Tietyö
-A12,Irtokiviä ,143,Irtokiviä
-A13,Liukas ajorata ,144,Liukas ajorata
-A14,Vaarallinen tien reuna ,147,Vaarallinen tien reuna
-A15,Suojatien ennakkovaroitus ,151,Suojatien ennakkovaroitus
-A16,Jalankulkijoita ,,
-A17,Lapsia ,152,Lapsia
-A18,Pyöräilijöitä ,153,Pyöräilijöitä
-A19,Hiihtolatu ,154,Hiihtolatu
-A20.1,Hirvi ,155,Hirvieläimiä
-A20.2,Poro ,156,Poroja
-A20.3,Kauriseläin ,,
-A21,Tienristeys ,161,Tienristeys
-A22.1,"Sivutien risteys, x",162,Sivutien risteys
-A22.2,"Sivutien risteys, y",163,Sivutien risteys
-A22.3,"Sivutien risteys, z",164,Sivutien risteys
-A22.4,"Sivutien risteys, v",,
-A23,Liikennevalot ,165,Liikennevalot
-A24,Liikenneympyrä ,166,Liikenneympyrä
-A25,Raitiovaunu ,167,Raitiotie
-A26,Rautatien tasoristeys ilman puomeja ,171,"Rautatien tasoristeys, ilmanpuomeja"
-A27,"Rautatien tasoristeys, jossa on puomit ",172,"Rautatien tasoristeys, jossa on puomit"
-A28.1,"Rautatien tasoristeyksen lähestymismerkit, x",173,Rautatien tasoristeyksen lähestymismerkit
-A28.2,"Rautatien tasoristeyksen lähestymismerkit, y",174,Rautatien tasoristeyksen lähestymismerkit
-A28.3 ,"Rautatien tasoristeyksen lähestymismerkit, z",175,Rautatien tasoristeyksen lähestymismerkit
-A29.1,Tasoristeys ,176,Yksiraiteisen rautatien tasoristeys
-A29.2,Tasoristeys ,177,Kaksi- tai useampi raiteisen rautatien tasoristeys
-A30,Putoavia kiviä ,181,Putoavia kiviä
-A31,Matalalla lentäviä lentokoneita ,182,Matalalla lentäviä lentokoneita
-A32,Sivutuuli ,183,Sivutuuli
-A33,Muu vaara ,189,Muu vaara
-B1,Etuajo-oikeutettu tie ,211,Etuajo- oikeutettu tie
-B2,Etuajo-oikeuden päättyminen ,212,Etuajo-oikeuden päättyminen
-B3,Etuajo-oikeus kohdattaessa ,221,Etuajo-oikeus kohdatessa
-B4,Väistämisvelvollisuus kohdattaessa ,222,Väistämisvelvollisuus kohdattaessa
-B5,Väistämisvelvollisuus risteyksessä ,231,Väistämisvelvollisuus risteyksessä
-B6,Pakollinen pysäyttäminen ,232,Pakollinen pysäyttäminen
-B7,Väistämisvelvollisuus pyöräilijän tienylityspaikassa ,,
-C1,Ajoneuvolla ajo kielletty ,311,Ajoneuvolla ajo kielletty
-C2,Moottorikäyttöisellä ajoneuvolla ajo kielletty ,312,Moottorikäyttöisellä ajoneuvolla ajo kielletty
-C3,Kuorma- ja pakettiautolla ajo kielletty ,313,Kuorma- ja pakettiautolla ajo kielletty
-C4,Ajoneuvoyhdistelmällä ajo kielletty ,314,Ajoneuvoyhdistelmällä ajo kielletty
-C5,Traktorilla ajo kielletty ,315,Traktorilla ajo kielletty
-C6,Moottoripyörällä ajo kielletty ,316,Moottoripyörällä ajo kielletty
-C7,Moottorikelkalla ajo kielletty ,317,Moottorikelkalla ajo killetty
-C8,Vaarallisten aineiden kuljetus kielletty ,318,Vaarallisten aineiden kuljetus kielletty
-C9,Linja-autolla ajo kielletty ,319,Linja-autolla ajo kielletty
-C10,Mopolla ajo kielletty ,321,Mopolla ajo kielletty
-C11,Polkupyörällä ajo kielletty ,322,Polkupyörällä ja mopolla ajo kielletty
-C12,Polkupyörällä ja mopolla ajo kielletty ,,
-C13,Jalankulku kielletty ,323,Jalankulku kielletty
-C14,Jalankulku ja polkupyörällä ajo kielletty ,,
-C15,Jalankulku ja polkupyörällä ja mopolla ajo kielletty ,324,Jalankulku sekä polkupyörällä ja mopolla ajo kielletty
-C16,Ratsastus kielletty ,325,Ratsastus kielletty
-C17,Kielletty ajosuunta ,331,Kielletty ajosuunta
-C18,Vasemmalle kääntyminen kielletty ,332,Vasemmalle kääntyminen kielletty
-C19,Oikealle kääntyminen kielletty ,333,Oikealle kääntyminen kielletty
-C20,U-käännös kielletty ,334,U-käännös kielletty
-C21,Ajoneuvon suurin sallittu leveys ,341,Ajoneuvon suurin sallittu leveys
-C22,Ajoneuvon suurin sallittu korkeus ,342,Ajoneuvon suurin sallittu korkeus
-C23,Ajoneuvon tai ajoneuvoyhdistelmän suurin sallittu pituus ,343,Ajoneuvon tai ajoneuvoyhdistelmän suurin sallittu pituus
-C24,Ajoneuvon suurin sallittu massa ,344,Ajoneuvon suurin sallittu massa
-C25,Ajoneuvoyhdistelmän suurin sallittu massa ,345,Ajoneuvoyhdistelmän suurin sallittu massa
-C26,Ajoneuvon suurin sallittu akselille kohdistuva massa ,346,Ajoneuvon suurin sallittu akselille kohdistuva massa
-C27,Ajoneuvon suurin sallittu telille kohdistuva massa ,347,Ajoneuvon suurin sallittu telille kohdistuva massa
-C28,Ohituskielto ,351,Ohituskielto
-C29,Ohituskielto päättyy ,352,Ohituskielto päättyy
-C30,Ohituskielto kuorma-autolla ,353,Ohituskielto kuorma-autolla
-C31,Ohituskielto kuorma-autolla päättyy ,354,Ohituskielto kuorma-autolla päättyy
-C32,Nopeusrajoitus ,361,Nopeus rajoitus
-C33,Nopeusrajoitus päättyy,362,Nopeusrajoitus päättyy
-C34,Nopeusrajoitusalue ,363,Nopeusrajoitusalue
-C35,Nopeusrajoitusalue päättyy ,364,Nopeusrajoitusalue päättyy
-C36,"Ajokaistakohtainen kielto, rajoitus tai määräys",365,Ajokaistakohtainen kielto tai rajoitus
-C37,Pysäyttäminen kielletty ,371,Pysäyttäminen kielletty
-C38,Pysäköinti kielletty ,372,Pysäköinti kielletty
-C39,Pysäköintikieltoalue ,373,Pysäköintikieltoalue
-C40,Pysäköintikieltoalue päättyy ,374,Pysäköintikieltoalue päättyy
-C41,Taksiasema-alue ,375,Taksiasema-alue
-C42,Taksin pysäyttämispaikka ,376,Taksin pysähtymispaikka
-C43,Kuormauspaikka ,,
-C44.1,Vuoropysäköinti ,381,Vuoropysäköinti (kielletty parittomina päivinä)
-C44.2,Vuoropysäköinti ,382,Vuoropysäköinti (kielletty parillisina päivinä)
-C45,Pakollinen pysäyttäminen tullitarkastusta varten ,391,Pakollinen pysäyttäminen tulliasemalla
-C46,Pakollinen pysäyttäminen tarkastusta varten ,392,Pakollinen pysäyttäminen tarkastusta varten
-C47,Moottorikäyttöisten ajoneuvojen vähimmäisetäisyys ,393,Moottorikäyttöisten ajoneuvojen vähimmäisetäisyys
-C48,Nastarenkailla varustetulla moottorikäyttöisellä ajoneuvolla ajo kielletty ,,
-D1.1,Pakollinen ajosuunta ,411,Pakollinen ajosuunta
-D1.2,Pakollinen ajosuunta ,412,Pakollinen ajosuunta
-D1.3,Pakollinen ajosuunta ,413,Pakollinen ajosuunta
-D1.4,Pakollinen ajosuunta ,414,Pakollinen ajosuunta
-D1.5,Pakollinen ajosuunta ,415,Pakollinen ajosuunta
-D1.6,Pakollinen ajosuunta ,,
-D1.7,Pakollinen ajosuunta ,,
-D1.8,Pakollinen ajosuunta ,,
-D1.9,Pakollinen ajosuunta ,,
-D2,Pakollinen kiertosuunta ,416,Pakollinen kiertosuunta
-D3.1,Liikenteenjakaja ,417,Liikenteenjakaja
-D3.2,Liikenteenjakaja ,418,Liikenteenjakaja
-D3.3,Liikenteenjakaja ,,
-D4,Jalkakäytävä ,421,Jalkakäytävä
-D5,Pyörätie ,422,Pyörätie
-D6,Yhdistetty pyörätie ja jalkakäytävä ,423,Yhditetty pyörätie ja jalkakäytävä
-D7.1,Pyörätie ja jalkakäytävä rinnakkain ,424,Pyörätie ja jalkakäytävä rinnakkain
-D7.2,Pyörätie ja jalkakäytävä rinnakkain ,425,Pyörätie ja jalkakäytävä rinnakkain
-D8,Moottorikelkkailureitti ,426,Moottorikelkkailureitti
-D9,Ratsastustie ,427,Ratsastustie
-D10,Vähimmäisnopeus ,,
-D11,Vähimmäisnopeus päättyy ,,
-E1,Suojatie ,511,Suojatie
-E2,Pysäköintipaikka ,521,Pysäköintipaikka
-E3.1,Liityntäpysäköintipaikka ,520a,Liityntäpysäköintipaikka
-E3.2,Liityntäpysäköintipaikka ,520b,Liityntäpysäköintipaikka
-E3.3,Liityntäpysäköintipaikka ,520c,Liityntäpysäköintipaikka
-E3.4,Liityntäpysäköintipaikka ,,
-E4.1,Ajoneuvojen sijoitus pysäköintipaikalla ,521a,"Ajoneuvojen sijoitus pysäköintipaikalla, eri suunnat"
-E4.2,Ajoneuvojen sijoitus pysäköintipaikalla ,521b,"Ajoneuvojen sijoitus pysäköintipaikalla, eri suunnat"
-E4.3,Ajoneuvojen sijoitus pysäköintipaikalla ,521c,"Ajoneuvojen sijoitus pysäköintipaikalla, eri suunnat"
-E5,Kohtaamispaikka ,522,Kohtaamispaikka
-E6,Linja-autopysäkki ,531,Paikallisliikenteen linja-auton pysäkki
-E7,Raitiovaunupysäkki ,533,Raitiovaunun pysäkki
-E8,Taksiasema ,534,Taksiasema
-E9.1,Linja-autokaista ,541a,Linja-autokaista
-E9.2,Linja-autokaista ,541b,Linja-autokaista
-E10.1,Linja-autokaista päättyy ,542a,Linja-autokaista päättyy
-E10.2,Linja-autokaista päättyy ,542b,Linja-autokaista päättyy
-E11.1,Raitiovaunukaista ,543a,Raitiovaunukaista
-E11.2,Raitiovaunukaista ,543b,Raitiovaunukaista
-E12.1,Raitiovaunukaista päättyy ,544a,Raitiovaunukaista päättyy
-E12.2,Raitiovaunukaista päättyy ,544b,Raitiovaunukaista päättyy
-E13.1,Pyöräkaista ,,
-E13.2,Pyöräkaista ,,
-E14.1,Yksisuuntainen tie ,551,Yksisuuntainen tie
-E14.2,Yksisuuntainen tie ,,
-E15,Moottoritie ,561,Moottoritie
-E16,Moottoritie päättyy ,562,Moottoritie päättyy
-E17,Moottoriliikennetie ,563,Moottoriliikennetie
-E18,Moottoriliikennetie päättyy ,564,Moottoriliikennetie päättyy
-E19,Tunneli ,565,Tunneli
-E20,Tunneli päättyy ,566,Tunneli päättyy
-E21,Hätäpysäyttämispaikka ,567,Hätäpysäyttämispaikka
-E22,Taajama ,571,Taajama
-E23,Taajama päättyy ,572,Taajama päättyy
-E24,Pihakatu ,573,Pihakatu
-E25,Pihakatu päättyy ,574,Pihakatu päättyy
-E26,Kävelykatu ,575,Kävelykatu
-E27,Kävelykatu päättyy ,575,Kävelykatu päättyy
-E28,Pyöräkatu ,,
-E29,Pyöräkatu päättyy ,,
-E30,Ajokaistojen yhdistyminen ,,
-F1.1,Suunnistustaulu ,611,Suunnistustaulu
-F1.2,Suunnistustaulu ,,
-F1.3,Suunnistustaulu ,,
-F2.1,Suunnistustaulu ,612,Suunnistustaulu
-F2.2,Suunnistustaulu ,,
-F2.3,Suunnistustaulu ,,
-F3,Ajokaistakohtainen suunnistustaulu ,,
-F4.1,Kiertotien suunnistustaulu ,614,Kiertotien suunnistustaulu
-F4.2,Kiertotien suunnistustaulu ,,
-F5,Kiertotieopastus ,615,Kiertotieopastus
-F6,Ajoreittiopastus ,616,Ajoreittiopastus
-F7.1,Ajokaistaopastus ,621,Ajokaistaopastus
-F7.2,Ajokaistaopastus ,622,Ajokaistaopastus
-F7.3,Ajokaistaopastus ,,
-F7.4,Ajokaistaopastus ,,
-F7.5,Ajokaistaopastus ,,
-F7.6,Ajokaistaopastus ,,
-F8.1,Ajokaistan päättyminen ,623,Ajokaistan päättyminen
-F8.2,Ajokaistan päättyminen ,631,Ajokaistan yläpuolinen viitta
-F9,Viitoituksen koontimerkki ,,
-F10,Ajokaistan yläpuolinen viitta ,632,Ajokaistan yläpuolinen viitta
-F11,Ajokaistan yläpuolinen viitta ,633,Ajokaistan yläpuolinen viitta
-F12,Ajokaistan yläpuolinen erkanemisviitta ,,
-F13,Tienviitta ,641,Tienviitta
-F14,Erkanemisviitta ,642,Erkanemisviitta
-F15,Kiertotien viitta ,646,Kiertotien viitta
-F16,Osoiteviitta ,644,Osoiteviitta
-F17,Osoiteviitan ennakkomerkki ,,
-F18.1,Liityntäpysäköintiviitta ,650,Liityntäpysäköintiviitta
-F18.2,Liityntäpysäköintiviitta ,,
-F18.3,Liityntäpysäköintiviitta ,,
-F18.4,Liityntäpysäköintiviitta ,,
-F18.5,Liityntäpysäköintiviitta ,,
-F19,Jalankulun viitta ,645,Kevyen liikenteen viitta
-F20.1,Pyöräilyn viitta ,645,Kevyen liikenteen viitta
-F20.2,Pyöräilyn viitta ,645,Kevyen liikenteen viitta
-F21.1,Pyöräilyn suunnistustaulu ,,
-F21.2,Pyöräilyn suunnistustaulu ,,
-F22,Pyöräilyn etäisyystaulu ,,
-F23,Pyöräilyn paikannimi ,,
-F24.1,Umpitie,651,Umpitie
-F24.2,Umpitie,652,Umpitie
-F24.3,Umpitie,,
-F25,Enimmäisnopeussuositus ,653,Enimmäisnopeussuositus
-F26,Etäisyystaulu ,661,Etäisyystaulu
-F27.1,Paikannimi ,662,Paikannimi
-F27.2,Paikannimi ,,
-F28,Kansainvälisen pääliikenneväylän numero ,663,Kansainvälisen pääliikenneväylän numero
-F29,Valtatien numero ,664,Valtatien numero
-F30,Kantatien numero ,665,Kantatien numero
-F31,Seututien numero,665a,Seututien numero
-F32,Muun maantien numero ,666,Muun yleisen tien numero
-F33,Kehätien numero ,,
-F34,Eritasoliittymän numero ,,
-F35,Opastus numeron tarkoittamalle tielle ,667,Opastus numeron tarkoittamalle tielle
-F36,Varareitti ,,
-F37,Moottoritien tunnus ,671,Moottoritien tunnus
-F38,Moottoriliikennetien tunnus ,672,Moottoriliikennetien tunnus
-F39,Lentoasema ,673,Lentoasema
-F40,Autolautta ,674,Autolautta
-F41,Matkustajasatama ,,
-F42,Tavarasatama ,675,Tavarasatama
-F43,Tavaraterminaali ,,
-F44,Teollisuusalue tai yritysalue ,676,Teollisuusalue
-F45,Vähittäiskaupan suuryksikkö ,,
-F46.1,Pysäköinti,677,Pysäköinti
-F46.2,Pysäköinti,,
-F47,Rautatieasema ,678,Rautatieasema
-F48,Linja-autoasema ,679,Linja-autoasema
-F49,Keskusta ,,
-F50,Tietylle ajoneuvolle tarkoitettu reitti,681,Kulkuneuvolle tarkoitettu reitti
-F51,Vaarallisten aineiden kuljetukselle tarkoitettu reitti ,684,Vaarallisten aineiden kuljetuksille tarkoitettu reitti
-F52,Jalankulkijalle tarkoitettu reitti ,682,Jalankulkijoille tarkoitettu reitti
-F53,Esteetön reitti ,683,Vammaiselle tarkoitettu reitti
-F54.1,"Reitti, jolla on portaat ",685,"Reitti, jolla on portaat"
-F54.2,"Reitti, jolla on portaat ",,
-F55.1,Reitti ilman portaita ,686,"Reitti, ilman portaita"
-F55.2,Reitti ilman portaita ,,
-F55.3,Reitti ilman portaita ,,
-F55.4,Reitti ilman portaita ,,
-F56.1,Hätäuloskäynti ,690,Hätäuloskäynti
-F56.2,Hätäuloskäynti ,,
-F57.1,Poistumisreitti ,691,Poistumisreitti
-F57.2,Poistumisreitti ,,
-G1,Palvelukohteen opastustaulu ,701,Palvelukohteen opastustaulu
-G2,Palvelukohteen opastustaulu ,702,Palvelukohteen opastustaulu
-G3,Palvelukohteen erkanemisviitta ,703,Palvelukohteen erkanemisviitta
-G4,Palvelukohteen osoiteviitta ,704,Palvelukohteen osoiteviitta
-G5,Palvelukohteen osoiteviitan ennakkomerkki,704a,Palvelukohteen osoiteviitan ennakkomerkki
-G6,Radioaseman taajuus ,710,Radioaseman taajuus
-G7,Opastuspiste ,711,Opastuspiste
-G8,Opastustoimisto ,712,Opastustoimisto
-G9,Ensiapu ,715,Ensiapu
-G10,Autokorjaamo ,721,Autokorjaamo
-G11.1,"Polttoaineen jakelu, Bensiini tai etanoli",722,Huoltoasema
-G11.2,"Polttoaineen jakelu, paineistettu kaasu",,
-G11.3,"Polttoaineen jakelu, sähkö",,
-G11.4,"Polttoaineen jakelu, vety",,
-G12,Hotelli tai motelli,723,Hotelli tai motelli
-G13,Ruokailupaikka ,724,Ruokailupaikka
-G14,Kahvila tai pikaruokapaikka ,725,Kahvila tai pikaruokapaikka
-G15,Käymälä ,726,Käymälä
-G16,Retkeilymaja ,731,Retkeilymaja
-G17,Leirintäalue,733,Leirintäalue
-G18,Matkailuajoneuvoalue ,734,Matkailuajoneuvoalue
-G19,Levähdysalue ,741,Levähdysalue
-G20,Ulkoilualue ,742,Ulkoilualue
-G21,Hätäpuhelin ,791,Hätäpuhelin
-G22,Sammutin ,792,Sammutin
-G23,Museo tai historiallinen rakennus ,772a,Museo tai historiallinen rakennus
-G24,Maailmanperintökohde ,772b,Maailmanperintökohde
-G25,Luontokohde ,772c,luonnonkohde
-G26,Näköalapaikka ,772d,Näköalapaikka
-G27,Eläintarha tai –puisto ,772e,Eläintarha tai -puisto
-G28,Muu nähtävyys ,772f,Muu nähtävyys
-G29,Uintipaikka ,773a,Uintipaikka
-G30,Kalastuspaikka ,773b,Kalastuspaikka
-G31,Hiihtohissi ,773c,Hiihtohissi
-G32,Maastohiihtokeskus ,,
-G33,Golfkenttä ,773d,Golfkenttä
-G34,Huvi- ja teemapuisto ,773e,Huvi- tai teemapuisto
-G35,Mökkimajoitus ,774a,Mökkimajoitus
-G36,Aamiaismajoitus ,744b,Aamiaismajoitus
-G37,Suoramyyntipaikka ,744c,Suoramyyntipaikka
-G38,Käsityöpaja ,744d,Käsityöpaja
-G39,Kotieläinpiha ,744e,Kotieläinpiha
-G40,Ratsastuspaikka ,744f,Ratsastuspaikka
-G41.1,Matkailutie ,771a,Matkailutie
-G41.2,Matkailutie ,771b,Matkailutie
-G42,Tilapäinen opastusmerkki ,,
-H1,Kohde risteävässä suunnassa ,811,Kohde risteävällä tiellä
-H2.1,Kohde nuolen suunnassa ,812,Kohde nuolen suunnassa
-H2.2,Kohde nuolen suunnassa ,813,Kohde nuolen suunnassa
-H2.3,Kohde nuolen suunnassa ,,
-H3,Vaikutusalueen pituus ,814,Vaikutusalueen pituus
-H4,Etäisyys kohteeseen ,815,Etäisyys kohteeseen
-H5,Etäisyys pakolliseen pysäyttämiseen ,816,Etäisyys pakolliseen pysähtymiseen
-H6,Vapaa leveys ,821,Vapaa leveys
-H7,Vapaa korkeus ,822,Vapaa korkeus
-H8,Sähköjohdon korkeus ,823,Sähköjohdon korkeus
-H9.1,Vaikutusalue molempiin suuntiin ,824,Vaikutusalue molempiin suuntiin
-H9.2,Vaikutusalue molempiin suuntiin ,825,Vaikutusalue molempiin suuntiin
-H10,Vaikutusalue nuolen suuntaan ,826,Vaikutusalue nuolen suuntaan
-H11,Vaikutusalue päättyy ,828,Vaikutusalue päättyy
-H12.1,Henkilöauto ,831,Henkilöauto
-H12.2,Linja-auto ,832,Linja-auto
-H12.3,Kuorma-auto,833,Kuorma-auto
-H12.4,Pakettiauto ,833.2,Ajoneuvoyhdistelmä
-H12.5,Matkailuperävaunu ,834,Pakettiauto
-H12.6,Matkailuauto ,835,Matkailuajoneuvo
-H12.7,Invalidin ajoneuvo ,836,Invalidin ajoneuvo
-H12.8,Moottoripyörä ,841,Moottoripyörä
-H12.9,Mopo ,842,Mopo
-H12.10,Polkupyörä ,843,Polkupyörä
-H12.11,Moottorikelkka ,,
-H12.12,Traktori,,
-H12.13,Vähäpäästöinen ajoneuvo ,,
-H13.1,Pysäköintitapa ,844,Pysäköintitapa
-H13.2,Pysäköintitapa ,845, Pysäköintitapa
-H14,Kielto ryhmän A vaarallisten aineiden kuljetukselle ,848, Läpiajokielto ryhmän A-vaarallisten aineiden kuljetukselle
-H15,Kielto ryhmän B vaarallisten aineiden kuljetukselle ,849,Läpiajokielto ryhmän B-vaarallisten aineiden kuljetukselle
-H16,Tunneliluokka ,,
-H17.1,Voimassaoloaika ,851,Voimassaoloaika (arkisin ma-pe)
-H17.2,Voimassaoloaika ,852,Voimassaoloaika (arki-lauantaisin)
-H17.3,Voimassaoloaika ,853,Voimassaoloaika (sun. ja pyhinä)
-H18,Aikarajoitus ,854,Aikarajoitus
-H19.1,Pysäköintiajan alkamisen osoittamisvelvollisuus ,856a,Pysäköintikiekon käyttövelvollisuus
-H19.2,Pysäköintiajan alkamisen osoittamisvelvollisuus ,856b,Pysäköintikiekon käyttövelvollisuus
-H20,Maksullinen pysäköinti ,855a,Maksullinen pysäköinti
-H21,Latauspaikka ,,
-H22.1,Etuajo-oikeutetun liikenteen suunta ,861a,Etuajo-oikeutetun liikenteen suuntaan
-H22.2,Etuajo-oikeutetun liikenteen suunta ,861b,Etuajo-oikeutetun liikenteen suunta
-H23.1,Kaksisuuntainen pyörätie ,863,Risteävä kaksisuuntainen pyörätie
-H23.2,Kaksisuuntainen pyörätie ,,
-H24,Tekstillinen lisäkilpi ,871,Tekstillinen lisäkilpi
-H25,Huoltoajo sallittu ,880,Hätäpuhelin ja sammutin
-H26,Hätäpuhelin ja sammutin ,,
-I1,Sulkupuomi ,,
-I2.1,Sulkuaita ,,
-I2.2,Sulkuaita ,,
-I3.1,Sulkupylväs ,,
-I3.2,Sulkupylväs ,,
-I3.3,Sulkupylväs ,,
-I4,Sulkukartio ,,
-I5,Taustamerkki ,,
-I6,Kaarteen suuntamerkki,,
-I7.1,Reunamerkki ,,
-I7.2,Reunamerkki ,,
-I8,Korkeusmerkki ,,
-I9,Alikulun korkeusmitta ,,
-I10.1,Liikennemerkkipylvään tehostamismerkki ,,
-I10.2,Liikennemerkkipylvään tehostamismerkki ,,
-I11,Erkanemismerkki ,,
-I12.1,Reunapaalu ,,
-I12.2,Reunapaalu ,,
-I13,Siirtokehotus ,,
-I14,Paikannusmerkki ,,
-I15,Automaattinen liikennevalvonta ,,
-I16,Tekninen valvonta ,,
-I17.1,Poronhoitoalue ,,
-I17.2,Poronhoitoalue ,,
-I18,Yleinen nopeusrajoitus ,,
-I19,Valtion raja ,,
-K1,Keskiviiva ,,
-K2,Ajokaistaviiva ,,
-K3,Sulkuviiva ,,
-K4,Varoitusviiva ,,
-K5,Sulkualue ,,
-K6,Reunaviiva,,
-L1,Pysäytysviiva ,,
-L2,Väistämisviiva ,,
-L3,Suojatie ,,
-L4,Pyörätien jatke,,
-L5,Töyssy ,,
-L6,Heräteraidat ,,
-M1,Ajokaistanuoli ,,
-M2,Ajokaistan vaihtamisnuoli ,,
-M3,Pysäköintialue,,
-M4,Keltainen reunamerkintä ,,
-M5,Pysäyttämisrajoitus ,,
-M6,Ohjausviiva ,,
-M7,Jalankulkija ,,
-M8,Pyöräilijä ,,
-M9,Väistämisvelvollisuutta osoittava ennakkomerkintä ,,
-M10,"""STOP""-ennakkomerkintä ",,
-M11,"""P""-merkintä ",,
-M12,Invalidin ajoneuvo ,,
-M13,"""BUS""-merkintä ",,
-M14,"""TAXI""-merkintä ",,
-M15,Lataus ,,
-M16,Nopeusrajoitus ,,
-M17,Tiennumero ,,
-M18,Risteysruudutus ,,
-M19,Liikennemerkki ,,
-P1,"Vasen tai oikea käsivarsi kohotettuna, kämmen lähestyvää tienkäyttäjää kohti ",,
-P2,Viittoava merkki ajosuunnassa ,,
-P3,"Ajoneuvosta sivulle ojennettu käsivarsi; kämmen, pienoisliikennemerkki tai punaista valoa ",,
-P4,"Punainen vilkkuva valo, jota näytetään samanaikaisesti sinistä valoa näyttävän vilkkuvan ",,
+﻿MerkkiKoodi,Kuvaus,NykyinenLiisussaTunnus,NykyinenLiisussaNimi,Tyypi
+1,Kiinteä punainen valo ,,,
+2,Kiinteä vihreä valo ,,,
+3,Kiinteä keltainen valo ,,,
+4,Nuolivalo ,,,
+5,Vilkkuva punainen valo ,,,
+6,Vilkkuva valkoinen valo ,,,
+7,Vilkkuva keltainen valo ,,,
+8,Joukkoliikenneopastin ,,,
+9,Polkupyöräopastin,,,
+10,Jalankulkijaopastin ,,,
+11,Ajokaistaopastin ,,,
+A1.1,"Mutka, oikea",111,Mutka oikealle,
+A1.2,"Mutka, vasen",112,Mutka vasemmalle,
+A2.1,"Mutkia , oikealle",113,"Mutkia, joista ensimmäinen oikealle",
+A2.2,"Mutkia , vasemmalle",114,"Mutkia, joista ensimmäinen vasemmaalle",
+A3.1,Jyrkkä mäki ,115,Jyrkkä alamäki,
+A3.2,Jyrkkä mäki ,116,Jyrkkä ylämäki,
+A4,Kapeneva tie ,121,Kapeneva tie,
+A5,Kaksisuuntainen liikenne ,122,Kaksisuuntainen liikenne,
+A6,Avattava silta ,131,Avattava silta,
+A7,"Lautta, laituri tai ranta ",132,"Lautta, laituri tai ranta",
+A8,Liikenneruuhka ,133,Liikenneruuhka,
+A9,Epätasainen tie ,141,Epätasainen tie,
+A10,Töyssyjä ,141a,Töyssyjä,
+A11,Tietyö ,142,Tietyö,
+A12,Irtokiviä ,143,Irtokiviä,
+A13,Liukas ajorata ,144,Liukas ajorata,
+A14,Vaarallinen tien reuna ,147,Vaarallinen tien reuna,
+A15,Suojatien ennakkovaroitus ,151,Suojatien ennakkovaroitus,
+A16,Jalankulkijoita ,,,
+A17,Lapsia ,152,Lapsia,
+A18,Pyöräilijöitä ,153,Pyöräilijöitä,
+A19,Hiihtolatu ,154,Hiihtolatu,
+A20.1,Hirvi ,155,Hirvieläimiä,
+A20.2,Poro ,156,Poroja,
+A20.3,Kauriseläin ,,,
+A21,Tienristeys ,161,Tienristeys,
+A22.1,"Sivutien risteys, x",162,Sivutien risteys,
+A22.2,"Sivutien risteys, y",163,Sivutien risteys,
+A22.3,"Sivutien risteys, z",164,Sivutien risteys,
+A22.4,"Sivutien risteys, v",,,
+A23,Liikennevalot ,165,Liikennevalot,
+A24,Liikenneympyrä ,166,Liikenneympyrä,
+A25,Raitiovaunu ,167,Raitiotie,
+A26,Rautatien tasoristeys ilman puomeja ,171,"Rautatien tasoristeys, ilmanpuomeja",
+A27,"Rautatien tasoristeys, jossa on puomit ",172,"Rautatien tasoristeys, jossa on puomit",
+A28.1,"Rautatien tasoristeyksen lähestymismerkit, x",173,Rautatien tasoristeyksen lähestymismerkit,
+A28.2,"Rautatien tasoristeyksen lähestymismerkit, y",174,Rautatien tasoristeyksen lähestymismerkit,
+A28.3 ,"Rautatien tasoristeyksen lähestymismerkit, z",175,Rautatien tasoristeyksen lähestymismerkit,
+A29.1,Tasoristeys ,176,Yksiraiteisen rautatien tasoristeys,
+A29.2,Tasoristeys ,177,Kaksi- tai useampi raiteisen rautatien tasoristeys,
+A30,Putoavia kiviä ,181,Putoavia kiviä,
+A31,Matalalla lentäviä lentokoneita ,182,Matalalla lentäviä lentokoneita,
+A32,Sivutuuli ,183,Sivutuuli,
+A33,Muu vaara ,189,Muu vaara,
+B1,Etuajo-oikeutettu tie ,211,Etuajo- oikeutettu tie,
+B2,Etuajo-oikeuden päättyminen ,212,Etuajo-oikeuden päättyminen,
+B3,Etuajo-oikeus kohdattaessa ,221,Etuajo-oikeus kohdatessa,
+B4,Väistämisvelvollisuus kohdattaessa ,222,Väistämisvelvollisuus kohdattaessa,
+B5,Väistämisvelvollisuus risteyksessä ,231,Väistämisvelvollisuus risteyksessä,
+B6,Pakollinen pysäyttäminen ,232,Pakollinen pysäyttäminen,
+B7,Väistämisvelvollisuus pyöräilijän tienylityspaikassa ,,,
+C1,Ajoneuvolla ajo kielletty ,311,Ajoneuvolla ajo kielletty,
+C2,Moottorikäyttöisellä ajoneuvolla ajo kielletty ,312,Moottorikäyttöisellä ajoneuvolla ajo kielletty,
+C3,Kuorma- ja pakettiautolla ajo kielletty ,313,Kuorma- ja pakettiautolla ajo kielletty,
+C4,Ajoneuvoyhdistelmällä ajo kielletty ,314,Ajoneuvoyhdistelmällä ajo kielletty,
+C5,Traktorilla ajo kielletty ,315,Traktorilla ajo kielletty,
+C6,Moottoripyörällä ajo kielletty ,316,Moottoripyörällä ajo kielletty,
+C7,Moottorikelkalla ajo kielletty ,317,Moottorikelkalla ajo killetty,
+C8,Vaarallisten aineiden kuljetus kielletty ,318,Vaarallisten aineiden kuljetus kielletty,
+C9,Linja-autolla ajo kielletty ,319,Linja-autolla ajo kielletty,
+C10,Mopolla ajo kielletty ,321,Mopolla ajo kielletty,
+C11,Polkupyörällä ajo kielletty ,322,Polkupyörällä ja mopolla ajo kielletty,
+C12,Polkupyörällä ja mopolla ajo kielletty ,,,
+C13,Jalankulku kielletty ,323,Jalankulku kielletty,
+C14,Jalankulku ja polkupyörällä ajo kielletty ,,,
+C15,Jalankulku ja polkupyörällä ja mopolla ajo kielletty ,324,Jalankulku sekä polkupyörällä ja mopolla ajo kielletty,
+C16,Ratsastus kielletty ,325,Ratsastus kielletty,
+C17,Kielletty ajosuunta ,331,Kielletty ajosuunta,
+C18,Vasemmalle kääntyminen kielletty ,332,Vasemmalle kääntyminen kielletty,
+C19,Oikealle kääntyminen kielletty ,333,Oikealle kääntyminen kielletty,
+C20,U-käännös kielletty ,334,U-käännös kielletty,
+C21,Ajoneuvon suurin sallittu leveys ,341,Ajoneuvon suurin sallittu leveys,
+C22,Ajoneuvon suurin sallittu korkeus ,342,Ajoneuvon suurin sallittu korkeus,
+C23,Ajoneuvon tai ajoneuvoyhdistelmän suurin sallittu pituus ,343,Ajoneuvon tai ajoneuvoyhdistelmän suurin sallittu pituus,
+C24,Ajoneuvon suurin sallittu massa ,344,Ajoneuvon suurin sallittu massa,
+C25,Ajoneuvoyhdistelmän suurin sallittu massa ,345,Ajoneuvoyhdistelmän suurin sallittu massa,
+C26,Ajoneuvon suurin sallittu akselille kohdistuva massa ,346,Ajoneuvon suurin sallittu akselille kohdistuva massa,
+C27,Ajoneuvon suurin sallittu telille kohdistuva massa ,347,Ajoneuvon suurin sallittu telille kohdistuva massa,
+C28,Ohituskielto ,351,Ohituskielto,
+C29,Ohituskielto päättyy ,352,Ohituskielto päättyy,
+C30,Ohituskielto kuorma-autolla ,353,Ohituskielto kuorma-autolla,
+C31,Ohituskielto kuorma-autolla päättyy ,354,Ohituskielto kuorma-autolla päättyy,
+C32,Nopeusrajoitus ,361,Nopeus rajoitus,
+C33,Nopeusrajoitus päättyy,362,Nopeusrajoitus päättyy,
+C34,Nopeusrajoitusalue ,363,Nopeusrajoitusalue,
+C35,Nopeusrajoitusalue päättyy ,364,Nopeusrajoitusalue päättyy,
+C36,"Ajokaistakohtainen kielto, rajoitus tai määräys",365,Ajokaistakohtainen kielto tai rajoitus,
+C37,Pysäyttäminen kielletty ,371,Pysäyttäminen kielletty,
+C38,Pysäköinti kielletty ,372,Pysäköinti kielletty,
+C39,Pysäköintikieltoalue ,373,Pysäköintikieltoalue,
+C40,Pysäköintikieltoalue päättyy ,374,Pysäköintikieltoalue päättyy,
+C41,Taksiasema-alue ,375,Taksiasema-alue,
+C42,Taksin pysäyttämispaikka ,376,Taksin pysähtymispaikka,
+C43,Kuormauspaikka ,,,
+C44.1,Vuoropysäköinti ,381,Vuoropysäköinti (kielletty parittomina päivinä),
+C44.2,Vuoropysäköinti ,382,Vuoropysäköinti (kielletty parillisina päivinä),
+C45,Pakollinen pysäyttäminen tullitarkastusta varten ,391,Pakollinen pysäyttäminen tulliasemalla,
+C46,Pakollinen pysäyttäminen tarkastusta varten ,392,Pakollinen pysäyttäminen tarkastusta varten,
+C47,Moottorikäyttöisten ajoneuvojen vähimmäisetäisyys ,393,Moottorikäyttöisten ajoneuvojen vähimmäisetäisyys,
+C48,Nastarenkailla varustetulla moottorikäyttöisellä ajoneuvolla ajo kielletty ,,,
+D1.1,Pakollinen ajosuunta ,411,Pakollinen ajosuunta,
+D1.2,Pakollinen ajosuunta ,412,Pakollinen ajosuunta,
+D1.3,Pakollinen ajosuunta ,413,Pakollinen ajosuunta,
+D1.4,Pakollinen ajosuunta ,414,Pakollinen ajosuunta,
+D1.5,Pakollinen ajosuunta ,415,Pakollinen ajosuunta,
+D1.6,Pakollinen ajosuunta ,,,
+D1.7,Pakollinen ajosuunta ,,,
+D1.8,Pakollinen ajosuunta ,,,
+D1.9,Pakollinen ajosuunta ,,,
+D2,Pakollinen kiertosuunta ,416,Pakollinen kiertosuunta,
+D3.1,Liikenteenjakaja ,417,Liikenteenjakaja,
+D3.2,Liikenteenjakaja ,418,Liikenteenjakaja,
+D3.3,Liikenteenjakaja ,,,
+D4,Jalkakäytävä ,421,Jalkakäytävä,
+D5,Pyörätie ,422,Pyörätie,
+D6,Yhdistetty pyörätie ja jalkakäytävä ,423,Yhditetty pyörätie ja jalkakäytävä,
+D7.1,Pyörätie ja jalkakäytävä rinnakkain ,424,Pyörätie ja jalkakäytävä rinnakkain,
+D7.2,Pyörätie ja jalkakäytävä rinnakkain ,425,Pyörätie ja jalkakäytävä rinnakkain,
+D8,Moottorikelkkailureitti ,426,Moottorikelkkailureitti,
+D9,Ratsastustie ,427,Ratsastustie,
+D10,Vähimmäisnopeus ,,,
+D11,Vähimmäisnopeus päättyy ,,,
+E1,Suojatie ,511,Suojatie,
+E2,Pysäköintipaikka ,521,Pysäköintipaikka,
+E3.1,Liityntäpysäköintipaikka ,520a,Liityntäpysäköintipaikka,
+E3.2,Liityntäpysäköintipaikka ,520b,Liityntäpysäköintipaikka,
+E3.3,Liityntäpysäköintipaikka ,520c,Liityntäpysäköintipaikka,
+E3.4,Liityntäpysäköintipaikka ,,,
+E4.1,Ajoneuvojen sijoitus pysäköintipaikalla ,521a,"Ajoneuvojen sijoitus pysäköintipaikalla, eri suunnat",
+E4.2,Ajoneuvojen sijoitus pysäköintipaikalla ,521b,"Ajoneuvojen sijoitus pysäköintipaikalla, eri suunnat",
+E4.3,Ajoneuvojen sijoitus pysäköintipaikalla ,521c,"Ajoneuvojen sijoitus pysäköintipaikalla, eri suunnat",
+E5,Kohtaamispaikka ,522,Kohtaamispaikka,
+E6,Linja-autopysäkki ,531,Paikallisliikenteen linja-auton pysäkki,
+E7,Raitiovaunupysäkki ,533,Raitiovaunun pysäkki,
+E8,Taksiasema ,534,Taksiasema,
+E9.1,Linja-autokaista ,541a,Linja-autokaista,
+E9.2,Linja-autokaista ,541b,Linja-autokaista,
+E10.1,Linja-autokaista päättyy ,542a,Linja-autokaista päättyy,
+E10.2,Linja-autokaista päättyy ,542b,Linja-autokaista päättyy,
+E11.1,Raitiovaunukaista ,543a,Raitiovaunukaista,
+E11.2,Raitiovaunukaista ,543b,Raitiovaunukaista,
+E12.1,Raitiovaunukaista päättyy ,544a,Raitiovaunukaista päättyy,
+E12.2,Raitiovaunukaista päättyy ,544b,Raitiovaunukaista päättyy,
+E13.1,Pyöräkaista ,,,
+E13.2,Pyöräkaista ,,,
+E14.1,Yksisuuntainen tie ,551,Yksisuuntainen tie,
+E14.2,Yksisuuntainen tie ,,,
+E15,Moottoritie ,561,Moottoritie,
+E16,Moottoritie päättyy ,562,Moottoritie päättyy,
+E17,Moottoriliikennetie ,563,Moottoriliikennetie,
+E18,Moottoriliikennetie päättyy ,564,Moottoriliikennetie päättyy,
+E19,Tunneli ,565,Tunneli,
+E20,Tunneli päättyy ,566,Tunneli päättyy,
+E21,Hätäpysäyttämispaikka ,567,Hätäpysäyttämispaikka,
+E22,Taajama ,571,Taajama,
+E23,Taajama päättyy ,572,Taajama päättyy,
+E24,Pihakatu ,573,Pihakatu,
+E25,Pihakatu päättyy ,574,Pihakatu päättyy,
+E26,Kävelykatu ,575,Kävelykatu,
+E27,Kävelykatu päättyy ,575,Kävelykatu päättyy,
+E28,Pyöräkatu ,,,
+E29,Pyöräkatu päättyy ,,,
+E30,Ajokaistojen yhdistyminen ,,,
+F1.1,Suunnistustaulu ,611,Suunnistustaulu,
+F1.2,Suunnistustaulu ,,,
+F1.3,Suunnistustaulu ,,,
+F2.1,Suunnistustaulu ,612,Suunnistustaulu,
+F2.2,Suunnistustaulu ,,,
+F2.3,Suunnistustaulu ,,,
+F3,Ajokaistakohtainen suunnistustaulu ,,,
+F4.1,Kiertotien suunnistustaulu ,614,Kiertotien suunnistustaulu,
+F4.2,Kiertotien suunnistustaulu ,,,
+F5,Kiertotieopastus ,615,Kiertotieopastus,
+F6,Ajoreittiopastus ,616,Ajoreittiopastus,
+F7.1,Ajokaistaopastus ,621,Ajokaistaopastus,
+F7.2,Ajokaistaopastus ,622,Ajokaistaopastus,
+F7.3,Ajokaistaopastus ,,,
+F7.4,Ajokaistaopastus ,,,
+F7.5,Ajokaistaopastus ,,,
+F7.6,Ajokaistaopastus ,,,
+F8.1,Ajokaistan päättyminen ,623,Ajokaistan päättyminen,
+F8.2,Ajokaistan päättyminen ,631,Ajokaistan yläpuolinen viitta,
+F9,Viitoituksen koontimerkki ,,,
+F10,Ajokaistan yläpuolinen viitta ,632,Ajokaistan yläpuolinen viitta,
+F11,Ajokaistan yläpuolinen viitta ,633,Ajokaistan yläpuolinen viitta,
+F12,Ajokaistan yläpuolinen erkanemisviitta ,,,
+F13,Tienviitta ,641,Tienviitta,
+F14,Erkanemisviitta ,642,Erkanemisviitta,
+F15,Kiertotien viitta ,646,Kiertotien viitta,
+F16,Osoiteviitta ,644,Osoiteviitta,
+F17,Osoiteviitan ennakkomerkki ,,,
+F18.1,Liityntäpysäköintiviitta ,650,Liityntäpysäköintiviitta,
+F18.2,Liityntäpysäköintiviitta ,,,
+F18.3,Liityntäpysäköintiviitta ,,,
+F18.4,Liityntäpysäköintiviitta ,,,
+F18.5,Liityntäpysäköintiviitta ,,,
+F19,Jalankulun viitta ,645,Kevyen liikenteen viitta,
+F20.1,Pyöräilyn viitta ,645,Kevyen liikenteen viitta,
+F20.2,Pyöräilyn viitta ,645,Kevyen liikenteen viitta,
+F21.1,Pyöräilyn suunnistustaulu ,,,
+F21.2,Pyöräilyn suunnistustaulu ,,,
+F22,Pyöräilyn etäisyystaulu ,,,
+F23,Pyöräilyn paikannimi ,,,
+F24.1,Umpitie,651,Umpitie,
+F24.2,Umpitie,652,Umpitie,
+F24.3,Umpitie,,,
+F25,Enimmäisnopeussuositus ,653,Enimmäisnopeussuositus,
+F26,Etäisyystaulu ,661,Etäisyystaulu,
+F27.1,Paikannimi ,662,Paikannimi,
+F27.2,Paikannimi ,,,
+F28,Kansainvälisen pääliikenneväylän numero ,663,Kansainvälisen pääliikenneväylän numero,
+F29,Valtatien numero ,664,Valtatien numero,
+F30,Kantatien numero ,665,Kantatien numero,
+F31,Seututien numero,665a,Seututien numero,
+F32,Muun maantien numero ,666,Muun yleisen tien numero,
+F33,Kehätien numero ,,,
+F34,Eritasoliittymän numero ,,,
+F35,Opastus numeron tarkoittamalle tielle ,667,Opastus numeron tarkoittamalle tielle,
+F36,Varareitti ,,,
+F37,Moottoritien tunnus ,671,Moottoritien tunnus,
+F38,Moottoriliikennetien tunnus ,672,Moottoriliikennetien tunnus,
+F39,Lentoasema ,673,Lentoasema,
+F40,Autolautta ,674,Autolautta,
+F41,Matkustajasatama ,,,
+F42,Tavarasatama ,675,Tavarasatama,
+F43,Tavaraterminaali ,,,
+F44,Teollisuusalue tai yritysalue ,676,Teollisuusalue,
+F45,Vähittäiskaupan suuryksikkö ,,,
+F46.1,Pysäköinti,677,Pysäköinti,
+F46.2,Pysäköinti,,,
+F47,Rautatieasema ,678,Rautatieasema,
+F48,Linja-autoasema ,679,Linja-autoasema,
+F49,Keskusta ,,,
+F50,Tietylle ajoneuvolle tarkoitettu reitti,681,Kulkuneuvolle tarkoitettu reitti,
+F51,Vaarallisten aineiden kuljetukselle tarkoitettu reitti ,684,Vaarallisten aineiden kuljetuksille tarkoitettu reitti,
+F52,Jalankulkijalle tarkoitettu reitti ,682,Jalankulkijoille tarkoitettu reitti,
+F53,Esteetön reitti ,683,Vammaiselle tarkoitettu reitti,
+F54.1,"Reitti, jolla on portaat ",685,"Reitti, jolla on portaat",
+F54.2,"Reitti, jolla on portaat ",,,
+F55.1,Reitti ilman portaita ,686,"Reitti, ilman portaita",
+F55.2,Reitti ilman portaita ,,,
+F55.3,Reitti ilman portaita ,,,
+F55.4,Reitti ilman portaita ,,,
+F56.1,Hätäuloskäynti ,690,Hätäuloskäynti,
+F56.2,Hätäuloskäynti ,,,
+F57.1,Poistumisreitti ,691,Poistumisreitti,
+F57.2,Poistumisreitti ,,,
+G1,Palvelukohteen opastustaulu ,701,Palvelukohteen opastustaulu,
+G2,Palvelukohteen opastustaulu ,702,Palvelukohteen opastustaulu,
+G3,Palvelukohteen erkanemisviitta ,703,Palvelukohteen erkanemisviitta,
+G4,Palvelukohteen osoiteviitta ,704,Palvelukohteen osoiteviitta,
+G5,Palvelukohteen osoiteviitan ennakkomerkki,704a,Palvelukohteen osoiteviitan ennakkomerkki,
+G6,Radioaseman taajuus ,710,Radioaseman taajuus,
+G7,Opastuspiste ,711,Opastuspiste,
+G8,Opastustoimisto ,712,Opastustoimisto,
+G9,Ensiapu ,715,Ensiapu,
+G10,Autokorjaamo ,721,Autokorjaamo,
+G11.1,"Polttoaineen jakelu, Bensiini tai etanoli",722,Huoltoasema,
+G11.2,"Polttoaineen jakelu, paineistettu kaasu",,,
+G11.3,"Polttoaineen jakelu, sähkö",,,
+G11.4,"Polttoaineen jakelu, vety",,,
+G12,Hotelli tai motelli,723,Hotelli tai motelli,
+G13,Ruokailupaikka ,724,Ruokailupaikka,
+G14,Kahvila tai pikaruokapaikka ,725,Kahvila tai pikaruokapaikka,
+G15,Käymälä ,726,Käymälä,
+G16,Retkeilymaja ,731,Retkeilymaja,
+G17,Leirintäalue,733,Leirintäalue,
+G18,Matkailuajoneuvoalue ,734,Matkailuajoneuvoalue,
+G19,Levähdysalue ,741,Levähdysalue,
+G20,Ulkoilualue ,742,Ulkoilualue,
+G21,Hätäpuhelin ,791,Hätäpuhelin,
+G22,Sammutin ,792,Sammutin,
+G23,Museo tai historiallinen rakennus ,772a,Museo tai historiallinen rakennus,
+G24,Maailmanperintökohde ,772b,Maailmanperintökohde,
+G25,Luontokohde ,772c,luonnonkohde,
+G26,Näköalapaikka ,772d,Näköalapaikka,
+G27,Eläintarha tai –puisto ,772e,Eläintarha tai -puisto,
+G28,Muu nähtävyys ,772f,Muu nähtävyys,
+G29,Uintipaikka ,773a,Uintipaikka,
+G30,Kalastuspaikka ,773b,Kalastuspaikka,
+G31,Hiihtohissi ,773c,Hiihtohissi,
+G32,Maastohiihtokeskus ,,,
+G33,Golfkenttä ,773d,Golfkenttä,
+G34,Huvi- ja teemapuisto ,773e,Huvi- tai teemapuisto,
+G35,Mökkimajoitus ,774a,Mökkimajoitus,
+G36,Aamiaismajoitus ,744b,Aamiaismajoitus,
+G37,Suoramyyntipaikka ,744c,Suoramyyntipaikka,
+G38,Käsityöpaja ,744d,Käsityöpaja,
+G39,Kotieläinpiha ,744e,Kotieläinpiha,
+G40,Ratsastuspaikka ,744f,Ratsastuspaikka,
+G41.1,Matkailutie ,771a,Matkailutie,
+G41.2,Matkailutie ,771b,Matkailutie,
+G42,Tilapäinen opastusmerkki ,,,
+H1,Kohde risteävässä suunnassa ,811,Kohde risteävällä tiellä,
+H2.1,Kohde nuolen suunnassa ,812,Kohde nuolen suunnassa,
+H2.2,Kohde nuolen suunnassa ,813,Kohde nuolen suunnassa,
+H2.3,Kohde nuolen suunnassa ,,,
+H3,Vaikutusalueen pituus ,814,Vaikutusalueen pituus,
+H4,Etäisyys kohteeseen ,815,Etäisyys kohteeseen,
+H5,Etäisyys pakolliseen pysäyttämiseen ,816,Etäisyys pakolliseen pysähtymiseen,
+H6,Vapaa leveys ,821,Vapaa leveys,
+H7,Vapaa korkeus ,822,Vapaa korkeus,
+H8,Sähköjohdon korkeus ,823,Sähköjohdon korkeus,
+H9.1,Vaikutusalue molempiin suuntiin ,824,Vaikutusalue molempiin suuntiin,
+H9.2,Vaikutusalue molempiin suuntiin ,825,Vaikutusalue molempiin suuntiin,
+H10,Vaikutusalue nuolen suuntaan ,826,Vaikutusalue nuolen suuntaan,
+H11,Vaikutusalue päättyy ,828,Vaikutusalue päättyy,
+H12.1,Henkilöauto ,831,Henkilöauto,
+H12.2,Linja-auto ,832,Linja-auto,
+H12.3,Kuorma-auto,833,Kuorma-auto,
+H12.4,Pakettiauto ,833.2,Ajoneuvoyhdistelmä,
+H12.5,Matkailuperävaunu ,834,Pakettiauto,
+H12.6,Matkailuauto ,835,Matkailuajoneuvo,
+H12.7,Invalidin ajoneuvo ,836,Invalidin ajoneuvo,
+H12.8,Moottoripyörä ,841,Moottoripyörä,
+H12.9,Mopo ,842,Mopo,
+H12.10,Polkupyörä ,843,Polkupyörä,
+H12.11,Moottorikelkka ,,,
+H12.12,Traktori,,,
+H12.13,Vähäpäästöinen ajoneuvo ,,,
+H13.1,Pysäköintitapa ,844,Pysäköintitapa,
+H13.2,Pysäköintitapa ,845, Pysäköintitapa,
+H14,Kielto ryhmän A vaarallisten aineiden kuljetukselle ,848, Läpiajokielto ryhmän A-vaarallisten aineiden kuljetukselle,
+H15,Kielto ryhmän B vaarallisten aineiden kuljetukselle ,849,Läpiajokielto ryhmän B-vaarallisten aineiden kuljetukselle,
+H16,Tunneliluokka ,,,
+H17.1,Voimassaoloaika ,851,Voimassaoloaika (arkisin ma-pe),
+H17.2,Voimassaoloaika ,852,Voimassaoloaika (arki-lauantaisin),
+H17.3,Voimassaoloaika ,853,Voimassaoloaika (sun. ja pyhinä),
+H18,Aikarajoitus ,854,Aikarajoitus,
+H19.1,Pysäköintiajan alkamisen osoittamisvelvollisuus ,856a,Pysäköintikiekon käyttövelvollisuus,
+H19.2,Pysäköintiajan alkamisen osoittamisvelvollisuus ,856b,Pysäköintikiekon käyttövelvollisuus,
+H20,Maksullinen pysäköinti ,855a,Maksullinen pysäköinti,
+H21,Latauspaikka ,,,
+H22.1,Etuajo-oikeutetun liikenteen suunta ,861a,Etuajo-oikeutetun liikenteen suuntaan,
+H22.2,Etuajo-oikeutetun liikenteen suunta ,861b,Etuajo-oikeutetun liikenteen suunta,
+H23.1,Kaksisuuntainen pyörätie ,863,Risteävä kaksisuuntainen pyörätie,
+H23.2,Kaksisuuntainen pyörätie ,,,
+H24,Tekstillinen lisäkilpi ,871,Tekstillinen lisäkilpi,
+H25,Huoltoajo sallittu ,880,Hätäpuhelin ja sammutin,
+H26,Hätäpuhelin ja sammutin ,,,
+I1,Sulkupuomi ,,,
+I2.1,Sulkuaita ,,,
+I2.2,Sulkuaita ,,,
+I3.1,Sulkupylväs ,,,
+I3.2,Sulkupylväs ,,,
+I3.3,Sulkupylväs ,,,
+I4,Sulkukartio ,,,
+I5,Taustamerkki ,,,
+I6,Kaarteen suuntamerkki,,,
+I7.1,Reunamerkki ,,,
+I7.2,Reunamerkki ,,,
+I8,Korkeusmerkki ,,,
+I9,Alikulun korkeusmitta ,,,
+I10.1,Liikennemerkkipylvään tehostamismerkki ,,,
+I10.2,Liikennemerkkipylvään tehostamismerkki ,,,
+I11,Erkanemismerkki ,,,
+I12.1,Reunapaalu ,,,
+I12.2,Reunapaalu ,,,
+I13,Siirtokehotus ,,,
+I14,Paikannusmerkki ,,,
+I15,Automaattinen liikennevalvonta ,,,
+I16,Tekninen valvonta ,,,
+I17.1,Poronhoitoalue ,,,
+I17.2,Poronhoitoalue ,,,
+I18,Yleinen nopeusrajoitus ,,,
+I19,Valtion raja ,,,
+K1,Keskiviiva ,,,longitudinal
+K2,Ajokaistaviiva ,,,longitudinal
+K3,Sulkuviiva ,,,longitudinal
+K4,Varoitusviiva ,,,longitudinal
+K5,Sulkualue ,,,longitudinal
+K6,Reunaviiva,,,longitudinal
+L1,Pysäytysviiva ,,,transverse
+L2,Väistämisviiva ,,,transverse
+L3,Suojatie ,,,transverse
+L4,Pyörätien jatke,,,transverse
+L5,Töyssy ,,,transverse
+L6,Heräteraidat ,,,transverse
+M1,Ajokaistanuoli ,,,other
+M2,Ajokaistan vaihtamisnuoli ,,,other
+M3,Pysäköintialue,,,other
+M4,Keltainen reunamerkintä ,,,other
+M5,Pysäyttämisrajoitus ,,,other
+M6,Ohjausviiva ,,,other
+M7,Jalankulkija ,,,other
+M8,Pyöräilijä ,,,other
+M9,Väistämisvelvollisuutta osoittava ennakkomerkintä ,,,other
+M10,"""STOP""-ennakkomerkintä ",,,other
+M11,"""P""-merkintä ",,,other
+M12,Invalidin ajoneuvo ,,,other
+M13,"""BUS""-merkintä ",,,other
+M14,"""TAXI""-merkintä ",,,other
+M15,Lataus ,,,other
+M16,Nopeusrajoitus ,,,other
+M17,Tiennumero ,,,other
+M18,Risteysruudutus ,,,other
+M19,Liikennemerkki ,,,other
+P1,"Vasen tai oikea käsivarsi kohotettuna, kämmen lähestyvää tienkäyttäjää kohti ",,,
+P2,Viittoava merkki ajosuunnassa ,,,
+P3,"Ajoneuvosta sivulle ojennettu käsivarsi; kämmen, pienoisliikennemerkki tai punaista valoa ",,,
+P4,"Punainen vilkkuva valo, jota näytetään samanaikaisesti sinistä valoa näyttävän vilkkuvan ",,,
