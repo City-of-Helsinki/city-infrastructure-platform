@@ -13,34 +13,6 @@ class GenerateMountRealObjectsTestCase(TestCase):
         self.mount_type = get_mount_type(code="LIGHTPOLE", description="Lightpole")
         self.mount_type_2 = get_mount_type(code="POLE", description="Pole")
 
-    def test_create_a_single_mount_real_for_main_and_additional_traffic_signs(self):
-        main_sign = TrafficSignReal.objects.create(
-            location=Point(0, 0, 10, srid=settings.SRID),
-            legacy_code="100",
-            mount_type=self.mount_type,
-            direction=0,
-            created_by=self.user,
-            updated_by=self.user,
-            owner="test owner",
-        )
-        additional_sign = TrafficSignReal.objects.create(
-            location=Point(0.5, 0.5, 5, srid=settings.SRID),
-            parent=main_sign,
-            legacy_code="800",
-            mount_type=self.mount_type,
-            direction=0,
-            created_by=self.user,
-            updated_by=self.user,
-            owner="test owner",
-        )
-        call_command("generate_mount_real_objects")
-        main_sign.refresh_from_db()
-        additional_sign.refresh_from_db()
-        self.assertEqual(MountReal.objects.count(), 1)
-        mount_real = MountReal.objects.first()
-        self.assertEqual(main_sign.mount_real, mount_real)
-        self.assertEqual(additional_sign.mount_real, mount_real)
-
     def test_create_a_single_mount_real_for_nearby_traffic_signs(self):
         main_sign_1 = TrafficSignReal.objects.create(
             location=Point(1, 1, 10, srid=settings.SRID),
