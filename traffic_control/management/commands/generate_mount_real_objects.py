@@ -40,7 +40,6 @@ class Command(BaseCommand):
                 mount_real = self.get_mount_real(main_traffic_sign, options["radius"])
                 main_traffic_sign.mount_real = mount_real
                 main_traffic_sign.save(update_fields=("mount_real",))
-                main_traffic_sign.children.active().update(mount_real=mount_real)
 
         self.stdout.write("Generating mount real objects completed.")
 

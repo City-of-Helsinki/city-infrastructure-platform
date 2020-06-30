@@ -63,14 +63,6 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
         ),
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
-    parent = models.ForeignKey(
-        "self",
-        verbose_name=_("Parent Traffic Sign Plan"),
-        on_delete=models.PROTECT,
-        related_name="children",
-        blank=True,
-        null=True,
-    )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     mount_plan = models.ForeignKey(
         MountPlan,
@@ -234,14 +226,6 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
     legacy_code = models.CharField(
         _("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True
-    )
-    parent = models.ForeignKey(
-        "self",
-        verbose_name=_("Parent Traffic Sign Real"),
-        on_delete=models.PROTECT,
-        related_name="children",
-        blank=True,
-        null=True,
     )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     mount_real = models.ForeignKey(

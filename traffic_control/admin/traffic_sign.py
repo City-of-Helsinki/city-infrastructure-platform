@@ -51,7 +51,6 @@ class TrafficSignPlanAdmin(
         "direction",
         "device_type",
         "value",
-        "parent",
         "txt",
         "mount_plan",
         "mount_type",
@@ -122,7 +121,6 @@ class TrafficSignRealAdmin(
         "value",
         "legacy_code",
         "has_additional_signs",
-        "parent",
         "txt",
         "mount_real",
         "mount_type",
@@ -175,7 +173,6 @@ class TrafficSignRealAdmin(
         "mount_real",
         "mount_type",
         "height",
-        "parent",
         "installation_status",
         "validity_period_start",
         "validity_period_end",
@@ -233,7 +230,6 @@ class TrafficSignRealAdmin(
         "mount_real__id",
         "mount_type",
         "height",
-        "parent__id",
         "validity_period_start",
         "validity_period_end",
         "reflection_class",
@@ -257,8 +253,8 @@ class TrafficSignRealAdmin(
 
 class OrderedTrafficSignRealInline(admin.TabularInline):
     model = TrafficSignReal
-    fields = ("id", "parent", "z_coord")
-    readonly_fields = ("id", "parent", "z_coord")
+    fields = ("id", "z_coord")
+    readonly_fields = ("id", "z_coord")
     show_change_link = True
     can_delete = False
     verbose_name = _("Ordered traffic sign")

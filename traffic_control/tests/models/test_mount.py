@@ -44,7 +44,6 @@ class MountRealTestCase(TestCase):
             legacy_code="100",
             mount_type=self.mount_type,
             mount_real=self.mount_real,
-            parent=traffic_sign_1,
             direction=0,
             created_by=self.user,
             updated_by=self.user,
