@@ -24,6 +24,23 @@ class UserStampedAdminMixin:
         super().save_model(request, obj, form, change)
 
 
+class UserStampedInlineAdminMixin:
+    """
+    A mixin class for model admin that sets inline model created_by/updated_by
+    from request user
+    """
+
+    def save_formset(self, request, form, formset, change):
+        objects = formset.save(commit=False)
+
+        for obj in objects:
+            if not obj.created_by_id:
+                obj.created_by = request.user
+
+            obj.updated_by = request.user
+            obj.save()
+
+
 class SoftDeleteAdminMixin:
     exclude = ("is_active", "deleted_at", "deleted_by")
 
