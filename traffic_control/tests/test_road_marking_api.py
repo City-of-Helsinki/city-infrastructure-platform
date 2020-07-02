@@ -197,6 +197,8 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner,
+            "source_name": "test-source",
+            "source_id": 1,
         }
         response = self.client.post(
             reverse("v1:roadmarkingplan-list"), data, format="json"
@@ -223,6 +225,8 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
             "owner": self.test_owner,
+            "source_name": "test-source",
+            "source_id": 1,
         }
         response = self.client.put(
             reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id}),
@@ -456,6 +460,8 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner,
+            "source_name": "test-source",
+            "source_id": 1,
         }
         response = self.client.post(
             reverse("v1:roadmarkingreal-list"), data, format="json"
@@ -483,6 +489,8 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             "installation_date": "2020-01-21",
             "lifecycle": self.test_lifecycle_2.value,
             "owner": self.test_owner,
+            "source_name": "test-source",
+            "source_id": 1,
         }
         response = self.client.put(
             reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
