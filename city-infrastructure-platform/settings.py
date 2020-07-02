@@ -52,6 +52,7 @@ env = environ.Env(
     OIDC_API_TOKEN_AUTH_ISSUER=(str, None),
     TOKEN_AUTH_MAX_TOKEN_AGE=(int, 600),
     OIDC_ENDPOINT=(str, None),
+    LOGGING_AUTH_DEBUG=(bool, False),
 )
 
 if os.path.exists(env_file):
@@ -89,6 +90,38 @@ if OIDC_AUTHENTICATION_ENABLED and (
 
 CACHES = {"default": env.cache()}
 vars().update(env.email_url())  # EMAIL_BACKEND etc.
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'timestamped_named': {
+            'format': '%(asctime)s %(name)s %(levelname)s: %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'timestamped_named',
+        },
+        # Just for reference, not used
+        'blackhole': {
+            'class': 'logging.NullHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'helusers': {
+            'handlers': ['console'],
+            'level': 'DEBUG' if env('LOGGING_AUTH_DEBUG') else 'INFO',
+            'propagate': False,
+        },
+    }
+}
 
 # Application definition
 DJANGO_APPS = [
