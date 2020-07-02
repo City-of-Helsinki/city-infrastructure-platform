@@ -175,6 +175,8 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
     amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
+    source_id = models.IntegerField(_("Source id"), blank=True, null=True)
+    source_name = models.CharField(_("Source name"), max_length=254, blank=True)
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -182,6 +184,7 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
         db_table = "road_marking_plan"
         verbose_name = _("Road Marking Plan")
         verbose_name_plural = _("Road Marking Plans")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.device_type} {self.value}"
@@ -339,6 +342,8 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
     amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
+    source_id = models.IntegerField(_("Source id"), blank=True, null=True)
+    source_name = models.CharField(_("Source name"), max_length=254, blank=True)
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -346,6 +351,7 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
         db_table = "road_marking_real"
         verbose_name = _("Road Marking Real")
         verbose_name_plural = _("Road Marking Reals")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.device_type} {self.value}"
