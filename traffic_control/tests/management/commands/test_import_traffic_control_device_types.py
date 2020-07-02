@@ -1,10 +1,12 @@
 import os
-from unittest.mock import mock_open, patch
+from unittest.mock import patch
 
 from django.core.management import call_command, CommandError
 from django.test import TestCase
 
 from traffic_control.models.common import TrafficControlDeviceType
+
+from .utils import mock_open
 
 
 class ImportTrafficControlDeviceTypesTestCase(TestCase):
@@ -28,16 +30,9 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
             ]
         )
 
-        # mock_open does not implement required dunder methods
-        # in order to be consumable by csv.reader. There's an
-        # open issue regarding this: https://bugs.python.org/issue21258
-        m = mock_open(read_data=data)
-        m.return_value.__iter__ = lambda f: f
-        m.return_value.__next__ = lambda f: next(iter(f.readline, ""))
-
         with patch(
             "traffic_control.management.commands.import_traffic_control_device_types.open",
-            m,
+            mock_open(read_data=data),
         ):
             call_command("import_traffic_control_device_types", "test-data.csv")
             self.assertEqual(TrafficControlDeviceType.objects.count(), 2)
