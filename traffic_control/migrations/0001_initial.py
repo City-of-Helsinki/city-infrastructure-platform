@@ -131,7 +131,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -301,7 +301,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -485,7 +485,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -661,7 +661,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -984,7 +984,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -1230,7 +1230,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -1466,7 +1466,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -1718,7 +1718,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -1888,7 +1888,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -2013,7 +2013,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -2304,7 +2304,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
@@ -2665,7 +2665,7 @@ class Migration(migrations.Migration):
                 (
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
-                        default=1,
+                        default=3,
                         enum=traffic_control.models.common.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
