@@ -85,8 +85,10 @@ def test__additional_sign_plan__detail(geo_format):
 @pytest.mark.django_db
 def test__additional_sign_plan__create(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
+    traffic_sign_plan = get_traffic_sign_plan()
     data = {
-        "parent": get_traffic_sign_plan().pk,
+        "parent": traffic_sign_plan.pk,
+        "location": str(traffic_sign_plan.location),
         "decision_date": "2020-01-02",
         "owner": "City of Helsinki",
     }
@@ -111,8 +113,10 @@ def test__additional_sign_plan__update(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="A1234")
     asp = get_additional_sign_plan()
+    traffic_sign_plan = get_traffic_sign_plan(device_type=dt)
     data = {
-        "parent": get_traffic_sign_plan(device_type=dt).pk,
+        "parent": traffic_sign_plan.pk,
+        "location": str(traffic_sign_plan.location),
         "decision_date": "2020-01-02",
         "owner": "City of Helsinki",
     }
@@ -237,9 +241,10 @@ def test__additional_sign_real__detail(geo_format):
 @pytest.mark.django_db
 def test__additional_sign_real__create(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
+    traffic_sign_real = get_traffic_sign_real()
     data = {
-        "parent": get_traffic_sign_real().pk,
-        "decision_date": "2020-01-02",
+        "parent": traffic_sign_real.pk,
+        "location": str(traffic_sign_real.location),
         "owner": "City of Helsinki",
     }
 
@@ -250,7 +255,6 @@ def test__additional_sign_real__create(admin_user):
         assert response.status_code == status.HTTP_201_CREATED
         assert AdditionalSignReal.objects.count() == 1
         assert response_data["id"] == str(AdditionalSignReal.objects.first().pk)
-        assert response_data["decision_date"] == data["decision_date"]
         assert response_data["owner"] == data["owner"]
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -263,9 +267,10 @@ def test__additional_sign_real__update(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="A1234")
     asr = get_additional_sign_real()
+    traffic_sign_real = get_traffic_sign_real(device_type=dt)
     data = {
-        "parent": get_traffic_sign_real(device_type=dt).pk,
-        "decision_date": "2020-01-02",
+        "parent": traffic_sign_real.pk,
+        "location": str(traffic_sign_real.location),
         "owner": "City of Helsinki",
     }
 
@@ -277,15 +282,10 @@ def test__additional_sign_real__update(admin_user):
     if admin_user:
         assert response.status_code == status.HTTP_200_OK
         assert response_data["id"] == str(asr.pk)
-        assert response_data["decision_date"] == data["decision_date"]
         assert response_data["owner"] == data["owner"]
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         asr.refresh_from_db()
-        assert (
-            asr.decision_date
-            != datetime.strptime(data["decision_date"], "%Y-%m-%d").date()
-        )
         assert asr.owner != data["owner"]
 
 

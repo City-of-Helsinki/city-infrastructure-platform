@@ -282,7 +282,7 @@ def get_traffic_sign_real(location="", device_type=None):
 
 
 def get_additional_sign_plan(
-    location=test_point, parent=None, owner="Test owner", plan=None
+    location=test_point_3d, parent=None, owner="Test owner", plan=None
 ):
     user = get_user("test_user")
 
@@ -303,10 +303,9 @@ def get_additional_sign_real(parent=None, owner="Test owner"):
 
     return AdditionalSignReal.objects.get_or_create(
         parent=parent or get_traffic_sign_real(),
-        location=test_point,
+        location=test_point_3d,
         affect_area=test_polygon,
         owner=owner,
-        decision_date=datetime.date(2020, 1, 1),
         created_by=user,
         updated_by=user,
     )[0]

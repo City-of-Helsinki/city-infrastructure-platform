@@ -3,7 +3,6 @@ import uuid
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -18,6 +17,7 @@ from .common import (
     LaneType,
     Lifecycle,
     Reflection,
+    Size,
     Surface,
     TrafficControlDeviceType,
 )
@@ -35,13 +35,12 @@ class AbstractAdditionalSign(SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    location = models.PointField(
-        _("Location (2D)"), srid=settings.SRID, blank=True, null=True
-    )
+    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
+    height = models.IntegerField(_("Height"), blank=True, null=True)
+    direction = models.IntegerField(_("Direction"), default=0)
     affect_area = models.PolygonField(
         _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
-
     reflection_class = EnumField(
         Reflection,
         verbose_name=_("Reflection"),
@@ -76,13 +75,11 @@ class AbstractAdditionalSign(SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-
-    decision_id = models.CharField(
-        _("Decision id"), max_length=254, blank=True, null=True
-    )
-    decision_date = models.DateField(_("Decision date"))
     installation_id = models.CharField(
         _("Installation id"), max_length=254, blank=True, null=True
+    )
+    installation_details = models.CharField(
+        _("Installation details"), max_length=254, blank=True, null=True
     )
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
@@ -111,21 +108,15 @@ class AbstractAdditionalSign(SoftDeleteModel, UserControlModel):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
+    source_id = models.CharField(_("Source id"), max_length=64, blank=True, null=True)
+    source_name = models.CharField(
+        _("Source name"), max_length=254, blank=True, null=True
+    )
 
     objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         abstract = True
-
-    def save(self, *args, **kwargs):
-        if not self.location and self.parent:
-            self.location = Point(
-                self.parent.location.x,
-                self.parent.location.y,
-                srid=self.parent.location.srid,
-            )
-
-        super().save(*args, **kwargs)
 
 
 class AdditionalSignPlan(AbstractAdditionalSign):
@@ -145,6 +136,10 @@ class AdditionalSignPlan(AbstractAdditionalSign):
         blank=True,
         null=True,
     )
+    decision_id = models.CharField(
+        _("Decision id"), max_length=254, blank=True, null=True
+    )
+    decision_date = models.DateField(_("Decision date"))
 
     class Meta:
         db_table = "additional_sign_plan"
@@ -182,6 +177,18 @@ class AdditionalSignReal(AbstractAdditionalSign):
         _("Manufacturer"), max_length=254, blank=True, null=True
     )
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
+    legacy_code = models.CharField(
+        _("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True
+    )
+    permit_decision_id = models.CharField(
+        _("Decision id (Allu)"), max_length=254, blank=True, null=True
+    )
+    operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
+    scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
+    size = EnumField(Size, verbose_name=_("Size"), max_length=1, blank=True, null=True,)
+    attachment_url = models.URLField(
+        _("Attachment url"), max_length=500, blank=True, null=True
+    )
 
     class Meta:
         db_table = "additional_sign_real"
