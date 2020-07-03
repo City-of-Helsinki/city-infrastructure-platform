@@ -66,7 +66,7 @@ class TrafficLightPlanSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
 class TrafficLightPlanGeoJSONSerializer(TrafficLightPlanSerializer):
@@ -97,7 +97,7 @@ class TrafficLightRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
 class TrafficLightRealGeoJSONSerializer(TrafficLightRealSerializer):
@@ -128,7 +128,7 @@ class TrafficSignPlanSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
 class TrafficSignPlanGeoJSONSerializer(TrafficSignPlanSerializer):
@@ -160,7 +160,7 @@ class TrafficSignRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("legacy_code", "is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "legacy_code", "is_active", "deleted_at", "deleted_by")
 
 
 class TrafficSignRealGeoJSONSerializer(TrafficSignRealSerializer):
@@ -252,7 +252,7 @@ class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerial
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
 class SignpostPlanGeoJSONSerializer(SignpostPlanSerializer):
@@ -281,7 +281,7 @@ class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerial
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
 class SignpostRealGeoJSONSerializer(SignpostRealSerializer):
