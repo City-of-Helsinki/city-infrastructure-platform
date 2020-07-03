@@ -13,6 +13,7 @@ from traffic_control.models import (
 from users.utils import get_system_user
 
 SOURCE_NAME = "main_streets_2014"
+OWNER = "Helsingin kaupunki"
 
 ARROW_DIRECTION_MAPPING = {
     "F": ArrowDirection.STRAIGHT,
@@ -72,6 +73,7 @@ class Command(BaseCommand):
                         "value": value,
                         "created_by": user,
                         "updated_by": user,
+                        "owner": OWNER,
                     },
                 )
                 count += 1
