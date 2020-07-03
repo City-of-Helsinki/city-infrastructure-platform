@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand, CommandError
 
-from traffic_control.models import TrafficSignReal
+from traffic_control.models import AdditionalSignReal, TrafficSignReal
 from traffic_control.models.traffic_sign import LocationSpecifier
 from users.utils import get_system_user
 
@@ -38,7 +38,11 @@ class Command(BaseCommand):
                     float(row["longitude"]), float(row["latitude"]), 0, srid=SOURCE_SRID
                 )
                 location.transform(settings.SRID)
-                TrafficSignReal.objects.update_or_create(
+                is_additional_sign = row["code"].strip().startswith("8")
+                traffic_sign_model = (
+                    AdditionalSignReal if is_additional_sign else TrafficSignReal
+                )
+                traffic_sign_model.objects.update_or_create(
                     source_name=SOURCE_NAME,
                     source_id=row["id"],
                     defaults={

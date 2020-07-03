@@ -4,7 +4,7 @@ from unittest.mock import patch
 from django.core.management import call_command, CommandError
 from django.test import TestCase
 
-from traffic_control.models import TrafficSignReal
+from traffic_control.models import AdditionalSignReal, TrafficSignReal
 
 from .utils import mock_open
 
@@ -24,6 +24,8 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
                 "id-2,24.3746164964,60.3863144666,10,,,B2,,,,,,,,,,,2020-06-15T06:27:09.998Z,https://example.com/2,,,right,,,",  # noqa: E501
                 "id-3,24.3523944777,60.4773050631,10,,,C3,,,,,,,,,,,2020-06-30T03:27:09.998Z,https://example.com/3,,,right,,,",  # noqa: E501
                 "id-3,24.3523944777,60.4773050631,10,,,C3,,,,,,,,,,,2020-06-30T03:27:09.998Z,https://example.com/3,,,right,,,",  # noqa: E501
+                "id-4,24.3523944777,60.4773050631,10,,,80,,,,,,,,,,,2020-06-30T03:27:09.998Z,https://example.com/3,,,right,,,",  # noqa: E501
+                "id-5,24.3523944777,60.4773050631,10,,,88,,,,,,,,,,,2020-06-30T03:27:09.998Z,https://example.com/3,,,right,,,",  # noqa: E501
             ]
         )
 
@@ -33,3 +35,4 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
         ):
             call_command("import_traffic_signs_vaisala", "test-data.csv")
             self.assertEqual(TrafficSignReal.objects.count(), 3)
+            self.assertEqual(AdditionalSignReal.objects.count(), 2)
