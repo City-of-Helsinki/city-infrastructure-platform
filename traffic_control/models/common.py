@@ -65,10 +65,10 @@ class Color(Enum):
 
 
 class Lifecycle(Enum):
-    ACTIVE = 1
-    TEMPORARILY_ACTIVE = 2
-    TEMPORARILY_INACTIVE = 3
-    INACTIVE = 99
+    ACTIVE = 3
+    TEMPORARILY_ACTIVE = 4
+    TEMPORARILY_INACTIVE = 5
+    INACTIVE = 6
 
     class Labels:
         ACTIVE = _("Active")
