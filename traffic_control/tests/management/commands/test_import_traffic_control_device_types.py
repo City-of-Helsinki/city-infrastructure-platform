@@ -19,7 +19,7 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
         )
 
     @patch("os.path.exists", return_value=True)
-    def test_import_portal_types_success(self, mock_exists):
+    def test_import_device_types_success(self, mock_exists):
         data = os.linesep.join(
             [
                 "MerkkiKoodi,Kuvaus,NykyinenLiisussaTunnus,NykyinenLiisussaNimi,Tyypi",

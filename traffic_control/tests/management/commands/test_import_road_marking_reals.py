@@ -16,7 +16,7 @@ class ImportPortalTypesTestCase(TestCase):
         )
 
     @patch("os.path.exists", return_value=True)
-    def test_import_portal_types_success(self, mock_exists):
+    def test_import_road_marking_success(self, mock_exists):
         TrafficControlDeviceType.objects.create(code="M1")
         data = os.linesep.join(
             [
