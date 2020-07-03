@@ -187,7 +187,7 @@ def test_plan_relation_admin_view_available_choices(admin_client):
         get_signpost_plan(location=loc, plan=plan)
         get_traffic_light_plan(location=loc, plan=plan)
         get_traffic_sign_plan(location=loc_3d, plan=plan)
-        get_additional_sign_plan(location=loc, plan=plan)
+        get_additional_sign_plan(location=loc_3d, plan=plan)
 
     plan_1.refresh_from_db()
     plan_2.refresh_from_db()

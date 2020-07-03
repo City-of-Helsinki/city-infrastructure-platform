@@ -42,9 +42,11 @@ def test_plan_get_related_locations():
         location=Point(95.0, 110.0, 0.0, srid=settings.SRID), plan=plan
     )
     asp_1 = get_additional_sign_plan(
-        location=Point(80.0, 120.0, srid=settings.SRID), plan=plan
+        location=Point(80.0, 120.0, 0.0, srid=settings.SRID), plan=plan
     )
-    asp_2 = get_additional_sign_plan(location=None, parent=tsp_2, plan=plan)
+    asp_2 = get_additional_sign_plan(
+        location=Point(80.0, 120.0, 0.0, srid=settings.SRID), parent=tsp_2, plan=plan
+    )
 
     locations = plan._get_related_locations()
 
@@ -91,8 +93,12 @@ def test_plan_derive_location_from_related_plans():
     tsp_2 = get_traffic_sign_plan(
         location=Point(95.0, 110.0, 0.0, srid=settings.SRID), plan=plan
     )
-    asp_1 = get_additional_sign_plan(location=Point(80.0, 120.0, srid=settings.SRID))
-    asp_2 = get_additional_sign_plan(location=None, parent=tsp_2)
+    asp_1 = get_additional_sign_plan(
+        location=Point(80.0, 120.0, 0.0, srid=settings.SRID)
+    )
+    asp_2 = get_additional_sign_plan(
+        location=Point(80.0, 120.0, 0.0, srid=settings.SRID), parent=tsp_2
+    )
 
     noise_bp = get_barrier_plan(location=Point(150.0, 150.0, srid=settings.SRID))
     noise_mp = get_mount_plan(location=Point(150.0, 150.0, srid=settings.SRID))
@@ -103,7 +109,7 @@ def test_plan_derive_location_from_related_plans():
         location=Point(150.0, 150.0, 0.0, srid=settings.SRID)
     )
     noise_asp = get_additional_sign_plan(
-        location=Point(150.0, 150.0, srid=settings.SRID)
+        location=Point(150.0, 150.0, 0.0, srid=settings.SRID)
     )
 
     plan.refresh_from_db()
