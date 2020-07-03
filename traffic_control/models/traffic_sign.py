@@ -50,9 +50,7 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.DecimalField(
-        _("Height"), max_digits=20, decimal_places=6, blank=True, null=True
-    )
+    height = models.IntegerField(_("Height"), blank=True, null=True)
     direction = models.IntegerField(_("Direction"), default=0)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
@@ -219,9 +217,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         null=True,
     )
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.DecimalField(
-        _("Height"), max_digits=20, decimal_places=6, blank=True, null=True
-    )
+    height = models.IntegerField(_("Height"), blank=True, null=True)
     direction = models.IntegerField(_("Direction"), default=0)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
@@ -266,7 +262,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
     installation_details = models.CharField(
         _("Installation details"), max_length=254, blank=True, null=True
     )
-    allu_decision_id = models.CharField(
+    permit_decision_id = models.CharField(
         _("Decision id (Allu)"), max_length=254, blank=True, null=True
     )
     validity_period_start = models.DateField(
@@ -300,7 +296,9 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         _("Manufacturer"), max_length=254, blank=True, null=True
     )
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    color = EnumIntegerField(Color, verbose_name=_("Color"), blank=True, null=True)
+    color = EnumIntegerField(
+        Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True
+    )
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
@@ -312,7 +310,11 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
     )
     location_specifier = EnumIntegerField(
-        LocationSpecifier, verbose_name=_("Location specifier"), blank=True, null=True,
+        LocationSpecifier,
+        verbose_name=_("Location specifier"),
+        default=LocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
     )
     operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
     attachment_url = models.URLField(

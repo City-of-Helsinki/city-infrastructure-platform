@@ -446,7 +446,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
             "installation_id": 123,
-            "allu_decision_id": 456,
+            "permit_decision_id": 456,
             "owner": self.test_owner,
         }
         response = self.client.post(
@@ -475,7 +475,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
             "installation_id": 123,
-            "allu_decision_id": 456,
+            "permit_decision_id": 456,
             "owner": self.test_owner,
         }
         response = self.client.put(
