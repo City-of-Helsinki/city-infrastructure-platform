@@ -526,7 +526,7 @@ class TrafficControlDeviceTypeSerializer(
 ):
     class Meta:
         model = TrafficControlDeviceType
-        fields = "__all__"
+        exclude = ("legacy_code", "legacy_description")
 
     def validate_target_model(
         self, value: Optional[DeviceTypeTargetModel]
