@@ -160,7 +160,7 @@ class TrafficSignRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        exclude = ("legacy_code", "is_active", "deleted_at", "deleted_by")
 
 
 class TrafficSignRealGeoJSONSerializer(TrafficSignRealSerializer):
