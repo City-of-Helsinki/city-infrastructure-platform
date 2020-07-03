@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import (
     AdditionalSignPlan,
+    AdditionalSignReal,
     BarrierPlan,
     MountPlan,
     RoadMarkingPlan,
@@ -47,6 +48,18 @@ class TrafficSignRealModelForm(Point3DFieldForm):
 class TrafficSignPlanModelForm(Point3DFieldForm):
     class Meta:
         model = TrafficSignPlan
+        fields = "__all__"
+
+
+class AdditionalSignRealModelForm(Point3DFieldForm):
+    class Meta:
+        model = AdditionalSignReal
+        fields = "__all__"
+
+
+class AdditionalSignPlanModelForm(Point3DFieldForm):
+    class Meta:
+        model = AdditionalSignPlan
         fields = "__all__"
 
 
