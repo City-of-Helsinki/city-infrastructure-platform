@@ -23,12 +23,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("Generating mount real objects ...")
-        # main traffic signs are those whose legacy code
-        # does not start with 8
-        main_traffic_signs = (
-            TrafficSignReal.objects.active()
-            .filter(mount_real__isnull=True, mount_type__isnull=False)
-            .exclude(legacy_code__startswith="8")
+        main_traffic_signs = TrafficSignReal.objects.active().filter(
+            mount_real__isnull=True, mount_type__isnull=False
         )
 
         for main_traffic_sign in main_traffic_signs:
