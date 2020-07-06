@@ -14,7 +14,7 @@ import environ
 import sentry_sdk
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
-from helusers.defaults import SOCIAL_AUTH_PIPELINE
+from helusers.defaults import SOCIAL_AUTH_PIPELINE  # noqa: F401
 from sentry_sdk.integrations.django import DjangoIntegration
 
 from .utils import git_version
