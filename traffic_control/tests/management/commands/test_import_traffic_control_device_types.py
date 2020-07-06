@@ -22,7 +22,7 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
     def test_import_device_types_success(self, mock_exists):
         data = os.linesep.join(
             [
-                "MerkkiKoodi,Kuvaus,NykyinenLiisussaTunnus,NykyinenLiisussaNimi,Tyypi",
+                "MerkkiKoodi,Kuvaus,NykyinenLiisussaTunnus,NykyinenLiisussaNimi,Tyyppi",
                 "1,Kiinteä punainen valo ,,,",
                 "K1,Keskiviiva ,,,longitudinal",
                 "K1,Keskiviiva ,,,longitudinal",
