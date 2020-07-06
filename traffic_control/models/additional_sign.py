@@ -203,7 +203,7 @@ class AdditionalSignReal(AbstractAdditionalSign):
         _("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True
     )
     permit_decision_id = models.CharField(
-        _("Decision id (Allu)"), max_length=254, blank=True, null=True
+        _("Permit decision id"), max_length=254, blank=True, null=True
     )
     operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
     scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
