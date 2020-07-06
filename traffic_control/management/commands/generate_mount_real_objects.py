@@ -1,10 +1,12 @@
+from itertools import chain
+
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from traffic_control.models import MountReal, TrafficSignReal
+from traffic_control.models import AdditionalSignReal, MountReal, TrafficSignReal
 
 OWNER = "Helsingin kaupunki"
 
@@ -23,19 +25,25 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("Generating mount real objects ...")
-        main_traffic_signs = TrafficSignReal.objects.active().filter(
+        traffic_signs = TrafficSignReal.objects.active().filter(
             mount_real__isnull=True, mount_type__isnull=False
         )
 
-        for main_traffic_sign in main_traffic_signs:
-            # wrapper MountReal object creation and traffic sign
+        standalone_additional_signs = AdditionalSignReal.objects.active().filter(
+            mount_real__isnull=True, mount_type__isnull=False, parent__isnull=True
+        )
+
+        for traffic_sign in list(chain(traffic_signs, standalone_additional_signs)):
+            # wrap MountReal object creation and traffic sign
             # linking in a transaction so that unlinked main traffic
             # signs and linked additional traffic signs can still be
             # found in a second run on failures
             with transaction.atomic():
-                mount_real = self.get_mount_real(main_traffic_sign, options["radius"])
-                main_traffic_sign.mount_real = mount_real
-                main_traffic_sign.save(update_fields=("mount_real",))
+                mount_real = self.get_mount_real(traffic_sign, options["radius"])
+                traffic_sign.mount_real = mount_real
+                traffic_sign.save(update_fields=("mount_real",))
+                if isinstance(traffic_sign, TrafficSignReal):
+                    traffic_sign.additional_signs.active().update(mount_real=mount_real)
 
         self.stdout.write("Generating mount real objects completed.")
 
