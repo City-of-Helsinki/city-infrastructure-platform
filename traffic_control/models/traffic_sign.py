@@ -263,7 +263,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         _("Installation details"), max_length=254, blank=True, null=True
     )
     permit_decision_id = models.CharField(
-        _("Decision id (Allu)"), max_length=254, blank=True, null=True
+        _("Permit decision id"), max_length=254, blank=True, null=True
     )
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
