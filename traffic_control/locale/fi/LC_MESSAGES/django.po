@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-30 10:57+0300\n"
+"POT-Creation-Date: 2020-07-06 14:56+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,8 +94,14 @@ msgstr "Luoja"
 msgid "Updated by"
 msgstr "Päivittäjä"
 
-msgid "Location (2D)"
-msgstr "Sijainti (2D)"
+msgid "Location (3D)"
+msgstr "Sijainti (3D)"
+
+msgid "Height"
+msgstr "Korkeus"
+
+msgid "Direction"
+msgstr "Suunta"
 
 msgid "Affect area (2D)"
 msgstr "Vaikutusalue (2D)"
@@ -109,6 +115,9 @@ msgstr "Pinta"
 msgid "Color"
 msgstr "Väri"
 
+msgid "Mount type"
+msgstr "Kiinnityskohteen tyyppi"
+
 msgid "Road name"
 msgstr "Kadun/tien nimi"
 
@@ -121,14 +130,11 @@ msgstr "Kaistatyyppi"
 msgid "Location specifier"
 msgstr "Sijaintitarkenne"
 
-msgid "Decision id"
-msgstr "Päätöksen tunnus"
-
-msgid "Decision date"
-msgstr "Päätöspvm"
-
 msgid "Installation id"
 msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
+
+msgid "Installation details"
+msgstr "Asennuksen lisätiedot"
 
 msgid "Installation date"
 msgstr "Asennuspvm"
@@ -157,17 +163,35 @@ msgstr "Kausiluontoinen voimassaoloaika loppuu"
 msgid "Lifecycle"
 msgstr "Elinkaari"
 
+msgid "Source id"
+msgstr "Lähteen id"
+
+msgid "Source name"
+msgstr "Lähteen nimi"
+
 msgid "Parent Traffic Sign Plan"
 msgstr "Isäntäkilpi (suunnitelma)"
 
+msgid "Mount Plan"
+msgstr "Kiinnityskohde (suunnitelma)"
+
 msgid "Plan"
 msgstr "Suunnitelma"
+
+msgid "Decision id"
+msgstr "Päätöksen tunnus"
+
+msgid "Decision date"
+msgstr "Päätöspvm"
 
 msgid "Additional Sign Plan"
 msgstr "Lisäkilpi (suunnitelma)"
 
 msgid "Parent Traffic Sign Real"
 msgstr "Isäntäkilpi (toteuma)"
+
+msgid "Mount Real"
+msgstr "Kiinnityskohde (toteuma)"
 
 msgid "Condition"
 msgstr "Kunto"
@@ -177,6 +201,24 @@ msgstr "Valmistaja"
 
 msgid "RFID"
 msgstr "RFID"
+
+msgid "Legacy Traffic Sign Code"
+msgstr "Vanha merkkikoodi"
+
+msgid "Permit decision id"
+msgstr "Lupapäätöksen tunnistenumero"
+
+msgid "Operation"
+msgstr "Toimenpide"
+
+msgid "Scanned at"
+msgstr "Kuvattu-aikaleima"
+
+msgid "Size"
+msgstr "Koko"
+
+msgid "Attachment url"
+msgstr "Liite (url)"
 
 msgid "Additional Sign Real"
 msgstr "Lisäkilpi (toteuma)"
@@ -228,6 +270,9 @@ msgstr "Ajoradan tai kaistan oikea reuna"
 
 msgid "Left of road or lane"
 msgstr "Ajoradan tai kaistan vasen reuna"
+
+msgid "Location (2D)"
+msgstr "Sijainti (2D)"
 
 msgid "Connection type"
 msgstr "Avattava yhteys"
@@ -427,6 +472,9 @@ msgstr "Liikennevalo"
 msgid "Traffic sign"
 msgstr "Liikennemerkki"
 
+msgid "Additional sign"
+msgstr "Lisäkilpi"
+
 msgid "Longitudinal"
 msgstr "Pituussuuntainen"
 
@@ -466,9 +514,6 @@ msgstr "Digiroad koodi"
 msgid "Digiroad description"
 msgstr "Digiroad selite"
 
-msgid "Mount type"
-msgstr "Kiinnityskohteen tyyppi"
-
 msgid "Mount types"
 msgstr "Kiinnityskohteen tyypit"
 
@@ -490,9 +535,6 @@ msgstr "Portaalityypit"
 msgid "Base"
 msgstr "Jalusta"
 
-msgid "Height"
-msgstr "Korkeus"
-
 msgid "Electric accountable"
 msgstr "Sähköisen vastuutaho"
 
@@ -501,9 +543,6 @@ msgstr "Kaadettava/taitettava"
 
 msgid "Cross bar length"
 msgstr "Poikkiorren pituus"
-
-msgid "Mount Plan"
-msgstr "Kiinnityskohde (suunnitelma)"
 
 msgid "Mount Plan File"
 msgstr "Suunnitelmadokumentti (kiinnityskohde)"
@@ -516,9 +555,6 @@ msgstr "Tarkastettu-aikaleima"
 
 msgid "Diameter"
 msgstr "Kantavuus / jalustan halkaisija"
-
-msgid "Mount Real"
-msgstr "Kiinnityskohde (toteuma)"
 
 msgid "Mount Reals"
 msgstr "Kiinnityskohde (toteumat)"
@@ -568,6 +604,15 @@ msgstr "Vasemmalle"
 msgid "Left and straight"
 msgstr "Vasemmalle ja suoraan"
 
+msgid "Lane ends"
+msgstr "Kaista päättyy"
+
+msgid "Right and left"
+msgstr "Oikealle ja vasemmalle"
+
+msgid "Straight, right and left"
+msgstr "Suoraan, oikealle ja vasemmalle"
+
 msgid "White"
 msgstr "Valkoinen"
 
@@ -601,17 +646,11 @@ msgstr "Nuolen suunta"
 msgid "Road Marking value"
 msgstr "Teksti"
 
-msgid "Size"
-msgstr "Koko"
-
 msgid "Traffic Sign Plan"
 msgstr "Liikennemerkki (suunnitelma)"
 
 msgid "Type specifier"
 msgstr "Tyypin tarkenne"
-
-msgid "Has rumble strips"
-msgstr "Heräteraidat"
 
 msgid "Symbol"
 msgstr "Symboli"
@@ -672,9 +711,6 @@ msgstr "Keskisaareke tai liikenteenjakaja"
 
 msgid "Vertical"
 msgstr "Pitkittäin ajosuuntaan nähden"
-
-msgid "Direction"
-msgstr "Suunta"
 
 msgid "Signpost value"
 msgstr "Arvo"
@@ -805,41 +841,14 @@ msgstr "Toteumadokumentit (liikennevalo)"
 msgid "Outside"
 msgstr "Tie tai katuverkon ulkopuolella"
 
-msgid "Location (3D)"
-msgstr "Sijainti (3D)"
-
 msgid "Traffic Sign Code value"
 msgstr "Merkin numeerinen arvo"
-
-msgid "Source id"
-msgstr "Lähteen id"
-
-msgid "Source name"
-msgstr "Lähteen nimi"
 
 msgid "Traffic Sign Plan File"
 msgstr "Suunnitelmadokumentti (liikennemerkki)"
 
 msgid "Traffic Sign Plan Files"
 msgstr "Suunnitelmadokumentit (liikennemerkki)"
-
-msgid "Legacy Traffic Sign Code"
-msgstr "Vanha merkkikoodi"
-
-msgid "Installation details"
-msgstr "Asennuksen lisätiedot"
-
-msgid "Decision id (Allu)"
-msgstr "Lupapäätöksen tunnistenumero (Allu)"
-
-msgid "Scanned at"
-msgstr "Kuvattu-aikaleima"
-
-msgid "Operation"
-msgstr "Toimenpide"
-
-msgid "Attachment url"
-msgstr "Liite (url)"
 
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
