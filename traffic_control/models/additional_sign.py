@@ -21,6 +21,7 @@ from .common import (
     Surface,
     TrafficControlDeviceType,
 )
+from .mount import MountPlan, MountReal, MountType
 from .plan import Plan
 from .traffic_sign import (
     InstallationStatus,
@@ -59,6 +60,13 @@ class AbstractAdditionalSign(SoftDeleteModel, UserControlModel):
     )
     color = EnumIntegerField(
         Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True
+    )
+    mount_type = models.ForeignKey(
+        MountType,
+        verbose_name=_("Mount type"),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
     )
 
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
@@ -128,6 +136,13 @@ class AdditionalSignPlan(AbstractAdditionalSign):
         blank=True,
         null=True,
     )
+    mount_plan = models.ForeignKey(
+        MountPlan,
+        verbose_name=_("Mount Plan"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -162,6 +177,13 @@ class AdditionalSignReal(AbstractAdditionalSign):
     additional_sign_plan = models.ForeignKey(
         AdditionalSignPlan,
         verbose_name=_("Additional Sign Plan"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+    mount_real = models.ForeignKey(
+        MountReal,
+        verbose_name=_("Mount Real"),
         on_delete=models.PROTECT,
         blank=True,
         null=True,
@@ -211,6 +233,8 @@ class AbstractAdditionalSignContent(UserControlModel):
         limit_choices_to=Q(
             Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
         ),
+        null=True,
+        blank=False,
     )
     text = models.CharField(verbose_name=_("Content text"), max_length=256, blank=True)
     order = models.SmallIntegerField(
@@ -222,7 +246,9 @@ class AbstractAdditionalSignContent(UserControlModel):
         abstract = True
 
     def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
+        if self.device_type and not self.device_type.validate_relation(
+            DeviceTypeTargetModel.TRAFFIC_SIGN
+        ):
             raise ValidationError(
                 f'Device type "{self.device_type}" is not allowed for traffic signs'
             )

@@ -5,7 +5,7 @@ from django.test import TestCase
 from traffic_control.forms import TrafficSignRealModelForm
 from traffic_control.models import TrafficSignReal
 from traffic_control.models.common import Lifecycle
-from traffic_control.tests.factories import get_user
+from traffic_control.tests.factories import get_traffic_control_device_type, get_user
 
 
 class TrafficSignRealModelFormTestCase(TestCase):
@@ -19,6 +19,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
             "updated_by": user.id,
             "owner": "test owner",
             "lifecycle": Lifecycle.ACTIVE,
+            "device_type": get_traffic_control_device_type().pk,
         }
         user = get_user()
         traffic_sign_real = TrafficSignReal.objects.create(
@@ -46,6 +47,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
             "updated_by": user.id,
             "owner": "test owner",
             "lifecycle": Lifecycle.ACTIVE,
+            "device_type": get_traffic_control_device_type().pk,
         }
         form = TrafficSignRealModelForm(data=data)
         form.is_valid()

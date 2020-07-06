@@ -201,7 +201,7 @@ class AdditionalSignPlanSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
 class AdditionalSignPlanGeoJSONSerializer(AdditionalSignPlanSerializer):
@@ -222,7 +222,7 @@ class AdditionalSignRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
 class AdditionalSignRealGeoJSONSerializer(AdditionalSignRealSerializer):

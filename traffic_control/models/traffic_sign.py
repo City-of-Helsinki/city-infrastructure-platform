@@ -226,7 +226,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         limit_choices_to=Q(
             Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
         ),
-        blank=True,
+        blank=False,
         null=True,
     )
     value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
