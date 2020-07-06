@@ -48,7 +48,7 @@ pyjwkest==1.4.2           # via drf-oidc-auth
 pyjwt==1.7.1              # via social-auth-core
 pyparsing==2.4.7          # via packaging
 pyrsistent==0.16.0        # via jsonschema
-python-dateutil==2.6.0    # via azure-storage-common, django-auditlog
+python-dateutil==2.6.0
 python-jose==3.1.0        # via django-helusers
 python3-openid==3.1.0     # via social-auth-core
 pytz==2019.3
