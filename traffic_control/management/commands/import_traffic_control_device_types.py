@@ -4,6 +4,7 @@ import os
 from django.core.management.base import BaseCommand, CommandError
 
 from traffic_control.models import TrafficControlDeviceType
+from traffic_control.models.common import DeviceTypeTargetModel
 
 
 class Command(BaseCommand):
@@ -25,7 +26,14 @@ class Command(BaseCommand):
             csv_reader = csv.reader(f)
             next(csv_reader, None)  # skip header
             for row in csv_reader:
-                code, description, legacy_code, legacy_description, type = row
+                (
+                    code,
+                    description,
+                    legacy_code,
+                    legacy_description,
+                    type,
+                    target_model,
+                ) = row
                 TrafficControlDeviceType.objects.update_or_create(
                     code=code,
                     defaults={
@@ -33,6 +41,9 @@ class Command(BaseCommand):
                         "legacy_code": legacy_code,
                         "legacy_description": legacy_description,
                         "type": type,
+                        "target_model": DeviceTypeTargetModel[target_model.upper()]
+                        if target_model
+                        else None,
                     },
                 )
                 count += 1

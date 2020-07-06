@@ -231,7 +231,7 @@ class AbstractAdditionalSignContent(UserControlModel):
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
         limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
+            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)
         ),
         null=True,
         blank=False,

@@ -158,6 +158,8 @@ class DeviceTypeTargetModel(Enum):
     SIGNPOST = "signpost"
     TRAFFIC_LIGHT = "traffic_light"
     TRAFFIC_SIGN = "traffic_sign"
+    ADDITIONAL_SIGN = "additional_sign"
+    OTHER = "other"
 
     class Labels:
         BARRIER = _("Barrier")
@@ -165,6 +167,8 @@ class DeviceTypeTargetModel(Enum):
         SIGNPOST = _("Signpost")
         TRAFFIC_LIGHT = _("Traffic light")
         TRAFFIC_SIGN = _("Traffic sign")
+        ADDITIONAL_SIGN = _("Additional sign")
+        OTHER = _("Other")
 
 
 class TrafficControlDeviceTypeType(Enum):
