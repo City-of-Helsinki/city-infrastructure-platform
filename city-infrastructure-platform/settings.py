@@ -52,6 +52,7 @@ env = environ.Env(
     OIDC_API_TOKEN_AUTH_ISSUER=(str, None),
     TOKEN_AUTH_MAX_TOKEN_AGE=(int, 600),
     OIDC_ENDPOINT=(str, None),
+    HELUSERS_ADGROUPS_CLAIM=(str, "groups"),
     LOGGING_AUTH_DEBUG=(bool, False),
 )
 
@@ -60,6 +61,7 @@ if os.path.exists(env_file):
 
 SOCIAL_AUTH_TUNNISTAMO_KEY = env("SOCIAL_AUTH_TUNNISTAMO_KEY")
 SOCIAL_AUTH_TUNNISTAMO_SECRET = env("SOCIAL_AUTH_TUNNISTAMO_SECRET")
+HELUSERS_ADGROUPS_CLAIM = env("HELUSERS_ADGROUPS_CLAIM")
 
 if env("OIDC_ENDPOINT"):
     SOCIAL_AUTH_TUNNISTAMO_OIDC_ENDPOINT = env("OIDC_ENDPOINT")
@@ -93,34 +95,29 @@ vars().update(env.email_url())  # EMAIL_BACKEND etc.
 
 # Logging
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'timestamped_named': {
-            'format': '%(asctime)s %(name)s %(levelname)s: %(message)s',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "timestamped_named": {
+            "format": "%(asctime)s %(name)s %(levelname)s: %(message)s",
         },
     },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'timestamped_named',
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "timestamped_named",
         },
         # Just for reference, not used
-        'blackhole': {
-            'class': 'logging.NullHandler',
+        "blackhole": {"class": "logging.NullHandler"},
+    },
+    "loggers": {
+        "django": {"handlers": ["console"], "level": "INFO"},
+        "helusers": {
+            "handlers": ["console"],
+            "level": "DEBUG" if env("LOGGING_AUTH_DEBUG") else "INFO",
+            "propagate": False,
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
-        'helusers': {
-            'handlers': ['console'],
-            'level': 'DEBUG' if env('LOGGING_AUTH_DEBUG') else 'INFO',
-            'propagate': False,
-        },
-    }
 }
 
 # Application definition
