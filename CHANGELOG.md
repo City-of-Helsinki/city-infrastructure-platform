@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2020-07-07
+
 First release of the City Infrastructure Platform API.
 
 Provides an API for handling and storing common Traffic Control entities, such as TrafficSigns and RoadMarkings.
@@ -15,14 +17,14 @@ Provides an API for handling and storing common Traffic Control entities, such a
 - Traffic Control REST API
 - Traffic Control models:
   - `TrafficSignPlan` and `TrafficSignReal`
+  - `AdditionalSignPlan` and `AdditionalSignReal`
   - `TrafficLightPlan` and `TrafficLightReal`
   - `RoadMarkingPlan` and `RoadMarkingReal`
   - `SignpostPlan` and `SignpostReal`
   - `BarrierPlan` and `BarrierReal`
   - `MountPlan` and `MountReal`
   - `Plan`
-
-## [1.0.0] - 2020-xx-xx
+- SSO-login with TokenAuthentication
 
 [unreleased]: https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/v0.0.1...v1.0.0
