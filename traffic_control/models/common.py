@@ -249,6 +249,8 @@ class TrafficControlDeviceType(models.Model):
             "trafficlightreal",
             "trafficsignplan",
             "trafficsignreal",
+            "additionalsigncontentplan",
+            "additionalsigncontentreal",
         ]
         ignore_prefix = target_type.value.replace("_", "")
         relevant_relations = [

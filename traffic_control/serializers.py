@@ -169,6 +169,12 @@ class TrafficSignRealGeoJSONSerializer(TrafficSignRealSerializer):
 
 
 class AdditionalSignContentPlanSerializer(serializers.ModelSerializer):
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.ADDITIONAL_SIGN
+        )
+    )
+
     class Meta:
         model = AdditionalSignContentPlan
         fields = "__all__"
@@ -179,6 +185,12 @@ class AdditionalSignContentPlanSerializer(serializers.ModelSerializer):
 
 
 class AdditionalSignContentRealSerializer(serializers.ModelSerializer):
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(
+            DeviceTypeTargetModel.ADDITIONAL_SIGN
+        )
+    )
+
     class Meta:
         model = AdditionalSignContentReal
         fields = "__all__"

@@ -247,7 +247,7 @@ class AbstractAdditionalSignContent(UserControlModel):
 
     def save(self, *args, **kwargs):
         if self.device_type and not self.device_type.validate_relation(
-            DeviceTypeTargetModel.TRAFFIC_SIGN
+            DeviceTypeTargetModel.ADDITIONAL_SIGN
         ):
             raise ValidationError(
                 f'Device type "{self.device_type}" is not allowed for traffic signs'
