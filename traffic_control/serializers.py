@@ -222,7 +222,7 @@ class AdditionalSignRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        exclude = ("mount_type", "legacy_code", "is_active", "deleted_at", "deleted_by")
 
 
 class AdditionalSignRealGeoJSONSerializer(AdditionalSignRealSerializer):
