@@ -20,7 +20,8 @@ RUN apt-get update && \
         gdal-bin \
         postgresql-client \
         git \
-        gettext && \
+        gettext \
+        mime-support && \
     pip install --no-cache-dir -r requirements.txt -r requirements-prod.txt && \
     apt-get remove -y build-essential libpq-dev && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
