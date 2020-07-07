@@ -1,3 +1,8 @@
+[![Build status](https://api.travis-ci.com/City-of-Helsinki/city-infrastructure-platform.svg?branch=master)](https://travis-ci.com/github/City-of-Helsinki/city-infrastructure-platform)
+[![Codecov](https://codecov.io/gh/City-of-Helsinki/city-infrastructure-platform/branch/master/graph/badge.svg)](https://codecov.io/gh/City-of-Helsinki/city-infrastructure-platform)
+[![Requirements](https://requires.io/github/City-of-Helsinki/city-infrastructure-platform/requirements.svg?branch=master)](https://requires.io/github/City-of-Helsinki/city-infrastructure-platform/requirements/?branch=master)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # City Infrastructure Platform
 
 City Infrastructure Platform REST-API backend application.
