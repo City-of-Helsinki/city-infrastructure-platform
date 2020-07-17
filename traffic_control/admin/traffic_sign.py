@@ -34,6 +34,13 @@ __all__ = (
 class TrafficControlDeviceTypeAdmin(
     EnumChoiceValueDisplayAdminMixin, AuditLogHistoryAdmin
 ):
+    list_display = (
+        "code",
+        "description",
+        "legacy_code",
+        "legacy_description",
+        "target_model",
+    )
     ordering = ("code",)
     actions = None
 
