@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Admin UI usability improvements
+
 ## [1.0.0] - 2020-07-07
 
 First release of the City Infrastructure Platform API.
