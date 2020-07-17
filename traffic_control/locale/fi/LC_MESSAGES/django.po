@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-17 11:14+0300\n"
+"POT-Creation-Date: 2020-07-17 13:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -531,6 +531,9 @@ msgstr "Liikenteenohjauslaitteen tyyppi"
 
 msgid "Traffic Control Device Types"
 msgstr "Liikenteenohjauslaitteiden tyypit"
+
+msgid "Description (fi)"
+msgstr "Kuvaus (fi)"
 
 msgid "Digiroad code"
 msgstr "Digiroad koodi"
