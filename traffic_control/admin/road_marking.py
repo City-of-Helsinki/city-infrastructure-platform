@@ -1,4 +1,5 @@
 from django.contrib.gis import admin
+from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
@@ -29,6 +30,68 @@ class RoadMarkingPlanAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (
+            _("Physical properties"),
+            {
+                "fields": (
+                    "arrow_direction",
+                    "line_direction",
+                    "size",
+                    "length",
+                    "width",
+                    "is_raised",
+                    "is_grinded",
+                    "material",
+                    "color",
+                )
+            },
+        ),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "type_specifier",
+                    "value",
+                    "symbol",
+                    "amount",
+                    "additional_info",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("plan", "traffic_sign_plan")}),
+        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
+    )
     list_display = (
         "id",
         "device_type",
@@ -57,6 +120,73 @@ class RoadMarkingRealAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (
+            _("Physical properties"),
+            {
+                "fields": (
+                    "arrow_direction",
+                    "line_direction",
+                    "size",
+                    "length",
+                    "width",
+                    "is_raised",
+                    "is_grinded",
+                    "material",
+                    "color",
+                    "condition",
+                )
+            },
+        ),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "type_specifier",
+                    "value",
+                    "symbol",
+                    "amount",
+                    "additional_info",
+                    "missing_traffic_sign_real_txt",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("road_marking_plan", "traffic_sign_real")}),
+        (
+            _("Installation information"),
+            {"fields": ("installation_date", "installation_status")},
+        ),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
+    )
     list_display = (
         "id",
         "device_type",

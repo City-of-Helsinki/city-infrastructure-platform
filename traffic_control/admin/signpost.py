@@ -1,4 +1,5 @@
 from django.contrib.gis import admin
+from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
@@ -24,6 +25,55 @@ class SignpostPlanAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (_("Physical properties"), {"fields": ("height", "size", "reflection_class")}),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "responsible_entity",
+                    "electric_maintainer",
+                    "device_type",
+                    "mount_type",
+                    "attachment_class",
+                    "value",
+                    "txt",
+                    "target_id",
+                    "target_txt",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
+        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
+    )
     list_display = (
         "id",
         "device_type",
@@ -53,6 +103,71 @@ class SignpostRealAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (
+            _("Physical properties"),
+            {
+                "fields": (
+                    "height",
+                    "size",
+                    "reflection_class",
+                    "material",
+                    "condition",
+                )
+            },
+        ),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "responsible_entity",
+                    "electric_maintainer",
+                    "device_type",
+                    "mount_type",
+                    "attachment_class",
+                    "value",
+                    "txt",
+                    "target_id",
+                    "target_txt",
+                    "organization",
+                    "manufacturer",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("parent", "signpost_plan", "mount_real")}),
+        (
+            _("Installation information"),
+            {"fields": ("installation_date", "installation_status")},
+        ),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
+    )
     list_display = (
         "id",
         "device_type",

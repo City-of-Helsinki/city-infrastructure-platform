@@ -1,4 +1,5 @@
 from django.contrib.gis import admin
+from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
@@ -24,6 +25,49 @@ class BarrierPlanAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (_("Physical properties"), {"fields": ("material", "reflective", "length")}),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "is_electric",
+                    "connection_type",
+                    "count",
+                    "txt",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("plan",)}),
+        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
+    )
     list_display = (
         "id",
         "device_type",
@@ -52,6 +96,55 @@ class BarrierRealAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (
+            _("Physical properties"),
+            {"fields": ("material", "reflective", "length", "condition")},
+        ),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "is_electric",
+                    "connection_type",
+                    "count",
+                    "txt",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("barrier_plan",)}),
+        (
+            _("Installation information"),
+            {"fields": ("installation_date", "installation_status")},
+        ),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
+    )
     list_display = (
         "id",
         "device_type",
