@@ -88,6 +88,7 @@ class TrafficSignPlanAdmin(
         "lifecycle",
         "location",
         "decision_date",
+        "has_additional_signs",
     )
     readonly_fields = (
         "created_at",
@@ -98,6 +99,10 @@ class TrafficSignPlanAdmin(
     ordering = ("-created_at",)
     inlines = (TrafficSignPlanFileInline,)
 
+    def has_additional_signs(self, obj):
+        return (_("No"), _("Yes"))[obj.has_additional_signs()]
+
+    has_additional_signs.short_description = _("has additional signs")
 
 class TrafficSignRealFileInline(admin.TabularInline):
     model = TrafficSignRealFile
@@ -193,6 +198,7 @@ class TrafficSignRealAdmin(
         "manufacturer",
         "permit_decision_id",
         "txt",
+        "has_additional_signs",
         "color",
         "attachment_url",
         "scanned_at",
