@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-06 14:56+0300\n"
+"POT-Creation-Date: 2020-07-17 11:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,30 @@ msgstr "Lisäkilven sisältö"
 
 msgid "Additional sign contents"
 msgstr "Lisäkilven sisällöt"
+
+msgid "Location information"
+msgstr "Sijaintitiedot"
+
+msgid "Physical properties"
+msgstr "Fyysiset ominaisuudet"
+
+msgid "General information"
+msgstr "Yleiset tiedot"
+
+msgid "Related models"
+msgstr "Liittyvät tietomallit"
+
+msgid "Decision information"
+msgstr "Päätöstiedot"
+
+msgid "Validity"
+msgstr "Voimassaolo"
+
+msgid "Metadata"
+msgstr "Metatiedot"
+
+msgid "Installation information"
+msgstr "Asennuksen tiedot"
 
 #, python-format
 msgid "Set related plans for plan %s"
@@ -130,21 +154,6 @@ msgstr "Kaistatyyppi"
 msgid "Location specifier"
 msgstr "Sijaintitarkenne"
 
-msgid "Installation id"
-msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
-
-msgid "Installation details"
-msgstr "Asennuksen lisätiedot"
-
-msgid "Installation date"
-msgstr "Asennuspvm"
-
-msgid "Installation status"
-msgstr "Asennuksen tila"
-
-msgid "Installed by"
-msgstr "Asentaja"
-
 msgid "Owner"
 msgstr "Omistaja"
 
@@ -195,6 +204,21 @@ msgstr "Kiinnityskohde (toteuma)"
 
 msgid "Condition"
 msgstr "Kunto"
+
+msgid "Installation id"
+msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
+
+msgid "Installation details"
+msgstr "Asennuksen lisätiedot"
+
+msgid "Installation date"
+msgstr "Asennuspvm"
+
+msgid "Installation status"
+msgstr "Asennuksen tila"
+
+msgid "Installed by"
+msgstr "Asentaja"
 
 msgid "Manufacturer"
 msgstr "Valmistaja"
