@@ -45,38 +45,63 @@ class TrafficSignPlanAdmin(
     AuditLogHistoryAdmin,
 ):
     form = TrafficSignPlanModelForm
-    fields = (
-        ("location", "z_coord"),
-        "height",
-        "direction",
-        "device_type",
-        "value",
-        "txt",
-        "mount_plan",
-        "mount_type",
-        "decision_date",
-        "decision_id",
-        "validity_period_start",
-        "validity_period_end",
-        "affect_area",
-        "created_at",
-        "updated_at",
-        "created_by",
-        "updated_by",
-        "size",
-        "reflection_class",
-        "surface_class",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
-        "owner",
-        "color",
-        "lifecycle",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "location_specifier",
-        "source_id",
-        "source_name",
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    ("location", "z_coord"),
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                    "affect_area",
+                )
+            },
+        ),
+        (
+            _("Physical properties"),
+            {
+                "fields": (
+                    "size",
+                    "height",
+                    "color",
+                    "reflection_class",
+                    "surface_class",
+                )
+            },
+        ),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "mount_type",
+                    "value",
+                    "txt",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("plan", "mount_plan")}),
+        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
     )
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -104,6 +129,7 @@ class TrafficSignPlanAdmin(
 
     has_additional_signs.short_description = _("has additional signs")
 
+
 class TrafficSignRealFileInline(admin.TabularInline):
     model = TrafficSignRealFile
 
@@ -117,50 +143,81 @@ class TrafficSignRealAdmin(
     AuditLogHistoryAdmin,
 ):
     form = TrafficSignRealModelForm
-    fields = (
-        "traffic_sign_plan",
-        ("location", "z_coord"),
-        "height",
-        "direction",
-        "device_type",
-        "value",
-        "legacy_code",
-        "has_additional_signs",
-        "txt",
-        "mount_real",
-        "mount_type",
-        "installation_date",
-        "installation_status",
-        "installation_id",
-        "installation_details",
-        "permit_decision_id",
-        "validity_period_start",
-        "validity_period_end",
-        "condition",
-        "affect_area",
-        "created_at",
-        "updated_at",
-        "scanned_at",
-        "created_by",
-        "updated_by",
-        "size",
-        "reflection_class",
-        "surface_class",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
-        "owner",
-        "manufacturer",
-        "rfid",
-        "color",
-        "lifecycle",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "location_specifier",
-        "operation",
-        "attachment_url",
-        "source_id",
-        "source_name",
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    ("location", "z_coord"),
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                    "affect_area",
+                )
+            },
+        ),
+        (
+            _("Physical properties"),
+            {
+                "fields": (
+                    "size",
+                    "height",
+                    "color",
+                    "reflection_class",
+                    "surface_class",
+                    "condition",
+                )
+            },
+        ),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "mount_type",
+                    "permit_decision_id",
+                    "attachment_url",
+                    "scanned_at",
+                    "operation",
+                    "manufacturer",
+                    "rfid",
+                    "value",
+                    "txt",
+                    "legacy_code",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("traffic_sign_plan", "mount_real")}),
+        (
+            _("Installation information"),
+            {
+                "fields": (
+                    "installation_date",
+                    "installation_status",
+                    "installation_id",
+                    "installation_details",
+                ),
+            },
+        ),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
     )
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE

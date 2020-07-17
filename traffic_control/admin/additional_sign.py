@@ -54,31 +54,45 @@ class AdditionalSignPlanAdmin(
     AuditLogHistoryAdmin,
 ):
     form = AdditionalSignPlanModelForm
-    fields = (
-        ("location", "z_coord"),
-        "plan",
-        "decision_date",
-        "decision_id",
-        "validity_period_start",
-        "validity_period_end",
-        "affect_area",
-        "created_at",
-        "updated_at",
-        "created_by",
-        "updated_by",
-        "reflection_class",
-        "surface_class",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
-        "owner",
-        "color",
-        "lifecycle",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "location_specifier",
-        "source_id",
-        "source_name",
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    ("location", "z_coord"),
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                    "affect_area",
+                )
+            },
+        ),
+        (
+            _("Physical properties"),
+            {"fields": ("height", "color", "reflection_class", "surface_class")},
+        ),
+        (
+            _("General information"),
+            {"fields": ("owner", "mount_type", "source_id", "source_name")},
+        ),
+        (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
+        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
     )
 
     default_lon = HELSINKI_LONGITUDE
@@ -104,32 +118,82 @@ class AdditionalSignRealAdmin(
     AuditLogHistoryAdmin,
 ):
     form = AdditionalSignRealModelForm
-    fields = (
-        "additional_sign_plan",
-        ("location", "z_coord"),
-        "validity_period_start",
-        "validity_period_end",
-        "affect_area",
-        "created_at",
-        "updated_at",
-        "created_by",
-        "updated_by",
-        "reflection_class",
-        "surface_class",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
-        "owner",
-        "color",
-        "lifecycle",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "location_specifier",
-        "condition",
-        "manufacturer",
-        "rfid",
-        "source_id",
-        "source_name",
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    ("location", "z_coord"),
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                    "affect_area",
+                )
+            },
+        ),
+        (
+            _("Physical properties"),
+            {
+                "fields": (
+                    "size",
+                    "height",
+                    "color",
+                    "reflection_class",
+                    "surface_class",
+                    "condition",
+                )
+            },
+        ),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "mount_type",
+                    "permit_decision_id",
+                    "attachment_url",
+                    "scanned_at",
+                    "operation",
+                    "manufacturer",
+                    "rfid",
+                    "legacy_code",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (
+            _("Related models"),
+            {"fields": ("parent", "additional_sign_plan", "mount_real")},
+        ),
+        (
+            _("Installation information"),
+            {
+                "fields": (
+                    "installation_id",
+                    "installation_details",
+                    "installation_date",
+                    "installation_status",
+                    "installed_by",
+                )
+            },
+        ),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
     )
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE

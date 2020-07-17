@@ -1,4 +1,5 @@
 from django.contrib.gis import admin
+from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
@@ -29,6 +30,51 @@ class TrafficLightPlanAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (_("Physical properties"), {"fields": ("height", "mount_type")}),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "type",
+                    "vehicle_recognition",
+                    "push_button",
+                    "sound_beacon",
+                    "txt",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("plan", "mount_plan")}),
+        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
+    )
     list_display = (
         "id",
         "device_type",
@@ -58,6 +104,54 @@ class TrafficLightRealAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    fieldsets = (
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (_("Physical properties"), {"fields": ("height", "mount_type", "condition")}),
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "type",
+                    "vehicle_recognition",
+                    "push_button",
+                    "sound_beacon",
+                    "txt",
+                )
+            },
+        ),
+        (_("Related models"), {"fields": ("traffic_light_plan", "mount_real")}),
+        (
+            _("Installation information"),
+            {"fields": ("installation_date", "installation_status")},
+        ),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    ("validity_period_start", "validity_period_end"),
+                    "lifecycle",
+                )
+            },
+        ),
+        (
+            _("Metadata"),
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+        ),
+    )
     list_display = (
         "id",
         "device_type",
