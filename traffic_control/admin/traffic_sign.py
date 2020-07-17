@@ -4,7 +4,12 @@ from enumfields.admin import EnumFieldListFilter
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
-from ..mixins import Point3DFieldAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
+from ..mixins import (
+    EnumChoiceValueDisplayAdminMixin,
+    Point3DFieldAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+)
 from ..models import (
     TrafficControlDeviceType,
     TrafficSignPlan,
@@ -26,8 +31,9 @@ __all__ = (
 
 
 @admin.register(TrafficControlDeviceType)
-class TrafficControlDeviceTypeAdmin(AuditLogHistoryAdmin):
-    list_display = ("code", "description", "legacy_code", "legacy_description")
+class TrafficControlDeviceTypeAdmin(
+    EnumChoiceValueDisplayAdminMixin, AuditLogHistoryAdmin
+):
     ordering = ("code",)
     actions = None
 
@@ -38,6 +44,7 @@ class TrafficSignPlanFileInline(admin.TabularInline):
 
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(
+    EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Point3DFieldAdminMixin,
@@ -136,6 +143,7 @@ class TrafficSignRealFileInline(admin.TabularInline):
 
 @admin.register(TrafficSignReal)
 class TrafficSignRealAdmin(
+    EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Point3DFieldAdminMixin,

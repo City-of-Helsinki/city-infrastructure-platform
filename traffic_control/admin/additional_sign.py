@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..forms import AdditionalSignPlanModelForm, AdditionalSignRealModelForm
 from ..mixins import (
+    EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -46,6 +47,7 @@ class AdditionalSignContentRealInline(BaseAdditionalSignContentInline):
 
 @admin.register(AdditionalSignPlan)
 class AdditionalSignPlanAdmin(
+    EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
@@ -110,6 +112,7 @@ class AdditionalSignPlanAdmin(
 
 @admin.register(AdditionalSignReal)
 class AdditionalSignRealAdmin(
+    EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,

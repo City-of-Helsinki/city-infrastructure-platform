@@ -3,7 +3,9 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.gis import forms
 from django.contrib.gis.geos import Point
 from django.db.models import Q
+from django.forms.widgets import Select
 from django.utils.translation import gettext_lazy as _
+from enumfields.forms import EnumChoiceField
 
 from .models import (
     AdditionalSignPlan,
@@ -16,6 +18,30 @@ from .models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
+
+
+class AdminEnumSelectWidget(Select):
+    """
+    Widget that that displays Enum's logical value in the option label after
+    the label defined in Enum class.
+    """
+
+    def create_option(self, *args, **kwargs):
+        option = super().create_option(*args, **kwargs)
+        value = option["value"]
+        if value:
+            label = option["label"]
+            option["label"] = f"{label} ({value})"
+        return option
+
+
+class AdminEnumChoiceField(EnumChoiceField):
+    """
+    Form field that that displays Enum's logical value in the option label
+    after the label defined in Enum class.
+    """
+
+    widget = AdminEnumSelectWidget
 
 
 class Point3DFieldForm(forms.ModelForm):

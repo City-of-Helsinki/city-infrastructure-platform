@@ -2,7 +2,11 @@ from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
+from ..mixins import (
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+)
 from ..models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
 from .audit_log import AuditLogHistoryAdmin
 
@@ -20,7 +24,11 @@ class BarrierPlanFileInline(admin.TabularInline):
 
 @admin.register(BarrierPlan)
 class BarrierPlanAdmin(
-    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -91,7 +99,11 @@ class BarrierRealFileInline(admin.TabularInline):
 
 @admin.register(BarrierReal)
 class BarrierRealAdmin(
-    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
