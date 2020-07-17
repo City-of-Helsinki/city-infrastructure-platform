@@ -83,22 +83,7 @@ class AbstractAdditionalSign(SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    installation_id = models.CharField(
-        _("Installation id"), max_length=254, blank=True, null=True
-    )
-    installation_details = models.CharField(
-        _("Installation details"), max_length=254, blank=True, null=True
-    )
-    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        default=InstallationStatus.IN_USE,
-        blank=True,
-        null=True,
-    )
-    installed_by = models.CharField(_("Installed by"), max_length=256, blank=True)
+
     owner = models.CharField(_("Owner"), max_length=256)
 
     validity_period_start = models.DateField(
@@ -195,6 +180,22 @@ class AdditionalSignReal(AbstractAdditionalSign):
         blank=True,
         null=True,
     )
+    installation_id = models.CharField(
+        _("Installation id"), max_length=254, blank=True, null=True
+    )
+    installation_details = models.CharField(
+        _("Installation details"), max_length=254, blank=True, null=True
+    )
+    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
+        max_length=10,
+        default=InstallationStatus.IN_USE,
+        blank=True,
+        null=True,
+    )
+    installed_by = models.CharField(_("Installed by"), max_length=256, blank=True)
     manufacturer = models.CharField(
         _("Manufacturer"), max_length=254, blank=True, null=True
     )
