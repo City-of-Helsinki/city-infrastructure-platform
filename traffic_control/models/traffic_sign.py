@@ -45,6 +45,16 @@ class LocationSpecifier(Enum):
         OUTSIDE = _("Outside")
 
 
+class TrafficSignPlanQuerySet(SoftDeleteQuerySet):
+    def soft_delete(self, user):
+        from .additional_sign import AdditionalSignPlan
+
+        additional_signs = AdditionalSignPlan.objects.filter(parent__in=self).active()
+
+        super().soft_delete(user)
+        additional_signs.soft_delete(user)
+
+
 class TrafficSignPlan(SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -153,7 +163,7 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
         _("Source name"), max_length=254, blank=True, null=True
     )
 
-    objects = SoftDeleteQuerySet.as_manager()
+    objects = TrafficSignPlanQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_sign_plan"
@@ -173,6 +183,14 @@ class TrafficSignPlan(SoftDeleteModel, UserControlModel):
 
         if self.plan:
             self.plan.derive_location_from_related_plans()
+
+    def has_additional_signs(self):
+        return self.additional_signs.active().exists()
+
+    @transaction.atomic
+    def soft_delete(self, user):
+        super().soft_delete(user)
+        self.additional_signs.soft_delete(user)
 
 
 class TrafficSignPlanFile(models.Model):
