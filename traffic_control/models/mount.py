@@ -22,6 +22,9 @@ class MountType(models.Model):
     description = models.CharField(
         verbose_name=_("Description"), max_length=256, blank=False, null=False,
     )
+    description_fi = models.CharField(
+        verbose_name=_("Description (fi)"), max_length=256, blank=True, null=False,
+    )
     digiroad_code = models.IntegerField(
         verbose_name=_("Digiroad code"), blank=True, null=True,
     )

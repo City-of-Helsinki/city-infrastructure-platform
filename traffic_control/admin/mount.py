@@ -168,7 +168,13 @@ class MountRealAdmin(
 
 @admin.register(MountType)
 class MountTypeAdmin(AuditLogHistoryAdmin):
-    list_display = ("code", "description", "digiroad_code", "digiroad_description")
+    list_display = (
+        "code",
+        "description",
+        "description_fi",
+        "digiroad_code",
+        "digiroad_description",
+    )
     ordering = ("code", "description")
 
 
