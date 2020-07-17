@@ -6,7 +6,11 @@ from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..forms import PlanRelationsForm
-from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
+from ..mixins import (
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+)
 from ..models import Plan
 from .audit_log import AuditLogHistoryAdmin
 
@@ -15,7 +19,11 @@ __all__ = ("PlanAdmin",)
 
 @admin.register(Plan)
 class PlanAdmin(
-    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE

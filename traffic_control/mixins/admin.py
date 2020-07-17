@@ -24,6 +24,22 @@ class UserStampedAdminMixin:
         super().save_model(request, obj, form, change)
 
 
+class EnumChoiceValueDisplayAdminMixin:
+    """
+    A mixin class for model admin that displays Enum's logical value in the
+    option label after the label defined in Enum class.
+    """
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        from enumfields import EnumField, EnumIntegerField
+        from ..forms import AdminEnumChoiceField
+
+        if isinstance(db_field, (EnumField, EnumIntegerField)):
+            return db_field.formfield(choices_form_class=AdminEnumChoiceField, **kwargs)
+
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+
 class UserStampedInlineAdminMixin:
     """
     A mixin class for model admin that sets inline model created_by/updated_by

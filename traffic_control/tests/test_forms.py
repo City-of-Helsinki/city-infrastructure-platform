@@ -1,11 +1,43 @@
 from django.conf import settings
 from django.contrib.gis.geos import Point
+from django.forms import forms
 from django.test import TestCase
+from enumfields import Enum, EnumIntegerField
 
-from traffic_control.forms import TrafficSignRealModelForm
+from traffic_control.forms import AdminEnumChoiceField, TrafficSignRealModelForm
 from traffic_control.models import TrafficSignReal
 from traffic_control.models.common import Lifecycle
 from traffic_control.tests.factories import get_traffic_control_device_type, get_user
+
+
+class _TestEnum(Enum):
+    RED = 1
+    GREEN = 2
+    BLUE = 3
+
+    class Labels:
+        RED = "Red"
+        GREEN = "Green"
+        # BLUE label is left out on purpose
+
+
+class _TestForm(forms.Form):
+    test_field = EnumIntegerField(_TestEnum).formfield(
+        choices_form_class=AdminEnumChoiceField
+    )
+
+
+def test_admin_enum_choice_field():
+    form = _TestForm()
+    widget = form.fields["test_field"].widget
+    context = widget.get_context("test_field", "", {})
+
+    options = context["widget"]["optgroups"]
+
+    assert options[0][1][0]["label"] == "---------"
+    assert options[1][1][0]["label"] == "Red (1)"
+    assert options[2][1][0]["label"] == "Green (2)"
+    assert options[3][1][0]["label"] == "Blue (3)"
 
 
 class TrafficSignRealModelFormTestCase(TestCase):

@@ -2,7 +2,11 @@ from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
+from ..mixins import (
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+)
 from ..models import (
     MountPlan,
     MountPlanFile,
@@ -29,7 +33,11 @@ class MountPlanFileInline(admin.TabularInline):
 
 @admin.register(MountPlan)
 class MountPlanAdmin(
-    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -92,7 +100,11 @@ class MountRealFileInline(admin.TabularInline):
 
 @admin.register(MountReal)
 class MountRealAdmin(
-    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE

@@ -2,7 +2,11 @@ from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..mixins import SoftDeleteAdminMixin, UserStampedAdminMixin
+from ..mixins import (
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+)
 from ..models import (
     RoadMarkingPlan,
     RoadMarkingPlanFile,
@@ -25,7 +29,11 @@ class RoadMarkingPlanFileInline(admin.TabularInline):
 
 @admin.register(RoadMarkingPlan)
 class RoadMarkingPlanAdmin(
-    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -115,7 +123,11 @@ class RoadMarkingRealFileInline(admin.TabularInline):
 
 @admin.register(RoadMarkingReal)
 class RoadMarkingRealAdmin(
-    SoftDeleteAdminMixin, UserStampedAdminMixin, admin.OSMGeoAdmin, AuditLogHistoryAdmin
+    EnumChoiceValueDisplayAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+    admin.OSMGeoAdmin,
+    AuditLogHistoryAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
