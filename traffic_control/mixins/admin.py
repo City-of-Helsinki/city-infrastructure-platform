@@ -1,3 +1,7 @@
+from django.contrib.admin import SimpleListFilter
+from django.utils.translation import gettext_lazy as _
+
+
 class Point3DFieldAdminMixin:
     """A mixin class that shows a map for 3d geometries.
 
@@ -57,20 +61,62 @@ class UserStampedInlineAdminMixin:
             obj.save()
 
 
+class SoftDeleteFilter(SimpleListFilter):
+    """
+    Admin filter that by default excludes soft deleted instances out
+    of the list view.
+    """
+
+    title = _("Marked as deleted (hidden from API)")
+    parameter_name = "soft_deleted"
+
+    def lookups(self, request, model_admin):
+        return (
+            (None, _("No")),
+            ("1", _("Yes")),
+        )
+
+    def choices(self, changelist):
+        for lookup, title in self.lookup_choices:
+            yield {
+                "selected": self.value() == lookup,
+                "query_string": changelist.get_query_string(
+                    {self.parameter_name: lookup}, []
+                ),
+                "display": title,
+            }
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        is_active = True
+
+        if value and value == "1":
+            is_active = False
+
+        return queryset.filter(is_active=is_active)
+
+
 class SoftDeleteAdminMixin:
+    """
+    A mixin class for models that support soft deletion.
+    """
+
     exclude = ("is_active", "deleted_at", "deleted_by")
+    actions = ["action_soft_delete", "action_undo_soft_delete"]
+    list_filter = [
+        SoftDeleteFilter,
+    ]
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.active()
+    def action_soft_delete(self, request, queryset):
+        queryset.soft_delete(request.user)
 
-    def delete_model(self, request, obj):
-        obj.soft_delete(request.user)
+    action_soft_delete.short_description = _("Mark selected objects as deleted")
+    action_soft_delete.allowed_permissions = ("change", "delete")
 
-    def delete_queryset(self, request, queryset):
-        # audit log entries are created via saving signals,
-        # using bulk operations will not trigger the signals
-        # and will skip the auditing. Thus soft delete
-        # objects in queryset one by one.
-        for obj in queryset:
-            obj.soft_delete(request.user)
+    def action_undo_soft_delete(self, request, queryset):
+        queryset.update(is_active=True, deleted_by=None, deleted_at=None)
+
+    action_undo_soft_delete.short_description = _(
+        "Mark selected objects as not deleted"
+    )
+    action_undo_soft_delete.allowed_permissions = ("change",)

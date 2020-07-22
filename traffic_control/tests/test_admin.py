@@ -1,12 +1,18 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.gis.geos import Point
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 
-from traffic_control.admin import TrafficSignRealAdmin
-from traffic_control.models import TrafficSignReal
+from traffic_control.admin import BarrierRealAdmin, TrafficSignRealAdmin
+from traffic_control.models import BarrierReal, TrafficSignReal
 from traffic_control.models.common import Lifecycle
-from traffic_control.tests.factories import get_additional_sign_real, get_user
+from traffic_control.tests.factories import (
+    get_additional_sign_real,
+    get_barrier_real,
+    get_user,
+)
 
 
 class MockRequest:
@@ -73,30 +79,52 @@ class TrafficSignRealAdminTestCase(TestCase):
         self.assertEqual(self.traffic_sign_real.created_by, self.user)
         self.assertEqual(self.traffic_sign_real.updated_by, self.admin)
 
-    def test_delete_model_soft_delete_instance(self):
-        ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
-        request = MockRequest()
-        request.user = self.admin
-        ma.delete_model(request, self.traffic_sign_real)
-        self.traffic_sign_real.refresh_from_db()
-        self.assertFalse(self.traffic_sign_real.is_active)
-        self.assertEqual(self.traffic_sign_real.deleted_by, self.admin)
 
-    def test_get_queryset_exclude_soft_deleted(self):
-        ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
-        request = MockRequest()
-        request.user = self.admin
-        qs = ma.get_queryset(request)
+class SoftDeleteAdminTestCase(TestCase):
+    request_factory = RequestFactory()
+
+    def setUp(self):
+        self.user = get_user()
+        self.admin_user = get_user(admin=True)
+        self.barrier_real = get_barrier_real()
+        self.site = AdminSite()
+        self.model_admin = BarrierRealAdmin(BarrierReal, self.site)
+
+    def test_exclude_soft_deleted_by_default(self):
+        request = self.request_factory.get("/", {})
+        request.user = self.admin_user
+        changelist = self.model_admin.get_changelist_instance(request)
+        qs = changelist.get_queryset(request)
         self.assertEqual(qs.count(), 1)
-        ma.delete_model(request, self.traffic_sign_real)
-        qs = ma.get_queryset(request)
+        self.model_admin.delete_model(request, self.barrier_real)
+        qs = self.model_admin.get_queryset(request)
         self.assertEqual(qs.count(), 0)
 
-    def test_delete_queryset_soft_delete_objects_in_queryset(self):
-        ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
-        request = MockRequest()
-        request.user = self.admin
-        ma.delete_model(request, self.traffic_sign_real)
-        ma.delete_queryset(request, TrafficSignReal.objects.all())
-        self.traffic_sign_real.refresh_from_db()
-        self.assertFalse(self.traffic_sign_real.is_active)
+    def test_list_soft_deleted(self):
+        request = self.request_factory.get("/", {"soft_deleted": "1"})
+        request.user = self.admin_user
+        changelist = self.model_admin.get_changelist_instance(request)
+        qs = changelist.get_queryset(request)
+        self.assertEqual(qs.count(), 0)
+        self.barrier_real.soft_delete(self.admin_user)
+        qs = changelist.get_queryset(request)
+        self.assertEqual(qs.count(), 1)
+
+    def test_action_soft_delete(self):
+        request = self.request_factory.post("/")
+        request.user = self.admin_user
+        self.model_admin.action_soft_delete(request, BarrierReal.objects.all())
+        self.barrier_real.refresh_from_db()
+        self.assertFalse(self.barrier_real.is_active)
+        self.assertIsInstance(self.barrier_real.deleted_at, datetime)
+        self.assertEqual(self.barrier_real.deleted_by, self.admin_user)
+
+    def test_action_undo_soft_delete(self):
+        request = self.request_factory.post("/")
+        request.user = self.admin_user
+        self.barrier_real.soft_delete(self.admin_user)
+        self.model_admin.action_undo_soft_delete(request, BarrierReal.objects.all())
+        self.barrier_real.refresh_from_db()
+        self.assertTrue(self.barrier_real.is_active)
+        self.assertIsNone(self.barrier_real.deleted_at)
+        self.assertIsNone(self.barrier_real.deleted_by)
