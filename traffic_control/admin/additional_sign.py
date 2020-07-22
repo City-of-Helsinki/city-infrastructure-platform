@@ -255,7 +255,7 @@ class AdditionalSignRealAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
-    list_filter = [
+    list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", EnumFieldListFilter),
         ("installation_status", EnumFieldListFilter),
         ("condition", EnumFieldListFilter),

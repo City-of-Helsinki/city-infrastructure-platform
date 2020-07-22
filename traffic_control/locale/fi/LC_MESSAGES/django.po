@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-17 13:45+0300\n"
+"POT-Creation-Date: 2020-07-21 14:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,6 +96,15 @@ msgstr "Liikennemerkki (suunnitelmat)"
 
 msgid "Additional Sign Plans"
 msgstr "Lisäkilpi (suunnitelmat)"
+
+msgid "Marked as deleted (hidden from API)"
+msgstr "Merkitty poistetuksi (piilotettu rajapinnasta)"
+
+msgid "Mark selected objects as deleted"
+msgstr "Merkitse valitut kohteet poistetuksi"
+
+msgid "Mark selected objects as not deleted"
+msgstr "Kumoa valittujen kohteiden poistettu merkintä"
 
 msgid "Active"
 msgstr "Pysyvä laite"
