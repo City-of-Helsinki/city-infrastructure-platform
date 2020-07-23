@@ -305,12 +305,12 @@ def get_additional_sign_plan(
     )[0]
 
 
-def get_additional_sign_real(parent=None, owner="Test owner"):
+def get_additional_sign_real(location=test_point_3d, parent=None, owner="Test owner"):
     user = get_user("test_user")
 
     return AdditionalSignReal.objects.get_or_create(
         parent=parent or get_traffic_sign_real(),
-        location=test_point_3d,
+        location=location,
         affect_area=test_polygon,
         owner=owner,
         created_by=user,
