@@ -17,6 +17,7 @@ from traffic_control.models import (
     MountPlan,
     MountReal,
     MountType,
+    OperationalArea,
     Plan,
     Reflective,
     RoadMarkingColor,
@@ -52,6 +53,12 @@ def get_user(username=None, admin=False):
         email="test@example.com",
         is_staff=admin,
         is_superuser=admin,
+    )[0]
+
+
+def get_operational_area(area=None):
+    return OperationalArea.objects.get_or_create(
+        name="Test operational area", area=area or test_polygon,
     )[0]
 
 

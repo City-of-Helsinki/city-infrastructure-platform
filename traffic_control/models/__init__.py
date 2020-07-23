@@ -32,6 +32,7 @@ from .mount import (
     MountType,
     PortalType,
 )
+from .operational_area import GroupOperationalArea, OperationalArea
 from .plan import Plan
 from .road_marking import (
     ArrowDirection,

@@ -14,6 +14,7 @@ from .mount import (
     MountRealFileInline,
     PortalTypeAdmin,
 )
+from .operational_area import GroupAdmin, OperationalAreaAdmin
 from .plan import PlanAdmin
 from .road_marking import (
     RoadMarkingPlanAdmin,
