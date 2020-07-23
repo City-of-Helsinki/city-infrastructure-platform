@@ -16,3 +16,18 @@ class User(AbstractUser):
     operational_areas = models.ManyToManyField(
         "traffic_control.OperationalArea", related_name="users", blank=True,
     )
+
+    def location_is_in_operational_area(self, location):
+        """
+        Check if given location is within the operational area defined for user
+        """
+        if self.is_superuser or self.bypass_operational_area:
+            return True
+
+        groups = Group.objects.filter(user=self).prefetch_related(
+            "operational_area", "operational_area__areas"
+        )
+        return (
+            self.operational_areas.filter(area__contains=location).exists()
+            or groups.filter(operational_area__areas__area__contains=location).exists()
+        )

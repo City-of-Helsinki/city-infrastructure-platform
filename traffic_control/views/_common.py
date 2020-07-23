@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
@@ -10,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from ..mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
+from ..permissions import ObjectInsideOperationalAreaOrAnonReadOnly
 
 __all__ = ("FileUploadViews", "TrafficControlViewSet")
 
@@ -20,7 +22,10 @@ class TrafficControlViewSet(
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["-created_at"]
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    permission_classes = [
+        DjangoModelPermissionsOrAnonReadOnly,
+        ObjectInsideOperationalAreaOrAnonReadOnly,
+    ]
     serializer_classes = {}
 
     def get_serializer_class(self):
@@ -28,6 +33,23 @@ class TrafficControlViewSet(
         if geo_format == "geojson":
             return self.serializer_classes.get("geojson")
         return self.serializer_classes.get("default")
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Check that the location of the to-be-created object is within the
+        # user's operational area.
+        user = request.user
+        location = serializer.validated_data.get("location")
+        if not user.location_is_in_operational_area(location):
+            raise PermissionDenied("Location outside allowed operational area.")
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 class FileUploadViews(GenericViewSet):
