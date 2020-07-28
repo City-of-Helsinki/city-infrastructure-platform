@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-21 14:43+0300\n"
+"POT-Creation-Date: 2020-07-28 14:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,9 @@ msgstr "Metatiedot"
 
 msgid "Installation information"
 msgstr "Asennuksen tiedot"
+
+msgid "Operational areas"
+msgstr "Toiminta-alue"
 
 #, python-format
 msgid "Set related plans for plan %s"
@@ -601,8 +604,20 @@ msgstr "Toteumadokumentti (kiinnityskohde)"
 msgid "Mount Real Files"
 msgstr "Toteumadokumentit (kiinnityskohde)"
 
+msgid "Group operational area"
+msgstr "Ryhmän toiminta-alue"
+
+msgid "Group operational areas"
+msgstr "Ryhmien toiminta-alueet"
+
 msgid "Name"
 msgstr "Nimi"
+
+msgid "Area"
+msgstr "Alue"
+
+msgid "Operational area"
+msgstr "Toiminta-alue"
 
 msgid "Plan number"
 msgstr "Suunnitelman numero"
@@ -906,6 +921,9 @@ msgstr "Tallenna välillä ja jatka muokkaamista"
 
 msgid "Home"
 msgstr "Etusivu"
+
+msgid "This field may not be null."
+msgstr ""
 
 msgid "File not found."
 msgstr "Tiedostoa ei löytynyt."
