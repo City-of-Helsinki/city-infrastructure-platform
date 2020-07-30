@@ -18,6 +18,16 @@ file_uuid_parameter = openapi.Parameter(
 )
 
 
+class TrafficSignType(serializers.Serializer):
+    """
+    Serializer that is used to generate OpenAPI documentation for
+    TrafficControlDeviceType model's traffic_sign_type attribute.
+    """
+
+    code = serializers.CharField(read_only=True)
+    text = serializers.CharField(read_only=True)
+
+
 class FileUploadSchema(serializers.Serializer):
     """
     Serializer that is used to generate OpenAPI documentation for single file

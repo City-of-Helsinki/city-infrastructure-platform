@@ -1,6 +1,7 @@
 from typing import Optional
 
 from django.core.exceptions import ValidationError
+from drf_yasg.utils import swagger_serializer_method
 from enumfields.drf.serializers import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
@@ -40,6 +41,7 @@ from .models import (
     TrafficSignRealFile,
 )
 from .models.common import DeviceTypeTargetModel
+from .schema import TrafficSignType
 
 
 class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
@@ -536,9 +538,20 @@ class PlanGeoJSONSerializer(PlanSerializer):
 class TrafficControlDeviceTypeSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
+    traffic_sign_type = serializers.SerializerMethodField(
+        method_name="get_traffic_sign_type",
+    )
+
     class Meta:
         model = TrafficControlDeviceType
         exclude = ("legacy_code", "legacy_description")
+
+    @swagger_serializer_method(serializer_or_field=TrafficSignType)
+    def get_traffic_sign_type(self, obj):
+        value = obj.traffic_sign_type
+        if value:
+            return {"code": obj.code[0], "type": value}
+        return None
 
     def validate_target_model(
         self, value: Optional[DeviceTypeTargetModel]

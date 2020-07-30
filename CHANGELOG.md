@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 - Permissions based on operational area
+- `traffic_sign_type` property for `TrafficControlDeviceType`
 
 ### Changed
 - Admin UI usability improvements

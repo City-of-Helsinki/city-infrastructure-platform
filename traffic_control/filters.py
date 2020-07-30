@@ -1,4 +1,6 @@
 from django.contrib.gis.db.models import GeometryField
+from django.utils.translation import gettext_lazy as _
+from django_filters import ChoiceFilter
 from django_filters.rest_framework import FilterSet
 from rest_framework_gis.filters import GeometryFilter
 
@@ -24,6 +26,7 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
+from traffic_control.models.common import TRAFFIC_SIGN_TYPE_CHOICES
 
 
 class GenericMeta:
@@ -123,8 +126,19 @@ class TrafficLightRealFilterSet(FilterSet):
 
 
 class TrafficControlDeviceTypeFilterSet(FilterSet):
+    traffic_sign_type = ChoiceFilter(
+        label=_("Traffic sign type"),
+        choices=TRAFFIC_SIGN_TYPE_CHOICES,
+        method="filter_traffic_sign_type",
+    )
+
     class Meta(GenericMeta):
         model = TrafficControlDeviceType
+
+    def filter_traffic_sign_type(self, queryset, name, value):
+        if value:
+            queryset = queryset.filter(code__startswith=value)
+        return queryset
 
 
 class TrafficSignPlanFilterSet(FilterSet):
