@@ -1,6 +1,7 @@
 import pytest
 from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
+from django.utils.translation import gettext_lazy as _
 
 from traffic_control.models.common import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
@@ -175,3 +176,26 @@ def test__traffic_control_device_type__target_model__validate_multiple_invalid_r
 
         device_type.refresh_from_db()
         assert not device_type.target_model
+
+
+@pytest.mark.parametrize(
+    "code,expected_value",
+    (
+        ("A1", _("Warning sign")),
+        ("B1", _("Priority or give-way sign")),
+        ("C1", _("Prohibitory or restrictive sign")),
+        ("D1", _("Mandatory sign")),
+        ("E1", _("Regulatory sign")),
+        ("F1", _("Information sign")),
+        ("G1", _("Service sign")),
+        ("H1", _("Additional sign")),
+        ("I1", _("Other road sign")),
+        ("X", None),
+        ("123", None),
+    ),
+)
+@pytest.mark.django_db
+def test__traffic_control_device_type__traffic_sign_type(code, expected_value):
+    device_type = get_traffic_control_device_type(code=code)
+
+    assert device_type.traffic_sign_type == expected_value

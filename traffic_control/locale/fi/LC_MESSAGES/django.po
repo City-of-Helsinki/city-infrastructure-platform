@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-28 14:43+0300\n"
+"POT-Creation-Date: 2020-07-30 12:12+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,6 +75,9 @@ msgstr "Sijainti (z)"
 
 msgid "Traffic control"
 msgstr "Liikenteenohjauslaitteet"
+
+msgid "Traffic sign type"
+msgstr "Liikennemerkkityyppi"
 
 msgid "Location (x,y)"
 msgstr "Sijainti (x,y)"
@@ -519,6 +522,30 @@ msgstr "Poikkisuuntainen"
 
 msgid "Other road marking"
 msgstr "Muu tiemerkintä"
+
+msgid "Warning sign"
+msgstr "Varoitusmerkki"
+
+msgid "Priority or give-way sign"
+msgstr "Etuajo-oikeus- tai väistämismerkki"
+
+msgid "Prohibitory or restrictive sign"
+msgstr "Kielto- tai rajoitusmerkki"
+
+msgid "Mandatory sign"
+msgstr "Määräysmerkki"
+
+msgid "Regulatory sign"
+msgstr "Sääntömerkki"
+
+msgid "Information sign"
+msgstr "Opastusmerkki"
+
+msgid "Service sign"
+msgstr "Palvelukohteen opastusmerkki"
+
+msgid "Other road sign"
+msgstr "Muu merkki"
 
 msgid "Code"
 msgstr "Koodi"

@@ -188,6 +188,22 @@ class TrafficControlDeviceTypeQuerySet(models.QuerySet):
         return self.filter(Q(target_model=None) | Q(target_model=target_model))
 
 
+TRAFFIC_SIGN_TYPE_MAP = {
+    "A": _("Warning sign"),
+    "B": _("Priority or give-way sign"),
+    "C": _("Prohibitory or restrictive sign"),
+    "D": _("Mandatory sign"),
+    "E": _("Regulatory sign"),
+    "F": _("Information sign"),
+    "G": _("Service sign"),
+    "H": _("Additional sign"),
+    "I": _("Other road sign"),
+}
+TRAFFIC_SIGN_TYPE_CHOICES = tuple(
+    (key, value) for key, value in TRAFFIC_SIGN_TYPE_MAP.items()
+)
+
+
 class TrafficControlDeviceType(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -226,6 +242,10 @@ class TrafficControlDeviceType(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.code, self.description)
+
+    @property
+    def traffic_sign_type(self):
+        return TRAFFIC_SIGN_TYPE_MAP.get(self.code[0])
 
     def save(self, *args, **kwargs):
         if self.pk:

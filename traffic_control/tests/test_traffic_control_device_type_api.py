@@ -13,6 +13,7 @@ from traffic_control.tests.factories import (
     get_road_marking_real,
     get_signpost_plan,
     get_signpost_real,
+    get_traffic_control_device_type,
     get_traffic_light_plan,
     get_traffic_light_real,
     get_traffic_sign_plan,
@@ -206,6 +207,22 @@ class TrafficControlDeviceTypeTests(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TrafficControlDeviceType.objects.count(), 0)
+
+    def test__traffic_sign_type__filtering(self):
+        dt_1 = get_traffic_control_device_type(code="A1")
+        dt_2 = get_traffic_control_device_type(code="A2")
+        get_traffic_control_device_type(code="B1")
+        get_traffic_control_device_type(code="C1")
+
+        response = self.client.get(
+            reverse("v1:trafficcontroldevicetype-list"), data={"traffic_sign_type": "A"}
+        )
+
+        response_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_data["count"], 2)
+        self.assertEqual(response_data["results"][0]["id"], str(dt_1.pk))
+        self.assertEqual(response_data["results"][1]["id"], str(dt_2.pk))
 
     @staticmethod
     def __create_test_traffic_control_device_type():
