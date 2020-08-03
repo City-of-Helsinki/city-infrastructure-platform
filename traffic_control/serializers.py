@@ -556,10 +556,11 @@ class TrafficControlDeviceTypeSerializer(
     def validate_target_model(
         self, value: Optional[DeviceTypeTargetModel]
     ) -> Optional[DeviceTypeTargetModel]:
-        try:
-            self.instance.validate_change_target_model(value, raise_exception=True)
-        except ValidationError as error:
-            raise serializers.ValidationError(error.message)
+        if self.instance and self.instance.target_model != value:
+            try:
+                self.instance.validate_change_target_model(value, raise_exception=True)
+            except ValidationError as error:
+                raise serializers.ValidationError(error.message)
 
         return value
 

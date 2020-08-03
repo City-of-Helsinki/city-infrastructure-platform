@@ -105,6 +105,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
         data = {
             "code": "L3",
             "description": "Suojatie",
+            "target_model": DeviceTypeTargetModel.ADDITIONAL_SIGN.value,
         }
         response = self.client.post(
             reverse("v1:trafficcontroldevicetype-list"), data, format="json"
