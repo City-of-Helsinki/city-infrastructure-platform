@@ -4,7 +4,7 @@ from dateutil.parser import parse
 from django.conf import settings
 from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import Point
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from pytz import timezone
 
 from users.utils import get_system_user
@@ -89,7 +89,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         filename = options["filename"]
         if not os.path.exists(filename):
-            raise Exception("File {0} does not exist".format(filename))
+            raise CommandError("File {0} does not exist".format(filename))
 
         user = get_system_user()
         data_source = DataSource(filename)
