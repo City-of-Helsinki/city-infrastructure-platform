@@ -6,7 +6,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UserControlModel
+from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
 from .common import Condition, InstallationStatus, Lifecycle
 from .plan import Plan
 from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
@@ -59,7 +59,7 @@ class PortalType(models.Model):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
 
 
-class MountPlan(SoftDeleteModel, UserControlModel):
+class MountPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -123,12 +123,6 @@ class MountPlan(SoftDeleteModel, UserControlModel):
 
     def __str__(self):
         return "%s %s" % (self.id, self.mount_type)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        if self.plan:
-            self.plan.derive_location_from_related_plans()
 
 
 class MountPlanFile(models.Model):

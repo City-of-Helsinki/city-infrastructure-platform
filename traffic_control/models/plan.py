@@ -83,13 +83,17 @@ class Plan(SoftDeleteModel, UserControlModel):
 
         :param buffer: Buffer radius
         """
-        location_polygons = MultiPolygon(
-            [p.buffer(buffer) for p in self._get_related_locations()],
-            srid=settings.SRID,
-        )
-        area = location_polygons.convex_hull
+        locations = self._get_related_locations()
+        if len(locations) == 0:
+            self.location = None
+        else:
+            location_polygons = MultiPolygon(
+                [p.buffer(buffer) for p in self._get_related_locations()],
+                srid=settings.SRID,
+            )
+            area = location_polygons.convex_hull
 
-        self.location = MultiPolygon(area, srid=settings.SRID)
+            self.location = MultiPolygon(area, srid=settings.SRID)
         self.save(update_fields=["location"])
 
 

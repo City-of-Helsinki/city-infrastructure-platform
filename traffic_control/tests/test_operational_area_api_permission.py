@@ -100,7 +100,7 @@ model_factory_map = {
         ("MountReal", None, False),
         ("Plan", test_multipolygon_inside_area, True),
         ("Plan", test_multipolygon_outside_area, False),
-        ("Plan", None, False),
+        ("Plan", None, True),
         ("RoadMarkingPlan", test_point_inside_area, True),
         ("RoadMarkingPlan", test_point_outside_area, False),
         ("RoadMarkingPlan", None, False),

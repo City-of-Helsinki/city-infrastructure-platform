@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UserControlModel
+from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -80,7 +80,7 @@ class LocationSpecifier(Enum):
         LEFT_SIDE_OF_LANE_OR_ROAD = _("Left side of lane or road")
 
 
-class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
+class RoadMarkingPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -208,9 +208,6 @@ class RoadMarkingPlan(SoftDeleteModel, UserControlModel):
             raise ValidationError(
                 f'Road name is required for "{TrafficControlDeviceTypeType.TRANSVERSE.value}" road marking'
             )
-
-        if self.plan:
-            self.plan.derive_location_from_related_plans()
 
 
 class RoadMarkingPlanFile(models.Model):

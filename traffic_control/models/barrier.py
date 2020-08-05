@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UserControlModel
+from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -53,7 +53,7 @@ class LocationSpecifier(Enum):
         LEFT = _("Left of road or lane")
 
 
-class BarrierPlan(SoftDeleteModel, UserControlModel):
+class BarrierPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -134,9 +134,6 @@ class BarrierPlan(SoftDeleteModel, UserControlModel):
             )
 
         super().save(*args, **kwargs)
-
-        if self.plan:
-            self.plan.derive_location_from_related_plans()
 
 
 class BarrierPlanFile(models.Model):

@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UserControlModel
+from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -40,7 +40,7 @@ class LocationSpecifier(Enum):
         VERTICAL = _("Vertical")
 
 
-class SignpostPlan(SoftDeleteModel, UserControlModel):
+class SignpostPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -169,9 +169,6 @@ class SignpostPlan(SoftDeleteModel, UserControlModel):
             )
 
         super().save(*args, **kwargs)
-
-        if self.plan:
-            self.plan.derive_location_from_related_plans()
 
 
 class SignpostPlanFile(models.Model):
