@@ -160,3 +160,52 @@ def test_plan_location_is_updated_on_related_model_save(factory):
 
     plan.refresh_from_db()
     assert plan.location != old_location
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "factory",
+    (
+        get_barrier_plan,
+        get_mount_plan,
+        get_road_marking_plan,
+        get_signpost_plan,
+        get_traffic_light_plan,
+        get_traffic_sign_plan,
+    ),
+)
+def test_both_plan_locations_are_updated_when_plan_is_changed(factory):
+    plan_1 = get_plan(location=None, name="Test plan 1")
+    plan_2 = get_plan(location=None, name="Test plan 2")
+    related_object = factory(plan=plan_1)
+    plan_1.refresh_from_db()
+    assert plan_1.location.covers(related_object.location)
+    related_object.plan = plan_2
+    related_object.save()
+    plan_1.refresh_from_db()
+    assert plan_1.location is None
+    plan_2.refresh_from_db()
+    assert plan_2.location.covers(related_object.location)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "factory",
+    (
+        get_barrier_plan,
+        get_mount_plan,
+        get_road_marking_plan,
+        get_signpost_plan,
+        get_traffic_light_plan,
+        get_traffic_sign_plan,
+    ),
+)
+def test_plan_locations_are_updated_when_plan_is_removed_from_object(factory):
+    plan = get_plan(location=None, name="Test plan 1")
+    related_object = factory(plan=plan)
+    plan.refresh_from_db()
+    assert plan.location.covers(related_object.location)
+    related_object.plan = None
+    related_object.save()
+    plan.refresh_from_db()
+    assert plan.location is None

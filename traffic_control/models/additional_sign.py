@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UserControlModel
+from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
 from .common import (
     Color,
     Condition,
@@ -112,7 +112,7 @@ class AbstractAdditionalSign(SoftDeleteModel, UserControlModel):
         abstract = True
 
 
-class AdditionalSignPlan(AbstractAdditionalSign):
+class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
     parent = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Parent Traffic Sign Plan"),

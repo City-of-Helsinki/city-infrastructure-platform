@@ -42,7 +42,7 @@ class TrafficControlViewSet(
         # user's operational area.
         user = request.user
         location = serializer.validated_data.get("location")
-        if not user.location_is_in_operational_area(location):
+        if location and not user.location_is_in_operational_area(location):
             raise PermissionDenied("Location outside allowed operational area.")
 
         self.perform_create(serializer)

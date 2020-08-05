@@ -62,13 +62,13 @@ def get_operational_area(area=None):
     )[0]
 
 
-def get_plan(location=""):
+def get_plan(location=test_multi_polygon, name="Test plan"):
     user = get_user("test_user")
     superuser = get_user("super user", admin=True)
     return Plan.objects.get_or_create(
-        name="Test plan",
+        name=name,
         plan_number="2020_1",
-        location=location or test_multi_polygon,
+        location=location,
         planner=user,
         decision_maker=superuser,
         created_by=user,

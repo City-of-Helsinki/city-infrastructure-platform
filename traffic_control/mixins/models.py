@@ -44,3 +44,29 @@ class UserControlModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class UpdatePlanLocationMixin:
+    """A mixin class that updates plan location when the plan
+    field of target model is changed"""
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            old_plan = None
+        else:
+            # remember the old plan when updating existing traffic
+            # control objects
+            old_plan = type(self).objects.get(pk=self.pk).plan
+        super().save(*args, **kwargs)
+        if self.plan != old_plan:
+            # note that we also need to update the old plan location when
+            # updating the plan field of existing traffic control objects.
+            if old_plan:
+                old_plan.derive_location_from_related_plans()
+            if self.plan:
+                self.plan.derive_location_from_related_plans()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        if self.plan:
+            self.plan.derive_location_from_related_plans()
