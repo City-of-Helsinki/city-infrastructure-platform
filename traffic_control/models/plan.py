@@ -30,7 +30,9 @@ class Plan(SoftDeleteModel, UserControlModel):
         max_length=16,
         help_text=_("Year and verdict section separated with an underscore."),
     )
-    location = models.MultiPolygonField(_("Location (2D)"), srid=settings.SRID)
+    location = models.MultiPolygonField(
+        _("Location (2D)"), srid=settings.SRID, null=True, blank=True
+    )
     planner = models.ForeignKey(
         get_user_model(),
         verbose_name=_("Planner"),
