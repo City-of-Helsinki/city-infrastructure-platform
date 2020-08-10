@@ -10,10 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 - Permissions based on operational area
 - `traffic_sign_type` property for `TrafficControlDeviceType`
+- Added tests for Katajanokka importer
 
 ### Changed
 - Admin UI usability improvements
 - Add `description_fi` field for `MountType`
+- Improved the plan geometry generation
+
+### Fixed
+- Fixed a bug that creating `TrafficControlDeviceType` crashes when target model is specified
 
 ## [1.0.0] - 2020-07-07
 
