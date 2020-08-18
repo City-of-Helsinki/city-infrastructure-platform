@@ -1,3 +1,4 @@
+from django.contrib.admin import SimpleListFilter
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
@@ -17,6 +18,7 @@ from ..models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
+from ..models.common import TRAFFIC_SIGN_TYPE_CHOICES
 from ..models.utils import order_queryset_by_z_coord_desc
 from .audit_log import AuditLogHistoryAdmin
 
@@ -30,6 +32,20 @@ __all__ = (
 )
 
 
+class TrafficSignTypeListFilter(SimpleListFilter):
+    title = _("Traffic sign type")
+    parameter_name = "traffic_sign_type"
+
+    def lookups(self, request, model_admin):
+        return TRAFFIC_SIGN_TYPE_CHOICES
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            return queryset.filter(code__startswith=value)
+        return queryset
+
+
 @admin.register(TrafficControlDeviceType)
 class TrafficControlDeviceTypeAdmin(
     EnumChoiceValueDisplayAdminMixin, AuditLogHistoryAdmin
@@ -41,6 +57,7 @@ class TrafficControlDeviceTypeAdmin(
         "legacy_description",
         "target_model",
     )
+    list_filter = (TrafficSignTypeListFilter,)
     ordering = ("code",)
     actions = None
 
