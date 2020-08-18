@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Permissions based on operational area
 - `traffic_sign_type` property for `TrafficControlDeviceType`
 - Added tests for Katajanokka importer
+- Add traffic sign type list filter to `TrafficControlDeviceTypeAdmin`
 
 ### Changed
 - Admin UI usability improvements
