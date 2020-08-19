@@ -144,7 +144,11 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "auditlog",
 ]
-LOCAL_APPS = ["users.apps.UsersConfig", "traffic_control.apps.TrafficControlConfig"]
+LOCAL_APPS = [
+    "users.apps.UsersConfig",
+    "traffic_control.apps.TrafficControlConfig",
+    "map",
+]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 AUTHENTICATION_BACKENDS = (
