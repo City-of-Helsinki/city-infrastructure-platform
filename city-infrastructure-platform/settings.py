@@ -184,7 +184,7 @@ ROOT_URLCONF = "city-infrastructure-platform.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [checkout_dir("templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

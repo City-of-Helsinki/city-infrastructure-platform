@@ -17,33 +17,5 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgid "identifier"
-msgstr "tunniste"
-
-msgid "Finnish name"
-msgstr "Suomenkielinen nimi"
-
-msgid "English name"
-msgstr "Englanninkielinen nimi"
-
-msgid "is basemap"
-msgstr "On pohjakartta"
-
-msgid "order"
-msgstr "järjestys"
-
-msgid "layer"
-msgstr "taso"
-
-msgid "layers"
-msgstr "tasot"
-
-msgid "Map View"
-msgstr "Karttanäkymä"
-
-msgid "Basemaps"
-msgstr "Pohjakartat"
-
-msgid "Overlays"
-msgstr "Tasot"
+msgid "View map"
+msgstr "Näytä kartta"
