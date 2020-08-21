@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added tests for Katajanokka importer
 - Add traffic sign type list filter to `TrafficControlDeviceTypeAdmin`
 - Allow users to authenticate to the REST API with Token
+- Add a layer model and a map view to visualize data on the map
 
 ### Changed
 - Admin UI usability improvements
