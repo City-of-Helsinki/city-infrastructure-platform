@@ -1,0 +1,34 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.control-container {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+.mouse-position {
+    color: #eee;
+    text-align: center;
+    bottom: 8px;
+    right: 8px;
+    border-radius: 4px;
+    padding: 2px;
+    position: absolute;
+    font-size: 12px;
+}
+
+.mouse-position, .ol-scale-line {
+    background-color: rgba(0,60,136,.5);
+}

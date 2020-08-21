@@ -7,6 +7,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
+from map.views import map_view
 from traffic_control.views import (
     additional_sign as additional_sign_views,
     barrier as barrier_views,
@@ -125,7 +126,9 @@ urlpatterns = [
     path("sentry-debug/", lambda a: 1 / 0),
 ]
 
-urlpatterns += i18n_patterns(path("admin/", admin.site.urls),)
+urlpatterns += i18n_patterns(
+    path("admin/", admin.site.urls), path("map/", map_view, name="map-view")
+)
 
 if settings.DEBUG:
     from django.conf.urls.static import static
