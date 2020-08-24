@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
@@ -24,6 +25,8 @@ def map_view(request):
         "basemap": {"title": _("Basemaps"), "layers": basemaps},
         "overlay": {"title": _("Overlays"), "layers": overlays},
     }
-    return render(
-        request, "map/map_view.html", {"layer_config": json.dumps(layer_config)}
-    )
+    map_config = {
+        "layerConfig": layer_config,
+        "overlaySourceUrl": settings.OVERLAY_SOURCE_URL,
+    }
+    return render(request, "map/map_view.html", {"map_config": json.dumps(map_config)})
