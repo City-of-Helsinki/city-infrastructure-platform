@@ -55,6 +55,7 @@ env = environ.Env(
     OIDC_ENDPOINT=(str, None),
     HELUSERS_ADGROUPS_CLAIM=(str, "groups"),
     LOGGING_AUTH_DEBUG=(bool, False),
+    OVERLAY_SOURCE_URL=(str, "https://geoserver.hel.fi/geoserver/city-infra/wms"),
 )
 
 if os.path.exists(env_file):
@@ -278,3 +279,5 @@ if SENTRY_DSN:
 
 # Custom settings
 SRID = 3879  # the spatial reference id used for geometries
+
+OVERLAY_SOURCE_URL = env.str("OVERLAY_SOURCE_URL")

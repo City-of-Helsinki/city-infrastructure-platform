@@ -2,8 +2,8 @@
 (function() {
   "use strict";
 
-  function MapView(target, layerConfig) {
-    this.layerConfig = layerConfig;
+  function MapView(target, mapConfig) {
+    this.mapConfig = mapConfig;
     this.map = this.createMap(target);
   }
 
@@ -26,7 +26,7 @@
   };
 
   MapView.prototype.getBasemapLayerGroup = function() {
-    const basemapConfig = this.layerConfig.basemap;
+    const basemapConfig = this.mapConfig.layerConfig.basemap;
     const basemapLayers = basemapConfig.layers.map(([layer, title], index) => {
       const wmsSource = new ol.source.ImageWMS({
         url: "https://kartta.hel.fi/ws/geoserver/avoindata/wms",
@@ -47,10 +47,10 @@
   };
 
   MapView.prototype.getOverlayLayerGroup = function() {
-    const overlayConfig = this.layerConfig.overlay;
+    const overlayConfig = this.mapConfig.layerConfig.overlay;
     const overlayLayers = overlayConfig.layers.map(([layer, title]) => {
       const wmsSource = new ol.source.ImageWMS({
-        url: "https://geoserver.hel.fi/geoserver/city-infra/wms",
+        url: this.mapConfig.overlaySourceUrl,
         params: {LAYERS: layer}
       });
       return new ol.layer.Image({
