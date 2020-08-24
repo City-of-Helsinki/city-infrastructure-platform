@@ -12,6 +12,7 @@ from traffic_control.views import (
     additional_sign as additional_sign_views,
     barrier as barrier_views,
     mount as mount_views,
+    operational_area as operational_area_views,
     plan as plan_views,
     road_marking as road_marking_views,
     signpost as signpost_views,
@@ -81,6 +82,9 @@ router.register(
 )
 router.register(
     "mount-types", mount_views.MountTypeViewSet,
+)
+router.register(
+    "operational-areas", operational_area_views.OperationalAreaViewSet,
 )
 schema_view = get_schema_view(
     openapi.Info(

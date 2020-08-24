@@ -20,6 +20,7 @@ from .models import (
     MountReal,
     MountRealFile,
     MountType,
+    OperationalArea,
     Plan,
     PortalType,
     RoadMarkingPlan,
@@ -574,4 +575,12 @@ class PortalTypeSerializer(serializers.ModelSerializer):
 class MountTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MountType
+        fields = "__all__"
+
+
+class OperationalAreaSerializer(serializers.ModelSerializer):
+    area = GeometryField()
+
+    class Meta:
+        model = OperationalArea
         fields = "__all__"
