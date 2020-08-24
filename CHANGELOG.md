@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add traffic sign type list filter to `TrafficControlDeviceTypeAdmin`
 - Allow users to authenticate to the REST API with Token
 - Add a layer model and a map view to visualize data on the map
+- Add REST API endpoint for `OperationalArea`
 
 ### Changed
 - Admin UI usability improvements
