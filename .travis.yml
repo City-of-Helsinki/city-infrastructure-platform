@@ -34,7 +34,7 @@ before_script:
 script:
   - flake8
   - black --check .
-  - isort -c
+  - isort . -c
   - pytest -ra -vvv --cov=.
 
 after_success:

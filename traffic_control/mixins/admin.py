@@ -36,6 +36,7 @@ class EnumChoiceValueDisplayAdminMixin:
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         from enumfields import EnumField, EnumIntegerField
+
         from ..forms import AdminEnumChoiceField
 
         if isinstance(db_field, (EnumField, EnumIntegerField)):
