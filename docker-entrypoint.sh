@@ -14,11 +14,9 @@ if [[ "$COLLECT_STATIC" = "1" ]]; then
     ./manage.py collectstatic --noinput
 fi
 
-# Only translate traffic_control module for now
+# Translate messages
 echo "Updating translations..."
-cd traffic_control
-../manage.py compilemessages -l fi
-cd ..
+./manage.py compilemessages -l fi
 
 echo "Checking for odd ENTRYPOINT line in arguments"
 echo "Arguments are:"

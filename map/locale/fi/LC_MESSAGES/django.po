@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "identifier"
-msgstr "tunniste"
+msgstr "Tunniste"
 
 msgid "Finnish name"
 msgstr "Suomenkielinen nimi"
@@ -31,13 +31,13 @@ msgid "is basemap"
 msgstr "On pohjakartta"
 
 msgid "order"
-msgstr "järjestys"
+msgstr "Järjestys"
 
 msgid "layer"
-msgstr "taso"
+msgstr "Taso"
 
 msgid "layers"
-msgstr "tasot"
+msgstr "Tasot"
 
 msgid "Map View"
 msgstr "Karttanäkymä"
