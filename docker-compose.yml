@@ -16,6 +16,10 @@ services:
       context: "."
     volumes:
         - .:/city-infrastructure-platform
+    environment:
+        # Database location is controlled above by postgres config. Thus we override
+        # any value set in .env
+        - DATABASE_URL=postgis://city-infrastructure-platform:city-infrastructure-platform@db/city-infrastructure-platform
     env_file:
         - .env
     ports:
