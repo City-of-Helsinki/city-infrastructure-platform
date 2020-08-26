@@ -15,6 +15,10 @@
 </head>
 <body>
 <div id="map"></div>
+<div id="feature-info-popup" class="ol-popup">
+    <button onclick="mapView.closeFeatureInfo()" class="ol-popup-closer">✖</button>
+    <div id="feature-list" class="feature-list"></div>
+</div>
 <script>
     const mapView = new MapView("map", {{ map_config | safe }});
 </script>
