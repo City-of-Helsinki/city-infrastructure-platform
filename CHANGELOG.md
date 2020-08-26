@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow users to authenticate to the REST API with Token
 - Add a layer model and a map view to visualize data on the map
 - Add REST API endpoint for `OperationalArea`
+- Show admin links when clicking features on map view
 
 ### Changed
 - Admin UI usability improvements
