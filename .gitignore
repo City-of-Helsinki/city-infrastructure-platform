@@ -74,7 +74,6 @@ pip-log.txt
 repo_name
 sdist/
 sftp-config.json
-src/
 target/
 var/
 venv/
