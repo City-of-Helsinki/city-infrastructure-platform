@@ -127,12 +127,11 @@ urlpatterns = [
     url(
         r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
     ),
+    path("map/", map_view, name="map-view"),
     path("sentry-debug/", lambda a: 1 / 0),
 ]
 
-urlpatterns += i18n_patterns(
-    path("admin/", admin.site.urls), path("map/", map_view, name="map-view")
-)
+urlpatterns += i18n_patterns(path("admin/", admin.site.urls))
 
 if settings.DEBUG:
     from django.conf.urls.static import static

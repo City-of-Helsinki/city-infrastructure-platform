@@ -187,7 +187,7 @@ ROOT_URLCONF = "city-infrastructure-platform.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [checkout_dir("templates")],
+        "DIRS": [checkout_dir("templates"), checkout_dir("map-view/build")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -237,6 +237,7 @@ MEDIA_ROOT = var_root("media")
 STATIC_URL = env("STATIC_URL")
 MEDIA_URL = env("MEDIA_URL")
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+STATICFILES_DIRS = [checkout_dir("map-view/build/static")]
 
 # Whether to trust X-Forwarded-Host headers for all purposes
 # where Django would need to make use of its own hostname
