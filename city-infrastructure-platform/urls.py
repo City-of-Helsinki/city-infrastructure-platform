@@ -7,7 +7,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-from map.views import map_view
+from map import views as map_views
 from traffic_control.views import (
     additional_sign as additional_sign_views,
     barrier as barrier_views,
@@ -127,11 +127,14 @@ urlpatterns = [
     url(
         r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
     ),
-    path("map/", map_view, name="map-view"),
     path("sentry-debug/", lambda a: 1 / 0),
 ]
 
-urlpatterns += i18n_patterns(path("admin/", admin.site.urls))
+urlpatterns += i18n_patterns(
+    path("admin/", admin.site.urls),
+    path("map/", map_views.map_view, name="map-view"),
+    path("map-config/", map_views.map_config, name="map-config"),
+)
 
 if settings.DEBUG:
     from django.conf.urls.static import static
