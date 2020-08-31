@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add a layer model and a map view to visualize data on the map
 - Add REST API endpoint for `OperationalArea`
 - Show admin links when clicking features on map view
+- Turn map view into a React app with Material UI
 
 ### Changed
 - Admin UI usability improvements
