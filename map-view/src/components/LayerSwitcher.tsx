@@ -1,17 +1,18 @@
+import { createStyles, Theme, withStyles, WithStyles } from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
+import IconButton from "@material-ui/core/IconButton";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import React from "react";
-import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import React from "react";
+import Map from "../common/Map";
 import { MapConfig } from "../models";
-import { createStyles, Theme, withStyles, WithStyles } from "@material-ui/core";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -63,7 +64,9 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
       ></FormControlLabel>
     ));
     const changeBasemap = (event: React.ChangeEvent<HTMLInputElement>) => {
-      this.setState({ visibleBasemap: (event.target as HTMLInputElement).value });
+      const basemap = (event.target as HTMLInputElement).value;
+      Map.setVisibleBasemap(basemap);
+      this.setState({ visibleBasemap: basemap });
     };
     return (
       <div className="basemap-group">
@@ -82,7 +85,10 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
     const { name, layers } = overlayConfig;
     const { visibleOverlays } = this.state;
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
-      visibleOverlays[event.target.name] = event.target.checked;
+      const identifier = event.target.name;
+      const checked = event.target.checked;
+      visibleOverlays[identifier] = checked;
+      Map.setOverlayVisible(identifier, checked);
       this.setState({ visibleOverlays });
     };
     const overlayCheckboxes = layers.map((layer) => (
