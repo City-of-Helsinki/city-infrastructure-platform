@@ -12,7 +12,6 @@ def map_view(request):
     return render(request, "index.html")
 
 
-@staff_member_required
 def map_config(request):
     language_code = request.LANGUAGE_CODE
     basemaps = []
@@ -34,12 +33,12 @@ def map_config(request):
         )
 
     config = {
-        "basemaps": {
+        "basemapConfig": {
             "name": _("Basemaps"),
             "layers": basemaps,
             "sourceUrl": settings.BASEMAP_SOURCE_URL,
         },
-        "overlays": {
+        "overlayConfig": {
             "name": _("Overlays"),
             "layers": overlays,
             "sourceUrl": settings.OVERLAY_SOURCE_URL,
