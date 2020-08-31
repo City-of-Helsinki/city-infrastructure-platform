@@ -11,7 +11,6 @@ from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
 from .common import (
-    Color,
     Condition,
     DeviceTypeTargetModel,
     InstallationStatus,
@@ -138,9 +137,6 @@ class TrafficSignPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel
         _("Seasonal validity period end"), blank=True, null=True
     )
     owner = models.CharField(_("Owner"), max_length=254)
-    color = EnumIntegerField(
-        Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True
-    )
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
@@ -311,9 +307,6 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         _("Manufacturer"), max_length=254, blank=True, null=True
     )
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    color = EnumIntegerField(
-        Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True
-    )
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )

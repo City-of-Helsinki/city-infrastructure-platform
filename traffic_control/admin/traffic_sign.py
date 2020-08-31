@@ -93,15 +93,7 @@ class TrafficSignPlanAdmin(
         ),
         (
             _("Physical properties"),
-            {
-                "fields": (
-                    "size",
-                    "height",
-                    "color",
-                    "reflection_class",
-                    "surface_class",
-                )
-            },
+            {"fields": ("size", "height", "reflection_class", "surface_class",)},
         ),
         (
             _("General information"),
@@ -196,7 +188,6 @@ class TrafficSignRealAdmin(
                 "fields": (
                     "size",
                     "height",
-                    "color",
                     "reflection_class",
                     "surface_class",
                     "condition",
@@ -288,7 +279,6 @@ class TrafficSignRealAdmin(
         "permit_decision_id",
         "txt",
         "has_additional_signs",
-        "color",
         "attachment_url",
         "scanned_at",
         "created_at",
@@ -313,7 +303,6 @@ class TrafficSignRealAdmin(
         ("reflection_class", EnumFieldListFilter),
         ("surface_class", EnumFieldListFilter),
         ("location_specifier", EnumFieldListFilter),
-        ("color", EnumFieldListFilter),
     ]
     search_fields = (
         "traffic_sign_plan__id",
