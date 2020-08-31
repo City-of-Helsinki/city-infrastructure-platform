@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `description_fi` field for `MountType`
 - Improved the plan geometry generation
 - Application root URL is changed to `/city-infra`
+- Remove `color` attribute from `TrafficSignPlan` and `TrafficSignReal`
 
 ### Fixed
 - Fixed a bug that creating `TrafficControlDeviceType` crashes when target model is specified
