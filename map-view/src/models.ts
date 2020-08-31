@@ -10,6 +10,6 @@ export interface LayerConfig {
 }
 
 export interface MapConfig {
-  basemaps: LayerConfig;
-  overlays: LayerConfig;
+  basemapConfig: LayerConfig;
+  overlayConfig: LayerConfig;
 }

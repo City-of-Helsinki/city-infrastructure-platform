@@ -1,20 +1,85 @@
-import React from "react";
-import "./App.css";
-import Map from "./common/Map";
-import MapConfigAPI from "./api/MapConfigAPI";
-
+import { Drawer } from "@material-ui/core";
+import Fab from "@material-ui/core/Fab";
+import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core/styles";
+import LayersIcon from "@material-ui/icons/Layers";
 import "ol/ol.css";
+import React from "react";
+import MapConfigAPI from "./api/MapConfigAPI";
+import "./App.css";
+import LayerSwitcher from "./components/LayerSwitcher";
+import Map from "./common/Map";
+import { MapConfig } from "./models";
 
-class App extends React.Component {
+const drawWidth = "400px";
+
+const styles = (theme: Theme) =>
+  createStyles({
+    mapButton: {
+      position: "absolute",
+      right: "16px",
+      top: "16px",
+      color: "white",
+    },
+    drawer: {
+      width: drawWidth,
+    },
+    drawerPaper: {
+      width: drawWidth,
+    },
+  });
+
+interface AppProps extends WithStyles<typeof styles> {}
+
+interface AppState {
+  open: boolean;
+  mapConfig: MapConfig | null;
+}
+
+class App extends React.Component<AppProps, AppState> {
   mapId = "map";
 
+  constructor(props: AppProps) {
+    super(props);
+    this.state = {
+      open: false,
+      mapConfig: null,
+    };
+  }
+
   componentDidMount() {
-    MapConfigAPI.getMapConfig().then((mapConfig) => Map.initialize(this.mapId, mapConfig));
+    MapConfigAPI.getMapConfig().then((mapConfig) => {
+      this.setState({
+        mapConfig,
+      });
+      Map.initialize(this.mapId, mapConfig);
+    });
   }
 
   render() {
-    return <div id={this.mapId}></div>;
+    const { classes } = this.props;
+    const { open, mapConfig } = this.state;
+    return (
+      <div className="App">
+        <div id={this.mapId}></div>
+        <Fab size="medium" color="primary" onClick={() => this.setState({ open: !open })} className={classes.mapButton}>
+          <LayersIcon />
+        </Fab>
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="right"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          {mapConfig && (
+            <LayerSwitcher mapConfig={mapConfig} onClose={() => this.setState({ open: false })}></LayerSwitcher>
+          )}
+        </Drawer>
+      </div>
+    );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);

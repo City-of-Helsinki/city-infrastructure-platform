@@ -1,4 +1,5 @@
 import { MapConfig } from "../models";
+import { APIBaseUrl } from "../consts";
 
 class MapConfigAPI {
   private mapConfig: MapConfig;
@@ -7,7 +8,7 @@ class MapConfigAPI {
     if (this.mapConfig) {
       return Promise.resolve(this.mapConfig);
     } else {
-      const url = "/map-config";
+      const url = `${APIBaseUrl}/map-config`;
       return fetch(url)
         .then((response) => response.text())
         .then((responseText) => {

@@ -17,9 +17,9 @@ class Map {
   private map: OLMap;
 
   initialize(target: string, mapConfig: MapConfig) {
-    const { basemaps, overlays } = mapConfig;
-    const basemapLayerGroup = this.createBasemapLayerGroup(basemaps);
-    const overlayLayerGroup = this.createOverlayLayerGroup(overlays);
+    const { basemapConfig, overlayConfig } = mapConfig;
+    const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
+    const overlayLayerGroup = this.createOverlayLayerGroup(overlayConfig);
     const helsinkiCoords = [25499052.02, 6675851.38];
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
     const projection = this.getProjection();
