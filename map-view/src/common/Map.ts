@@ -15,6 +15,10 @@ import ImageWMS from "ol/source/ImageWMS";
 class Map {
   private projectionCode = "EPSG:3879";
   private map: OLMap;
+  private visibleBasemap: string;
+  private basemapLayers: { [identifier: string]: ImageLayer } = {};
+  private overlayLayers: { [identifier: string]: ImageLayer } = {};
+  private featureInfoCallback: (features: string[]) => void = (features: string[]) => {};
 
   initialize(target: string, mapConfig: MapConfig) {
     const { basemapConfig, overlayConfig } = mapConfig;
@@ -36,6 +40,49 @@ class Map {
       controls: this.getControls(),
       view,
     });
+
+    this.map.on("singleclick", (event) => {
+      const viewResolution = view.getResolution();
+      const visibleLayers = Object.values(this.overlayLayers).filter((layer) => layer.getVisible());
+      if (visibleLayers.length > 0) {
+        const layerNames = visibleLayers.map((layer) => (layer.getSource() as ImageWMS).getParams().LAYERS);
+        const url = (visibleLayers[0].getSource() as ImageWMS).getFeatureInfoUrl(
+          event.coordinate,
+          viewResolution,
+          projection,
+          {
+            INFO_FORMAT: "application/json",
+            LAYERS: layerNames.join(","),
+            FEATURE_COUNT: 10,
+          }
+        );
+
+        if (url) {
+          fetch(url)
+            .then((response) => response.text())
+            .then((responseText) => {
+              const data = JSON.parse(responseText);
+              const featureIds = data["features"].map((feature: { id: string }) => feature["id"]);
+              this.featureInfoCallback(featureIds);
+            });
+        }
+      }
+    });
+  }
+
+  registerFeatureInfoCallback(fn: (features: string[]) => void) {
+    this.featureInfoCallback = fn;
+  }
+
+  setVisibleBasemap(basemap: string) {
+    // there can be only one visible base
+    this.basemapLayers[this.visibleBasemap].setVisible(false);
+    this.visibleBasemap = basemap;
+    this.basemapLayers[this.visibleBasemap].setVisible(true);
+  }
+
+  setOverlayVisible(overlay: string, visible: boolean) {
+    this.overlayLayers[overlay].setVisible(visible);
   }
 
   private createBasemapLayerGroup(layerConfig: LayerConfig) {
@@ -45,10 +92,15 @@ class Map {
         url: sourceUrl,
         params: { LAYERS: identifier },
       });
-      return new ImageLayer({
+      const layer = new ImageLayer({
         source: wmsSource,
         visible: index === 0,
       });
+      if (index === 0) {
+        this.visibleBasemap = identifier;
+      }
+      this.basemapLayers[identifier] = layer;
+      return layer;
     });
 
     return new LayerGroup({
@@ -63,10 +115,12 @@ class Map {
         url: sourceUrl,
         params: { LAYERS: identifier },
       });
-      return new ImageLayer({
+      const layer = new ImageLayer({
         source: wmsSource,
-        visible: true,
+        visible: false,
       });
+      this.overlayLayers[identifier] = layer;
+      return layer;
     });
     return new LayerGroup({
       layers: overlayLayers,
