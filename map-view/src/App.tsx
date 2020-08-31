@@ -7,6 +7,7 @@ import React from "react";
 import MapConfigAPI from "./api/MapConfigAPI";
 import "./App.css";
 import LayerSwitcher from "./components/LayerSwitcher";
+import FeatureInfo from "./components/FeatureInfo";
 import Map from "./common/Map";
 import { MapConfig } from "./models";
 
@@ -33,6 +34,7 @@ interface AppProps extends WithStyles<typeof styles> {}
 interface AppState {
   open: boolean;
   mapConfig: MapConfig | null;
+  features: string[];
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -43,6 +45,7 @@ class App extends React.Component<AppProps, AppState> {
     this.state = {
       open: false,
       mapConfig: null,
+      features: [],
     };
   }
 
@@ -52,15 +55,17 @@ class App extends React.Component<AppProps, AppState> {
         mapConfig,
       });
       Map.initialize(this.mapId, mapConfig);
+      Map.registerFeatureInfoCallback((features: string[]) => this.setState({ features }));
     });
   }
 
   render() {
     const { classes } = this.props;
-    const { open, mapConfig } = this.state;
+    const { open, mapConfig, features } = this.state;
     return (
       <div className="App">
         <div id={this.mapId}></div>
+        {features.length > 0 && <FeatureInfo features={features} onClose={() => this.setState({ features: [] })} />}
         <Fab size="medium" color="primary" onClick={() => this.setState({ open: !open })} className={classes.mapButton}>
           <LayersIcon />
         </Fab>
@@ -73,9 +78,7 @@ class App extends React.Component<AppProps, AppState> {
             paper: classes.drawerPaper,
           }}
         >
-          {mapConfig && (
-            <LayerSwitcher mapConfig={mapConfig} onClose={() => this.setState({ open: false })}></LayerSwitcher>
-          )}
+          {mapConfig && <LayerSwitcher mapConfig={mapConfig} onClose={() => this.setState({ open: false })} />}
         </Drawer>
       </div>
     );
