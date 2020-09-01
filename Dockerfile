@@ -21,12 +21,15 @@ RUN apt-get update && \
         postgresql-client \
         git \
         gettext \
-        mime-support && \
+        mime-support \
+        nodejs \
+        npm && \
     pip install --no-cache-dir -r requirements.txt -r requirements-prod.txt && \
     apt-get remove -y build-essential libpq-dev && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/archives
+    rm -rf /var/cache/apt/archives && \
+    npm install -g yarn
 
 COPY docker-entrypoint.sh /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
