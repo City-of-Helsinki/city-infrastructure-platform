@@ -7,3 +7,5 @@ var/
 *.csv
 /tmp/*
 .*
+**/node_modules
+**/build
