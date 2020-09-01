@@ -5,6 +5,7 @@ LABEL vendor="Anders Innovations Oy"
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /city-infrastructure-platform && \
+    mkdir /map-view && \
     groupadd -g 1000 appuser && \
     useradd -u 1000 -g appuser -ms /bin/bash appuser
 WORKDIR /city-infrastructure-platform
@@ -50,6 +51,12 @@ RUN chown -R appuser:appuser /city-infrastructure-platform
 USER appuser
 EXPOSE 8000
 
+# ===================================
+FROM base AS build
+# ===================================
+COPY map-view/ /map-view/
+RUN cd /map-view && yarn install && yarn build
+
 # ==============================
 FROM base AS production
 # ==============================
@@ -57,6 +64,7 @@ ENV APPLY_MIGRATIONS=1
 ENV COLLECT_STATIC=1
 
 COPY . /city-infrastructure-platform
+COPY --from=build /map-view/build/ /city-infrastructure-platform/map-view/build/
 RUN chown -R appuser:appuser /city-infrastructure-platform
 USER appuser
 EXPOSE 8000

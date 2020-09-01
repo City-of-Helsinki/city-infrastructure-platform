@@ -2,8 +2,6 @@
 
 set -e
 
-cd map-view && yarn install && yarn build && cd ..
-
 # Apply database migrations
 if [[ "$APPLY_MIGRATIONS" = "1" ]]; then
     echo "Applying database migrations..."
