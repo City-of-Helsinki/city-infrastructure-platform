@@ -56,6 +56,8 @@ env = environ.Env(
     HELUSERS_ADGROUPS_CLAIM=(str, "groups"),
     LOGGING_AUTH_DEBUG=(bool, False),
     OVERLAY_SOURCE_URL=(str, "https://geoserver.hel.fi/geoserver/city-infra/wms"),
+    STATIC_URL=(str, "/static/"),
+    MEDIA_URL=(str, "/media/"),
 )
 
 if os.path.exists(env_file):
@@ -229,12 +231,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 var_root = env.path("VAR_ROOT")
-MEDIA_ROOT = var_root("media")
 STATIC_ROOT = var_root("static")
-MEDIA_URL = "/media/"
-STATIC_URL = "/static/"
+MEDIA_ROOT = var_root("media")
+STATIC_URL = env("STATIC_URL")
+MEDIA_URL = env("MEDIA_URL")
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 # Whether to trust X-Forwarded-Host headers for all purposes
