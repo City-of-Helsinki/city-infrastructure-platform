@@ -105,14 +105,13 @@ class SignpostPlan(
         blank=True,
         null=True,
     )
-    owner_obj = models.ForeignKey(
+    owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
         blank=False,
-        null=True,
+        null=False,
         on_delete=models.PROTECT,
     )
-    owner = models.CharField(_("Owner"), max_length=254)
     size = EnumField(
         Size,
         verbose_name=_("Size"),
@@ -275,14 +274,13 @@ class SignpostReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    owner_obj = models.ForeignKey(
+    owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
         blank=False,
-        null=True,
+        null=False,
         on_delete=models.PROTECT,
     )
-    owner = models.CharField(_("Owner"), max_length=254)
     size = EnumField(
         Size,
         verbose_name=_("Size"),

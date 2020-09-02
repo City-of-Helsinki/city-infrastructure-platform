@@ -6,9 +6,8 @@ from django.contrib.gis.measure import D
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from traffic_control.models import AdditionalSignReal, MountReal, TrafficSignReal
-
-OWNER = "Helsingin kaupunki"
+from ...models import AdditionalSignReal, MountReal, TrafficSignReal
+from ...utils import get_default_owner
 
 
 class Command(BaseCommand):
@@ -25,10 +24,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("Generating mount real objects ...")
+        owner = get_default_owner()
+
         traffic_signs = TrafficSignReal.objects.active().filter(
             mount_real__isnull=True, mount_type__isnull=False
         )
-
         standalone_additional_signs = AdditionalSignReal.objects.active().filter(
             mount_real__isnull=True, mount_type__isnull=False, parent__isnull=True
         )
@@ -39,7 +39,7 @@ class Command(BaseCommand):
             # signs and linked additional traffic signs can still be
             # found in a second run on failures
             with transaction.atomic():
-                mount_real = self.get_mount_real(traffic_sign, options["radius"])
+                mount_real = self.get_mount_real(traffic_sign, owner, options["radius"])
                 traffic_sign.mount_real = mount_real
                 traffic_sign.save(update_fields=("mount_real",))
                 if isinstance(traffic_sign, TrafficSignReal):
@@ -47,7 +47,7 @@ class Command(BaseCommand):
 
         self.stdout.write("Generating mount real objects completed.")
 
-    def get_mount_real(self, traffic_sign, radius):
+    def get_mount_real(self, traffic_sign, owner, radius):
         """Get mount real object for traffic sign
 
         Return the mount real if there exists one with the same
@@ -71,7 +71,7 @@ class Command(BaseCommand):
                     srid=settings.SRID,
                 ),
                 mount_type=traffic_sign.mount_type,
-                owner=OWNER,
+                owner=owner,
                 created_by=traffic_sign.created_by,
                 updated_by=traffic_sign.updated_by,
             )

@@ -11,6 +11,7 @@ from traffic_control.models.common import Lifecycle
 from traffic_control.tests.factories import (
     get_additional_sign_real,
     get_barrier_real,
+    get_owner,
     get_user,
 )
 
@@ -29,7 +30,7 @@ class TrafficSignRealAdminTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
             lifecycle=Lifecycle.ACTIVE,
         )
         self.site = AdminSite()
@@ -65,7 +66,7 @@ class TrafficSignRealAdminTestCase(TestCase):
             location=Point(1, 1, 5, srid=settings.SRID),
             legacy_code="100",
             direction=0,
-            owner="test owner",
+            owner=get_owner(),
         )
         ma.save_model(request, traffic_sign_real, None, None)
         self.assertEqual(traffic_sign_real.created_by, self.admin)

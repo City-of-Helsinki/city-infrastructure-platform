@@ -195,7 +195,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
             "road_name": "Test street 1",
         }
         response = self.client.post(reverse("v1:barrierplan-list"), data, format="json")
@@ -220,7 +220,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
             "road_name": "Test street 1",
         }
         response = self.client.put(
@@ -275,6 +275,7 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
             reflective=Reflective.YES,
             connection_type=ConnectionType.OPEN_OUT,
             road_name="Testingroad",
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -452,7 +453,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
             "road_name": "Test street 1",
         }
         response = self.client.post(reverse("v1:barrierreal-list"), data, format="json")
@@ -478,7 +479,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-21",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
             "road_name": "Test street 1",
         }
         response = self.client.put(
@@ -534,6 +535,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             reflective=Reflective.YES,
             connection_type=ConnectionType.OPEN_OUT,
             road_name="Testingroad",
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -548,6 +550,7 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             reflective=Reflective.YES,
             connection_type=ConnectionType.OPEN_OUT,
             road_name="Testingroad",
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )

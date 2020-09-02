@@ -196,7 +196,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
             "source_name": "test-source",
             "source_id": 1,
         }
@@ -224,7 +224,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
             "source_name": "test-source",
             "source_id": 1,
         }
@@ -282,6 +282,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             is_grinded=True,
             is_raised=False,
             road_name="Testingroad",
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -459,7 +460,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
             "source_name": "test-source",
             "source_id": 1,
         }
@@ -488,7 +489,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-21",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
             "source_name": "test-source",
             "source_id": 1,
         }
@@ -549,6 +550,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             is_grinded=True,
             is_raised=False,
             road_name="Testingroad",
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -565,6 +567,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             is_grinded=True,
             is_raised=False,
             road_name="Testingroad",
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )

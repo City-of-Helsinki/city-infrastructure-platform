@@ -4,7 +4,7 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from traffic_control.models import MountReal, TrafficSignReal
-from traffic_control.tests.factories import get_mount_type, get_user
+from traffic_control.tests.factories import get_mount_type, get_owner, get_user
 
 
 class GenerateMountRealObjectsTestCase(TestCase):
@@ -21,7 +21,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         main_sign_2 = TrafficSignReal.objects.create(
             location=Point(1, 0.8, 5, srid=settings.SRID),
@@ -30,7 +30,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         call_command("generate_mount_real_objects")
         self.assertEqual(MountReal.objects.count(), 1)
@@ -48,7 +48,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         TrafficSignReal.objects.create(
             location=Point(2, 2, 5, srid=settings.SRID),
@@ -57,7 +57,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         call_command("generate_mount_real_objects")
         self.assertEqual(MountReal.objects.count(), 2)
@@ -70,7 +70,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         TrafficSignReal.objects.create(
             location=Point(1, 0.8, 5, srid=settings.SRID),
@@ -79,7 +79,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         call_command("generate_mount_real_objects")
         self.assertEqual(MountReal.objects.count(), 2)

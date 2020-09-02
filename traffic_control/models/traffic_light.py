@@ -178,14 +178,13 @@ class TrafficLightPlan(
         LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
     )
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    owner_obj = models.ForeignKey(
+    owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
         blank=False,
-        null=True,
+        null=False,
         on_delete=models.PROTECT,
     )
-    owner = models.CharField(_("Owner"), max_length=254)
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -321,14 +320,13 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         null=True,
     )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    owner_obj = models.ForeignKey(
+    owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
         blank=False,
-        null=True,
+        null=False,
         on_delete=models.PROTECT,
     )
-    owner = models.CharField(_("Owner"), max_length=254)
 
     objects = SoftDeleteQuerySet.as_manager()
 

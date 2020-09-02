@@ -15,6 +15,7 @@ from ...models import (
     MountType,
     TrafficSignReal,
 )
+from ...utils import get_default_owner
 
 CLI_HELP_TEXT = """
 Import traffic sign real data to the platform from standard ESRI SHP-file.
@@ -33,7 +34,6 @@ Shapefile is expected to have a single layer with PointZ geometries and followin
 
 TARGET_SRID = 3879
 SOURCE_NAME = "BLOM streetview2019"
-OWNER = "Helsingin kaupunki"
 
 
 class Command(BaseCommand):
@@ -92,6 +92,8 @@ class Command(BaseCommand):
             raise CommandError("File {0} does not exist".format(filename))
 
         user = get_system_user()
+        owner = get_default_owner()
+
         data_source = DataSource(filename)
         layer = data_source[0]
         source_srid = layer.srs.srid
@@ -115,7 +117,7 @@ class Command(BaseCommand):
                 "direction": int(str(feature.get("direction") or 0)),
                 "scanned_at": self.get_date(feature),
                 "mount_type": self.get_mount_type(feature),
-                "owner": OWNER,
+                "owner": owner,
                 "created_by": user,
                 "updated_by": user,
             }

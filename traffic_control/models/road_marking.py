@@ -161,14 +161,13 @@ class RoadMarkingPlan(
     seasonal_validity_period_end = models.DateField(
         _("Seasonal validity period end"), blank=True, null=True
     )
-    owner_obj = models.ForeignKey(
+    owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
         blank=False,
-        null=True,
+        null=False,
         on_delete=models.PROTECT,
     )
-    owner = models.CharField(_("Owner"), max_length=254)
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
@@ -330,14 +329,13 @@ class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     seasonal_validity_period_end = models.DateField(
         _("Seasonal validity period end"), blank=True, null=True
     )
-    owner_obj = models.ForeignKey(
+    owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
         blank=False,
-        null=True,
+        null=False,
         on_delete=models.PROTECT,
     )
-    owner = models.CharField(_("Owner"), max_length=254)
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
