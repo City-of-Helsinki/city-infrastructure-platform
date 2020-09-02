@@ -5,15 +5,12 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand, CommandError
 
-from traffic_control.models import (
-    ArrowDirection,
-    RoadMarkingReal,
-    TrafficControlDeviceType,
-)
 from users.utils import get_system_user
 
+from ...models import ArrowDirection, RoadMarkingReal, TrafficControlDeviceType
+from ...utils import get_default_owner
+
 SOURCE_NAME = "main_streets_2014"
-OWNER = "Helsingin kaupunki"
 
 ARROW_DIRECTION_MAPPING = {
     "F": ArrowDirection.STRAIGHT,
@@ -45,6 +42,7 @@ class Command(BaseCommand):
         self.stdout.write("Importing road markings...")
         count = 0
         user = get_system_user()
+        owner = get_default_owner()
         with open(filename) as f:
             csv_reader = csv.reader(f, delimiter=";")
             next(csv_reader, None)  # skip header
@@ -73,7 +71,7 @@ class Command(BaseCommand):
                         "value": value,
                         "created_by": user,
                         "updated_by": user,
-                        "owner": OWNER,
+                        "owner": owner,
                     },
                 )
                 count += 1

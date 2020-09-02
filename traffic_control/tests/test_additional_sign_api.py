@@ -18,6 +18,7 @@ from .factories import (
     get_additional_sign_plan,
     get_additional_sign_real,
     get_api_client,
+    get_owner,
     get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_traffic_sign_real,
@@ -32,8 +33,8 @@ from .factories import (
 @pytest.mark.django_db
 def test__additional_sign_plan__list(geo_format):
     client = get_api_client()
-    for owner in ["foo", "bar", "baz"]:
-        asp = get_additional_sign_plan(owner=owner)
+    for owner_name in ["foo", "bar", "baz"]:
+        asp = get_additional_sign_plan(owner=get_owner(name_fi=owner_name))
         get_additional_sign_content_plan(parent=asp)
 
     response = client.get(
@@ -90,7 +91,7 @@ def test__additional_sign_plan__create(admin_user):
         "parent": traffic_sign_plan.pk,
         "location": str(traffic_sign_plan.location),
         "decision_date": "2020-01-02",
-        "owner": "City of Helsinki",
+        "owner": get_owner().pk,
     }
 
     response = client.post(reverse("v1:additionalsignplan-list"), data=data)
@@ -101,7 +102,7 @@ def test__additional_sign_plan__create(admin_user):
         assert AdditionalSignPlan.objects.count() == 1
         assert response_data["id"] == str(AdditionalSignPlan.objects.first().pk)
         assert response_data["decision_date"] == data["decision_date"]
-        assert response_data["owner"] == data["owner"]
+        assert response_data["owner"] == str(data["owner"])
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert AdditionalSignPlan.objects.count() == 0
@@ -118,7 +119,7 @@ def test__additional_sign_plan__update(admin_user):
         "parent": traffic_sign_plan.pk,
         "location": str(traffic_sign_plan.location),
         "decision_date": "2020-01-02",
-        "owner": "City of Helsinki",
+        "owner": get_owner().pk,
     }
 
     response = client.put(
@@ -130,7 +131,7 @@ def test__additional_sign_plan__update(admin_user):
         assert response.status_code == status.HTTP_200_OK
         assert response_data["id"] == str(asp.pk)
         assert response_data["decision_date"] == data["decision_date"]
-        assert response_data["owner"] == data["owner"]
+        assert response_data["owner"] == str(data["owner"])
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         asp.refresh_from_db()
@@ -188,8 +189,8 @@ def test__additional_sign_plan__soft_deleted_get_404_response():
 @pytest.mark.django_db
 def test__additional_sign_real__list(geo_format):
     client = get_api_client()
-    for owner in ["foo", "bar", "baz"]:
-        asr = get_additional_sign_real(owner=owner)
+    for owner_name in ["foo", "bar", "baz"]:
+        asr = get_additional_sign_real(owner=get_owner(name_fi=owner_name))
         get_additional_sign_content_real(parent=asr)
 
     response = client.get(
@@ -245,7 +246,7 @@ def test__additional_sign_real__create(admin_user):
     data = {
         "parent": traffic_sign_real.pk,
         "location": str(traffic_sign_real.location),
-        "owner": "City of Helsinki",
+        "owner": get_owner().pk,
     }
 
     response = client.post(reverse("v1:additionalsignreal-list"), data=data)
@@ -255,7 +256,7 @@ def test__additional_sign_real__create(admin_user):
         assert response.status_code == status.HTTP_201_CREATED
         assert AdditionalSignReal.objects.count() == 1
         assert response_data["id"] == str(AdditionalSignReal.objects.first().pk)
-        assert response_data["owner"] == data["owner"]
+        assert response_data["owner"] == str(data["owner"])
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert AdditionalSignReal.objects.count() == 0
@@ -271,7 +272,7 @@ def test__additional_sign_real__update(admin_user):
     data = {
         "parent": traffic_sign_real.pk,
         "location": str(traffic_sign_real.location),
-        "owner": "City of Helsinki",
+        "owner": get_owner().pk,
     }
 
     response = client.put(
@@ -282,7 +283,7 @@ def test__additional_sign_real__update(admin_user):
     if admin_user:
         assert response.status_code == status.HTTP_200_OK
         assert response_data["id"] == str(asr.pk)
-        assert response_data["owner"] == data["owner"]
+        assert response_data["owner"] == str(data["owner"])
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         asr.refresh_from_db()
@@ -407,7 +408,7 @@ def test__additional_sign_content_plan__update(admin_user):
     ascp = get_additional_sign_content_plan()
     dt = get_traffic_control_device_type(code="H17.1")
     data = {
-        "parent": get_additional_sign_plan(owner="New owner").pk,
+        "parent": get_additional_sign_plan(owner=get_owner(name_fi="New owner")).pk,
         "text": "Updated content",
         "order": 100,
         "device_type": str(dt.pk),
@@ -533,7 +534,7 @@ def test__additional_sign_content_real__update(admin_user):
     ascr = get_additional_sign_content_real()
     dt = get_traffic_control_device_type(code="H17.1")
     data = {
-        "parent": get_additional_sign_real(owner="New owner").pk,
+        "parent": get_additional_sign_real(owner=get_owner(name_fi="New owner")).pk,
         "text": "Updated content",
         "order": 100,
         "device_type": str(dt.pk),

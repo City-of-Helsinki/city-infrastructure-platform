@@ -19,6 +19,7 @@ from traffic_control.tests.factories import (
     get_mount_plan,
     get_mount_real,
     get_operational_area,
+    get_owner,
     get_plan,
     get_road_marking_plan,
     get_road_marking_real,
@@ -160,7 +161,7 @@ def test__api_operational_area_permission__create(model, location, success):
             "device_type": device_type.pk,
             "decision_date": "2020-07-01",
             "lifecycle": Lifecycle.ACTIVE.value,
-            "owner": "Helsinki",
+            "owner": get_owner().pk,
         }
 
         if model in ["BarrierPlan", "BarrierReal"]:
@@ -210,7 +211,7 @@ def test__api_operational_area_permission__create__geojson(location, success):
         "device_type": device_type.pk,
         "decision_date": "2020-07-01",
         "lifecycle": Lifecycle.ACTIVE.value,
-        "owner": "Helsinki",
+        "owner": get_owner().pk,
         "road_name": "testroad",
     }
 
@@ -298,7 +299,7 @@ def test__api_operational_area_permission__update(model, location, success):
             "device_type": device_type.pk,
             "decision_date": "2020-07-01",
             "lifecycle": Lifecycle.ACTIVE.value,
-            "owner": "Helsinki",
+            "owner": get_owner().pk,
         }
 
         if model in ["BarrierPlan", "BarrierReal"]:

@@ -11,7 +11,7 @@ from traffic_control.models.common import (
     TrafficControlDeviceType,
     TrafficControlDeviceTypeType,
 )
-from traffic_control.tests.factories import get_user
+from traffic_control.tests.factories import get_owner, get_user
 
 
 class RoadMarkingPlanTestCase(TestCase):
@@ -28,6 +28,7 @@ class RoadMarkingPlanTestCase(TestCase):
                 location=Point(1, 1, srid=settings.SRID),
                 road_name="",
                 decision_date=date(2020, 6, 29),
+                owner=get_owner(),
                 created_by=user,
                 updated_by=user,
             )
@@ -50,6 +51,7 @@ class RoadMarkingRealTestCase(TestCase):
                 device_type=device_type,
                 location=Point(1, 1, srid=settings.SRID),
                 road_name="",
+                owner=get_owner(),
                 created_by=user,
                 updated_by=user,
             )

@@ -192,7 +192,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.post(
             reverse("v1:trafficsignplan-list"), data, format="json"
@@ -218,7 +218,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.put(
             reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
@@ -270,6 +270,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -447,7 +448,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             "lifecycle": self.test_lifecycle.value,
             "installation_id": 123,
             "permit_decision_id": 456,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.post(
             reverse("v1:trafficsignreal-list"), data, format="json"
@@ -476,7 +477,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             "lifecycle": self.test_lifecycle_2.value,
             "installation_id": 123,
             "permit_decision_id": 456,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.put(
             reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
@@ -529,6 +530,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -538,6 +540,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             location=self.test_point,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )

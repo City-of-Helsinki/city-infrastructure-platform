@@ -12,6 +12,7 @@ from traffic_control.models import (
 from traffic_control.tests.factories import (
     get_additional_sign_plan,
     get_additional_sign_real,
+    get_owner,
     get_traffic_control_device_type,
     get_user,
 )
@@ -27,7 +28,7 @@ class TrafficSignPlanTestCase(TestCase):
             decision_date=timezone.now(),
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
 
     def test_main_sign_has_additional_signs_return_false(self):
@@ -78,7 +79,7 @@ class TrafficSignRealTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
 
     def test_main_sign_has_additional_signs_return_false(self):

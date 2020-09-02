@@ -133,7 +133,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.post(reverse("v1:mountplan-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -157,7 +157,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.put(
             reverse("v1:mountplan-detail", kwargs={"pk": mount_plan.id}),
@@ -207,6 +207,7 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -327,7 +328,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.post(reverse("v1:mountreal-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -352,7 +353,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.put(
             reverse("v1:mountreal-detail", kwargs={"pk": mount_real.id}),
@@ -403,6 +404,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -412,6 +414,7 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             location=self.test_point,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )

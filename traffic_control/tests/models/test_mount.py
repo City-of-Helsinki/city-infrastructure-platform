@@ -3,7 +3,7 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 
 from traffic_control.models import MountReal, TrafficSignReal
-from traffic_control.tests.factories import get_mount_type, get_user
+from traffic_control.tests.factories import get_mount_type, get_owner, get_user
 
 
 class MountRealTestCase(TestCase):
@@ -13,7 +13,7 @@ class MountRealTestCase(TestCase):
         self.mount_real = MountReal.objects.create(
             location=Point(1, 1, srid=settings.SRID),
             mount_type=self.mount_type,
-            owner="test owner",
+            owner=get_owner(),
             created_by=self.user,
             updated_by=self.user,
         )
@@ -27,7 +27,7 @@ class MountRealTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         traffic_sign_2 = TrafficSignReal.objects.create(
             location=Point(0, 0, 2.5, srid=settings.SRID),
@@ -37,7 +37,7 @@ class MountRealTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         traffic_sign_3 = TrafficSignReal.objects.create(
             location=Point(0, 0, 1.8, srid=settings.SRID),
@@ -47,7 +47,7 @@ class MountRealTestCase(TestCase):
             direction=0,
             created_by=self.user,
             updated_by=self.user,
-            owner="test owner",
+            owner=get_owner(),
         )
         self.assertQuerysetEqual(
             self.mount_real.ordered_traffic_signs,

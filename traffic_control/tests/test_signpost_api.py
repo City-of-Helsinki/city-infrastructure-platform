@@ -192,7 +192,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.post(
             reverse("v1:signpostplan-list"), data, format="json"
@@ -218,7 +218,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.put(
             reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
@@ -268,6 +268,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -443,7 +444,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.post(
             reverse("v1:signpostreal-list"), data, format="json"
@@ -470,7 +471,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.put(
             reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
@@ -521,6 +522,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             location=self.test_point,
             decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -530,6 +532,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             location=self.test_point,
             installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )

@@ -199,7 +199,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.post(
             reverse("v1:trafficlightplan-list"), data, format="json"
@@ -227,7 +227,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.put(
             reverse("v1:trafficlightplan-detail", kwargs={"pk": traffic_light.id}),
@@ -282,6 +282,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             mount_type=get_mount_type(),
             road_name="Testingroad",
             sound_beacon=TrafficLightSoundBeaconValue.YES,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -460,7 +461,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.post(
             reverse("v1:trafficlightreal-list"), data, format="json"
@@ -489,7 +490,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             "location": self.test_point.ewkt,
             "installation_date": "2020-01-21",
             "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner,
+            "owner": self.test_owner.pk,
         }
         response = self.client.put(
             reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}),
@@ -547,6 +548,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             mount_type=get_mount_type(),
             road_name="Testingroad",
             sound_beacon=TrafficLightSoundBeaconValue.YES,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )
@@ -561,6 +563,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             mount_type=get_mount_type(),
             road_name="Testingroad",
             sound_beacon=TrafficLightSoundBeaconValue.YES,
+            owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
         )

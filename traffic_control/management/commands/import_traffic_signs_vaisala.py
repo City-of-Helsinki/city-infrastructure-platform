@@ -5,12 +5,13 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand, CommandError
 
-from traffic_control.models import AdditionalSignReal, TrafficSignReal
-from traffic_control.models.traffic_sign import LocationSpecifier
 from users.utils import get_system_user
 
+from ...models import AdditionalSignReal, TrafficSignReal
+from ...models.traffic_sign import LocationSpecifier
+from ...utils import get_default_owner
+
 SOURCE_NAME = "Vaisala 2019-2020"
-OWNER = "Helsingin kaupunki"
 SOURCE_SRID = 4326
 
 
@@ -31,6 +32,7 @@ class Command(BaseCommand):
         self.stdout.write("Importing vaisala traffic signs...")
         count = 0
         user = get_system_user()
+        owner = get_default_owner()
         with open(filename, encoding="utf-8-sig") as f:
             csv_reader = csv.DictReader(f, delimiter=",")
             for row in csv_reader:
@@ -55,7 +57,7 @@ class Command(BaseCommand):
                         "attachment_url": row["frame_url"],
                         "source_id": row["id"],
                         "source_name": SOURCE_NAME,
-                        "owner": OWNER,
+                        "owner": owner,
                         "created_by": user,
                         "updated_by": user,
                     },

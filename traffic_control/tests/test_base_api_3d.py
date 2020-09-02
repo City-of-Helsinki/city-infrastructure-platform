@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.gis.geos import LineString, Point, Polygon
 from rest_framework.test import APITestCase
 
-from traffic_control.models import Lifecycle, MountType, TrafficControlDeviceType
+from traffic_control.models import Lifecycle, MountType, Owner, TrafficControlDeviceType
 from users.models import User
 
 test_point_3d = Point(10.0, 10.0, 0.0, srid=settings.SRID)
@@ -86,4 +86,6 @@ class TrafficControlAPIBaseTestCase3D(APITestCase):
         self.test_type_2 = MountType.objects.create(code="WALL", description="Wall")
         self.test_point = test_point_3d
         self.test_point_2 = test_point_2_3d
-        self.test_owner = "City of Helsinki"
+        self.test_owner = Owner.objects.create(
+            name_fi="Helsingin kaupunki", name_en="City of Helsinki"
+        )

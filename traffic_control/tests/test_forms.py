@@ -7,7 +7,11 @@ from enumfields import Enum, EnumIntegerField
 from traffic_control.forms import AdminEnumChoiceField, TrafficSignRealModelForm
 from traffic_control.models import TrafficSignReal
 from traffic_control.models.common import Lifecycle
-from traffic_control.tests.factories import get_traffic_control_device_type, get_user
+from traffic_control.tests.factories import (
+    get_owner,
+    get_traffic_control_device_type,
+    get_user,
+)
 
 
 class _TestEnum(Enum):
@@ -43,13 +47,14 @@ def test_admin_enum_choice_field():
 class TrafficSignRealModelFormTestCase(TestCase):
     def test_update_traffic_sign_real_3d_location(self):
         user = get_user()
+        owner = get_owner()
         data = {
             "location": Point(5, 5, srid=settings.SRID),
             "z_coord": 20,
             "direction": 0,
             "created_by": user.id,
             "updated_by": user.id,
-            "owner": "test owner",
+            "owner": owner.pk,
             "lifecycle": Lifecycle.ACTIVE,
             "device_type": get_traffic_control_device_type().pk,
         }
@@ -59,7 +64,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
             direction=0,
             created_by=user,
             updated_by=user,
-            owner="test owner",
+            owner=owner,
             lifecycle=Lifecycle.ACTIVE,
         )
         form = TrafficSignRealModelForm(data=data, instance=traffic_sign_real)
@@ -77,7 +82,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
             "direction": 0,
             "created_by": user.id,
             "updated_by": user.id,
-            "owner": "test owner",
+            "owner": get_owner().pk,
             "lifecycle": Lifecycle.ACTIVE,
             "device_type": get_traffic_control_device_type().pk,
         }

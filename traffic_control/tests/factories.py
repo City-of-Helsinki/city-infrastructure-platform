@@ -18,6 +18,7 @@ from traffic_control.models import (
     MountReal,
     MountType,
     OperationalArea,
+    Owner,
     Plan,
     Reflective,
     RoadMarkingColor,
@@ -62,6 +63,10 @@ def get_operational_area(area=None):
     )[0]
 
 
+def get_owner(name_fi="Omistaja", name_en="Owner"):
+    return Owner.objects.get_or_create(name_fi=name_fi, name_en=name_en)[0]
+
+
 def get_plan(location=test_multi_polygon, name="Test plan"):
     user = get_user("test_user")
     superuser = get_user("super user", admin=True)
@@ -88,6 +93,7 @@ def get_barrier_plan(location="", plan=None, device_type=None):
         connection_type=ConnectionType.OPEN_OUT,
         road_name="Testingroad",
         plan=plan,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -106,6 +112,7 @@ def get_barrier_real(location="", device_type=None):
         reflective=Reflective.YES,
         connection_type=ConnectionType.OPEN_OUT,
         road_name="Testingroad",
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )
@@ -124,6 +131,7 @@ def get_mount_plan(location="", plan=None):
         decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -138,6 +146,7 @@ def get_mount_real(location=""):
         location=location or test_point,
         installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -158,6 +167,7 @@ def get_road_marking_plan(location="", plan=None, device_type=None):
         is_raised=False,
         road_name="Testingroad",
         plan=plan,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -178,6 +188,7 @@ def get_road_marking_real(location="", device_type=None):
         is_grinded=True,
         is_raised=False,
         road_name="Testingroad",
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -192,6 +203,7 @@ def get_signpost_plan(location="", plan=None, device_type=None):
         decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -206,6 +218,7 @@ def get_signpost_real(location="", device_type=None):
         location=location or test_point,
         installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -224,6 +237,7 @@ def get_traffic_light_plan(location="", plan=None, device_type=None):
         road_name="Testingroad",
         sound_beacon=TrafficLightSoundBeaconValue.YES,
         plan=plan,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -242,6 +256,7 @@ def get_traffic_light_real(location="", device_type=None):
         mount_type=get_mount_type(),
         road_name="Testingroad",
         sound_beacon=TrafficLightSoundBeaconValue.YES,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -266,6 +281,7 @@ def get_traffic_sign_plan(location="", plan=None, device_type=None):
         decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -283,15 +299,17 @@ def get_traffic_sign_real(location="", device_type=None):
         location=location or test_point_3d,
         installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
+        owner=get_owner(),
         created_by=user,
         updated_by=user,
     )[0]
 
 
 def get_additional_sign_plan(
-    location=test_point_3d, parent=None, owner="Test owner", plan=None
+    location=test_point_3d, parent=None, owner=None, plan=None
 ):
     user = get_user("test_user")
+    owner = owner or get_owner()
 
     return AdditionalSignPlan.objects.get_or_create(
         parent=parent or get_traffic_sign_plan(),
@@ -305,8 +323,9 @@ def get_additional_sign_plan(
     )[0]
 
 
-def get_additional_sign_real(location=test_point_3d, parent=None, owner="Test owner"):
+def get_additional_sign_real(location=test_point_3d, parent=None, owner=None):
     user = get_user("test_user")
+    owner = owner or get_owner()
 
     return AdditionalSignReal.objects.get_or_create(
         parent=parent or get_traffic_sign_real(),
