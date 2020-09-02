@@ -78,6 +78,13 @@ class BarrierPlan(
     )
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     is_electric = models.BooleanField(_("Is electric"), default=False)
+    owner_obj = models.ForeignKey(
+        "traffic_control.Owner",
+        verbose_name=_("Owner"),
+        blank=False,
+        null=True,
+        on_delete=models.PROTECT,
+    )
     owner = models.CharField(_("Owner"), max_length=254)
     decision_date = models.DateField(_("Decision date"))
     decision_id = models.CharField(
@@ -189,6 +196,13 @@ class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     )
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     is_electric = models.BooleanField(_("Is electric"), default=False)
+    owner_obj = models.ForeignKey(
+        "traffic_control.Owner",
+        verbose_name=_("Owner"),
+        blank=False,
+        null=True,
+        on_delete=models.PROTECT,
+    )
     owner = models.CharField(_("Owner"), max_length=254)
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(

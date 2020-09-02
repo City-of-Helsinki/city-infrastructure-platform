@@ -89,6 +89,13 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         null=True,
     )
 
+    owner_obj = models.ForeignKey(
+        "traffic_control.Owner",
+        verbose_name=_("Owner"),
+        blank=False,
+        null=True,
+        on_delete=models.PROTECT,
+    )
     owner = models.CharField(_("Owner"), max_length=256)
 
     validity_period_start = models.DateField(
