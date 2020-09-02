@@ -183,6 +183,21 @@ class TrafficControlDeviceTypeType(Enum):
         OTHER = _("Other road marking")
 
 
+class Owner(models.Model):
+    id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
+    name_fi = models.CharField(verbose_name=_("Name (fi)"), max_length=254)
+    name_en = models.CharField(verbose_name=_("Name (en)"), max_length=254)
+
+    class Meta:
+        verbose_name = _("Owner")
+        verbose_name_plural = _("Owners")
+
+    def __str__(self):
+        return f"{self.name_en} ({self.name_fi})"
+
+
 class TrafficControlDeviceTypeQuerySet(models.QuerySet):
     def for_target_model(self, target_model: DeviceTypeTargetModel):
         return self.filter(Q(target_model=None) | Q(target_model=target_model))

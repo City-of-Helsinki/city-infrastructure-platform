@@ -19,6 +19,7 @@ from .common import (
     Condition,
     InstallationStatus,
     Lifecycle,
+    Owner,
     Reflection,
     Size,
     Surface,
