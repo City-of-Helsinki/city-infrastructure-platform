@@ -9,11 +9,11 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import MultiPolygon, Point
 from django.utils.translation import gettext_lazy as _
 
-from ..mixins.models import SoftDeleteModel, UserControlModel
+from ..mixins.models import SoftDeleteModel, SourceControlModel, UserControlModel
 from ..models.utils import SoftDeleteQuerySet
 
 
-class Plan(SoftDeleteModel, UserControlModel):
+class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     # Permissions
     ADD_PERMISSION = "traffic_control.add_plan"
     CHANGE_PERMISSION = "traffic_control.change_plan"
@@ -56,6 +56,7 @@ class Plan(SoftDeleteModel, UserControlModel):
         db_table = "plan"
         verbose_name = _("Plan")
         verbose_name_plural = _("Plans")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.plan_number} {self.name}"

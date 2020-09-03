@@ -9,7 +9,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -54,7 +59,9 @@ class TrafficSignPlanQuerySet(SoftDeleteQuerySet):
         additional_signs.soft_delete(user)
 
 
-class TrafficSignPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
+class TrafficSignPlan(
+    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
+):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -154,10 +161,6 @@ class TrafficSignPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel
         blank=True,
         null=True,
     )
-    source_id = models.CharField(_("Source id"), max_length=64, blank=True, null=True)
-    source_name = models.CharField(
-        _("Source name"), max_length=254, blank=True, null=True
-    )
 
     objects = TrafficSignPlanQuerySet.as_manager()
 
@@ -165,6 +168,7 @@ class TrafficSignPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel
         db_table = "traffic_sign_plan"
         verbose_name = _("Traffic Sign Plan")
         verbose_name_plural = _("Traffic Sign Plans")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.device_type}"
@@ -216,7 +220,7 @@ class TrafficSignRealQuerySet(SoftDeleteQuerySet):
         additional_signs.soft_delete(user)
 
 
-class TrafficSignReal(SoftDeleteModel, UserControlModel):
+class TrafficSignReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -328,10 +332,6 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
     attachment_url = models.URLField(
         _("Attachment url"), max_length=500, blank=True, null=True
     )
-    source_id = models.CharField(_("Source id"), max_length=64, blank=True, null=True)
-    source_name = models.CharField(
-        _("Source name"), max_length=254, blank=True, null=True
-    )
 
     objects = TrafficSignRealQuerySet.as_manager()
 
@@ -339,6 +339,7 @@ class TrafficSignReal(SoftDeleteModel, UserControlModel):
         db_table = "traffic_sign_real"
         verbose_name = _("Traffic Sign Real")
         verbose_name_plural = _("Traffic Sign Reals")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.device_type}"

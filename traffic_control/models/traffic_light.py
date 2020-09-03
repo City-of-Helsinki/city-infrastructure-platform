@@ -8,7 +8,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -88,7 +93,9 @@ class PushButton(Enum):
         YES = _("Yes")
 
 
-class TrafficLightPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
+class TrafficLightPlan(
+    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
+):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -179,6 +186,7 @@ class TrafficLightPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlMode
         db_table = "traffic_light_plan"
         verbose_name = _("Traffic Light Plan")
         verbose_name_plural = _("Traffic Light Plans")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.type} {self.device_type}"
@@ -212,7 +220,7 @@ class TrafficLightPlanFile(models.Model):
         return "%s" % self.file
 
 
-class TrafficLightReal(SoftDeleteModel, UserControlModel):
+class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -314,6 +322,7 @@ class TrafficLightReal(SoftDeleteModel, UserControlModel):
         db_table = "traffic_light_real"
         verbose_name = _("Traffic Light Real")
         verbose_name_plural = _("Traffic Light Reals")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.type} {self.device_type}"
