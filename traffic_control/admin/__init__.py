@@ -15,6 +15,7 @@ from .mount import (
     PortalTypeAdmin,
 )
 from .operational_area import GroupAdmin, OperationalAreaAdmin
+from .owner import OwnerAdmin
 from .plan import PlanAdmin
 from .road_marking import (
     RoadMarkingPlanAdmin,
