@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add REST API endpoint for `OperationalArea`
 - Show admin links when clicking features on map view
 - Turn map view into a React app with Material UI
+- Add `source_name` and `source_id` to all TrafficControl models
 
 ### Changed
 - Admin UI usability improvements
