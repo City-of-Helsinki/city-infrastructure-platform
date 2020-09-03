@@ -8,7 +8,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Color,
     Condition,
@@ -32,7 +37,7 @@ from .traffic_sign import (
 from .utils import SoftDeleteQuerySet
 
 
-class AbstractAdditionalSign(SoftDeleteModel, UserControlModel):
+class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -101,10 +106,6 @@ class AbstractAdditionalSign(SoftDeleteModel, UserControlModel):
     lifecycle = EnumIntegerField(
         Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
     )
-    source_id = models.CharField(_("Source id"), max_length=64, blank=True, null=True)
-    source_name = models.CharField(
-        _("Source name"), max_length=254, blank=True, null=True
-    )
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -145,6 +146,7 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
         db_table = "additional_sign_plan"
         verbose_name = _("Additional Sign Plan")
         verbose_name_plural = _("Additional Sign Plans")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"AdditionalSignPlan {self.id}"
@@ -217,6 +219,7 @@ class AdditionalSignReal(AbstractAdditionalSign):
         db_table = "additional_sign_real"
         verbose_name = _("Additional Sign Real")
         verbose_name_plural = _("Additional Sign Reals")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"AdditionalSignReal {self.id}"

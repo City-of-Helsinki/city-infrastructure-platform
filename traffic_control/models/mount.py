@@ -6,7 +6,12 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import Condition, InstallationStatus, Lifecycle
 from .plan import Plan
 from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
@@ -59,7 +64,9 @@ class PortalType(models.Model):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
 
 
-class MountPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
+class MountPlan(
+    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
+):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -120,6 +127,7 @@ class MountPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
         db_table = "mount_plan"
         verbose_name = _("Mount Plan")
         verbose_name_plural = _("Mount Plans")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return "%s %s" % (self.id, self.mount_type)
@@ -145,7 +153,7 @@ class MountPlanFile(models.Model):
         return "%s" % self.file
 
 
-class MountReal(SoftDeleteModel, UserControlModel):
+class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -221,6 +229,7 @@ class MountReal(SoftDeleteModel, UserControlModel):
         db_table = "mount_real"
         verbose_name = _("Mount Real")
         verbose_name_plural = _("Mount Reals")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return "%s %s" % (self.id, self.mount_type)

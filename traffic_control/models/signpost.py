@@ -8,7 +8,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -40,7 +45,9 @@ class LocationSpecifier(Enum):
         VERTICAL = _("Vertical")
 
 
-class SignpostPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
+class SignpostPlan(
+    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
+):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -158,6 +165,7 @@ class SignpostPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
         db_table = "signpost_plan"
         verbose_name = _("Signpost Plan")
         verbose_name_plural = _("Signpost Plans")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.device_type} {self.txt}"
@@ -191,7 +199,7 @@ class SignpostPlanFile(models.Model):
         return "%s" % self.file
 
 
-class SignpostReal(SoftDeleteModel, UserControlModel):
+class SignpostReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -327,6 +335,7 @@ class SignpostReal(SoftDeleteModel, UserControlModel):
         db_table = "signpost_real"
         verbose_name = _("Signpost Real")
         verbose_name_plural = _("Signpost Reals")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.device_type} {self.txt}"

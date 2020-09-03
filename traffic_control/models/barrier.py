@@ -8,7 +8,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -53,7 +58,9 @@ class LocationSpecifier(Enum):
         LEFT = _("Left of road or lane")
 
 
-class BarrierPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
+class BarrierPlan(
+    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
+):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -123,6 +130,7 @@ class BarrierPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
         db_table = "barrier_plan"
         verbose_name = _("Barrier Plan")
         verbose_name_plural = _("Barrier Plans")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.device_type}"
@@ -156,7 +164,7 @@ class BarrierPlanFile(models.Model):
         return "%s" % self.file
 
 
-class BarrierReal(SoftDeleteModel, UserControlModel):
+class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -234,6 +242,7 @@ class BarrierReal(SoftDeleteModel, UserControlModel):
         db_table = "barrier_real"
         verbose_name = _("Barrier real")
         verbose_name_plural = _("Barrier reals")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"{self.id} {self.device_type}"

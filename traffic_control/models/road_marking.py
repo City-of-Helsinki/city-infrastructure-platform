@@ -8,7 +8,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -80,7 +85,9 @@ class LocationSpecifier(Enum):
         LEFT_SIDE_OF_LANE_OR_ROAD = _("Left side of lane or road")
 
 
-class RoadMarkingPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel):
+class RoadMarkingPlan(
+    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
+):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -179,8 +186,6 @@ class RoadMarkingPlan(UpdatePlanLocationMixin, SoftDeleteModel, UserControlModel
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
     amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
-    source_id = models.IntegerField(_("Source id"), blank=True, null=True)
-    source_name = models.CharField(_("Source name"), max_length=254, blank=True)
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -230,7 +235,7 @@ class RoadMarkingPlanFile(models.Model):
         return "%s" % self.file
 
 
-class RoadMarkingReal(SoftDeleteModel, UserControlModel):
+class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
@@ -343,8 +348,6 @@ class RoadMarkingReal(SoftDeleteModel, UserControlModel):
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
     amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
-    source_id = models.IntegerField(_("Source id"), blank=True, null=True)
-    source_name = models.CharField(_("Source name"), max_length=254, blank=True)
 
     objects = SoftDeleteQuerySet.as_manager()
 

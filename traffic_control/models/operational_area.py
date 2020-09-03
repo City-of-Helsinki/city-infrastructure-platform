@@ -5,6 +5,8 @@ from django.contrib.auth.models import Group
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 
+from traffic_control.mixins.models import SourceControlModel
+
 
 class GroupOperationalArea(models.Model):
     """
@@ -27,7 +29,7 @@ class GroupOperationalArea(models.Model):
         return f"GroupOperationalArea {self.group.name}"
 
 
-class OperationalArea(models.Model):
+class OperationalArea(SourceControlModel):
     """
     Model containing operational area polygon used to check location based
     permissions
@@ -44,6 +46,7 @@ class OperationalArea(models.Model):
     class Meta:
         verbose_name = _("Operational area")
         verbose_name_plural = _("Operational areas")
+        unique_together = ["source_name", "source_id"]
 
     def __str__(self):
         return f"OperationalArea {self.name}"
