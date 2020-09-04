@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Turn map view into a React app with Material UI
 - Add `source_name` and `source_id` to all TrafficControl models
 - `Owner` model and foreign key relation to it for all TrafficControl models
+- Add management command to import operational areas (contract areas) from Helsinki WFS
 
 ### Changed
 - Admin UI usability improvements
