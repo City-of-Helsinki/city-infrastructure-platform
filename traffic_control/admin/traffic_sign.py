@@ -138,6 +138,7 @@ class TrafficSignPlanAdmin(
         "decision_date",
         "has_additional_signs",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -303,6 +304,7 @@ class TrafficSignRealAdmin(
         ("reflection_class", EnumFieldListFilter),
         ("surface_class", EnumFieldListFilter),
         ("location_specifier", EnumFieldListFilter),
+        "owner",
     ]
     search_fields = (
         "traffic_sign_plan__id",
