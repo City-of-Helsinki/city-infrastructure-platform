@@ -1,7 +1,9 @@
 import datetime
 from typing import Optional
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.gis.geos import MultiPolygon
 from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
@@ -59,7 +61,8 @@ def get_user(username=None, admin=False):
 
 def get_operational_area(area=None):
     return OperationalArea.objects.get_or_create(
-        name="Test operational area", area=area or test_polygon,
+        name="Test operational area",
+        location=area or MultiPolygon(test_polygon, srid=settings.SRID),
     )[0]
 
 

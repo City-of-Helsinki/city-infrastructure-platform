@@ -580,7 +580,7 @@ class MountTypeSerializer(serializers.ModelSerializer):
 
 
 class OperationalAreaSerializer(serializers.ModelSerializer):
-    area = GeometryField()
+    location = GeometryField()
 
     class Meta:
         model = OperationalArea

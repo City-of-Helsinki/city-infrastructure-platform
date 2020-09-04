@@ -28,6 +28,8 @@ class User(AbstractUser):
             "operational_area", "operational_area__areas"
         )
         return (
-            self.operational_areas.filter(area__contains=location).exists()
-            or groups.filter(operational_area__areas__area__contains=location).exists()
+            self.operational_areas.filter(location__contains=location).exists()
+            or groups.filter(
+                operational_area__areas__location__contains=location
+            ).exists()
         )
