@@ -36,12 +36,16 @@ class OperationalArea(SourceControlModel):
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(
-        verbose_name=_("Name"), max_length=256, blank=False, null=False
-    )
-    area = models.PolygonField(
-        verbose_name=_("Area"), srid=settings.SRID, blank=False, null=False
-    )
+    name = models.CharField(_("Name"), max_length=256, blank=False)
+    name_short = models.CharField(_("Name short"), max_length=256, blank=True)
+    area_type = models.CharField(_("Area type"), max_length=256, blank=True)
+    contractor = models.CharField(_("Contractor"), max_length=256, blank=True)
+    start_date = models.DateField(_("Start date"), null=True, blank=True)
+    end_date = models.DateField(_("End date"), null=True, blank=True)
+    updated_date = models.DateField(_("Updated date"), null=True, blank=True)
+    task = models.CharField(_("Task"), max_length=256, blank=True)
+    status = models.CharField(_("Status"), max_length=256, blank=True)
+    location = models.MultiPolygonField(_("Location (2D)"), srid=settings.SRID)
 
     class Meta:
         verbose_name = _("Operational area")

@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from django.conf import settings
-from django.contrib.gis.geos import Point, Polygon
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import RequestFactory
 
 from ..models import OperationalArea
@@ -46,7 +46,8 @@ def test_is_admin_user_or_read_only(method, is_staff, expected):
 def test__operational_area_permission__point_in_area(method):
     user = get_user()
     operational_area = OperationalArea.objects.create(
-        name="Test operational area", area=test_polygon,
+        name="Test operational area",
+        location=MultiPolygon(test_polygon, srid=settings.SRID),
     )
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
@@ -75,7 +76,8 @@ def test__operational_area_permission__point_in_area(method):
 def test__operational_area_permission__point_not_in_area(method, expected):
     user = get_user()
     operational_area = OperationalArea.objects.create(
-        name="Test operational area", area=test_polygon,
+        name="Test operational area",
+        location=MultiPolygon(test_polygon, srid=settings.SRID),
     )
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
@@ -94,7 +96,8 @@ def test__operational_area_permission__point_not_in_area(method, expected):
 def test__operational_area_permission__polygon_in_area(method):
     user = get_user()
     operational_area = OperationalArea.objects.create(
-        name="Test operational area", area=test_polygon,
+        name="Test operational area",
+        location=MultiPolygon(test_polygon, srid=settings.SRID),
     )
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
@@ -128,7 +131,8 @@ def test__operational_area_permission__polygon_in_area(method):
 def test__operational_area_permission__polygon_partially_not_in_area(method, expected):
     user = get_user()
     operational_area = OperationalArea.objects.create(
-        name="Test operational area", area=test_polygon,
+        name="Test operational area",
+        location=MultiPolygon(test_polygon, srid=settings.SRID),
     )
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
@@ -162,7 +166,8 @@ def test__operational_area_permission__polygon_partially_not_in_area(method, exp
 def test__operational_area_permission__polygon_not_in_area(method, expected):
     user = get_user()
     operational_area = OperationalArea.objects.create(
-        name="Test operational area", area=test_polygon,
+        name="Test operational area",
+        location=MultiPolygon(test_polygon, srid=settings.SRID),
     )
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")

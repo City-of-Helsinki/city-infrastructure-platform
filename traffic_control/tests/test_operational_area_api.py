@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase
 
 from traffic_control.models import OperationalArea
 from traffic_control.tests.factories import get_operational_area, get_user
-from traffic_control.tests.test_base_api import test_polygon
+from traffic_control.tests.test_base_api import test_multi_polygon
 
 
 class OperationalAreaAPITestCase(APITestCase):
@@ -30,7 +30,7 @@ class OperationalAreaAPITestCase(APITestCase):
     def test_admin_create_operational_area_created(self):
         url = reverse("v1:operationalarea-list")
         self.client.force_login(self.admin)
-        data = {"name": "TEST AREA", "area": test_polygon.ewkt}
+        data = {"name": "TEST AREA", "location": test_multi_polygon.ewkt}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(OperationalArea.objects.filter(name="TEST AREA").count(), 1)
@@ -43,7 +43,7 @@ class OperationalAreaAPITestCase(APITestCase):
         data = {
             "id": self.operational_area.id,
             "name": "TEST AREA",
-            "area": test_polygon.ewkt,
+            "location": test_multi_polygon.ewkt,
         }
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -75,7 +75,7 @@ class OperationalAreaAPITestCase(APITestCase):
     def test_user_create_operational_area_forbidden(self):
         url = reverse("v1:operationalarea-list")
         self.client.force_login(self.user)
-        data = {"name": "TEST AREA", "area": test_polygon.ewkt}
+        data = {"name": "TEST AREA", "location": test_multi_polygon.ewkt}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -87,7 +87,7 @@ class OperationalAreaAPITestCase(APITestCase):
         data = {
             "id": self.operational_area.id,
             "name": "TEST AREA",
-            "area": test_polygon.ewkt,
+            "location": test_multi_polygon.ewkt,
         }
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

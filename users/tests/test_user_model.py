@@ -1,14 +1,15 @@
 import pytest
 from django.conf import settings
 from django.contrib.auth.models import Group
-from django.contrib.gis.geos import Point, Polygon
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 
 from traffic_control.models import GroupOperationalArea
 from traffic_control.tests.factories import get_operational_area, get_user
 
-area = Polygon(
+polygon = Polygon(
     ((0.0, 0.0), (0.0, 50.0), (50.0, 50.0), (50.0, 0.0), (0.0, 0.0)), srid=settings.SRID
 )
+area = MultiPolygon(polygon, srid=settings.SRID)
 point_inside_area = Point(10.0, 10.0, srid=settings.SRID)
 point_outside_area = Point(-10.0, -10.0, srid=settings.SRID)
 
