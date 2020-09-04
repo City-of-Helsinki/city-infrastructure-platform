@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show admin links when clicking features on map view
 - Turn map view into a React app with Material UI
 - Add `source_name` and `source_id` to all TrafficControl models
+- `Owner` model and foreign key relation to it for all TrafficControl models
 
 ### Changed
 - Admin UI usability improvements
