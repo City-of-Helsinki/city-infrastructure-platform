@@ -25,7 +25,11 @@ class OperationalAreaAdmin(admin.OSMGeoAdmin):
     list_display = [
         "name",
         "id",
+        "area_type",
+        "contractor",
+        "status",
     ]
+    list_filter = ("area_type", "contractor", "status")
 
 
 admin.site.unregister(Group)
