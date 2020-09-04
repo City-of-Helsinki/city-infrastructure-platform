@@ -14,6 +14,7 @@ from traffic_control.models import (
     MountPlan,
     MountReal,
     MountType,
+    Owner,
     Plan,
     PortalType,
     RoadMarkingPlan,
@@ -83,6 +84,11 @@ class MountRealFilterSet(FilterSet):
 class MountTypeFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = MountType
+
+
+class OwnerFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = Owner
 
 
 class PlanFilterSet(FilterSet):

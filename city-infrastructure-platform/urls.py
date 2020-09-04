@@ -13,6 +13,7 @@ from traffic_control.views import (
     barrier as barrier_views,
     mount as mount_views,
     operational_area as operational_area_views,
+    owner as owner_views,
     plan as plan_views,
     road_marking as road_marking_views,
     signpost as signpost_views,
@@ -85,6 +86,9 @@ router.register(
 )
 router.register(
     "operational-areas", operational_area_views.OperationalAreaViewSet,
+)
+router.register(
+    "owners", owner_views.OwnerViewSet,
 )
 schema_view = get_schema_view(
     openapi.Info(
