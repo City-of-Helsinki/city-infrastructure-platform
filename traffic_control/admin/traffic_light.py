@@ -91,6 +91,7 @@ class TrafficLightPlanAdmin(
         "location",
         "decision_date",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -172,6 +173,7 @@ class TrafficLightRealAdmin(
         "location",
         "installation_date",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (
         "created_at",
         "updated_at",

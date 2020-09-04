@@ -84,6 +84,7 @@ class MountPlanAdmin(
         "lifecycle",
         "location",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -156,6 +157,7 @@ class MountRealAdmin(
         "lifecycle",
         "location",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (
         "created_at",
         "updated_at",

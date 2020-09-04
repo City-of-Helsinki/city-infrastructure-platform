@@ -83,6 +83,7 @@ class BarrierPlanAdmin(
         "location",
         "decision_date",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -164,6 +165,7 @@ class BarrierRealAdmin(
         "location",
         "installation_date",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (
         "created_at",
         "updated_at",

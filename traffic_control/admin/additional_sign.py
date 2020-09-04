@@ -113,6 +113,7 @@ class AdditionalSignPlanAdmin(
         "created_by",
         "updated_by",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     ordering = ("-created_at",)
     inlines = (AdditionalSignContentPlanInline,)
 
@@ -263,6 +264,7 @@ class AdditionalSignRealAdmin(
         ("surface_class", EnumFieldListFilter),
         ("location_specifier", EnumFieldListFilter),
         ("color", EnumFieldListFilter),
+        "owner",
     ]
     search_fields = (
         "additional_sign_plan__id",
