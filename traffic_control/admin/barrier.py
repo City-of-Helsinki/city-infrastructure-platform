@@ -1,7 +1,9 @@
 from django.contrib.gis import admin
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from ..forms import AdminFileWidget
 from ..mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
@@ -19,6 +21,9 @@ __all__ = (
 
 
 class BarrierPlanFileInline(admin.TabularInline):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidget},
+    }
     model = BarrierPlanFile
 
 
@@ -95,6 +100,9 @@ class BarrierPlanAdmin(
 
 
 class BarrierRealFileInline(admin.TabularInline):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidget},
+    }
     model = BarrierRealFile
 
 
