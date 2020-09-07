@@ -1,10 +1,11 @@
 from django.contrib.admin import SimpleListFilter
 from django.contrib.gis import admin
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..forms import TrafficSignPlanModelForm, TrafficSignRealModelForm
+from ..forms import AdminFileWidget, TrafficSignPlanModelForm, TrafficSignRealModelForm
 from ..mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
@@ -63,6 +64,9 @@ class TrafficControlDeviceTypeAdmin(
 
 
 class TrafficSignPlanFileInline(admin.TabularInline):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidget},
+    }
     model = TrafficSignPlanFile
 
 
@@ -155,6 +159,9 @@ class TrafficSignPlanAdmin(
 
 
 class TrafficSignRealFileInline(admin.TabularInline):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidget},
+    }
     model = TrafficSignRealFile
 
 
