@@ -113,6 +113,7 @@ class AdditionalSignPlanAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("parent", "plan", "mount_plan")
     list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     ordering = ("-created_at",)
     inlines = (AdditionalSignContentPlanInline,)
@@ -255,6 +256,7 @@ class AdditionalSignRealAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", EnumFieldListFilter),

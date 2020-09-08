@@ -97,6 +97,7 @@ class SignpostPlanAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("parent", "plan", "mount_plan")
     ordering = ("-created_at",)
     inlines = (SignpostPlanFileInline,)
 
@@ -196,5 +197,6 @@ class SignpostRealAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("parent", "signpost_plan", "mount_real")
     ordering = ("-created_at",)
     inline = (SignpostRealFileInline,)
