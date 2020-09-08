@@ -7,9 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add `source_name` and `source_id` to all TrafficControl models
+- `Owner` model and foreign key relation to it for all TrafficControl models
+- Add management command to import operational areas (contract areas) from Helsinki WFS
+
+### Changed
+- Open attachments in new tab in admin
+
+### Fixed
+- Traffic control model admin performance issues caused by multiple foreign key choices
+
 ## [1.1.0] - 2020-09-01
 
-## Added
+### Added
 - Permissions based on operational area
 - `traffic_sign_type` property for `TrafficControlDeviceType`
 - Added tests for Katajanokka importer
@@ -19,9 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add REST API endpoint for `OperationalArea`
 - Show admin links when clicking features on map view
 - Turn map view into a React app with Material UI
-- Add `source_name` and `source_id` to all TrafficControl models
-- `Owner` model and foreign key relation to it for all TrafficControl models
-- Add management command to import operational areas (contract areas) from Helsinki WFS
 
 ### Changed
 - Admin UI usability improvements
@@ -29,11 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved the plan geometry generation
 - Application root URL is changed to `/city-infra`
 - Remove `color` attribute from `TrafficSignPlan` and `TrafficSignReal`
-- Open attachments in new tab in admin
 
 ### Fixed
 - Fixed a bug that creating `TrafficControlDeviceType` crashes when target model is specified
-- Traffic control model admin performance issues caused by multiple foreign key choices
 
 ## [1.0.0] - 2020-07-07
 
