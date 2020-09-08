@@ -55,7 +55,7 @@ class AdminEnumChoiceField(EnumChoiceField):
 class Point3DFieldForm(forms.ModelForm):
     """Form class that allows entering a z coordinate for 3d point"""
 
-    z_coord = forms.FloatField(label=_("Location (z)"))
+    z_coord = forms.FloatField(label=_("Location (z)"), initial=0)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
