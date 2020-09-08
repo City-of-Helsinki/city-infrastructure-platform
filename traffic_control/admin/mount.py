@@ -96,6 +96,7 @@ class MountPlanAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("plan",)
     ordering = ("-created_at",)
     inlines = (MountPlanFileInline,)
 
@@ -172,6 +173,7 @@ class MountRealAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("mount_plan",)
     ordering = ("-created_at",)
     inlines = (MountRealFileInline, OrderedTrafficSignRealInline)
 

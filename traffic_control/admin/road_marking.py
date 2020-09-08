@@ -119,6 +119,7 @@ class RoadMarkingPlanAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("plan", "traffic_sign_plan")
     ordering = ("-created_at",)
     inlines = (RoadMarkingPlanFileInline,)
 
@@ -222,5 +223,6 @@ class RoadMarkingRealAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("road_marking_plan", "traffic_sign_real")
     ordering = ("-created_at",)
     inlines = (RoadMarkingRealFileInline,)

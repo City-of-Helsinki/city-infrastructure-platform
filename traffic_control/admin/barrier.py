@@ -95,6 +95,7 @@ class BarrierPlanAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("plan",)
     ordering = ("-created_at",)
     inlines = (BarrierPlanFileInline,)
 
@@ -180,5 +181,6 @@ class BarrierRealAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("barrier_plan",)
     ordering = ("-created_at",)
     inlines = (BarrierRealFileInline,)

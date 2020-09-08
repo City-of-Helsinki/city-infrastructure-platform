@@ -149,6 +149,7 @@ class TrafficSignPlanAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("plan", "mount_plan")
     ordering = ("-created_at",)
     inlines = (TrafficSignPlanFileInline,)
 
@@ -303,6 +304,7 @@ class TrafficSignRealAdmin(
         "created_by",
         "updated_by",
     )
+    raw_id_fields = ("traffic_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", EnumFieldListFilter),

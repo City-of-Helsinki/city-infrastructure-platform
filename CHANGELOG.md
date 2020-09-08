@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed a bug that creating `TrafficControlDeviceType` crashes when target model is specified
+- Traffic control model admin performance issues caused by multiple foreign key choices
 
 ## [1.0.0] - 2020-07-07
 
