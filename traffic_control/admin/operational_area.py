@@ -29,6 +29,10 @@ class OperationalAreaAdmin(admin.OSMGeoAdmin):
         "contractor",
         "status",
     ]
+    readonly_fields = [
+        "source_name",
+        "source_id",
+    ]
     list_filter = ("area_type", "contractor", "status")
 
 

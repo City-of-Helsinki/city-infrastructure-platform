@@ -46,6 +46,8 @@ class PlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "source_name",
+        "source_id",
     )
     ordering = ("-created_at",)
 

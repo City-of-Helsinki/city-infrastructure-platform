@@ -112,6 +112,8 @@ class AdditionalSignPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "source_name",
+        "source_id",
     )
     raw_id_fields = ("parent", "plan", "mount_plan")
     list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
@@ -255,6 +257,8 @@ class AdditionalSignRealAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "source_name",
+        "source_id",
     )
     raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
     ordering = ("-created_at",)
