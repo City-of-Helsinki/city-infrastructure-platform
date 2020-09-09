@@ -10,6 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="trafficsignplan", name="color",),
-        migrations.RemoveField(model_name="trafficsignreal", name="color",),
+        migrations.RemoveField(
+            model_name="trafficsignplan",
+            name="color",
+        ),
+        migrations.RemoveField(
+            model_name="trafficsignreal",
+            name="color",
+        ),
     ]

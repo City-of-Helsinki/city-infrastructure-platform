@@ -132,7 +132,12 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"ordering": ("id",), "abstract": False,},
-            managers=[("objects", django.contrib.auth.models.UserManager()),],
+            options={
+                "ordering": ("id",),
+                "abstract": False,
+            },
+            managers=[
+                ("objects", django.contrib.auth.models.UserManager()),
+            ],
         ),
     ]

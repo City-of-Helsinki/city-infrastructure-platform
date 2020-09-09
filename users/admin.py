@@ -9,7 +9,12 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = BaseUserAdmin.fieldsets + (
         (
             _("Operational area"),
-            {"fields": ("bypass_operational_area", "operational_areas",)},
+            {
+                "fields": (
+                    "bypass_operational_area",
+                    "operational_areas",
+                )
+            },
         ),
     )
     filter_horizontal = BaseUserAdmin.filter_horizontal + ("operational_areas",)

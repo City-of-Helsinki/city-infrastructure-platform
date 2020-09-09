@@ -38,7 +38,10 @@ env = environ.Env(
     VAR_ROOT=(str, default_var_root),
     ALLOWED_HOSTS=(list, []),
     TRUST_X_FORWARDED_HOST=(bool, False),
-    DATABASE_URL=(str, "postgis:///city-infrastructure-platform",),
+    DATABASE_URL=(
+        str,
+        "postgis:///city-infrastructure-platform",
+    ),
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
     SENTRY_DSN=(str, ""),

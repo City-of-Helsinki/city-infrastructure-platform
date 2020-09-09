@@ -23,28 +23,36 @@ from traffic_control.views import (
 
 router = routers.DefaultRouter()
 router.register(
-    "barrier-plans", barrier_views.BarrierPlanViewSet,
+    "barrier-plans",
+    barrier_views.BarrierPlanViewSet,
 )
 router.register(
-    "barrier-reals", barrier_views.BarrierRealViewSet,
+    "barrier-reals",
+    barrier_views.BarrierRealViewSet,
 )
 router.register(
-    "traffic-light-plans", traffic_light_views.TrafficLightPlanViewSet,
+    "traffic-light-plans",
+    traffic_light_views.TrafficLightPlanViewSet,
 )
 router.register(
-    "traffic-light-reals", traffic_light_views.TrafficLightRealViewSet,
+    "traffic-light-reals",
+    traffic_light_views.TrafficLightRealViewSet,
 )
 router.register(
-    "traffic-sign-plans", traffic_sign_views.TrafficSignPlanViewSet,
+    "traffic-sign-plans",
+    traffic_sign_views.TrafficSignPlanViewSet,
 )
 router.register(
-    "traffic-sign-reals", traffic_sign_views.TrafficSignRealViewSet,
+    "traffic-sign-reals",
+    traffic_sign_views.TrafficSignRealViewSet,
 )
 router.register(
-    "additional-sign-plans", additional_sign_views.AdditionalSignPlanViewSet,
+    "additional-sign-plans",
+    additional_sign_views.AdditionalSignPlanViewSet,
 )
 router.register(
-    "additional-sign-reals", additional_sign_views.AdditionalSignRealViewSet,
+    "additional-sign-reals",
+    additional_sign_views.AdditionalSignRealViewSet,
 )
 router.register(
     "additional-sign-content-plans",
@@ -55,40 +63,52 @@ router.register(
     additional_sign_views.AdditionalSignContentRealViewSet,
 )
 router.register(
-    "mount-plans", mount_views.MountPlanViewSet,
+    "mount-plans",
+    mount_views.MountPlanViewSet,
 )
 router.register(
-    "mount-reals", mount_views.MountRealViewSet,
+    "mount-reals",
+    mount_views.MountRealViewSet,
 )
 router.register(
-    "signpost-plans", signpost_views.SignpostPlanViewSet,
+    "signpost-plans",
+    signpost_views.SignpostPlanViewSet,
 )
 router.register(
-    "signpost-reals", signpost_views.SignpostRealViewSet,
+    "signpost-reals",
+    signpost_views.SignpostRealViewSet,
 )
 router.register(
-    "road-marking-plans", road_marking_views.RoadMarkingPlanViewSet,
+    "road-marking-plans",
+    road_marking_views.RoadMarkingPlanViewSet,
 )
 router.register(
-    "road-marking-reals", road_marking_views.RoadMarkingRealViewSet,
+    "road-marking-reals",
+    road_marking_views.RoadMarkingRealViewSet,
 )
 router.register(
-    "traffic-control-device-types", traffic_sign_views.TrafficControlDeviceTypeViewSet,
+    "traffic-control-device-types",
+    traffic_sign_views.TrafficControlDeviceTypeViewSet,
 )
 router.register(
-    "plans", plan_views.PlanViewSet,
+    "plans",
+    plan_views.PlanViewSet,
 )
 router.register(
-    "portal-types", mount_views.PortalTypeViewSet,
+    "portal-types",
+    mount_views.PortalTypeViewSet,
 )
 router.register(
-    "mount-types", mount_views.MountTypeViewSet,
+    "mount-types",
+    mount_views.MountTypeViewSet,
 )
 router.register(
-    "operational-areas", operational_area_views.OperationalAreaViewSet,
+    "operational-areas",
+    operational_area_views.OperationalAreaViewSet,
 )
 router.register(
-    "owners", owner_views.OwnerViewSet,
+    "owners",
+    owner_views.OwnerViewSet,
 )
 schema_view = get_schema_view(
     openapi.Info(

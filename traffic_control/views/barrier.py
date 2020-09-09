@@ -95,7 +95,10 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: BarrierPlanFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),
@@ -175,7 +178,10 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: BarrierRealFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),

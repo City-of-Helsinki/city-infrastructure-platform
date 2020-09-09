@@ -14,8 +14,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="additionalsignreal", name="decision_date",),
-        migrations.RemoveField(model_name="additionalsignreal", name="decision_id",),
+        migrations.RemoveField(
+            model_name="additionalsignreal",
+            name="decision_date",
+        ),
+        migrations.RemoveField(
+            model_name="additionalsignreal",
+            name="decision_id",
+        ),
         migrations.AddField(
             model_name="additionalsignplan",
             name="direction",

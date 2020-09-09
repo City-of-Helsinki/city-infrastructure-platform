@@ -14,7 +14,9 @@ class User(AbstractUser):
         default=False,
     )
     operational_areas = models.ManyToManyField(
-        "traffic_control.OperationalArea", related_name="users", blank=True,
+        "traffic_control.OperationalArea",
+        related_name="users",
+        blank=True,
     )
 
     def location_is_in_operational_area(self, location):

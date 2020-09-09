@@ -97,7 +97,14 @@ class TrafficSignPlanAdmin(
         ),
         (
             _("Physical properties"),
-            {"fields": ("size", "height", "reflection_class", "surface_class",)},
+            {
+                "fields": (
+                    "size",
+                    "height",
+                    "reflection_class",
+                    "surface_class",
+                )
+            },
         ),
         (
             _("General information"),

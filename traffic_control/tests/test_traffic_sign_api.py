@@ -47,7 +47,8 @@ def test_filter_traffic_sign_plans_location(location, location_query, expected):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,location_query,expected", point_location_error_test_data_3d,
+    "location,location_query,expected",
+    point_location_error_test_data_3d,
 )
 def test_filter_error_traffic_sign_plans_location(location, location_query, expected):
     """
@@ -301,7 +302,8 @@ def test_filter_traffic_sign_reals_location(location, location_query, expected):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,location_query,expected", point_location_error_test_data_3d,
+    "location,location_query,expected",
+    point_location_error_test_data_3d,
 )
 def test_filter_error_traffic_sign_reals_location(location, location_query, expected):
     """

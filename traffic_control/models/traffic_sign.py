@@ -158,7 +158,10 @@ class TrafficSignPlan(
         LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
     )
     lane_type = EnumField(
-        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
@@ -293,18 +296,35 @@ class TrafficSignReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         _("Validity period end"), blank=True, null=True
     )
     condition = EnumIntegerField(
-        Condition, verbose_name=_("Condition"), blank=True, null=True,
+        Condition,
+        verbose_name=_("Condition"),
+        blank=True,
+        null=True,
     )
     affect_area = models.PolygonField(
         _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
     )
     scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
-    size = EnumField(Size, verbose_name=_("Size"), max_length=1, blank=True, null=True,)
+    size = EnumField(
+        Size,
+        verbose_name=_("Size"),
+        max_length=1,
+        blank=True,
+        null=True,
+    )
     reflection_class = EnumField(
-        Reflection, verbose_name=_("Reflection"), max_length=2, blank=True, null=True,
+        Reflection,
+        verbose_name=_("Reflection"),
+        max_length=2,
+        blank=True,
+        null=True,
     )
     surface_class = EnumField(
-        Surface, verbose_name=_("Surface"), max_length=6, blank=True, null=True,
+        Surface,
+        verbose_name=_("Surface"),
+        max_length=6,
+        blank=True,
+        null=True,
     )
     seasonal_validity_period_start = models.DateField(
         _("Seasonal validity period start"), blank=True, null=True
@@ -331,7 +351,10 @@ class TrafficSignReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
     )
     lane_type = EnumField(
-        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,

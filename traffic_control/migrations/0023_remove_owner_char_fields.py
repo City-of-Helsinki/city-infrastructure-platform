@@ -11,20 +11,62 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="additionalsignplan", name="owner",),
-        migrations.RemoveField(model_name="additionalsignreal", name="owner",),
-        migrations.RemoveField(model_name="barrierplan", name="owner",),
-        migrations.RemoveField(model_name="barrierreal", name="owner",),
-        migrations.RemoveField(model_name="mountplan", name="owner",),
-        migrations.RemoveField(model_name="mountreal", name="owner",),
-        migrations.RemoveField(model_name="roadmarkingplan", name="owner",),
-        migrations.RemoveField(model_name="roadmarkingreal", name="owner",),
-        migrations.RemoveField(model_name="signpostplan", name="owner",),
-        migrations.RemoveField(model_name="signpostreal", name="owner",),
-        migrations.RemoveField(model_name="trafficlightplan", name="owner",),
-        migrations.RemoveField(model_name="trafficlightreal", name="owner",),
-        migrations.RemoveField(model_name="trafficsignplan", name="owner",),
-        migrations.RemoveField(model_name="trafficsignreal", name="owner",),
+        migrations.RemoveField(
+            model_name="additionalsignplan",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="additionalsignreal",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="barrierplan",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="barrierreal",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="mountplan",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="mountreal",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="roadmarkingplan",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="roadmarkingreal",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="signpostplan",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="signpostreal",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="trafficlightplan",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="trafficlightreal",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="trafficsignplan",
+            name="owner",
+        ),
+        migrations.RemoveField(
+            model_name="trafficsignreal",
+            name="owner",
+        ),
         migrations.AlterField(
             model_name="additionalsignplan",
             name="owner_obj",

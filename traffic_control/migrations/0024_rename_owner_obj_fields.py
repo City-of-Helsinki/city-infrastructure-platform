@@ -11,45 +11,73 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name="additionalsignplan", old_name="owner_obj", new_name="owner",
+            model_name="additionalsignplan",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="additionalsignreal", old_name="owner_obj", new_name="owner",
+            model_name="additionalsignreal",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="barrierplan", old_name="owner_obj", new_name="owner",
+            model_name="barrierplan",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="barrierreal", old_name="owner_obj", new_name="owner",
+            model_name="barrierreal",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="mountplan", old_name="owner_obj", new_name="owner",
+            model_name="mountplan",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="mountreal", old_name="owner_obj", new_name="owner",
+            model_name="mountreal",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="roadmarkingplan", old_name="owner_obj", new_name="owner",
+            model_name="roadmarkingplan",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="roadmarkingreal", old_name="owner_obj", new_name="owner",
+            model_name="roadmarkingreal",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="signpostplan", old_name="owner_obj", new_name="owner",
+            model_name="signpostplan",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="signpostreal", old_name="owner_obj", new_name="owner",
+            model_name="signpostreal",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="trafficlightplan", old_name="owner_obj", new_name="owner",
+            model_name="trafficlightplan",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="trafficlightreal", old_name="owner_obj", new_name="owner",
+            model_name="trafficlightreal",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="trafficsignplan", old_name="owner_obj", new_name="owner",
+            model_name="trafficsignplan",
+            old_name="owner_obj",
+            new_name="owner",
         ),
         migrations.RenameField(
-            model_name="trafficsignreal", old_name="owner_obj", new_name="owner",
+            model_name="trafficsignreal",
+            old_name="owner_obj",
+            new_name="owner",
         ),
     ]
