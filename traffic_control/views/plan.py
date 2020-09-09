@@ -35,7 +35,9 @@ from ._common import TrafficControlViewSet
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single Plan",),
+    decorator=swagger_auto_schema(
+        operation_description="Soft-delete single Plan",
+    ),
 )
 class PlanViewSet(TrafficControlViewSet):
     serializer_classes = {

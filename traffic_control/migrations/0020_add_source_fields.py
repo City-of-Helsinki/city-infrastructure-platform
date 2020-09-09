@@ -363,45 +363,59 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterUniqueTogether(
-            name="additionalsignplan", unique_together={("source_name", "source_id")},
+            name="additionalsignplan",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="additionalsignreal", unique_together={("source_name", "source_id")},
+            name="additionalsignreal",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="barrierplan", unique_together={("source_name", "source_id")},
+            name="barrierplan",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="barrierreal", unique_together={("source_name", "source_id")},
+            name="barrierreal",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="mountplan", unique_together={("source_name", "source_id")},
+            name="mountplan",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="mountreal", unique_together={("source_name", "source_id")},
+            name="mountreal",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="operationalarea", unique_together={("source_name", "source_id")},
+            name="operationalarea",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="plan", unique_together={("source_name", "source_id")},
+            name="plan",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="signpostplan", unique_together={("source_name", "source_id")},
+            name="signpostplan",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="signpostreal", unique_together={("source_name", "source_id")},
+            name="signpostreal",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="trafficlightplan", unique_together={("source_name", "source_id")},
+            name="trafficlightplan",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="trafficlightreal", unique_together={("source_name", "source_id")},
+            name="trafficlightreal",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="trafficsignplan", unique_together={("source_name", "source_id")},
+            name="trafficsignplan",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="trafficsignreal", unique_together={("source_name", "source_id")},
+            name="trafficsignreal",
+            unique_together={("source_name", "source_id")},
         ),
     ]

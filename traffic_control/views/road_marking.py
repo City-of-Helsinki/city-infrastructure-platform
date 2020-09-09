@@ -104,7 +104,10 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: RoadMarkingPlanFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),
@@ -188,7 +191,10 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: RoadMarkingRealFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),

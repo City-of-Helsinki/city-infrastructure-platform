@@ -104,7 +104,10 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: TrafficLightPlanFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),
@@ -188,7 +191,10 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: TrafficLightRealFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),

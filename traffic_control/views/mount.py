@@ -113,7 +113,10 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: MountPlanFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),
@@ -194,7 +197,10 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: MountRealFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),

@@ -79,7 +79,10 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
     )
     lane_type = EnumField(
-        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
@@ -216,7 +219,13 @@ class AdditionalSignReal(AbstractAdditionalSign):
     )
     operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
     scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
-    size = EnumField(Size, verbose_name=_("Size"), max_length=1, blank=True, null=True,)
+    size = EnumField(
+        Size,
+        verbose_name=_("Size"),
+        max_length=1,
+        blank=True,
+        null=True,
+    )
     attachment_url = models.URLField(
         _("Attachment url"), max_length=500, blank=True, null=True
     )

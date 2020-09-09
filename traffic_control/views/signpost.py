@@ -95,7 +95,10 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: SignpostPlanFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),
@@ -177,7 +180,10 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         responses={200: SignpostRealFileSerializer},
     )
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),

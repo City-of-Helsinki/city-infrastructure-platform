@@ -15,10 +15,15 @@ class GroupOperationalArea(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     group = models.OneToOneField(
-        Group, unique=True, related_name="operational_area", on_delete=models.CASCADE,
+        Group,
+        unique=True,
+        related_name="operational_area",
+        on_delete=models.CASCADE,
     )
     areas = models.ManyToManyField(
-        "OperationalArea", related_name="groups", blank=True,
+        "OperationalArea",
+        related_name="groups",
+        blank=True,
     )
 
     class Meta:

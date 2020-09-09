@@ -30,7 +30,8 @@ from .test_base_api import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,location_query,expected", point_location_test_data,
+    "location,location_query,expected",
+    point_location_test_data,
 )
 def test_filter_traffic_light_plans_location(location, location_query, expected):
     """
@@ -53,7 +54,8 @@ def test_filter_traffic_light_plans_location(location, location_query, expected)
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,location_query,expected", point_location_error_test_data,
+    "location,location_query,expected",
+    point_location_error_test_data,
 )
 def test_filter_error_traffic_light_plans_location(location, location_query, expected):
     """
@@ -290,7 +292,8 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,location_query,expected", point_location_test_data,
+    "location,location_query,expected",
+    point_location_test_data,
 )
 def test_filter_traffic_light_reals_location(location, location_query, expected):
     """
@@ -313,7 +316,8 @@ def test_filter_traffic_light_reals_location(location, location_query, expected)
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "location,location_query,expected", point_location_error_test_data,
+    "location,location_query,expected",
+    point_location_error_test_data,
 )
 def test_filter_error_traffic_light_reals_location(location, location_query, expected):
     """

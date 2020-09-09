@@ -144,6 +144,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterModelTable(
-            name="TrafficControlDeviceType", table="traffic_control_device_type",
+            name="TrafficControlDeviceType",
+            table="traffic_control_device_type",
         ),
     ]

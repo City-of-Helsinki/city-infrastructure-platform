@@ -10,6 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="roadmarkingplan", name="has_rumble_strips",),
-        migrations.RemoveField(model_name="roadmarkingreal", name="has_rumble_strips",),
+        migrations.RemoveField(
+            model_name="roadmarkingplan",
+            name="has_rumble_strips",
+        ),
+        migrations.RemoveField(
+            model_name="roadmarkingreal",
+            name="has_rumble_strips",
+        ),
     ]

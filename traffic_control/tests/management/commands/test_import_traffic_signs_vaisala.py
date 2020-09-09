@@ -12,7 +12,10 @@ from .utils import mock_open
 class ImportTrafficControlDeviceTypesTestCase(TestCase):
     def test_raise_command_error_if_no_file_found(self):
         self.assertRaises(
-            CommandError, call_command, "import_traffic_signs_vaisala", "dummy.csv",
+            CommandError,
+            call_command,
+            "import_traffic_signs_vaisala",
+            "dummy.csv",
         )
 
     @patch("os.path.exists", return_value=True)

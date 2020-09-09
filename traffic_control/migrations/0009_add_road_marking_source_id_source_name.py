@@ -35,9 +35,11 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterUniqueTogether(
-            name="roadmarkingplan", unique_together={("source_name", "source_id")},
+            name="roadmarkingplan",
+            unique_together={("source_name", "source_id")},
         ),
         migrations.AlterUniqueTogether(
-            name="roadmarkingreal", unique_together={("source_name", "source_id")},
+            name="roadmarkingreal",
+            unique_together={("source_name", "source_id")},
         ),
     ]

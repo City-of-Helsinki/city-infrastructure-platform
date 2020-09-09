@@ -11,16 +11,23 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name="additionalsignplan", name="installation_date",
+            model_name="additionalsignplan",
+            name="installation_date",
         ),
         migrations.RemoveField(
-            model_name="additionalsignplan", name="installation_details",
+            model_name="additionalsignplan",
+            name="installation_details",
         ),
         migrations.RemoveField(
-            model_name="additionalsignplan", name="installation_id",
+            model_name="additionalsignplan",
+            name="installation_id",
         ),
         migrations.RemoveField(
-            model_name="additionalsignplan", name="installation_status",
+            model_name="additionalsignplan",
+            name="installation_status",
         ),
-        migrations.RemoveField(model_name="additionalsignplan", name="installed_by",),
+        migrations.RemoveField(
+            model_name="additionalsignplan",
+            name="installed_by",
+        ),
     ]

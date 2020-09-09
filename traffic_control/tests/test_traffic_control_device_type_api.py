@@ -38,7 +38,8 @@ class TrafficControlDeviceTypeTests(APITestCase):
         count = 3
         for i in range(count):
             TrafficControlDeviceType.objects.create(
-                code=i, description="Test description %s" % i,
+                code=i,
+                description="Test description %s" % i,
             )
         response = self.client.get(reverse("v1:trafficcontroldevicetype-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -52,7 +53,8 @@ class TrafficControlDeviceTypeTests(APITestCase):
         count = 3
         for i in range(count):
             TrafficControlDeviceType.objects.create(
-                code=i, description="Test description %s" % i,
+                code=i,
+                description="Test description %s" % i,
             )
         response = self.client.get(reverse("v1:trafficcontroldevicetype-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -228,7 +230,8 @@ class TrafficControlDeviceTypeTests(APITestCase):
     @staticmethod
     def __create_test_traffic_control_device_type():
         return TrafficControlDeviceType.objects.create(
-            code="M16", description="Nopeusrajoitus",
+            code="M16",
+            description="Nopeusrajoitus",
         )
 
 

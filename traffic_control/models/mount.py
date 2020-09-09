@@ -22,19 +22,32 @@ class MountType(models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     code = models.CharField(
-        verbose_name=_("Code"), max_length=128, blank=False, null=False,
+        verbose_name=_("Code"),
+        max_length=128,
+        blank=False,
+        null=False,
     )
     description = models.CharField(
-        verbose_name=_("Description"), max_length=256, blank=False, null=False,
+        verbose_name=_("Description"),
+        max_length=256,
+        blank=False,
+        null=False,
     )
     description_fi = models.CharField(
-        verbose_name=_("Description (fi)"), max_length=256, blank=True, null=False,
+        verbose_name=_("Description (fi)"),
+        max_length=256,
+        blank=True,
+        null=False,
     )
     digiroad_code = models.IntegerField(
-        verbose_name=_("Digiroad code"), blank=True, null=True,
+        verbose_name=_("Digiroad code"),
+        blank=True,
+        null=True,
     )
     digiroad_description = models.CharField(
-        verbose_name=_("Digiroad description"), max_length=256, blank=True,
+        verbose_name=_("Digiroad description"),
+        max_length=256,
+        blank=True,
     )
 
     class Meta:

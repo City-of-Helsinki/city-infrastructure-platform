@@ -7,9 +7,9 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        l
-        for l in open("requirements.txt", "rt").readlines()
-        if l and not l.startswith("#")
+        line
+        for line in open("requirements.txt", "rt").readlines()
+        if line and not line.startswith("#")
     ],
     zip_safe=False,
 )

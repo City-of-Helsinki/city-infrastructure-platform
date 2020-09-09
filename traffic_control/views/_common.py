@@ -91,7 +91,10 @@ class FileUploadViews(GenericViewSet):
         return Response({"files": files})
 
     @action(
-        methods=("PATCH", "DELETE",),
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
         detail=True,
         url_path="files/(?P<file_pk>[^/.]+)",
         parser_classes=(MultiPartParser,),

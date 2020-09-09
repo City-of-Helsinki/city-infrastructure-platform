@@ -29,7 +29,10 @@ class Migration(migrations.Migration):
                 ("name_fi", models.CharField(max_length=254, verbose_name="Name (fi)")),
                 ("name_en", models.CharField(max_length=254, verbose_name="Name (en)")),
             ],
-            options={"verbose_name": "Owner", "verbose_name_plural": "Owners",},
+            options={
+                "verbose_name": "Owner",
+                "verbose_name_plural": "Owners",
+            },
         ),
         migrations.AddField(
             model_name="additionalsignplan",

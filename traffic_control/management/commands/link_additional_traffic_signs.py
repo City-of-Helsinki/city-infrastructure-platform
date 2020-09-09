@@ -11,7 +11,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "-r", "--radius", type=float, default=1, help="Search radius in meters",
+            "-r",
+            "--radius",
+            type=float,
+            default=1,
+            help="Search radius in meters",
         )
 
     def handle(self, *args, **options):

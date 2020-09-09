@@ -155,7 +155,10 @@ class SignpostPlan(
         LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
     )
     lane_type = EnumField(
-        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
@@ -331,7 +334,10 @@ class SignpostReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
     )
     lane_type = EnumField(
-        LaneType, verbose_name=_("Lane type"), default=LaneType.MAIN, blank=True,
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
