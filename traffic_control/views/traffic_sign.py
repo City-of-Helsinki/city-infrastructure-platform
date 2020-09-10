@@ -25,8 +25,8 @@ from ..schema import (
     location_parameter,
     MultiFileUploadSchema,
 )
-from ..serializers import (
-    TrafficControlDeviceTypeSerializer,
+from ..serializers.common import TrafficControlDeviceTypeSerializer
+from ..serializers.traffic_sign import (
     TrafficSignPlanFileSerializer,
     TrafficSignPlanGeoJSONSerializer,
     TrafficSignPlanSerializer,

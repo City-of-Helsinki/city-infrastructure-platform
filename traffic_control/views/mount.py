@@ -27,7 +27,7 @@ from ..schema import (
     location_parameter,
     MultiFileUploadSchema,
 )
-from ..serializers import (
+from ..serializers.mount import (
     MountPlanFileSerializer,
     MountPlanGeoJSONSerializer,
     MountPlanSerializer,
