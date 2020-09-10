@@ -5,21 +5,21 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.viewsets import ModelViewSet
 
-from traffic_control.filters import (
+from ..filters import (
     AdditionalSignContentPlanFilterSet,
     AdditionalSignContentRealFilterSet,
     AdditionalSignPlanFilterSet,
     AdditionalSignRealFilterSet,
 )
-from traffic_control.mixins import UserCreateMixin, UserUpdateMixin
-from traffic_control.models import (
+from ..mixins import UserCreateMixin, UserUpdateMixin
+from ..models import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
 )
-from traffic_control.schema import location_parameter
-from traffic_control.serializers import (
+from ..schema import location_parameter
+from ..serializers.additional_sign import (
     AdditionalSignContentPlanSerializer,
     AdditionalSignContentRealSerializer,
     AdditionalSignPlanGeoJSONSerializer,
@@ -27,7 +27,7 @@ from traffic_control.serializers import (
     AdditionalSignRealGeoJSONSerializer,
     AdditionalSignRealSerializer,
 )
-from traffic_control.views._common import TrafficControlViewSet
+from ..views._common import TrafficControlViewSet
 
 
 @method_decorator(
@@ -118,8 +118,17 @@ class AdditionalSignRealViewSet(TrafficControlViewSet):
         "default": AdditionalSignRealSerializer,
         "geojson": AdditionalSignRealGeoJSONSerializer,
     }
-    queryset = AdditionalSignReal.objects.active()
+    queryset = AdditionalSignReal.objects.none()
     filterset_class = AdditionalSignRealFilterSet
+
+    def get_queryset(self):
+        queryset = AdditionalSignReal.objects.active()
+        return queryset.prefetch_related(
+            "content",
+            "content__device_type",
+            "content__created_by",
+            "content__updated_by",
+        )
 
 
 @method_decorator(

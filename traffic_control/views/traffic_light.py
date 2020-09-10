@@ -16,7 +16,7 @@ from ..schema import (
     location_parameter,
     MultiFileUploadSchema,
 )
-from ..serializers import (
+from ..serializers.traffic_light import (
     TrafficLightPlanFileSerializer,
     TrafficLightPlanGeoJSONSerializer,
     TrafficLightPlanSerializer,

@@ -3,8 +3,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 
-from traffic_control.models import OperationalArea
-from traffic_control.serializers import OperationalAreaSerializer
+from ..models import OperationalArea
+from ..serializers.common import OperationalAreaSerializer
 
 
 @method_decorator(

@@ -4,7 +4,7 @@ from drf_yasg.utils import swagger_auto_schema
 from ..filters import PlanFilterSet
 from ..models import Plan
 from ..schema import location_parameter
-from ..serializers import PlanGeoJSONSerializer, PlanSerializer
+from ..serializers.plan import PlanGeoJSONSerializer, PlanSerializer
 from ._common import TrafficControlViewSet
 
 
