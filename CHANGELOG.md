@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Open attachments in new tab in admin
+- The `content` attribute of `AdditionalSignPlan` and `AdditionalSignReal` models are no longer
+  read only in the API.
 
 ### Fixed
 - Traffic control model admin performance issues caused by multiple foreign key choices
