@@ -252,7 +252,6 @@ class AbstractAdditionalSignContent(UserControlModel):
     )
 
     class Meta:
-        ordering = ("order",)
         abstract = True
 
     def save(self, *args, **kwargs):
@@ -279,6 +278,7 @@ class AdditionalSignContentPlan(AbstractAdditionalSignContent):
     class Meta:
         verbose_name = _("Additional Sign Content Plan")
         verbose_name_plural = _("Additional Sign Content Plans")
+        ordering = ("parent", "order")
 
     def __str__(self):
         return f"AdditionalSignContentPlan at position {self.order} for {self.parent}"
@@ -297,6 +297,7 @@ class AdditionalSignContentReal(AbstractAdditionalSignContent):
     class Meta:
         verbose_name = _("Additional Sign Content Real")
         verbose_name_plural = _("Additional Sign Content Reals")
+        ordering = ("parent", "order")
 
     def __str__(self):
         return f"AdditionalSignContentReal at position {self.order} for {self.parent}"
