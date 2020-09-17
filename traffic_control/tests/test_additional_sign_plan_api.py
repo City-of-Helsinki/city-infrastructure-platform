@@ -1,7 +1,6 @@
-from datetime import datetime
-
 import pytest
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
@@ -16,6 +15,7 @@ from .factories import (
     get_traffic_sign_plan,
     get_user,
 )
+from .test_base_api_3d import test_point_2_3d
 
 # AdditionalSignPlan tests
 # ===============================================
@@ -76,14 +76,19 @@ def test__additional_sign_plan__detail(geo_format):
 
 @pytest.mark.parametrize("admin_user", (False, True))
 @pytest.mark.django_db
-def test__additional_sign_plan__create(admin_user):
+def test__additional_sign_plan__create_without_content(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint POST request doesn't raise
+    validation errors for missing content data and that the sign is created
+    successfully
+    """
     client = get_api_client(user=get_user(admin=admin_user))
-    traffic_sign_plan = get_traffic_sign_plan()
+    tsp = get_traffic_sign_plan()
     data = {
-        "parent": traffic_sign_plan.pk,
-        "location": str(traffic_sign_plan.location),
-        "decision_date": "2020-01-02",
+        "parent": tsp.pk,
+        "location": str(tsp.location),
         "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
     }
 
     response = client.post(reverse("v1:additionalsignplan-list"), data=data)
@@ -92,27 +97,170 @@ def test__additional_sign_plan__create(admin_user):
     if admin_user:
         assert response.status_code == status.HTTP_201_CREATED
         assert AdditionalSignPlan.objects.count() == 1
-        assert response_data["id"] == str(AdditionalSignPlan.objects.first().pk)
-        assert response_data["decision_date"] == data["decision_date"]
+        assert AdditionalSignContentPlan.objects.count() == 0
+        asp = AdditionalSignPlan.objects.first()
+        assert response_data["id"] == str(asp.pk)
+        assert response_data["parent"] == str(data["parent"])
         assert response_data["owner"] == str(data["owner"])
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert AdditionalSignPlan.objects.count() == 0
+        assert AdditionalSignContentPlan.objects.count() == 0
 
 
 @pytest.mark.parametrize("admin_user", (False, True))
 @pytest.mark.django_db
-def test__additional_sign_plan__update(admin_user):
+def test__additional_sign_plan__create_with_content(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint POST request creates
+    AdditionalSignContentPlan instances successfully
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    tsp = get_traffic_sign_plan()
+    dt = get_traffic_control_device_type()
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [
+            {"text": "Test content 1", "order": 1, "device_type": str(dt.pk)},
+            {"text": "Test content 2", "order": 2, "device_type": str(dt.pk)},
+        ],
+    }
+
+    response = client.post(reverse("v1:additionalsignplan-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_201_CREATED
+        assert AdditionalSignPlan.objects.count() == 1
+        asp = AdditionalSignPlan.objects.first()
+        assert response_data["id"] == str(asp.pk)
+        assert response_data["parent"] == str(data["parent"])
+        assert response_data["owner"] == str(data["owner"])
+        assert AdditionalSignContentPlan.objects.count() == 2
+        ascp_1 = asp.content.first()
+        assert ascp_1.text == "Test content 1"
+        assert ascp_1.order == 1
+        assert ascp_1.device_type.pk == dt.pk
+        ascp_2 = asp.content.last()
+        assert ascp_2.text == "Test content 2"
+        assert ascp_2.order == 2
+        assert ascp_2.device_type.pk == dt.pk
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert AdditionalSignPlan.objects.count() == 0
+        assert AdditionalSignContentPlan.objects.count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__create_with_content_id(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint POST request raises
+    an error if any of the content instances have a id defined.
+    Pre-existing content instances can not be assigned for newly
+    created additional signs.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    tsp = get_traffic_sign_plan()
+    dt = get_traffic_control_device_type()
+    ascp = get_additional_sign_content_plan(device_type=dt)
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [
+            {
+                "id": str(ascp.pk),
+                "text": "Test content",
+                "order": 1,
+                "device_type": str(dt.pk),
+            }
+        ],
+    }
+
+    response = client.post(reverse("v1:additionalsignplan-list"), data=data)
+    response_data = response.json()
+    asp = AdditionalSignPlan.objects.exclude(pk=ascp.parent.pk).first()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response_data == {
+            "content": [
+                {
+                    "id": [
+                        (
+                            "Creating new additional sign with pre-existing "
+                            "content instance is not allowed. Content objects "
+                            'must not have "id" defined.'
+                        )
+                    ]
+                }
+            ]
+        }
+        assert not asp
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert not asp
+        assert AdditionalSignContentPlan.objects.count() == 1
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__create_with_incomplete_data(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint POST request raises
+    validation error correctly if required data is missing.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    tsp = get_traffic_sign_plan()
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [{"text": "Test content", "order": 1}],
+    }
+
+    response = client.post(reverse("v1:additionalsignplan-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response_data == {
+            "content": [{"device_type": [_("This field is required.")]}]
+        }
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    assert AdditionalSignPlan.objects.count() == 0
+    assert AdditionalSignContentPlan.objects.count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__update_without_content(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint PUT request update
+    is successful when content is not defined. Old content should
+    be deleted.
+    """
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="A1234")
     asp = get_additional_sign_plan()
-    traffic_sign_plan = get_traffic_sign_plan(device_type=dt)
+    get_additional_sign_content_plan(parent=asp)
+    tsp = get_traffic_sign_plan(device_type=dt)
     data = {
-        "parent": traffic_sign_plan.pk,
-        "location": str(traffic_sign_plan.location),
-        "decision_date": "2020-01-02",
-        "owner": get_owner().pk,
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner(name_en="New owner").pk,
+        "decision_date": "2020-09-01",
     }
+
+    assert AdditionalSignContentPlan.objects.count() == 1
 
     response = client.put(
         reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
@@ -122,16 +270,359 @@ def test__additional_sign_plan__update(admin_user):
     if admin_user:
         assert response.status_code == status.HTTP_200_OK
         assert response_data["id"] == str(asp.pk)
-        assert response_data["decision_date"] == data["decision_date"]
+        assert response_data["owner"] == str(data["owner"])
+        assert AdditionalSignContentPlan.objects.count() == 0
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.owner != data["owner"]
+        assert AdditionalSignContentPlan.objects.count() == 1
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__update_with_content(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint PUT request replaces
+    AdditionalSignContentPlan instances when content does not have
+    id defined. A new content instance should be created.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    dt = get_traffic_control_device_type(code="A1234")
+    asp = get_additional_sign_plan()
+    original_ascp = get_additional_sign_content_plan(parent=asp)
+    tsp = get_traffic_sign_plan(device_type=dt)
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [{"text": "New content", "order": 123, "device_type": str(dt.pk)}],
+    }
+
+    response = client.put(
+        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
+    )
+    response_data = response.json()
+    asp.refresh_from_db()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_200_OK
+        assert response_data["id"] == str(asp.pk)
+        assert response_data["owner"] == str(data["owner"])
+        new_ascp = asp.content.first()
+        content = response_data["content"][0]
+        assert content["id"] == str(new_ascp.pk)
+        assert content["text"] == "New content"
+        assert content["order"] == 123
+        assert not AdditionalSignContentPlan.objects.filter(
+            pk=original_ascp.pk
+        ).exists()
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.owner != data["owner"]
+        assert asp.content.count() == 1
+        original_ascp.refresh_from_db()
+        assert original_ascp.parent == asp
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__update_with_content_id(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint PUT request updates
+    AdditionalSignContent instances successfully when id is defined.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    dt = get_traffic_control_device_type(code="A1234")
+    asp = get_additional_sign_plan()
+    ascp = get_additional_sign_content_plan(parent=asp)
+    tsp = get_traffic_sign_plan(device_type=dt)
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [
+            {
+                "id": str(ascp.pk),
+                "text": "Updated content",
+                "order": 100,
+                "device_type": str(dt.pk),
+            }
+        ],
+    }
+
+    response = client.put(
+        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
+    )
+    response_data = response.json()
+    asp.refresh_from_db()
+    ascp.refresh_from_db()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_200_OK
+        assert response_data["id"] == str(asp.pk)
+        assert response_data["owner"] == str(data["owner"])
+        content = response_data["content"][0]
+        assert content["id"] == str(ascp.pk)
+        assert content["text"] == "Updated content"
+        assert content["order"] == 100
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.owner != data["owner"]
+        assert ascp.text != "Updated text"
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__update_with_unrelated_content_id(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint PUT request raises
+    validation error if content is not related to the AdditionalSignPlan
+    that is being updated.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    dt = get_traffic_control_device_type(code="A1234")
+    asp = get_additional_sign_plan()
+    ascp = get_additional_sign_content_plan(
+        parent=get_additional_sign_plan(location=test_point_2_3d)
+    )
+    tsp = get_traffic_sign_plan(device_type=dt)
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [
+            {
+                "id": str(ascp.pk),
+                "text": "Updated content",
+                "order": 100,
+                "device_type": str(dt.pk),
+            }
+        ],
+    }
+
+    response = client.put(
+        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
+    )
+    response_data = response.json()
+    asp.refresh_from_db()
+    ascp.refresh_from_db()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response_data == {
+            "content": [
+                {
+                    "id": [
+                        (
+                            "Updating content instances that do not belong to "
+                            "this additional sign is not allowed."
+                        )
+                    ]
+                }
+            ]
+        }
+        assert ascp.parent != asp
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.owner != data["owner"]
+        assert ascp.text != "Updated text"
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__partial_update_without_content(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint PATCH request update
+    is successful when content is not defined. Old content should
+    not be deleted.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    dt = get_traffic_control_device_type(code="A1234")
+    asp = get_additional_sign_plan()
+    get_additional_sign_content_plan(parent=asp)
+    tsp = get_traffic_sign_plan(device_type=dt)
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner(name_en="New owner").pk,
+        "decision_date": "2020-09-01",
+    }
+
+    assert AdditionalSignContentPlan.objects.count() == 1
+
+    response = client.patch(
+        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
+    )
+    response_data = response.json()
+    asp.refresh_from_db()
+
+    assert AdditionalSignContentPlan.objects.count() == 1
+    assert asp.content.exists()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_200_OK
+        assert response_data["id"] == str(asp.pk)
         assert response_data["owner"] == str(data["owner"])
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
-        asp.refresh_from_db()
-        assert (
-            asp.decision_date
-            != datetime.strptime(data["decision_date"], "%Y-%m-%d").date()
-        )
         assert asp.owner != data["owner"]
+        assert AdditionalSignContentPlan.objects.count() == 1
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__partial_update_with_content(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint PATCH request replaces
+    AdditionalSignContentPlan instances when content does not have
+    id defined. A new content instance should be created.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    dt = get_traffic_control_device_type(code="A1234")
+    asp = get_additional_sign_plan()
+    original_ascp = get_additional_sign_content_plan(parent=asp)
+    tsp = get_traffic_sign_plan(device_type=dt)
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [{"text": "New content", "order": 123, "device_type": str(dt.pk)}],
+    }
+
+    response = client.patch(
+        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
+    )
+    response_data = response.json()
+    asp.refresh_from_db()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_200_OK
+        assert response_data["id"] == str(asp.pk)
+        assert response_data["owner"] == str(data["owner"])
+        new_ascr = asp.content.first()
+        content = response_data["content"][0]
+        assert content["id"] == str(new_ascr.pk)
+        assert content["text"] == "New content"
+        assert content["order"] == 123
+        assert not AdditionalSignContentPlan.objects.filter(
+            pk=original_ascp.pk
+        ).exists()
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.owner != data["owner"]
+        assert asp.content.count() == 1
+        original_ascp.refresh_from_db()
+        assert original_ascp.parent == asp
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__partial_update_with_content_id(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint PATCH request updates
+    AdditionalSignContentPlan instances successfully when id is defined.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    dt = get_traffic_control_device_type(code="A1234")
+    asp = get_additional_sign_plan()
+    ascp = get_additional_sign_content_plan(parent=asp)
+    tsp = get_traffic_sign_plan(device_type=dt)
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [
+            {
+                "id": str(ascp.pk),
+                "text": "Updated content",
+                "order": 100,
+                "device_type": str(dt.pk),
+            }
+        ],
+    }
+
+    response = client.patch(
+        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
+    )
+    response_data = response.json()
+    asp.refresh_from_db()
+    ascp.refresh_from_db()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_200_OK
+        assert response_data["id"] == str(asp.pk)
+        assert response_data["owner"] == str(data["owner"])
+        content = response_data["content"][0]
+        assert content["id"] == str(ascp.pk)
+        assert content["text"] == "Updated content"
+        assert content["order"] == 100
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.owner != data["owner"]
+        assert ascp.text != "Updated text"
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__partial_update_with_unrelated_content_id(admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint PATCH request raises
+    validation error if content is not related to the parent
+    AdditionalSignPlan.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    dt = get_traffic_control_device_type(code="A1234")
+    asp = get_additional_sign_plan()
+    ascp = get_additional_sign_content_plan(
+        parent=get_additional_sign_plan(location=test_point_2_3d)
+    )
+    tsp = get_traffic_sign_plan(device_type=dt)
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner().pk,
+        "decision_date": "2020-09-01",
+        "content": [
+            {
+                "id": str(ascp.pk),
+                "text": "Updated content",
+                "order": 100,
+                "device_type": str(dt.pk),
+            }
+        ],
+    }
+
+    response = client.patch(
+        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
+    )
+    response_data = response.json()
+    asp.refresh_from_db()
+    ascp.refresh_from_db()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response_data == {
+            "content": [
+                {
+                    "id": [
+                        (
+                            "Updating content instances that do not belong to "
+                            "this additional sign is not allowed."
+                        )
+                    ]
+                }
+            ]
+        }
+        assert ascp.parent != asp
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.owner != data["owner"]
+        assert ascp.text != "Updated text"
 
 
 @pytest.mark.parametrize("admin_user", (False, True))

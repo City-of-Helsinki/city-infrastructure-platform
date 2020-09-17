@@ -33,7 +33,9 @@ from ..views._common import TrafficControlViewSet
 @method_decorator(
     name="create",
     decorator=swagger_auto_schema(
-        operation_description="Create new AdditionalSign Plan"
+        operation_description=(
+            "Create new AdditionalSign Plan and AdditionalSignContent Plans"
+        )
     ),
 )
 @method_decorator(
@@ -52,13 +54,18 @@ from ..views._common import TrafficControlViewSet
 @method_decorator(
     name="update",
     decorator=swagger_auto_schema(
-        operation_description="Update single AdditionalSign Plan"
+        operation_description=(
+            "Update single AdditionalSign Plan and AdditionalSignContent Plans"
+        )
     ),
 )
 @method_decorator(
     name="partial_update",
     decorator=swagger_auto_schema(
-        operation_description="Partially update single AdditionalSign Plan"
+        operation_description=(
+            "Partially update single AdditionalSign Plan and "
+            "AdditionalSignContent Plans"
+        )
     ),
 )
 @method_decorator(
@@ -79,7 +86,9 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet):
 @method_decorator(
     name="create",
     decorator=swagger_auto_schema(
-        operation_description="Create new AdditionalSign Real"
+        operation_description=(
+            "Create new AdditionalSign Real and AdditionalSignContent Reals"
+        ),
     ),
 )
 @method_decorator(
@@ -98,13 +107,18 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet):
 @method_decorator(
     name="update",
     decorator=swagger_auto_schema(
-        operation_description="Update single AdditionalSign Real"
+        operation_description=(
+            "Update single AdditionalSign Real and AdditionalSignContent Reals"
+        )
     ),
 )
 @method_decorator(
     name="partial_update",
     decorator=swagger_auto_schema(
-        operation_description="Partially update single AdditionalSign Real"
+        operation_description=(
+            "Partially update single AdditionalSign Real and "
+            "AdditionalSignContent Reals"
+        )
     ),
 )
 @method_decorator(
@@ -130,11 +144,16 @@ class AdditionalSignRealViewSet(TrafficControlViewSet):
             "content__updated_by",
         )
 
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
 
 @method_decorator(
     name="create",
     decorator=swagger_auto_schema(
-        operation_description="Create new AdditionalSignContent Plan"
+        operation_description=(
+            "Create new AdditionalSignContent Plan and AdditionalSignContent Plans"
+        )
     ),
 )
 @method_decorator(
