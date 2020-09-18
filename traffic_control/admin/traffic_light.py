@@ -45,20 +45,6 @@ class TrafficLightPlanAdmin(
     default_zoom = 12
     fieldsets = (
         (
-            _("Location information"),
-            {
-                "fields": (
-                    "location",
-                    "direction",
-                    "road_name",
-                    "lane_number",
-                    "lane_type",
-                    "location_specifier",
-                )
-            },
-        ),
-        (_("Physical properties"), {"fields": ("height", "mount_type")}),
-        (
             _("General information"),
             {
                 "fields": (
@@ -72,6 +58,20 @@ class TrafficLightPlanAdmin(
                 )
             },
         ),
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (_("Physical properties"), {"fields": ("height", "mount_type")}),
         (_("Related models"), {"fields": ("plan", "mount_plan")}),
         (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
@@ -130,20 +130,6 @@ class TrafficLightRealAdmin(
     default_zoom = 12
     fieldsets = (
         (
-            _("Location information"),
-            {
-                "fields": (
-                    "location",
-                    "direction",
-                    "road_name",
-                    "lane_number",
-                    "lane_type",
-                    "location_specifier",
-                )
-            },
-        ),
-        (_("Physical properties"), {"fields": ("height", "mount_type", "condition")}),
-        (
             _("General information"),
             {
                 "fields": (
@@ -157,6 +143,20 @@ class TrafficLightRealAdmin(
                 )
             },
         ),
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (_("Physical properties"), {"fields": ("height", "mount_type", "condition")}),
         (_("Related models"), {"fields": ("traffic_light_plan", "mount_real")}),
         (
             _("Installation information"),

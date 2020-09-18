@@ -59,6 +59,10 @@ class AdditionalSignPlanAdmin(
     form = AdditionalSignPlanModelForm
     fieldsets = (
         (
+            _("General information"),
+            {"fields": ("owner", "mount_type", "source_id", "source_name")},
+        ),
+        (
             _("Location information"),
             {
                 "fields": (
@@ -75,10 +79,6 @@ class AdditionalSignPlanAdmin(
         (
             _("Physical properties"),
             {"fields": ("height", "color", "reflection_class", "surface_class")},
-        ),
-        (
-            _("General information"),
-            {"fields": ("owner", "mount_type", "source_id", "source_name")},
         ),
         (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
         (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
@@ -134,6 +134,24 @@ class AdditionalSignRealAdmin(
     form = AdditionalSignRealModelForm
     fieldsets = (
         (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "mount_type",
+                    "permit_decision_id",
+                    "attachment_url",
+                    "scanned_at",
+                    "operation",
+                    "manufacturer",
+                    "rfid",
+                    "legacy_code",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (
             _("Location information"),
             {
                 "fields": (
@@ -157,24 +175,6 @@ class AdditionalSignRealAdmin(
                     "reflection_class",
                     "surface_class",
                     "condition",
-                )
-            },
-        ),
-        (
-            _("General information"),
-            {
-                "fields": (
-                    "owner",
-                    "mount_type",
-                    "permit_decision_id",
-                    "attachment_url",
-                    "scanned_at",
-                    "operation",
-                    "manufacturer",
-                    "rfid",
-                    "legacy_code",
-                    "source_id",
-                    "source_name",
                 )
             },
         ),

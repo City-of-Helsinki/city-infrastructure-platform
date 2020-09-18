@@ -45,6 +45,22 @@ class RoadMarkingPlanAdmin(
     default_zoom = 12
     fieldsets = (
         (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "type_specifier",
+                    "value",
+                    "symbol",
+                    "amount",
+                    "additional_info",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (
             _("Location information"),
             {
                 "fields": (
@@ -69,22 +85,6 @@ class RoadMarkingPlanAdmin(
                     "is_grinded",
                     "material",
                     "color",
-                )
-            },
-        ),
-        (
-            _("General information"),
-            {
-                "fields": (
-                    "owner",
-                    "device_type",
-                    "type_specifier",
-                    "value",
-                    "symbol",
-                    "amount",
-                    "additional_info",
-                    "source_id",
-                    "source_name",
                 )
             },
         ),
@@ -146,6 +146,23 @@ class RoadMarkingRealAdmin(
     default_zoom = 12
     fieldsets = (
         (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "type_specifier",
+                    "value",
+                    "symbol",
+                    "amount",
+                    "additional_info",
+                    "missing_traffic_sign_real_txt",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (
             _("Location information"),
             {
                 "fields": (
@@ -171,23 +188,6 @@ class RoadMarkingRealAdmin(
                     "material",
                     "color",
                     "condition",
-                )
-            },
-        ),
-        (
-            _("General information"),
-            {
-                "fields": (
-                    "owner",
-                    "device_type",
-                    "type_specifier",
-                    "value",
-                    "symbol",
-                    "amount",
-                    "additional_info",
-                    "missing_traffic_sign_real_txt",
-                    "source_id",
-                    "source_name",
                 )
             },
         ),

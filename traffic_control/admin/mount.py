@@ -48,6 +48,10 @@ class MountPlanAdmin(
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
     fieldsets = (
+        (
+            _("General information"),
+            {"fields": ("owner", "electric_accountable", "txt")},
+        ),
         (_("Location information"), {"fields": ("location",)}),
         (
             _("Physical properties"),
@@ -62,10 +66,6 @@ class MountPlanAdmin(
                     "is_foldable",
                 )
             },
-        ),
-        (
-            _("General information"),
-            {"fields": ("owner", "electric_accountable", "txt")},
         ),
         (_("Related models"), {"fields": ("plan",)}),
         (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
@@ -122,6 +122,10 @@ class MountRealAdmin(
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
     fieldsets = (
+        (
+            _("General information"),
+            {"fields": ("owner", "electric_accountable", "inspected_at", "txt")},
+        ),
         (_("Location information"), {"fields": ("location",)}),
         (
             _("Physical properties"),
@@ -138,10 +142,6 @@ class MountRealAdmin(
                     "condition",
                 )
             },
-        ),
-        (
-            _("General information"),
-            {"fields": ("owner", "electric_accountable", "inspected_at", "txt")},
         ),
         (_("Related models"), {"fields": ("mount_plan",)}),
         (

@@ -40,19 +40,6 @@ class BarrierPlanAdmin(
     default_zoom = 12
     fieldsets = (
         (
-            _("Location information"),
-            {
-                "fields": (
-                    "location",
-                    "road_name",
-                    "lane_number",
-                    "lane_type",
-                    "location_specifier",
-                )
-            },
-        ),
-        (_("Physical properties"), {"fields": ("material", "reflective", "length")}),
-        (
             _("General information"),
             {
                 "fields": (
@@ -65,6 +52,19 @@ class BarrierPlanAdmin(
                 )
             },
         ),
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (_("Physical properties"), {"fields": ("material", "reflective", "length")}),
         (_("Related models"), {"fields": ("plan",)}),
         (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
@@ -122,6 +122,19 @@ class BarrierRealAdmin(
     default_zoom = 12
     fieldsets = (
         (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "is_electric",
+                    "connection_type",
+                    "count",
+                    "txt",
+                )
+            },
+        ),
+        (
             _("Location information"),
             {
                 "fields": (
@@ -136,19 +149,6 @@ class BarrierRealAdmin(
         (
             _("Physical properties"),
             {"fields": ("material", "reflective", "length", "condition")},
-        ),
-        (
-            _("General information"),
-            {
-                "fields": (
-                    "owner",
-                    "device_type",
-                    "is_electric",
-                    "connection_type",
-                    "count",
-                    "txt",
-                )
-            },
         ),
         (_("Related models"), {"fields": ("barrier_plan",)}),
         (
