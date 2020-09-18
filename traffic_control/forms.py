@@ -14,6 +14,7 @@ from .models import (
     MountPlan,
     RoadMarkingPlan,
     SignpostPlan,
+    TrafficControlDeviceType,
     TrafficLightPlan,
     TrafficSignPlan,
     TrafficSignReal,
@@ -26,6 +27,26 @@ class AdminFileWidget(widgets.AdminFileWidget):
     """
 
     template_name = "admin/traffic_control/widgets/clearable_file_input.html"
+
+
+class AdminTrafficSignIconSelectWidget(Select):
+    """
+    Widget that show a traffic sign icon representing the selected device type
+    next to the select input
+    """
+
+    template_name = "admin/traffic_control/widgets/traffic_sign_icon_select.html"
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+
+        icon_path = ""
+        instance = TrafficControlDeviceType.objects.filter(pk=value).first()
+        if instance:
+            icon_path = f"svg/traffic_sign_icons/{instance.code}.svg"
+        context["icon_path"] = icon_path
+
+        return context
 
 
 class AdminEnumSelectWidget(Select):
@@ -77,12 +98,18 @@ class TrafficSignRealModelForm(Point3DFieldForm):
     class Meta:
         model = TrafficSignReal
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficSignIconSelectWidget(),
+        }
 
 
 class TrafficSignPlanModelForm(Point3DFieldForm):
     class Meta:
         model = TrafficSignPlan
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficSignIconSelectWidget(),
+        }
 
 
 class AdditionalSignRealModelForm(Point3DFieldForm):
