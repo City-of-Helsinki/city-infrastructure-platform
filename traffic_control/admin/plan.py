@@ -30,11 +30,11 @@ class PlanAdmin(
     default_zoom = 12
 
     fieldsets = (
-        (_("Location information"), {"fields": ("location",)}),
         (
             _("General information"),
             {"fields": ("name", "plan_number", "planner", "decision_maker")},
         ),
+        (_("Location information"), {"fields": ("location",)}),
         (
             _("Metadata"),
             {"fields": ("created_at", "updated_at", "created_by", "updated_by")},

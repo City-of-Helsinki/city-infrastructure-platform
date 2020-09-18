@@ -82,6 +82,20 @@ class TrafficSignPlanAdmin(
     form = TrafficSignPlanModelForm
     fieldsets = (
         (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "mount_type",
+                    "value",
+                    "txt",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (
             _("Location information"),
             {
                 "fields": (
@@ -103,20 +117,6 @@ class TrafficSignPlanAdmin(
                     "height",
                     "reflection_class",
                     "surface_class",
-                )
-            },
-        ),
-        (
-            _("General information"),
-            {
-                "fields": (
-                    "owner",
-                    "device_type",
-                    "mount_type",
-                    "value",
-                    "txt",
-                    "source_id",
-                    "source_name",
                 )
             },
         ),
@@ -187,6 +187,27 @@ class TrafficSignRealAdmin(
     form = TrafficSignRealModelForm
     fieldsets = (
         (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "device_type",
+                    "mount_type",
+                    "permit_decision_id",
+                    "attachment_url",
+                    "scanned_at",
+                    "operation",
+                    "manufacturer",
+                    "rfid",
+                    "value",
+                    "txt",
+                    "legacy_code",
+                    "source_id",
+                    "source_name",
+                )
+            },
+        ),
+        (
             _("Location information"),
             {
                 "fields": (
@@ -209,27 +230,6 @@ class TrafficSignRealAdmin(
                     "reflection_class",
                     "surface_class",
                     "condition",
-                )
-            },
-        ),
-        (
-            _("General information"),
-            {
-                "fields": (
-                    "owner",
-                    "device_type",
-                    "mount_type",
-                    "permit_decision_id",
-                    "attachment_url",
-                    "scanned_at",
-                    "operation",
-                    "manufacturer",
-                    "rfid",
-                    "value",
-                    "txt",
-                    "legacy_code",
-                    "source_id",
-                    "source_name",
                 )
             },
         ),

@@ -40,20 +40,6 @@ class SignpostPlanAdmin(
     default_zoom = 12
     fieldsets = (
         (
-            _("Location information"),
-            {
-                "fields": (
-                    "location",
-                    "direction",
-                    "road_name",
-                    "lane_number",
-                    "lane_type",
-                    "location_specifier",
-                )
-            },
-        ),
-        (_("Physical properties"), {"fields": ("height", "size", "reflection_class")}),
-        (
             _("General information"),
             {
                 "fields": (
@@ -70,6 +56,20 @@ class SignpostPlanAdmin(
                 )
             },
         ),
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "location",
+                    "direction",
+                    "road_name",
+                    "lane_number",
+                    "lane_type",
+                    "location_specifier",
+                )
+            },
+        ),
+        (_("Physical properties"), {"fields": ("height", "size", "reflection_class")}),
         (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
         (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
@@ -129,6 +129,25 @@ class SignpostRealAdmin(
     default_zoom = 12
     fieldsets = (
         (
+            _("General information"),
+            {
+                "fields": (
+                    "owner",
+                    "responsible_entity",
+                    "electric_maintainer",
+                    "device_type",
+                    "mount_type",
+                    "attachment_class",
+                    "value",
+                    "txt",
+                    "target_id",
+                    "target_txt",
+                    "organization",
+                    "manufacturer",
+                )
+            },
+        ),
+        (
             _("Location information"),
             {
                 "fields": (
@@ -150,25 +169,6 @@ class SignpostRealAdmin(
                     "reflection_class",
                     "material",
                     "condition",
-                )
-            },
-        ),
-        (
-            _("General information"),
-            {
-                "fields": (
-                    "owner",
-                    "responsible_entity",
-                    "electric_maintainer",
-                    "device_type",
-                    "mount_type",
-                    "attachment_class",
-                    "value",
-                    "txt",
-                    "target_id",
-                    "target_txt",
-                    "organization",
-                    "manufacturer",
                 )
             },
         ),
