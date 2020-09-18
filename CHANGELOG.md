@@ -11,11 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `source_name` and `source_id` to all TrafficControl models
 - `Owner` model and foreign key relation to it for all TrafficControl models
 - Add management command to import operational areas (contract areas) from Helsinki WFS
+- Show traffic sign icon next to `device_type` in `TrafficSignPlan` and `TrafficSignReal` admin
 
 ### Changed
 - Open attachments in new tab in admin
 - The `content` attribute of `AdditionalSignPlan` and `AdditionalSignReal` models are no longer
   read only in the API.
+- Move general information to be the first fieldset in admin views
 
 ### Fixed
 - Traffic control model admin performance issues caused by multiple foreign key choices
