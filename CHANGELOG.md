@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Owner` model and foreign key relation to it for all TrafficControl models
 - Add management command to import operational areas (contract areas) from Helsinki WFS
 - Show traffic sign icon next to `device_type` in `TrafficSignPlan` and `TrafficSignReal` admin
+- Add traffic control device types filtering by target model
 
 ### Changed
 - Open attachments in new tab in admin

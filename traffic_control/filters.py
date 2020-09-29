@@ -27,7 +27,10 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.models.common import TRAFFIC_SIGN_TYPE_CHOICES
+from traffic_control.models.common import (
+    DeviceTypeTargetModel,
+    TRAFFIC_SIGN_TYPE_CHOICES,
+)
 
 
 class GenericMeta:
@@ -136,6 +139,11 @@ class TrafficControlDeviceTypeFilterSet(FilterSet):
         label=_("Traffic sign type"),
         choices=TRAFFIC_SIGN_TYPE_CHOICES,
         method="filter_traffic_sign_type",
+    )
+
+    target_model = ChoiceFilter(
+        label=_("Target data model"),
+        choices=DeviceTypeTargetModel.choices(),
     )
 
     class Meta(GenericMeta):
