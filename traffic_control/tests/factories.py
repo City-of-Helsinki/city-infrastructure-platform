@@ -317,7 +317,6 @@ def get_additional_sign_plan(
     return AdditionalSignPlan.objects.get_or_create(
         parent=parent or get_traffic_sign_plan(),
         location=location,
-        affect_area=test_polygon,
         owner=owner,
         decision_date=datetime.date(2020, 1, 1),
         plan=plan,
@@ -333,7 +332,6 @@ def get_additional_sign_real(location=test_point_3d, parent=None, owner=None):
     return AdditionalSignReal.objects.get_or_create(
         parent=parent or get_traffic_sign_real(),
         location=location,
-        affect_area=test_polygon,
         owner=owner,
         created_by=user,
         updated_by=user,

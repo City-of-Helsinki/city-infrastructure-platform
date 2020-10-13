@@ -153,7 +153,6 @@ class AdditionalSignPlanSerializer(
 
 class AdditionalSignPlanGeoJSONSerializer(AdditionalSignPlanSerializer):
     location = GeometryField(required=False)
-    affect_area = GeometryField(required=False)
 
 
 class AdditionalSignContentRealSerializer(serializers.ModelSerializer):
@@ -209,4 +208,3 @@ class AdditionalSignRealSerializer(
 
 class AdditionalSignRealGeoJSONSerializer(AdditionalSignRealSerializer):
     location = GeometryField(required=False)
-    affect_area = GeometryField(required=False)

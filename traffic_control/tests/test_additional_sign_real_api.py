@@ -42,10 +42,8 @@ def test__additional_sign_real__list(geo_format):
 
         if geo_format == "geojson":
             assert result["location"] == GeoJsonDict(obj.location.json)
-            assert result["affect_area"] == GeoJsonDict(obj.affect_area.json)
         else:
             assert result["location"] == obj.location.ewkt
-            assert result["affect_area"] == obj.affect_area.ewkt
 
 
 @pytest.mark.parametrize("geo_format", ("", "geojson"))
@@ -68,10 +66,8 @@ def test__additional_sign_real__detail(geo_format):
 
     if geo_format == "geojson":
         assert response_data["location"] == GeoJsonDict(asr.location.json)
-        assert response_data["affect_area"] == GeoJsonDict(asr.affect_area.json)
     else:
         assert response_data["location"] == asr.location.ewkt
-        assert response_data["affect_area"] == asr.affect_area.ewkt
 
 
 @pytest.mark.parametrize("admin_user", (False, True))

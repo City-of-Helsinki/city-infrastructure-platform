@@ -72,7 +72,6 @@ class AdditionalSignPlanAdmin(
                     "lane_number",
                     "lane_type",
                     "location_specifier",
-                    "affect_area",
                 )
             },
         ),
@@ -161,7 +160,7 @@ class AdditionalSignRealAdmin(
                     "lane_number",
                     "lane_type",
                     "location_specifier",
-                    "affect_area",
+                    "parking_area",
                 )
             },
         ),
