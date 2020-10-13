@@ -5,6 +5,7 @@ from .additional_sign import (
     AdditionalSignPlan,
     AdditionalSignReal,
 )
+from .affect_area import ParkingArea, ParkingAreaCategory
 from .barrier import (
     BarrierPlan,
     BarrierPlanFile,
