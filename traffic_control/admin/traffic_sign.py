@@ -105,7 +105,6 @@ class TrafficSignPlanAdmin(
                     "lane_number",
                     "lane_type",
                     "location_specifier",
-                    "affect_area",
                 )
             },
         ),
@@ -217,7 +216,7 @@ class TrafficSignRealAdmin(
                     "lane_number",
                     "lane_type",
                     "location_specifier",
-                    "affect_area",
+                    "parking_area",
                 )
             },
         ),

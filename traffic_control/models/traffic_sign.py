@@ -15,6 +15,7 @@ from ..mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
+from .affect_area import ParkingArea
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -301,8 +302,12 @@ class TrafficSignReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    affect_area = models.PolygonField(
-        _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
+    parking_area = models.ForeignKey(
+        ParkingArea,
+        verbose_name=_("Parking area"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
     )
     scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
     size = EnumField(

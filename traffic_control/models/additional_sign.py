@@ -14,6 +14,7 @@ from ..mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
+from .affect_area import ParkingArea
 from .common import (
     Color,
     Condition,
@@ -44,9 +45,6 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.IntegerField(_("Height"), blank=True, null=True)
     direction = models.IntegerField(_("Direction"), default=0)
-    affect_area = models.PolygonField(
-        _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
-    )
     reflection_class = EnumField(
         Reflection,
         verbose_name=_("Reflection"),
@@ -228,6 +226,13 @@ class AdditionalSignReal(AbstractAdditionalSign):
     )
     attachment_url = models.URLField(
         _("Attachment url"), max_length=500, blank=True, null=True
+    )
+    parking_area = models.ForeignKey(
+        ParkingArea,
+        verbose_name=_("Parking area"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
     )
 
     class Meta:
