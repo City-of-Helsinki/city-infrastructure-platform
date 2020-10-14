@@ -1,25 +1,15 @@
-from collections import UserDict
 from unittest.mock import patch
 
-from django.conf import settings
-from django.contrib.gis.gdal import SpatialReference
 from django.core.management import call_command
 from django.test import TestCase
 
 from traffic_control.models import OperationalArea
+from traffic_control.tests.management.commands.utils import (
+    create_mock_data_source,
+    MockAttribute,
+    MockFeature,
+)
 from traffic_control.tests.test_base_api import test_multi_polygon
-
-
-class MockAttribute:
-    def __init__(self, value):
-        self.value = value
-
-
-class MockFeature(UserDict):
-    def __init__(self, data, ogr_geom):
-        super().__init__(data)
-        self.geom = ogr_geom
-
 
 MOCK_FEATURE_1 = MockFeature(
     {
@@ -54,34 +44,11 @@ MOCK_FEATURE_2 = MockFeature(
 )
 
 
-class MockLayer:
-    def __init__(self):
-        self.srs = SpatialReference(settings.SRID)
-        self.mock_features = [
-            MOCK_FEATURE_1,
-            MOCK_FEATURE_2,
-        ]
-
-    def __iter__(self):
-        yield from self.mock_features
-
-    def __len__(self):
-        return len(self.mock_features)
-
-
-class MockDataSource:
-    def __init__(self, ds_input):
-        pass
-
-    def __getitem__(self, index):
-        return MockLayer()
-
-
 class ImportOperationalAreasHkiWfsTestCase(TestCase):
     @patch("urllib.request.urlretrieve", return_value=("dummy-file", {}))
     @patch(
         "traffic_control.management.commands.import_operational_areas_hki_wfs.DataSource",
-        MockDataSource,
+        create_mock_data_source([MOCK_FEATURE_1, MOCK_FEATURE_2]),
     )
     def test_importer_created_operational_areas(self, mock_urlretrieve):
         call_command("import_operational_areas_hki_wfs")
