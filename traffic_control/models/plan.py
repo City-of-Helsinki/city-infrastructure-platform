@@ -49,6 +49,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         null=False,
         blank=False,
     )
+    decision_maker = models.CharField(_("Decision maker"), blank=True, max_length=200)
 
     objects = SoftDeleteQuerySet.as_manager()
 
