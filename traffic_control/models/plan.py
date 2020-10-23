@@ -28,7 +28,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     plan_number = models.CharField(
         verbose_name=_("Plan number"),
         max_length=16,
-        help_text=_("Year and verdict section separated with an underscore."),
+        help_text=_("Year and verdict section separated with a dash"),
     )
     location = models.MultiPolygonField(
         _("Location (2D)"), srid=settings.SRID, null=True, blank=True
@@ -41,7 +41,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         null=False,
         blank=False,
     )
-    decision_maker = models.ForeignKey(
+    decision_maker_legacy = models.ForeignKey(
         get_user_model(),
         verbose_name=_("Decision maker"),
         related_name="decision_maker_plan_set",
