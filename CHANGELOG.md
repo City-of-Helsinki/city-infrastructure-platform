@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add `ParkingArea` model and parking area foreign key relations in `TrafficSignReal` and `AdditionalSignReal`
 - Add a management command to import parking areas from Helsinki City WFS
+- Update `Plan` model `plan_number` help_text and change `decision_maker` from ForeignKey to CharField
 
 ## [1.2.0] - 2020-09-29
 
