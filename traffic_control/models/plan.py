@@ -41,14 +41,6 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         null=False,
         blank=False,
     )
-    decision_maker_legacy = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Decision maker"),
-        related_name="decision_maker_plan_set",
-        on_delete=models.PROTECT,
-        null=False,
-        blank=False,
-    )
     decision_maker = models.CharField(_("Decision maker"), blank=True, max_length=200)
 
     objects = SoftDeleteQuerySet.as_manager()
