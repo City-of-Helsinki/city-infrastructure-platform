@@ -65,12 +65,16 @@ class Command(BaseCommand):
                 count += 1
 
                 if is_additional_sign:
-                    AdditionalSignContentReal.objects.create(
-                        parent=traffic_sign,
-                        text=row["text"],
-                        order=1,
-                        created_by=user,
-                        updated_by=user,
+                    AdditionalSignContentReal.objects.update_or_create(
+                        source_name=SOURCE_NAME,
+                        source_id=row["id"],
+                        defaults={
+                            "parent": traffic_sign,
+                            "text": row["text"],
+                            "order": 1,
+                            "created_by": user,
+                            "updated_by": user,
+                        },
                     )
 
                 if count % self.step == 0:
