@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from users.utils import get_system_user
 
-from ...models import AdditionalSignReal, TrafficSignReal
+from ...models import AdditionalSignContentReal, AdditionalSignReal, TrafficSignReal
 from ...models.traffic_sign import LocationSpecifier
 from ...utils import get_default_owner
 
@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 traffic_sign_model = (
                     AdditionalSignReal if is_additional_sign else TrafficSignReal
                 )
-                traffic_sign_model.objects.update_or_create(
+                traffic_sign, _ = traffic_sign_model.objects.update_or_create(
                     source_name=SOURCE_NAME,
                     source_id=row["id"],
                     defaults={
@@ -63,6 +63,16 @@ class Command(BaseCommand):
                     },
                 )
                 count += 1
+
+                if is_additional_sign:
+                    AdditionalSignContentReal.objects.create(
+                        parent=traffic_sign,
+                        text=row["text"],
+                        order=1,
+                        created_by=user,
+                        updated_by=user,
+                    )
+
                 if count % self.step == 0:
                     self.stdout.write(f"{count} traffic signs are imported...")
 

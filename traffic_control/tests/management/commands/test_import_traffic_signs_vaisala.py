@@ -4,7 +4,13 @@ from unittest.mock import patch
 from django.core.management import call_command, CommandError
 from django.test import TestCase
 
-from traffic_control.models import AdditionalSignReal, TrafficSignReal
+from traffic_control.models import (
+    AdditionalSignContentReal,
+    AdditionalSignReal,
+    TrafficControlDeviceType,
+    TrafficSignReal,
+)
+from traffic_control.models.common import DeviceTypeTargetModel
 
 from .utils import mock_open
 
@@ -36,6 +42,41 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
             "traffic_control.management.commands.import_traffic_signs_vaisala.open",
             mock_open(read_data=data),
         ):
+            for legacy_code in ["A1", "B2", "C3"]:
+                TrafficControlDeviceType.objects.create(
+                    code=f"CODE-{legacy_code}",
+                    legacy_code=legacy_code,
+                    target_model=DeviceTypeTargetModel.TRAFFIC_SIGN,
+                )
+            for legacy_code in ["80", "88"]:
+                TrafficControlDeviceType.objects.create(
+                    code=f"CODE-{legacy_code}",
+                    legacy_code=legacy_code,
+                    target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+                )
             call_command("import_traffic_signs_vaisala", "test-data.csv")
             self.assertEqual(TrafficSignReal.objects.count(), 3)
+            traffic_sign_device_types = dict(
+                TrafficSignReal.objects.values_list("source_id", "device_type__code")
+            )
+            expected_traffic_sign_device_types = {
+                "id-1": "CODE-A1",
+                "id-2": "CODE-B2",
+                "id-3": "CODE-C3",
+            }
+            self.assertDictEqual(
+                traffic_sign_device_types, expected_traffic_sign_device_types
+            )
             self.assertEqual(AdditionalSignReal.objects.count(), 2)
+            additional_sign_device_types = dict(
+                AdditionalSignContentReal.objects.values_list(
+                    "parent__source_id", "device_type__code"
+                )
+            )
+            expected_additional_sign_device_types = {
+                "id-4": "CODE-80",
+                "id-5": "CODE-88",
+            }
+            self.assertDictEqual(
+                additional_sign_device_types, expected_additional_sign_device_types
+            )

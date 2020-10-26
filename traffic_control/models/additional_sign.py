@@ -276,6 +276,16 @@ class AbstractAdditionalSignContent(UserControlModel):
                 f'Device type "{self.device_type}" is not allowed for traffic signs'
             )
 
+        if not self.device_type:
+            self.device_type = (
+                TrafficControlDeviceType.objects.for_target_model(
+                    DeviceTypeTargetModel.ADDITIONAL_SIGN
+                )
+                .filter(legacy_code=self.parent.legacy_code)
+                .order_by("code")
+                .first()
+            )
+
         super().save(*args, **kwargs)
 
 

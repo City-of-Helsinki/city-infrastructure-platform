@@ -11,8 +11,10 @@ from traffic_control.models import (
     AdditionalSignContentReal,
     AdditionalSignReal,
     MountType,
+    TrafficControlDeviceType,
     TrafficSignReal,
 )
+from traffic_control.models.common import DeviceTypeTargetModel
 
 MOCK_FEATURE_1 = {
     "fid": "1",
@@ -75,6 +77,12 @@ class ImportTrafficSignRealsBlomKarttaTestCase(TestCase):
         MockDataSource,
     )
     def test_import_traffic_sign_reals_blom_kartta_success(self, mock_exists):
+        device_type = TrafficControlDeviceType.objects.create(
+            code="ABC",
+            legacy_code="808",
+            target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        )
+
         call_command("import_traffic_sign_reals_blom_kartta", "-f", "dummy.csv")
         # verify main traffic sign is imported
         self.assertEqual(TrafficSignReal.objects.count(), 1)
@@ -95,3 +103,5 @@ class ImportTrafficSignRealsBlomKarttaTestCase(TestCase):
         additional_sign_content = AdditionalSignContentReal.objects.first()
         self.assertEqual(additional_sign_content.parent, additional_sign)
         self.assertEqual(additional_sign_content.text, "additional sign info")
+        # verify additional sign content is assigned correct device_type
+        self.assertEqual(additional_sign_content.device_type, device_type)
