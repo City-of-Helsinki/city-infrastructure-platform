@@ -245,7 +245,7 @@ class AdditionalSignReal(AbstractAdditionalSign):
         return f"AdditionalSignReal {self.id}"
 
 
-class AbstractAdditionalSignContent(UserControlModel):
+class AbstractAdditionalSignContent(SourceControlModel, UserControlModel):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
