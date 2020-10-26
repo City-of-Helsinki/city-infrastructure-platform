@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update `Plan` model `plan_number` help_text and change `decision_maker` from ForeignKey to CharField
 - Assign `device_type` based on `legacy_code` to `AdditionalSignContentReal` and `AdditionalSignContentPlan` instances
 - Add `source_name` and `source_id` to to `AdditionalSignContentReal` and `AdditionalSignContentPlan` and update importers accordingly
+- Improve fields naming in Plan API endpoint to make it more understandable
 
 ## [1.2.0] - 2020-09-29
 
