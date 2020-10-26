@@ -135,8 +135,16 @@ class Command(BaseCommand):
 
             # Create content instance for additional sign that contains the sign text
             if is_additional_sign and text:
-                AdditionalSignContentReal.objects.create(
-                    parent=obj, text=text, order=1, created_by=user, updated_by=user
+                AdditionalSignContentReal.objects.update_or_create(
+                    source_name=SOURCE_NAME,
+                    source_id=str(feature.get("id")),
+                    defaults={
+                        "parent": obj,
+                        "text": text,
+                        "order": 1,
+                        "created_by": user,
+                        "updated_by": user,
+                    },
                 )
 
             counter += 1
