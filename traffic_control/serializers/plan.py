@@ -14,31 +14,31 @@ from ..models import (
 
 
 class PlanRelationSerializer(serializers.ModelSerializer):
-    barrier = serializers.PrimaryKeyRelatedField(
+    barrier_plan_ids = serializers.PrimaryKeyRelatedField(
         source="barrier_plans", many=True, queryset=BarrierPlan.objects.active()
     )
-    mount = serializers.PrimaryKeyRelatedField(
+    mount_plan_ids = serializers.PrimaryKeyRelatedField(
         source="mount_plans", many=True, queryset=MountPlan.objects.active()
     )
-    road_marking = serializers.PrimaryKeyRelatedField(
+    road_marking_plan_ids = serializers.PrimaryKeyRelatedField(
         source="road_marking_plans",
         many=True,
         queryset=RoadMarkingPlan.objects.active(),
     )
-    signpost = serializers.PrimaryKeyRelatedField(
+    signpost_plan_ids = serializers.PrimaryKeyRelatedField(
         source="signpost_plans", many=True, queryset=SignpostPlan.objects.active()
     )
-    traffic_light = serializers.PrimaryKeyRelatedField(
+    traffic_light_plan_ids = serializers.PrimaryKeyRelatedField(
         source="traffic_light_plans",
         many=True,
         queryset=TrafficLightPlan.objects.active(),
     )
-    traffic_sign = serializers.PrimaryKeyRelatedField(
+    traffic_sign_plan_ids = serializers.PrimaryKeyRelatedField(
         source="traffic_sign_plans",
         many=True,
         queryset=TrafficSignPlan.objects.active(),
     )
-    additional_sign = serializers.PrimaryKeyRelatedField(
+    additional_sign_plan_ids = serializers.PrimaryKeyRelatedField(
         source="additional_sign_plans",
         many=True,
         queryset=AdditionalSignPlan.objects.all(),
@@ -47,18 +47,18 @@ class PlanRelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan
         fields = (
-            "barrier",
-            "mount",
-            "road_marking",
-            "signpost",
-            "traffic_light",
-            "traffic_sign",
-            "additional_sign",
+            "barrier_plan_ids",
+            "mount_plan_ids",
+            "road_marking_plan_ids",
+            "signpost_plan_ids",
+            "traffic_light_plan_ids",
+            "traffic_sign_plan_ids",
+            "additional_sign_plan_ids",
         )
 
 
 class PlanSerializer(serializers.ModelSerializer):
-    plans = PlanRelationSerializer(source="*")
+    linked_objects = PlanRelationSerializer(source="*")
 
     class Meta:
         model = Plan

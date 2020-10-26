@@ -145,14 +145,14 @@ def test__api_operational_area_permission__create(model, location, success):
             "location": location,
             "planner": user.pk,
             "decision_maker": user.pk,
-            "plans": {
-                "barrier": [],
-                "mount": [],
-                "road_marking": [],
-                "signpost": [],
-                "traffic_light": [],
-                "traffic_sign": [],
-                "additional_sign": [],
+            "linked_objects": {
+                "barrier_plan_ids": [],
+                "mount_plan_ids": [],
+                "road_marking_plan_ids": [],
+                "signpost_plan_ids": [],
+                "traffic_light_plan_ids": [],
+                "traffic_sign_plan_ids": [],
+                "additional_sign_plan_ids": [],
             },
         }
     else:
@@ -283,14 +283,14 @@ def test__api_operational_area_permission__update(model, location, success):
             "location": location.ewkt,
             "planner": user.pk,
             "decision_maker": user.pk,
-            "plans": {
-                "barrier": [],
-                "mount": [],
-                "road_marking": [],
-                "signpost": [],
-                "traffic_light": [],
-                "traffic_sign": [],
-                "additional_sign": [],
+            "linked_objects": {
+                "barrier_plan_ids": [],
+                "mount_plan_ids": [],
+                "road_marking_plan_ids": [],
+                "signpost_plan_ids": [],
+                "traffic_light_plan_ids": [],
+                "traffic_sign_plan_ids": [],
+                "additional_sign_plan_ids": [],
             },
         }
     else:
