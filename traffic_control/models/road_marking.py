@@ -127,10 +127,6 @@ class RoadMarkingPlan(
         blank=True,
         null=True,
     )
-    decision_date = models.DateField(_("Decision date"))
-    decision_id = models.CharField(
-        _("Decision id"), max_length=254, blank=True, null=True
-    )
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
     )

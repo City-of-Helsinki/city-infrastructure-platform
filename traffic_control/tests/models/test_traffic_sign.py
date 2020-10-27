@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.test import TestCase
-from django.utils import timezone
 
 from traffic_control.models import (
     AdditionalSignPlan,
@@ -25,7 +24,6 @@ class TrafficSignPlanTestCase(TestCase):
             location=Point(0, 0, 10, srid=settings.SRID),
             direction=0,
             device_type=get_traffic_control_device_type(code="T123"),
-            decision_date=timezone.now(),
             created_by=self.user,
             updated_by=self.user,
             owner=get_owner(),

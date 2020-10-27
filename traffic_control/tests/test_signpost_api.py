@@ -192,7 +192,6 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         data = {
             "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
-            "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
         }
@@ -205,9 +204,6 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         signpost_plan = SignpostPlan.objects.first()
         self.assertEqual(signpost_plan.device_type.id, data["device_type"])
         self.assertEqual(signpost_plan.location.ewkt, data["location"])
-        self.assertEqual(
-            signpost_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
-        )
         self.assertEqual(signpost_plan.lifecycle.value, data["lifecycle"])
 
     def test_update_signpost_plan(self):
@@ -218,7 +214,6 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         data = {
             "device_type": self.test_device_type_2.id,
             "location": self.test_point.ewkt,
-            "decision_date": "2020-01-03",
             "lifecycle": self.test_lifecycle_2.value,
             "owner": self.test_owner.pk,
         }
@@ -232,9 +227,6 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         signpost_plan = SignpostPlan.objects.first()
         self.assertEqual(signpost_plan.device_type.id, data["device_type"])
         self.assertEqual(signpost_plan.location.ewkt, data["location"])
-        self.assertEqual(
-            signpost_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
-        )
         self.assertEqual(signpost_plan.lifecycle.value, data["lifecycle"])
 
     def test_delete_signpost_plan_detail(self):
@@ -268,7 +260,6 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         return SignpostPlan.objects.create(
             device_type=self.test_device_type,
             location=self.test_point,
-            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             owner=self.test_owner,
             created_by=self.user,
@@ -524,7 +515,6 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         signpost_plan = SignpostPlan.objects.create(
             device_type=self.test_device_type,
             location=self.test_point,
-            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             owner=self.test_owner,
             created_by=self.user,

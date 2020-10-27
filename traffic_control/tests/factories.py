@@ -89,7 +89,6 @@ def get_barrier_plan(location="", plan=None, device_type=None):
     return BarrierPlan.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point,
-        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         material="Betoni",
         reflective=Reflective.YES,
@@ -131,7 +130,6 @@ def get_mount_plan(location="", plan=None):
     return MountPlan.objects.get_or_create(
         mount_type=get_mount_type(code="PORTAL", description="Portal"),
         location=location or test_point,
-        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         owner=get_owner(),
@@ -163,7 +161,6 @@ def get_road_marking_plan(location="", plan=None, device_type=None):
         value="30",
         color=RoadMarkingColor.WHITE,
         location=location or test_point,
-        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         material="Maali",
         is_grinded=True,
@@ -203,7 +200,6 @@ def get_signpost_plan(location="", plan=None, device_type=None):
     return SignpostPlan.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point,
-        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         owner=get_owner(),
@@ -234,7 +230,6 @@ def get_traffic_light_plan(location="", plan=None, device_type=None):
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
-        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         mount_type=get_mount_type(),
         road_name="Testingroad",
@@ -281,7 +276,6 @@ def get_traffic_sign_plan(location="", plan=None, device_type=None):
     return TrafficSignPlan.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
         location=location or test_point_3d,
-        decision_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         owner=get_owner(),
@@ -318,7 +312,6 @@ def get_additional_sign_plan(
         parent=parent or get_traffic_sign_plan(),
         location=location,
         owner=owner,
-        decision_date=datetime.date(2020, 1, 1),
         plan=plan,
         created_by=user,
         updated_by=user,

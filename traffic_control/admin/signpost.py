@@ -71,7 +71,6 @@ class SignpostPlanAdmin(
         ),
         (_("Physical properties"), {"fields": ("height", "size", "reflection_class")}),
         (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
-        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
             _("Validity"),
             {
@@ -93,7 +92,6 @@ class SignpostPlanAdmin(
         "txt",
         "lifecycle",
         "location",
-        "decision_date",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (

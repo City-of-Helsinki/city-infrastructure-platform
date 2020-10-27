@@ -193,7 +193,6 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         data = {
             "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
-            "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
             "road_name": "Test street 1",
@@ -205,9 +204,6 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         barrier_plan = BarrierPlan.objects.first()
         self.assertEqual(barrier_plan.device_type.id, data["device_type"])
         self.assertEqual(barrier_plan.location.ewkt, data["location"])
-        self.assertEqual(
-            barrier_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
-        )
         self.assertEqual(barrier_plan.lifecycle.value, data["lifecycle"])
 
     def test_update_barrier_plan(self):
@@ -218,7 +214,6 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         data = {
             "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
-            "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
             "owner": self.test_owner.pk,
             "road_name": "Test street 1",
@@ -233,9 +228,6 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         barrier_plan = BarrierPlan.objects.first()
         self.assertEqual(barrier_plan.device_type.id, data["device_type"])
         self.assertEqual(barrier_plan.location.ewkt, data["location"])
-        self.assertEqual(
-            barrier_plan.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
-        )
         self.assertEqual(barrier_plan.lifecycle.value, data["lifecycle"])
 
     def test_delete_barrier_plan_detail(self):
@@ -269,7 +261,6 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         return BarrierPlan.objects.create(
             device_type=self.test_device_type,
             location=self.test_point,
-            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             material="Betoni",
             reflective=Reflective.YES,
@@ -529,7 +520,6 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         barrier_plan = BarrierPlan.objects.create(
             device_type=self.test_device_type,
             location=self.test_point,
-            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             material="Betoni",
             reflective=Reflective.YES,

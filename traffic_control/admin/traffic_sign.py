@@ -120,7 +120,6 @@ class TrafficSignPlanAdmin(
             },
         ),
         (_("Related models"), {"fields": ("plan", "mount_plan")}),
-        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
             _("Validity"),
             {
@@ -145,7 +144,6 @@ class TrafficSignPlanAdmin(
         "value",
         "lifecycle",
         "location",
-        "decision_date",
         "has_additional_signs",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]

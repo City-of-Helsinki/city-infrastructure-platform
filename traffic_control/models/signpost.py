@@ -87,10 +87,6 @@ class SignpostPlan(
         null=True,
         on_delete=models.SET_NULL,
     )
-    decision_date = models.DateField(_("Decision date"))
-    decision_id = models.CharField(
-        _("Decision id"), max_length=254, blank=True, null=True
-    )
     validity_period_start = models.DateField(
         _("Validity period start"), blank=True, null=True
     )

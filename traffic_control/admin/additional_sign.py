@@ -80,7 +80,6 @@ class AdditionalSignPlanAdmin(
             {"fields": ("height", "color", "reflection_class", "surface_class")},
         ),
         (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
-        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
             _("Validity"),
             {
@@ -104,7 +103,6 @@ class AdditionalSignPlanAdmin(
         "id",
         "lifecycle",
         "location",
-        "decision_date",
     )
     readonly_fields = (
         "created_at",

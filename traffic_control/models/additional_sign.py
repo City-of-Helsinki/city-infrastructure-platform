@@ -144,10 +144,6 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
         blank=True,
         null=True,
     )
-    decision_id = models.CharField(
-        _("Decision id"), max_length=254, blank=True, null=True
-    )
-    decision_date = models.DateField(_("Decision date"))
 
     class Meta:
         db_table = "additional_sign_plan"

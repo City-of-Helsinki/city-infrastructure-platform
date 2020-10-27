@@ -85,10 +85,6 @@ class BarrierPlan(
         null=False,
         on_delete=models.PROTECT,
     )
-    decision_date = models.DateField(_("Decision date"))
-    decision_id = models.CharField(
-        _("Decision id"), max_length=254, blank=True, null=True
-    )
     reflective = EnumField(
         Reflective, verbose_name=_("Reflective"), blank=True, null=True
     )
