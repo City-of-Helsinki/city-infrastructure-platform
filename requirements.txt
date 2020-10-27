@@ -13,7 +13,7 @@ cffi==1.14.3              # via cryptography
 chardet==3.0.4            # via requests
 coreapi==2.3.3            # via drf-yasg
 coreschema==0.0.4         # via coreapi, drf-yasg
-cryptography==3.1.1       # via azure-storage-common, social-auth-core
+cryptography==3.2       # via azure-storage-common, social-auth-core
 defusedxml==0.7.0rc1      # via python3-openid, social-auth-core
 django==2.2.16
 django-auditlog==0.4.7
