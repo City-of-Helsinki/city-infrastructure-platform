@@ -68,7 +68,6 @@ class MountPlanAdmin(
             },
         ),
         (_("Related models"), {"fields": ("plan",)}),
-        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
             _("Validity"),
             {

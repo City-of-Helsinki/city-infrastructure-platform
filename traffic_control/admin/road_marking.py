@@ -89,7 +89,6 @@ class RoadMarkingPlanAdmin(
             },
         ),
         (_("Related models"), {"fields": ("plan", "traffic_sign_plan")}),
-        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
             _("Validity"),
             {
@@ -110,7 +109,6 @@ class RoadMarkingPlanAdmin(
         "device_type",
         "lifecycle",
         "location",
-        "decision_date",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (

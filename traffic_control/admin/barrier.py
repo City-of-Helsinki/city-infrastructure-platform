@@ -66,7 +66,6 @@ class BarrierPlanAdmin(
         ),
         (_("Physical properties"), {"fields": ("material", "reflective", "length")}),
         (_("Related models"), {"fields": ("plan",)}),
-        (_("Decision information"), {"fields": ("decision_date", "decision_id")}),
         (
             _("Validity"),
             {
@@ -86,7 +85,6 @@ class BarrierPlanAdmin(
         "device_type",
         "lifecycle",
         "location",
-        "decision_date",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
     readonly_fields = (

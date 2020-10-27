@@ -199,7 +199,6 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             "device_type": self.test_device_type.id,
             "type": TrafficLightType.SIGNAL.value,
             "location": self.test_point.ewkt,
-            "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
         }
@@ -213,9 +212,6 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(traffic_light.device_type.id, data["device_type"])
         self.assertEqual(traffic_light.type.value, data["type"])
         self.assertEqual(traffic_light.location.ewkt, data["location"])
-        self.assertEqual(
-            traffic_light.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
-        )
         self.assertEqual(traffic_light.lifecycle.value, data["lifecycle"])
 
     def test_update_traffic_light_plan(self):
@@ -227,7 +223,6 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             "device_type": self.test_device_type.id,
             "type": TrafficLightType.ARROW_RIGHT.value,
             "location": self.test_point.ewkt,
-            "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
             "owner": self.test_owner.pk,
         }
@@ -242,9 +237,6 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(traffic_light.device_type.id, data["device_type"])
         self.assertEqual(traffic_light.type.value, data["type"])
         self.assertEqual(traffic_light.location.ewkt, data["location"])
-        self.assertEqual(
-            traffic_light.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
-        )
         self.assertEqual(traffic_light.lifecycle.value, data["lifecycle"])
 
     def test_delete_traffic_light_plan_detail(self):
@@ -279,7 +271,6 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             device_type=self.test_device_type,
             location=self.test_point,
             type=TrafficLightType.SIGNAL,
-            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             mount_type=get_mount_type(),
             road_name="Testingroad",
@@ -547,7 +538,6 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             device_type=self.test_device_type,
             location=self.test_point,
             type=TrafficLightType.SIGNAL,
-            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             mount_type=get_mount_type(),
             road_name="Testingroad",

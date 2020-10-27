@@ -84,7 +84,6 @@ def test__additional_sign_plan__create_without_content(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
     }
 
     response = client.post(reverse("v1:additionalsignplan-list"), data=data)
@@ -118,7 +117,6 @@ def test__additional_sign_plan__create_with_content(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [
             {"text": "Test content 1", "order": 1, "device_type": str(dt.pk)},
             {"text": "Test content 2", "order": 2, "device_type": str(dt.pk)},
@@ -167,7 +165,6 @@ def test__additional_sign_plan__create_with_content_id(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [
             {
                 "id": str(ascp.pk),
@@ -217,7 +214,6 @@ def test__additional_sign_plan__create_with_incomplete_data(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [{"text": "Test content", "order": 1}],
     }
 
@@ -253,7 +249,6 @@ def test__additional_sign_plan__update_without_content(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner(name_en="New owner").pk,
-        "decision_date": "2020-09-01",
     }
 
     assert AdditionalSignContentPlan.objects.count() == 1
@@ -291,7 +286,6 @@ def test__additional_sign_plan__update_with_content(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [{"text": "New content", "order": 123, "device_type": str(dt.pk)}],
     }
 
@@ -337,7 +331,6 @@ def test__additional_sign_plan__update_with_content_id(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [
             {
                 "id": str(ascp.pk),
@@ -388,7 +381,6 @@ def test__additional_sign_plan__update_with_unrelated_content_id(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [
             {
                 "id": str(ascp.pk),
@@ -444,7 +436,6 @@ def test__additional_sign_plan__partial_update_without_content(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner(name_en="New owner").pk,
-        "decision_date": "2020-09-01",
     }
 
     assert AdditionalSignContentPlan.objects.count() == 1
@@ -485,7 +476,6 @@ def test__additional_sign_plan__partial_update_with_content(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [{"text": "New content", "order": 123, "device_type": str(dt.pk)}],
     }
 
@@ -531,7 +521,6 @@ def test__additional_sign_plan__partial_update_with_content_id(admin_user):
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [
             {
                 "id": str(ascp.pk),
@@ -582,7 +571,6 @@ def test__additional_sign_plan__partial_update_with_unrelated_content_id(admin_u
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
-        "decision_date": "2020-09-01",
         "content": [
             {
                 "id": str(ascp.pk),

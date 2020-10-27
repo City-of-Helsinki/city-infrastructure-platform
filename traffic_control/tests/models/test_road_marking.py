@@ -1,5 +1,3 @@
-from datetime import date
-
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
@@ -27,7 +25,6 @@ class RoadMarkingPlanTestCase(TestCase):
                 device_type=device_type,
                 location=Point(1, 1, srid=settings.SRID),
                 road_name="",
-                decision_date=date(2020, 6, 29),
                 owner=get_owner(),
                 created_by=user,
                 updated_by=user,

@@ -159,7 +159,6 @@ def test__api_operational_area_permission__create(model, location, success):
         data = {
             "location": location,
             "device_type": device_type.pk,
-            "decision_date": "2020-07-01",
             "lifecycle": Lifecycle.ACTIVE.value,
             "owner": get_owner().pk,
         }
@@ -209,7 +208,6 @@ def test__api_operational_area_permission__create__geojson(location, success):
     data = {
         "location": location,
         "device_type": device_type.pk,
-        "decision_date": "2020-07-01",
         "lifecycle": Lifecycle.ACTIVE.value,
         "owner": get_owner().pk,
         "road_name": "testroad",
@@ -297,7 +295,6 @@ def test__api_operational_area_permission__update(model, location, success):
         data = {
             "location": location.ewkt,
             "device_type": device_type.pk,
-            "decision_date": "2020-07-01",
             "lifecycle": Lifecycle.ACTIVE.value,
             "owner": get_owner().pk,
         }

@@ -194,7 +194,6 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         data = {
             "device_type": self.test_device_type.id,
             "location": self.test_point.ewkt,
-            "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
             "source_name": "test-source",
@@ -209,9 +208,6 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         road_marking = RoadMarkingPlan.objects.first()
         self.assertEqual(road_marking.device_type.id, data["device_type"])
         self.assertEqual(road_marking.location.ewkt, data["location"])
-        self.assertEqual(
-            road_marking.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
-        )
         self.assertEqual(road_marking.lifecycle.value, data["lifecycle"])
 
     def test_update_road_marking(self):
@@ -222,7 +218,6 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         data = {
             "device_type": self.test_device_type_2.id,
             "location": self.test_point.ewkt,
-            "decision_date": "2020-01-02",
             "lifecycle": self.test_lifecycle_2.value,
             "owner": self.test_owner.pk,
             "source_name": "test-source",
@@ -238,9 +233,6 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         road_marking = RoadMarkingPlan.objects.first()
         self.assertEqual(road_marking.device_type.id, data["device_type"])
         self.assertEqual(road_marking.location.ewkt, data["location"])
-        self.assertEqual(
-            road_marking.decision_date.strftime("%Y-%m-%d"), data["decision_date"]
-        )
         self.assertEqual(road_marking.lifecycle.value, data["lifecycle"])
 
     def test_delete_road_marking_detail(self):
@@ -276,7 +268,6 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             value="30",
             color=RoadMarkingColor.WHITE,
             location=self.test_point,
-            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             material="Maali",
             is_grinded=True,
@@ -544,7 +535,6 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             value="30",
             color=RoadMarkingColor.WHITE,
             location=self.test_point,
-            decision_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
             lifecycle=self.test_lifecycle,
             material="Maali",
             is_grinded=True,
