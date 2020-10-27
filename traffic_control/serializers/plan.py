@@ -15,33 +15,46 @@ from ..models import (
 
 class PlanRelationSerializer(serializers.ModelSerializer):
     barrier_plan_ids = serializers.PrimaryKeyRelatedField(
-        source="barrier_plans", many=True, queryset=BarrierPlan.objects.active()
+        source="barrier_plans",
+        many=True,
+        queryset=BarrierPlan.objects.active(),
+        required=False,
     )
     mount_plan_ids = serializers.PrimaryKeyRelatedField(
-        source="mount_plans", many=True, queryset=MountPlan.objects.active()
+        source="mount_plans",
+        many=True,
+        queryset=MountPlan.objects.active(),
+        required=False,
     )
     road_marking_plan_ids = serializers.PrimaryKeyRelatedField(
         source="road_marking_plans",
         many=True,
         queryset=RoadMarkingPlan.objects.active(),
+        required=False,
     )
     signpost_plan_ids = serializers.PrimaryKeyRelatedField(
-        source="signpost_plans", many=True, queryset=SignpostPlan.objects.active()
+        source="signpost_plans",
+        many=True,
+        queryset=SignpostPlan.objects.active(),
+        required=False,
     )
     traffic_light_plan_ids = serializers.PrimaryKeyRelatedField(
         source="traffic_light_plans",
         many=True,
         queryset=TrafficLightPlan.objects.active(),
+        required=False,
     )
     traffic_sign_plan_ids = serializers.PrimaryKeyRelatedField(
         source="traffic_sign_plans",
         many=True,
         queryset=TrafficSignPlan.objects.active(),
+        required=False,
     )
     additional_sign_plan_ids = serializers.PrimaryKeyRelatedField(
         source="additional_sign_plans",
         many=True,
         queryset=AdditionalSignPlan.objects.all(),
+        required=False,
     )
 
     class Meta:
@@ -58,7 +71,7 @@ class PlanRelationSerializer(serializers.ModelSerializer):
 
 
 class PlanSerializer(serializers.ModelSerializer):
-    linked_objects = PlanRelationSerializer(source="*")
+    linked_objects = PlanRelationSerializer(source="*", required=False)
 
     class Meta:
         model = Plan
