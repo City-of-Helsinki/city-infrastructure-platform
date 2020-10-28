@@ -10,6 +10,7 @@ import NavigateNext from "@material-ui/icons/NavigateNext";
 import React from "react";
 import { APIBaseUrl } from "../consts";
 import { Feature } from "../models";
+import { withTranslation, WithTranslation } from "react-i18next";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -33,7 +34,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface FeatureInfoProps extends WithStyles<typeof styles> {
+interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
   features: Feature[];
   onClose: () => void;
 }
@@ -58,7 +59,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
   }
 
   render() {
-    const { features, onClose, classes } = this.props;
+    const { features, onClose, classes, t } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
     const fid = feature["id"];
@@ -80,9 +81,9 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>{t("close")}</Button>
           <Button color="primary" target="_blank" href={this.getAdminLink(feature)}>
-            Edit
+            {t("edit")}
           </Button>
           <div className={classes.spacer}></div>
           <Typography color="textSecondary">
@@ -108,4 +109,4 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
   }
 }
 
-export default withStyles(styles)(FeatureInfo);
+export default withTranslation()(withStyles(styles)(FeatureInfo));
