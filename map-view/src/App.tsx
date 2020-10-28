@@ -9,7 +9,7 @@ import "./App.css";
 import LayerSwitcher from "./components/LayerSwitcher";
 import FeatureInfo from "./components/FeatureInfo";
 import Map from "./common/Map";
-import { MapConfig } from "./models";
+import { Feature, MapConfig } from "./models";
 
 const drawWidth = "400px";
 
@@ -34,7 +34,7 @@ interface AppProps extends WithStyles<typeof styles> {}
 interface AppState {
   open: boolean;
   mapConfig: MapConfig | null;
-  features: string[];
+  features: Feature[];
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -55,7 +55,7 @@ class App extends React.Component<AppProps, AppState> {
         mapConfig,
       });
       Map.initialize(this.mapId, mapConfig);
-      Map.registerFeatureInfoCallback((features: string[]) => this.setState({ features }));
+      Map.registerFeatureInfoCallback((features: Feature[]) => this.setState({ features }));
     });
   }
 
