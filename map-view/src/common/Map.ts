@@ -53,6 +53,7 @@ class Map {
           {
             INFO_FORMAT: "application/json",
             LAYERS: layerNames.join(","),
+            QUERY_LAYERS: layerNames.join(","),
             FEATURE_COUNT: 10,
           }
         );
