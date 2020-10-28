@@ -7,7 +7,7 @@ import { createStringXY } from "ol/coordinate";
 import ScaleLine from "ol/control/ScaleLine";
 import { defaults as defaultControls } from "ol/control";
 import View from "ol/View";
-import { LayerConfig, MapConfig } from "../models";
+import { Feature, LayerConfig, MapConfig } from "../models";
 import ImageLayer from "ol/layer/Image";
 import LayerGroup from "ol/layer/Group";
 import ImageWMS from "ol/source/ImageWMS";
@@ -18,7 +18,7 @@ class Map {
   private visibleBasemap: string;
   private basemapLayers: { [identifier: string]: ImageLayer } = {};
   private overlayLayers: { [identifier: string]: ImageLayer } = {};
-  private featureInfoCallback: (features: string[]) => void = (features: string[]) => {};
+  private featureInfoCallback: (features: Feature[]) => void = (features: Feature[]) => {};
 
   initialize(target: string, mapConfig: MapConfig) {
     const { basemapConfig, overlayConfig } = mapConfig;
@@ -62,15 +62,14 @@ class Map {
             .then((response) => response.text())
             .then((responseText) => {
               const data = JSON.parse(responseText);
-              const featureIds = data["features"].map((feature: { id: string }) => feature["id"]);
-              this.featureInfoCallback(featureIds);
+              this.featureInfoCallback(data["features"]);
             });
         }
       }
     });
   }
 
-  registerFeatureInfoCallback(fn: (features: string[]) => void) {
+  registerFeatureInfoCallback(fn: (features: Feature[]) => void) {
     this.featureInfoCallback = fn;
   }
 

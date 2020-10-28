@@ -9,6 +9,7 @@ import NavigateBefore from "@material-ui/icons/NavigateBefore";
 import NavigateNext from "@material-ui/icons/NavigateNext";
 import React from "react";
 import { APIBaseUrl } from "../consts";
+import { Feature } from "../models";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -27,10 +28,13 @@ const styles = (theme: Theme) =>
     spacer: {
       flexGrow: 1,
     },
+    content: {
+      marginTop: "10px",
+    },
   });
 
 interface FeatureInfoProps extends WithStyles<typeof styles> {
-  features: string[];
+  features: Feature[];
   onClose: () => void;
 }
 
@@ -46,8 +50,10 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
     };
   }
 
-  getAdminLink(feature: string) {
-    const [featureType, featureId] = feature.split(".");
+  getAdminLink(feature: Feature) {
+    const fid = feature["id"];
+    const featureType = fid.split(".")[0];
+    const featureId = feature["properties"]["id"];
     return `${APIBaseUrl}/admin/traffic_control/${featureType.replace(/_/g, "")}/${featureId}/change`;
   }
 
@@ -55,7 +61,9 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
     const { features, onClose, classes } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
-    const [featureType, featureId] = feature.split(".");
+    const fid = feature["id"];
+    const featureType = fid.split(".")[0];
+    const { id, code, txt } = feature["properties"];
 
     return (
       <Card className={classes.root}>
@@ -63,7 +71,13 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
           <Typography className={classes.title} variant="h5" component="h2">
             {featureType.replace(/_/g, " ")}
           </Typography>
-          <Typography color="textSecondary">{featureId}</Typography>
+          <Typography className={classes.content} variant="body1" component="p">
+            <b>id</b>: {id}
+            <br />
+            <b>code</b>: {code}
+            <br />
+            <b>txt</b>: {txt}
+          </Typography>
         </CardContent>
         <CardActions>
           <Button onClick={onClose}>Close</Button>

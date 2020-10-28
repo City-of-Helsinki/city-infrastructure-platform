@@ -40,7 +40,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
   constructor(props: LayerSwitcherProps) {
     super(props);
     const { basemapConfig, overlayConfig } = props.mapConfig;
-    const visibleBasemap = basemapConfig.layers.length > 0 ? basemapConfig.layers[0].identifier : '';
+    const visibleBasemap = basemapConfig.layers.length > 0 ? basemapConfig.layers[0].identifier : "";
     const visibleOverlays: { [identifier: string]: boolean } = {};
     overlayConfig.layers.forEach(({ identifier }) => {
       visibleOverlays[identifier] = false;
