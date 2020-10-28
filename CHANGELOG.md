@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `source_name` and `source_id` to to `AdditionalSignContentReal` and `AdditionalSignContentPlan` and update importers accordingly
 - Improve fields naming in Plan API endpoint to make it more understandable
 - Remove `decision_date` and `decision_id` from traffic control plan models
+- Improve admin map view feature info window to include more fields
 
 ## [1.2.0] - 2020-09-29
 
