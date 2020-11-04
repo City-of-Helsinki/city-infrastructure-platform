@@ -33,7 +33,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     location = models.MultiPolygonField(
         _("Location (2D)"), srid=settings.SRID, null=True, blank=True
     )
-    planner = models.ForeignKey(
+    planner_legacy = models.ForeignKey(
         get_user_model(),
         verbose_name=_("Planner"),
         related_name="plan_set",
