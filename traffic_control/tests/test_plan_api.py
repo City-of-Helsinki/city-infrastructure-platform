@@ -76,7 +76,6 @@ def test_plan_detail_geojson():
 @pytest.mark.django_db
 def test_plan_create():
     user = get_user(admin=True)
-    decision_maker = get_user(username="test_decision_maker", admin=True)
     api_client = get_api_client(user=user)
     location = test_multi_polygon.ewkt
     barrier_plan = get_barrier_plan()
@@ -93,8 +92,8 @@ def test_plan_create():
             "name": "Test plan",
             "plan_number": "2020_1",
             "location": location,
-            "planner": user.pk,
-            "decision_maker": decision_maker.pk,
+            "planner": "Planner",
+            "decision_maker": "Decision Maker",
             "created_by": user.pk,
             "updated_by": user.pk,
             "linked_objects": {
@@ -118,8 +117,8 @@ def test_plan_create():
     assert plan.plan_number == "2020_1"
     assert plan.created_by == user
     assert plan.updated_by == user
-    assert plan.planner == user
-    assert decision_maker == decision_maker
+    assert plan.planner == "Planner"
+    assert plan.decision_maker == "Decision Maker"
 
     assert barrier_plan in plan.barrier_plans.all()
     assert mount_plan in plan.mount_plans.all()
