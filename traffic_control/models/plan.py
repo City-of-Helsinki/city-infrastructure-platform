@@ -4,7 +4,6 @@ from typing import List
 
 from auditlog.registry import auditlog
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import MultiPolygon, Point
 from django.utils.translation import gettext_lazy as _
@@ -32,14 +31,6 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     )
     location = models.MultiPolygonField(
         _("Location (2D)"), srid=settings.SRID, null=True, blank=True
-    )
-    planner_legacy = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("Planner"),
-        related_name="plan_set",
-        on_delete=models.PROTECT,
-        null=False,
-        blank=False,
     )
     planner = models.CharField(_("Planner"), blank=True, max_length=200)
     decision_maker = models.CharField(_("Decision maker"), blank=True, max_length=200)
