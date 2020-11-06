@@ -8,18 +8,7 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from ..models import Plan
-from .factories import (
-    get_additional_sign_plan,
-    get_api_client,
-    get_barrier_plan,
-    get_mount_plan,
-    get_plan,
-    get_road_marking_plan,
-    get_signpost_plan,
-    get_traffic_light_plan,
-    get_traffic_sign_plan,
-    get_user,
-)
+from .factories import get_api_client, get_plan, get_user
 from .test_base_api import (
     test_multi_polygon,
     test_polygon,
@@ -78,13 +67,6 @@ def test_plan_create():
     user = get_user(admin=True)
     api_client = get_api_client(user=user)
     location = test_multi_polygon.ewkt
-    barrier_plan = get_barrier_plan()
-    mount_plan = get_mount_plan()
-    road_marking_plan = get_road_marking_plan()
-    signpost_plan = get_signpost_plan()
-    traffic_light_plan = get_traffic_light_plan()
-    traffic_sign_plan = get_traffic_sign_plan()
-    additional_sign_plan = get_additional_sign_plan()
 
     response = api_client.post(
         reverse("v1:plan-list"),
@@ -96,15 +78,6 @@ def test_plan_create():
             "decision_maker": "Decision Maker",
             "created_by": user.pk,
             "updated_by": user.pk,
-            "linked_objects": {
-                "barrier_plan_ids": [barrier_plan.pk],
-                "mount_plan_ids": [mount_plan.pk],
-                "road_marking_plan_ids": [road_marking_plan.pk],
-                "signpost_plan_ids": [signpost_plan.pk],
-                "traffic_light_plan_ids": [traffic_light_plan.pk],
-                "traffic_sign_plan_ids": [traffic_sign_plan.pk],
-                "additional_sign_plan_ids": [additional_sign_plan.pk],
-            },
         },
         format="json",
     )
@@ -119,14 +92,6 @@ def test_plan_create():
     assert plan.updated_by == user
     assert plan.planner == "Planner"
     assert plan.decision_maker == "Decision Maker"
-
-    assert barrier_plan in plan.barrier_plans.all()
-    assert mount_plan in plan.mount_plans.all()
-    assert road_marking_plan in plan.road_marking_plans.all()
-    assert signpost_plan in plan.signpost_plans.all()
-    assert traffic_light_plan in plan.traffic_light_plans.all()
-    assert traffic_sign_plan in plan.traffic_sign_plans.all()
-    assert additional_sign_plan in plan.additional_sign_plans.all()
 
 
 @pytest.mark.django_db
