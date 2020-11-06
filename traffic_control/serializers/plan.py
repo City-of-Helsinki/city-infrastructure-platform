@@ -1,60 +1,51 @@
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from ..models import (
-    AdditionalSignPlan,
-    BarrierPlan,
-    MountPlan,
-    Plan,
-    RoadMarkingPlan,
-    SignpostPlan,
-    TrafficLightPlan,
-    TrafficSignPlan,
-)
+from ..models import Plan
 
 
 class PlanRelationSerializer(serializers.ModelSerializer):
     barrier_plan_ids = serializers.PrimaryKeyRelatedField(
         source="barrier_plans",
         many=True,
-        queryset=BarrierPlan.objects.active(),
         required=False,
+        read_only=True,
     )
     mount_plan_ids = serializers.PrimaryKeyRelatedField(
         source="mount_plans",
         many=True,
-        queryset=MountPlan.objects.active(),
         required=False,
+        read_only=True,
     )
     road_marking_plan_ids = serializers.PrimaryKeyRelatedField(
         source="road_marking_plans",
         many=True,
-        queryset=RoadMarkingPlan.objects.active(),
         required=False,
+        read_only=True,
     )
     signpost_plan_ids = serializers.PrimaryKeyRelatedField(
         source="signpost_plans",
         many=True,
-        queryset=SignpostPlan.objects.active(),
         required=False,
+        read_only=True,
     )
     traffic_light_plan_ids = serializers.PrimaryKeyRelatedField(
         source="traffic_light_plans",
         many=True,
-        queryset=TrafficLightPlan.objects.active(),
         required=False,
+        read_only=True,
     )
     traffic_sign_plan_ids = serializers.PrimaryKeyRelatedField(
         source="traffic_sign_plans",
         many=True,
-        queryset=TrafficSignPlan.objects.active(),
         required=False,
+        read_only=True,
     )
     additional_sign_plan_ids = serializers.PrimaryKeyRelatedField(
         source="additional_sign_plans",
         many=True,
-        queryset=AdditionalSignPlan.objects.all(),
         required=False,
+        read_only=True,
     )
 
     class Meta:
@@ -71,7 +62,7 @@ class PlanRelationSerializer(serializers.ModelSerializer):
 
 
 class PlanSerializer(serializers.ModelSerializer):
-    linked_objects = PlanRelationSerializer(source="*", required=False)
+    linked_objects = PlanRelationSerializer(source="*", required=False, read_only=True)
 
     class Meta:
         model = Plan
