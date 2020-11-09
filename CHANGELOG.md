@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve fields naming in Plan API endpoint to make it more understandable
 - Remove `decision_date` and `decision_id` from traffic control plan models
 - Improve admin map view feature info window to include more fields
+- Set `Plan` `linked_objects` as read-only
 
 ## [1.2.0] - 2020-09-29
 
