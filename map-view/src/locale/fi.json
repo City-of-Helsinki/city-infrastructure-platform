@@ -1,6 +1,15 @@
 {
   "translation": {
     "edit": "muokkaa",
-    "close": "sulje"
+    "close": "sulje",
+    "featureInfoTitle": {
+      "traffic_sign_real": "Liikennemerkkitoteuma",
+      "traffic_sign_plan": "Liikennemerkkisuunnitelma",
+      "additional_sign_real": "Lisäkilpitoteuma",
+      "additional_sign_plan": "Lisäkilpisuunnitelma"
+    },
+    "Device type": "Merkki",
+    "Direction": "Suunta",
+    "Additional info": "Lisätieto"
   }
 }

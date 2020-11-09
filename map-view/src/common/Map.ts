@@ -48,7 +48,7 @@ class Map {
         const layerNames = visibleLayers.map((layer) => (layer.getSource() as ImageWMS).getParams().LAYERS);
         const url = (visibleLayers[0].getSource() as ImageWMS).getFeatureInfoUrl(
           event.coordinate,
-          viewResolution,
+          viewResolution as number,
           projection,
           {
             INFO_FORMAT: "application/json",

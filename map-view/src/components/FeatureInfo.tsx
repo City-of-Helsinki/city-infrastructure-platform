@@ -64,20 +64,25 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
     const feature = features[featureIndex];
     const fid = feature["id"];
     const featureType = fid.split(".")[0];
-    const { id, code, txt } = feature["properties"];
+    const { id, value, txt, direction, device_type_code, device_type_description } = feature["properties"];
+    const deviceTypeText = value
+      ? `${device_type_code} - ${device_type_description} (${value})`
+      : `${device_type_code} - ${device_type_description}`;
 
     return (
       <Card className={classes.root}>
         <CardContent>
           <Typography className={classes.title} variant="h5" component="h2">
-            {featureType.replace(/_/g, " ")}
+            {t(`featureInfoTitle.${featureType}`)}
           </Typography>
           <Typography className={classes.content} variant="body1" component="p">
-            <b>id</b>: {id}
+            <b>Id</b>: {id}
             <br />
-            <b>code</b>: {code}
+            <b>{t("Device type")}</b>: {deviceTypeText}
             <br />
-            <b>txt</b>: {txt}
+            <b>{t("Direction")}</b>: {direction}
+            <br />
+            <b>{t("Additional info")}</b>: {txt}
           </Typography>
         </CardContent>
         <CardActions>

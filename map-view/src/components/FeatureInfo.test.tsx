@@ -8,16 +8,19 @@ test("renders feature info", () => {
     {
       geometry: { type: "Point", coordinates: [1, 1] },
       geometry_name: "location",
-      id: "test_feature_class.20950c38-eb7e-11ea-adc1-0242ac120002",
+      id: "traffic_sign_real.20950c38-eb7e-11ea-adc1-0242ac120002",
       properties: {
         id: "fcdbbc6f-5903-4574-baa3-fef33a4b0621",
-        code: "CODE-1",
+        direction: "DIR-1",
         txt: "sample text",
+        value: 10,
+        device_type_code: "ABC",
+        device_type_description: "Sample description",
       },
       type: "Feature",
     },
   ];
   const { getByText } = render(<FeatureInfo features={mockFeatures} onClose={() => {}} />);
-  const featureClass = getByText(/Test Feature Class/i);
-  expect(featureClass).toBeInTheDocument();
+  const featureInfoTitle = getByText(/traffic_sign_real/i);
+  expect(featureInfoTitle).toBeInTheDocument();
 });

@@ -17,7 +17,10 @@ export interface MapConfig {
 export interface FeatureProperties {
   id: string;
   txt: string;
-  code: string;
+  direction: string;
+  value: number;
+  device_type_code: string;
+  device_type_description: string;
 }
 
 export interface Feature {
