@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove `decision_date` and `decision_id` from traffic control plan models
 - Improve admin map view feature info window to include more fields
 - Set `Plan` `linked_objects` as read-only
+- Improve feature info window to include more details and add localization to it
 
 ## [1.2.0] - 2020-09-29
 
