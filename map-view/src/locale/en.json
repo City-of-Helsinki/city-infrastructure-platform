@@ -1,6 +1,15 @@
 {
   "translation": {
     "edit": "edit",
-    "close": "close"
+    "close": "close",
+    "featureInfoTitle": {
+      "traffic_sign_real": "Traffic Sign Real",
+      "traffic_sign_plan": "Traffic Sign Plan",
+      "additional_sign_real": "Additional Sign Real",
+      "additional_sign_plan": "Additional Sign Plan"
+    },
+    "Device type": "Device type",
+    "Direction": "Direction",
+    "Additional info": "Additional info"
   }
 }
