@@ -3,7 +3,12 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..forms import AdditionalSignPlanModelForm, AdditionalSignRealModelForm
+from ..forms import (
+    AdditionalSignContentPlanForm,
+    AdditionalSignContentRealForm,
+    AdditionalSignPlanModelForm,
+    AdditionalSignRealModelForm,
+)
 from ..mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
@@ -40,10 +45,12 @@ class BaseAdditionalSignContentInline(admin.TabularInline):
 
 class AdditionalSignContentPlanInline(BaseAdditionalSignContentInline):
     model = AdditionalSignContentPlan
+    form = AdditionalSignContentPlanForm
 
 
 class AdditionalSignContentRealInline(BaseAdditionalSignContentInline):
     model = AdditionalSignContentReal
+    form = AdditionalSignContentRealForm
 
 
 @admin.register(AdditionalSignPlan)

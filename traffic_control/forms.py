@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
 from .models import (
+    AdditionalSignContentPlan,
+    AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
     BarrierPlan,
@@ -122,6 +124,24 @@ class AdditionalSignPlanModelForm(Point3DFieldForm):
     class Meta:
         model = AdditionalSignPlan
         fields = "__all__"
+
+
+class AdditionalSignContentPlanForm(forms.ModelForm):
+    class Meta:
+        model = AdditionalSignContentPlan
+        fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficSignIconSelectWidget(),
+        }
+
+
+class AdditionalSignContentRealForm(forms.ModelForm):
+    class Meta:
+        model = AdditionalSignContentReal
+        fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficSignIconSelectWidget(),
+        }
 
 
 class PlanRelationsForm(forms.Form):
