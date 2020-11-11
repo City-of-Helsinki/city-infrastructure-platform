@@ -62,7 +62,7 @@ class Command(BaseCommand):
                     source_name=SOURCE_NAME,
                     source_id=source_id,
                     defaults={
-                        "location": Point(int(x), int(y), srid=settings.SRID),
+                        "location": Point(int(x), int(y), 0.0, srid=settings.SRID),
                         "device_type": self.get_device_type(device_type_code),
                         "arrow_direction": ARROW_DIRECTION_MAPPING.get(arrow_direction),
                         "size": size,

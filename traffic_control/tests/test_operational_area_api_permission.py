@@ -33,13 +33,19 @@ from traffic_control.tests.factories import (
     get_user,
 )
 
-test_point_inside_area = Point(20.0, 20.0, srid=settings.SRID)
-test_point_outside_area = Point(-20.0, -20.0, srid=settings.SRID)
+test_point_inside_area = Point(20.0, 20.0, 0.0, srid=settings.SRID)
+test_point_outside_area = Point(-20.0, -20.0, 0.0, srid=settings.SRID)
 test_3d_point_inside_area = Point(20.0, 20.0, 0.0, srid=settings.SRID)
 test_3d_point_outside_area = Point(-20.0, -20.0, 0.0, srid=settings.SRID)
 test_multipolygon_inside_area = MultiPolygon(
     Polygon(
-        ((20.0, 20.0), (20.0, 30.0), (30.0, 30.0), (30.0, 20.0), (20.0, 20.0)),
+        (
+            (20.0, 20.0, 0.0),
+            (20.0, 30.0, 0.0),
+            (30.0, 30.0, 0.0),
+            (30.0, 20.0, 0.0),
+            (20.0, 20.0, 0.0),
+        ),
         srid=settings.SRID,
     ),
     srid=settings.SRID,
@@ -47,11 +53,11 @@ test_multipolygon_inside_area = MultiPolygon(
 test_multipolygon_outside_area = MultiPolygon(
     Polygon(
         (
-            (-20.0, -20.0),
-            (-20.0, -30.0),
-            (-30.0, -30.0),
-            (-30.0, -20.0),
-            (-20.0, -20.0),
+            (-20.0, -20.0, 0.0),
+            (-20.0, -30.0, 0.0),
+            (-30.0, -30.0, 0.0),
+            (-30.0, -20.0, 0.0),
+            (-20.0, -20.0, 0.0),
         ),
         srid=settings.SRID,
     ),

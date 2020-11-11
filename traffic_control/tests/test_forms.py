@@ -49,7 +49,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
         user = get_user()
         owner = get_owner()
         data = {
-            "location": Point(5, 5, srid=settings.SRID),
+            "location": Point(5, 5, 0.0, srid=settings.SRID),
             "z_coord": 20,
             "direction": 0,
             "created_by": user.id,
@@ -77,7 +77,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
     def test_create_traffic_sign_real_3d_location(self):
         user = get_user()
         data = {
-            "location": Point(10, 10, srid=settings.SRID),
+            "location": Point(10, 10, 0.0, srid=settings.SRID),
             "z_coord": 20,
             "direction": 0,
             "created_by": user.id,

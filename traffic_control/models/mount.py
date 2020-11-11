@@ -83,7 +83,7 @@ class MountPlan(
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
+    location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
@@ -179,7 +179,7 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
+    location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),

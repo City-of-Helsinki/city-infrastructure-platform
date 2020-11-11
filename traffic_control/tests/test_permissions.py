@@ -52,7 +52,7 @@ def test__operational_area_permission__point_in_area(method):
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
     request.user = user
-    barrier_real = get_barrier_real(location=Point(20.0, 20.0, srid=settings.SRID))
+    barrier_real = get_barrier_real(location=Point(20.0, 20.0, 0, srid=settings.SRID))
 
     has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(
         request, mock_view, barrier_real
@@ -82,7 +82,7 @@ def test__operational_area_permission__point_not_in_area(method, expected):
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
     request.user = user
-    barrier_real = get_barrier_real(location=Point(-20.0, -20.0, srid=settings.SRID))
+    barrier_real = get_barrier_real(location=Point(-20.0, -20.0, 0, srid=settings.SRID))
 
     has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(
         request, mock_view, barrier_real
@@ -104,7 +104,13 @@ def test__operational_area_permission__polygon_in_area(method):
     request.user = user
     barrier_real = get_barrier_real(
         location=Polygon(
-            ((10.0, 10.0), (10.0, 20.0), (20.0, 20.0), (20.0, 10.0), (10.0, 10.0)),
+            (
+                (10.0, 10.0, 0),
+                (10.0, 20.0, 0),
+                (20.0, 20.0, 0),
+                (20.0, 10.0, 0),
+                (10.0, 10.0, 0),
+            ),
             srid=settings.SRID,
         )
     )
@@ -139,7 +145,13 @@ def test__operational_area_permission__polygon_partially_not_in_area(method, exp
     request.user = user
     barrier_real = get_barrier_real(
         location=Polygon(
-            ((10.0, 10.0), (10.0, -10.0), (-10.0, -10.0), (-10.0, 10.0), (10.0, 10.0)),
+            (
+                (10.0, 10.0, 0),
+                (10.0, -10.0, 0),
+                (-10.0, -10.0, 0),
+                (-10.0, 10.0, 0),
+                (10.0, 10.0, 0),
+            ),
             srid=settings.SRID,
         )
     )
@@ -175,11 +187,11 @@ def test__operational_area_permission__polygon_not_in_area(method, expected):
     barrier_real = get_barrier_real(
         location=Polygon(
             (
-                (-10.0, -10.0),
-                (-10.0, -20.0),
-                (-20.0, -20.0),
-                (-20.0, -10.0),
-                (-10.0, -10.0),
+                (-10.0, -10.0, 0),
+                (-10.0, -20.0, 0),
+                (-20.0, -20.0, 0),
+                (-20.0, -10.0, 0),
+                (-10.0, -10.0, 0),
             ),
             srid=settings.SRID,
         )

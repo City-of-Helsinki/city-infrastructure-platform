@@ -5,34 +5,41 @@ from rest_framework.test import APITestCase
 from traffic_control.models import Lifecycle, MountType, Owner, TrafficControlDeviceType
 from users.models import User
 
-test_point = Point(10.0, 10.0, srid=settings.SRID)
-test_point_2 = Point(0.0, 0.0, srid=settings.SRID)
-test_point_3 = Point(100.0, 100.0, srid=settings.SRID)
-test_point_4 = Point(-44.3, 60.1, srid=4326)
-test_line = LineString((0.0, 0.0), (50.0, 0.0), srid=settings.SRID)
-test_line_2 = LineString((20.0, 20.0), (30.0, 30.0), srid=settings.SRID)
-test_line_3 = LineString((40.0, 40.0), (60.0, 60.0), srid=settings.SRID)
-test_line_4 = LineString((500.0, 500.0), (500.0, 550.0), srid=settings.SRID)
+test_point = Point(10.0, 10.0, 0.0, srid=settings.SRID)
+test_point_2 = Point(0.0, 0.0, 0.0, srid=settings.SRID)
+test_point_3 = Point(100.0, 100.0, 0.0, srid=settings.SRID)
+test_point_4 = Point(-44.3, 60.1, 0.0, srid=4326)
+test_line = LineString((0.0, 0.0, 0.0), (50.0, 0.0, 0.0), srid=settings.SRID)
+test_line_2 = LineString((20.0, 20.0, 0.0), (30.0, 30.0, 0.0), srid=settings.SRID)
+test_line_3 = LineString((40.0, 40.0, 0.0), (60.0, 60.0, 0.0), srid=settings.SRID)
+test_line_4 = LineString((500.0, 500.0, 0.0), (500.0, 550.0, 0.0), srid=settings.SRID)
 test_polygon = Polygon(
-    ((0.0, 0.0), (0.0, 50.0), (50.0, 50.0), (50.0, 0.0), (0.0, 0.0)), srid=settings.SRID
+    (
+        (0.0, 0.0, 0.0),
+        (0.0, 50.0, 0.0),
+        (50.0, 50.0, 0.0),
+        (50.0, 0.0, 0.0),
+        (0.0, 0.0, 0.0),
+    ),
+    srid=settings.SRID,
 )
 test_polygon_2 = Polygon(
     (
-        (1000.0, 1000.0),
-        (1000.0, 1050.0),
-        (1050.0, 1050.0),
-        (1050.0, 1000.0),
-        (1000.0, 1000.0),
+        (1000.0, 1000.0, 0.0),
+        (1000.0, 1050.0, 0.0),
+        (1050.0, 1050.0, 0.0),
+        (1050.0, 1000.0, 0.0),
+        (1000.0, 1000.0, 0.0),
     ),
     srid=settings.SRID,
 )
 test_polygon_3 = Polygon(
     (
-        (100.0, 100.0),
-        (100.0, 150.0),
-        (150.0, 150.0),
-        (150.0, 100.0),
-        (100.0, 100.0),
+        (100.0, 100.0, 0.0),
+        (100.0, 150.0, 0.0),
+        (150.0, 150.0, 0.0),
+        (150.0, 100.0, 0.0),
+        (100.0, 100.0, 0.0),
     ),
     srid=settings.SRID,
 )

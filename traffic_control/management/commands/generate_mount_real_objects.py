@@ -1,7 +1,5 @@
 from itertools import chain
 
-from django.conf import settings
-from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -65,11 +63,7 @@ class Command(BaseCommand):
         )
         if not mount_real:
             mount_real = MountReal.objects.create(
-                location=Point(
-                    traffic_sign.location.x,
-                    traffic_sign.location.y,
-                    srid=settings.SRID,
-                ),
+                location=traffic_sign.location,
                 mount_type=traffic_sign.mount_type,
                 owner=owner,
                 created_by=traffic_sign.created_by,
