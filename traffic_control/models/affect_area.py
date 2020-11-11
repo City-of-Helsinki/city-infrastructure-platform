@@ -47,7 +47,7 @@ class ParkingArea(SourceControlModel):
     owner = models.ForeignKey(
         Owner, verbose_name=_("owner"), null=True, blank=True, on_delete=models.PROTECT
     )
-    location = models.MultiPolygonField(_("location"), srid=settings.SRID)
+    location = models.MultiPolygonField(_("location (3D)"), dim=3, srid=settings.SRID)
 
     def __str__(self):
         return f"{self.area_type} - f{self.source_id}"

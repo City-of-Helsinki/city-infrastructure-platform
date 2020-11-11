@@ -50,7 +50,7 @@ class OperationalArea(SourceControlModel):
     updated_date = models.DateField(_("Updated date"), null=True, blank=True)
     task = models.CharField(_("Task"), max_length=256, blank=True)
     status = models.CharField(_("Status"), max_length=256, blank=True)
-    location = models.MultiPolygonField(_("Location (2D)"), srid=settings.SRID)
+    location = models.MultiPolygonField(_("Location (3D)"), dim=3, srid=settings.SRID)
 
     class Meta:
         verbose_name = _("Operational area")

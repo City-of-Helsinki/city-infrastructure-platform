@@ -23,7 +23,7 @@ class RoadMarkingPlanTestCase(TestCase):
         with self.assertRaises(ValidationError) as e:
             RoadMarkingPlan.objects.create(
                 device_type=device_type,
-                location=Point(1, 1, srid=settings.SRID),
+                location=Point(1, 1, 0, srid=settings.SRID),
                 road_name="",
                 owner=get_owner(),
                 created_by=user,
@@ -46,7 +46,7 @@ class RoadMarkingRealTestCase(TestCase):
         with self.assertRaises(ValidationError) as e:
             RoadMarkingReal.objects.create(
                 device_type=device_type,
-                location=Point(1, 1, srid=settings.SRID),
+                location=Point(1, 1, 0, srid=settings.SRID),
                 road_name="",
                 owner=get_owner(),
                 created_by=user,

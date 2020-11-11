@@ -51,7 +51,7 @@ class SignpostPlan(
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )
@@ -215,7 +215,7 @@ class SignpostReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.DecimalField(
         _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
     )

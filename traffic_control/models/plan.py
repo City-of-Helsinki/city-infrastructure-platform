@@ -5,7 +5,7 @@ from typing import List
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import MultiPolygon, Point
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.utils.translation import gettext_lazy as _
 
 from ..mixins.models import SoftDeleteModel, SourceControlModel, UserControlModel
@@ -30,7 +30,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         help_text=_("Year and verdict section separated with a dash"),
     )
     location = models.MultiPolygonField(
-        _("Location (2D)"), srid=settings.SRID, null=True, blank=True
+        _("Location (3D)"), dim=3, srid=settings.SRID, null=True, blank=True
     )
     planner = models.CharField(_("Planner"), blank=True, max_length=200)
     decision_maker = models.CharField(_("Decision maker"), blank=True, max_length=200)
@@ -78,8 +78,9 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
                 srid=settings.SRID,
             )
             area = location_polygons.convex_hull
-
-            self.location = MultiPolygon(area, srid=settings.SRID)
+            coords_3d = [(*pt, 0) for pt in area.coords[0]]
+            area_3d = Polygon(coords_3d, srid=settings.SRID)
+            self.location = MultiPolygon(area_3d, srid=settings.SRID)
         self.save(update_fields=["location"])
 
 

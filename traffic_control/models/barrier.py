@@ -64,7 +64,7 @@ class BarrierPlan(
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
+    location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
@@ -180,7 +180,7 @@ class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    location = models.GeometryField(_("Location (2D)"), srid=settings.SRID)
+    location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),

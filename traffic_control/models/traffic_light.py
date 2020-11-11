@@ -99,7 +99,7 @@ class TrafficLightPlan(
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
     type = EnumField(TrafficLightType, blank=True, null=True)
     device_type = models.ForeignKey(
@@ -239,7 +239,7 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    location = models.PointField(_("Location (2D)"), srid=settings.SRID)
+    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
     type = EnumField(TrafficLightType, blank=True, null=True)
     device_type = models.ForeignKey(
