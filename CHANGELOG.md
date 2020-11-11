@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve feature info window to include more details and add localization to it
 - Add ParkingAreaCategory and ParkingArea to django admin
 - Use icon select widget for AdditionalSignContentPlan/Real inlines
+- Convert all 2d geometry fields to 3d
 
 ## [1.2.0] - 2020-09-29
 
