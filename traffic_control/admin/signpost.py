@@ -8,9 +8,11 @@ from ..mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
 )
 from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
 from .audit_log import AuditLogHistoryAdmin
+from .common import TrafficControlOperationInlineBase
 
 __all__ = (
     "SignpostPlanAdmin",
@@ -18,6 +20,8 @@ __all__ = (
     "SignpostRealAdmin",
     "SignpostRealFileInline",
 )
+
+from ..models.signpost import SignpostRealOperation
 
 
 class SignpostPlanFileInline(admin.TabularInline):
@@ -114,11 +118,16 @@ class SignpostRealFileInline(admin.TabularInline):
     model = SignpostRealFile
 
 
+class SignpostRealOperationInline(TrafficControlOperationInlineBase):
+    model = SignpostRealOperation
+
+
 @admin.register(SignpostReal)
 class SignpostRealAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
 ):
@@ -209,4 +218,4 @@ class SignpostRealAdmin(
     )
     raw_id_fields = ("parent", "signpost_plan", "mount_real")
     ordering = ("-created_at",)
-    inline = (SignpostRealFileInline,)
+    inline = (SignpostRealFileInline, SignpostRealOperationInline)

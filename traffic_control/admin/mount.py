@@ -8,6 +8,7 @@ from ..mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
 )
 from ..models import (
     MountPlan,
@@ -18,6 +19,7 @@ from ..models import (
     PortalType,
 )
 from .audit_log import AuditLogHistoryAdmin
+from .common import TrafficControlOperationInlineBase
 from .traffic_sign import OrderedTrafficSignRealInline
 
 __all__ = (
@@ -27,6 +29,8 @@ __all__ = (
     "MountRealFileInline",
     "PortalTypeAdmin",
 )
+
+from ..models.mount import MountRealOperation
 
 
 class MountPlanFileInline(admin.TabularInline):
@@ -109,11 +113,16 @@ class MountRealFileInline(admin.TabularInline):
     model = MountRealFile
 
 
+class MountRealOperationInline(TrafficControlOperationInlineBase):
+    model = MountRealOperation
+
+
 @admin.register(MountReal)
 class MountRealAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
 ):
@@ -178,7 +187,11 @@ class MountRealAdmin(
     )
     raw_id_fields = ("mount_plan",)
     ordering = ("-created_at",)
-    inlines = (MountRealFileInline, OrderedTrafficSignRealInline)
+    inlines = (
+        MountRealFileInline,
+        OrderedTrafficSignRealInline,
+        MountRealOperationInline,
+    )
 
 
 @admin.register(MountType)

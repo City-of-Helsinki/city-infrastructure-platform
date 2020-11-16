@@ -8,6 +8,7 @@ from ..mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
 )
 from ..models import (
     TrafficLightPlan,
@@ -16,6 +17,7 @@ from ..models import (
     TrafficLightRealFile,
 )
 from .audit_log import AuditLogHistoryAdmin
+from .common import TrafficControlOperationInlineBase
 
 __all__ = (
     "TrafficLightPlanAdmin",
@@ -23,6 +25,8 @@ __all__ = (
     "TrafficLightRealAdmin",
     "TrafficLightRealFileInline",
 )
+
+from ..models.traffic_light import TrafficLightRealOperation
 
 
 class TrafficLightPlanFileInline(admin.TabularInline):
@@ -115,11 +119,16 @@ class TrafficLightRealFileInline(admin.TabularInline):
     model = TrafficLightRealFile
 
 
+class TrafficLightRealOperationInline(TrafficControlOperationInlineBase):
+    model = TrafficLightRealOperation
+
+
 @admin.register(TrafficLightReal)
 class TrafficLightRealAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
 ):
@@ -193,4 +202,4 @@ class TrafficLightRealAdmin(
     )
     raw_id_fields = ("traffic_light_plan", "mount_real")
     ordering = ("-created_at",)
-    inlines = (TrafficLightRealFileInline,)
+    inlines = (TrafficLightRealFileInline, TrafficLightRealOperationInline)
