@@ -21,6 +21,8 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
+    OperationBase,
+    OperationType,
     TrafficControlDeviceType,
 )
 from .mount import MountPlan, MountReal, MountType
@@ -354,6 +356,27 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
             )
 
         super().save(*args, **kwargs)
+
+
+class TrafficLightRealOperation(OperationBase):
+    operation_type = models.ForeignKey(
+        OperationType,
+        limit_choices_to={"traffic_light": True},
+        verbose_name=_("operation type"),
+        on_delete=models.PROTECT,
+    )
+    traffic_light_real = models.ForeignKey(
+        TrafficLightReal,
+        verbose_name=_("traffic light real"),
+        on_delete=models.PROTECT,
+        related_name="operations",
+    )
+
+    class Meta:
+        db_table = "traffic_light_real_operation"
+        ordering = ["operation_date"]
+        verbose_name = _("Traffic light real operation")
+        verbose_name_plural = _("Traffic light real operations")
 
 
 class TrafficLightRealFile(models.Model):

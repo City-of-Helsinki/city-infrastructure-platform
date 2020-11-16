@@ -21,6 +21,8 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
+    OperationBase,
+    OperationType,
     TrafficControlDeviceType,
 )
 from .plan import Plan
@@ -268,6 +270,27 @@ class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
             )
 
         super().save(*args, **kwargs)
+
+
+class BarrierRealOperation(OperationBase):
+    operation_type = models.ForeignKey(
+        OperationType,
+        limit_choices_to={"barrier": True},
+        verbose_name=_("operation type"),
+        on_delete=models.PROTECT,
+    )
+    barrier_real = models.ForeignKey(
+        BarrierReal,
+        verbose_name=_("barrier real"),
+        on_delete=models.PROTECT,
+        related_name="operations",
+    )
+
+    class Meta:
+        db_table = "barrier_real_operation"
+        ordering = ["operation_date"]
+        verbose_name = _("Barrier real operation")
+        verbose_name_plural = _("Barrier real operations")
 
 
 class BarrierRealFile(models.Model):

@@ -22,6 +22,8 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
+    OperationBase,
+    OperationType,
     Reflection,
     Size,
     Surface,
@@ -239,6 +241,27 @@ class AdditionalSignReal(AbstractAdditionalSign):
 
     def __str__(self):
         return f"AdditionalSignReal {self.id}"
+
+
+class AdditionalSignRealOperation(OperationBase):
+    operation_type = models.ForeignKey(
+        OperationType,
+        limit_choices_to={"additional_sign": True},
+        verbose_name=_("operation type"),
+        on_delete=models.PROTECT,
+    )
+    additional_sign_real = models.ForeignKey(
+        AdditionalSignReal,
+        verbose_name=_("additional sign real"),
+        on_delete=models.PROTECT,
+        related_name="operations",
+    )
+
+    class Meta:
+        db_table = "additional_sign_real_operation"
+        ordering = ["operation_date"]
+        verbose_name = _("Additional sign real operation")
+        verbose_name_plural = _("Additional sign real operations")
 
 
 class AbstractAdditionalSignContent(SourceControlModel, UserControlModel):
