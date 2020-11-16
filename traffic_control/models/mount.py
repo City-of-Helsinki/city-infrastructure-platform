@@ -12,7 +12,13 @@ from ..mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from .common import Condition, InstallationStatus, Lifecycle
+from .common import (
+    Condition,
+    InstallationStatus,
+    Lifecycle,
+    OperationBase,
+    OperationType,
+)
 from .plan import Plan
 from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
 
@@ -260,6 +266,27 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         """traffic sign reals ordered by z coordinate from top down"""
         qs = self.trafficsignreal_set.active()
         return order_queryset_by_z_coord_desc(qs)
+
+
+class MountRealOperation(OperationBase):
+    operation_type = models.ForeignKey(
+        OperationType,
+        limit_choices_to={"mount": True},
+        verbose_name=_("operation type"),
+        on_delete=models.PROTECT,
+    )
+    mount_real = models.ForeignKey(
+        MountReal,
+        verbose_name=_("mount real"),
+        on_delete=models.PROTECT,
+        related_name="operations",
+    )
+
+    class Meta:
+        db_table = "mount_real_operation"
+        ordering = ["operation_date"]
+        verbose_name = _("Mount real operation")
+        verbose_name_plural = _("Mount real operations")
 
 
 class MountRealFile(models.Model):

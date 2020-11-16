@@ -8,6 +8,8 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField
 
+from traffic_control.mixins.models import UserControlModel
+
 
 class InstallationStatus(Enum):
     IN_USE = "IN_USE"
@@ -342,3 +344,37 @@ class TrafficControlDeviceType(models.Model):
 
 
 auditlog.register(TrafficControlDeviceType)
+
+
+class OperationType(models.Model):
+    name = models.CharField(_("name"), max_length=200)
+    traffic_sign = models.BooleanField(_("traffic sign"), default=False)
+    additional_sign = models.BooleanField(_("additional sign"), default=False)
+    road_marking = models.BooleanField(_("road marking"), default=False)
+    barrier = models.BooleanField(_("barrier"), default=False)
+    signpost = models.BooleanField(_("signpost"), default=False)
+    traffic_light = models.BooleanField(_("traffic light"), default=False)
+    mount = models.BooleanField(_("mount"), default=False)
+
+    class Meta:
+        verbose_name = _("operation type")
+        verbose_name_plural = _("operation types")
+
+    def __str__(self):
+        return self.name
+
+
+class OperationBase(UserControlModel):
+    operation_date = models.DateField(_("operation date"))
+    straightness_value = models.FloatField(
+        _("straightness value"), null=True, blank=True
+    )
+    quality_requirements_fulfilled = models.BooleanField(
+        _("quality requirements fulfilled"), default=False
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.operation_type} {self.operation_date}"

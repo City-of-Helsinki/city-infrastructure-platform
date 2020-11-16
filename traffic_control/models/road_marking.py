@@ -21,6 +21,8 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
+    OperationBase,
+    OperationType,
     TrafficControlDeviceType,
     TrafficControlDeviceTypeType,
 )
@@ -389,6 +391,27 @@ class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
             )
 
         super().save(*args, **kwargs)
+
+
+class RoadMarkingRealOperation(OperationBase):
+    operation_type = models.ForeignKey(
+        OperationType,
+        limit_choices_to={"road_marking": True},
+        verbose_name=_("operation type"),
+        on_delete=models.PROTECT,
+    )
+    road_marking_real = models.ForeignKey(
+        RoadMarkingReal,
+        verbose_name=_("road marking real"),
+        on_delete=models.PROTECT,
+        related_name="operations",
+    )
+
+    class Meta:
+        db_table = "road_marking_real_operation"
+        ordering = ["operation_date"]
+        verbose_name = _("Road marking real operation")
+        verbose_name_plural = _("Road marking real operations")
 
 
 class RoadMarkingRealFile(models.Model):

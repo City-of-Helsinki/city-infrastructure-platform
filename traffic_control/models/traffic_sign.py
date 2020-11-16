@@ -23,6 +23,8 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
+    OperationBase,
+    OperationType,
     Reflection,
     Size,
     Surface,
@@ -407,6 +409,27 @@ class TrafficSignReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     def soft_delete(self, user):
         super().soft_delete(user)
         self.additional_signs.soft_delete(user)
+
+
+class TrafficSignRealOperation(OperationBase):
+    operation_type = models.ForeignKey(
+        OperationType,
+        limit_choices_to={"traffic_sign": True},
+        verbose_name=_("operation type"),
+        on_delete=models.PROTECT,
+    )
+    traffic_sign_real = models.ForeignKey(
+        TrafficSignReal,
+        verbose_name=_("traffic sign real"),
+        on_delete=models.PROTECT,
+        related_name="operations",
+    )
+
+    class Meta:
+        db_table = "traffic_sign_real_operation"
+        ordering = ["operation_date"]
+        verbose_name = _("Traffic sign real operation")
+        verbose_name_plural = _("Traffic sign real operations")
 
 
 class TrafficSignRealFile(models.Model):

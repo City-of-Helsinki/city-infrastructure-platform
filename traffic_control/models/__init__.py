@@ -4,6 +4,7 @@ from .additional_sign import (
     AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
+    AdditionalSignRealOperation,
 )
 from .affect_area import ParkingArea, ParkingAreaCategory
 from .barrier import (
@@ -11,6 +12,7 @@ from .barrier import (
     BarrierPlanFile,
     BarrierReal,
     BarrierRealFile,
+    BarrierRealOperation,
     ConnectionType,
     LaneType,
     Reflective,
@@ -20,6 +22,7 @@ from .common import (
     Condition,
     InstallationStatus,
     Lifecycle,
+    OperationType,
     Owner,
     Reflection,
     Size,
@@ -31,6 +34,7 @@ from .mount import (
     MountPlanFile,
     MountReal,
     MountRealFile,
+    MountRealOperation,
     MountType,
     PortalType,
 )
@@ -44,13 +48,21 @@ from .road_marking import (
     RoadMarkingPlanFile,
     RoadMarkingReal,
     RoadMarkingRealFile,
+    RoadMarkingRealOperation,
 )
-from .signpost import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
+from .signpost import (
+    SignpostPlan,
+    SignpostPlanFile,
+    SignpostReal,
+    SignpostRealFile,
+    SignpostRealOperation,
+)
 from .traffic_light import (
     TrafficLightPlan,
     TrafficLightPlanFile,
     TrafficLightReal,
     TrafficLightRealFile,
+    TrafficLightRealOperation,
     TrafficLightSoundBeaconValue,
     TrafficLightType,
 )
@@ -59,4 +71,5 @@ from .traffic_sign import (
     TrafficSignPlanFile,
     TrafficSignReal,
     TrafficSignRealFile,
+    TrafficSignRealOperation,
 )

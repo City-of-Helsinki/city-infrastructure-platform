@@ -21,6 +21,8 @@ from .common import (
     LaneNumber,
     LaneType,
     Lifecycle,
+    OperationBase,
+    OperationType,
     Reflection,
     Size,
     TrafficControlDeviceType,
@@ -361,6 +363,27 @@ class SignpostReal(SourceControlModel, SoftDeleteModel, UserControlModel):
             )
 
         super().save(*args, **kwargs)
+
+
+class SignpostRealOperation(OperationBase):
+    operation_type = models.ForeignKey(
+        OperationType,
+        limit_choices_to={"signpost": True},
+        verbose_name=_("operation type"),
+        on_delete=models.PROTECT,
+    )
+    signpost_real = models.ForeignKey(
+        SignpostReal,
+        verbose_name=_("signpost real"),
+        on_delete=models.PROTECT,
+        related_name="operations",
+    )
+
+    class Meta:
+        db_table = "signpost_real_operation"
+        ordering = ["operation_date"]
+        verbose_name = _("Signpost real operation")
+        verbose_name_plural = _("Signpost real operations")
 
 
 class SignpostRealFile(models.Model):
