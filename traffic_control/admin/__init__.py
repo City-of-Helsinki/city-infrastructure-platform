@@ -8,6 +8,7 @@ from .barrier import (
     BarrierRealAdmin,
     BarrierRealFileInline,
 )
+from .common import OperationTypeAdmin
 from .mount import (
     MountPlanAdmin,
     MountPlanFileInline,

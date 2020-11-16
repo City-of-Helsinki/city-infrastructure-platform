@@ -8,6 +8,7 @@ from ..mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
 )
 from ..models import (
     RoadMarkingPlan,
@@ -16,6 +17,7 @@ from ..models import (
     RoadMarkingRealFile,
 )
 from .audit_log import AuditLogHistoryAdmin
+from .common import TrafficControlOperationInlineBase
 
 __all__ = (
     "RoadMarkingPlanAdmin",
@@ -23,6 +25,8 @@ __all__ = (
     "RoadMarkingRealAdmin",
     "RoadMarkingRealFileInline",
 )
+
+from ..models.road_marking import RoadMarkingRealOperation
 
 
 class RoadMarkingPlanFileInline(admin.TabularInline):
@@ -131,11 +135,16 @@ class RoadMarkingRealFileInline(admin.TabularInline):
     model = RoadMarkingRealFile
 
 
+class RoadMarkingRealOperationInline(TrafficControlOperationInlineBase):
+    model = RoadMarkingRealOperation
+
+
 @admin.register(RoadMarkingReal)
 class RoadMarkingRealAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
 ):
@@ -227,4 +236,4 @@ class RoadMarkingRealAdmin(
     )
     raw_id_fields = ("road_marking_plan", "traffic_sign_real")
     ordering = ("-created_at",)
-    inlines = (RoadMarkingRealFileInline,)
+    inlines = (RoadMarkingRealFileInline, RoadMarkingRealOperationInline)

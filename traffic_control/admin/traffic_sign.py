@@ -11,6 +11,7 @@ from ..mixins import (
     Point3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
 )
 from ..models import (
     TrafficControlDeviceType,
@@ -20,8 +21,10 @@ from ..models import (
     TrafficSignRealFile,
 )
 from ..models.common import TRAFFIC_SIGN_TYPE_CHOICES
+from ..models.traffic_sign import TrafficSignRealOperation
 from ..models.utils import order_queryset_by_z_coord_desc
 from .audit_log import AuditLogHistoryAdmin
+from .common import TrafficControlOperationInlineBase
 
 __all__ = (
     "OrderedTrafficSignRealInline",
@@ -172,11 +175,16 @@ class TrafficSignRealFileInline(admin.TabularInline):
     model = TrafficSignRealFile
 
 
+class TrafficSignRealOperationInline(TrafficControlOperationInlineBase):
+    model = TrafficSignRealOperation
+
+
 @admin.register(TrafficSignReal)
 class TrafficSignRealAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
     Point3DFieldAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
@@ -340,7 +348,7 @@ class TrafficSignRealAdmin(
         "source_id",
         "source_name",
     )
-    inlines = (TrafficSignRealFileInline,)
+    inlines = (TrafficSignRealFileInline, TrafficSignRealOperationInline)
 
     def has_additional_signs(self, obj):
         return (_("No"), _("Yes"))[obj.has_additional_signs()]

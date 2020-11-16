@@ -8,9 +8,11 @@ from ..mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
 )
 from ..models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
 from .audit_log import AuditLogHistoryAdmin
+from .common import TrafficControlOperationInlineBase
 
 __all__ = (
     "BarrierPlanAdmin",
@@ -18,6 +20,8 @@ __all__ = (
     "BarrierRealAdmin",
     "BarrierRealFileInline",
 )
+
+from ..models.barrier import BarrierRealOperation
 
 
 class BarrierPlanFileInline(admin.TabularInline):
@@ -107,11 +111,16 @@ class BarrierRealFileInline(admin.TabularInline):
     model = BarrierRealFile
 
 
+class BarrierRealOperationInline(TrafficControlOperationInlineBase):
+    model = BarrierRealOperation
+
+
 @admin.register(BarrierReal)
 class BarrierRealAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
 ):
@@ -185,4 +194,4 @@ class BarrierRealAdmin(
     )
     raw_id_fields = ("barrier_plan",)
     ordering = ("-created_at",)
-    inlines = (BarrierRealFileInline,)
+    inlines = (BarrierRealFileInline, BarrierRealOperationInline)

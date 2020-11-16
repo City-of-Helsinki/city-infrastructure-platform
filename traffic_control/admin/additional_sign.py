@@ -22,7 +22,9 @@ from ..models import (
     AdditionalSignPlan,
     AdditionalSignReal,
 )
+from ..models.additional_sign import AdditionalSignRealOperation
 from .audit_log import AuditLogHistoryAdmin
+from .common import TrafficControlOperationInlineBase
 
 
 class BaseAdditionalSignContentInline(admin.TabularInline):
@@ -51,6 +53,10 @@ class AdditionalSignContentPlanInline(BaseAdditionalSignContentInline):
 class AdditionalSignContentRealInline(BaseAdditionalSignContentInline):
     model = AdditionalSignContentReal
     form = AdditionalSignContentRealForm
+
+
+class AdditionalSignRealOperationInline(TrafficControlOperationInlineBase):
+    model = AdditionalSignRealOperation
 
 
 @admin.register(AdditionalSignPlan)
@@ -293,4 +299,4 @@ class AdditionalSignRealAdmin(
         "source_id",
         "source_name",
     )
-    inlines = (AdditionalSignContentRealInline,)
+    inlines = (AdditionalSignContentRealInline, AdditionalSignRealOperationInline)
