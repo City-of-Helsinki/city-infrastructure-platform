@@ -9,6 +9,7 @@ from traffic_control.models import RoadMarkingColor, RoadMarkingPlan, RoadMarkin
 
 from ..models.common import DeviceTypeTargetModel
 from .factories import (
+    add_road_marking_real_operation,
     get_api_client,
     get_road_marking_plan,
     get_road_marking_real,
@@ -421,12 +422,26 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get one real road marking object.
         """
         road_marking_real = self.__create_test_road_marking_real()
+        operation_1 = add_road_marking_real_operation(
+            road_marking_real, operation_date=datetime.date(2020, 11, 5)
+        )
+        operation_2 = add_road_marking_real_operation(
+            road_marking_real, operation_date=datetime.date(2020, 11, 15)
+        )
+        operation_3 = add_road_marking_real_operation(
+            road_marking_real, operation_date=datetime.date(2020, 11, 10)
+        )
         response = self.client.get(
             reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(road_marking_real.id))
         self.assertEqual(road_marking_real.location.ewkt, response.data.get("location"))
+        # verify operations are ordered by operation_date
+        operation_ids = [operation["id"] for operation in response.data["operations"]]
+        self.assertEqual(
+            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
+        )
 
     def test_get_road_marking_real_detail__geojson(self):
         """

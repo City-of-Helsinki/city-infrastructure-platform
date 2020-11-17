@@ -7,7 +7,12 @@ from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import MountPlan, MountReal
 
-from .factories import get_api_client, get_mount_plan, get_mount_real
+from .factories import (
+    add_mount_real_operation,
+    get_api_client,
+    get_mount_plan,
+    get_mount_real,
+)
 from .test_base_api import (
     line_location_error_test_data,
     line_location_test_data,
@@ -290,11 +295,25 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get one mount real object.
         """
         mount_real = self.__create_test_mount_real()
+        operation_1 = add_mount_real_operation(
+            mount_real, operation_date=datetime.date(2020, 11, 5)
+        )
+        operation_2 = add_mount_real_operation(
+            mount_real, operation_date=datetime.date(2020, 11, 15)
+        )
+        operation_3 = add_mount_real_operation(
+            mount_real, operation_date=datetime.date(2020, 11, 10)
+        )
         response = self.client.get(
             reverse("v1:mountreal-detail", kwargs={"pk": mount_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_real.id))
+        # verify operations are ordered by operation_date
+        operation_ids = [operation["id"] for operation in response.data["operations"]]
+        self.assertEqual(
+            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
+        )
 
     def test_get_mount_real_detail__geojson(self):
         """

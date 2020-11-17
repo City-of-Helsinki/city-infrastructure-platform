@@ -9,6 +9,7 @@ from traffic_control.models import BarrierPlan, BarrierReal, ConnectionType, Ref
 
 from ..models.common import DeviceTypeTargetModel
 from .factories import (
+    add_barrier_real_operation,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -414,12 +415,26 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get one real barrier object.
         """
         barrier_real = self.__create_test_barrier_real()
+        operation_1 = add_barrier_real_operation(
+            barrier_real, operation_date=datetime.date(2020, 11, 5)
+        )
+        operation_2 = add_barrier_real_operation(
+            barrier_real, operation_date=datetime.date(2020, 11, 15)
+        )
+        operation_3 = add_barrier_real_operation(
+            barrier_real, operation_date=datetime.date(2020, 11, 10)
+        )
         response = self.client.get(
             reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(barrier_real.id))
         self.assertEqual(barrier_real.location.ewkt, response.data.get("location"))
+        # verify operations are ordered by operation_date
+        operation_ids = [operation["id"] for operation in response.data["operations"]]
+        self.assertEqual(
+            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
+        )
 
     def test_get_barrier_real_detail__geojson(self):
         """

@@ -9,6 +9,7 @@ from traffic_control.models import SignpostPlan, SignpostReal
 
 from ..models.common import DeviceTypeTargetModel
 from .factories import (
+    add_signpost_real_operation,
     get_api_client,
     get_signpost_plan,
     get_signpost_real,
@@ -409,12 +410,26 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get one signpost real object.
         """
         signpost_real = self.__create_test_signpost_real()
+        operation_1 = add_signpost_real_operation(
+            signpost_real, operation_date=datetime.date(2020, 11, 5)
+        )
+        operation_2 = add_signpost_real_operation(
+            signpost_real, operation_date=datetime.date(2020, 11, 15)
+        )
+        operation_3 = add_signpost_real_operation(
+            signpost_real, operation_date=datetime.date(2020, 11, 10)
+        )
         response = self.client.get(
             reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(signpost_real.id))
         self.assertEqual(signpost_real.location.ewkt, response.data.get("location"))
+        # verify operations are ordered by operation_date
+        operation_ids = [operation["id"] for operation in response.data["operations"]]
+        self.assertEqual(
+            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
+        )
 
     def test_get_signpost_real_detail__geojson(self):
         """

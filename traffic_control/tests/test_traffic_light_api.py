@@ -14,6 +14,7 @@ from traffic_control.models import (
 
 from ..models.common import DeviceTypeTargetModel
 from .factories import (
+    add_traffic_light_real_operation,
     get_api_client,
     get_mount_type,
     get_traffic_control_device_type,
@@ -423,6 +424,15 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get one real traffic light object.
         """
         traffic_light_real = self.__create_test_traffic_light_real()
+        operation_1 = add_traffic_light_real_operation(
+            traffic_light_real, operation_date=datetime.date(2020, 11, 5)
+        )
+        operation_2 = add_traffic_light_real_operation(
+            traffic_light_real, operation_date=datetime.date(2020, 11, 15)
+        )
+        operation_3 = add_traffic_light_real_operation(
+            traffic_light_real, operation_date=datetime.date(2020, 11, 10)
+        )
         response = self.client.get(
             reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id})
         )
@@ -430,6 +440,11 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.data.get("id"), str(traffic_light_real.id))
         self.assertEqual(
             traffic_light_real.location.ewkt, response.data.get("location")
+        )
+        # verify operations are ordered by operation_date
+        operation_ids = [operation["id"] for operation in response.data["operations"]]
+        self.assertEqual(
+            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
         )
 
     def test_get_traffic_light_real_detail__geojson(self):

@@ -9,6 +9,7 @@ from traffic_control.models import TrafficSignPlan, TrafficSignReal
 
 from ..models.common import DeviceTypeTargetModel
 from .factories import (
+    add_traffic_sign_real_operation,
     get_api_client,
     get_traffic_control_device_type,
     get_traffic_sign_plan,
@@ -409,12 +410,26 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         Ensure we can get one traffic sign real object.
         """
         traffic_sign_real = self.__create_test_traffic_sign_real()
+        operation_1 = add_traffic_sign_real_operation(
+            traffic_sign_real, operation_date=datetime.date(2020, 11, 5)
+        )
+        operation_2 = add_traffic_sign_real_operation(
+            traffic_sign_real, operation_date=datetime.date(2020, 11, 15)
+        )
+        operation_3 = add_traffic_sign_real_operation(
+            traffic_sign_real, operation_date=datetime.date(2020, 11, 10)
+        )
         response = self.client.get(
             reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
         self.assertEqual(traffic_sign_real.location.ewkt, response.data.get("location"))
+        # verify operations are ordered by operation_date
+        operation_ids = [operation["id"] for operation in response.data["operations"]]
+        self.assertEqual(
+            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
+        )
 
     def test_get_traffic_sign_real_detail__geojson(self):
         """

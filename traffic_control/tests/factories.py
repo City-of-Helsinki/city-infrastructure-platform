@@ -12,12 +12,15 @@ from traffic_control.models import (
     AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
+    AdditionalSignRealOperation,
     BarrierPlan,
     BarrierReal,
+    BarrierRealOperation,
     ConnectionType,
     Lifecycle,
     MountPlan,
     MountReal,
+    MountRealOperation,
     MountType,
     OperationalArea,
     Owner,
@@ -26,17 +29,21 @@ from traffic_control.models import (
     RoadMarkingColor,
     RoadMarkingPlan,
     RoadMarkingReal,
+    RoadMarkingRealOperation,
     SignpostPlan,
     SignpostReal,
+    SignpostRealOperation,
     TrafficControlDeviceType,
     TrafficLightPlan,
     TrafficLightReal,
+    TrafficLightRealOperation,
     TrafficLightSoundBeaconValue,
     TrafficLightType,
     TrafficSignPlan,
     TrafficSignReal,
+    TrafficSignRealOperation,
 )
-from traffic_control.models.common import DeviceTypeTargetModel
+from traffic_control.models.common import DeviceTypeTargetModel, OperationType
 from traffic_control.tests.test_base_api import (
     test_multi_polygon,
     test_point,
@@ -369,3 +376,151 @@ def get_api_client(user=None):
     if user:
         api_client.force_authenticate(user=user)
     return api_client
+
+
+def get_operation_type(name="Test operation type"):
+    return OperationType.objects.get_or_create(
+        name=name,
+        defaults={
+            "traffic_sign": True,
+            "additional_sign": True,
+            "road_marking": True,
+            "barrier": True,
+            "signpost": True,
+            "traffic_light": True,
+            "mount": True,
+        },
+    )[0]
+
+
+def add_additional_sign_real_operation(
+    additional_sign_real,
+    operation_type=None,
+    operation_date=None,
+):
+    if not operation_type:
+        operation_type = get_operation_type()
+    if not operation_date:
+        operation_date = datetime.date.today()
+    user = get_user("test_user")
+    return AdditionalSignRealOperation.objects.create(
+        operation_type=operation_type,
+        operation_date=operation_date,
+        additional_sign_real=additional_sign_real,
+        created_by=user,
+        updated_by=user,
+    )
+
+
+def add_traffic_sign_real_operation(
+    traffic_sign_real,
+    operation_type=None,
+    operation_date=None,
+):
+    if not operation_type:
+        operation_type = get_operation_type()
+    if not operation_date:
+        operation_date = datetime.date.today()
+    user = get_user("test_user")
+    return TrafficSignRealOperation.objects.create(
+        operation_type=operation_type,
+        operation_date=operation_date,
+        traffic_sign_real=traffic_sign_real,
+        created_by=user,
+        updated_by=user,
+    )
+
+
+def add_road_marking_real_operation(
+    road_marking_real,
+    operation_type=None,
+    operation_date=None,
+):
+    if not operation_type:
+        operation_type = get_operation_type()
+    if not operation_date:
+        operation_date = datetime.date.today()
+    user = get_user("test_user")
+    return RoadMarkingRealOperation.objects.create(
+        operation_type=operation_type,
+        operation_date=operation_date,
+        road_marking_real=road_marking_real,
+        created_by=user,
+        updated_by=user,
+    )
+
+
+def add_signpost_real_operation(
+    signpost_real,
+    operation_type=None,
+    operation_date=None,
+):
+    if not operation_type:
+        operation_type = get_operation_type()
+    if not operation_date:
+        operation_date = datetime.date.today()
+    user = get_user("test_user")
+    return SignpostRealOperation.objects.create(
+        operation_type=operation_type,
+        operation_date=operation_date,
+        signpost_real=signpost_real,
+        created_by=user,
+        updated_by=user,
+    )
+
+
+def add_barrier_real_operation(
+    barrier_real,
+    operation_type=None,
+    operation_date=None,
+):
+    if not operation_type:
+        operation_type = get_operation_type()
+    if not operation_date:
+        operation_date = datetime.date.today()
+    user = get_user("test_user")
+    return BarrierRealOperation.objects.create(
+        operation_type=operation_type,
+        operation_date=operation_date,
+        barrier_real=barrier_real,
+        created_by=user,
+        updated_by=user,
+    )
+
+
+def add_mount_real_operation(
+    mount_real,
+    operation_type=None,
+    operation_date=None,
+):
+    if not operation_type:
+        operation_type = get_operation_type()
+    if not operation_date:
+        operation_date = datetime.date.today()
+    user = get_user("test_user")
+    return MountRealOperation.objects.create(
+        operation_type=operation_type,
+        operation_date=operation_date,
+        mount_real=mount_real,
+        created_by=user,
+        updated_by=user,
+    )
+
+
+def add_traffic_light_real_operation(
+    traffic_light_real,
+    operation_type=None,
+    operation_date=None,
+):
+    if not operation_type:
+        operation_type = get_operation_type()
+    if not operation_date:
+        operation_date = datetime.date.today()
+    user = get_user("test_user")
+    return TrafficLightRealOperation.objects.create(
+        operation_type=operation_type,
+        operation_date=operation_date,
+        traffic_light_real=traffic_light_real,
+        created_by=user,
+        updated_by=user,
+    )
