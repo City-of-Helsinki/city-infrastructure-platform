@@ -10,6 +10,7 @@ from ..models import (
     MountType,
     PortalType,
 )
+from ..models.mount import MountRealOperation
 
 
 class PortalTypeSerializer(serializers.ModelSerializer):
@@ -54,11 +55,20 @@ class MountRealFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class MountRealOperationSerializer(serializers.ModelSerializer):
+    operation_type = serializers.StringRelatedField()
+
+    class Meta:
+        model = MountRealOperation
+        fields = ("id", "operation_type", "operation_date")
+
+
 class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     ordered_traffic_signs = serializers.PrimaryKeyRelatedField(
         read_only=True, many=True
     )
     files = MountRealFileSerializer(many=True, read_only=True)
+    operations = MountRealOperationSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = MountReal

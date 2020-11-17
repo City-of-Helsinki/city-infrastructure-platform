@@ -10,6 +10,7 @@ from ..models import (
     TrafficControlDeviceType,
 )
 from ..models.common import DeviceTypeTargetModel
+from ..models.signpost import SignpostRealOperation
 
 
 class SignpostPlanFileSerializer(serializers.ModelSerializer):
@@ -47,12 +48,23 @@ class SignpostRealFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class SignpostRealOperationSerializer(serializers.ModelSerializer):
+    operation_type = serializers.StringRelatedField()
+
+    class Meta:
+        model = SignpostRealOperation
+        fields = ("id", "operation_type", "operation_date")
+
+
 class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = SignpostRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(
             DeviceTypeTargetModel.SIGNPOST
         )
+    )
+    operations = SignpostRealOperationSerializer(
+        many=True, required=False, read_only=True
     )
 
     class Meta:

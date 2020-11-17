@@ -10,6 +10,7 @@ from ..models import (
     TrafficControlDeviceType,
 )
 from ..models.common import DeviceTypeTargetModel
+from ..models.road_marking import RoadMarkingRealOperation
 
 
 class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
@@ -49,6 +50,14 @@ class RoadMarkingRealFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class RoadMarkingRealOperationSerializer(serializers.ModelSerializer):
+    operation_type = serializers.StringRelatedField()
+
+    class Meta:
+        model = RoadMarkingRealOperation
+        fields = ("id", "operation_type", "operation_date")
+
+
 class RoadMarkingRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -57,6 +66,9 @@ class RoadMarkingRealSerializer(
         queryset=TrafficControlDeviceType.objects.for_target_model(
             DeviceTypeTargetModel.ROAD_MARKING
         )
+    )
+    operations = RoadMarkingRealOperationSerializer(
+        many=True, required=False, read_only=True
     )
 
     class Meta:
