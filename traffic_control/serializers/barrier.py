@@ -9,6 +9,7 @@ from ..models import (
     BarrierRealFile,
     TrafficControlDeviceType,
 )
+from ..models.barrier import BarrierRealOperation
 from ..models.common import DeviceTypeTargetModel
 
 
@@ -47,12 +48,23 @@ class BarrierRealFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class BarrierRealOperationSerializer(serializers.ModelSerializer):
+    operation_type = serializers.StringRelatedField()
+
+    class Meta:
+        model = BarrierRealOperation
+        fields = ("id", "operation_type", "operation_date")
+
+
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = BarrierRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(
             DeviceTypeTargetModel.BARRIER
         )
+    )
+    operations = BarrierRealOperationSerializer(
+        many=True, required=False, read_only=True
     )
 
     class Meta:

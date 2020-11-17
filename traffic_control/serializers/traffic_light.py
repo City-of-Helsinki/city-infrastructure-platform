@@ -10,6 +10,7 @@ from ..models import (
     TrafficLightRealFile,
 )
 from ..models.common import DeviceTypeTargetModel
+from ..models.traffic_light import TrafficLightRealOperation
 
 
 class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
@@ -49,6 +50,14 @@ class TrafficLightRealFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class TrafficLightRealOperationSerializer(serializers.ModelSerializer):
+    operation_type = serializers.StringRelatedField()
+
+    class Meta:
+        model = TrafficLightRealOperation
+        fields = ("id", "operation_type", "operation_date")
+
+
 class TrafficLightRealSerializer(
     EnumSupportSerializerMixin, serializers.ModelSerializer
 ):
@@ -57,6 +66,9 @@ class TrafficLightRealSerializer(
         queryset=TrafficControlDeviceType.objects.for_target_model(
             DeviceTypeTargetModel.TRAFFIC_LIGHT
         )
+    )
+    operations = TrafficLightRealOperationSerializer(
+        many=True, required=False, read_only=True
     )
 
     class Meta:

@@ -9,6 +9,7 @@ from ..models import (
     AdditionalSignReal,
     TrafficControlDeviceType,
 )
+from ..models.additional_sign import AdditionalSignRealOperation
 from ..models.common import DeviceTypeTargetModel
 
 
@@ -187,12 +188,23 @@ class NestedAdditionalSignContentRealSerializer(
         read_only_fields = ("created_by", "updated_by", "created_at", "updated_at")
 
 
+class AdditionalSignRealOperationSerializer(serializers.ModelSerializer):
+    operation_type = serializers.StringRelatedField()
+
+    class Meta:
+        model = AdditionalSignRealOperation
+        fields = ("id", "operation_type", "operation_date")
+
+
 class AdditionalSignRealSerializer(
     WritableNestedContentSerializerMixin,
     EnumSupportSerializerMixin,
     serializers.ModelSerializer,
 ):
     content = NestedAdditionalSignContentRealSerializer(many=True, required=False)
+    operations = AdditionalSignRealOperationSerializer(
+        many=True, required=False, read_only=True
+    )
 
     class Meta:
         model = AdditionalSignReal
