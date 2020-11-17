@@ -1,3 +1,5 @@
+import datetime
+
 import pytest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -7,6 +9,7 @@ from rest_framework_gis.fields import GeoJsonDict
 from traffic_control.models import AdditionalSignContentReal, AdditionalSignReal
 
 from .factories import (
+    add_additional_sign_real_operation,
     get_additional_sign_content_real,
     get_additional_sign_real,
     get_api_client,
@@ -52,6 +55,15 @@ def test__additional_sign_real__detail(geo_format):
     client = get_api_client()
     asr = get_additional_sign_real()
     ascr = get_additional_sign_content_real(parent=asr)
+    operation_1 = add_additional_sign_real_operation(
+        asr, operation_date=datetime.date(2020, 11, 5)
+    )
+    operation_2 = add_additional_sign_real_operation(
+        asr, operation_date=datetime.date(2020, 11, 15)
+    )
+    operation_3 = add_additional_sign_real_operation(
+        asr, operation_date=datetime.date(2020, 11, 10)
+    )
 
     response = client.get(
         reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}),
@@ -63,6 +75,9 @@ def test__additional_sign_real__detail(geo_format):
     assert response_data["id"] == str(asr.pk)
     assert response_data["parent"] == str(asr.parent.pk)
     assert response_data["content"][0]["id"] == str(ascr.pk)
+    # verify operations are ordered by operation_date
+    operation_ids = [operation["id"] for operation in response_data["operations"]]
+    assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]
 
     if geo_format == "geojson":
         assert response_data["location"] == GeoJsonDict(asr.location.json)
