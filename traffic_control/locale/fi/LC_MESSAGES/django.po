@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-21 14:53+0300\n"
+"POT-Creation-Date: 2020-11-18 13:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,20 +24,17 @@ msgstr "Lisäkilven sisältö"
 msgid "Additional sign contents"
 msgstr "Lisäkilven sisällöt"
 
+msgid "General information"
+msgstr "Yleiset tiedot"
+
 msgid "Location information"
 msgstr "Sijaintitiedot"
 
 msgid "Physical properties"
 msgstr "Fyysiset ominaisuudet"
 
-msgid "General information"
-msgstr "Yleiset tiedot"
-
 msgid "Related models"
 msgstr "Liittyvät tietomallit"
-
-msgid "Decision information"
-msgstr "Päätöstiedot"
 
 msgid "Validity"
 msgstr "Voimassaolo"
@@ -78,6 +75,9 @@ msgstr "Sijainti (z)"
 
 msgid "Traffic control"
 msgstr "Liikenteenohjauslaitteet"
+
+msgid "Target data model"
+msgstr "Kohde tietomalli"
 
 msgid "Location (x,y)"
 msgstr "Sijainti (x,y)"
@@ -133,6 +133,12 @@ msgstr "Luoja"
 msgid "Updated by"
 msgstr "Päivittäjä"
 
+msgid "Source id"
+msgstr "Lähteen id"
+
+msgid "Source name"
+msgstr "Lähteen nimi"
+
 msgid "Location (3D)"
 msgstr "Sijainti (3D)"
 
@@ -141,9 +147,6 @@ msgstr "Korkeus"
 
 msgid "Direction"
 msgstr "Suunta"
-
-msgid "Affect area (2D)"
-msgstr "Vaikutusalue (2D)"
 
 msgid "Reflection"
 msgstr "Kalvo"
@@ -187,12 +190,6 @@ msgstr "Kausiluontoinen voimassaoloaika loppuu"
 msgid "Lifecycle"
 msgstr "Elinkaari"
 
-msgid "Source id"
-msgstr "Lähteen id"
-
-msgid "Source name"
-msgstr "Lähteen nimi"
-
 msgid "Parent Traffic Sign Plan"
 msgstr "Isäntäkilpi (suunnitelma)"
 
@@ -201,12 +198,6 @@ msgstr "Kiinnityskohde (suunnitelma)"
 
 msgid "Plan"
 msgstr "Suunnitelma"
-
-msgid "Decision id"
-msgstr "Päätöksen tunnus"
-
-msgid "Decision date"
-msgstr "Päätöspvm"
 
 msgid "Additional Sign Plan"
 msgstr "Lisäkilpi (suunnitelma)"
@@ -259,11 +250,26 @@ msgstr "Koko"
 msgid "Attachment url"
 msgstr "Liite (url)"
 
+msgid "Parking area"
+msgstr "Pysäköintipaikka"
+
 msgid "Additional Sign Real"
 msgstr "Lisäkilpi (toteuma)"
 
 msgid "Additional Sign Reals"
 msgstr "Lisäkilpi (toteumat)"
+
+msgid "operation type"
+msgstr "toimenpiteen tyyppi"
+
+msgid "additional sign real"
+msgstr "Lisäkilpi (toteuma)"
+
+msgid "Additional sign real operation"
+msgstr "Lisäkilven toimenpide"
+
+msgid "Additional sign real operations"
+msgstr "Lisäkilven toimenpiteet"
 
 msgid "Device type"
 msgstr "Laitteen tyyppi"
@@ -292,6 +298,54 @@ msgstr "Lisäkilven sisältö (toteuma)"
 msgid "Additional Sign Content Reals"
 msgstr "Lisäkilpien sisällöt (toteumat)"
 
+msgid "parking area category"
+msgstr "pysäköintialueen luokka"
+
+msgid "parking area categories"
+msgstr "pysäköintialueen luokat"
+
+msgid "category"
+msgstr "luokka"
+
+msgid "area type"
+msgstr "alueen tyyppi"
+
+msgid "season"
+msgstr "kausi"
+
+msgid "resident parking id"
+msgstr "asukaspysäköintitunnus"
+
+msgid "position"
+msgstr "sijainti"
+
+msgid "validity"
+msgstr "voimassaolo"
+
+msgid "duration"
+msgstr "kesto"
+
+msgid "surface area"
+msgstr "pinta-ala"
+
+msgid "parking slots"
+msgstr "pysäköintipaikat"
+
+msgid "additional info"
+msgstr "Lisätieto"
+
+msgid "stopping prohibited"
+msgstr "pysäköinti kielletty"
+
+msgid "updated at"
+msgstr "Päivitetty-aikaleima"
+
+msgid "owner"
+msgstr "Omistaja"
+
+msgid "location (3D)"
+msgstr "Sijainti (3D)"
+
 msgid "Closed"
 msgstr "Suljettu yhteys"
 
@@ -309,9 +363,6 @@ msgstr "Ajoradan tai kaistan oikea reuna"
 
 msgid "Left of road or lane"
 msgstr "Ajoradan tai kaistan vasen reuna"
-
-msgid "Location (2D)"
-msgstr "Sijainti (2D)"
 
 msgid "Connection type"
 msgstr "Avattava yhteys"
@@ -351,6 +402,15 @@ msgstr "Ajoeste (toteuma)"
 
 msgid "Barrier reals"
 msgstr "Ajoeste (toteumat)"
+
+msgid "barrier real"
+msgstr "Ajoeste (toteuma)"
+
+msgid "Barrier real operation"
+msgstr "Ajoesteen toimenpide"
+
+msgid "Barrier real operations"
+msgstr "Ajoesteen toimenpiteet"
 
 msgid "Barrier Real File"
 msgstr "Toteumadokumentti (ajoeste)"
@@ -523,6 +583,15 @@ msgstr "Poikkisuuntainen"
 msgid "Other road marking"
 msgstr "Muu tiemerkintä"
 
+msgid "Name (fi)"
+msgstr "Nimi (fi)"
+
+msgid "Name (en)"
+msgstr "Nimi (en)"
+
+msgid "Owners"
+msgstr "Omistajat"
+
 msgid "Warning sign"
 msgstr "Varoitusmerkki"
 
@@ -559,9 +628,6 @@ msgstr "Vanha merkkikoodi"
 msgid "Legacy description"
 msgstr "Vanha kuvaus"
 
-msgid "Target data model"
-msgstr "Kohde tietomalli"
-
 msgid "Type"
 msgstr "Tyyppi"
 
@@ -570,6 +636,42 @@ msgstr "Liikenteenohjauslaitteen tyyppi"
 
 msgid "Traffic Control Device Types"
 msgstr "Liikenteenohjauslaitteiden tyypit"
+
+msgid "name"
+msgstr "nimi"
+
+msgid "traffic sign"
+msgstr "Liikennemerkki"
+
+msgid "additional sign"
+msgstr "Lisäkilpi"
+
+msgid "road marking"
+msgstr "Tiemerkintä"
+
+msgid "barrier"
+msgstr "Ajoeste"
+
+msgid "signpost"
+msgstr "Opaste"
+
+msgid "traffic light"
+msgstr "Liikennevalo"
+
+msgid "mount"
+msgstr "Määrä"
+
+msgid "operation types"
+msgstr "Toimenpidetyypit"
+
+msgid "operation date"
+msgstr "Toimenpide pvm"
+
+msgid "straightness value"
+msgstr "suoruusarvo"
+
+msgid "quality requirements fulfilled"
+msgstr "hoidon laatuvaatimusten mukainen"
 
 msgid "Description (fi)"
 msgstr "Kuvaus (fi)"
@@ -625,6 +727,15 @@ msgstr "Kantavuus / jalustan halkaisija"
 msgid "Mount Reals"
 msgstr "Kiinnityskohde (toteumat)"
 
+msgid "mount real"
+msgstr "Kiinnityskohde (toteuma)"
+
+msgid "Mount real operation"
+msgstr "Kiinnityskohteen toimenpide"
+
+msgid "Mount real operations"
+msgstr "Kiinnityskohteen toimenpiteet"
+
 msgid "Mount Real File"
 msgstr "Toteumadokumentti (kiinnityskohde)"
 
@@ -640,8 +751,29 @@ msgstr "Ryhmien toiminta-alueet"
 msgid "Name"
 msgstr "Nimi"
 
-msgid "Area"
-msgstr "Alue"
+msgid "Name short"
+msgstr "Nimi (lyhyt)"
+
+msgid "Area type"
+msgstr "Aluetyyppi"
+
+msgid "Contractor"
+msgstr "Urakoitsija"
+
+msgid "Start date"
+msgstr "Aloitus pvm"
+
+msgid "End date"
+msgstr "Lopetus pvm"
+
+msgid "Updated date"
+msgstr "Päivitetty-aikaleima"
+
+msgid "Task"
+msgstr "Tehtävä"
+
+msgid "Status"
+msgstr "Tila"
 
 msgid "Operational area"
 msgstr "Toiminta-alue"
@@ -649,8 +781,8 @@ msgstr "Toiminta-alue"
 msgid "Plan number"
 msgstr "Suunnitelman numero"
 
-msgid "Year and verdict section separated with an underscore."
-msgstr "Vuosi ja päätöspykälä alaviivalla erotettuna"
+msgid "Year and verdict section separated with a dash"
+msgstr "Vuosi ja päätöspykälä väliviivalla erotettuna"
 
 msgid "Planner"
 msgstr "Suunnittelija"
@@ -769,6 +901,15 @@ msgstr "Tiemerkintä (toteuma)"
 msgid "Road Marking Reals"
 msgstr "Tiemerkintä (toteumat)"
 
+msgid "road marking real"
+msgstr "Tiemerkintä (toteuma)"
+
+msgid "Road marking real operation"
+msgstr "Tiemerkinnän toimenpide"
+
+msgid "Road marking real operations"
+msgstr "Tiemerkinnän toimenpiteet"
+
 msgid "RoadMarking Real File"
 msgstr "Toteumadokumentti (tiemerkintä)"
 
@@ -834,6 +975,15 @@ msgstr "Opaste (toteuma)"
 
 msgid "Signpost Reals"
 msgstr "Opaste (toteumat)"
+
+msgid "signpost real"
+msgstr "Opaste (toteuma)"
+
+msgid "Signpost real operation"
+msgstr "Opasteen toimenpide"
+
+msgid "Signpost real operations"
+msgstr "Opasteen toimenpiteet"
 
 msgid "Signpost Real File"
 msgstr "Toteumadokumentti (opaste)"
@@ -910,6 +1060,15 @@ msgstr "Liikennevalo (toteuma)"
 msgid "Traffic Light Reals"
 msgstr "Liikennevalo (toteumat)"
 
+msgid "traffic light real"
+msgstr "Liikennevalo (toteuma)"
+
+msgid "Traffic light real operation"
+msgstr "Liikennevalon toimenpide"
+
+msgid "Traffic light real operations"
+msgstr "Liikennevalon toimenpiteet"
+
 msgid "Traffic Light Real File"
 msgstr "Toteumadokumentti (liikennevalo)"
 
@@ -922,6 +1081,9 @@ msgstr "Tie tai katuverkon ulkopuolella"
 msgid "Traffic Sign Code value"
 msgstr "Merkin numeerinen arvo"
 
+msgid "Affect area (2D)"
+msgstr "Vaikutusalue (2D)"
+
 msgid "Traffic Sign Plan File"
 msgstr "Suunnitelmadokumentti (liikennemerkki)"
 
@@ -930,6 +1092,15 @@ msgstr "Suunnitelmadokumentit (liikennemerkki)"
 
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
+
+msgid "traffic sign real"
+msgstr "Liikennemerkki (toteuma)"
+
+msgid "Traffic sign real operation"
+msgstr "Liikennemerkin toimenpide"
+
+msgid "Traffic sign real operations"
+msgstr "Liikennemerkin toimenpiteet"
 
 msgid "Traffic Sign Real File"
 msgstr "Toteumadokumentti (liikennemerkki)"
@@ -949,8 +1120,11 @@ msgstr "Tallenna välillä ja jatka muokkaamista"
 msgid "Home"
 msgstr "Etusivu"
 
+msgid "This field is required."
+msgstr "Tämä kenttä vaaditaan"
+
 msgid "This field may not be null."
-msgstr ""
+msgstr "Tämä kenttä ei voi olla tyhjä"
 
 msgid "File not found."
 msgstr "Tiedostoa ei löytynyt."
