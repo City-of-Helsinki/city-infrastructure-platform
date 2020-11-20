@@ -39,16 +39,32 @@ class AdminTrafficSignIconSelectWidget(Select):
 
     template_name = "admin/traffic_control/widgets/traffic_sign_icon_select.html"
 
+    class Media:
+        css = {"all": ("traffic_control/css/traffic_sign_icon_select.css",)}
+        js = ("traffic_control/js/traffic_sign_icon_select.js",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.icon_url_mapping = None
+
+    def get_icon_url(self, value):
+        if not self.icon_url_mapping:
+            id_code_values = TrafficControlDeviceType.objects.values_list("id", "code")
+            self.icon_url_mapping = {
+                uuid: f"{settings.STATIC_URL}traffic_control/svg/traffic_sign_icons/{code}.svg"
+                for uuid, code in id_code_values
+            }
+        return self.icon_url_mapping.get(value, "")
+
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
-
-        icon_path = ""
-        instance = TrafficControlDeviceType.objects.filter(pk=value).first()
-        if instance:
-            icon_path = f"svg/traffic_sign_icons/{instance.code}.svg"
-        context["icon_path"] = icon_path
-
+        context["icon_path"] = self.get_icon_url(value)
         return context
+
+    def create_option(self, name, value, *args, **kwargs):
+        option = super().create_option(name, value, *args, **kwargs)
+        option["attrs"]["icon-url"] = self.get_icon_url(value)
+        return option
 
 
 class AdminEnumSelectWidget(Select):
@@ -101,7 +117,7 @@ class TrafficSignRealModelForm(Point3DFieldForm):
         model = TrafficSignReal
         fields = "__all__"
         widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget(),
+            "device_type": AdminTrafficSignIconSelectWidget,
         }
 
 
@@ -110,7 +126,7 @@ class TrafficSignPlanModelForm(Point3DFieldForm):
         model = TrafficSignPlan
         fields = "__all__"
         widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget(),
+            "device_type": AdminTrafficSignIconSelectWidget,
         }
 
 
@@ -131,7 +147,7 @@ class AdditionalSignContentPlanForm(forms.ModelForm):
         model = AdditionalSignContentPlan
         fields = "__all__"
         widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget(),
+            "device_type": AdminTrafficSignIconSelectWidget,
         }
 
 
@@ -140,7 +156,7 @@ class AdditionalSignContentRealForm(forms.ModelForm):
         model = AdditionalSignContentReal
         fields = "__all__"
         widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget(),
+            "device_type": AdminTrafficSignIconSelectWidget,
         }
 
 
