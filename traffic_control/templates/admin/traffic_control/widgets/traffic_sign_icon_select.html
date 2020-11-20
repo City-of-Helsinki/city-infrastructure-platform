@@ -1,60 +1,19 @@
 {% load static %}
 
-<img id="traffic-sign-icon" src="{% static icon_path %}" alt="Traffic sign icon" {% if not icon_path %}style="display: none;"{% endif %}>
-<style>
-    #traffic-sign-icon {
-        height: 32px;
-        width: auto;
-        margin-right: 10px;
-    }
-</style>
-<script>
-    /**
-     * Update #traffic-sign-icon icon based on the select input value
-     *
-     * Fetch new device type code from the TrafficControlDeviceType API
-     * for the selected device type and set the `img` tag to use correct
-     * icon to visualize the selection.
-     *
-     * @param pk TrafficControlDeviceType object uuid pk
-     */
-    function updateTrafficSignIcon(pk) {
-        const staticFileUrlBase = "{% static '' %}";
-        const deviceTypeApiUrlBase = "{% url 'v1:trafficcontroldevicetype-list' %}";
-        const icon = document.getElementById("traffic-sign-icon");
-
-        if (!pk) {
-            // Hide icon if empty value is selected
-            icon.style.display = "none";
-            return;
-        }
-
-        fetch(`${deviceTypeApiUrlBase}${pk}`)
-        .then(response => response.json())
-        .then(data => {
-            icon.src = `${staticFileUrlBase}/svg/traffic_sign_icons/${data.code}.svg`;
-
-            // Remove display property from icon if
-            if (icon.style.removeProperty) {
-                icon.style.removeProperty("display");
-            } else {
-                icon.style.removeAttribute("display");
-            }
-        });
-    }
-</script>
+<img class="traffic-sign-icon" src="{% static icon_path %}" alt="Traffic sign icon" {% if not icon_path %}style="display: none;"{% endif %}>
 
 {# Default select widget template with added onchange attribute #}
-<select name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %} onchange="updateTrafficSignIcon(this.value);">
+<select name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}
+        onchange="updateTrafficSignIcon(this.previousElementSibling, this.options[this.selectedIndex].getAttribute('icon-url'));">
     {% for group_name, group_choices, group_index in widget.optgroups %}
         {% if group_name %}
             <optgroup label="{{ group_name }}">
         {% endif %}
-        {% for option in group_choices %}
-            {% include option.template_name with widget=option %}
-        {% endfor %}
-        {% if group_name %}
-            </optgroup>
-        {% endif %}
+    {% for option in group_choices %}
+        {% include option.template_name with widget=option %}
+    {% endfor %}
+    {% if group_name %}
+        </optgroup>
+    {% endif %}
     {% endfor %}
 </select>
