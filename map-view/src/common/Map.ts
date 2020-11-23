@@ -11,19 +11,60 @@ import { Feature, LayerConfig, MapConfig } from "../models";
 import ImageLayer from "ol/layer/Image";
 import LayerGroup from "ol/layer/Group";
 import ImageWMS from "ol/source/ImageWMS";
+import GeoJson from "ol/format/GeoJSON";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import Style from "ol/style/Style";
+import Icon from "ol/style/Icon";
+import ArrowIcon from "../assets/arrow.svg";
 
 class Map {
+  /**
+   * Projection code used by the map
+   */
   private projectionCode = "EPSG:3879";
+  /**
+   * Openlayers Map instance
+   */
   private map: OLMap;
+  /**
+   * Current visible basemap
+   */
   private visibleBasemap: string;
+  /**
+   * GeoJSON parser
+   */
+  private geojsonFormat = new GeoJson();
+  /**
+   * A layer to draw temporary vector features on the map
+   */
+  private vectorLayer: VectorLayer;
+  /**
+   * Available basemap layers
+   */
   private basemapLayers: { [identifier: string]: ImageLayer } = {};
+  /**
+   * Available overlay layers
+   */
   private overlayLayers: { [identifier: string]: ImageLayer } = {};
+  /**
+   * Callback function to process features returned from GetFeatureInfo requests
+   *
+   * @param features Features returned from GetFeatureInfo requests
+   */
   private featureInfoCallback: (features: Feature[]) => void = (features: Feature[]) => {};
 
+  /**
+   * Initialize map on target element
+   *
+   * @param target The id of the element on which the map will be mounted
+   * @param mapConfig Configurations for the map
+   */
   initialize(target: string, mapConfig: MapConfig) {
     const { basemapConfig, overlayConfig } = mapConfig;
     const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
     const overlayLayerGroup = this.createOverlayLayerGroup(overlayConfig);
+    this.vectorLayer = this.createVectorLayer();
     const helsinkiCoords = [25499052.02, 6675851.38];
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
     const projection = this.getProjection();
@@ -36,7 +77,7 @@ class Map {
     });
     this.map = new OLMap({
       target: target,
-      layers: [basemapLayerGroup, overlayLayerGroup],
+      layers: [basemapLayerGroup, overlayLayerGroup, this.vectorLayer],
       controls: this.getControls(),
       view,
     });
@@ -83,6 +124,31 @@ class Map {
 
   setOverlayVisible(overlay: string, visible: boolean) {
     this.overlayLayers[overlay].setVisible(visible);
+  }
+
+  /**
+   * Show a direction arrow on the feature
+   *
+   * @param feature Target feature on which a direction arrow will be shown
+   */
+  showDirectionArrow(feature: Feature) {
+    this.vectorLayer.getSource().clear();
+    const olFeature = this.geojsonFormat.readFeature(feature);
+    const rotation = (olFeature.get("direction") * Math.PI) / 180;
+    const arrowStyle = new Style({
+      image: new Icon({
+        src: ArrowIcon,
+        scale: 2.0,
+        rotation,
+      }),
+    });
+    olFeature.setStyle(arrowStyle);
+    this.vectorLayer.getSource().addFeature(olFeature);
+  }
+
+  private createVectorLayer() {
+    const vectorSource = new VectorSource();
+    return new VectorLayer({ source: vectorSource });
   }
 
   private createBasemapLayerGroup(layerConfig: LayerConfig) {
