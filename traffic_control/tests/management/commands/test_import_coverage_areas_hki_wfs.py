@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.core.management import call_command
 from django.test import TestCase
 
-from traffic_control.models.affect_area import ParkingArea, ParkingAreaCategory
+from traffic_control.models.affect_area import CoverageArea, CoverageAreaCategory
 from traffic_control.tests.management.commands.utils import (
     create_mock_data_source,
     MockAttribute,
@@ -54,13 +54,13 @@ MOCK_FEATURE_2 = MockFeature(
 )
 
 
-class ImportParkingAreaTestCase(TestCase):
+class ImportCoverageAreaTestCase(TestCase):
     @patch("urllib.request.urlretrieve", return_value=("dummy-file", {}))
     @patch(
-        "traffic_control.management.commands.import_parking_areas_hki_wfs.DataSource",
+        "traffic_control.management.commands.import_coverage_areas_hki_wfs.DataSource",
         create_mock_data_source([MOCK_FEATURE_1, MOCK_FEATURE_2]),
     )
-    def test_importer_created_parking_areas(self, mock_urlretrieve):
-        call_command("import_parking_areas_hki_wfs")
-        self.assertEqual(ParkingArea.objects.count(), 2)
-        self.assertEqual(ParkingAreaCategory.objects.count(), 1)
+    def test_importer_created_coverage_areas(self, mock_urlretrieve):
+        call_command("import_coverage_areas_hki_wfs")
+        self.assertEqual(CoverageArea.objects.count(), 2)
+        self.assertEqual(CoverageAreaCategory.objects.count(), 1)

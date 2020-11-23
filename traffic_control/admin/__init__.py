@@ -1,6 +1,6 @@
 # flake8: noqa
 from .additional_sign import AdditionalSignPlanAdmin, AdditionalSignRealAdmin
-from .affect_area import ParkingAreaAdmin, ParkingAreaCategoryAdmin
+from .affect_area import CoverageAreaAdmin, CoverageAreaCategoryAdmin
 from .audit_log import AuditLogHistoryAdmin
 from .barrier import (
     BarrierPlanAdmin,

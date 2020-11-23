@@ -222,7 +222,7 @@ class TrafficSignRealAdmin(
                     "lane_number",
                     "lane_type",
                     "location_specifier",
-                    "parking_area",
+                    "coverage_area",
                 )
             },
         ),

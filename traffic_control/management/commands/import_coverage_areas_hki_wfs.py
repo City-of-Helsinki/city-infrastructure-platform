@@ -6,7 +6,7 @@ from django.contrib.gis.geos import MultiPolygon
 from django.core.management import BaseCommand
 
 from traffic_control.models import Owner
-from traffic_control.models.affect_area import ParkingArea, ParkingAreaCategory
+from traffic_control.models.affect_area import CoverageArea, CoverageAreaCategory
 
 SOURCE_NAME = "pysäköintialue"
 WFS_SOURCE_URL = "https://kartta.hel.fi/ws/geoserver/avoindata/wfs"
@@ -25,16 +25,16 @@ def parse_str_value(str_value):
 
 
 class Command(BaseCommand):
-    help = "Import parking areas from Helsinki WFS"
+    help = "Import coverage areas from Helsinki WFS"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.categories = {
-            category.id: category for category in ParkingAreaCategory.objects.all()
+            category.id: category for category in CoverageAreaCategory.objects.all()
         }
 
     def handle(self, *args, **options):
-        self.stdout.write("Importing parking areas from Helsinki WFS ...")
+        self.stdout.write("Importing coverage areas from Helsinki WFS ...")
         url = f"{WFS_SOURCE_URL}?service=wfs&version=2.0.0&request=GetFeature&typeNames={SOURCE_LAYER}"
         filename, _ = urlretrieve(url)
         ds = DataSource(filename)
@@ -43,12 +43,12 @@ class Command(BaseCommand):
         for feature in ds[0]:
             category_id = feature["luokka"].value
             category_name = parse_str_value(feature["luokka_nimi"].value)
-            category = self.get_parking_area_category(category_id, category_name)
+            category = self.get_coverage_area_category(category_id, category_name)
             geometry = feature.geom.geos
             if geometry.geom_type == "Polygon":
                 # the WFS layer has mixed geometries (Polygon & MultiPolygon)
                 geometry = MultiPolygon([geometry])
-            ParkingArea.objects.update_or_create(
+            CoverageArea.objects.update_or_create(
                 source_name=SOURCE_NAME,
                 source_id=feature["id"].value,
                 defaults={
@@ -75,11 +75,11 @@ class Command(BaseCommand):
                 },
             )
             count += 1
-        self.stdout.write(f"{count} parking areas are imported.")
+        self.stdout.write(f"{count} coverage areas are imported.")
 
-    def get_parking_area_category(self, category_id, category_name):
+    def get_coverage_area_category(self, category_id, category_name):
         if category_id not in self.categories:
-            category = ParkingAreaCategory.objects.create(
+            category = CoverageAreaCategory.objects.create(
                 id=category_id, name=category_name
             )
             self.categories[category_id] = category

@@ -8,7 +8,7 @@ from traffic_control.mixins.models import SourceControlModel
 from traffic_control.models.common import Owner
 
 
-class ParkingAreaCategory(models.Model):
+class CoverageAreaCategory(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
 
@@ -20,10 +20,10 @@ class ParkingAreaCategory(models.Model):
         return self.name
 
 
-class ParkingArea(SourceControlModel):
+class CoverageArea(SourceControlModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
-        ParkingAreaCategory,
+        CoverageAreaCategory,
         verbose_name=_("category"),
         null=True,
         blank=True,

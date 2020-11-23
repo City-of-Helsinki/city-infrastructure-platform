@@ -15,7 +15,7 @@ from ..mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from .affect_area import ParkingArea
+from .affect_area import CoverageArea
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -300,8 +300,8 @@ class TrafficSignReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    parking_area = models.ForeignKey(
-        ParkingArea,
+    coverage_area = models.ForeignKey(
+        CoverageArea,
         verbose_name=_("Parking area"),
         blank=True,
         null=True,
