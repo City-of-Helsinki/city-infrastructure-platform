@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 13:25+0200\n"
+"POT-Creation-Date: 2020-11-23 14:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -250,8 +250,8 @@ msgstr "Koko"
 msgid "Attachment url"
 msgstr "Liite (url)"
 
-msgid "Parking area"
-msgstr "Pysäköintipaikka"
+msgid "Coverage area"
+msgstr "Vaikutusalue"
 
 msgid "Additional Sign Real"
 msgstr "Lisäkilpi (toteuma)"
@@ -298,53 +298,44 @@ msgstr "Lisäkilven sisältö (toteuma)"
 msgid "Additional Sign Content Reals"
 msgstr "Lisäkilpien sisällöt (toteumat)"
 
-msgid "parking area category"
-msgstr "pysäköintialueen luokka"
+msgid "Coverage area category"
+msgstr "Vaikutusalueen luokka"
 
-msgid "parking area categories"
-msgstr "pysäköintialueen luokat"
+msgid "Coverage area categories"
+msgstr "Vaikutusalueen luokat"
 
-msgid "category"
-msgstr "luokka"
+msgid "Category"
+msgstr "Luokka"
 
-msgid "area type"
-msgstr "alueen tyyppi"
+msgid "Area type"
+msgstr "Aluetyyppi"
 
-msgid "season"
-msgstr "kausi"
+msgid "Season"
+msgstr "Kausi"
 
-msgid "resident parking id"
-msgstr "asukaspysäköintitunnus"
+msgid "Resident parking id"
+msgstr "Asukaspysäköintitunnus"
 
-msgid "position"
-msgstr "sijainti"
+msgid "Position"
+msgstr "Sijainti"
 
-msgid "validity"
-msgstr "voimassaolo"
+msgid "Duration"
+msgstr "Kesto"
 
-msgid "duration"
-msgstr "kesto"
+msgid "Surface area"
+msgstr "Pinta-ala"
 
-msgid "surface area"
-msgstr "pinta-ala"
+msgid "Parking slots"
+msgstr "Pysäköintipaikat"
 
-msgid "parking slots"
-msgstr "pysäköintipaikat"
-
-msgid "additional info"
+msgid "Additional info"
 msgstr "Lisätieto"
 
-msgid "stopping prohibited"
-msgstr "pysäköinti kielletty"
+msgid "Stopping prohibited"
+msgstr "Pysäköinti kielletty"
 
-msgid "updated at"
-msgstr "Päivitetty-aikaleima"
-
-msgid "owner"
-msgstr "Omistaja"
-
-msgid "location (3D)"
-msgstr "Sijainti (3D)"
+msgid "Coverage areas"
+msgstr "Vaikutusalueet"
 
 msgid "Closed"
 msgstr "Suljettu yhteys"
@@ -637,41 +628,26 @@ msgstr "Liikenteenohjauslaitteen tyyppi"
 msgid "Traffic Control Device Types"
 msgstr "Liikenteenohjauslaitteiden tyypit"
 
-msgid "name"
-msgstr "nimi"
+msgid "Name"
+msgstr "Nimi"
 
-msgid "traffic sign"
-msgstr "Liikennemerkki"
+msgid "Mount"
+msgstr "Kiinnityskohde"
 
-msgid "additional sign"
-msgstr "Lisäkilpi"
+msgid "Operation type"
+msgstr "Toimenpiteen tyyppi"
 
-msgid "road marking"
-msgstr "Tiemerkintä"
-
-msgid "barrier"
-msgstr "Ajoeste"
-
-msgid "signpost"
-msgstr "Opaste"
-
-msgid "traffic light"
-msgstr "Liikennevalo"
-
-msgid "mount"
-msgstr "Määrä"
-
-msgid "operation types"
+msgid "Operation types"
 msgstr "Toimenpidetyypit"
 
-msgid "operation date"
+msgid "Operation date"
 msgstr "Toimenpide pvm"
 
-msgid "straightness value"
-msgstr "suoruusarvo"
+msgid "Straightness value"
+msgstr "Suoruusarvo"
 
-msgid "quality requirements fulfilled"
-msgstr "hoidon laatuvaatimusten mukainen"
+msgid "Quality requirements fulfilled"
+msgstr "Hoidon laatuvaatimusten mukainen"
 
 msgid "Description (fi)"
 msgstr "Kuvaus (fi)"
@@ -748,14 +724,8 @@ msgstr "Ryhmän toiminta-alue"
 msgid "Group operational areas"
 msgstr "Ryhmien toiminta-alueet"
 
-msgid "Name"
-msgstr "Nimi"
-
 msgid "Name short"
 msgstr "Nimi (lyhyt)"
-
-msgid "Area type"
-msgstr "Aluetyyppi"
 
 msgid "Contractor"
 msgstr "Urakoitsija"
@@ -873,9 +843,6 @@ msgstr "Koholla"
 
 msgid "Is grinded"
 msgstr "Rouhittu"
-
-msgid "Additional info"
-msgstr "Lisätieto"
 
 msgid "Amount"
 msgstr "Määrä"
