@@ -347,30 +347,30 @@ auditlog.register(TrafficControlDeviceType)
 
 
 class OperationType(models.Model):
-    name = models.CharField(_("name"), max_length=200)
-    traffic_sign = models.BooleanField(_("traffic sign"), default=False)
-    additional_sign = models.BooleanField(_("additional sign"), default=False)
-    road_marking = models.BooleanField(_("road marking"), default=False)
-    barrier = models.BooleanField(_("barrier"), default=False)
-    signpost = models.BooleanField(_("signpost"), default=False)
-    traffic_light = models.BooleanField(_("traffic light"), default=False)
-    mount = models.BooleanField(_("mount"), default=False)
+    name = models.CharField(_("Name"), max_length=200)
+    traffic_sign = models.BooleanField(_("Traffic sign"), default=False)
+    additional_sign = models.BooleanField(_("Additional sign"), default=False)
+    road_marking = models.BooleanField(_("Road marking"), default=False)
+    barrier = models.BooleanField(_("Barrier"), default=False)
+    signpost = models.BooleanField(_("Signpost"), default=False)
+    traffic_light = models.BooleanField(_("Traffic light"), default=False)
+    mount = models.BooleanField(_("Mount"), default=False)
 
     class Meta:
-        verbose_name = _("operation type")
-        verbose_name_plural = _("operation types")
+        verbose_name = _("Operation type")
+        verbose_name_plural = _("Operation types")
 
     def __str__(self):
         return self.name
 
 
 class OperationBase(UserControlModel):
-    operation_date = models.DateField(_("operation date"))
+    operation_date = models.DateField(_("Operation date"))
     straightness_value = models.FloatField(
-        _("straightness value"), null=True, blank=True
+        _("Straightness value"), null=True, blank=True
     )
     quality_requirements_fulfilled = models.BooleanField(
-        _("quality requirements fulfilled"), default=False
+        _("Quality requirements fulfilled"), default=False
     )
 
     class Meta:
