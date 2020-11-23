@@ -14,7 +14,7 @@ from ..mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from .affect_area import ParkingArea
+from .affect_area import CoverageArea
 from .common import (
     Color,
     Condition,
@@ -225,8 +225,8 @@ class AdditionalSignReal(AbstractAdditionalSign):
     attachment_url = models.URLField(
         _("Attachment url"), max_length=500, blank=True, null=True
     )
-    parking_area = models.ForeignKey(
-        ParkingArea,
+    coverage_area = models.ForeignKey(
+        CoverageArea,
         verbose_name=_("Parking area"),
         blank=True,
         null=True,

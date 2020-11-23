@@ -1,16 +1,16 @@
 from django.contrib.gis import admin
 
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from traffic_control.models import ParkingArea, ParkingAreaCategory
+from traffic_control.models import CoverageArea, CoverageAreaCategory
 
 
-@admin.register(ParkingAreaCategory)
-class ParkingAreaCategoryAdmin(admin.ModelAdmin):
+@admin.register(CoverageAreaCategory)
+class CoverageAreaCategoryAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
 
 
-@admin.register(ParkingArea)
-class ParkingAreaAdmin(admin.OSMGeoAdmin):
+@admin.register(CoverageArea)
+class CoverageAreaAdmin(admin.OSMGeoAdmin):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
