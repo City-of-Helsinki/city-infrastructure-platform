@@ -227,7 +227,7 @@ class AdditionalSignReal(AbstractAdditionalSign):
     )
     coverage_area = models.ForeignKey(
         CoverageArea,
-        verbose_name=_("Parking area"),
+        verbose_name=_("Coverage area"),
         blank=True,
         null=True,
         on_delete=models.PROTECT,
