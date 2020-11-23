@@ -20,7 +20,9 @@ test("renders feature info", () => {
       type: "Feature",
     },
   ];
-  const { getByText } = render(<FeatureInfo features={mockFeatures} onClose={() => {}} />);
+  const { getByText } = render(
+    <FeatureInfo features={mockFeatures} onSelectFeature={(feature: Feature) => {}} onClose={() => {}} />
+  );
   const featureInfoTitle = getByText(/traffic_sign_real/i);
   expect(featureInfoTitle).toBeInTheDocument();
 });

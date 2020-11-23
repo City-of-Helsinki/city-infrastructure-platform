@@ -36,19 +36,24 @@ const styles = (theme: Theme) =>
 
 interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
   features: Feature[];
+  onSelectFeature: (feature: Feature) => void;
   onClose: () => void;
 }
 
-interface FeatureInfoStates {
+interface FeatureInfoState {
   featureIndex: number;
 }
 
-class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
+class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
   constructor(props: FeatureInfoProps) {
     super(props);
     this.state = {
       featureIndex: 0,
     };
+  }
+
+  UNSAFE_componentWillReceiveProps() {
+    this.setState({ featureIndex: 0 });
   }
 
   getAdminLink(feature: Feature) {
@@ -59,9 +64,10 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoStates> {
   }
 
   render() {
-    const { features, onClose, classes, t } = this.props;
+    const { features, classes, onSelectFeature, onClose, t } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
+    onSelectFeature(feature);
     const fid = feature["id"];
     const featureType = fid.split(".")[0];
     const { id, value, txt, direction, device_type_code, device_type_description } = feature["properties"];
