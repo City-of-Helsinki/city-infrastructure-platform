@@ -31,6 +31,8 @@ else:
     env_file = checkout_dir(".env")
     default_var_root = checkout_dir("var")
 
+BASE_DIR = checkout_dir()
+
 env = environ.Env(
     DEBUG=(bool, False),
     TIER=(str, "dev"),  # one of: prod, qa, stage, test, dev

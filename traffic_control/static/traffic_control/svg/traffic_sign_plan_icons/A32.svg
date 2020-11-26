@@ -1,0 +1,29 @@
+<ns0:svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns1="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns2="http://www.inkscape.org/namespaces/inkscape" xmlns:ns4="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" version="1.1" id="Layer_1" x="0px" y="0px" width="396.85211" height="348.06821" viewBox="0 0 396.85212 348.06819" xml:space="preserve" ns1:docname="A32.svg" ns2:version="0.92.5 (2060ec1f9f, 2020-04-08)" opacity="0.6"><ns0:metadata id="metadata1880"><rdf:RDF><ns4:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></ns4:Work></rdf:RDF></ns0:metadata><ns0:defs id="defs1878" /><ns1:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" ns2:pageopacity="0" ns2:pageshadow="2" ns2:window-width="640" ns2:window-height="480" id="namedview1876" showgrid="false" ns2:zoom="0.55503813" ns2:cx="198.4256" ns2:cy="174.03399" ns2:window-x="0" ns2:window-y="0" ns2:window-maximized="0" ns2:current-layer="Layer_1" />
+<ns0:g id="LWPOLYLINE_1_" transform="translate(-14.172899,-38.563788)">
+	<ns0:path d="M 198.425,46.747 16.369,362.085 c -4.521,7.824 -1.837,17.832 5.988,22.352 2.488,1.438 5.309,2.195 8.184,2.195 h 364.117 c 9.038,0 16.367,-7.326 16.367,-16.365 0,-2.875 -0.761,-5.697 -2.198,-8.182 L 226.772,46.747 c -4.521,-7.825 -14.529,-10.507 -22.355,-5.988 -2.489,1.437 -4.554,3.5 -5.992,5.988 z" id="path1848" ns2:connector-curvature="0" style="fill:#ffcd00" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_9_" transform="translate(-14.172899,-38.563788)">
+	<ns0:path d="M 202.476,49.087 20.417,364.421 c -3.23,5.592 -1.313,12.74 4.276,15.967 1.779,1.025 3.794,1.566 5.847,1.566 h 364.117 c 6.453,0 11.688,-5.234 11.688,-11.688 0,-2.053 -0.542,-4.066 -1.566,-5.846 L 222.721,49.087 c -3.227,-5.592 -10.376,-7.507 -15.968,-4.28 -1.776,1.025 -3.252,2.501 -4.277,4.28 z" id="path1851" ns2:connector-curvature="0" style="fill:#e4002b" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_10_" transform="translate(-14.172899,-38.563788)">
+	<ns0:polygon points="362.266,351.563 212.597,92.334 62.933,351.563 " id="polygon1854" style="fill:#ffcd00" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_11_" transform="translate(-14.172899,-38.563788)">
+	<ns0:path d="M 145.667,349.228 V 252.33 l 27.184,37.366 127.752,22.479 1.998,-2.115 c 6.395,-6.777 9.327,-16.111 7.955,-25.325 l -0.433,-2.881 -116.381,-53.984 -58.192,23.615 v 97.735 z" id="path1857" ns2:connector-curvature="0" style="fill:#101820" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_17_" transform="translate(-14.172899,-38.563788)">
+	<ns0:path d="m 173.079,280.279 -22.326,-31.057 37.353,-15.143 c -10.289,13.151 -15.607,29.511 -15.027,46.2 z" id="path1860" ns2:connector-curvature="0" style="fill:#ffcd00" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_18_" transform="translate(-14.172899,-38.563788)">
+	<ns0:path d="m 289.527,277.07 c -8.618,6.639 -12.157,17.964 -8.851,28.323 l 16.922,3.088 c -2.121,-8.664 0.271,-17.818 6.355,-24.343 z" id="path1863" ns2:connector-curvature="0" style="fill:#ffcd00" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_19_" transform="translate(-14.172899,-38.563788)">
+	<ns0:path d="m 243.207,254.746 -15.555,-7.664 c -12.019,11.818 -17.553,28.734 -14.846,45.366 l 16.922,3.088 c -2.644,-14.999 2.42,-30.321 13.479,-40.79 z" id="path1866" ns2:connector-curvature="0" style="fill:#ffcd00" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_20_" transform="translate(-14.172899,-38.563788)">
+	<ns0:path d="M 195.585,289.007 178.66,285.92 c -2.607,-19.74 4.059,-39.58 18.053,-53.742 l 15.558,7.662 c -13.218,12.705 -19.441,31.041 -16.686,49.167 z" id="path1869" ns2:connector-curvature="0" style="fill:#ffcd00" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_21_" transform="translate(-14.172899,-38.563788)">
+	<ns0:path d="m 274.385,269.828 -15.562,-7.662 c -10.552,8.998 -15.204,23.133 -12.054,36.64 l 16.928,3.088 c -3.32,-11.868 0.916,-24.56 10.688,-32.066 z" id="path1872" ns2:connector-curvature="0" style="fill:#ffcd00" />
+</ns0:g>
+</ns0:svg>

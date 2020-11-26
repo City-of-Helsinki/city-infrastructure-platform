@@ -1,0 +1,17 @@
+<ns0:svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns1="http://www.inkscape.org/namespaces/inkscape" xmlns:ns2="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns4="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ns1:version="1.0 (4035a4fb49, 2020-05-01)" ns2:docname="I7.2_Reunamerkki.svg" xml:space="preserve" viewBox="0 0 99.218012 396.851" height="396.85101" width="99.21801" y="0px" x="0px" id="Layer_1" version="1.1" opacity="0.6"><ns0:metadata id="metadata22"><rdf:RDF><ns4:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></ns4:Work></rdf:RDF></ns0:metadata><ns0:defs id="defs20" /><ns2:namedview ns1:current-layer="Layer_1" ns1:window-maximized="1" ns1:window-y="73" ns1:window-x="-8" ns1:cy="198.42501" ns1:cx="49.608495" ns1:zoom="1.999078" showgrid="false" id="namedview18" ns1:window-height="1017" ns1:window-width="1920" ns1:pageshadow="2" ns1:pageopacity="0" guidetolerance="10" gridtolerance="10" objecttolerance="10" borderopacity="1" bordercolor="#666666" pagecolor="#ffffff" />
+<ns0:g transform="translate(-162.99,-14.173)" id="LWPOLYLINE_71_">
+	<ns0:polygon id="polygon2" points="162.99,411.023 262.208,311.814 262.208,411.023 " style="fill:#101820" />
+</ns0:g>
+<ns0:g transform="translate(-162.99,-14.173)" id="LWPOLYLINE_72_">
+	<ns0:rect id="rect5" height="396.85101" width="99.218002" style="fill:#101820" y="14.173" x="162.99001" />
+</ns0:g>
+<ns0:g transform="translate(-162.99,-14.173)" id="LWPOLYLINE_73_">
+	<ns0:polygon id="polygon8" points="262.208,14.173 262.208,113.387 162.99,212.601 162.99,113.387 " style="fill:#ffcd00" />
+</ns0:g>
+<ns0:g transform="translate(-162.99,-14.173)" id="LWPOLYLINE_74_">
+	<ns0:polygon id="polygon11" points="262.208,212.601 262.208,311.814 162.99,411.023 162.99,311.814 " style="fill:#ffcd00" />
+</ns0:g>
+<ns0:g transform="translate(-162.99,-14.173)" id="LWPOLYLINE_70_">
+	<ns0:polygon id="polygon14" points="162.99,14.173 162.99,113.387 262.208,14.173 " style="fill:none" />
+</ns0:g>
+</ns0:svg>
