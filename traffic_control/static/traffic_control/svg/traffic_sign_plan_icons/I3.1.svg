@@ -1,0 +1,20 @@
+<ns0:svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns1="http://www.inkscape.org/namespaces/inkscape" xmlns:ns2="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns4="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ns1:version="1.0 (4035a4fb49, 2020-05-01)" ns2:docname="I3.1_Sulkupylv&#228;s.svg" xml:space="preserve" viewBox="0 0 205.137 396.84999" height="396.85001" width="205.13699" y="0px" x="0px" id="Layer_1" version="1.1" opacity="0.6"><ns0:metadata id="metadata25"><rdf:RDF><ns4:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></ns4:Work></rdf:RDF></ns0:metadata><ns0:defs id="defs23" /><ns2:namedview ns1:current-layer="Layer_1" ns1:window-maximized="1" ns1:window-y="73" ns1:window-x="-8" ns1:cy="198.42501" ns1:cx="102.5685" ns1:zoom="1.999078" fit-margin-bottom="0" fit-margin-right="0" fit-margin-left="0" fit-margin-top="0" showgrid="false" id="namedview21" ns1:window-height="1017" ns1:window-width="1920" ns1:pageshadow="2" ns1:pageopacity="0" guidetolerance="10" gridtolerance="10" objecttolerance="10" borderopacity="1" bordercolor="#666666" pagecolor="#ffffff" />
+<ns0:g transform="translate(-110.03,-14.173)" id="LWPOLYLINE_88_">
+	<ns0:polygon id="polygon2" points="315.167,398.813 315.167,411.023 110.03,411.023 110.03,398.813 153.986,380.494 175.964,380.494 249.234,380.494 271.21,380.494 " style="fill:#8a8d8f" />
+</ns0:g>
+<ns0:g transform="translate(-110.03,-14.173)" id="LWPOLYLINE_90_">
+	<ns0:polygon id="polygon5" points="249.234,380.494 249.234,343.864 175.964,288.914 175.964,380.494 " style="fill:#e4002b" />
+</ns0:g>
+<ns0:g transform="translate(-110.03,-14.173)" id="LWPOLYLINE_91_">
+	<ns0:polygon id="polygon8" points="249.234,252.284 249.234,160.704 175.964,105.755 175.964,197.335 " style="fill:#e4002b" />
+</ns0:g>
+<ns0:g transform="translate(-110.03,-14.173)" id="LWPOLYLINE_93_">
+	<ns0:polygon id="polygon11" points="249.234,14.173 175.964,14.173 249.234,69.12 " style="fill:#e4002b" />
+</ns0:g>
+<ns0:g transform="translate(-110.03,-14.173)" id="LWPOLYLINE_89_">
+	<ns0:polygon id="polygon14" points="249.234,343.864 249.234,252.284 175.964,197.335 175.964,288.914 " style="fill:#e3e829" />
+</ns0:g>
+<ns0:g transform="translate(-110.03,-14.173)" id="LWPOLYLINE_92_">
+	<ns0:polygon id="polygon17" points="249.234,160.704 249.234,69.12 175.964,14.173 175.964,105.755 " style="fill:#e3e829" />
+</ns0:g>
+</ns0:svg>

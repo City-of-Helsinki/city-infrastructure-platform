@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add traffic control operation models and include operations in admin and REST API
 - Rename ParkingArea to CoverageArea and as well as other related models and fields
 - Add direction indicator to traffic signs
+- Add management command to generate traffic sign plan icons
 
 ## [1.2.0] - 2020-09-29
 

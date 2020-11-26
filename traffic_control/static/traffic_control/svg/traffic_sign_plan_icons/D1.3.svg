@@ -1,0 +1,14 @@
+<ns0:svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns1="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns2="http://www.inkscape.org/namespaces/inkscape" xmlns:ns4="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" version="1.1" id="Layer_1" x="0px" y="0px" width="397.35101" height="397.349" viewBox="0 0 397.35102 397.34899" xml:space="preserve" ns1:docname="D1.3.svg" ns2:version="0.92.5 (2060ec1f9f, 2020-04-08)" opacity="0.6"><ns0:metadata id="metadata57"><rdf:RDF><ns4:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></ns4:Work></rdf:RDF></ns0:metadata><ns0:defs id="defs55" /><ns1:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" ns2:pageopacity="0" ns2:pageshadow="2" ns2:window-width="640" ns2:window-height="480" id="namedview53" showgrid="false" ns2:zoom="0.55503813" ns2:cx="198.6755" ns2:cy="198.67499" ns2:window-x="0" ns2:window-y="0" ns2:window-maximized="0" ns2:current-layer="Layer_1" />
+<ns0:g id="CIRCLE_4_" transform="translate(-13.923,-13.924)">
+	<ns0:path style="fill:#ffffff" d="m 411.024,212.601 c 0,-109.587 -88.835,-198.427 -198.422,-198.427 -109.587,0 -198.429,88.839 -198.429,198.427 0,109.587 88.841,198.422 198.429,198.422 109.587,-0.001 198.422,-88.835 198.422,-198.422 z" id="path40" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="CIRCLE_2_" transform="translate(-13.923,-13.924)">
+	<ns0:path style="fill:none;stroke:#005eb8;stroke-width:0.5;stroke-miterlimit:10" d="m 411.024,212.601 c 0,-109.587 -88.835,-198.427 -198.422,-198.427 -109.587,0 -198.429,88.839 -198.429,198.427 0,109.587 88.841,198.422 198.429,198.422 109.587,-0.001 198.422,-88.835 198.422,-198.422 z" id="path43" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="CIRCLE_3_" transform="translate(-13.923,-13.924)">
+	<ns0:path style="fill:#005eb8" d="m 401.726,212.601 c 0,-104.451 -84.678,-189.124 -189.124,-189.124 -104.456,0 -189.126,84.673 -189.126,189.124 0,104.446 84.67,189.123 189.126,189.123 104.446,0 189.124,-84.677 189.124,-189.123 z" id="path46" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE" transform="translate(-13.923,-13.924)">
+	<ns0:polygon style="fill:#ffffff" points="293.212,191.091 293.212,138.191 212.602,57.577 131.992,138.191 131.992,191.091 192.445,130.633 192.445,367.62 232.75,367.62 232.75,130.633 " id="polygon49" />
+</ns0:g>
+</ns0:svg>

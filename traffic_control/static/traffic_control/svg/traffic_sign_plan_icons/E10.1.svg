@@ -1,0 +1,34 @@
+<ns0:svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns1="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns2="http://www.inkscape.org/namespaces/inkscape" xmlns:ns4="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" version="1.1" id="Layer_1" x="0px" y="0px" width="397.35199" height="397.35101" viewBox="0 0 397.352 397.351" xml:space="preserve" ns1:docname="E10.1.svg" ns2:version="0.92.5 (2060ec1f9f, 2020-04-08)" opacity="0.6"><ns0:metadata id="metadata79"><rdf:RDF><ns4:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></ns4:Work></rdf:RDF></ns0:metadata><ns0:defs id="defs77" /><ns1:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" ns2:pageopacity="0" ns2:pageshadow="2" ns2:window-width="640" ns2:window-height="480" id="namedview75" showgrid="false" ns2:zoom="0.55503813" ns2:cx="198.6765" ns2:cy="198.67601" ns2:window-x="0" ns2:window-y="0" ns2:window-maximized="0" ns2:current-layer="Layer_1" />
+<ns0:g id="LWPOLYLINE_5_" transform="translate(-13.922,-13.923)">
+	
+		<ns0:rect x="14.172" y="14.173" style="fill:#005eb8;stroke:#005eb8;stroke-width:0.5;stroke-miterlimit:10" width="396.85199" height="396.85101" id="rect42" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_4_" transform="translate(-13.922,-13.923)">
+	<ns0:path style="fill:#ffffff" d="m 31.807,14.173 c -9.736,0 -17.635,7.896 -17.635,17.638 v 361.574 c 0,9.741 7.898,17.639 17.635,17.639 h 361.582 c 9.736,0 17.635,-7.897 17.635,-17.639 V 31.811 c 0,-9.741 -7.898,-17.638 -17.635,-17.638 z" id="path45" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_1_" transform="translate(-13.922,-13.923)">
+	<ns0:path style="fill:#005eb8" d="M 366.038,22.99 H 31.807 c -4.863,0 -8.813,3.949 -8.813,8.82 v 334.223 z" id="path48" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_2_" transform="translate(-13.922,-13.923)">
+	<ns0:path style="fill:#005eb8" d="m 59.159,402.206 h 334.23 c 4.863,0 8.813,-3.948 8.813,-8.821 V 59.159 Z" id="path51" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_10_" transform="translate(-13.922,-13.923)">
+	<ns0:path style="fill:#ffffff" d="m 308.29,153.071 -7.003,7.008 h 45.803 v 39.686 h -50.715 v -34.778 l -6.614,6.614 v 28.164 h -28.159 l -53.964,53.964 h 53.264 c -0.029,-0.672 -0.029,-1.343 0,-2.014 0.555,-13.627 12.052,-24.22 25.679,-23.665 13.627,0.559 24.229,12.056 23.665,25.679 h 38.752 c 3.813,0 6.905,-3.094 6.905,-6.906 v -86.841 c 0,-3.817 -3.093,-6.91 -6.905,-6.91 H 308.29 Z" id="path54" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_9_" transform="translate(-13.922,-13.923)">
+	<ns0:path style="fill:#ffffff" d="M 235.961,153.071 H 91.471 c -3.151,0 -5.914,2.14 -6.691,5.198 l -15.485,60.544 v 34.915 h 34.394 c -0.359,-8.891 4.085,-17.285 11.643,-21.982 11.585,-7.193 26.807,-3.638 34.005,7.946 l 39.929,-39.928 h -7.529 v -39.686 h 47.214 z" id="path57" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="CIRCLE_2_" transform="translate(-13.922,-13.923)">
+	<ns0:path style="fill:#ffffff" d="m 304.973,252.727 c 0,-10.719 -8.687,-19.405 -19.396,-19.405 -10.719,0 -19.405,8.687 -19.405,19.405 0,10.709 8.687,19.399 19.405,19.399 10.71,0 19.396,-8.69 19.396,-19.399 z" id="path60" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_8_" transform="translate(-13.922,-13.923)">
+	<ns0:path style="fill:#ffffff" d="m 119.202,269.826 26.263,-26.263 c -5.058,-9.444 -16.817,-13.004 -26.263,-7.946 -9.444,5.058 -13.004,16.817 -7.946,26.262 1.809,3.375 4.571,6.142 7.946,7.947 z" id="path63" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_7_" transform="translate(-13.922,-13.923)">
+	<ns0:polygon style="fill:#005eb8" points="125.826,160.079 91.141,160.079 77.913,211.786 119.523,211.786 " id="polygon66" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_6_" transform="translate(-13.922,-13.923)">
+	<ns0:polygon style="fill:#005eb8" points="175.122,160.079 132.489,160.079 127.655,199.765 175.122,199.765 " id="polygon69" />
+</ns0:g>
+<ns0:path style="fill:#e4002b" d="M 357.105,9.0669997 9.0730001,357.099 v 22.362 c 0,4.873 3.9489999,8.821 8.8129999,8.821 H 40.248 L 388.28,40.247 V 17.888 c 0,-4.871 -3.949,-8.8200003 -8.813,-8.8200003 h -22.362 z" id="path72" ns2:connector-curvature="0" />
+</ns0:svg>

@@ -1,0 +1,23 @@
+<ns0:svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns1="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns2="http://www.inkscape.org/namespaces/inkscape" xmlns:ns4="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" version="1.1" id="Layer_1" x="0px" y="0px" width="396.85101" height="252.53999" viewBox="0 0 396.85102 252.53998" xml:space="preserve" ns1:docname="I9.svg" ns2:version="0.92.5 (2060ec1f9f, 2020-04-08)" opacity="0.6"><ns0:metadata id="metadata5184"><rdf:RDF><ns4:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></ns4:Work></rdf:RDF></ns0:metadata><ns0:defs id="defs5182" /><ns1:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" ns2:pageopacity="0" ns2:pageshadow="2" ns2:window-width="640" ns2:window-height="480" id="namedview5180" showgrid="false" ns2:zoom="0.55503813" ns2:cx="198.4255" ns2:cy="126.26999" ns2:window-x="0" ns2:window-y="0" ns2:window-maximized="0" ns2:current-layer="Layer_1" />
+<ns0:g id="LWPOLYLINE_146_" transform="translate(-14.173,-86.328003)">
+	<ns0:rect x="14.173" y="86.328003" style="fill:#ffcd00" width="396.85101" height="252.53999" id="rect5158" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_147_" transform="translate(-14.173,-86.328003)">
+	<ns0:polygon style="fill:#101820" points="378.553,118.798 356.904,118.798 356.904,284.748 61.073,284.748 61.073,306.397 378.553,306.397 " id="polygon5161" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_148_" transform="translate(-14.173,-86.328003)">
+	<ns0:path style="fill:#101820" d="m 61.493,165.698 h 21.65 v -7.221 c 0,-2.335 0.451,-4.648 1.333,-6.811 3.757,-9.225 14.293,-13.653 23.518,-9.886 9.225,3.757 13.653,14.288 9.886,23.513 l -56.387,76.164 v 21.645 h 79.37 V 241.457 H 86.029 l 52.473,-69.495 c 7.451,-20.616 -3.232,-43.363 -23.844,-50.809 -20.611,-7.446 -43.363,3.232 -50.804,23.849 -2.025,5.583 -2.76,11.555 -2.162,17.474 z" id="path5164" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_149_" transform="translate(-14.173,-86.328003)">
+	<ns0:path style="fill:#101820" d="m 150.245,281.143 17.453,-20.307 c 4.723,-3.657 5.583,-10.458 1.92,-15.181 -3.651,-4.728 -10.452,-5.593 -15.186,-1.931 -2.645,2.047 -4.188,5.205 -4.188,8.553 v 28.866 z" id="path5167" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_150_" transform="translate(-14.173,-86.328003)">
+	<ns0:path style="fill:#101820" d="m 242.24,184.635 v 16.934 c -3.861,22.479 -13.296,43.636 -27.443,61.534 h -21.639 c 12.488,-12.614 22.027,-27.837 27.946,-44.57 -2.802,0.845 -5.709,1.275 -8.626,1.275 -16.445,0 -29.763,-13.323 -29.763,-29.763 v -5.41 c 0,-16.439 13.317,-29.762 29.763,-29.762 16.434,0 29.762,13.322 29.762,29.762 z" id="path5170" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_152_" transform="translate(-14.173,-86.328003)">
+	<ns0:path style="fill:#101820" d="m 301.65,201.841 c -2.813,-2.372 -6.381,-3.673 -10.054,-3.673 -5.227,0.64 -10.254,2.414 -14.724,5.194 v -5.194 H 263.89 v 64.935 h 12.982 v -45.888 c 0,-4.785 3.883,-8.657 8.657,-8.657 4.786,0 8.658,3.872 8.658,8.657 v 45.888 h 12.992 v -45.888 c 0,-4.785 3.872,-8.657 8.658,-8.657 4.785,0 8.658,3.872 8.658,8.657 v 45.888 h 12.981 v -49.481 c -0.599,-8.327 -7.252,-14.929 -15.584,-15.453 -6.967,-0.898 -14.04,0.388 -20.242,3.672 z" id="path5173" ns2:connector-curvature="0" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_151_" transform="translate(-14.173,-86.328003)">
+	<ns0:path style="fill:#ffcd00" d="m 198.951,184.635 v 5.41 c 0,7.473 6.055,13.527 13.527,13.527 7.472,0 13.527,-6.055 13.527,-13.527 v -5.41 c 0,-7.472 -6.056,-13.527 -13.527,-13.527 -7.473,-0.001 -13.527,6.055 -13.527,13.527 z" id="path5176" ns2:connector-curvature="0" />
+</ns0:g>
+</ns0:svg>

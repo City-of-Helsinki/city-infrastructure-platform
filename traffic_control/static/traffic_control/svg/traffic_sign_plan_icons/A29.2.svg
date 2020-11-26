@@ -1,0 +1,14 @@
+<ns0:svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns0="http://www.w3.org/2000/svg" xmlns:ns1="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns2="http://www.inkscape.org/namespaces/inkscape" xmlns:ns4="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" version="1.1" id="Layer_1" x="0px" y="0px" width="396.849" height="363.84201" viewBox="0 0 396.84901 363.842" xml:space="preserve" ns1:docname="A29.2.svg" ns2:version="0.92.5 (2060ec1f9f, 2020-04-08)" opacity="0.6"><ns0:metadata id="metadata897"><rdf:RDF><ns4:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></ns4:Work></rdf:RDF></ns0:metadata><ns0:defs id="defs895" /><ns1:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" ns2:pageopacity="0" ns2:pageshadow="2" ns2:window-width="640" ns2:window-height="480" id="namedview893" showgrid="false" ns2:zoom="0.55503813" ns2:cx="198.4245" ns2:cy="181.92099" ns2:window-x="0" ns2:window-y="0" ns2:window-maximized="0" ns2:current-layer="Layer_1" />
+<ns0:g id="LWPOLYLINE_8_" transform="translate(-14.174,-30.677)">
+	<ns0:polygon style="fill:#e4002b" points="410.81,41.798 368.996,30.677 212.599,120.905 56.205,30.677 14.391,41.798 25.693,83.563 151.512,156.148 25.477,228.86 14.174,270.626 55.989,281.743 212.599,191.391 369.208,281.743 411.023,270.626 399.72,228.86 273.687,156.148 399.507,83.563 " id="polygon880" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_10_" transform="translate(-14.174,-30.677)">
+	<ns0:polygon style="fill:#e4002b" points="14.174,383.401 55.989,394.519 212.599,304.171 369.208,394.519 411.023,383.401 399.72,341.636 212.599,233.685 25.477,341.636 " id="polygon883" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_9_" transform="translate(-14.174,-30.677)">
+	<ns0:polygon style="fill:#ffcd00" points="54.447,43.759 29.355,50.43 36.14,75.489 175.947,156.148 35.948,236.917 29.167,261.972 54.255,268.647 212.599,177.292 370.95,268.647 396.034,261.972 389.25,236.917 249.252,156.148 389.057,75.489 395.842,50.43 370.757,43.759 212.599,135.003 " id="polygon886" />
+</ns0:g>
+<ns0:g id="LWPOLYLINE_11_" transform="translate(-14.174,-30.677)">
+	<ns0:polygon style="fill:#ffcd00" points="29.167,374.753 54.255,381.427 212.599,290.069 370.95,381.427 396.034,374.753 389.25,349.692 212.599,247.778 35.948,349.692 " id="polygon889" />
+</ns0:g>
+</ns0:svg>
