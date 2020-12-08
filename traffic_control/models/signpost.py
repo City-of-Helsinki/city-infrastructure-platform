@@ -66,7 +66,9 @@ class SignpostPlan(
             Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)
         ),
     )
-    value = models.IntegerField(_("Signpost value"), blank=True, null=True)
+    value = models.DecimalField(
+        _("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True
+    )
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
     parent = models.ForeignKey(
         "self",
@@ -230,7 +232,9 @@ class SignpostReal(SourceControlModel, SoftDeleteModel, UserControlModel):
             Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)
         ),
     )
-    value = models.IntegerField(_("Signpost value"), blank=True, null=True)
+    value = models.DecimalField(
+        _("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True
+    )
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
     parent = models.ForeignKey(
         "self",

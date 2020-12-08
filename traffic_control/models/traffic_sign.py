@@ -79,7 +79,13 @@ class TrafficSignPlan(
             Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
         ),
     )
-    value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
+    value = models.DecimalField(
+        _("Traffic Sign Code value"),
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     mount_plan = models.ForeignKey(
         MountPlan,
@@ -252,7 +258,13 @@ class TrafficSignReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=False,
         null=True,
     )
-    value = models.IntegerField(_("Traffic Sign Code value"), blank=True, null=True)
+    value = models.DecimalField(
+        _("Traffic Sign Code value"),
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
     legacy_code = models.CharField(
         _("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True
     )
