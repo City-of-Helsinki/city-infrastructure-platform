@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add direction indicator to traffic signs
 - Add management command to generate traffic sign plan icons
 
+### Changed
+- Change TrafficSign and Signpost value field from IntegerField to DecimalField
+
 ## [1.2.0] - 2020-09-29
 
 ### Added
