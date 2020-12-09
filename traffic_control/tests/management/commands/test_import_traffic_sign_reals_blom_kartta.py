@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from unittest.mock import patch
 
 from django.conf import settings
@@ -21,7 +22,7 @@ MOCK_FEATURE_1 = {
     "mount_type": "Wall",
     "date": "2020-08-04 12:00:00",
     "type": "101",
-    "text": "traffic sign info",
+    "text": "4,05t",
     "x": 2776957,
     "y": 8442622,
     "z": 0.5,
@@ -96,8 +97,9 @@ class ImportTrafficSignRealsBlomKarttaTestCase(TestCase):
         expected_time = datetime.datetime(2020, 8, 4, 9, 0, 0, tzinfo=timezone("UTC"))
         self.assertEqual(traffic_sign.scanned_at, expected_time)
         # verify text is imported for main traffic sign
-        self.assertEqual(traffic_sign.txt, "traffic sign info")
-
+        self.assertEqual(traffic_sign.txt, "4,05t")
+        # verify numeric value is extracted from text and assign to value field
+        self.assertEqual(traffic_sign.value, Decimal("4.05"))
         additional_sign = AdditionalSignReal.objects.first()
         # verify additional content is created
         additional_sign_content = AdditionalSignContentReal.objects.first()
