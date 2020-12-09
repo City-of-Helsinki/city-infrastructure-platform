@@ -27,6 +27,8 @@ class Command(BaseCommand):
         count = 0
         for feature in ds[0]:
             if feature["tehtavakokonaisuus"].value == "KATU":
+                gdal_geometry = feature.geom
+                gdal_geometry.coord_dim = 3  # force 3d coordinates
                 start_date = parse_date(feature["alku_pvm"].value)
                 end_date = parse_date(feature["loppu_pvm"].value)
                 updated_date = parse_date(feature["paivitetty_tietopalveluun"].value)
@@ -43,7 +45,7 @@ class Command(BaseCommand):
                         "updated_date": updated_date,
                         "task": feature["tehtavakokonaisuus"].value,
                         "status": feature["status"].value,
-                        "location": feature.geom.geos,
+                        "location": gdal_geometry.geos,
                     },
                 )
                 count += 1

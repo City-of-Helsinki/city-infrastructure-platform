@@ -44,7 +44,9 @@ class Command(BaseCommand):
             category_id = feature["luokka"].value
             category_name = parse_str_value(feature["luokka_nimi"].value)
             category = self.get_coverage_area_category(category_id, category_name)
-            geometry = feature.geom.geos
+            gdal_geometry = feature.geom
+            gdal_geometry.coord_dim = 3  # force 3d coordinates
+            geometry = gdal_geometry.geos
             if geometry.geom_type == "Polygon":
                 # the WFS layer has mixed geometries (Polygon & MultiPolygon)
                 geometry = MultiPolygon([geometry])
