@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Change TrafficSign and Signpost value field from IntegerField to DecimalField
 - Extract numeric values from text column when importing blom kartta traffic signs
+- Force 3d geometries when importing coverage areas and operational areas from HKI WFS
 
 ## [1.2.0] - 2020-09-29
 
