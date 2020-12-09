@@ -1,4 +1,6 @@
 import os
+import re
+from decimal import Decimal, InvalidOperation
 
 from dateutil.parser import parse
 from django.conf import settings
@@ -124,8 +126,9 @@ class Command(BaseCommand):
 
             # Add text to the sign data if the imported sign is not an additional sign
             text = str(feature.get("text") or "").strip()
-            if not is_additional_sign:
+            if not is_additional_sign and text:
                 data["txt"] = text
+                data["value"] = self.extract_numeric_value(text)
 
             obj, created = traffic_sign_model.objects.update_or_create(
                 source_name=SOURCE_NAME,
@@ -137,7 +140,7 @@ class Command(BaseCommand):
             if is_additional_sign and text:
                 AdditionalSignContentReal.objects.update_or_create(
                     source_name=SOURCE_NAME,
-                    source_id=str(feature.get("id")),
+                    source_id=str(feature.get("fid")),
                     defaults={
                         "parent": obj,
                         "text": text,
@@ -159,3 +162,20 @@ class Command(BaseCommand):
             f"{additional_sign_counter} are additional signs"
         )
         self.stdout.write("Import done!")
+
+    def extract_numeric_value(self, text):
+        """
+        Extract numeric value from text. If there are multiple numeric
+        values in the text, return the first one. Return None if no
+        numeric values found
+        """
+        pattern = "[\d.,-]+"
+        numbers = re.findall(pattern, text)
+        if not numbers:
+            return None
+        try:
+            value_str = numbers[0].replace(",", ".")
+            return Decimal(value_str)
+        except InvalidOperation:
+            self.stdout.write(f"Cannot convert to decimal: {value_str}")
+            return None
