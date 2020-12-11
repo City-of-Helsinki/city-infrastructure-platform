@@ -29,22 +29,48 @@ class Command(BaseCommand):
                 (
                     code,
                     description,
+                    icon,
+                    value,
+                    unit,
+                    size,
                     legacy_code,
                     legacy_description,
                     type,
                     target_model,
                 ) = row
-                TrafficControlDeviceType.objects.update_or_create(
-                    code=code,
-                    defaults={
-                        "description": description,
-                        "legacy_code": legacy_code,
-                        "legacy_description": legacy_description,
-                        "type": type,
-                        "target_model": DeviceTypeTargetModel[target_model.upper()]
+
+                defaults = {
+                    "icon": icon,
+                    "description": description,
+                    "value": value,
+                    "unit": unit,
+                    "size": size,
+                    "legacy_code": legacy_code,
+                    "legacy_description": legacy_description,
+                    "type": type,
+                }
+
+                try:
+                    device_type = TrafficControlDeviceType.objects.get(code=code)
+                    for key, value in defaults.items():
+                        setattr(device_type, key, value)
+                    if not device_type.target_model:
+                        # assign target_model when the target_model is None in current device type
+                        device_type.target_model = (
+                            DeviceTypeTargetModel[target_model.upper()]
+                            if target_model
+                            else ""
+                        )
+                    device_type.save(validate_target_model_change=False)
+                except TrafficControlDeviceType.DoesNotExist:
+                    defaults["code"] = code
+                    # assign target_model when creating new traffic control device types
+                    defaults["target_model"] = (
+                        DeviceTypeTargetModel[target_model.upper()]
                         if target_model
-                        else None,
-                    },
-                )
+                        else ""
+                    )
+                    TrafficControlDeviceType.objects.create(**defaults)
+
                 count += 1
         self.stdout.write(f"{count} traffic control device types are imported")
