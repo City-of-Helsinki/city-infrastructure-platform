@@ -226,9 +226,13 @@ class TrafficControlDeviceType(models.Model):
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
     code = models.CharField(_("Code"), unique=True, max_length=32)
+    icon = models.CharField(_("Icon"), max_length=100, blank=True)
     description = models.CharField(
         _("Description"), max_length=254, blank=True, null=True
     )
+    value = models.CharField(_("Value"), max_length=50, blank=True)
+    unit = models.CharField(_("Unit"), max_length=50, blank=True)
+    size = models.CharField(_("Size"), max_length=50, blank=True)
     legacy_code = models.CharField(
         _("Legacy code"), max_length=32, blank=True, null=True
     )
