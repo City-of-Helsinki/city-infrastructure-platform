@@ -268,9 +268,11 @@ class TrafficControlDeviceType(models.Model):
     def traffic_sign_type(self):
         return TRAFFIC_SIGN_TYPE_MAP.get(self.code[0])
 
-    def save(self, *args, **kwargs):
+    def save(self, validate_target_model_change=True, *args, **kwargs):
         if self.pk:
-            self.validate_change_target_model(self.target_model, raise_exception=True)
+            self.validate_change_target_model(
+                self.target_model, raise_exception=validate_target_model_change
+            )
 
         super().save(*args, **kwargs)
 
