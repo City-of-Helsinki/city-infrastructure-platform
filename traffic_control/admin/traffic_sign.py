@@ -56,7 +56,11 @@ class TrafficControlDeviceTypeAdmin(
 ):
     list_display = (
         "code",
+        "icon",
         "description",
+        "value",
+        "unit",
+        "size",
         "legacy_code",
         "legacy_description",
         "target_model",
