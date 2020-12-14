@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 import pytest
 from django.urls import reverse
@@ -75,7 +76,7 @@ def test__traffic_sign_plan__valid_device_type(target_model):
     client = get_api_client(user=get_user(admin=True))
     traffic_sign_plan = get_traffic_sign_plan()
     device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
+        code="123", description="test", target_model=target_model, value="12.5"
     )
     data = {"device_type": device_type.id}
 
@@ -88,6 +89,7 @@ def test__traffic_sign_plan__valid_device_type(target_model):
     traffic_sign_plan.refresh_from_db()
     assert response.status_code == status.HTTP_200_OK
     assert traffic_sign_plan.device_type == device_type
+    assert traffic_sign_plan.value == Decimal("12.5")
 
 
 @pytest.mark.django_db
@@ -321,7 +323,7 @@ def test__traffic_sign_real__valid_device_type(target_model):
     client = get_api_client(user=get_user(admin=True))
     traffic_sign_real = get_traffic_sign_real()
     device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
+        code="123", description="test", target_model=target_model, value="12.5"
     )
     data = {"device_type": device_type.id}
 
@@ -334,6 +336,7 @@ def test__traffic_sign_real__valid_device_type(target_model):
     traffic_sign_real.refresh_from_db()
     assert response.status_code == status.HTTP_200_OK
     assert traffic_sign_real.device_type == device_type
+    assert traffic_sign_real.value == Decimal("12.5")
 
 
 @pytest.mark.django_db

@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import (
+    DecimalValueFromDeviceTypeMixin,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -48,7 +49,11 @@ class LocationSpecifier(Enum):
 
 
 class SignpostPlan(
-    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
+    DecimalValueFromDeviceTypeMixin,
+    UpdatePlanLocationMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
 ):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -208,7 +213,12 @@ class SignpostPlanFile(models.Model):
         return "%s" % self.file
 
 
-class SignpostReal(SourceControlModel, SoftDeleteModel, UserControlModel):
+class SignpostReal(
+    DecimalValueFromDeviceTypeMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
+):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )

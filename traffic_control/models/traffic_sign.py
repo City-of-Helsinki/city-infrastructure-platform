@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import (
+    DecimalValueFromDeviceTypeMixin,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -63,7 +64,11 @@ class TrafficSignPlanQuerySet(SoftDeleteQuerySet):
 
 
 class TrafficSignPlan(
-    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
+    DecimalValueFromDeviceTypeMixin,
+    UpdatePlanLocationMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
 ):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -234,7 +239,12 @@ class TrafficSignRealQuerySet(SoftDeleteQuerySet):
         additional_signs.soft_delete(user)
 
 
-class TrafficSignReal(SourceControlModel, SoftDeleteModel, UserControlModel):
+class TrafficSignReal(
+    DecimalValueFromDeviceTypeMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
+):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
