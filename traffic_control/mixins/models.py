@@ -1,7 +1,12 @@
+import logging
+from decimal import Decimal, InvalidOperation
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+logger = logging.getLogger("traffic_control")
 
 
 class SoftDeleteModel(models.Model):
@@ -82,3 +87,20 @@ class SourceControlModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class DecimalValueFromDeviceTypeMixin:
+    """
+    A model mixin class that saves device type value to the decimal value field
+
+    Only set value field when the value field is empty and a default value
+    is set in device type
+    """
+
+    def save(self, *args, **kwargs):
+        if not self.value and self.device_type and self.device_type.value:
+            try:
+                self.value = Decimal(self.device_type.value)
+            except InvalidOperation:
+                logger.warning("Cannot convert device type value to Decimal")
+        super().save(*args, **kwargs)
