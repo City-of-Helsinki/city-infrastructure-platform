@@ -271,9 +271,13 @@ def get_traffic_control_device_type(
     code: str = "A11",
     description: str = "Test",
     target_model: Optional[DeviceTypeTargetModel] = None,
+    value: str = "",
 ):
     return TrafficControlDeviceType.objects.get_or_create(
-        code=code, description=description, target_model=target_model
+        code=code,
+        description=description,
+        target_model=target_model,
+        value=value,
     )[0]
 
 

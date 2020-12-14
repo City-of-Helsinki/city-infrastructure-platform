@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 import pytest
 from django.urls import reverse
@@ -76,7 +77,7 @@ def test__signpost_plan__valid_device_type(target_model):
     client = get_api_client(user=get_user(admin=True))
     signpost_plan = get_signpost_plan()
     device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
+        code="123", description="test", target_model=target_model, value="15"
     )
     data = {"device_type": device_type.id}
 
@@ -89,6 +90,7 @@ def test__signpost_plan__valid_device_type(target_model):
     signpost_plan.refresh_from_db()
     assert response.status_code == status.HTTP_200_OK
     assert signpost_plan.device_type == device_type
+    assert signpost_plan.value == Decimal("15")
 
 
 @pytest.mark.django_db
@@ -321,7 +323,7 @@ def test__signpost_real__valid_device_type(target_model):
     client = get_api_client(user=get_user(admin=True))
     signpost_real = get_signpost_real()
     device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
+        code="123", description="test", target_model=target_model, value="15"
     )
     data = {"device_type": device_type.id}
 
@@ -334,6 +336,7 @@ def test__signpost_real__valid_device_type(target_model):
     signpost_real.refresh_from_db()
     assert response.status_code == status.HTTP_200_OK
     assert signpost_real.device_type == device_type
+    assert signpost_real.value == Decimal("15")
 
 
 @pytest.mark.django_db
