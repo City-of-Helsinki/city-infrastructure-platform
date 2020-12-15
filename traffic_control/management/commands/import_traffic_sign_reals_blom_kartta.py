@@ -169,7 +169,7 @@ class Command(BaseCommand):
         values in the text, return the first one. Return None if no
         numeric values found
         """
-        pattern = "[\d.,-]+"
+        pattern = r"[\d.,-]+"
         numbers = re.findall(pattern, text)
         if not numbers:
             return None
