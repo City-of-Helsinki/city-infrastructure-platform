@@ -1,7 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: City Infrastructure Platform
+name: City Infrastructure Platform tests
 
 on:
   push:
@@ -12,10 +9,12 @@ on:
 jobs:
   build:
 
+    # Ubuntu latests is Ubuntu 18.04 as of 2020/12
     runs-on: ubuntu-latest
 
     env:
       DEBUG: 1
+      # Disabled OIDC to allow for minimal test configuration
       OIDC_AUTHENTICATION_ENABLED: 0
       # Database for tests
       DATABASE_URL: postgis://postgres:postgres@localhost/city-infrastructure-platform
@@ -38,11 +37,11 @@ jobs:
         flake8
         black --check .
         isort . -c
-    - name: Test with pytest
+    - name: Run pytest code functionality tests
       run: |
         pytest -ra -vvv --cov=.
 
-    # Service containers to run with `container-job`
+    # Majority of the tests require database
     services:
       # Label used to access the service container
       postgres:
