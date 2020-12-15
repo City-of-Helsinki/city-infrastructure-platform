@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extract numeric values from text column when importing blom kartta traffic signs
 - Force 3d geometries when importing coverage areas and operational areas from HKI WFS
 
+### Fixed
+- Fix the styling of traffic sign icon widget so that the icon and select are in the same row
+
 ## [1.2.0] - 2020-09-29
 
 ### Added
