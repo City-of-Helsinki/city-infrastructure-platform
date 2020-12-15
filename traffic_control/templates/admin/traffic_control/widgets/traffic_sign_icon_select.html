@@ -1,6 +1,6 @@
 {% load static %}
 
-<img class="traffic-sign-icon" src="{% static icon_path %}" alt="Traffic sign icon" {% if not icon_path %}style="display: none;"{% endif %}>
+<img class="traffic-sign-icon" src="{{ icon_path }}" alt="Traffic sign icon" {% if not icon_path %}style="display: none;"{% endif %}>
 
 {# Default select widget template with added onchange attribute #}
 <select name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}
