@@ -18,7 +18,7 @@ jobs:
       DEBUG: 1
       OIDC_AUTHENTICATION_ENABLED: 0
       # Database for tests
-      DATABASE_URL: postgis://postgres:postgres@postgres/city-infrastructure-platform
+      DATABASE_URL: postgis://postgres:postgres@localhost/city-infrastructure-platform
 
     steps:
     - uses: actions/checkout@v2
