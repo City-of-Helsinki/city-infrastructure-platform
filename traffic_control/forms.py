@@ -49,10 +49,10 @@ class AdminTrafficSignIconSelectWidget(Select):
 
     def get_icon_url(self, value):
         if not self.icon_url_mapping:
-            id_code_values = TrafficControlDeviceType.objects.values_list("id", "code")
+            id_icon_values = TrafficControlDeviceType.objects.values_list("id", "icon")
             self.icon_url_mapping = {
-                uuid: f"{settings.STATIC_URL}traffic_control/svg/traffic_sign_icons/{code}.svg"
-                for uuid, code in id_code_values
+                uuid: f"{settings.STATIC_URL}traffic_control/svg/traffic_sign_icons/{icon}"
+                for uuid, icon in id_icon_values
             }
         return self.icon_url_mapping.get(value, "")
 
