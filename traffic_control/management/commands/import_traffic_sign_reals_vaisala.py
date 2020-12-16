@@ -16,12 +16,12 @@ SOURCE_SRID = 4326
 
 
 class Command(BaseCommand):
-    help = "Import vaisala traffic signs from a csv file"
+    help = "Import vaisala traffic sign reals from a csv file"
     step = 1000
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "filename", help="Path to the vaisala traffic sign csv file"
+            "filename", help="Path to the vaisala traffic sign reals csv file"
         )
 
     def handle(self, *args, **options):
