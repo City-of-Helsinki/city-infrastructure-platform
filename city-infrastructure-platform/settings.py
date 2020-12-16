@@ -292,5 +292,5 @@ OVERLAY_SOURCE_URL = env.str("OVERLAY_SOURCE_URL")
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 
 LOCALE_PATHS = [
-    './templates/locale',
+    "./templates/locale",
 ]
