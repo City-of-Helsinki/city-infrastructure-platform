@@ -20,7 +20,7 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
         self.assertRaises(
             CommandError,
             call_command,
-            "import_traffic_signs_vaisala",
+            "import_traffic_sign_reals_vaisala",
             "dummy.csv",
         )
 
@@ -39,7 +39,7 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
         )
 
         with patch(
-            "traffic_control.management.commands.import_traffic_signs_vaisala.open",
+            "traffic_control.management.commands.import_traffic_sign_reals_vaisala.open",
             mock_open(read_data=data),
         ):
             for legacy_code in ["A1", "B2", "C3"]:
@@ -54,7 +54,7 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
                     legacy_code=legacy_code,
                     target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
                 )
-            call_command("import_traffic_signs_vaisala", "test-data.csv")
+            call_command("import_traffic_sign_reals_vaisala", "test-data.csv")
             self.assertEqual(TrafficSignReal.objects.count(), 3)
             traffic_sign_device_types = dict(
                 TrafficSignReal.objects.values_list("source_id", "device_type__code")
