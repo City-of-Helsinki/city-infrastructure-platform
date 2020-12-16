@@ -156,7 +156,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "users.apps.UsersConfig",
     "traffic_control.apps.TrafficControlConfig",
-    "map",
+    "map.apps.MapConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -290,3 +290,7 @@ SRID = 3879  # the spatial reference id used for geometries
 
 OVERLAY_SOURCE_URL = env.str("OVERLAY_SOURCE_URL")
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
+
+LOCALE_PATHS = [
+    './templates/locale',
+]

@@ -10,7 +10,7 @@ from traffic_control.models.common import Owner
 
 class CoverageAreaCategory(models.Model):
     id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=200, blank=True)
+    name = models.CharField(_("Name"), max_length=200, blank=True)
 
     class Meta:
         verbose_name = _("Coverage area category")

@@ -18,11 +18,13 @@ class GroupOperationalArea(models.Model):
         Group,
         unique=True,
         related_name="operational_area",
+        verbose_name=_("Group"),
         on_delete=models.CASCADE,
     )
     areas = models.ManyToManyField(
         "OperationalArea",
         related_name="groups",
+        verbose_name=_("Operational areas"),
         blank=True,
     )
 
