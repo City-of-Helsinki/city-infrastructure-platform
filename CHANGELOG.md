@@ -7,22 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2020-12-16
+
 ### Added
-- Add `ParkingArea` model and parking area foreign key relations in `TrafficSignReal` and `AdditionalSignReal`
-- Add a management command to import parking areas from Helsinki City WFS
+- Add `CoverageArea` model and coverage area foreign key relations in `TrafficSignReal` and `AdditionalSignReal`
+- Add a management command to import parking areas as coverage areas from Helsinki City WFS
 - Update `Plan` model `plan_number` help_text and change `decision_maker` from ForeignKey to CharField
 - Assign `device_type` based on `legacy_code` to `AdditionalSignContentReal` and `AdditionalSignContentPlan` instances
-- Add `source_name` and `source_id` to to `AdditionalSignContentReal` and `AdditionalSignContentPlan` and update importers accordingly
+- Add `source_name` and `source_id` to `AdditionalSignContentReal` and `AdditionalSignContentPlan` and update importers accordingly
 - Improve fields naming in Plan API endpoint to make it more understandable
 - Remove `decision_date` and `decision_id` from traffic control plan models
 - Improve admin map view feature info window to include more fields
 - Set `Plan` `linked_objects` as read-only
 - Improve feature info window to include more details and add localization to it
-- Add ParkingAreaCategory and ParkingArea to django admin
+- Add CoverageAreaCategory and CoverageArea to django admin
 - Use icon select widget for AdditionalSignContentPlan/Real inlines
 - Convert all 2d geometry fields to 3d
 - Add traffic control operation models and include operations in admin and REST API
-- Rename ParkingArea to CoverageArea and as well as other related models and fields
 - Add direction indicator to traffic signs
 - Add management command to generate traffic sign plan icons
 - Add icon, value, unit and size fields to TrafficControlDeviceType model
@@ -97,7 +98,8 @@ Provides an API for handling and storing common Traffic Control entities, such a
   - `Plan`
 - SSO-login with TokenAuthentication
 
-[unreleased]: https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/v0.0.1...v1.0.0
