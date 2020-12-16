@@ -14,11 +14,11 @@ cffi==1.14.4              # via cryptography
 chardet==3.0.4            # via requests
 coreapi==2.3.3            # via drf-yasg
 coreschema==0.0.4         # via coreapi, drf-yasg
-cryptography==3.3         # via authlib, azure-storage-common, drf-oidc-auth, social-auth-core
+cryptography==3.3.1       # via authlib, azure-storage-common, drf-oidc-auth, social-auth-core
 defusedxml==0.7.0rc1      # via python3-openid, social-auth-core
 django==2.2.17
 django-auditlog==0.4.7
-django-cors-headers==3.5.0
+django-cors-headers==3.6.0
 django-enumfields==2.0.0
 django-environ==0.4.5
 django-extensions==3.1.0
@@ -38,7 +38,7 @@ jinja2==2.11.2            # via coreschema
 jsonschema==3.2.0         # via swagger-spec-validator
 markupsafe==1.1.1         # via jinja2
 oauthlib==3.1.0           # via requests-oauthlib, social-auth-core
-packaging==20.7           # via drf-yasg
+packaging==20.8           # via drf-yasg
 psycopg2==2.8.6
 pyasn1==0.4.8             # via python-jose, rsa
 pycparser==2.20           # via cffi
@@ -55,7 +55,7 @@ requests-oauthlib==1.3.0  # via social-auth-core
 rsa==4.6
 ruamel.yaml==0.16.12      # via drf-yasg
 ruamel.yaml.clib==0.2.2   # via ruamel-yaml
-sentry-sdk==0.19.4
+sentry-sdk==0.19.5
 six==1.15.0               # via cryptography, django-jsonfield, ecdsa, jsonschema, python-dateutil, python-jose, social-auth-app-django, social-auth-core, swagger-spec-validator
 social-auth-app-django==4.0.0
 social-auth-core==3.3.3   # via social-auth-app-django

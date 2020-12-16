@@ -17,7 +17,7 @@ coverage==5.3             # via pytest-cov
 decorator==4.4.2          # via ipython
 docopt==0.6.2             # via pytest-watch
 factory-boy==3.1.0
-faker==5.0.1              # via factory-boy
+faker==5.0.2              # via factory-boy
 flake8==3.8.4
 flake8-polyfill==1.0.2    # via pep8-naming
 importmagic==0.1.7
@@ -28,10 +28,9 @@ isort==5.6.4
 jedi==0.17.2
 mccabe==0.6.1             # via flake8
 mypy-extensions==0.4.3    # via black
-packaging==20.7           # via pytest
+packaging==20.8           # via pytest
 parso==0.7.1              # via jedi
 pathspec==0.8.1           # via black
-pathtools==0.1.2          # via watchdog
 pep8-naming==0.11.1
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
@@ -39,13 +38,13 @@ pluggy==0.13.1            # via pytest
 prequ==1.4.7
 prompt-toolkit==3.0.8     # via ipython
 ptyprocess==0.6.0         # via pexpect
-py==1.9.0                 # via pytest
+py==1.10.0                # via pytest
 pycodestyle==2.6.0        # via autopep8, flake8
 pydocstyle==5.1.1
 pyflakes==2.2.0           # via autoflake, flake8
 pygments==2.7.3           # via ipython
 pyparsing==2.4.7          # via packaging
-pytest==6.1.2
+pytest==6.2.1
 pytest-cov==2.10.1
 pytest-django==4.1.0
 pytest-watch==4.2.0
@@ -59,7 +58,7 @@ toml==0.10.2              # via autopep8, black, pytest
 traitlets==5.0.5          # via ipython
 typed-ast==1.4.1          # via black
 typing-extensions==3.7.4.3  # via black
-watchdog==0.10.4          # via pytest-watch
+watchdog==1.0.1           # via pytest-watch
 wcwidth==0.2.5            # via prompt-toolkit
 yapf==0.30.0
 
