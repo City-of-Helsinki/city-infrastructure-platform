@@ -16,6 +16,7 @@ class User(AbstractUser):
     operational_areas = models.ManyToManyField(
         "traffic_control.OperationalArea",
         related_name="users",
+        verbose_name=_("Operational areas"),
         blank=True,
     )
 
@@ -35,3 +36,7 @@ class User(AbstractUser):
                 operational_area__areas__location__contains=location
             ).exists()
         )
+
+    class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
