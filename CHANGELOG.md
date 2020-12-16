@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add management command to generate traffic sign plan icons
 - Add icon, value, unit and size fields to TrafficControlDeviceType model
 - Use device type value for traffic sign and signpost value field if not provided
+- Add API-root and API-documentation links to Admin UI front page
 
 ### Changed
 - Change TrafficSign and Signpost value field from IntegerField to DecimalField
