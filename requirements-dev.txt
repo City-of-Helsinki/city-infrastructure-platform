@@ -42,7 +42,7 @@ py==1.10.0                # via pytest
 pycodestyle==2.6.0        # via autopep8, flake8
 pydocstyle==5.1.1
 pyflakes==2.2.0           # via autoflake, flake8
-pygments==2.7.3           # via ipython
+pygments==2.7.4           # via ipython
 pyparsing==2.4.7          # via packaging
 pytest==6.2.1
 pytest-cov==2.10.1
