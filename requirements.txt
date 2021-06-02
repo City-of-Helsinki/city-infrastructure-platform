@@ -62,7 +62,7 @@ social-auth-core==3.3.3   # via social-auth-app-django
 sqlparse==0.4.1           # via django
 swagger-spec-validator==2.7.3  # via drf-yasg
 uritemplate==3.0.1        # via coreapi, drf-yasg
-urllib3==1.26.2           # via requests, sentry-sdk
+urllib3==1.26.5           # via requests, sentry-sdk
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools                # via jsonschema
