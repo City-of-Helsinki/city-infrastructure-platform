@@ -16,7 +16,7 @@ coreapi==2.3.3            # via drf-yasg
 coreschema==0.0.4         # via coreapi, drf-yasg
 cryptography==3.3.1       # via authlib, azure-storage-common, drf-oidc-auth, social-auth-core
 defusedxml==0.7.0rc1      # via python3-openid, social-auth-core
-django==2.2.17
+django==2.2.24
 django-auditlog==0.4.7
 django-cors-headers==3.6.0
 django-enumfields==2.0.0
