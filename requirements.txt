@@ -59,7 +59,7 @@ sentry-sdk==0.19.5
 six==1.15.0               # via cryptography, django-jsonfield, ecdsa, jsonschema, python-dateutil, python-jose, social-auth-app-django, social-auth-core, swagger-spec-validator
 social-auth-app-django==4.0.0
 social-auth-core==3.3.3   # via social-auth-app-django
-sqlparse==0.4.1           # via django
+sqlparse==0.4.2           # via django
 swagger-spec-validator==2.7.3  # via drf-yasg
 uritemplate==3.0.1        # via coreapi, drf-yasg
 urllib3==1.26.2           # via requests, sentry-sdk
