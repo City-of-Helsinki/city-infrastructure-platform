@@ -6,10 +6,7 @@ from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import RequestFactory
 
 from ..models import OperationalArea
-from ..permissions import (
-    IsAdminUserOrReadOnly,
-    ObjectInsideOperationalAreaOrAnonReadOnly,
-)
+from ..permissions import IsAdminUserOrReadOnly, ObjectInsideOperationalAreaOrAnonReadOnly
 from .factories import get_barrier_real, get_user
 from .test_base_api import test_polygon
 
@@ -54,9 +51,7 @@ def test__operational_area_permission__point_in_area(method):
     request.user = user
     barrier_real = get_barrier_real(location=Point(20.0, 20.0, 0, srid=settings.SRID))
 
-    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(
-        request, mock_view, barrier_real
-    )
+    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(request, mock_view, barrier_real)
 
     assert has_permission
 
@@ -84,9 +79,7 @@ def test__operational_area_permission__point_not_in_area(method, expected):
     request.user = user
     barrier_real = get_barrier_real(location=Point(-20.0, -20.0, 0, srid=settings.SRID))
 
-    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(
-        request, mock_view, barrier_real
-    )
+    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(request, mock_view, barrier_real)
 
     assert has_permission == expected
 
@@ -115,9 +108,7 @@ def test__operational_area_permission__polygon_in_area(method):
         )
     )
 
-    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(
-        request, mock_view, barrier_real
-    )
+    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(request, mock_view, barrier_real)
 
     assert has_permission
 
@@ -156,9 +147,7 @@ def test__operational_area_permission__polygon_partially_not_in_area(method, exp
         )
     )
 
-    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(
-        request, mock_view, barrier_real
-    )
+    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(request, mock_view, barrier_real)
 
     assert has_permission == expected
 
@@ -197,8 +186,6 @@ def test__operational_area_permission__polygon_not_in_area(method, expected):
         )
     )
 
-    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(
-        request, mock_view, barrier_real
-    )
+    has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(request, mock_view, barrier_real)
 
     assert has_permission == expected

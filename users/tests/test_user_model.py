@@ -15,9 +15,7 @@ point_inside_area = Point(10.0, 10.0, 0.0, srid=settings.SRID)
 point_outside_area = Point(-10.0, -10.0, 0.0, srid=settings.SRID)
 
 
-@pytest.mark.parametrize(
-    "location,expected", ((point_inside_area, True), (point_outside_area, False))
-)
+@pytest.mark.parametrize("location,expected", ((point_inside_area, True), (point_outside_area, False)))
 @pytest.mark.django_db
 def test__user_operational_area__contains_location(location, expected):
     user = get_user()
@@ -55,9 +53,7 @@ def test__user_operational_area__bypass_operational_area(location):
     assert in_area
 
 
-@pytest.mark.parametrize(
-    "location,expected", ((point_inside_area, True), (point_outside_area, False))
-)
+@pytest.mark.parametrize("location,expected", ((point_inside_area, True), (point_outside_area, False)))
 @pytest.mark.django_db
 def test__user_group_operational_area__contains_location(location, expected):
     user = get_user()

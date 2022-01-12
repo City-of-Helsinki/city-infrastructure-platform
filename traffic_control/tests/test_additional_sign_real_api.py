@@ -32,9 +32,7 @@ def test__additional_sign_real__list(geo_format):
         asr = get_additional_sign_real(owner=get_owner(name_fi=owner_name))
         get_additional_sign_content_real(parent=asr)
 
-    response = client.get(
-        reverse("v1:additionalsignreal-list"), data={"geo_format": geo_format}
-    )
+    response = client.get(reverse("v1:additionalsignreal-list"), data={"geo_format": geo_format})
     response_data = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -55,15 +53,9 @@ def test__additional_sign_real__detail(geo_format):
     client = get_api_client()
     asr = get_additional_sign_real()
     ascr = get_additional_sign_content_real(parent=asr)
-    operation_1 = add_additional_sign_real_operation(
-        asr, operation_date=datetime.date(2020, 11, 5)
-    )
-    operation_2 = add_additional_sign_real_operation(
-        asr, operation_date=datetime.date(2020, 11, 15)
-    )
-    operation_3 = add_additional_sign_real_operation(
-        asr, operation_date=datetime.date(2020, 11, 10)
-    )
+    operation_1 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 5))
+    operation_2 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 15))
+    operation_3 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 10))
 
     response = client.get(
         reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}),
@@ -236,9 +228,7 @@ def test__additional_sign_real__create_with_incomplete_data(admin_user):
 
     if admin_user:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response_data == {
-            "content": [{"device_type": [_("This field is required.")]}]
-        }
+        assert response_data == {"content": [{"device_type": [_("This field is required.")]}]}
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -267,9 +257,7 @@ def test__additional_sign_real__update_without_content(admin_user):
 
     assert AdditionalSignContentReal.objects.count() == 1
 
-    response = client.put(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data
-    )
+    response = client.put(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data)
     response_data = response.json()
 
     if admin_user:
@@ -303,9 +291,7 @@ def test__additional_sign_real__update_with_content(admin_user):
         "content": [{"text": "New content", "order": 123, "device_type": str(dt.pk)}],
     }
 
-    response = client.put(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data
-    )
+    response = client.put(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data)
     response_data = response.json()
     asr.refresh_from_db()
 
@@ -318,9 +304,7 @@ def test__additional_sign_real__update_with_content(admin_user):
         assert content["id"] == str(new_ascr.pk)
         assert content["text"] == "New content"
         assert content["order"] == 123
-        assert not AdditionalSignContentReal.objects.filter(
-            pk=original_ascr.pk
-        ).exists()
+        assert not AdditionalSignContentReal.objects.filter(pk=original_ascr.pk).exists()
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert asr.owner != data["owner"]
@@ -355,9 +339,7 @@ def test__additional_sign_real__update_with_content_id(admin_user):
         ],
     }
 
-    response = client.put(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data
-    )
+    response = client.put(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data)
     response_data = response.json()
     asr.refresh_from_db()
     ascr.refresh_from_db()
@@ -387,9 +369,7 @@ def test__additional_sign_real__update_with_unrelated_content_id(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="A1234")
     asr = get_additional_sign_real()
-    ascr = get_additional_sign_content_real(
-        parent=get_additional_sign_real(location=test_point_2_3d)
-    )
+    ascr = get_additional_sign_content_real(parent=get_additional_sign_real(location=test_point_2_3d))
     traffic_sign_real = get_traffic_sign_real(device_type=dt)
     data = {
         "parent": traffic_sign_real.pk,
@@ -405,9 +385,7 @@ def test__additional_sign_real__update_with_unrelated_content_id(admin_user):
         ],
     }
 
-    response = client.put(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data
-    )
+    response = client.put(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data)
     response_data = response.json()
     asr.refresh_from_db()
     ascr.refresh_from_db()
@@ -416,14 +394,7 @@ def test__additional_sign_real__update_with_unrelated_content_id(admin_user):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response_data == {
             "content": [
-                {
-                    "id": [
-                        (
-                            "Updating content instances that do not belong to "
-                            "this additional sign is not allowed."
-                        )
-                    ]
-                }
+                {"id": [("Updating content instances that do not belong to " "this additional sign is not allowed.")]}
             ]
         }
         assert ascr.parent != asr
@@ -454,9 +425,7 @@ def test__additional_sign_real__partial_update_without_content(admin_user):
 
     assert AdditionalSignContentReal.objects.count() == 1
 
-    response = client.patch(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data
-    )
+    response = client.patch(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data)
     response_data = response.json()
     asr.refresh_from_db()
 
@@ -493,9 +462,7 @@ def test__additional_sign_real__partial_update_with_content(admin_user):
         "content": [{"text": "New content", "order": 123, "device_type": str(dt.pk)}],
     }
 
-    response = client.patch(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data
-    )
+    response = client.patch(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data)
     response_data = response.json()
     asr.refresh_from_db()
 
@@ -508,9 +475,7 @@ def test__additional_sign_real__partial_update_with_content(admin_user):
         assert content["id"] == str(new_ascr.pk)
         assert content["text"] == "New content"
         assert content["order"] == 123
-        assert not AdditionalSignContentReal.objects.filter(
-            pk=original_ascr.pk
-        ).exists()
+        assert not AdditionalSignContentReal.objects.filter(pk=original_ascr.pk).exists()
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert asr.owner != data["owner"]
@@ -545,9 +510,7 @@ def test__additional_sign_real__partial_update_with_content_id(admin_user):
         ],
     }
 
-    response = client.patch(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data
-    )
+    response = client.patch(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data)
     response_data = response.json()
     asr.refresh_from_db()
     ascr.refresh_from_db()
@@ -577,9 +540,7 @@ def test__additional_sign_real__partial_update_with_unrelated_content_id(admin_u
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="A1234")
     asr = get_additional_sign_real()
-    ascr = get_additional_sign_content_real(
-        parent=get_additional_sign_real(location=test_point_2_3d)
-    )
+    ascr = get_additional_sign_content_real(parent=get_additional_sign_real(location=test_point_2_3d))
     traffic_sign_real = get_traffic_sign_real(device_type=dt)
     data = {
         "parent": traffic_sign_real.pk,
@@ -595,9 +556,7 @@ def test__additional_sign_real__partial_update_with_unrelated_content_id(admin_u
         ],
     }
 
-    response = client.patch(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data
-    )
+    response = client.patch(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}), data=data)
     response_data = response.json()
     asr.refresh_from_db()
     ascr.refresh_from_db()
@@ -606,14 +565,7 @@ def test__additional_sign_real__partial_update_with_unrelated_content_id(admin_u
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response_data == {
             "content": [
-                {
-                    "id": [
-                        (
-                            "Updating content instances that do not belong to "
-                            "this additional sign is not allowed."
-                        )
-                    ]
-                }
+                {"id": [("Updating content instances that do not belong to " "this additional sign is not allowed.")]}
             ]
         }
         assert ascr.parent != asr
@@ -630,9 +582,7 @@ def test__additional_sign_real__delete(admin_user):
     client = get_api_client(user=user)
     asr = get_additional_sign_real()
 
-    response = client.delete(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk})
-    )
+    response = client.delete(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}))
 
     if admin_user:
         assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -655,9 +605,7 @@ def test__additional_sign_real__soft_deleted_get_404_response():
     asr = get_additional_sign_real()
     asr.soft_delete(user)
 
-    response = client.get(
-        reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk})
-    )
+    response = client.get(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -690,9 +638,7 @@ def test__additional_sign_content_real__detail():
     dt = get_traffic_control_device_type(code="H17.1")
     ascr = get_additional_sign_content_real(device_type=dt)
 
-    response = client.get(
-        reverse("v1:additionalsigncontentreal-detail", kwargs={"pk": ascr.pk})
-    )
+    response = client.get(reverse("v1:additionalsigncontentreal-detail", kwargs={"pk": ascr.pk}))
     response_data = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -776,9 +722,7 @@ def test__additional_sign_content_real__delete(admin_user):
     client = get_api_client(user=user)
     ascr = get_additional_sign_content_real()
 
-    response = client.delete(
-        reverse("v1:additionalsigncontentreal-detail", kwargs={"pk": ascr.pk})
-    )
+    response = client.delete(reverse("v1:additionalsigncontentreal-detail", kwargs={"pk": ascr.pk}))
 
     if admin_user:
         assert response.status_code == status.HTTP_204_NO_CONTENT

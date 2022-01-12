@@ -6,11 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from ..forms import PlanRelationsForm
-from ..mixins import (
-    EnumChoiceValueDisplayAdminMixin,
-    SoftDeleteAdminMixin,
-    UserStampedAdminMixin,
-)
+from ..mixins import EnumChoiceValueDisplayAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
 from ..models import Plan
 from .audit_log import AuditLogHistoryAdmin
 
@@ -98,9 +94,7 @@ class PlanAdmin(
 
             if "_save" in request.POST and not form.errors:
                 # "Save" button was pressed. Redirect to admin plan list view.
-                return HttpResponseRedirect(
-                    reverse("admin:traffic_control_plan_changelist")
-                )
+                return HttpResponseRedirect(reverse("admin:traffic_control_plan_changelist"))
 
             context["form"] = form
 

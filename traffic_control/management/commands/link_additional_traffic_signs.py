@@ -24,9 +24,7 @@ class Command(BaseCommand):
         # The legacy code (type column from shapefile data) of the traffic signs follows
         # certain patterns. The legacy code of additional traffic signs always starts with
         # 8. See details with: https://vayla.fi/web/en/road-network/traffic-signs/additional-panels
-        additional_sign_qs = AdditionalSignReal.objects.active().filter(
-            parent__isnull=True
-        )
+        additional_sign_qs = AdditionalSignReal.objects.active().filter(parent__isnull=True)
         for additional_sign in additional_sign_qs:
             # find nearby main traffic sign candidates that have the same
             # mount type as target additional traffic sign
@@ -61,7 +59,5 @@ class Command(BaseCommand):
                 count += 1
 
         self.stdout.write(
-            "Linking additional traffic signs completed. {0} additional traffic signs linked.".format(
-                count
-            )
+            "Linking additional traffic signs completed. {0} additional traffic signs linked.".format(count)
         )

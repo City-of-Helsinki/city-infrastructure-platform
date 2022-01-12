@@ -11,9 +11,7 @@ class Command(BaseCommand):
     help = "Import traffic control device types from a csv file"
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "filename", help="Path to the traffic control device types csv file"
-        )
+        parser.add_argument("filename", help="Path to the traffic control device types csv file")
 
     def handle(self, *args, **options):
         filename = options["filename"]
@@ -56,20 +54,12 @@ class Command(BaseCommand):
                         setattr(device_type, key, value)
                     if not device_type.target_model:
                         # assign target_model when the target_model is None in current device type
-                        device_type.target_model = (
-                            DeviceTypeTargetModel[target_model.upper()]
-                            if target_model
-                            else ""
-                        )
+                        device_type.target_model = DeviceTypeTargetModel[target_model.upper()] if target_model else ""
                     device_type.save(validate_target_model_change=False)
                 except TrafficControlDeviceType.DoesNotExist:
                     defaults["code"] = code
                     # assign target_model when creating new traffic control device types
-                    defaults["target_model"] = (
-                        DeviceTypeTargetModel[target_model.upper()]
-                        if target_model
-                        else ""
-                    )
+                    defaults["target_model"] = DeviceTypeTargetModel[target_model.upper()] if target_model else ""
                     TrafficControlDeviceType.objects.create(**defaults)
 
                 count += 1

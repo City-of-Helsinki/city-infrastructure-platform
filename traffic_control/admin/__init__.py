@@ -2,20 +2,9 @@
 from .additional_sign import AdditionalSignPlanAdmin, AdditionalSignRealAdmin
 from .affect_area import CoverageAreaAdmin, CoverageAreaCategoryAdmin
 from .audit_log import AuditLogHistoryAdmin
-from .barrier import (
-    BarrierPlanAdmin,
-    BarrierPlanFileInline,
-    BarrierRealAdmin,
-    BarrierRealFileInline,
-)
+from .barrier import BarrierPlanAdmin, BarrierPlanFileInline, BarrierRealAdmin, BarrierRealFileInline
 from .common import OperationTypeAdmin
-from .mount import (
-    MountPlanAdmin,
-    MountPlanFileInline,
-    MountRealAdmin,
-    MountRealFileInline,
-    PortalTypeAdmin,
-)
+from .mount import MountPlanAdmin, MountPlanFileInline, MountRealAdmin, MountRealFileInline, PortalTypeAdmin
 from .operational_area import GroupAdmin, OperationalAreaAdmin
 from .owner import OwnerAdmin
 from .plan import PlanAdmin
@@ -25,12 +14,7 @@ from .road_marking import (
     RoadMarkingRealAdmin,
     RoadMarkingRealFileInline,
 )
-from .signpost import (
-    SignpostPlanAdmin,
-    SignpostPlanFileInline,
-    SignpostRealAdmin,
-    SignpostRealFileInline,
-)
+from .signpost import SignpostPlanAdmin, SignpostPlanFileInline, SignpostRealAdmin, SignpostRealFileInline
 from .traffic_light import (
     TrafficLightPlanAdmin,
     TrafficLightPlanFileInline,

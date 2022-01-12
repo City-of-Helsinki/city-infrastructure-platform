@@ -2,13 +2,7 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from ..models import (
-    SignpostPlan,
-    SignpostPlanFile,
-    SignpostReal,
-    SignpostRealFile,
-    TrafficControlDeviceType,
-)
+from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile, TrafficControlDeviceType
 from ..models.common import DeviceTypeTargetModel
 from ..models.signpost import SignpostRealOperation
 
@@ -22,9 +16,7 @@ class SignpostPlanFileSerializer(serializers.ModelSerializer):
 class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = SignpostPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.SIGNPOST
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST)
     )
 
     class Meta:
@@ -59,13 +51,9 @@ class SignpostRealOperationSerializer(serializers.ModelSerializer):
 class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = SignpostRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.SIGNPOST
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST)
     )
-    operations = SignpostRealOperationSerializer(
-        many=True, required=False, read_only=True
-    )
+    operations = SignpostRealOperationSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = SignpostReal

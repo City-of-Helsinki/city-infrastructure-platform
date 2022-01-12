@@ -92,10 +92,7 @@ class NestedAdditionalSignContentSerializerMixin:
             parent_pk = self.context["view"].kwargs["pk"]
 
             if str(parent.pk) != parent_pk:
-                message = (
-                    "Updating content instances that do not belong to this additional sign "
-                    "is not allowed."
-                )
+                message = "Updating content instances that do not belong to this additional sign " "is not allowed."
                 raise serializers.ValidationError(message)
 
         return value
@@ -103,9 +100,7 @@ class NestedAdditionalSignContentSerializerMixin:
 
 class AdditionalSignContentPlanSerializer(serializers.ModelSerializer):
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.ADDITIONAL_SIGN
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN)
     )
 
     class Meta:
@@ -122,9 +117,7 @@ class NestedAdditionalSignContentPlanSerializer(
 ):
     id = serializers.UUIDField(required=False)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.ADDITIONAL_SIGN
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN)
     )
 
     class Meta:
@@ -158,9 +151,7 @@ class AdditionalSignPlanGeoJSONSerializer(AdditionalSignPlanSerializer):
 
 class AdditionalSignContentRealSerializer(serializers.ModelSerializer):
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.ADDITIONAL_SIGN
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN)
     )
 
     class Meta:
@@ -177,9 +168,7 @@ class NestedAdditionalSignContentRealSerializer(
 ):
     id = serializers.UUIDField(required=False)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.ADDITIONAL_SIGN
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN)
     )
 
     class Meta:
@@ -202,9 +191,7 @@ class AdditionalSignRealSerializer(
     serializers.ModelSerializer,
 ):
     content = NestedAdditionalSignContentRealSerializer(many=True, required=False)
-    operations = AdditionalSignRealOperationSerializer(
-        many=True, required=False, read_only=True
-    )
+    operations = AdditionalSignRealOperationSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = AdditionalSignReal

@@ -8,12 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import (
-    SoftDeleteModel,
-    SourceControlModel,
-    UpdatePlanLocationMixin,
-    UserControlModel,
-)
+from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -87,20 +82,14 @@ class LocationSpecifier(Enum):
         LEFT_SIDE_OF_LANE_OR_ROAD = _("Left side of lane or road")
 
 
-class RoadMarkingPlan(
-    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
-):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+class RoadMarkingPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device Type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
     )
     line_direction = EnumField(
         LineDirection,
@@ -117,9 +106,7 @@ class RoadMarkingPlan(
         blank=True,
         null=True,
     )
-    value = models.CharField(
-        _("Road Marking value"), max_length=254, blank=True, null=True
-    )
+    value = models.CharField(_("Road Marking value"), max_length=254, blank=True, null=True)
     size = models.CharField(_("Size"), max_length=254, blank=True, null=True)
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     color = EnumIntegerField(
@@ -129,12 +116,8 @@ class RoadMarkingPlan(
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     traffic_sign_plan = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Traffic Sign Plan"),
@@ -150,15 +133,9 @@ class RoadMarkingPlan(
         blank=True,
         null=True,
     )
-    type_specifier = models.CharField(
-        _("Type specifier"), max_length=254, blank=True, null=True
-    )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"), blank=True, null=True
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"), blank=True, null=True
-    )
+    type_specifier = models.CharField(_("Type specifier"), max_length=254, blank=True, null=True)
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
     owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
@@ -167,13 +144,9 @@ class RoadMarkingPlan(
         on_delete=models.PROTECT,
     )
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -207,31 +180,20 @@ class RoadMarkingPlan(
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.ROAD_MARKING):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for road markings'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for road markings')
 
         super().save(*args, **kwargs)
 
-        if (
-            self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE
-            and self.road_name == ""
-        ):
+        if self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE and self.road_name == "":
             raise ValidationError(
                 f'Road name is required for "{TrafficControlDeviceTypeType.TRANSVERSE.value}" road marking'
             )
 
 
 class RoadMarkingPlanFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="planfiles/road_marking/"
-    )
-    road_marking_plan = models.ForeignKey(
-        RoadMarkingPlan, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/road_marking/")
+    road_marking_plan = models.ForeignKey(RoadMarkingPlan, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "road_marking_plan_file"
@@ -243,9 +205,7 @@ class RoadMarkingPlanFile(models.Model):
 
 
 class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     road_marking_plan = models.ForeignKey(
         RoadMarkingPlan,
         verbose_name=_("Road Marking Plan"),
@@ -258,9 +218,7 @@ class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
     )
     line_direction = EnumField(
         LineDirection,
@@ -277,9 +235,7 @@ class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    value = models.CharField(
-        _("Road Marking value"), max_length=254, blank=True, null=True
-    )
+    value = models.CharField(_("Road Marking value"), max_length=254, blank=True, null=True)
     size = models.CharField(_("Size"), max_length=254, blank=True, null=True)
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     color = EnumIntegerField(
@@ -298,12 +254,8 @@ class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     traffic_sign_real = models.ForeignKey(
         TrafficSignReal,
         verbose_name=_("Traffic Sign Real"),
@@ -321,15 +273,9 @@ class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    type_specifier = models.CharField(
-        _("Type specifier"), max_length=254, blank=True, null=True
-    )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"), blank=True, null=True
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"), blank=True, null=True
-    )
+    type_specifier = models.CharField(_("Type specifier"), max_length=254, blank=True, null=True)
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
     owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
@@ -338,13 +284,9 @@ class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         on_delete=models.PROTECT,
     )
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -378,14 +320,9 @@ class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.ROAD_MARKING):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for road markings'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for road markings')
 
-        if (
-            self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE
-            and self.road_name == ""
-        ):
+        if self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE and self.road_name == "":
             raise ValidationError(
                 f'Road name is required for "{TrafficControlDeviceTypeType.TRANSVERSE.value}" road marking'
             )
@@ -415,15 +352,9 @@ class RoadMarkingRealOperation(OperationBase):
 
 
 class RoadMarkingRealFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="realfiles/road_marking/"
-    )
-    road_marking_real = models.ForeignKey(
-        RoadMarkingReal, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/road_marking/")
+    road_marking_real = models.ForeignKey(RoadMarkingReal, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "road_marking_real_file"

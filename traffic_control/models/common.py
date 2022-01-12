@@ -186,9 +186,7 @@ class TrafficControlDeviceTypeType(Enum):
 
 
 class Owner(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     name_fi = models.CharField(verbose_name=_("Name (fi)"), max_length=254)
     name_en = models.CharField(verbose_name=_("Name (en)"), max_length=254)
 
@@ -216,29 +214,19 @@ TRAFFIC_SIGN_TYPE_MAP = {
     "H": _("Additional sign"),
     "I": _("Other road sign"),
 }
-TRAFFIC_SIGN_TYPE_CHOICES = tuple(
-    (key, value) for key, value in TRAFFIC_SIGN_TYPE_MAP.items()
-)
+TRAFFIC_SIGN_TYPE_CHOICES = tuple((key, value) for key, value in TRAFFIC_SIGN_TYPE_MAP.items())
 
 
 class TrafficControlDeviceType(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     code = models.CharField(_("Code"), unique=True, max_length=32)
     icon = models.CharField(_("Icon"), max_length=100, blank=True)
-    description = models.CharField(
-        _("Description"), max_length=254, blank=True, null=True
-    )
+    description = models.CharField(_("Description"), max_length=254, blank=True, null=True)
     value = models.CharField(_("Value"), max_length=50, blank=True)
     unit = models.CharField(_("Unit"), max_length=50, blank=True)
     size = models.CharField(_("Size"), max_length=50, blank=True)
-    legacy_code = models.CharField(
-        _("Legacy code"), max_length=32, blank=True, null=True
-    )
-    legacy_description = models.CharField(
-        _("Legacy description"), max_length=254, blank=True, null=True
-    )
+    legacy_code = models.CharField(_("Legacy code"), max_length=32, blank=True, null=True)
+    legacy_description = models.CharField(_("Legacy description"), max_length=254, blank=True, null=True)
     target_model = EnumField(
         DeviceTypeTargetModel,
         verbose_name=_("Target data model"),
@@ -270,9 +258,7 @@ class TrafficControlDeviceType(models.Model):
 
     def save(self, validate_target_model_change=True, *args, **kwargs):
         if self.pk:
-            self.validate_change_target_model(
-                self.target_model, raise_exception=validate_target_model_change
-            )
+            self.validate_change_target_model(self.target_model, raise_exception=validate_target_model_change)
 
         super().save(*args, **kwargs)
 
@@ -296,14 +282,10 @@ class TrafficControlDeviceType(models.Model):
             "additionalsigncontentreal",
         ]
         ignore_prefix = target_type.value.replace("_", "")
-        relevant_relations = [
-            relation for relation in relations if not relation.startswith(ignore_prefix)
-        ]
+        relevant_relations = [relation for relation in relations if not relation.startswith(ignore_prefix)]
 
         related_pks = []
-        queryset = TrafficControlDeviceType.objects.filter(pk=self.pk).values_list(
-            *relevant_relations
-        )
+        queryset = TrafficControlDeviceType.objects.filter(pk=self.pk).values_list(*relevant_relations)
         if queryset.exists():
             related_pks = queryset.first()
 
@@ -372,12 +354,8 @@ class OperationType(models.Model):
 
 class OperationBase(UserControlModel):
     operation_date = models.DateField(_("Operation date"))
-    straightness_value = models.FloatField(
-        _("Straightness value"), null=True, blank=True
-    )
-    quality_requirements_fulfilled = models.BooleanField(
-        _("Quality requirements fulfilled"), default=False
-    )
+    straightness_value = models.FloatField(_("Straightness value"), null=True, blank=True)
+    quality_requirements_fulfilled = models.BooleanField(_("Quality requirements fulfilled"), default=False)
 
     class Meta:
         abstract = True

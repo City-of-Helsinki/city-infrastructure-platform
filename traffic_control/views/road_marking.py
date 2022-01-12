@@ -4,18 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
 from ..filters import RoadMarkingPlanFilterSet, RoadMarkingRealFilterSet
-from ..models import (
-    RoadMarkingPlan,
-    RoadMarkingPlanFile,
-    RoadMarkingReal,
-    RoadMarkingRealFile,
-)
-from ..schema import (
-    file_uuid_parameter,
-    FileUploadSchema,
-    location_parameter,
-    MultiFileUploadSchema,
-)
+from ..models import RoadMarkingPlan, RoadMarkingPlanFile, RoadMarkingReal, RoadMarkingRealFile
+from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from ..serializers.road_marking import (
     RoadMarkingPlanFileSerializer,
     RoadMarkingPlanGeoJSONSerializer,
@@ -42,27 +32,19 @@ __all__ = ("RoadMarkingPlanViewSet", "RoadMarkingRealViewSet")
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single RoadMarking Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single RoadMarking Plan"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(
-        operation_description="Update single RoadMarking Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Update single RoadMarking Plan"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single RoadMarking Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single RoadMarking Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single RoadMarking Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single RoadMarking Plan"),
 )
 class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -129,27 +111,19 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single RoadMarking Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single RoadMarking Real"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(
-        operation_description="Update single RoadMarking Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Update single RoadMarking Real"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single RoadMarking Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single RoadMarking Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single RoadMarking Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single RoadMarking Real"),
 )
 class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {

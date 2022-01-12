@@ -37,9 +37,7 @@ def test_filter_road_markings_plans_location(location, location_query, expected)
     api_client = get_api_client()
 
     road_marking_plan = get_road_marking_plan(location)
-    response = api_client.get(
-        reverse("v1:roadmarkingplan-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:roadmarkingplan-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -61,9 +59,7 @@ def test_filter_error_road_markings_plans_location(location, location_query, exp
     api_client = get_api_client()
 
     get_road_marking_plan(location)
-    response = api_client.get(
-        reverse("v1:roadmarkingplan-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:roadmarkingplan-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -77,9 +73,7 @@ def test__road_marking_plan__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     road_marking_plan = get_road_marking_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -109,9 +103,7 @@ def test__road_marking_plan__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     road_marking_plan = get_road_marking_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -149,27 +141,21 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_road_marking_plan()
-        response = self.client.get(
-            reverse("v1:roadmarkingplan-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:roadmarkingplan-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             road_marking_plan = RoadMarkingPlan.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(road_marking_plan.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(road_marking_plan.location.json))
 
     def test_get_road_marking_detail(self):
         """
         Ensure we can get one road marking plan object.
         """
         road_marking = self.__create_test_road_marking_plan()
-        response = self.client.get(
-            reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id})
-        )
+        response = self.client.get(reverse("v1:roadmarkingplan-detail", kwargs={"pk": road_marking.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(road_marking.id))
         self.assertEqual(road_marking.location.ewkt, response.data.get("location"))
@@ -200,9 +186,7 @@ class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
             "source_name": "test-source",
             "source_id": 1,
         }
-        response = self.client.post(
-            reverse("v1:roadmarkingplan-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:roadmarkingplan-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(RoadMarkingPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -292,9 +276,7 @@ def test_filter_road_markings_reals_location(location, location_query, expected)
     api_client = get_api_client()
 
     road_marking_real = get_road_marking_real(location)
-    response = api_client.get(
-        reverse("v1:roadmarkingreal-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:roadmarkingreal-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -316,9 +298,7 @@ def test_filter_error_road_markings_reals_location(location, location_query, exp
     api_client = get_api_client()
 
     get_road_marking_real(location)
-    response = api_client.get(
-        reverse("v1:roadmarkingreal-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:roadmarkingreal-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -332,9 +312,7 @@ def test__road_marking_real__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     road_marking_real = get_road_marking_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -364,9 +342,7 @@ def test__road_marking_real__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     road_marking_real = get_road_marking_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -404,44 +380,30 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_road_marking_real()
-        response = self.client.get(
-            reverse("v1:roadmarkingreal-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:roadmarkingreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             road_marking_plan = RoadMarkingReal.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(road_marking_plan.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(road_marking_plan.location.json))
 
     def test_get_road_marking_real_detail(self):
         """
         Ensure we can get one real road marking object.
         """
         road_marking_real = self.__create_test_road_marking_real()
-        operation_1 = add_road_marking_real_operation(
-            road_marking_real, operation_date=datetime.date(2020, 11, 5)
-        )
-        operation_2 = add_road_marking_real_operation(
-            road_marking_real, operation_date=datetime.date(2020, 11, 15)
-        )
-        operation_3 = add_road_marking_real_operation(
-            road_marking_real, operation_date=datetime.date(2020, 11, 10)
-        )
-        response = self.client.get(
-            reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id})
-        )
+        operation_1 = add_road_marking_real_operation(road_marking_real, operation_date=datetime.date(2020, 11, 5))
+        operation_2 = add_road_marking_real_operation(road_marking_real, operation_date=datetime.date(2020, 11, 15))
+        operation_3 = add_road_marking_real_operation(road_marking_real, operation_date=datetime.date(2020, 11, 10))
+        response = self.client.get(reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(road_marking_real.id))
         self.assertEqual(road_marking_real.location.ewkt, response.data.get("location"))
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
-        self.assertEqual(
-            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
-        )
+        self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
 
     def test_get_road_marking_real_detail__geojson(self):
         """
@@ -470,9 +432,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             "source_name": "test-source",
             "source_id": 1,
         }
-        response = self.client.post(
-            reverse("v1:roadmarkingreal-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:roadmarkingreal-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(RoadMarkingReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -525,9 +485,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(RoadMarkingReal.objects.count(), 1)
-        deleted_road_marking_real = RoadMarkingReal.objects.get(
-            id=str(road_marking_real.id)
-        )
+        deleted_road_marking_real = RoadMarkingReal.objects.get(id=str(road_marking_real.id))
         self.assertEqual(deleted_road_marking_real.id, road_marking_real.id)
         self.assertFalse(deleted_road_marking_real.is_active)
         self.assertEqual(deleted_road_marking_real.deleted_by, self.user)

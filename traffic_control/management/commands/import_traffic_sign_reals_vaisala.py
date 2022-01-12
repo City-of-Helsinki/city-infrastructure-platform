@@ -20,9 +20,7 @@ class Command(BaseCommand):
     step = 1000
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "filename", help="Path to the vaisala traffic sign reals csv file"
-        )
+        parser.add_argument("filename", help="Path to the vaisala traffic sign reals csv file")
 
     def handle(self, *args, **options):
         filename = options["filename"]
@@ -36,14 +34,10 @@ class Command(BaseCommand):
         with open(filename, encoding="utf-8-sig") as f:
             csv_reader = csv.DictReader(f, delimiter=",")
             for row in csv_reader:
-                location = Point(
-                    float(row["longitude"]), float(row["latitude"]), 0, srid=SOURCE_SRID
-                )
+                location = Point(float(row["longitude"]), float(row["latitude"]), 0, srid=SOURCE_SRID)
                 location.transform(settings.SRID)
                 is_additional_sign = row["code"].strip().startswith("8")
-                traffic_sign_model = (
-                    AdditionalSignReal if is_additional_sign else TrafficSignReal
-                )
+                traffic_sign_model = AdditionalSignReal if is_additional_sign else TrafficSignReal
                 traffic_sign, _ = traffic_sign_model.objects.update_or_create(
                     source_name=SOURCE_NAME,
                     source_id=row["id"],

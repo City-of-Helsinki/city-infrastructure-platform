@@ -55,25 +55,17 @@ class SignpostPlan(
     SoftDeleteModel,
     UserControlModel,
 ):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     direction = models.IntegerField(_("Direction"), default=0)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)),
     )
-    value = models.DecimalField(
-        _("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True
-    )
+    value = models.DecimalField(_("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
     parent = models.ForeignKey(
         "self",
@@ -96,12 +88,8 @@ class SignpostPlan(
         null=True,
         on_delete=models.SET_NULL,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -133,32 +121,16 @@ class SignpostPlan(
         blank=True,
         null=True,
     )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"), blank=True, null=True
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"), blank=True, null=True
-    )
-    attachment_class = models.CharField(
-        _("Attachment class"), max_length=254, blank=True, null=True
-    )
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
+    attachment_class = models.CharField(_("Attachment class"), max_length=254, blank=True, null=True)
     target_id = models.CharField(_("Target ID"), max_length=254, blank=True, null=True)
-    target_txt = models.CharField(
-        _("Target txt"), max_length=254, blank=True, null=True
-    )
-    responsible_entity = models.CharField(
-        _("Responsible entity"), max_length=254, blank=True, null=True
-    )
-    electric_maintainer = models.CharField(
-        _("Electric maintainer"), max_length=254, blank=True, null=True
-    )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    target_txt = models.CharField(_("Target txt"), max_length=254, blank=True, null=True)
+    responsible_entity = models.CharField(_("Responsible entity"), max_length=254, blank=True, null=True)
+    electric_maintainer = models.CharField(_("Electric maintainer"), max_length=254, blank=True, null=True)
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -186,23 +158,15 @@ class SignpostPlan(
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.SIGNPOST):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for signposts'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for signposts')
 
         super().save(*args, **kwargs)
 
 
 class SignpostPlanFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="planfiles/signpost/"
-    )
-    signpost_plan = models.ForeignKey(
-        SignpostPlan, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/signpost/")
+    signpost_plan = models.ForeignKey(SignpostPlan, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "signpost_plan_file"
@@ -219,9 +183,7 @@ class SignpostReal(
     SoftDeleteModel,
     UserControlModel,
 ):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     signpost_plan = models.ForeignKey(
         SignpostPlan,
         verbose_name=_("Signpost Plan"),
@@ -230,21 +192,15 @@ class SignpostReal(
         null=True,
     )
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     direction = models.IntegerField(_("Direction"), default=0)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)),
     )
-    value = models.DecimalField(
-        _("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True
-    )
+    value = models.DecimalField(_("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
     parent = models.ForeignKey(
         "self",
@@ -276,12 +232,8 @@ class SignpostReal(
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     condition = EnumIntegerField(
         Condition,
         verbose_name=_("Condition"),
@@ -313,38 +265,18 @@ class SignpostReal(
         null=True,
     )
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"), blank=True, null=True
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"), blank=True, null=True
-    )
-    organization = models.CharField(
-        _("Organization"), max_length=254, blank=True, null=True
-    )
-    manufacturer = models.CharField(
-        _("Manufacturer"), max_length=254, blank=True, null=True
-    )
-    attachment_class = models.CharField(
-        _("Attachment class"), max_length=254, blank=True, null=True
-    )
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
+    organization = models.CharField(_("Organization"), max_length=254, blank=True, null=True)
+    manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
+    attachment_class = models.CharField(_("Attachment class"), max_length=254, blank=True, null=True)
     target_id = models.CharField(_("Target ID"), max_length=254, blank=True, null=True)
-    target_txt = models.CharField(
-        _("Target txt"), max_length=254, blank=True, null=True
-    )
-    responsible_entity = models.CharField(
-        _("Responsible entity"), max_length=254, blank=True, null=True
-    )
-    electric_maintainer = models.CharField(
-        _("Electric maintainer"), max_length=254, blank=True, null=True
-    )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    target_txt = models.CharField(_("Target txt"), max_length=254, blank=True, null=True)
+    responsible_entity = models.CharField(_("Responsible entity"), max_length=254, blank=True, null=True)
+    electric_maintainer = models.CharField(_("Electric maintainer"), max_length=254, blank=True, null=True)
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -372,9 +304,7 @@ class SignpostReal(
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.SIGNPOST):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for signposts'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for signposts')
 
         super().save(*args, **kwargs)
 
@@ -401,15 +331,9 @@ class SignpostRealOperation(OperationBase):
 
 
 class SignpostRealFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="realfiles/signpost/"
-    )
-    signpost_real = models.ForeignKey(
-        SignpostReal, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/signpost/")
+    signpost_real = models.ForeignKey(SignpostReal, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "signpost_real_file"

@@ -19,14 +19,10 @@ class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TrafficLightPlanSerializer(
-    EnumSupportSerializerMixin, serializers.ModelSerializer
-):
+class TrafficLightPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = TrafficLightPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.TRAFFIC_LIGHT
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT)
     )
 
     class Meta:
@@ -58,18 +54,12 @@ class TrafficLightRealOperationSerializer(serializers.ModelSerializer):
         fields = ("id", "operation_type", "operation_date")
 
 
-class TrafficLightRealSerializer(
-    EnumSupportSerializerMixin, serializers.ModelSerializer
-):
+class TrafficLightRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = TrafficLightRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.TRAFFIC_LIGHT
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT)
     )
-    operations = TrafficLightRealOperationSerializer(
-        many=True, required=False, read_only=True
-    )
+    operations = TrafficLightRealOperationSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = TrafficLightReal

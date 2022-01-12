@@ -21,9 +21,7 @@ class PortalTypeTests(APITestCase):
         self.client.force_login(self.user)
         count = 3
         for i in range(count):
-            PortalType.objects.create(
-                structure="Test structure", build_type="Test build type", model=i
-            )
+            PortalType.objects.create(structure="Test structure", build_type="Test build type", model=i)
         response = self.client.get(reverse("v1:portaltype-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -35,9 +33,7 @@ class PortalTypeTests(APITestCase):
         self.client.force_login(self.admin_user)
         count = 3
         for i in range(count):
-            PortalType.objects.create(
-                structure="Test structure", build_type="Test build type", model=i
-            )
+            PortalType.objects.create(structure="Test structure", build_type="Test build type", model=i)
         response = self.client.get(reverse("v1:portaltype-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -48,9 +44,7 @@ class PortalTypeTests(APITestCase):
         """
         self.client.force_login(self.user)
         portal_type = self.__create_test_portal_type()
-        response = self.client.get(
-            reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id})
-        )
+        response = self.client.get(reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(portal_type.id))
 
@@ -60,9 +54,7 @@ class PortalTypeTests(APITestCase):
         """
         self.client.force_login(self.admin_user)
         portal_type = self.__create_test_portal_type()
-        response = self.client.get(
-            reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id})
-        )
+        response = self.client.get(reverse("v1:portaltype-detail", kwargs={"pk": portal_type.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(portal_type.id))
 
@@ -164,6 +156,4 @@ class PortalTypeTests(APITestCase):
 
     @staticmethod
     def __create_test_portal_type():
-        return PortalType.objects.create(
-            structure="Test structure", build_type="Test build type", model="Test model"
-        )
+        return PortalType.objects.create(structure="Test structure", build_type="Test build type", model="Test model")

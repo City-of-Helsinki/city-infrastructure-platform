@@ -24,9 +24,7 @@ class Command(BaseCommand):
             next(csv_reader, None)  # skip header
             for row in csv_reader:
                 structure, build_type, model = row
-                _, created = PortalType.objects.get_or_create(
-                    structure=structure, build_type=build_type, model=model
-                )
+                _, created = PortalType.objects.get_or_create(structure=structure, build_type=build_type, model=model)
                 if created:
                     count += 1
         self.stdout.write(f"{count} portal types are imported")

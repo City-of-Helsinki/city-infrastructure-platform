@@ -39,15 +39,11 @@ from traffic_control.tests.factories import (
     ),
 )
 @pytest.mark.django_db
-def test__traffic_control_device_type__target_model__restricts_relations(
-    allowed_value, factory
-):
+def test__traffic_control_device_type__target_model__restricts_relations(allowed_value, factory):
     related_obj = factory()
 
     for choice in DeviceTypeTargetModel:
-        device_type = get_traffic_control_device_type(
-            code=get_random_string(), target_model=choice
-        )
+        device_type = get_traffic_control_device_type(code=get_random_string(), target_model=choice)
 
         if choice == allowed_value:
             related_obj.device_type = device_type
@@ -65,9 +61,7 @@ def _get_additional_sign_content_plan(device_type):
     Get AdditionalSignContentPlan instance and set its related models
     interfering device_types to universal one.
     """
-    universal_device_type = get_traffic_control_device_type(
-        code="123", target_model=None
-    )
+    universal_device_type = get_traffic_control_device_type(code="123", target_model=None)
     obj = get_additional_sign_content_plan(device_type=device_type)
     obj.parent.parent.device_type = universal_device_type
     obj.parent.parent.save()
@@ -79,9 +73,7 @@ def _get_additional_sign_content_real(device_type):
     Get AdditionalSignContentReal instance and set its related models
     interfering device_types to universal one.
     """
-    universal_device_type = get_traffic_control_device_type(
-        code="123", target_model=None
-    )
+    universal_device_type = get_traffic_control_device_type(code="123", target_model=None)
     obj = get_additional_sign_content_real(device_type=device_type)
     obj.parent.parent.device_type = universal_device_type
     obj.parent.parent.save()
@@ -108,9 +100,7 @@ def _get_additional_sign_content_real(device_type):
     ),
 )
 @pytest.mark.django_db
-def test__traffic_control_device_type__target_model__update_is_valid(
-    new_target_model, factory
-):
+def test__traffic_control_device_type__target_model__update_is_valid(new_target_model, factory):
     device_type = get_traffic_control_device_type()
     factory(device_type=device_type)
 
@@ -139,9 +129,7 @@ def test__traffic_control_device_type__target_model__update_is_valid(
     ),
 )
 @pytest.mark.django_db
-def test__traffic_control_device_type__target_model__update_is_invalid(
-    new_target_model, factory
-):
+def test__traffic_control_device_type__target_model__update_is_invalid(new_target_model, factory):
     device_type = get_traffic_control_device_type()
     factory(device_type=device_type)
 

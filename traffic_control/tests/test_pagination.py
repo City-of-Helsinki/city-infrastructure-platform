@@ -21,9 +21,7 @@ def test_limit_offset_pagination():
     tsc_4 = get_traffic_control_device_type(code="A4", description="qux")
     tsc_5 = get_traffic_control_device_type(code="A5", description="quux")
 
-    response = api_client.get(
-        reverse("v1:trafficcontroldevicetype-list"), {"limit": 2, "offset": 2}
-    )
+    response = api_client.get(reverse("v1:trafficcontroldevicetype-list"), {"limit": 2, "offset": 2})
 
     result_pks = [r["id"] for r in response.data["results"]]
     assert response.data["count"] == 5

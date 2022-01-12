@@ -29,9 +29,7 @@ def test__additional_sign_plan__list(geo_format):
         asp = get_additional_sign_plan(owner=get_owner(name_fi=owner_name))
         get_additional_sign_content_plan(parent=asp)
 
-    response = client.get(
-        reverse("v1:additionalsignplan-list"), data={"geo_format": geo_format}
-    )
+    response = client.get(reverse("v1:additionalsignplan-list"), data={"geo_format": geo_format})
     response_data = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -222,9 +220,7 @@ def test__additional_sign_plan__create_with_incomplete_data(admin_user):
 
     if admin_user:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response_data == {
-            "content": [{"device_type": [_("This field is required.")]}]
-        }
+        assert response_data == {"content": [{"device_type": [_("This field is required.")]}]}
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -253,9 +249,7 @@ def test__additional_sign_plan__update_without_content(admin_user):
 
     assert AdditionalSignContentPlan.objects.count() == 1
 
-    response = client.put(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
-    )
+    response = client.put(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
     response_data = response.json()
 
     if admin_user:
@@ -289,9 +283,7 @@ def test__additional_sign_plan__update_with_content(admin_user):
         "content": [{"text": "New content", "order": 123, "device_type": str(dt.pk)}],
     }
 
-    response = client.put(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
-    )
+    response = client.put(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
     response_data = response.json()
     asp.refresh_from_db()
 
@@ -304,9 +296,7 @@ def test__additional_sign_plan__update_with_content(admin_user):
         assert content["id"] == str(new_ascp.pk)
         assert content["text"] == "New content"
         assert content["order"] == 123
-        assert not AdditionalSignContentPlan.objects.filter(
-            pk=original_ascp.pk
-        ).exists()
+        assert not AdditionalSignContentPlan.objects.filter(pk=original_ascp.pk).exists()
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert asp.owner != data["owner"]
@@ -341,9 +331,7 @@ def test__additional_sign_plan__update_with_content_id(admin_user):
         ],
     }
 
-    response = client.put(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
-    )
+    response = client.put(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
     response_data = response.json()
     asp.refresh_from_db()
     ascp.refresh_from_db()
@@ -373,9 +361,7 @@ def test__additional_sign_plan__update_with_unrelated_content_id(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="A1234")
     asp = get_additional_sign_plan()
-    ascp = get_additional_sign_content_plan(
-        parent=get_additional_sign_plan(location=test_point_2_3d)
-    )
+    ascp = get_additional_sign_content_plan(parent=get_additional_sign_plan(location=test_point_2_3d))
     tsp = get_traffic_sign_plan(device_type=dt)
     data = {
         "parent": tsp.pk,
@@ -391,9 +377,7 @@ def test__additional_sign_plan__update_with_unrelated_content_id(admin_user):
         ],
     }
 
-    response = client.put(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
-    )
+    response = client.put(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
     response_data = response.json()
     asp.refresh_from_db()
     ascp.refresh_from_db()
@@ -402,14 +386,7 @@ def test__additional_sign_plan__update_with_unrelated_content_id(admin_user):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response_data == {
             "content": [
-                {
-                    "id": [
-                        (
-                            "Updating content instances that do not belong to "
-                            "this additional sign is not allowed."
-                        )
-                    ]
-                }
+                {"id": [("Updating content instances that do not belong to " "this additional sign is not allowed.")]}
             ]
         }
         assert ascp.parent != asp
@@ -440,9 +417,7 @@ def test__additional_sign_plan__partial_update_without_content(admin_user):
 
     assert AdditionalSignContentPlan.objects.count() == 1
 
-    response = client.patch(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
-    )
+    response = client.patch(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
     response_data = response.json()
     asp.refresh_from_db()
 
@@ -479,9 +454,7 @@ def test__additional_sign_plan__partial_update_with_content(admin_user):
         "content": [{"text": "New content", "order": 123, "device_type": str(dt.pk)}],
     }
 
-    response = client.patch(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
-    )
+    response = client.patch(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
     response_data = response.json()
     asp.refresh_from_db()
 
@@ -494,9 +467,7 @@ def test__additional_sign_plan__partial_update_with_content(admin_user):
         assert content["id"] == str(new_ascr.pk)
         assert content["text"] == "New content"
         assert content["order"] == 123
-        assert not AdditionalSignContentPlan.objects.filter(
-            pk=original_ascp.pk
-        ).exists()
+        assert not AdditionalSignContentPlan.objects.filter(pk=original_ascp.pk).exists()
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert asp.owner != data["owner"]
@@ -531,9 +502,7 @@ def test__additional_sign_plan__partial_update_with_content_id(admin_user):
         ],
     }
 
-    response = client.patch(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
-    )
+    response = client.patch(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
     response_data = response.json()
     asp.refresh_from_db()
     ascp.refresh_from_db()
@@ -563,9 +532,7 @@ def test__additional_sign_plan__partial_update_with_unrelated_content_id(admin_u
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="A1234")
     asp = get_additional_sign_plan()
-    ascp = get_additional_sign_content_plan(
-        parent=get_additional_sign_plan(location=test_point_2_3d)
-    )
+    ascp = get_additional_sign_content_plan(parent=get_additional_sign_plan(location=test_point_2_3d))
     tsp = get_traffic_sign_plan(device_type=dt)
     data = {
         "parent": tsp.pk,
@@ -581,9 +548,7 @@ def test__additional_sign_plan__partial_update_with_unrelated_content_id(admin_u
         ],
     }
 
-    response = client.patch(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data
-    )
+    response = client.patch(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
     response_data = response.json()
     asp.refresh_from_db()
     ascp.refresh_from_db()
@@ -592,14 +557,7 @@ def test__additional_sign_plan__partial_update_with_unrelated_content_id(admin_u
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response_data == {
             "content": [
-                {
-                    "id": [
-                        (
-                            "Updating content instances that do not belong to "
-                            "this additional sign is not allowed."
-                        )
-                    ]
-                }
+                {"id": [("Updating content instances that do not belong to " "this additional sign is not allowed.")]}
             ]
         }
         assert ascp.parent != asp
@@ -616,9 +574,7 @@ def test__additional_sign_plan__delete(admin_user):
     client = get_api_client(user=user)
     asp = get_additional_sign_plan()
 
-    response = client.delete(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk})
-    )
+    response = client.delete(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}))
 
     if admin_user:
         assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -641,9 +597,7 @@ def test__additional_sign_plan__soft_deleted_get_404_response():
     asp = get_additional_sign_plan()
     asp.soft_delete(user)
 
-    response = client.get(
-        reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk})
-    )
+    response = client.get(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -676,9 +630,7 @@ def test__additional_sign_content_plan__detail():
     dt = get_traffic_control_device_type(code="H17.1")
     ascp = get_additional_sign_content_plan(device_type=dt)
 
-    response = client.get(
-        reverse("v1:additionalsigncontentplan-detail", kwargs={"pk": ascp.pk})
-    )
+    response = client.get(reverse("v1:additionalsigncontentplan-detail", kwargs={"pk": ascp.pk}))
     response_data = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -762,9 +714,7 @@ def test__additional_sign_content_plan__delete(admin_user):
     client = get_api_client(user=user)
     ascp = get_additional_sign_content_plan()
 
-    response = client.delete(
-        reverse("v1:additionalsigncontentplan-detail", kwargs={"pk": ascp.pk})
-    )
+    response = client.delete(reverse("v1:additionalsigncontentplan-detail", kwargs={"pk": ascp.pk}))
 
     if admin_user:
         assert response.status_code == status.HTTP_204_NO_CONTENT

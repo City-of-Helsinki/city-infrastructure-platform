@@ -8,12 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import (
-    SoftDeleteModel,
-    SourceControlModel,
-    UpdatePlanLocationMixin,
-    UserControlModel,
-)
+from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
 from .affect_area import CoverageArea
 from .common import (
     Color,
@@ -31,19 +26,12 @@ from .common import (
 )
 from .mount import MountPlan, MountReal, MountType
 from .plan import Plan
-from .traffic_sign import (
-    InstallationStatus,
-    LocationSpecifier,
-    TrafficSignPlan,
-    TrafficSignReal,
-)
+from .traffic_sign import InstallationStatus, LocationSpecifier, TrafficSignPlan, TrafficSignReal
 from .utils import SoftDeleteQuerySet
 
 
 class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.IntegerField(_("Height"), blank=True, null=True)
     direction = models.IntegerField(_("Direction"), default=0)
@@ -63,9 +51,7 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         blank=True,
         null=True,
     )
-    color = EnumIntegerField(
-        Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True
-    )
+    color = EnumIntegerField(Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True)
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
@@ -75,9 +61,7 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
     )
 
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -100,21 +84,11 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         on_delete=models.PROTECT,
     )
 
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"), blank=True, null=True
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"), blank=True, null=True
-    )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -187,12 +161,8 @@ class AdditionalSignReal(AbstractAdditionalSign):
         blank=True,
         null=True,
     )
-    installation_id = models.CharField(
-        _("Installation id"), max_length=254, blank=True, null=True
-    )
-    installation_details = models.CharField(
-        _("Installation details"), max_length=254, blank=True, null=True
-    )
+    installation_id = models.CharField(_("Installation id"), max_length=254, blank=True, null=True)
+    installation_details = models.CharField(_("Installation details"), max_length=254, blank=True, null=True)
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
         InstallationStatus,
@@ -203,16 +173,10 @@ class AdditionalSignReal(AbstractAdditionalSign):
         null=True,
     )
     installed_by = models.CharField(_("Installed by"), max_length=256, blank=True)
-    manufacturer = models.CharField(
-        _("Manufacturer"), max_length=254, blank=True, null=True
-    )
+    manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    legacy_code = models.CharField(
-        _("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True
-    )
-    permit_decision_id = models.CharField(
-        _("Permit decision id"), max_length=254, blank=True, null=True
-    )
+    legacy_code = models.CharField(_("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True)
+    permit_decision_id = models.CharField(_("Permit decision id"), max_length=254, blank=True, null=True)
     operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
     scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
     size = EnumField(
@@ -222,9 +186,7 @@ class AdditionalSignReal(AbstractAdditionalSign):
         blank=True,
         null=True,
     )
-    attachment_url = models.URLField(
-        _("Attachment url"), max_length=500, blank=True, null=True
-    )
+    attachment_url = models.URLField(_("Attachment url"), max_length=500, blank=True, null=True)
     coverage_area = models.ForeignKey(
         CoverageArea,
         verbose_name=_("Coverage area"),
@@ -265,41 +227,29 @@ class AdditionalSignRealOperation(OperationBase):
 
 
 class AbstractAdditionalSignContent(SourceControlModel, UserControlModel):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
 
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)),
         null=True,
         blank=False,
     )
     text = models.CharField(verbose_name=_("Content text"), max_length=256, blank=True)
-    order = models.SmallIntegerField(
-        verbose_name=_("Order"), default=1, blank=False, null=False
-    )
+    order = models.SmallIntegerField(verbose_name=_("Order"), default=1, blank=False, null=False)
 
     class Meta:
         abstract = True
 
     def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(
-            DeviceTypeTargetModel.ADDITIONAL_SIGN
-        ):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for traffic signs'
-            )
+        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ADDITIONAL_SIGN):
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
 
         if not self.device_type:
             self.device_type = (
-                TrafficControlDeviceType.objects.for_target_model(
-                    DeviceTypeTargetModel.ADDITIONAL_SIGN
-                )
+                TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN)
                 .filter(legacy_code=self.parent.legacy_code)
                 .order_by("code")
                 .first()

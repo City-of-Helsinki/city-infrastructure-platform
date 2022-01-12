@@ -2,12 +2,7 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 
-from traffic_control.models import (
-    AdditionalSignPlan,
-    AdditionalSignReal,
-    TrafficSignPlan,
-    TrafficSignReal,
-)
+from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, TrafficSignPlan, TrafficSignReal
 from traffic_control.tests.factories import (
     get_additional_sign_plan,
     get_additional_sign_real,

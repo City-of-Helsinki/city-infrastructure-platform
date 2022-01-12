@@ -6,27 +6,10 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
-from ..filters import (
-    MountPlanFilterSet,
-    MountRealFilterSet,
-    MountTypeFilterSet,
-    PortalTypeFilterSet,
-)
-from ..models import (
-    MountPlan,
-    MountPlanFile,
-    MountReal,
-    MountRealFile,
-    MountType,
-    PortalType,
-)
+from ..filters import MountPlanFilterSet, MountRealFilterSet, MountTypeFilterSet, PortalTypeFilterSet
+from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
 from ..permissions import IsAdminUserOrReadOnly
-from ..schema import (
-    file_uuid_parameter,
-    FileUploadSchema,
-    location_parameter,
-    MultiFileUploadSchema,
-)
+from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from ..serializers.mount import (
     MountPlanFileSerializer,
     MountPlanGeoJSONSerializer,
@@ -63,15 +46,11 @@ __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single Mount Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single Mount Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single Mount Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single Mount Plan"),
 )
 class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -146,15 +125,11 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single Mount Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single Mount Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single Mount Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single Mount Real"),
 )
 class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -227,9 +202,7 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single PortalType"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single PortalType"),
 )
 @method_decorator(
     name="destroy",
@@ -263,9 +236,7 @@ class PortalTypeViewSet(ModelViewSet):
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single MountType"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single MountType"),
 )
 @method_decorator(
     name="destroy",

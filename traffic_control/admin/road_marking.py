@@ -10,12 +10,7 @@ from ..mixins import (
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from ..models import (
-    RoadMarkingPlan,
-    RoadMarkingPlanFile,
-    RoadMarkingReal,
-    RoadMarkingRealFile,
-)
+from ..models import RoadMarkingPlan, RoadMarkingPlanFile, RoadMarkingReal, RoadMarkingRealFile
 from .audit_log import AuditLogHistoryAdmin
 from .common import TrafficControlOperationInlineBase
 

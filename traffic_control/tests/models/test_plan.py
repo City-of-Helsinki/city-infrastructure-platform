@@ -17,46 +17,20 @@ from traffic_control.tests.factories import (
 @pytest.mark.django_db
 def test_plan_get_related_locations():
     plan = get_plan()
-    bp_1 = get_barrier_plan(
-        location=Point(10.0, 10.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    bp_2 = get_barrier_plan(
-        location=Point(5.0, 5.0, 0.0, srid=settings.SRID), plan=plan
-    )
+    bp_1 = get_barrier_plan(location=Point(10.0, 10.0, 0.0, srid=settings.SRID), plan=plan)
+    bp_2 = get_barrier_plan(location=Point(5.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
     mp_1 = get_mount_plan(location=Point(20.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
-    mp_2 = get_mount_plan(
-        location=Point(100.0, 10.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    rmp_1 = get_road_marking_plan(
-        location=Point(0.0, 50.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    rmp_2 = get_road_marking_plan(
-        location=Point(100.0, 100.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    sp_1 = get_signpost_plan(
-        location=Point(10.0, 100.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    sp_2 = get_signpost_plan(
-        location=Point(35.0, 130.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    tlp_1 = get_traffic_light_plan(
-        location=Point(55.0, 120.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    tlp_2 = get_traffic_light_plan(
-        location=Point(90.0, 115.0, 0, srid=settings.SRID), plan=plan
-    )
-    tsp_1 = get_traffic_sign_plan(
-        location=Point(55.0, 5.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    tsp_2 = get_traffic_sign_plan(
-        location=Point(95.0, 110.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    asp_1 = get_additional_sign_plan(
-        location=Point(80.0, 120.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    asp_2 = get_additional_sign_plan(
-        location=Point(80.0, 120.0, 0.0, srid=settings.SRID), parent=tsp_2, plan=plan
-    )
+    mp_2 = get_mount_plan(location=Point(100.0, 10.0, 0.0, srid=settings.SRID), plan=plan)
+    rmp_1 = get_road_marking_plan(location=Point(0.0, 50.0, 0.0, srid=settings.SRID), plan=plan)
+    rmp_2 = get_road_marking_plan(location=Point(100.0, 100.0, 0.0, srid=settings.SRID), plan=plan)
+    sp_1 = get_signpost_plan(location=Point(10.0, 100.0, 0.0, srid=settings.SRID), plan=plan)
+    sp_2 = get_signpost_plan(location=Point(35.0, 130.0, 0.0, srid=settings.SRID), plan=plan)
+    tlp_1 = get_traffic_light_plan(location=Point(55.0, 120.0, 0.0, srid=settings.SRID), plan=plan)
+    tlp_2 = get_traffic_light_plan(location=Point(90.0, 115.0, 0, srid=settings.SRID), plan=plan)
+    tsp_1 = get_traffic_sign_plan(location=Point(55.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
+    tsp_2 = get_traffic_sign_plan(location=Point(95.0, 110.0, 0.0, srid=settings.SRID), plan=plan)
+    asp_1 = get_additional_sign_plan(location=Point(80.0, 120.0, 0.0, srid=settings.SRID), plan=plan)
+    asp_2 = get_additional_sign_plan(location=Point(80.0, 120.0, 0.0, srid=settings.SRID), parent=tsp_2, plan=plan)
 
     locations = plan._get_related_locations()
 
@@ -79,62 +53,28 @@ def test_plan_get_related_locations():
 @pytest.mark.django_db
 def test_plan_derive_location_from_related_plans():
     plan = get_plan()
-    bp_1 = get_barrier_plan(
-        location=Point(10.0, 10.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    bp_2 = get_barrier_plan(
-        location=Point(5.0, 5.0, 0.0, srid=settings.SRID), plan=plan
-    )
+    bp_1 = get_barrier_plan(location=Point(10.0, 10.0, 0.0, srid=settings.SRID), plan=plan)
+    bp_2 = get_barrier_plan(location=Point(5.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
     mp_1 = get_mount_plan(location=Point(20.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
-    mp_2 = get_mount_plan(
-        location=Point(100.0, 10.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    rmp_1 = get_road_marking_plan(
-        location=Point(0.0, 50.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    rmp_2 = get_road_marking_plan(
-        location=Point(100.0, 100.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    sp_1 = get_signpost_plan(
-        location=Point(10.0, 100.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    sp_2 = get_signpost_plan(
-        location=Point(35.0, 130.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    tlp_1 = get_traffic_light_plan(
-        location=Point(55.0, 120.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    tlp_2 = get_traffic_light_plan(
-        location=Point(90.0, 115.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    tsp_1 = get_traffic_sign_plan(
-        location=Point(55.0, 5.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    tsp_2 = get_traffic_sign_plan(
-        location=Point(95.0, 110.0, 0.0, srid=settings.SRID), plan=plan
-    )
-    asp_1 = get_additional_sign_plan(
-        location=Point(80.0, 120.0, 0.0, srid=settings.SRID)
-    )
-    asp_2 = get_additional_sign_plan(
-        location=Point(80.0, 120.0, 0.0, srid=settings.SRID), parent=tsp_2
-    )
+    mp_2 = get_mount_plan(location=Point(100.0, 10.0, 0.0, srid=settings.SRID), plan=plan)
+    rmp_1 = get_road_marking_plan(location=Point(0.0, 50.0, 0.0, srid=settings.SRID), plan=plan)
+    rmp_2 = get_road_marking_plan(location=Point(100.0, 100.0, 0.0, srid=settings.SRID), plan=plan)
+    sp_1 = get_signpost_plan(location=Point(10.0, 100.0, 0.0, srid=settings.SRID), plan=plan)
+    sp_2 = get_signpost_plan(location=Point(35.0, 130.0, 0.0, srid=settings.SRID), plan=plan)
+    tlp_1 = get_traffic_light_plan(location=Point(55.0, 120.0, 0.0, srid=settings.SRID), plan=plan)
+    tlp_2 = get_traffic_light_plan(location=Point(90.0, 115.0, 0.0, srid=settings.SRID), plan=plan)
+    tsp_1 = get_traffic_sign_plan(location=Point(55.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
+    tsp_2 = get_traffic_sign_plan(location=Point(95.0, 110.0, 0.0, srid=settings.SRID), plan=plan)
+    asp_1 = get_additional_sign_plan(location=Point(80.0, 120.0, 0.0, srid=settings.SRID))
+    asp_2 = get_additional_sign_plan(location=Point(80.0, 120.0, 0.0, srid=settings.SRID), parent=tsp_2)
 
     noise_bp = get_barrier_plan(location=Point(150.0, 150.0, 0.0, srid=settings.SRID))
     noise_mp = get_mount_plan(location=Point(150.0, 150.0, 0.0, srid=settings.SRID))
-    noise_rmp = get_road_marking_plan(
-        location=Point(150.0, 150.0, 0.0, srid=settings.SRID)
-    )
+    noise_rmp = get_road_marking_plan(location=Point(150.0, 150.0, 0.0, srid=settings.SRID))
     noise_sp = get_signpost_plan(location=Point(150.0, 150.0, 0.0, srid=settings.SRID))
-    noise_tlp = get_traffic_light_plan(
-        location=Point(150.0, 150.0, 0.0, srid=settings.SRID)
-    )
-    noise_tsp = get_traffic_sign_plan(
-        location=Point(150.0, 150.0, 0.0, srid=settings.SRID)
-    )
-    noise_asp = get_additional_sign_plan(
-        location=Point(150.0, 150.0, 0.0, srid=settings.SRID)
-    )
+    noise_tlp = get_traffic_light_plan(location=Point(150.0, 150.0, 0.0, srid=settings.SRID))
+    noise_tsp = get_traffic_sign_plan(location=Point(150.0, 150.0, 0.0, srid=settings.SRID))
+    noise_asp = get_additional_sign_plan(location=Point(150.0, 150.0, 0.0, srid=settings.SRID))
 
     plan.refresh_from_db()
     plan.derive_location_from_related_plans()

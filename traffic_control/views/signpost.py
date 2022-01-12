@@ -5,12 +5,7 @@ from rest_framework.parsers import MultiPartParser
 
 from ..filters import SignpostPlanFilterSet, SignpostRealFilterSet
 from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
-from ..schema import (
-    file_uuid_parameter,
-    FileUploadSchema,
-    location_parameter,
-    MultiFileUploadSchema,
-)
+from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from ..serializers.signpost import (
     SignpostPlanFileSerializer,
     SignpostPlanGeoJSONSerializer,
@@ -45,15 +40,11 @@ __all__ = ("SignpostPlanViewSet", "SignpostRealViewSet")
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single Signpost Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single Signpost Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single Signpost Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single Signpost Plan"),
 )
 class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -120,9 +111,7 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single Signpost Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single Signpost Real"),
 )
 @method_decorator(
     name="update",
@@ -130,15 +119,11 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single Signpost Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single Signpost Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single Signpost Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single Signpost Real"),
 )
 class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {

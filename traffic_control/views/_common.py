@@ -16,9 +16,7 @@ from ..permissions import ObjectInsideOperationalAreaOrAnonReadOnly
 __all__ = ("FileUploadViews", "TrafficControlViewSet")
 
 
-class TrafficControlViewSet(
-    ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin
-):
+class TrafficControlViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["-created_at"]
@@ -47,9 +45,7 @@ class TrafficControlViewSet(
 
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class FileUploadViews(GenericViewSet):
@@ -77,9 +73,7 @@ class FileUploadViews(GenericViewSet):
 
         # Validate request data
         for _filename, file in request.data.items():
-            serializer = serializer_class(
-                data={self.get_file_relation(): obj.id, "file": file}
-            )
+            serializer = serializer_class(data={self.get_file_relation(): obj.id, "file": file})
             serializer.is_valid(raise_exception=True)
             serializer_cache.append(serializer)
 
@@ -104,9 +98,7 @@ class FileUploadViews(GenericViewSet):
             try:
                 instance = self.file_queryset.get(id=file_pk)
             except exceptions.ObjectDoesNotExist:
-                return Response(
-                    {"detail": _("File not found.")}, status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"detail": _("File not found.")}, status=status.HTTP_404_NOT_FOUND)
 
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -114,9 +106,7 @@ class FileUploadViews(GenericViewSet):
         if request.method == "PATCH":
             instance = self.file_queryset.get(id=file_pk)
             serializer_class = self.get_file_serializer()
-            serializer = serializer_class(
-                instance=instance, data=request.data, partial=True
-            )
+            serializer = serializer_class(instance=instance, data=request.data, partial=True)
 
             serializer.is_valid(raise_exception=True)
             serializer.save()

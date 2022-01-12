@@ -11,12 +11,7 @@ from pytz import timezone
 
 from users.utils import get_system_user
 
-from ...models import (
-    AdditionalSignContentReal,
-    AdditionalSignReal,
-    MountType,
-    TrafficSignReal,
-)
+from ...models import AdditionalSignContentReal, AdditionalSignReal, MountType, TrafficSignReal
 from ...utils import get_default_owner
 
 CLI_HELP_TEXT = """
@@ -84,9 +79,7 @@ class Command(BaseCommand):
         try:
             return MountType.objects.get(code=mount_type.upper())
         except MountType.DoesNotExist:
-            return MountType.objects.create(
-                code=mount_type.upper(), description=mount_type.capitalize()
-            )
+            return MountType.objects.create(code=mount_type.upper(), description=mount_type.capitalize())
 
     def handle(self, *args, **options):
         filename = options["filename"]
@@ -109,9 +102,7 @@ class Command(BaseCommand):
         for feature in layer:
             legacy_code = str(feature.get("type")).strip()
             is_additional_sign = legacy_code.startswith("8")
-            traffic_sign_model = (
-                AdditionalSignReal if is_additional_sign else TrafficSignReal
-            )
+            traffic_sign_model = AdditionalSignReal if is_additional_sign else TrafficSignReal
 
             data = {
                 "location": self.get_location(feature, source_srid),
@@ -158,8 +149,7 @@ class Command(BaseCommand):
                 self.stdout.write(f"{counter} traffic signs imported...")
 
         self.stdout.write(
-            f"{counter} traffic signs imported of which "
-            f"{additional_sign_counter} are additional signs"
+            f"{counter} traffic signs imported of which " f"{additional_sign_counter} are additional signs"
         )
         self.stdout.write("Import done!")
 

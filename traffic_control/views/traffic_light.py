@@ -4,18 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
 from ..filters import TrafficLightPlanFilterSet, TrafficLightRealFilterSet
-from ..models import (
-    TrafficLightPlan,
-    TrafficLightPlanFile,
-    TrafficLightReal,
-    TrafficLightRealFile,
-)
-from ..schema import (
-    file_uuid_parameter,
-    FileUploadSchema,
-    location_parameter,
-    MultiFileUploadSchema,
-)
+from ..models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
+from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from ..serializers.traffic_light import (
     TrafficLightPlanFileSerializer,
     TrafficLightPlanGeoJSONSerializer,
@@ -42,27 +32,19 @@ __all__ = ("TrafficLightPlanViewSet", "TrafficLightRealViewSet")
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single TrafficLight Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficLight Plan"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(
-        operation_description="Update single TrafficLight Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Update single TrafficLight Plan"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single TrafficLight Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single TrafficLight Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single TrafficLight Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single TrafficLight Plan"),
 )
 class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -129,27 +111,19 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single TrafficLight Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficLight Real"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(
-        operation_description="Update single TrafficLight Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Update single TrafficLight Real"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single TrafficLight Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single TrafficLight Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single TrafficLight Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single TrafficLight Real"),
 )
 class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {

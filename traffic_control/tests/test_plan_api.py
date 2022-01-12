@@ -9,12 +9,7 @@ from rest_framework_gis.fields import GeoJsonDict
 
 from ..models import Plan
 from .factories import get_api_client, get_plan, get_user
-from .test_base_api import (
-    test_multi_polygon,
-    test_polygon,
-    test_polygon_2,
-    test_polygon_3,
-)
+from .test_base_api import test_multi_polygon, test_polygon, test_polygon_2, test_polygon_3
 
 
 @pytest.mark.django_db
@@ -143,9 +138,7 @@ def test_plan_filter_location(location, location_query, expected):
     api_client = get_api_client()
     plan = get_plan(location=location)
 
-    response = api_client.get(
-        reverse("v1:plan-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:plan-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected

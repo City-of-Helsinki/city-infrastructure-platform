@@ -25,9 +25,7 @@ from .factories import (
 from .test_base_api import test_point, test_point_2, test_polygon, test_polygon_2
 from .test_base_api_3d import test_point_2_3d, test_point_3d
 
-settings_overrides = override_settings(
-    STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage"
-)
+settings_overrides = override_settings(STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage")
 
 
 def setup_module():
@@ -53,17 +51,13 @@ def test_plan_relation_admin_view_requires_view_permission(client):
     plan = get_plan()
     client.force_login(user)
 
-    response = client.get(
-        reverse("admin:traffic_control_plan_set-plans", kwargs={"object_id": plan.pk})
-    )
+    response = client.get(reverse("admin:traffic_control_plan_set-plans", kwargs={"object_id": plan.pk}))
     assert response.status_code == 403
 
     ct = ContentType.objects.get_for_model(Plan)
     view_perm = Permission.objects.get(codename="view_plan", content_type=ct)
     user.user_permissions.add(view_perm)
-    response = client.get(
-        reverse("admin:traffic_control_plan_set-plans", kwargs={"object_id": plan.pk})
-    )
+    response = client.get(reverse("admin:traffic_control_plan_set-plans", kwargs={"object_id": plan.pk}))
     assert response.status_code == 200
 
 
@@ -192,28 +186,14 @@ def test_plan_relation_admin_view_available_choices(admin_client):
     plan_1.refresh_from_db()
     plan_2.refresh_from_db()
 
-    response = admin_client.get(
-        reverse("admin:traffic_control_plan_set-plans", kwargs={"object_id": plan_1.pk})
-    )
+    response = admin_client.get(reverse("admin:traffic_control_plan_set-plans", kwargs={"object_id": plan_1.pk}))
 
     form = response.context["form"]
     assert response.status_code == 200
     assert plan_2.barrier_plans.first() not in form.fields["barrier_plans"].queryset
     assert plan_2.mount_plans.first() not in form.fields["mount_plans"].queryset
-    assert (
-        plan_2.road_marking_plans.first()
-        not in form.fields["road_marking_plans"].queryset
-    )
+    assert plan_2.road_marking_plans.first() not in form.fields["road_marking_plans"].queryset
     assert plan_2.signpost_plans.first() not in form.fields["signpost_plans"].queryset
-    assert (
-        plan_2.traffic_light_plans.first()
-        not in form.fields["traffic_light_plans"].queryset
-    )
-    assert (
-        plan_2.traffic_sign_plans.first()
-        not in form.fields["traffic_sign_plans"].queryset
-    )
-    assert (
-        plan_2.additional_sign_plans.first()
-        not in form.fields["additional_sign_plans"].queryset
-    )
+    assert plan_2.traffic_light_plans.first() not in form.fields["traffic_light_plans"].queryset
+    assert plan_2.traffic_sign_plans.first() not in form.fields["traffic_sign_plans"].queryset
+    assert plan_2.additional_sign_plans.first() not in form.fields["additional_sign_plans"].queryset

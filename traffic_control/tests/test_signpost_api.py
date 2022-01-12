@@ -17,11 +17,7 @@ from .factories import (
     get_traffic_control_device_type,
     get_user,
 )
-from .test_base_api import (
-    point_location_error_test_data,
-    point_location_test_data,
-    TrafficControlAPIBaseTestCase,
-)
+from .test_base_api import point_location_error_test_data, point_location_test_data, TrafficControlAPIBaseTestCase
 
 
 @pytest.mark.django_db
@@ -36,9 +32,7 @@ def test_filter_signpost_plan_location(location, location_query, expected):
     api_client = get_api_client()
 
     signpost_plan = get_signpost_plan(location)
-    response = api_client.get(
-        reverse("v1:signpostplan-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:signpostplan-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -60,9 +54,7 @@ def test_filter_error_signpost_plans_location(location, location_query, expected
     api_client = get_api_client()
 
     get_signpost_plan(location)
-    response = api_client.get(
-        reverse("v1:signpostplan-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:signpostplan-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -76,9 +68,7 @@ def test__signpost_plan__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     signpost_plan = get_signpost_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model, value="15"
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model, value="15")
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -109,9 +99,7 @@ def test__signpost_plan__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     signpost_plan = get_signpost_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -149,27 +137,21 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_signpost_plan()
-        response = self.client.get(
-            reverse("v1:signpostplan-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:signpostplan-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             signpost_plan = SignpostPlan.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(signpost_plan.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(signpost_plan.location.json))
 
     def test_get_signpost_plan_detail(self):
         """
         Ensure we can get one signpost plan object.
         """
         signpost_plan = self.__create_test_signpost_plan()
-        response = self.client.get(
-            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id})
-        )
+        response = self.client.get(reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(signpost_plan.id))
         self.assertEqual(signpost_plan.location.ewkt, response.data.get("location"))
@@ -198,9 +180,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
         }
-        response = self.client.post(
-            reverse("v1:signpostplan-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:signpostplan-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(SignpostPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -282,9 +262,7 @@ def test_filter_signpost_reals_location(location, location_query, expected):
     api_client = get_api_client()
 
     signpost_real = get_signpost_real(location)
-    response = api_client.get(
-        reverse("v1:signpostreal-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:signpostreal-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -306,9 +284,7 @@ def test_filter_error_signpost_reals_location(location, location_query, expected
     api_client = get_api_client()
 
     get_signpost_real(location)
-    response = api_client.get(
-        reverse("v1:signpostreal-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:signpostreal-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -322,9 +298,7 @@ def test__signpost_real__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     signpost_real = get_signpost_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model, value="15"
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model, value="15")
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -355,9 +329,7 @@ def test__signpost_real__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     signpost_real = get_signpost_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -395,44 +367,30 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_signpost_real()
-        response = self.client.get(
-            reverse("v1:signpostreal-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:signpostreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             signpost_real = SignpostReal.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(signpost_real.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(signpost_real.location.json))
 
     def test_get_signpost_real_detail(self):
         """
         Ensure we can get one signpost real object.
         """
         signpost_real = self.__create_test_signpost_real()
-        operation_1 = add_signpost_real_operation(
-            signpost_real, operation_date=datetime.date(2020, 11, 5)
-        )
-        operation_2 = add_signpost_real_operation(
-            signpost_real, operation_date=datetime.date(2020, 11, 15)
-        )
-        operation_3 = add_signpost_real_operation(
-            signpost_real, operation_date=datetime.date(2020, 11, 10)
-        )
-        response = self.client.get(
-            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id})
-        )
+        operation_1 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 5))
+        operation_2 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 15))
+        operation_3 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 10))
+        response = self.client.get(reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(signpost_real.id))
         self.assertEqual(signpost_real.location.ewkt, response.data.get("location"))
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
-        self.assertEqual(
-            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
-        )
+        self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
 
     def test_get_signpost_real_detail__geojson(self):
         """
@@ -459,9 +417,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
         }
-        response = self.client.post(
-            reverse("v1:signpostreal-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:signpostreal-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(SignpostReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])

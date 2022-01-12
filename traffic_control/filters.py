@@ -27,10 +27,7 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.models.common import (
-    DeviceTypeTargetModel,
-    TRAFFIC_SIGN_TYPE_CHOICES,
-)
+from traffic_control.models.common import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_CHOICES
 
 
 class GenericMeta:

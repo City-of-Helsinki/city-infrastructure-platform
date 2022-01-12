@@ -70,9 +70,7 @@ class TrafficSignPlan(
     SoftDeleteModel,
     UserControlModel,
 ):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.IntegerField(_("Height"), blank=True, null=True)
     direction = models.IntegerField(_("Direction"), default=0)
@@ -80,9 +78,7 @@ class TrafficSignPlan(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
     )
     value = models.DecimalField(
         _("Traffic Sign Code value"),
@@ -106,15 +102,9 @@ class TrafficSignPlan(
         null=True,
         on_delete=models.SET_NULL,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
-    affect_area = models.PolygonField(
-        _("Affect area (2D)"), srid=settings.SRID, blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
+    affect_area = models.PolygonField(_("Affect area (2D)"), srid=settings.SRID, blank=True, null=True)
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -147,12 +137,8 @@ class TrafficSignPlan(
         blank=True,
         null=True,
     )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"), blank=True, null=True
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"), blank=True, null=True
-    )
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
     owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
@@ -160,13 +146,9 @@ class TrafficSignPlan(
         null=False,
         on_delete=models.PROTECT,
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -194,9 +176,7 @@ class TrafficSignPlan(
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for traffic signs'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
 
         super().save(*args, **kwargs)
 
@@ -210,15 +190,9 @@ class TrafficSignPlan(
 
 
 class TrafficSignPlanFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="planfiles/traffic_sign/"
-    )
-    traffic_sign_plan = models.ForeignKey(
-        TrafficSignPlan, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/traffic_sign/")
+    traffic_sign_plan = models.ForeignKey(TrafficSignPlan, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "traffic_sign_plan_file"
@@ -245,9 +219,7 @@ class TrafficSignReal(
     SoftDeleteModel,
     UserControlModel,
 ):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     traffic_sign_plan = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Traffic Sign Plan"),
@@ -262,9 +234,7 @@ class TrafficSignReal(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
         blank=False,
         null=True,
     )
@@ -275,9 +245,7 @@ class TrafficSignReal(
         blank=True,
         null=True,
     )
-    legacy_code = models.CharField(
-        _("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True
-    )
+    legacy_code = models.CharField(_("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True)
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     mount_real = models.ForeignKey(
         MountReal,
@@ -301,21 +269,11 @@ class TrafficSignReal(
         blank=True,
         null=True,
     )
-    installation_id = models.CharField(
-        _("Installation id"), max_length=254, blank=True, null=True
-    )
-    installation_details = models.CharField(
-        _("Installation details"), max_length=254, blank=True, null=True
-    )
-    permit_decision_id = models.CharField(
-        _("Permit decision id"), max_length=254, blank=True, null=True
-    )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    installation_id = models.CharField(_("Installation id"), max_length=254, blank=True, null=True)
+    installation_details = models.CharField(_("Installation details"), max_length=254, blank=True, null=True)
+    permit_decision_id = models.CharField(_("Permit decision id"), max_length=254, blank=True, null=True)
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     condition = EnumIntegerField(
         Condition,
         verbose_name=_("Condition"),
@@ -351,12 +309,8 @@ class TrafficSignReal(
         blank=True,
         null=True,
     )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"), blank=True, null=True
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"), blank=True, null=True
-    )
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
     owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
@@ -364,17 +318,11 @@ class TrafficSignReal(
         null=False,
         on_delete=models.PROTECT,
     )
-    manufacturer = models.CharField(
-        _("Manufacturer"), max_length=254, blank=True, null=True
-    )
+    manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -389,9 +337,7 @@ class TrafficSignReal(
         null=True,
     )
     operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
-    attachment_url = models.URLField(
-        _("Attachment url"), max_length=500, blank=True, null=True
-    )
+    attachment_url = models.URLField(_("Attachment url"), max_length=500, blank=True, null=True)
 
     objects = TrafficSignRealQuerySet.as_manager()
 
@@ -405,18 +351,12 @@ class TrafficSignReal(
         return f"{self.id} {self.device_type}"
 
     def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(
-            DeviceTypeTargetModel.TRAFFIC_SIGN
-        ):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for traffic signs'
-            )
+        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
 
         if not self.device_type:
             self.device_type = (
-                TrafficControlDeviceType.objects.for_target_model(
-                    DeviceTypeTargetModel.TRAFFIC_SIGN
-                )
+                TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN)
                 .filter(legacy_code=self.legacy_code)
                 .order_by("code")
                 .first()
@@ -455,15 +395,9 @@ class TrafficSignRealOperation(OperationBase):
 
 
 class TrafficSignRealFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="realfiles/traffic_sign/"
-    )
-    traffic_sign_real = models.ForeignKey(
-        TrafficSignReal, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/traffic_sign/")
+    traffic_sign_real = models.ForeignKey(TrafficSignReal, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "traffic_sign_real_file"

@@ -27,9 +27,7 @@ from ..serializers.common import OwnerSerializer
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single Owner"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single Owner"),
 )
 @method_decorator(
     name="destroy",

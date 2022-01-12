@@ -176,9 +176,7 @@ def test__api_operational_area_permission__create(model, location, success):
             data["source_name"] = "test source"
 
     api_client = get_api_client(user=user)
-    response = api_client.post(
-        reverse(f"v1:{model.lower()}-list"), data=data, format="json"
-    )
+    response = api_client.post(reverse(f"v1:{model.lower()}-list"), data=data, format="json")
 
     ModelClass = getattr(models, model)  # noqa: N806
     if success:
@@ -207,9 +205,7 @@ def test__api_operational_area_permission__create__geojson(location, success):
 
     if location:
         location = json.loads(location.geojson)
-        location.update(
-            {"crs": {"type": "name", "properties": {"name": f"EPSG:{settings.SRID}"}}}
-        )
+        location.update({"crs": {"type": "name", "properties": {"name": f"EPSG:{settings.SRID}"}}})
 
     data = {
         "location": location,
@@ -220,9 +216,7 @@ def test__api_operational_area_permission__create__geojson(location, success):
     }
 
     api_client = get_api_client(user=user)
-    response = api_client.post(
-        f"{reverse('v1:barrierplan-list')}?geo_format=geojson", data=data, format="json"
-    )
+    response = api_client.post(f"{reverse('v1:barrierplan-list')}?geo_format=geojson", data=data, format="json")
 
     if success:
         assert response.status_code == status.HTTP_201_CREATED
@@ -435,9 +429,7 @@ def test__api_operational_area_permission__delete(model, location, success):
     instance = model_factory_map[model](location=location)
 
     api_client = get_api_client(user=user)
-    response = api_client.delete(
-        reverse(f"v1:{model.lower()}-detail", kwargs={"pk": instance.pk})
-    )
+    response = api_client.delete(reverse(f"v1:{model.lower()}-detail", kwargs={"pk": instance.pk}))
 
     instance.refresh_from_db()
     if success:
