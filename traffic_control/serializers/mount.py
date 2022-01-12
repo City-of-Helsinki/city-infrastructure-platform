@@ -2,14 +2,7 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from ..models import (
-    MountPlan,
-    MountPlanFile,
-    MountReal,
-    MountRealFile,
-    MountType,
-    PortalType,
-)
+from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
 from ..models.mount import MountRealOperation
 
 
@@ -64,9 +57,7 @@ class MountRealOperationSerializer(serializers.ModelSerializer):
 
 
 class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
-    ordered_traffic_signs = serializers.PrimaryKeyRelatedField(
-        read_only=True, many=True
-    )
+    ordered_traffic_signs = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     files = MountRealFileSerializer(many=True, read_only=True)
     operations = MountRealOperationSerializer(many=True, required=False, read_only=True)
 

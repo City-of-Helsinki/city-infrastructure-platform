@@ -10,12 +10,7 @@ from ..mixins import (
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from ..models import (
-    TrafficLightPlan,
-    TrafficLightPlanFile,
-    TrafficLightReal,
-    TrafficLightRealFile,
-)
+from ..models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
 from .audit_log import AuditLogHistoryAdmin
 from .common import TrafficControlOperationInlineBase
 

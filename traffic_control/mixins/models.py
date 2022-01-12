@@ -78,12 +78,8 @@ class UpdatePlanLocationMixin:
 
 
 class SourceControlModel(models.Model):
-    source_id = models.CharField(
-        _("Source id"), max_length=64, null=True, blank=True, default=None
-    )
-    source_name = models.CharField(
-        _("Source name"), max_length=254, null=True, blank=True, default=None
-    )
+    source_id = models.CharField(_("Source id"), max_length=64, null=True, blank=True, default=None)
+    source_name = models.CharField(_("Source name"), max_length=254, null=True, blank=True, default=None)
 
     class Meta:
         abstract = True

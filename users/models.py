@@ -27,14 +27,10 @@ class User(AbstractUser):
         if self.is_superuser or self.bypass_operational_area:
             return True
 
-        groups = Group.objects.filter(user=self).prefetch_related(
-            "operational_area", "operational_area__areas"
-        )
+        groups = Group.objects.filter(user=self).prefetch_related("operational_area", "operational_area__areas")
         return (
             self.operational_areas.filter(location__contains=location).exists()
-            or groups.filter(
-                operational_area__areas__location__contains=location
-            ).exists()
+            or groups.filter(operational_area__areas__location__contains=location).exists()
         )
 
     class Meta:

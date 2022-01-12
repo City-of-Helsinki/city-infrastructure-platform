@@ -51,9 +51,7 @@ class TrafficSignTypeListFilter(SimpleListFilter):
 
 
 @admin.register(TrafficControlDeviceType)
-class TrafficControlDeviceTypeAdmin(
-    EnumChoiceValueDisplayAdminMixin, AuditLogHistoryAdmin
-):
+class TrafficControlDeviceTypeAdmin(EnumChoiceValueDisplayAdminMixin, AuditLogHistoryAdmin):
     list_display = (
         "code",
         "icon",

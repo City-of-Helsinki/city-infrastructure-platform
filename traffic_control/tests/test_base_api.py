@@ -79,26 +79,14 @@ line_location_error_test_data = [
 
 class TrafficControlAPIBaseTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_superuser(
-            username="testuser", password="testpw", email="testuser@example.com"
-        )
+        self.user = User.objects.create_superuser(username="testuser", password="testpw", email="testuser@example.com")
         self.client.login(username="testuser", password="testpw")
         self.test_lifecycle = Lifecycle.ACTIVE
         self.test_lifecycle_2 = Lifecycle.INACTIVE
-        self.test_device_type = TrafficControlDeviceType.objects.create(
-            code="A11", description="Speed limit"
-        )
-        self.test_device_type_2 = TrafficControlDeviceType.objects.create(
-            code="A12", description="Weight limit"
-        )
-        self.test_mount_type = MountType.objects.create(
-            code="PORTAL", description="Portal"
-        )
-        self.test_mount_type_2 = MountType.objects.create(
-            code="WALL", description="Wall"
-        )
+        self.test_device_type = TrafficControlDeviceType.objects.create(code="A11", description="Speed limit")
+        self.test_device_type_2 = TrafficControlDeviceType.objects.create(code="A12", description="Weight limit")
+        self.test_mount_type = MountType.objects.create(code="PORTAL", description="Portal")
+        self.test_mount_type_2 = MountType.objects.create(code="WALL", description="Wall")
         self.test_point = test_point
         self.test_point_2 = test_point_2
-        self.test_owner = Owner.objects.create(
-            name_fi="Helsingin kaupunki", name_en="City of Helsinki"
-        )
+        self.test_owner = Owner.objects.create(name_fi="Helsingin kaupunki", name_en="City of Helsinki")

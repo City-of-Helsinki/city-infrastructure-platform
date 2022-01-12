@@ -44,11 +44,7 @@ from traffic_control.models import (
     TrafficSignRealOperation,
 )
 from traffic_control.models.common import DeviceTypeTargetModel, OperationType
-from traffic_control.tests.test_base_api import (
-    test_multi_polygon,
-    test_point,
-    test_polygon,
-)
+from traffic_control.tests.test_base_api import test_multi_polygon, test_point, test_polygon
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
@@ -313,9 +309,7 @@ def get_traffic_sign_real(location="", device_type=None):
     )[0]
 
 
-def get_additional_sign_plan(
-    location=test_point_3d, parent=None, owner=None, plan=None
-):
+def get_additional_sign_plan(location=test_point_3d, parent=None, owner=None, plan=None):
     user = get_user("test_user")
     owner = owner or get_owner()
 

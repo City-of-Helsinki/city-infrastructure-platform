@@ -29,9 +29,7 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.categories = {
-            category.id: category for category in CoverageAreaCategory.objects.all()
-        }
+        self.categories = {category.id: category for category in CoverageAreaCategory.objects.all()}
 
     def handle(self, *args, **options):
         self.stdout.write("Importing coverage areas from Helsinki WFS ...")
@@ -57,21 +55,15 @@ class Command(BaseCommand):
                     "category": category,
                     "area_type": parse_str_value(feature["tyyppi"].value),
                     "season": parse_str_value(feature["kausi"].value),
-                    "resident_parking_id": parse_str_value(
-                        feature["asukaspysakointitunnus"].value
-                    ),
+                    "resident_parking_id": parse_str_value(feature["asukaspysakointitunnus"].value),
                     "place_position": parse_str_value(feature["paikan_asento"].value),
                     "validity": parse_str_value(feature["voimassaolo"].value),
                     "duration": parse_str_value(feature["kesto"].value),
                     "surface_area": feature["pinta_ala"].value,
                     "parking_slots": feature["paikat_ala"].value,
                     "additional_info": parse_str_value(feature["lisatieto"].value),
-                    "stopping_prohibited": parse_str_value(
-                        feature["pysayttamiskielto"].value
-                    ),
-                    "updated_at": parse_date(
-                        feature["paivitetty_tietopalveluun"].value
-                    ),
+                    "stopping_prohibited": parse_str_value(feature["pysayttamiskielto"].value),
+                    "updated_at": parse_date(feature["paivitetty_tietopalveluun"].value),
                     "owner": owner,
                     "location": geometry,
                 },
@@ -81,8 +73,6 @@ class Command(BaseCommand):
 
     def get_coverage_area_category(self, category_id, category_name):
         if category_id not in self.categories:
-            category = CoverageAreaCategory.objects.create(
-                id=category_id, name=category_name
-            )
+            category = CoverageAreaCategory.objects.create(id=category_id, name=category_name)
             self.categories[category_id] = category
         return self.categories[category_id]

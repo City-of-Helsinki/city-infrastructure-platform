@@ -13,33 +13,23 @@ from ..serializers.common import OperationalAreaSerializer
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all Operational Area"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve all Operational Area"),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single Operational Area"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single Operational Area"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(
-        operation_description="Update single Operational Area"
-    ),
+    decorator=swagger_auto_schema(operation_description="Update single Operational Area"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single Operational Area"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single Operational Area"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Delete single Operational Area"
-    ),
+    decorator=swagger_auto_schema(operation_description="Delete single Operational Area"),
 )
 class OperationalAreaViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]

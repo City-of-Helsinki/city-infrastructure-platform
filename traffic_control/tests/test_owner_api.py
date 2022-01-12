@@ -73,9 +73,7 @@ def test__owner_api__update(is_admin):
         "name_en": "Owner name",
     }
 
-    response = client.put(
-        reverse("v1:owner-detail", kwargs={"pk": owner.pk}), data=data
-    )
+    response = client.put(reverse("v1:owner-detail", kwargs={"pk": owner.pk}), data=data)
     owner.refresh_from_db()
     assert Owner.objects.count() == 1
 
@@ -100,9 +98,7 @@ def test__owner_api__partial_update(is_admin):
         "name_fi": "Omistajan nimi",
     }
 
-    response = client.patch(
-        reverse("v1:owner-detail", kwargs={"pk": owner.pk}), data=data
-    )
+    response = client.patch(reverse("v1:owner-detail", kwargs={"pk": owner.pk}), data=data)
     owner.refresh_from_db()
     assert Owner.objects.count() == 1
 

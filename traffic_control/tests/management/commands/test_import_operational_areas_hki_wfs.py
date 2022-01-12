@@ -4,11 +4,7 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from traffic_control.models import OperationalArea
-from traffic_control.tests.management.commands.utils import (
-    create_mock_data_source,
-    MockAttribute,
-    MockFeature,
-)
+from traffic_control.tests.management.commands.utils import create_mock_data_source, MockAttribute, MockFeature
 from traffic_control.tests.test_base_api import test_multi_polygon
 
 MOCK_FEATURE_1 = MockFeature(

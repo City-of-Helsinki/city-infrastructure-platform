@@ -11,9 +11,7 @@ from .utils import mock_open
 
 class ImportPortalTypesTestCase(TestCase):
     def test_raise_command_error_if_no_file_found(self):
-        self.assertRaises(
-            CommandError, call_command, "import_portal_types", "dummy.csv"
-        )
+        self.assertRaises(CommandError, call_command, "import_portal_types", "dummy.csv")
 
     @patch("os.path.exists", return_value=True)
     def test_import_portal_types_success(self, mock_exists):

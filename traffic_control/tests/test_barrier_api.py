@@ -37,9 +37,7 @@ def test_filter_barrier_plans_location(location, location_query, expected):
     api_client = get_api_client()
 
     barrier_plan = get_barrier_plan(location)
-    response = api_client.get(
-        reverse("v1:barrierplan-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:barrierplan-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -60,9 +58,7 @@ def test_filter_error_barrier_plans_location(location, location_query, expected)
     api_client = get_api_client()
 
     get_barrier_plan(location)
-    response = api_client.get(
-        reverse("v1:barrierplan-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:barrierplan-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -76,9 +72,7 @@ def test__barrier_plan__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     barrier_plan = get_barrier_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -108,9 +102,7 @@ def test__barrier_plan__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     barrier_plan = get_barrier_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -148,27 +140,21 @@ class BarrierPlanTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_barrier_plan()
-        response = self.client.get(
-            reverse("v1:barrierplan-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:barrierplan-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             barrier_plan = BarrierPlan.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(barrier_plan.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(barrier_plan.location.json))
 
     def test_get_barrier_plan_detail(self):
         """
         Ensure we can get one barrier plan object.
         """
         barrier_plan = self.__create_test_barrier_plan()
-        response = self.client.get(
-            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id})
-        )
+        response = self.client.get(reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(barrier_plan.id))
         self.assertEqual(barrier_plan.location.ewkt, response.data.get("location"))
@@ -285,9 +271,7 @@ def test_filter_barrier_reals_location(location, location_query, expected):
     api_client = get_api_client()
 
     barrier_real = get_barrier_real(location)
-    response = api_client.get(
-        reverse("v1:barrierreal-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:barrierreal-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -309,9 +293,7 @@ def test_filter_error_barrier_reals_location(location, location_query, expected)
     api_client = get_api_client()
 
     get_barrier_plan(location)
-    response = api_client.get(
-        reverse("v1:barrierreal-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:barrierreal-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -325,9 +307,7 @@ def test__barrier_real__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     barrier_real = get_barrier_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -357,9 +337,7 @@ def test__barrier_real__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     barrier_real = get_barrier_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -397,44 +375,30 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_barrier_real()
-        response = self.client.get(
-            reverse("v1:barrierreal-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:barrierreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             barrier_real = BarrierReal.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(barrier_real.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(barrier_real.location.json))
 
     def test_get_barrier_real_detail(self):
         """
         Ensure we can get one real barrier object.
         """
         barrier_real = self.__create_test_barrier_real()
-        operation_1 = add_barrier_real_operation(
-            barrier_real, operation_date=datetime.date(2020, 11, 5)
-        )
-        operation_2 = add_barrier_real_operation(
-            barrier_real, operation_date=datetime.date(2020, 11, 15)
-        )
-        operation_3 = add_barrier_real_operation(
-            barrier_real, operation_date=datetime.date(2020, 11, 10)
-        )
-        response = self.client.get(
-            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id})
-        )
+        operation_1 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 5))
+        operation_2 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 15))
+        operation_3 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 10))
+        response = self.client.get(reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(barrier_real.id))
         self.assertEqual(barrier_real.location.ewkt, response.data.get("location"))
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
-        self.assertEqual(
-            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
-        )
+        self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
 
     def test_get_barrier_real_detail__geojson(self):
         """

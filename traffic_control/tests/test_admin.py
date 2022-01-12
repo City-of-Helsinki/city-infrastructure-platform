@@ -8,12 +8,7 @@ from django.test import RequestFactory, TestCase
 from traffic_control.admin import BarrierRealAdmin, TrafficSignRealAdmin
 from traffic_control.models import BarrierReal, TrafficSignReal
 from traffic_control.models.common import Lifecycle
-from traffic_control.tests.factories import (
-    get_additional_sign_real,
-    get_barrier_real,
-    get_owner,
-    get_user,
-)
+from traffic_control.tests.factories import get_additional_sign_real, get_barrier_real, get_owner, get_user
 
 
 class MockRequest:

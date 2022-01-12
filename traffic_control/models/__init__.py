@@ -29,15 +29,7 @@ from .common import (
     Surface,
     TrafficControlDeviceType,
 )
-from .mount import (
-    MountPlan,
-    MountPlanFile,
-    MountReal,
-    MountRealFile,
-    MountRealOperation,
-    MountType,
-    PortalType,
-)
+from .mount import MountPlan, MountPlanFile, MountReal, MountRealFile, MountRealOperation, MountType, PortalType
 from .operational_area import GroupOperationalArea, OperationalArea
 from .plan import Plan
 from .road_marking import (
@@ -50,13 +42,7 @@ from .road_marking import (
     RoadMarkingRealFile,
     RoadMarkingRealOperation,
 )
-from .signpost import (
-    SignpostPlan,
-    SignpostPlanFile,
-    SignpostReal,
-    SignpostRealFile,
-    SignpostRealOperation,
-)
+from .signpost import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile, SignpostRealOperation
 from .traffic_light import (
     TrafficLightPlan,
     TrafficLightPlanFile,

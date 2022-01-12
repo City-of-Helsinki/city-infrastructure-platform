@@ -25,9 +25,7 @@ from .test_base_api_3d import (
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "location,location_query,expected", point_location_test_data_3d
-)
+@pytest.mark.parametrize("location,location_query,expected", point_location_test_data_3d)
 def test_filter_traffic_sign_plans_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
@@ -35,9 +33,7 @@ def test_filter_traffic_sign_plans_location(location, location_query, expected):
     api_client = get_api_client()
 
     traffic_sign_plan = get_traffic_sign_plan(location)
-    response = api_client.get(
-        reverse("v1:trafficsignplan-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:trafficsignplan-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -59,9 +55,7 @@ def test_filter_error_traffic_sign_plans_location(location, location_query, expe
     api_client = get_api_client()
 
     get_traffic_sign_plan(location)
-    response = api_client.get(
-        reverse("v1:trafficsignplan-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:trafficsignplan-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -108,9 +102,7 @@ def test__traffic_sign_plan__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_sign_plan = get_traffic_sign_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -148,27 +140,21 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         count = 3
         for i in range(count):
             self.__create_test_traffic_sign_plan()
-        response = self.client.get(
-            reverse("v1:trafficsignplan-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:trafficsignplan-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             traffic_sign_plan = TrafficSignPlan.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(traffic_sign_plan.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(traffic_sign_plan.location.json))
 
     def test_get_traffic_sign_plan_detail(self):
         """
         Ensure we can get one traffic sign plan object.
         """
         traffic_sign_plan = self.__create_test_traffic_sign_plan()
-        response = self.client.get(
-            reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id})
-        )
+        response = self.client.get(reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_plan.id))
         self.assertEqual(traffic_sign_plan.location.ewkt, response.data.get("location"))
@@ -197,9 +183,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
         }
-        response = self.client.post(
-            reverse("v1:trafficsignplan-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:trafficsignplan-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficSignPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -241,9 +225,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TrafficSignPlan.objects.count(), 1)
-        deleted_traffic_sign_plan = TrafficSignPlan.objects.get(
-            id=str(traffic_sign_plan.id)
-        )
+        deleted_traffic_sign_plan = TrafficSignPlan.objects.get(id=str(traffic_sign_plan.id))
         self.assertEqual(deleted_traffic_sign_plan.id, traffic_sign_plan.id)
         self.assertFalse(deleted_traffic_sign_plan.is_active)
         self.assertEqual(deleted_traffic_sign_plan.deleted_by, self.user)
@@ -272,9 +254,7 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "location,location_query,expected", point_location_test_data_3d
-)
+@pytest.mark.parametrize("location,location_query,expected", point_location_test_data_3d)
 def test_filter_traffic_sign_reals_location(location, location_query, expected):
     """
     Ensure that filtering with location is working correctly.
@@ -282,9 +262,7 @@ def test_filter_traffic_sign_reals_location(location, location_query, expected):
     api_client = get_api_client()
 
     traffic_sign_real = get_traffic_sign_real(location)
-    response = api_client.get(
-        reverse("v1:trafficsignreal-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:trafficsignreal-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -306,9 +284,7 @@ def test_filter_error_traffic_sign_reals_location(location, location_query, expe
     api_client = get_api_client()
 
     get_traffic_sign_real(location)
-    response = api_client.get(
-        reverse("v1:trafficsignreal-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:trafficsignreal-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -355,9 +331,7 @@ def test__traffic_sign_real__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_sign_real = get_traffic_sign_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -395,44 +369,30 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         count = 3
         for i in range(count):
             self.__create_test_traffic_sign_real()
-        response = self.client.get(
-            reverse("v1:trafficsignreal-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:trafficsignreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(traffic_sign_real.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(traffic_sign_real.location.json))
 
     def test_get_traffic_sign_real_detail(self):
         """
         Ensure we can get one traffic sign real object.
         """
         traffic_sign_real = self.__create_test_traffic_sign_real()
-        operation_1 = add_traffic_sign_real_operation(
-            traffic_sign_real, operation_date=datetime.date(2020, 11, 5)
-        )
-        operation_2 = add_traffic_sign_real_operation(
-            traffic_sign_real, operation_date=datetime.date(2020, 11, 15)
-        )
-        operation_3 = add_traffic_sign_real_operation(
-            traffic_sign_real, operation_date=datetime.date(2020, 11, 10)
-        )
-        response = self.client.get(
-            reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id})
-        )
+        operation_1 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 5))
+        operation_2 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 15))
+        operation_3 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 10))
+        response = self.client.get(reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
         self.assertEqual(traffic_sign_real.location.ewkt, response.data.get("location"))
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
-        self.assertEqual(
-            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
-        )
+        self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
 
     def test_get_traffic_sign_real_detail__geojson(self):
         """
@@ -461,9 +421,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             "permit_decision_id": 456,
             "owner": self.test_owner.pk,
         }
-        response = self.client.post(
-            reverse("v1:trafficsignreal-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:trafficsignreal-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficSignReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -516,9 +474,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TrafficSignReal.objects.count(), 1)
-        deleted_traffic_sign_real = TrafficSignReal.objects.get(
-            id=str(traffic_sign_real.id)
-        )
+        deleted_traffic_sign_real = TrafficSignReal.objects.get(id=str(traffic_sign_real.id))
         self.assertEqual(deleted_traffic_sign_real.id, traffic_sign_real.id)
         self.assertFalse(deleted_traffic_sign_real.is_active)
         self.assertEqual(deleted_traffic_sign_real.deleted_by, self.user)

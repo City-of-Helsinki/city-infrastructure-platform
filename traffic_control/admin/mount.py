@@ -10,14 +10,7 @@ from ..mixins import (
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from ..models import (
-    MountPlan,
-    MountPlanFile,
-    MountReal,
-    MountRealFile,
-    MountType,
-    PortalType,
-)
+from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
 from .audit_log import AuditLogHistoryAdmin
 from .common import TrafficControlOperationInlineBase
 from .traffic_sign import OrderedTrafficSignRealInline

@@ -66,9 +66,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
         """
         self.client.force_login(self.user)
         device_type = self.__create_test_traffic_control_device_type()
-        response = self.client.get(
-            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id})
-        )
+        response = self.client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(device_type.id))
 
@@ -78,9 +76,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
         """
         self.client.force_login(self.admin_user)
         device_type = self.__create_test_traffic_control_device_type()
-        response = self.client.get(
-            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id})
-        )
+        response = self.client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(device_type.id))
 
@@ -93,9 +89,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
             "code": "L3",
             "description": "Suojatie",
         }
-        response = self.client.post(
-            reverse("v1:trafficcontroldevicetype-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(TrafficControlDeviceType.objects.count(), 0)
 
@@ -109,9 +103,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
             "description": "Suojatie",
             "target_model": DeviceTypeTargetModel.ADDITIONAL_SIGN.value,
         }
-        response = self.client.post(
-            reverse("v1:trafficcontroldevicetype-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficControlDeviceType.objects.count(), 1)
         device_type = TrafficControlDeviceType.objects.first()
@@ -127,13 +119,9 @@ class TrafficControlDeviceTypeTests(APITestCase):
             "code": "L3",
             "description": "Suojatie",
         }
-        response = self.client.post(
-            reverse("v1:trafficcontroldevicetype-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response = self.client.post(
-            reverse("v1:trafficcontroldevicetype-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(TrafficControlDeviceType.objects.count(), 1)
         device_type = TrafficControlDeviceType.objects.first()
@@ -151,9 +139,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
             "description": "Suojatie",
         }
         response = self.client.put(
-            reverse(
-                "v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}
-            ),
+            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
             data,
             format="json",
         )
@@ -171,9 +157,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
             "description": "Suojatie",
         }
         response = self.client.put(
-            reverse(
-                "v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}
-            ),
+            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
             data,
             format="json",
         )
@@ -190,9 +174,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
         self.client.force_login(self.user)
         device_type = self.__create_test_traffic_control_device_type()
         response = self.client.delete(
-            reverse(
-                "v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}
-            ),
+            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(TrafficControlDeviceType.objects.count(), 1)
@@ -204,9 +186,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
         self.client.force_login(self.admin_user)
         device_type = self.__create_test_traffic_control_device_type()
         response = self.client.delete(
-            reverse(
-                "v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}
-            ),
+            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TrafficControlDeviceType.objects.count(), 0)
@@ -217,9 +197,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
         get_traffic_control_device_type(code="B1")
         get_traffic_control_device_type(code="C1")
 
-        response = self.client.get(
-            reverse("v1:trafficcontroldevicetype-list"), data={"traffic_sign_type": "A"}
-        )
+        response = self.client.get(reverse("v1:trafficcontroldevicetype-list"), data={"traffic_sign_type": "A"})
 
         response_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -320,9 +298,7 @@ def test__device_type__response_code_attribute():
     client = get_api_client()
     dt = get_traffic_control_device_type()
 
-    response = client.get(
-        reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": dt.pk})
-    )
+    response = client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": dt.pk}))
     response_data = response.json()
 
     assert "code" in response_data, (

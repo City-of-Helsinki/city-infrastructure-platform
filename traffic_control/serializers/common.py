@@ -11,9 +11,7 @@ from ..models.common import DeviceTypeTargetModel
 from ..schema import TrafficSignType
 
 
-class TrafficControlDeviceTypeSerializer(
-    EnumSupportSerializerMixin, serializers.ModelSerializer
-):
+class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     traffic_sign_type = serializers.SerializerMethodField(
         method_name="get_traffic_sign_type",
     )
@@ -29,9 +27,7 @@ class TrafficControlDeviceTypeSerializer(
             return {"code": obj.code[0], "type": value}
         return None
 
-    def validate_target_model(
-        self, value: Optional[DeviceTypeTargetModel]
-    ) -> Optional[DeviceTypeTargetModel]:
+    def validate_target_model(self, value: Optional[DeviceTypeTargetModel]) -> Optional[DeviceTypeTargetModel]:
         if self.instance and self.instance.target_model != value:
             try:
                 self.instance.validate_change_target_model(value, raise_exception=True)

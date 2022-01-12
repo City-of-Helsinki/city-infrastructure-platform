@@ -6,10 +6,6 @@ setup(
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
-        line
-        for line in open("requirements.txt", "rt").readlines()
-        if line and not line.startswith("#")
-    ],
+    install_requires=[line for line in open("requirements.txt", "rt").readlines() if line and not line.startswith("#")],
     zip_safe=False,
 )

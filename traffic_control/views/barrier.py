@@ -5,12 +5,7 @@ from rest_framework.parsers import MultiPartParser
 
 from ..filters import BarrierPlanFilterSet, BarrierRealFilterSet
 from ..models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
-from ..schema import (
-    file_uuid_parameter,
-    FileUploadSchema,
-    location_parameter,
-    MultiFileUploadSchema,
-)
+from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from ..serializers.barrier import (
     BarrierPlanFileSerializer,
     BarrierPlanGeoJSONSerializer,
@@ -45,15 +40,11 @@ __all__ = ("BarrierPlanViewSet", "BarrierRealViewSet")
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single Barrier Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single Barrier Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single Barrier Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single Barrier Plan"),
 )
 class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -128,15 +119,11 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single Barrier Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single Barrier Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single Barrier Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single Barrier Real"),
 )
 class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {

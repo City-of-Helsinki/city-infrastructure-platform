@@ -6,27 +6,14 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import (
-    SoftDeleteModel,
-    SourceControlModel,
-    UpdatePlanLocationMixin,
-    UserControlModel,
-)
-from .common import (
-    Condition,
-    InstallationStatus,
-    Lifecycle,
-    OperationBase,
-    OperationType,
-)
+from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
+from .common import Condition, InstallationStatus, Lifecycle, OperationBase, OperationType
 from .plan import Plan
 from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
 
 
 class MountType(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     code = models.CharField(
         verbose_name=_("Code"),
         max_length=128,
@@ -66,9 +53,7 @@ class MountType(models.Model):
 
 
 class PortalType(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     structure = models.CharField(_("Portal structure"), max_length=64)
     build_type = models.CharField(_("Portal build type"), max_length=64)
     model = models.CharField(_("Portal model"), max_length=64)
@@ -83,12 +68,8 @@ class PortalType(models.Model):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
 
 
-class MountPlan(
-    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
-):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+class MountPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     mount_type = models.ForeignKey(
         MountType,
@@ -106,12 +87,8 @@ class MountPlan(
         null=True,
     )
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -120,17 +97,11 @@ class MountPlan(
         blank=True,
         null=True,
     )
-    height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    electric_accountable = models.CharField(
-        _("Electric accountable"), max_length=254, blank=True, null=True
-    )
+    electric_accountable = models.CharField(_("Electric accountable"), max_length=254, blank=True, null=True)
     is_foldable = models.BooleanField(_("Is foldable"), blank=True, null=True)
-    cross_bar_length = models.DecimalField(
-        _("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    cross_bar_length = models.DecimalField(_("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True)
     owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
@@ -138,9 +109,7 @@ class MountPlan(
         null=False,
         on_delete=models.PROTECT,
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -155,15 +124,9 @@ class MountPlan(
 
 
 class MountPlanFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="planfiles/mount/"
-    )
-    mount_plan = models.ForeignKey(
-        MountPlan, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/mount/")
+    mount_plan = models.ForeignKey(MountPlan, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "mount_plan_file"
@@ -175,9 +138,7 @@ class MountPlanFile(models.Model):
 
 
 class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -211,12 +172,8 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     condition = EnumIntegerField(
         Condition,
         verbose_name=_("Condition"),
@@ -225,20 +182,12 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         null=True,
     )
     inspected_at = models.DateTimeField(_("Inspected at"), blank=True, null=True)
-    height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    electric_accountable = models.CharField(
-        _("Electric accountable"), max_length=254, blank=True, null=True
-    )
+    electric_accountable = models.CharField(_("Electric accountable"), max_length=254, blank=True, null=True)
     is_foldable = models.BooleanField(_("Is foldable"), blank=True, null=True)
-    cross_bar_length = models.DecimalField(
-        _("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
-    diameter = models.DecimalField(
-        _("Diameter"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    cross_bar_length = models.DecimalField(_("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True)
+    diameter = models.DecimalField(_("Diameter"), max_digits=5, decimal_places=2, blank=True, null=True)
     owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
@@ -246,9 +195,7 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         null=False,
         on_delete=models.PROTECT,
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -290,15 +237,9 @@ class MountRealOperation(OperationBase):
 
 
 class MountRealFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="realfiles/mount/"
-    )
-    mount_real = models.ForeignKey(
-        MountReal, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/mount/")
+    mount_real = models.ForeignKey(MountReal, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "mount_real_file"

@@ -5,12 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
-from traffic_control.models import (
-    TrafficLightPlan,
-    TrafficLightReal,
-    TrafficLightSoundBeaconValue,
-    TrafficLightType,
-)
+from traffic_control.models import TrafficLightPlan, TrafficLightReal, TrafficLightSoundBeaconValue, TrafficLightType
 
 from ..models.common import DeviceTypeTargetModel
 from .factories import (
@@ -22,11 +17,7 @@ from .factories import (
     get_traffic_light_real,
     get_user,
 )
-from .test_base_api import (
-    point_location_error_test_data,
-    point_location_test_data,
-    TrafficControlAPIBaseTestCase,
-)
+from .test_base_api import point_location_error_test_data, point_location_test_data, TrafficControlAPIBaseTestCase
 
 
 @pytest.mark.django_db
@@ -41,9 +32,7 @@ def test_filter_traffic_light_plans_location(location, location_query, expected)
     api_client = get_api_client()
 
     traffic_light_plan = get_traffic_light_plan(location)
-    response = api_client.get(
-        reverse("v1:trafficlightplan-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:trafficlightplan-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -65,9 +54,7 @@ def test_filter_error_traffic_light_plans_location(location, location_query, exp
     api_client = get_api_client()
 
     get_traffic_light_plan(location)
-    response = api_client.get(
-        reverse("v1:trafficlightplan-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:trafficlightplan-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -81,9 +68,7 @@ def test__traffic_light_plan__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_light_plan = get_traffic_light_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -113,9 +98,7 @@ def test__traffic_light_plan__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_light_plan = get_traffic_light_plan()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -153,27 +136,21 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_traffic_light_plan()
-        response = self.client.get(
-            reverse("v1:trafficlightplan-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:trafficlightplan-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             traffic_light_plan = TrafficLightPlan.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(traffic_light_plan.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(traffic_light_plan.location.json))
 
     def test_get_traffic_light_detail(self):
         """
         Ensure we can get one traffic light plan object.
         """
         traffic_light = self.__create_test_traffic_light_plan()
-        response = self.client.get(
-            reverse("v1:trafficlightplan-detail", kwargs={"pk": traffic_light.id})
-        )
+        response = self.client.get(reverse("v1:trafficlightplan-detail", kwargs={"pk": traffic_light.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_light.id))
         self.assertEqual(traffic_light.location.ewkt, response.data.get("location"))
@@ -203,9 +180,7 @@ class TrafficLightPlanTests(TrafficControlAPIBaseTestCase):
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
         }
-        response = self.client.post(
-            reverse("v1:trafficlightplan-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:trafficlightplan-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficLightPlan.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -294,9 +269,7 @@ def test_filter_traffic_light_reals_location(location, location_query, expected)
     api_client = get_api_client()
 
     traffic_light_real = get_traffic_light_real(location)
-    response = api_client.get(
-        reverse("v1:trafficlightreal-list"), {"location": location_query.ewkt}
-    )
+    response = api_client.get(reverse("v1:trafficlightreal-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data.get("count") == expected
@@ -318,9 +291,7 @@ def test_filter_error_traffic_light_reals_location(location, location_query, exp
     api_client = get_api_client()
 
     get_traffic_light_real(location)
-    response = api_client.get(
-        reverse("v1:trafficlightreal-list"), {"location": location_query}
-    )
+    response = api_client.get(reverse("v1:trafficlightreal-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
@@ -334,9 +305,7 @@ def test__traffic_light_real__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_light_real = get_traffic_light_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -366,9 +335,7 @@ def test__traffic_light_real__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_light_real = get_traffic_light_real()
-    device_type = get_traffic_control_device_type(
-        code="123", description="test", target_model=target_model
-    )
+    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -406,46 +373,30 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         count = 3
         for i in range(count):
             self.__create_test_traffic_light_real()
-        response = self.client.get(
-            reverse("v1:trafficlightreal-list"), data={"geo_format": "geojson"}
-        )
+        response = self.client.get(reverse("v1:trafficlightreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
 
         results = response.data.get("results")
         for result in results:
             traffic_light_real = TrafficLightReal.objects.get(id=result.get("id"))
-            self.assertEqual(
-                result.get("location"), GeoJsonDict(traffic_light_real.location.json)
-            )
+            self.assertEqual(result.get("location"), GeoJsonDict(traffic_light_real.location.json))
 
     def test_get_traffic_light_real_detail(self):
         """
         Ensure we can get one real traffic light object.
         """
         traffic_light_real = self.__create_test_traffic_light_real()
-        operation_1 = add_traffic_light_real_operation(
-            traffic_light_real, operation_date=datetime.date(2020, 11, 5)
-        )
-        operation_2 = add_traffic_light_real_operation(
-            traffic_light_real, operation_date=datetime.date(2020, 11, 15)
-        )
-        operation_3 = add_traffic_light_real_operation(
-            traffic_light_real, operation_date=datetime.date(2020, 11, 10)
-        )
-        response = self.client.get(
-            reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id})
-        )
+        operation_1 = add_traffic_light_real_operation(traffic_light_real, operation_date=datetime.date(2020, 11, 5))
+        operation_2 = add_traffic_light_real_operation(traffic_light_real, operation_date=datetime.date(2020, 11, 15))
+        operation_3 = add_traffic_light_real_operation(traffic_light_real, operation_date=datetime.date(2020, 11, 10))
+        response = self.client.get(reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_light_real.id))
-        self.assertEqual(
-            traffic_light_real.location.ewkt, response.data.get("location")
-        )
+        self.assertEqual(traffic_light_real.location.ewkt, response.data.get("location"))
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
-        self.assertEqual(
-            operation_ids, [operation_1.id, operation_3.id, operation_2.id]
-        )
+        self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
 
     def test_get_traffic_light_real_detail__geojson(self):
         """
@@ -473,9 +424,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             "lifecycle": self.test_lifecycle.value,
             "owner": self.test_owner.pk,
         }
-        response = self.client.post(
-            reverse("v1:trafficlightreal-list"), data, format="json"
-        )
+        response = self.client.post(reverse("v1:trafficlightreal-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(TrafficLightReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -529,9 +478,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TrafficLightReal.objects.count(), 1)
-        deleted_traffic_light_real = TrafficLightReal.objects.get(
-            id=str(traffic_light_real.id)
-        )
+        deleted_traffic_light_real = TrafficLightReal.objects.get(id=str(traffic_light_real.id))
         self.assertEqual(deleted_traffic_light_real.id, traffic_light_real.id)
         self.assertFalse(deleted_traffic_light_real.is_active)
         self.assertEqual(deleted_traffic_light_real.deleted_by, self.user)

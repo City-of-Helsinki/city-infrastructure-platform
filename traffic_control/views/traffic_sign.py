@@ -6,11 +6,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
-from ..filters import (
-    TrafficControlDeviceTypeFilterSet,
-    TrafficSignPlanFilterSet,
-    TrafficSignRealFilterSet,
-)
+from ..filters import TrafficControlDeviceTypeFilterSet, TrafficSignPlanFilterSet, TrafficSignRealFilterSet
 from ..models import (
     TrafficControlDeviceType,
     TrafficSignPlan,
@@ -19,12 +15,7 @@ from ..models import (
     TrafficSignRealFile,
 )
 from ..permissions import IsAdminUserOrReadOnly
-from ..schema import (
-    file_uuid_parameter,
-    FileUploadSchema,
-    location_parameter,
-    MultiFileUploadSchema,
-)
+from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from ..serializers.common import TrafficControlDeviceTypeSerializer
 from ..serializers.traffic_sign import (
     TrafficSignPlanFileSerializer,
@@ -49,33 +40,23 @@ __all__ = (
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all TrafficSign Codes"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve all TrafficSign Codes"),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single TrafficSign Code"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficSign Code"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(
-        operation_description="Update single TrafficSign Code"
-    ),
+    decorator=swagger_auto_schema(operation_description="Update single TrafficSign Code"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single TrafficSign Code"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single TrafficSign Code"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Delete single TrafficSign Code"
-    ),
+    decorator=swagger_auto_schema(operation_description="Delete single TrafficSign Code"),
 )
 class TrafficControlDeviceTypeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -100,27 +81,19 @@ class TrafficControlDeviceTypeViewSet(ModelViewSet):
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single TrafficSign Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficSign Plan"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(
-        operation_description="Update single TrafficSign Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Update single TrafficSign Plan"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single TrafficSign Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single TrafficSign Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single TrafficSign Plan"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single TrafficSign Plan"),
 )
 class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -187,27 +160,19 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single TrafficSign Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficSign Real"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(
-        operation_description="Update single TrafficSign Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Update single TrafficSign Real"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(
-        operation_description="Partially update single TrafficSign Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Partially update single TrafficSign Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(
-        operation_description="Soft-delete single TrafficSign Real"
-    ),
+    decorator=swagger_auto_schema(operation_description="Soft-delete single TrafficSign Real"),
 )
 class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {

@@ -11,9 +11,7 @@ User = get_user_model()
 class MountTypeTests(APITestCase):
     def setUp(self):
         MountType.objects.all().delete()
-        self.admin_user = User.objects.create_superuser(
-            username="admin", password="admin", email="admin@example.com"
-        )
+        self.admin_user = User.objects.create_superuser(username="admin", password="admin", email="admin@example.com")
         self.user = User.objects.create_user(username="user", password="user")
 
     def test__list__as_user__ok(self):
@@ -37,18 +35,14 @@ class MountTypeTests(APITestCase):
     def test__retrieve__as_user__ok(self):
         self.client.force_login(self.user)
         mount_type = self.__create_test_mount_type()
-        response = self.client.get(
-            reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id})
-        )
+        response = self.client.get(reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_type.id))
 
     def test__retrieve__as_admin__ok(self):
         self.client.force_login(self.admin_user)
         mount_type = self.__create_test_mount_type()
-        response = self.client.get(
-            reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id})
-        )
+        response = self.client.get(reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_type.id))
 

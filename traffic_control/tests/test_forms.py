@@ -7,11 +7,7 @@ from enumfields import Enum, EnumIntegerField
 from traffic_control.forms import AdminEnumChoiceField, TrafficSignRealModelForm
 from traffic_control.models import TrafficSignReal
 from traffic_control.models.common import Lifecycle
-from traffic_control.tests.factories import (
-    get_owner,
-    get_traffic_control_device_type,
-    get_user,
-)
+from traffic_control.tests.factories import get_owner, get_traffic_control_device_type, get_user
 
 
 class _TestEnum(Enum):
@@ -26,9 +22,7 @@ class _TestEnum(Enum):
 
 
 class _TestForm(forms.Form):
-    test_field = EnumIntegerField(_TestEnum).formfield(
-        choices_form_class=AdminEnumChoiceField
-    )
+    test_field = EnumIntegerField(_TestEnum).formfield(choices_form_class=AdminEnumChoiceField)
 
 
 def test_admin_enum_choice_field():

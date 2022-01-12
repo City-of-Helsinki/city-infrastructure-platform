@@ -24,9 +24,7 @@ class Command(BaseCommand):
         self.stdout.write("Generating mount real objects ...")
         owner = get_default_owner()
 
-        traffic_signs = TrafficSignReal.objects.active().filter(
-            mount_real__isnull=True, mount_type__isnull=False
-        )
+        traffic_signs = TrafficSignReal.objects.active().filter(mount_real__isnull=True, mount_type__isnull=False)
         standalone_additional_signs = AdditionalSignReal.objects.active().filter(
             mount_real__isnull=True, mount_type__isnull=False, parent__isnull=True
         )

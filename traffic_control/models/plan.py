@@ -19,9 +19,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     DELETE_PERMISSION = "traffic_control.delete_plan"
     VIEW_PERMISSION = "traffic_control.view_plan"
 
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
 
     name = models.CharField(verbose_name=_("Name"), max_length=512)
     plan_number = models.CharField(
@@ -29,9 +27,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         max_length=16,
         help_text=_("Year and verdict section separated with a dash"),
     )
-    location = models.MultiPolygonField(
-        _("Location (3D)"), dim=3, srid=settings.SRID, null=True, blank=True
-    )
+    location = models.MultiPolygonField(_("Location (3D)"), dim=3, srid=settings.SRID, null=True, blank=True)
     planner = models.CharField(_("Planner"), blank=True, max_length=200)
     decision_maker = models.CharField(_("Decision maker"), blank=True, max_length=200)
 

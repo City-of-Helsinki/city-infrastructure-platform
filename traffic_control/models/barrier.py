@@ -8,12 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import (
-    SoftDeleteModel,
-    SourceControlModel,
-    UpdatePlanLocationMixin,
-    UserControlModel,
-)
+from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -60,24 +55,16 @@ class LocationSpecifier(Enum):
         LEFT = _("Left of road or lane")
 
 
-class BarrierPlan(
-    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
-):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+class BarrierPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.BARRIER)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.BARRIER)),
     )
-    connection_type = EnumIntegerField(
-        ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED
-    )
+    connection_type = EnumIntegerField(ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED)
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     is_electric = models.BooleanField(_("Is electric"), default=False)
     owner = models.ForeignKey(
@@ -87,9 +74,7 @@ class BarrierPlan(
         null=False,
         on_delete=models.PROTECT,
     )
-    reflective = EnumField(
-        Reflective, verbose_name=_("Reflective"), blank=True, null=True
-    )
+    reflective = EnumField(Reflective, verbose_name=_("Reflective"), blank=True, null=True)
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -118,15 +103,9 @@ class BarrierPlan(
         blank=True,
         null=True,
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     length = models.IntegerField(_("Length"), blank=True, null=True)
     count = models.IntegerField(_("Count"), blank=True, null=True)
     txt = models.TextField(_("Txt"), blank=True, null=True)
@@ -144,23 +123,15 @@ class BarrierPlan(
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.BARRIER):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for barriers'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for barriers')
 
         super().save(*args, **kwargs)
 
 
 class BarrierPlanFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="planfiles/barrier/"
-    )
-    barrier_plan = models.ForeignKey(
-        BarrierPlan, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/barrier/")
+    barrier_plan = models.ForeignKey(BarrierPlan, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "barrier_plan_file"
@@ -172,9 +143,7 @@ class BarrierPlanFile(models.Model):
 
 
 class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     barrier_plan = models.ForeignKey(
         BarrierPlan,
         verbose_name=_("Barrier Plan"),
@@ -187,13 +156,9 @@ class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.BARRIER)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.BARRIER)),
     )
-    connection_type = EnumIntegerField(
-        ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED
-    )
+    connection_type = EnumIntegerField(ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED)
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     is_electric = models.BooleanField(_("Is electric"), default=False)
     owner = models.ForeignKey(
@@ -212,13 +177,9 @@ class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    reflective = EnumField(
-        Reflective, verbose_name=_("Reflective"), blank=True, null=True
-    )
+    reflective = EnumField(Reflective, verbose_name=_("Reflective"), blank=True, null=True)
     road_name = models.CharField(_("Road name"), max_length=254)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -232,15 +193,9 @@ class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     length = models.IntegerField(_("Length"), blank=True, null=True)
     count = models.IntegerField(_("Count"), blank=True, null=True)
     txt = models.TextField(_("Txt"), blank=True, null=True)
@@ -265,9 +220,7 @@ class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.BARRIER):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for barriers'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for barriers')
 
         super().save(*args, **kwargs)
 
@@ -294,15 +247,9 @@ class BarrierRealOperation(OperationBase):
 
 
 class BarrierRealFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="realfiles/barrier/"
-    )
-    barrier_real = models.ForeignKey(
-        BarrierReal, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/barrier/")
+    barrier_real = models.ForeignKey(BarrierReal, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "barrier_real_file"

@@ -8,12 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import (
-    SoftDeleteModel,
-    SourceControlModel,
-    UpdatePlanLocationMixin,
-    UserControlModel,
-)
+from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -95,12 +90,8 @@ class PushButton(Enum):
         YES = _("Yes")
 
 
-class TrafficLightPlan(
-    UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel
-):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+class TrafficLightPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     direction = models.IntegerField(_("Direction"), default=0)
     type = EnumField(TrafficLightType, blank=True, null=True)
@@ -108,9 +99,7 @@ class TrafficLightPlan(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_LIGHT)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_LIGHT)),
     )
     mount_plan = models.ForeignKey(
         MountPlan,
@@ -126,12 +115,8 @@ class TrafficLightPlan(
         null=True,
         on_delete=models.SET_NULL,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -147,9 +132,7 @@ class TrafficLightPlan(
         blank=True,
         null=True,
     )
-    height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     vehicle_recognition = EnumIntegerField(
         VehicleRecognition,
         verbose_name=_("Vehicle recognition"),
@@ -169,12 +152,8 @@ class TrafficLightPlan(
         null=True,
     )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -203,23 +182,15 @@ class TrafficLightPlan(
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_LIGHT):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for traffic lights'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic lights')
 
         super().save(*args, **kwargs)
 
 
 class TrafficLightPlanFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="planfiles/traffic_light/"
-    )
-    traffic_light_plan = models.ForeignKey(
-        TrafficLightPlan, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/traffic_light/")
+    traffic_light_plan = models.ForeignKey(TrafficLightPlan, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "traffic_light_plan_file"
@@ -231,9 +202,7 @@ class TrafficLightPlanFile(models.Model):
 
 
 class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     traffic_light_plan = models.ForeignKey(
         TrafficLightPlan,
         verbose_name=_("Traffic Light Plan"),
@@ -248,9 +217,7 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
-        limit_choices_to=Q(
-            Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_LIGHT)
-        ),
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_LIGHT)),
     )
     mount_real = models.ForeignKey(
         MountReal,
@@ -275,12 +242,8 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"), blank=True, null=True
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"), blank=True, null=True
-    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     condition = EnumIntegerField(
         Condition,
         verbose_name=_("Condition"),
@@ -288,13 +251,9 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    lifecycle = EnumIntegerField(
-        Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE
-    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(
-        LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True
-    )
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
@@ -308,9 +267,7 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    height = models.DecimalField(
-        _("Height"), max_digits=5, decimal_places=2, blank=True, null=True
-    )
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     vehicle_recognition = EnumIntegerField(
         VehicleRecognition,
         verbose_name=_("Vehicle recognition"),
@@ -351,9 +308,7 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
 
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_LIGHT):
-            raise ValidationError(
-                f'Device type "{self.device_type}" is not allowed for traffic lights'
-            )
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic lights')
 
         super().save(*args, **kwargs)
 
@@ -380,15 +335,9 @@ class TrafficLightRealOperation(OperationBase):
 
 
 class TrafficLightRealFile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, unique=True, editable=False, default=uuid.uuid4
-    )
-    file = models.FileField(
-        _("File"), blank=False, null=False, upload_to="realfiles/traffic_light/"
-    )
-    traffic_light_real = models.ForeignKey(
-        TrafficLightReal, on_delete=models.CASCADE, related_name="files"
-    )
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/traffic_light/")
+    traffic_light_real = models.ForeignKey(TrafficLightReal, on_delete=models.CASCADE, related_name="files")
 
     class Meta:
         db_table = "traffic_light_real_file"

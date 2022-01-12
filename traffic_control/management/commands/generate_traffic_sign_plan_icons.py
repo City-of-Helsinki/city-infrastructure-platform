@@ -12,9 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("Generating traffic sign plan icons...")
-        svg_dir = os.path.join(
-            settings.BASE_DIR, "traffic_control/static/traffic_control/svg"
-        )
+        svg_dir = os.path.join(settings.BASE_DIR, "traffic_control/static/traffic_control/svg")
         src_dir = os.path.join(svg_dir, "traffic_sign_icons")
         dest_dir = os.path.join(svg_dir, "traffic_sign_plan_icons")
         filenames = os.listdir(src_dir)

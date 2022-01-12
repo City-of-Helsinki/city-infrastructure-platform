@@ -81,9 +81,7 @@ class SoftDeleteFilter(SimpleListFilter):
         for lookup, title in self.lookup_choices:
             yield {
                 "selected": self.value() == lookup,
-                "query_string": changelist.get_query_string(
-                    {self.parameter_name: lookup}, []
-                ),
+                "query_string": changelist.get_query_string({self.parameter_name: lookup}, []),
                 "display": title,
             }
 
@@ -117,7 +115,5 @@ class SoftDeleteAdminMixin:
     def action_undo_soft_delete(self, request, queryset):
         queryset.update(is_active=True, deleted_by=None, deleted_at=None)
 
-    action_undo_soft_delete.short_description = _(
-        "Mark selected objects as not deleted"
-    )
+    action_undo_soft_delete.short_description = _("Mark selected objects as not deleted")
     action_undo_soft_delete.allowed_permissions = ("change",)

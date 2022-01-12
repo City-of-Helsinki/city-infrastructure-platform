@@ -19,14 +19,10 @@ class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class RoadMarkingPlanSerializer(
-    EnumSupportSerializerMixin, serializers.ModelSerializer
-):
+class RoadMarkingPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = RoadMarkingPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.ROAD_MARKING
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING)
     )
 
     class Meta:
@@ -58,18 +54,12 @@ class RoadMarkingRealOperationSerializer(serializers.ModelSerializer):
         fields = ("id", "operation_type", "operation_date")
 
 
-class RoadMarkingRealSerializer(
-    EnumSupportSerializerMixin, serializers.ModelSerializer
-):
+class RoadMarkingRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = RoadMarkingRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.ROAD_MARKING
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING)
     )
-    operations = RoadMarkingRealOperationSerializer(
-        many=True, required=False, read_only=True
-    )
+    operations = RoadMarkingRealOperationSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = RoadMarkingReal

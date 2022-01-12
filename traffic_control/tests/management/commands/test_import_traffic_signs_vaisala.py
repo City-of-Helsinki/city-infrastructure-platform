@@ -56,27 +56,19 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
                 )
             call_command("import_traffic_sign_reals_vaisala", "test-data.csv")
             self.assertEqual(TrafficSignReal.objects.count(), 3)
-            traffic_sign_device_types = dict(
-                TrafficSignReal.objects.values_list("source_id", "device_type__code")
-            )
+            traffic_sign_device_types = dict(TrafficSignReal.objects.values_list("source_id", "device_type__code"))
             expected_traffic_sign_device_types = {
                 "id-1": "CODE-A1",
                 "id-2": "CODE-B2",
                 "id-3": "CODE-C3",
             }
-            self.assertDictEqual(
-                traffic_sign_device_types, expected_traffic_sign_device_types
-            )
+            self.assertDictEqual(traffic_sign_device_types, expected_traffic_sign_device_types)
             self.assertEqual(AdditionalSignReal.objects.count(), 2)
             additional_sign_device_types = dict(
-                AdditionalSignContentReal.objects.values_list(
-                    "parent__source_id", "device_type__code"
-                )
+                AdditionalSignContentReal.objects.values_list("parent__source_id", "device_type__code")
             )
             expected_additional_sign_device_types = {
                 "id-4": "CODE-80",
                 "id-5": "CODE-88",
             }
-            self.assertDictEqual(
-                additional_sign_device_types, expected_additional_sign_device_types
-            )
+            self.assertDictEqual(additional_sign_device_types, expected_additional_sign_device_types)

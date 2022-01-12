@@ -2,13 +2,7 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from ..models import (
-    BarrierPlan,
-    BarrierPlanFile,
-    BarrierReal,
-    BarrierRealFile,
-    TrafficControlDeviceType,
-)
+from ..models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile, TrafficControlDeviceType
 from ..models.barrier import BarrierRealOperation
 from ..models.common import DeviceTypeTargetModel
 
@@ -22,9 +16,7 @@ class BarrierPlanFileSerializer(serializers.ModelSerializer):
 class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = BarrierPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.BARRIER
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER)
     )
 
     class Meta:
@@ -59,13 +51,9 @@ class BarrierRealOperationSerializer(serializers.ModelSerializer):
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     files = BarrierRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(
-            DeviceTypeTargetModel.BARRIER
-        )
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER)
     )
-    operations = BarrierRealOperationSerializer(
-        many=True, required=False, read_only=True
-    )
+    operations = BarrierRealOperationSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = BarrierReal
