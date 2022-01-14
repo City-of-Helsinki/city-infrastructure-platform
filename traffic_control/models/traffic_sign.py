@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import (
+    AbstractFileModel,
     DecimalValueFromDeviceTypeMixin,
     SoftDeleteModel,
     SourceControlModel,
@@ -187,20 +188,6 @@ class TrafficSignPlan(
     def soft_delete(self, user):
         super().soft_delete(user)
         self.additional_signs.soft_delete(user)
-
-
-class TrafficSignPlanFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/traffic_sign/")
-    traffic_sign_plan = models.ForeignKey(TrafficSignPlan, on_delete=models.CASCADE, related_name="files")
-
-    class Meta:
-        db_table = "traffic_sign_plan_file"
-        verbose_name = _("Traffic Sign Plan File")
-        verbose_name_plural = _("Traffic Sign Plan Files")
-
-    def __str__(self):
-        return "%s" % self.file
 
 
 class TrafficSignRealQuerySet(SoftDeleteQuerySet):
@@ -394,8 +381,17 @@ class TrafficSignRealOperation(OperationBase):
         verbose_name_plural = _("Traffic sign real operations")
 
 
-class TrafficSignRealFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class TrafficSignPlanFile(AbstractFileModel):
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/traffic_sign/")
+    traffic_sign_plan = models.ForeignKey(TrafficSignPlan, on_delete=models.CASCADE, related_name="files")
+
+    class Meta:
+        db_table = "traffic_sign_plan_file"
+        verbose_name = _("Traffic Sign Plan File")
+        verbose_name_plural = _("Traffic Sign Plan Files")
+
+
+class TrafficSignRealFile(AbstractFileModel):
     file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/traffic_sign/")
     traffic_sign_real = models.ForeignKey(TrafficSignReal, on_delete=models.CASCADE, related_name="files")
 
@@ -403,9 +399,6 @@ class TrafficSignRealFile(models.Model):
         db_table = "traffic_sign_real_file"
         verbose_name = _("Traffic Sign Real File")
         verbose_name_plural = _("Traffic Sign Real Files")
-
-    def __str__(self):
-        return f"{self.file}"
 
 
 auditlog.register(TrafficSignPlan)

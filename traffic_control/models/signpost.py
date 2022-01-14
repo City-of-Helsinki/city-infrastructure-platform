@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from ..mixins.models import (
+    AbstractFileModel,
     DecimalValueFromDeviceTypeMixin,
     SoftDeleteModel,
     SourceControlModel,
@@ -161,20 +162,6 @@ class SignpostPlan(
             raise ValidationError(f'Device type "{self.device_type}" is not allowed for signposts')
 
         super().save(*args, **kwargs)
-
-
-class SignpostPlanFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/signpost/")
-    signpost_plan = models.ForeignKey(SignpostPlan, on_delete=models.CASCADE, related_name="files")
-
-    class Meta:
-        db_table = "signpost_plan_file"
-        verbose_name = _("Signpost Plan File")
-        verbose_name_plural = _("Signpost Plan Files")
-
-    def __str__(self):
-        return "%s" % self.file
 
 
 class SignpostReal(
@@ -330,8 +317,17 @@ class SignpostRealOperation(OperationBase):
         verbose_name_plural = _("Signpost real operations")
 
 
-class SignpostRealFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class SignpostPlanFile(AbstractFileModel):
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/signpost/")
+    signpost_plan = models.ForeignKey(SignpostPlan, on_delete=models.CASCADE, related_name="files")
+
+    class Meta:
+        db_table = "signpost_plan_file"
+        verbose_name = _("Signpost Plan File")
+        verbose_name_plural = _("Signpost Plan Files")
+
+
+class SignpostRealFile(AbstractFileModel):
     file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/signpost/")
     signpost_real = models.ForeignKey(SignpostReal, on_delete=models.CASCADE, related_name="files")
 
@@ -339,9 +335,6 @@ class SignpostRealFile(models.Model):
         db_table = "signpost_real_file"
         verbose_name = _("Signpost Real File")
         verbose_name_plural = _("Signpost Real Files")
-
-    def __str__(self):
-        return f"{self.file}"
 
 
 auditlog.register(SignpostPlan)

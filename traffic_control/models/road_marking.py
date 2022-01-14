@@ -8,7 +8,13 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    AbstractFileModel,
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -190,20 +196,6 @@ class RoadMarkingPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteMod
             )
 
 
-class RoadMarkingPlanFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/road_marking/")
-    road_marking_plan = models.ForeignKey(RoadMarkingPlan, on_delete=models.CASCADE, related_name="files")
-
-    class Meta:
-        db_table = "road_marking_plan_file"
-        verbose_name = _("RoadMarking Plan File")
-        verbose_name_plural = _("RoadMarking Plan Files")
-
-    def __str__(self):
-        return "%s" % self.file
-
-
 class RoadMarkingReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     road_marking_plan = models.ForeignKey(
@@ -351,8 +343,17 @@ class RoadMarkingRealOperation(OperationBase):
         verbose_name_plural = _("Road marking real operations")
 
 
-class RoadMarkingRealFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class RoadMarkingPlanFile(AbstractFileModel):
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/road_marking/")
+    road_marking_plan = models.ForeignKey(RoadMarkingPlan, on_delete=models.CASCADE, related_name="files")
+
+    class Meta:
+        db_table = "road_marking_plan_file"
+        verbose_name = _("RoadMarking Plan File")
+        verbose_name_plural = _("RoadMarking Plan Files")
+
+
+class RoadMarkingRealFile(AbstractFileModel):
     file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/road_marking/")
     road_marking_real = models.ForeignKey(RoadMarkingReal, on_delete=models.CASCADE, related_name="files")
 
@@ -360,9 +361,6 @@ class RoadMarkingRealFile(models.Model):
         db_table = "road_marking_real_file"
         verbose_name = _("RoadMarking Real File")
         verbose_name_plural = _("RoadMarking Real Files")
-
-    def __str__(self):
-        return f"{self.file}"
 
 
 auditlog.register(RoadMarkingPlan)

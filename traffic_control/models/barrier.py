@@ -8,7 +8,13 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    AbstractFileModel,
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -128,20 +134,6 @@ class BarrierPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, 
         super().save(*args, **kwargs)
 
 
-class BarrierPlanFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/barrier/")
-    barrier_plan = models.ForeignKey(BarrierPlan, on_delete=models.CASCADE, related_name="files")
-
-    class Meta:
-        db_table = "barrier_plan_file"
-        verbose_name = _("Barrier Plan File")
-        verbose_name_plural = _("Barrier Plan Files")
-
-    def __str__(self):
-        return "%s" % self.file
-
-
 class BarrierReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     barrier_plan = models.ForeignKey(
@@ -246,8 +238,17 @@ class BarrierRealOperation(OperationBase):
         verbose_name_plural = _("Barrier real operations")
 
 
-class BarrierRealFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class BarrierPlanFile(AbstractFileModel):
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/barrier/")
+    barrier_plan = models.ForeignKey(BarrierPlan, on_delete=models.CASCADE, related_name="files")
+
+    class Meta:
+        db_table = "barrier_plan_file"
+        verbose_name = _("Barrier Plan File")
+        verbose_name_plural = _("Barrier Plan Files")
+
+
+class BarrierRealFile(AbstractFileModel):
     file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/barrier/")
     barrier_real = models.ForeignKey(BarrierReal, on_delete=models.CASCADE, related_name="files")
 
@@ -255,9 +256,6 @@ class BarrierRealFile(models.Model):
         db_table = "barrier_real_file"
         verbose_name = _("Barrier Real File")
         verbose_name_plural = _("Barrier Real Files")
-
-    def __str__(self):
-        return f"{self.file}"
 
 
 auditlog.register(BarrierPlan)

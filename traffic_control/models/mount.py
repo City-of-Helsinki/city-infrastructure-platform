@@ -6,7 +6,13 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    AbstractFileModel,
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import Condition, InstallationStatus, Lifecycle, OperationBase, OperationType
 from .plan import Plan
 from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
@@ -123,20 +129,6 @@ class MountPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, Us
         return "%s %s" % (self.id, self.mount_type)
 
 
-class MountPlanFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/mount/")
-    mount_plan = models.ForeignKey(MountPlan, on_delete=models.CASCADE, related_name="files")
-
-    class Meta:
-        db_table = "mount_plan_file"
-        verbose_name = _("Mount Plan File")
-        verbose_name_plural = _("Mount Plan Files")
-
-    def __str__(self):
-        return "%s" % self.file
-
-
 class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     mount_plan = models.ForeignKey(
@@ -236,8 +228,17 @@ class MountRealOperation(OperationBase):
         verbose_name_plural = _("Mount real operations")
 
 
-class MountRealFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class MountPlanFile(AbstractFileModel):
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/mount/")
+    mount_plan = models.ForeignKey(MountPlan, on_delete=models.CASCADE, related_name="files")
+
+    class Meta:
+        db_table = "mount_plan_file"
+        verbose_name = _("Mount Plan File")
+        verbose_name_plural = _("Mount Plan Files")
+
+
+class MountRealFile(AbstractFileModel):
     file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/mount/")
     mount_real = models.ForeignKey(MountReal, on_delete=models.CASCADE, related_name="files")
 
@@ -245,9 +246,6 @@ class MountRealFile(models.Model):
         db_table = "mount_real_file"
         verbose_name = _("Mount Real File")
         verbose_name_plural = _("Mount Real Files")
-
-    def __str__(self):
-        return f"{self.file}"
 
 
 auditlog.register(MountType)
