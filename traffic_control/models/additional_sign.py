@@ -95,6 +95,9 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return f"{self.__class__.__name__} {self.id}"
+
 
 class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
     parent = models.ForeignKey(
@@ -126,9 +129,6 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
         verbose_name = _("Additional Sign Plan")
         verbose_name_plural = _("Additional Sign Plans")
         unique_together = ["source_name", "source_id"]
-
-    def __str__(self):
-        return f"AdditionalSignPlan {self.id}"
 
 
 class AdditionalSignReal(AbstractAdditionalSign):
@@ -201,9 +201,6 @@ class AdditionalSignReal(AbstractAdditionalSign):
         verbose_name_plural = _("Additional Sign Reals")
         unique_together = ["source_name", "source_id"]
 
-    def __str__(self):
-        return f"AdditionalSignReal {self.id}"
-
 
 class AdditionalSignRealOperation(OperationBase):
     operation_type = models.ForeignKey(
@@ -243,6 +240,9 @@ class AbstractAdditionalSignContent(SourceControlModel, UserControlModel):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return f"{self.__class__.__name__} at position {self.order} for {self.parent}"
+
     def save(self, *args, **kwargs):
         if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ADDITIONAL_SIGN):
             raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
@@ -273,9 +273,6 @@ class AdditionalSignContentPlan(AbstractAdditionalSignContent):
         verbose_name_plural = _("Additional Sign Content Plans")
         ordering = ("parent", "order")
 
-    def __str__(self):
-        return f"AdditionalSignContentPlan at position {self.order} for {self.parent}"
-
 
 class AdditionalSignContentReal(AbstractAdditionalSignContent):
     parent = models.ForeignKey(
@@ -291,9 +288,6 @@ class AdditionalSignContentReal(AbstractAdditionalSignContent):
         verbose_name = _("Additional Sign Content Real")
         verbose_name_plural = _("Additional Sign Content Reals")
         ordering = ("parent", "order")
-
-    def __str__(self):
-        return f"AdditionalSignContentReal at position {self.order} for {self.parent}"
 
 
 auditlog.register(AdditionalSignPlan)

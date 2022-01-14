@@ -26,7 +26,7 @@ from .common import (
     OperationType,
     TrafficControlDeviceType,
 )
-from .mount import MountPlan, MountReal, MountType
+from .mount import MountPlan, MountReal
 from .plan import Plan
 from .utils import SoftDeleteQuerySet
 
@@ -96,10 +96,26 @@ class PushButton(Enum):
         YES = _("Yes")
 
 
-class TrafficLightPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel):
+class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
+    lane_type = EnumField(
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
+    )
     direction = models.IntegerField(_("Direction"), default=0)
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
+    mount_type = models.ForeignKey(
+        "MountType",
+        verbose_name=_("Mount type"),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     type = EnumField(TrafficLightType, blank=True, null=True)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
@@ -107,44 +123,8 @@ class TrafficLightPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteMo
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_LIGHT)),
     )
-    mount_plan = models.ForeignKey(
-        MountPlan,
-        verbose_name=_("Mount Plan"),
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    plan = models.ForeignKey(
-        Plan,
-        verbose_name=_("Plan"),
-        on_delete=models.PROTECT,
-        related_name="traffic_light_plans",
-        blank=True,
-        null=True,
-    )
-    location_specifier = EnumIntegerField(
-        LocationSpecifier,
-        verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
-        blank=True,
-        null=True,
-    )
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
-    vehicle_recognition = EnumIntegerField(
-        VehicleRecognition,
-        verbose_name=_("Vehicle recognition"),
-        blank=True,
-        null=True,
-    )
+    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     push_button = EnumIntegerField(
         PushButton,
         verbose_name=_("Push button"),
@@ -157,22 +137,57 @@ class TrafficLightPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteMo
         blank=True,
         null=True,
     )
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
-    lane_type = EnumField(
-        LaneType,
-        verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
-        blank=True,
-    )
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
         blank=False,
         null=False,
         on_delete=models.PROTECT,
+    )
+    vehicle_recognition = EnumIntegerField(
+        VehicleRecognition,
+        verbose_name=_("Vehicle recognition"),
+        blank=True,
+        null=True,
+    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
+    location_specifier = EnumIntegerField(
+        LocationSpecifier,
+        verbose_name=_("Location specifier"),
+        default=LocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.id} {self.type} {self.device_type}"
+
+    def save(self, *args, **kwargs):
+        if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_LIGHT):
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic lights')
+
+        super().save(*args, **kwargs)
+
+
+class TrafficLightPlan(UpdatePlanLocationMixin, AbstractTrafficLight):
+    mount_plan = models.ForeignKey(
+        MountPlan,
+        verbose_name=_("Mount Plan"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.PROTECT,
+        related_name="traffic_light_plans",
+        blank=True,
+        null=True,
     )
 
     objects = SoftDeleteQuerySet.as_manager()
@@ -183,18 +198,8 @@ class TrafficLightPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteMo
         verbose_name_plural = _("Traffic Light Plans")
         unique_together = ["source_name", "source_id"]
 
-    def __str__(self):
-        return f"{self.id} {self.type} {self.device_type}"
 
-    def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_LIGHT):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic lights')
-
-        super().save(*args, **kwargs)
-
-
-class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class TrafficLightReal(AbstractTrafficLight):
     traffic_light_plan = models.ForeignKey(
         TrafficLightPlan,
         verbose_name=_("Traffic Light Plan"),
@@ -202,28 +207,12 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    direction = models.IntegerField(_("Direction"), default=0)
-    type = EnumField(TrafficLightType, blank=True, null=True)
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_LIGHT)),
-    )
     mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
         on_delete=models.PROTECT,
         blank=True,
         null=True,
-    )
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
     )
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
@@ -234,57 +223,12 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     condition = EnumIntegerField(
         Condition,
         verbose_name=_("Condition"),
         default=Condition.VERY_GOOD,
         blank=True,
         null=True,
-    )
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
-    lane_type = EnumField(
-        LaneType,
-        verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
-        blank=True,
-    )
-    location_specifier = EnumIntegerField(
-        LocationSpecifier,
-        verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
-        blank=True,
-        null=True,
-    )
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
-    vehicle_recognition = EnumIntegerField(
-        VehicleRecognition,
-        verbose_name=_("Vehicle recognition"),
-        blank=True,
-        null=True,
-    )
-    push_button = EnumIntegerField(
-        PushButton,
-        verbose_name=_("Push button"),
-        blank=True,
-        null=True,
-    )
-    sound_beacon = EnumIntegerField(
-        TrafficLightSoundBeaconValue,
-        verbose_name=_("Sound beacon"),
-        blank=True,
-        null=True,
-    )
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
     )
 
     objects = SoftDeleteQuerySet.as_manager()
@@ -294,15 +238,6 @@ class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         verbose_name = _("Traffic Light Real")
         verbose_name_plural = _("Traffic Light Reals")
         unique_together = ["source_name", "source_id"]
-
-    def __str__(self):
-        return f"{self.id} {self.type} {self.device_type}"
-
-    def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_LIGHT):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic lights')
-
-        super().save(*args, **kwargs)
 
 
 class TrafficLightRealOperation(OperationBase):

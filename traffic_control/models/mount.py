@@ -74,9 +74,10 @@ class PortalType(models.Model):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
 
 
-class MountPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel):
+class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
@@ -95,15 +96,6 @@ class MountPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, Us
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
     validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    plan = models.ForeignKey(
-        Plan,
-        verbose_name=_("Plan"),
-        on_delete=models.PROTECT,
-        related_name="mount_plans",
-        blank=True,
-        null=True,
-    )
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     electric_accountable = models.CharField(_("Electric accountable"), max_length=254, blank=True, null=True)
     is_foldable = models.BooleanField(_("Is foldable"), blank=True, null=True)
@@ -116,6 +108,23 @@ class MountPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, Us
         on_delete=models.PROTECT,
     )
     lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.id} {self.mount_type}"
+
+
+class MountPlan(UpdatePlanLocationMixin, AbstractMount):
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.PROTECT,
+        related_name="mount_plans",
+        blank=True,
+        null=True,
+    )
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -125,12 +134,8 @@ class MountPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteModel, Us
         verbose_name_plural = _("Mount Plans")
         unique_together = ["source_name", "source_id"]
 
-    def __str__(self):
-        return "%s %s" % (self.id, self.mount_type)
 
-
-class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class MountReal(AbstractMount):
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -138,23 +143,8 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=False,
-        null=True,
-        on_delete=models.PROTECT,
-    )
-    base = models.CharField(verbose_name=_("Base"), max_length=128, blank=True)
-    portal_type = models.ForeignKey(
-        PortalType,
-        verbose_name=_("Portal type"),
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
+    inspected_at = models.DateTimeField(_("Inspected at"), blank=True, null=True)
+    diameter = models.DecimalField(_("Diameter"), max_digits=5, decimal_places=2, blank=True, null=True)
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
         InstallationStatus,
@@ -164,8 +154,6 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     condition = EnumIntegerField(
         Condition,
         verbose_name=_("Condition"),
@@ -173,21 +161,6 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         blank=True,
         null=True,
     )
-    inspected_at = models.DateTimeField(_("Inspected at"), blank=True, null=True)
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    electric_accountable = models.CharField(_("Electric accountable"), max_length=254, blank=True, null=True)
-    is_foldable = models.BooleanField(_("Is foldable"), blank=True, null=True)
-    cross_bar_length = models.DecimalField(_("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True)
-    diameter = models.DecimalField(_("Diameter"), max_digits=5, decimal_places=2, blank=True, null=True)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
 
     objects = SoftDeleteQuerySet.as_manager()
 
@@ -196,9 +169,6 @@ class MountReal(SourceControlModel, SoftDeleteModel, UserControlModel):
         verbose_name = _("Mount Real")
         verbose_name_plural = _("Mount Reals")
         unique_together = ["source_name", "source_id"]
-
-    def __str__(self):
-        return "%s %s" % (self.id, self.mount_type)
 
     @property
     def ordered_traffic_signs(self):
