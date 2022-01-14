@@ -6,9 +6,8 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import TrafficLightPlan, TrafficLightReal, TrafficLightSoundBeaconValue, TrafficLightType
-
-from ..models.common import DeviceTypeTargetModel
-from .factories import (
+from traffic_control.models.common import DeviceTypeTargetModel
+from traffic_control.tests.factories import (
     add_traffic_light_real_operation,
     get_api_client,
     get_mount_type,
@@ -17,7 +16,11 @@ from .factories import (
     get_traffic_light_real,
     get_user,
 )
-from .test_base_api import point_location_error_test_data, point_location_test_data, TrafficControlAPIBaseTestCase
+from traffic_control.tests.test_base_api import (
+    point_location_error_test_data,
+    point_location_test_data,
+    TrafficControlAPIBaseTestCase,
+)
 
 
 @pytest.mark.django_db

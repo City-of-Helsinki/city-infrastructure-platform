@@ -2,17 +2,17 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..forms import AdminFileWidget
-from ..mixins import (
+from traffic_control.admin.audit_log import AuditLogHistoryAdmin
+from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.forms import AdminFileWidget
+from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
-from .audit_log import AuditLogHistoryAdmin
-from .common import TrafficControlOperationInlineBase
+from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
 
 __all__ = (
     "SignpostPlanAdmin",
@@ -21,7 +21,7 @@ __all__ = (
     "SignpostRealFileInline",
 )
 
-from ..models.signpost import SignpostRealOperation
+from traffic_control.models.signpost import SignpostRealOperation
 
 
 class SignpostPlanFileInline(admin.TabularInline):

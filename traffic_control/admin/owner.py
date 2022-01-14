@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ..models import Owner
+from traffic_control.models import Owner
 
 
 @admin.register(Owner)

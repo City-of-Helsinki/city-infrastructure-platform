@@ -2,8 +2,8 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
-from ..models.mount import MountRealOperation
+from traffic_control.models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
+from traffic_control.models.mount import MountRealOperation
 
 
 class PortalTypeSerializer(serializers.ModelSerializer):

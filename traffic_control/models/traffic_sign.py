@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import (
+from traffic_control.mixins.models import (
     AbstractFileModel,
     DecimalValueFromDeviceTypeMixin,
     SoftDeleteModel,
@@ -17,8 +17,8 @@ from ..mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from .affect_area import CoverageArea
-from .common import (
+from traffic_control.models.affect_area import CoverageArea
+from traffic_control.models.common import (
     Condition,
     DeviceTypeTargetModel,
     InstallationStatus,
@@ -32,9 +32,9 @@ from .common import (
     Surface,
     TrafficControlDeviceType,
 )
-from .mount import MountPlan, MountReal
-from .plan import Plan
-from .utils import SoftDeleteQuerySet
+from traffic_control.models.mount import MountPlan, MountReal
+from traffic_control.models.plan import Plan
+from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class LocationSpecifier(Enum):
@@ -56,7 +56,7 @@ class LocationSpecifier(Enum):
 
 class TrafficSignPlanQuerySet(SoftDeleteQuerySet):
     def soft_delete(self, user):
-        from .additional_sign import AdditionalSignPlan
+        from traffic_control.models.additional_sign import AdditionalSignPlan
 
         additional_signs = AdditionalSignPlan.objects.filter(parent__in=self).active()
 
@@ -66,7 +66,7 @@ class TrafficSignPlanQuerySet(SoftDeleteQuerySet):
 
 class TrafficSignRealQuerySet(SoftDeleteQuerySet):
     def soft_delete(self, user):
-        from .additional_sign import AdditionalSignReal
+        from traffic_control.models.additional_sign import AdditionalSignReal
 
         additional_signs = AdditionalSignReal.objects.filter(parent__in=self).active()
 

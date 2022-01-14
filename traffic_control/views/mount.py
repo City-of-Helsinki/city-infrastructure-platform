@@ -6,11 +6,11 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
-from ..filters import MountPlanFilterSet, MountRealFilterSet, MountTypeFilterSet, PortalTypeFilterSet
-from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
-from ..permissions import IsAdminUserOrReadOnly
-from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
-from ..serializers.mount import (
+from traffic_control.filters import MountPlanFilterSet, MountRealFilterSet, MountTypeFilterSet, PortalTypeFilterSet
+from traffic_control.models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
+from traffic_control.permissions import IsAdminUserOrReadOnly
+from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.serializers.mount import (
     MountPlanFileSerializer,
     MountPlanGeoJSONSerializer,
     MountPlanSerializer,
@@ -20,7 +20,7 @@ from ..serializers.mount import (
     MountTypeSerializer,
     PortalTypeSerializer,
 )
-from ._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
 
 __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
 

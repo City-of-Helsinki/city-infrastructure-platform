@@ -3,10 +3,10 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
-from ..filters import BarrierPlanFilterSet, BarrierRealFilterSet
-from ..models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
-from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
-from ..serializers.barrier import (
+from traffic_control.filters import BarrierPlanFilterSet, BarrierRealFilterSet
+from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
+from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.serializers.barrier import (
     BarrierPlanFileSerializer,
     BarrierPlanGeoJSONSerializer,
     BarrierPlanSerializer,
@@ -14,7 +14,7 @@ from ..serializers.barrier import (
     BarrierRealGeoJSONSerializer,
     BarrierRealSerializer,
 )
-from ._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
 
 __all__ = ("BarrierPlanViewSet", "BarrierRealViewSet")
 

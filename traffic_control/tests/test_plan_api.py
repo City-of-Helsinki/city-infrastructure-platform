@@ -7,9 +7,9 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
-from ..models import Plan
-from .factories import get_api_client, get_plan, get_user
-from .test_base_api import test_multi_polygon, test_polygon, test_polygon_2, test_polygon_3
+from traffic_control.models import Plan
+from traffic_control.tests.factories import get_api_client, get_plan, get_user
+from traffic_control.tests.test_base_api import test_multi_polygon, test_polygon, test_polygon_2, test_polygon_3
 
 
 @pytest.mark.django_db

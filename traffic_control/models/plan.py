@@ -8,8 +8,8 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.utils.translation import gettext_lazy as _
 
-from ..mixins.models import SoftDeleteModel, SourceControlModel, UserControlModel
-from ..models.utils import SoftDeleteQuerySet
+from traffic_control.mixins.models import SoftDeleteModel, SourceControlModel, UserControlModel
+from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):

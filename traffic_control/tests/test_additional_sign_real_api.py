@@ -7,8 +7,7 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import AdditionalSignContentReal, AdditionalSignReal
-
-from .factories import (
+from traffic_control.tests.factories import (
     add_additional_sign_real_operation,
     get_additional_sign_content_real,
     get_additional_sign_real,
@@ -18,7 +17,7 @@ from .factories import (
     get_traffic_sign_real,
     get_user,
 )
-from .test_base_api_3d import test_point_2_3d
+from traffic_control.tests.test_base_api_3d import test_point_2_3d
 
 # AdditionalSignReal tests
 # ===============================================

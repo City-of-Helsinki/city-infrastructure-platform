@@ -5,8 +5,7 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import AdditionalSignContentPlan, AdditionalSignPlan
-
-from .factories import (
+from traffic_control.tests.factories import (
     get_additional_sign_content_plan,
     get_additional_sign_plan,
     get_api_client,
@@ -15,7 +14,7 @@ from .factories import (
     get_traffic_sign_plan,
     get_user,
 )
-from .test_base_api_3d import test_point_2_3d
+from traffic_control.tests.test_base_api_3d import test_point_2_3d
 
 # AdditionalSignPlan tests
 # ===============================================

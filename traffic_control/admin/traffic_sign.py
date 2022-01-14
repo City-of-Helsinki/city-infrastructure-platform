@@ -4,27 +4,27 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
-from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..forms import AdminFileWidget, TrafficSignPlanModelForm, TrafficSignRealModelForm
-from ..mixins import (
+from traffic_control.admin.audit_log import AuditLogHistoryAdmin
+from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.forms import AdminFileWidget, TrafficSignPlanModelForm, TrafficSignRealModelForm
+from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from ..models import (
+from traffic_control.models import (
     TrafficControlDeviceType,
     TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,
     TrafficSignRealFile,
 )
-from ..models.common import TRAFFIC_SIGN_TYPE_CHOICES
-from ..models.traffic_sign import TrafficSignRealOperation
-from ..models.utils import order_queryset_by_z_coord_desc
-from .audit_log import AuditLogHistoryAdmin
-from .common import TrafficControlOperationInlineBase
+from traffic_control.models.common import TRAFFIC_SIGN_TYPE_CHOICES
+from traffic_control.models.traffic_sign import TrafficSignRealOperation
+from traffic_control.models.utils import order_queryset_by_z_coord_desc
 
 __all__ = (
     "OrderedTrafficSignRealInline",

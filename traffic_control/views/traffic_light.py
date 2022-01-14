@@ -3,10 +3,10 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
-from ..filters import TrafficLightPlanFilterSet, TrafficLightRealFilterSet
-from ..models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
-from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
-from ..serializers.traffic_light import (
+from traffic_control.filters import TrafficLightPlanFilterSet, TrafficLightRealFilterSet
+from traffic_control.models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
+from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.serializers.traffic_light import (
     TrafficLightPlanFileSerializer,
     TrafficLightPlanGeoJSONSerializer,
     TrafficLightPlanSerializer,
@@ -14,7 +14,7 @@ from ..serializers.traffic_light import (
     TrafficLightRealGeoJSONSerializer,
     TrafficLightRealSerializer,
 )
-from ._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
 
 __all__ = ("TrafficLightPlanViewSet", "TrafficLightRealViewSet")
 

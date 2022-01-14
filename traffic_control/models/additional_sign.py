@@ -8,9 +8,9 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
-from .affect_area import CoverageArea
-from .common import (
+from traffic_control.mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
+from traffic_control.models.affect_area import CoverageArea
+from traffic_control.models.common import (
     Color,
     Condition,
     DeviceTypeTargetModel,
@@ -24,10 +24,10 @@ from .common import (
     Surface,
     TrafficControlDeviceType,
 )
-from .mount import MountPlan, MountReal, MountType
-from .plan import Plan
-from .traffic_sign import InstallationStatus, LocationSpecifier, TrafficSignPlan, TrafficSignReal
-from .utils import SoftDeleteQuerySet
+from traffic_control.models.mount import MountPlan, MountReal, MountType
+from traffic_control.models.plan import Plan
+from traffic_control.models.traffic_sign import InstallationStatus, LocationSpecifier, TrafficSignPlan, TrafficSignReal
+from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel):

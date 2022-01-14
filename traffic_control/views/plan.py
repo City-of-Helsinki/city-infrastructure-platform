@@ -1,11 +1,11 @@
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 
-from ..filters import PlanFilterSet
-from ..models import Plan
-from ..schema import location_parameter
-from ..serializers.plan import PlanGeoJSONSerializer, PlanSerializer
-from ._common import TrafficControlViewSet
+from traffic_control.filters import PlanFilterSet
+from traffic_control.models import Plan
+from traffic_control.schema import location_parameter
+from traffic_control.serializers.plan import PlanGeoJSONSerializer, PlanSerializer
+from traffic_control.views._common import TrafficControlViewSet
 
 
 @method_decorator(

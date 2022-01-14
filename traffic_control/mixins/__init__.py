@@ -1,2 +1,2 @@
-from .admin import *  # noqa
-from .api import *  # noqa
+from traffic_control.mixins.admin import *  # noqa
+from traffic_control.mixins.api import *  # noqa

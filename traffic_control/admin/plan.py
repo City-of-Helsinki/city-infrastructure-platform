@@ -4,11 +4,11 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
-from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..forms import PlanRelationsForm
-from ..mixins import EnumChoiceValueDisplayAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
-from ..models import Plan
-from .audit_log import AuditLogHistoryAdmin
+from traffic_control.admin.audit_log import AuditLogHistoryAdmin
+from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.forms import PlanRelationsForm
+from traffic_control.mixins import EnumChoiceValueDisplayAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
+from traffic_control.models import Plan
 
 __all__ = ("PlanAdmin",)
 

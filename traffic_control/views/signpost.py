@@ -3,10 +3,10 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
-from ..filters import SignpostPlanFilterSet, SignpostRealFilterSet
-from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
-from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
-from ..serializers.signpost import (
+from traffic_control.filters import SignpostPlanFilterSet, SignpostRealFilterSet
+from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
+from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.serializers.signpost import (
     SignpostPlanFileSerializer,
     SignpostPlanGeoJSONSerializer,
     SignpostPlanSerializer,
@@ -14,7 +14,7 @@ from ..serializers.signpost import (
     SignpostRealGeoJSONSerializer,
     SignpostRealSerializer,
 )
-from ._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
 
 __all__ = ("SignpostPlanViewSet", "SignpostRealViewSet")
 

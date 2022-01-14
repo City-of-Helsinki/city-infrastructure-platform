@@ -5,16 +5,21 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.viewsets import ModelViewSet
 
-from ..filters import (
+from traffic_control.filters import (
     AdditionalSignContentPlanFilterSet,
     AdditionalSignContentRealFilterSet,
     AdditionalSignPlanFilterSet,
     AdditionalSignRealFilterSet,
 )
-from ..mixins import UserCreateMixin, UserUpdateMixin
-from ..models import AdditionalSignContentPlan, AdditionalSignContentReal, AdditionalSignPlan, AdditionalSignReal
-from ..schema import location_parameter
-from ..serializers.additional_sign import (
+from traffic_control.mixins import UserCreateMixin, UserUpdateMixin
+from traffic_control.models import (
+    AdditionalSignContentPlan,
+    AdditionalSignContentReal,
+    AdditionalSignPlan,
+    AdditionalSignReal,
+)
+from traffic_control.schema import location_parameter
+from traffic_control.serializers.additional_sign import (
     AdditionalSignContentPlanSerializer,
     AdditionalSignContentRealSerializer,
     AdditionalSignPlanGeoJSONSerializer,
@@ -22,7 +27,7 @@ from ..serializers.additional_sign import (
     AdditionalSignRealGeoJSONSerializer,
     AdditionalSignRealSerializer,
 )
-from ..views._common import TrafficControlViewSet
+from traffic_control.views._common import TrafficControlViewSet
 
 
 @method_decorator(

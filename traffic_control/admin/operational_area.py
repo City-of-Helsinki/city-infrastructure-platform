@@ -3,8 +3,8 @@ from django.contrib.auth.models import Group
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
-from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..models import GroupOperationalArea, OperationalArea
+from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.models import GroupOperationalArea, OperationalArea
 
 
 class GroupOperationalAreaInline(admin.StackedInline):

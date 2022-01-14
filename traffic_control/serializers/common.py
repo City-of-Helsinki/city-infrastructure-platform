@@ -6,9 +6,9 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from ..models import OperationalArea, Owner, TrafficControlDeviceType
-from ..models.common import DeviceTypeTargetModel
-from ..schema import TrafficSignType
+from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceType
+from traffic_control.models.common import DeviceTypeTargetModel
+from traffic_control.schema import TrafficSignType
 
 
 class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):

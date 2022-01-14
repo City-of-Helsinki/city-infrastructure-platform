@@ -8,7 +8,7 @@ from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
 
-from ..models import (
+from traffic_control.models import (
     BarrierPlan,
     BarrierPlanFile,
     BarrierReal,
@@ -34,7 +34,7 @@ from ..models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
-from .factories import (
+from traffic_control.tests.factories import (
     get_api_client,
     get_barrier_plan,
     get_barrier_real,

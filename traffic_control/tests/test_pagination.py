@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from .factories import get_api_client, get_traffic_control_device_type
+from traffic_control.tests.factories import get_api_client, get_traffic_control_device_type
 
 
 @pytest.mark.django_db

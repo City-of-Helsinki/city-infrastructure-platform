@@ -7,7 +7,7 @@ from django.forms.widgets import Select
 from django.utils.translation import gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
-from .models import (
+from traffic_control.models import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,
     AdditionalSignPlan,
