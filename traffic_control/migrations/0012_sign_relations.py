@@ -3,6 +3,7 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
+import traffic_control.enums
 import traffic_control.models.common
 
 
@@ -66,7 +67,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "traffic_sign"
                             ),
                         ),
@@ -88,7 +89,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "traffic_sign"
                             ),
                         ),
@@ -110,7 +111,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "traffic_sign"
                             ),
                         ),

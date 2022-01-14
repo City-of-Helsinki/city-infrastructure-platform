@@ -6,28 +6,35 @@ from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import EnumField, EnumIntegerField
+from enumfields import Enum, EnumField, EnumIntegerField
 
-from traffic_control.mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
-from traffic_control.models.affect_area import CoverageArea
-from traffic_control.models.common import (
-    Color,
+from traffic_control.enums import (
     Condition,
     DeviceTypeTargetModel,
+    InstallationStatus,
     LaneNumber,
     LaneType,
     Lifecycle,
-    OperationBase,
-    OperationType,
     Reflection,
     Size,
     Surface,
-    TrafficControlDeviceType,
 )
+from traffic_control.mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
+from traffic_control.models.affect_area import CoverageArea
+from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
-from traffic_control.models.traffic_sign import InstallationStatus, LocationSpecifier, TrafficSignPlan, TrafficSignReal
+from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
 from traffic_control.models.utils import SoftDeleteQuerySet
+
+
+class Color(Enum):
+    BLUE = 1
+    YELLOW = 2
+
+    class Labels:
+        BLUE = _("Blue")
+        YELLOW = _("Yellow")
 
 
 class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel):

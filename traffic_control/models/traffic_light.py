@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
+from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType, Lifecycle
 from traffic_control.mixins.models import (
     AbstractFileModel,
     SoftDeleteModel,
@@ -15,17 +16,7 @@ from traffic_control.mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from traffic_control.models.common import (
-    Condition,
-    DeviceTypeTargetModel,
-    InstallationStatus,
-    LaneNumber,
-    LaneType,
-    Lifecycle,
-    OperationBase,
-    OperationType,
-    TrafficControlDeviceType,
-)
+from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import SoftDeleteQuerySet

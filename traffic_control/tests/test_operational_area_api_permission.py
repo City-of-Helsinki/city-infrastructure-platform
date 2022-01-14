@@ -9,7 +9,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
 from traffic_control import models
-from traffic_control.models import BarrierPlan, Lifecycle
+from traffic_control.enums import Lifecycle
+from traffic_control.models import BarrierPlan
 from traffic_control.tests.factories import (
     get_additional_sign_plan,
     get_additional_sign_real,

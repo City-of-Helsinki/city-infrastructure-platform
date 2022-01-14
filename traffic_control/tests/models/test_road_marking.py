@@ -3,8 +3,9 @@ from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from traffic_control.enums import DeviceTypeTargetModel, TrafficControlDeviceTypeType
 from traffic_control.models import RoadMarkingPlan, RoadMarkingReal
-from traffic_control.models.common import DeviceTypeTargetModel, TrafficControlDeviceType, TrafficControlDeviceTypeType
+from traffic_control.models.common import TrafficControlDeviceType
 from traffic_control.tests.factories import get_owner, get_user
 
 

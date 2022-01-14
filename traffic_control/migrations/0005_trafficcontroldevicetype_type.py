@@ -3,6 +3,7 @@
 import enumfields.fields
 from django.db import migrations
 
+import traffic_control.enums
 import traffic_control.models.common
 
 
@@ -18,7 +19,7 @@ class Migration(migrations.Migration):
             name="type",
             field=enumfields.fields.EnumField(
                 blank=True,
-                enum=traffic_control.models.common.TrafficControlDeviceTypeType,
+                enum=traffic_control.enums.TrafficControlDeviceTypeType,
                 max_length=50,
                 null=True,
                 verbose_name="Type",

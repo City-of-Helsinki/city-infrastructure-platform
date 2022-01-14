@@ -4,6 +4,7 @@ import django.contrib.gis.db.models.fields
 import enumfields.fields
 from django.db import migrations, models
 
+import traffic_control.enums
 import traffic_control.models.common
 
 
@@ -119,7 +120,7 @@ class Migration(migrations.Migration):
             name="size",
             field=enumfields.fields.EnumField(
                 blank=True,
-                enum=traffic_control.models.common.Size,
+                enum=traffic_control.enums.Size,
                 max_length=1,
                 null=True,
                 verbose_name="Size",

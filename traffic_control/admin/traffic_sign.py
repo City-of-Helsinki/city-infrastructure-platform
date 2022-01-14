@@ -7,6 +7,7 @@ from enumfields.admin import EnumFieldListFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.enums import TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.forms import AdminFileWidget, TrafficSignPlanModelForm, TrafficSignRealModelForm
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -22,7 +23,6 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
-from traffic_control.models.common import TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.models.traffic_sign import TrafficSignRealOperation
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 

@@ -3,8 +3,8 @@ import os
 
 from django.core.management.base import BaseCommand, CommandError
 
+from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import TrafficControlDeviceType
-from traffic_control.models.common import DeviceTypeTargetModel
 
 
 class Command(BaseCommand):

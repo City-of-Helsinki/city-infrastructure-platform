@@ -4,6 +4,7 @@ import django.db.models.deletion
 import enumfields.fields
 from django.db import migrations, models
 
+import traffic_control.enums
 import traffic_control.models.common
 
 
@@ -19,7 +20,7 @@ class Migration(migrations.Migration):
             name="target_model",
             field=enumfields.fields.EnumField(
                 blank=True,
-                enum=traffic_control.models.common.DeviceTypeTargetModel,
+                enum=traffic_control.enums.DeviceTypeTargetModel,
                 max_length=32,
                 null=True,
                 verbose_name="Target data model",
@@ -34,7 +35,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "barrier"
                             ),
                         ),
@@ -55,7 +56,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "barrier"
                             ),
                         ),
@@ -76,7 +77,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "road_marking"
                             ),
                         ),
@@ -97,7 +98,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "road_marking"
                             ),
                         ),
@@ -118,7 +119,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "signpost"
                             ),
                         ),
@@ -139,7 +140,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "signpost"
                             ),
                         ),
@@ -160,7 +161,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "traffic_light"
                             ),
                         ),
@@ -181,7 +182,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "traffic_light"
                             ),
                         ),
@@ -202,7 +203,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "traffic_sign"
                             ),
                         ),
@@ -224,7 +225,7 @@ class Migration(migrations.Migration):
                         ("target_model", None),
                         (
                             "target_model",
-                            traffic_control.models.common.DeviceTypeTargetModel(
+                            traffic_control.enums.DeviceTypeTargetModel(
                                 "traffic_sign"
                             ),
                         ),

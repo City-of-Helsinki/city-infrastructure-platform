@@ -2,6 +2,7 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
+from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import (
     RoadMarkingPlan,
     RoadMarkingPlanFile,
@@ -9,7 +10,6 @@ from traffic_control.models import (
     RoadMarkingRealFile,
     TrafficControlDeviceType,
 )
-from traffic_control.models.common import DeviceTypeTargetModel
 from traffic_control.models.road_marking import RoadMarkingRealOperation
 
 

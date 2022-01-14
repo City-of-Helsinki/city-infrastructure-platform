@@ -2,9 +2,9 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
+from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile, TrafficControlDeviceType
 from traffic_control.models.barrier import BarrierRealOperation
-from traffic_control.models.common import DeviceTypeTargetModel
 
 
 class BarrierPlanFileSerializer(serializers.ModelSerializer):

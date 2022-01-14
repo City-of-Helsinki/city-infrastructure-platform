@@ -1,4 +1,5 @@
 # flake8: noqa
+from traffic_control.enums import InstallationStatus
 from traffic_control.models.additional_sign import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,
@@ -14,21 +15,9 @@ from traffic_control.models.barrier import (
     BarrierRealFile,
     BarrierRealOperation,
     ConnectionType,
-    LaneType,
     Reflective,
 )
-from traffic_control.models.common import (
-    Color,
-    Condition,
-    InstallationStatus,
-    Lifecycle,
-    OperationType,
-    Owner,
-    Reflection,
-    Size,
-    Surface,
-    TrafficControlDeviceType,
-)
+from traffic_control.models.common import OperationType, Owner, TrafficControlDeviceType
 from traffic_control.models.mount import (
     MountPlan,
     MountPlanFile,

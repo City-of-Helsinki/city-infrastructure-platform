@@ -7,6 +7,7 @@ from django.contrib.gis.geos import MultiPolygon
 from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
+from traffic_control.enums import DeviceTypeTargetModel, Lifecycle
 from traffic_control.models import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,
@@ -17,7 +18,6 @@ from traffic_control.models import (
     BarrierReal,
     BarrierRealOperation,
     ConnectionType,
-    Lifecycle,
     MountPlan,
     MountReal,
     MountRealOperation,
@@ -43,7 +43,7 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealOperation,
 )
-from traffic_control.models.common import DeviceTypeTargetModel, OperationType
+from traffic_control.models.common import OperationType
 from traffic_control.tests.test_base_api import test_multi_polygon, test_point, test_polygon
 from traffic_control.tests.test_base_api_3d import test_point_3d
 

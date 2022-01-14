@@ -3,8 +3,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import TrafficControlDeviceType
-from traffic_control.models.common import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
     get_api_client,
     get_barrier_plan,

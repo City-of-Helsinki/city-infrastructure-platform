@@ -8,6 +8,7 @@ from django.core.management import call_command, CommandError
 from django.test import TestCase
 from pytz import timezone
 
+from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import (
     AdditionalSignContentReal,
     AdditionalSignReal,
@@ -15,7 +16,6 @@ from traffic_control.models import (
     TrafficControlDeviceType,
     TrafficSignReal,
 )
-from traffic_control.models.common import DeviceTypeTargetModel
 
 MOCK_FEATURE_1 = {
     "fid": "1",

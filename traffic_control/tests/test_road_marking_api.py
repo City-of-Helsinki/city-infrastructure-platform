@@ -5,8 +5,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
+from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import RoadMarkingColor, RoadMarkingPlan, RoadMarkingReal
-from traffic_control.models.common import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
     add_road_marking_real_operation,
     get_api_client,
