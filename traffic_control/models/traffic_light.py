@@ -8,7 +8,13 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
+from ..mixins.models import (
+    AbstractFileModel,
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from .common import (
     Condition,
     DeviceTypeTargetModel,
@@ -187,20 +193,6 @@ class TrafficLightPlan(UpdatePlanLocationMixin, SourceControlModel, SoftDeleteMo
         super().save(*args, **kwargs)
 
 
-class TrafficLightPlanFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/traffic_light/")
-    traffic_light_plan = models.ForeignKey(TrafficLightPlan, on_delete=models.CASCADE, related_name="files")
-
-    class Meta:
-        db_table = "traffic_light_plan_file"
-        verbose_name = _("Traffic Light Plan File")
-        verbose_name_plural = _("Traffic Light Plan Files")
-
-    def __str__(self):
-        return "%s" % self.file
-
-
 class TrafficLightReal(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     traffic_light_plan = models.ForeignKey(
@@ -334,8 +326,20 @@ class TrafficLightRealOperation(OperationBase):
         verbose_name_plural = _("Traffic light real operations")
 
 
-class TrafficLightRealFile(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class TrafficLightPlanFile(AbstractFileModel):
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/traffic_light/")
+    traffic_light_plan = models.ForeignKey(TrafficLightPlan, on_delete=models.CASCADE, related_name="files")
+
+    class Meta:
+        db_table = "traffic_light_plan_file"
+        verbose_name = _("Traffic Light Plan File")
+        verbose_name_plural = _("Traffic Light Plan Files")
+
+    def __str__(self):
+        return "%s" % self.file
+
+
+class TrafficLightRealFile(AbstractFileModel):
     file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/traffic_light/")
     traffic_light_real = models.ForeignKey(TrafficLightReal, on_delete=models.CASCADE, related_name="files")
 
@@ -343,9 +347,6 @@ class TrafficLightRealFile(models.Model):
         db_table = "traffic_light_real_file"
         verbose_name = _("Traffic Light Real File")
         verbose_name_plural = _("Traffic Light Real Files")
-
-    def __str__(self):
-        return f"{self.file}"
 
 
 auditlog.register(TrafficLightPlan)

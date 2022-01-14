@@ -1,4 +1,5 @@
 import logging
+import uuid
 from decimal import Decimal, InvalidOperation
 
 from django.contrib.auth import get_user_model
@@ -100,3 +101,13 @@ class DecimalValueFromDeviceTypeMixin:
             except InvalidOperation:
                 logger.warning("Cannot convert device type value to Decimal")
         super().save(*args, **kwargs)
+
+
+class AbstractFileModel(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.file}"
