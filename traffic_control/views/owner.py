@@ -3,10 +3,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.viewsets import ModelViewSet
 
-from ..filters import OwnerFilterSet
-from ..models import Owner
-from ..permissions import IsAdminUserOrReadOnly
-from ..serializers.common import OwnerSerializer
+from traffic_control.filters import OwnerFilterSet
+from traffic_control.models import Owner
+from traffic_control.permissions import IsAdminUserOrReadOnly
+from traffic_control.serializers.common import OwnerSerializer
 
 
 @method_decorator(

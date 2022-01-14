@@ -6,16 +6,16 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from ..mixins.models import (
+from traffic_control.mixins.models import (
     AbstractFileModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from .common import Condition, InstallationStatus, Lifecycle, OperationBase, OperationType
-from .plan import Plan
-from .utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
+from traffic_control.models.common import Condition, InstallationStatus, Lifecycle, OperationBase, OperationType
+from traffic_control.models.plan import Plan
+from traffic_control.models.utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
 
 
 class MountType(models.Model):

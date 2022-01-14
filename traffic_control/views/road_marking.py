@@ -3,10 +3,10 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
-from ..filters import RoadMarkingPlanFilterSet, RoadMarkingRealFilterSet
-from ..models import RoadMarkingPlan, RoadMarkingPlanFile, RoadMarkingReal, RoadMarkingRealFile
-from ..schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
-from ..serializers.road_marking import (
+from traffic_control.filters import RoadMarkingPlanFilterSet, RoadMarkingRealFilterSet
+from traffic_control.models import RoadMarkingPlan, RoadMarkingPlanFile, RoadMarkingReal, RoadMarkingRealFile
+from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.serializers.road_marking import (
     RoadMarkingPlanFileSerializer,
     RoadMarkingPlanGeoJSONSerializer,
     RoadMarkingPlanSerializer,
@@ -14,7 +14,7 @@ from ..serializers.road_marking import (
     RoadMarkingRealGeoJSONSerializer,
     RoadMarkingRealSerializer,
 )
-from ._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
 
 __all__ = ("RoadMarkingPlanViewSet", "RoadMarkingRealViewSet")
 

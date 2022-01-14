@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from ..models import Plan
+from traffic_control.models import Plan
 
 
 class PlanRelationSerializer(serializers.ModelSerializer):

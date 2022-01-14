@@ -5,8 +5,7 @@ from django.core.management import call_command, CommandError
 from django.test import TestCase
 
 from traffic_control.models import PortalType
-
-from .utils import mock_open
+from traffic_control.tests.management.commands.utils import mock_open
 
 
 class ImportPortalTypesTestCase(TestCase):

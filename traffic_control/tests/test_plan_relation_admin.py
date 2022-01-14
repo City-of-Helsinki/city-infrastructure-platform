@@ -10,8 +10,8 @@ from django.contrib.gis.geos import MultiPolygon
 from django.test import override_settings
 from django.urls import reverse
 
-from ..models import Plan
-from .factories import (
+from traffic_control.models import Plan
+from traffic_control.tests.factories import (
     get_additional_sign_plan,
     get_barrier_plan,
     get_mount_plan,
@@ -22,8 +22,8 @@ from .factories import (
     get_traffic_sign_plan,
     get_user,
 )
-from .test_base_api import test_point, test_point_2, test_polygon, test_polygon_2
-from .test_base_api_3d import test_point_2_3d, test_point_3d
+from traffic_control.tests.test_base_api import test_point, test_point_2, test_polygon, test_polygon_2
+from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
 
 settings_overrides = override_settings(STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage")
 

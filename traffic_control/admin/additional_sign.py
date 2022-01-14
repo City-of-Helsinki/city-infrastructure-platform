@@ -2,24 +2,29 @@ from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
-from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..forms import (
+from traffic_control.admin.audit_log import AuditLogHistoryAdmin
+from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.forms import (
     AdditionalSignContentPlanForm,
     AdditionalSignContentRealForm,
     AdditionalSignPlanModelForm,
     AdditionalSignRealModelForm,
 )
-from ..mixins import (
+from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from ..models import AdditionalSignContentPlan, AdditionalSignContentReal, AdditionalSignPlan, AdditionalSignReal
-from ..models.additional_sign import AdditionalSignRealOperation
-from .audit_log import AuditLogHistoryAdmin
-from .common import TrafficControlOperationInlineBase
+from traffic_control.models import (
+    AdditionalSignContentPlan,
+    AdditionalSignContentReal,
+    AdditionalSignPlan,
+    AdditionalSignReal,
+)
+from traffic_control.models.additional_sign import AdditionalSignRealOperation
 
 
 class BaseAdditionalSignContentInline(admin.TabularInline):

@@ -11,8 +11,7 @@ from traffic_control.models import (
     TrafficSignReal,
 )
 from traffic_control.models.common import DeviceTypeTargetModel
-
-from .utils import mock_open
+from traffic_control.tests.management.commands.utils import mock_open
 
 
 class ImportTrafficControlDeviceTypesTestCase(TestCase):

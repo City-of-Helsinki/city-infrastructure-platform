@@ -2,9 +2,15 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from ..models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile, TrafficControlDeviceType
-from ..models.common import DeviceTypeTargetModel
-from ..models.signpost import SignpostRealOperation
+from traffic_control.models import (
+    SignpostPlan,
+    SignpostPlanFile,
+    SignpostReal,
+    SignpostRealFile,
+    TrafficControlDeviceType,
+)
+from traffic_control.models.common import DeviceTypeTargetModel
+from traffic_control.models.signpost import SignpostRealOperation
 
 
 class SignpostPlanFileSerializer(serializers.ModelSerializer):

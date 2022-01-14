@@ -5,10 +5,10 @@ from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import RequestFactory
 
-from ..models import OperationalArea
-from ..permissions import IsAdminUserOrReadOnly, ObjectInsideOperationalAreaOrAnonReadOnly
-from .factories import get_barrier_real, get_user
-from .test_base_api import test_polygon
+from traffic_control.models import OperationalArea
+from traffic_control.permissions import IsAdminUserOrReadOnly, ObjectInsideOperationalAreaOrAnonReadOnly
+from traffic_control.tests.factories import get_barrier_real, get_user
+from traffic_control.tests.test_base_api import test_polygon
 
 mock_view = MagicMock()
 mock_user = MagicMock()

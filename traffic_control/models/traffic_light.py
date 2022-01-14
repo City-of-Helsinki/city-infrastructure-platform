@@ -8,14 +8,14 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from ..mixins.models import (
+from traffic_control.mixins.models import (
     AbstractFileModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from .common import (
+from traffic_control.models.common import (
     Condition,
     DeviceTypeTargetModel,
     InstallationStatus,
@@ -26,9 +26,9 @@ from .common import (
     OperationType,
     TrafficControlDeviceType,
 )
-from .mount import MountPlan, MountReal
-from .plan import Plan
-from .utils import SoftDeleteQuerySet
+from traffic_control.models.mount import MountPlan, MountReal
+from traffic_control.models.plan import Plan
+from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class TrafficLightSoundBeaconValue(Enum):

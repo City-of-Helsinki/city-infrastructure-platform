@@ -10,8 +10,8 @@ from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from ..mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
-from ..permissions import ObjectInsideOperationalAreaOrAnonReadOnly
+from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
+from traffic_control.permissions import ObjectInsideOperationalAreaOrAnonReadOnly
 
 __all__ = ("FileUploadViews", "TrafficControlViewSet")
 

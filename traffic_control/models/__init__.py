@@ -1,13 +1,13 @@
 # flake8: noqa
-from .additional_sign import (
+from traffic_control.models.additional_sign import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
     AdditionalSignRealOperation,
 )
-from .affect_area import CoverageArea, CoverageAreaCategory
-from .barrier import (
+from traffic_control.models.affect_area import CoverageArea, CoverageAreaCategory
+from traffic_control.models.barrier import (
     BarrierPlan,
     BarrierPlanFile,
     BarrierReal,
@@ -17,7 +17,7 @@ from .barrier import (
     LaneType,
     Reflective,
 )
-from .common import (
+from traffic_control.models.common import (
     Color,
     Condition,
     InstallationStatus,
@@ -29,10 +29,18 @@ from .common import (
     Surface,
     TrafficControlDeviceType,
 )
-from .mount import MountPlan, MountPlanFile, MountReal, MountRealFile, MountRealOperation, MountType, PortalType
-from .operational_area import GroupOperationalArea, OperationalArea
-from .plan import Plan
-from .road_marking import (
+from traffic_control.models.mount import (
+    MountPlan,
+    MountPlanFile,
+    MountReal,
+    MountRealFile,
+    MountRealOperation,
+    MountType,
+    PortalType,
+)
+from traffic_control.models.operational_area import GroupOperationalArea, OperationalArea
+from traffic_control.models.plan import Plan
+from traffic_control.models.road_marking import (
     ArrowDirection,
     LineDirection,
     RoadMarkingColor,
@@ -42,8 +50,14 @@ from .road_marking import (
     RoadMarkingRealFile,
     RoadMarkingRealOperation,
 )
-from .signpost import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile, SignpostRealOperation
-from .traffic_light import (
+from traffic_control.models.signpost import (
+    SignpostPlan,
+    SignpostPlanFile,
+    SignpostReal,
+    SignpostRealFile,
+    SignpostRealOperation,
+)
+from traffic_control.models.traffic_light import (
     TrafficLightPlan,
     TrafficLightPlanFile,
     TrafficLightReal,
@@ -52,7 +66,7 @@ from .traffic_light import (
     TrafficLightSoundBeaconValue,
     TrafficLightType,
 )
-from .traffic_sign import (
+from traffic_control.models.traffic_sign import (
     TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,

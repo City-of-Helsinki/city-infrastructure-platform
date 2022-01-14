@@ -2,18 +2,18 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from ..constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from ..forms import AdminFileWidget
-from ..mixins import (
+from traffic_control.admin.audit_log import AuditLogHistoryAdmin
+from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.traffic_sign import OrderedTrafficSignRealInline
+from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.forms import AdminFileWidget
+from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from ..models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
-from .audit_log import AuditLogHistoryAdmin
-from .common import TrafficControlOperationInlineBase
-from .traffic_sign import OrderedTrafficSignRealInline
+from traffic_control.models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
 
 __all__ = (
     "MountPlanAdmin",
@@ -23,7 +23,7 @@ __all__ = (
     "PortalTypeAdmin",
 )
 
-from ..models.mount import MountRealOperation
+from traffic_control.models.mount import MountRealOperation
 
 
 class MountPlanFileInline(admin.TabularInline):

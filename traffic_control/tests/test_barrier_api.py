@@ -6,9 +6,8 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import BarrierPlan, BarrierReal, ConnectionType, Reflective
-
-from ..models.common import DeviceTypeTargetModel
-from .factories import (
+from traffic_control.models.common import DeviceTypeTargetModel
+from traffic_control.tests.factories import (
     add_barrier_real_operation,
     get_api_client,
     get_barrier_plan,
@@ -16,7 +15,7 @@ from .factories import (
     get_traffic_control_device_type,
     get_user,
 )
-from .test_base_api import (
+from traffic_control.tests.test_base_api import (
     line_location_error_test_data,
     line_location_test_data,
     point_location_error_test_data,

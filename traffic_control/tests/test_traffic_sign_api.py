@@ -7,9 +7,8 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
-
-from ..models.common import DeviceTypeTargetModel
-from .factories import (
+from traffic_control.models.common import DeviceTypeTargetModel
+from traffic_control.tests.factories import (
     add_traffic_sign_real_operation,
     get_api_client,
     get_traffic_control_device_type,
@@ -17,7 +16,7 @@ from .factories import (
     get_traffic_sign_real,
     get_user,
 )
-from .test_base_api_3d import (
+from traffic_control.tests.test_base_api_3d import (
     point_location_error_test_data_3d,
     point_location_test_data_3d,
     TrafficControlAPIBaseTestCase3D,
