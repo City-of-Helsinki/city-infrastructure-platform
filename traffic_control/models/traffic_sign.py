@@ -32,7 +32,7 @@ from .common import (
     Surface,
     TrafficControlDeviceType,
 )
-from .mount import MountPlan, MountReal, MountType
+from .mount import MountPlan, MountReal
 from .plan import Plan
 from .utils import SoftDeleteQuerySet
 
@@ -64,22 +64,35 @@ class TrafficSignPlanQuerySet(SoftDeleteQuerySet):
         additional_signs.soft_delete(user)
 
 
-class TrafficSignPlan(
-    DecimalValueFromDeviceTypeMixin,
-    UpdatePlanLocationMixin,
-    SourceControlModel,
-    SoftDeleteModel,
-    UserControlModel,
-):
+class TrafficSignRealQuerySet(SoftDeleteQuerySet):
+    def soft_delete(self, user):
+        from .additional_sign import AdditionalSignReal
+
+        additional_signs = AdditionalSignReal.objects.filter(parent__in=self).active()
+
+        super().soft_delete(user)
+        additional_signs.soft_delete(user)
+
+
+class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.IntegerField(_("Height"), blank=True, null=True)
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
+    lane_type = EnumField(
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
+    )
     direction = models.IntegerField(_("Direction"), default=0)
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
+    height = models.IntegerField(_("Height"), blank=True, null=True)
+    mount_type = models.ForeignKey(
+        "MountType",
+        verbose_name=_("Mount type"),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
     )
     value = models.DecimalField(
         _("Traffic Sign Code value"),
@@ -89,6 +102,48 @@ class TrafficSignPlan(
         null=True,
     )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    owner = models.ForeignKey(
+        "traffic_control.Owner",
+        verbose_name=_("Owner"),
+        blank=False,
+        null=False,
+        on_delete=models.PROTECT,
+    )
+    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
+    location_specifier = EnumIntegerField(
+        LocationSpecifier,
+        verbose_name=_("Location specifier"),
+        default=LocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
+    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.id} {self.device_type}"
+
+    def has_additional_signs(self):
+        return self.additional_signs.active().exists()
+
+    @transaction.atomic
+    def soft_delete(self, user):
+        super().soft_delete(user)
+        self.additional_signs.soft_delete(user)
+
+
+class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, AbstractTrafficSign):
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
+    )
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -96,15 +151,6 @@ class TrafficSignPlan(
         blank=True,
         null=True,
     )
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     affect_area = models.PolygonField(_("Affect area (2D)"), srid=settings.SRID, blank=True, null=True)
     plan = models.ForeignKey(
         Plan,
@@ -138,31 +184,6 @@ class TrafficSignPlan(
         blank=True,
         null=True,
     )
-    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
-    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
-    lane_type = EnumField(
-        LaneType,
-        verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
-        blank=True,
-    )
-    location_specifier = EnumIntegerField(
-        LocationSpecifier,
-        verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
-        blank=True,
-        null=True,
-    )
 
     objects = TrafficSignPlanQuerySet.as_manager()
 
@@ -172,41 +193,14 @@ class TrafficSignPlan(
         verbose_name_plural = _("Traffic Sign Plans")
         unique_together = ["source_name", "source_id"]
 
-    def __str__(self):
-        return f"{self.id} {self.device_type}"
-
     def save(self, *args, **kwargs):
         if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
             raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
 
         super().save(*args, **kwargs)
 
-    def has_additional_signs(self):
-        return self.additional_signs.active().exists()
 
-    @transaction.atomic
-    def soft_delete(self, user):
-        super().soft_delete(user)
-        self.additional_signs.soft_delete(user)
-
-
-class TrafficSignRealQuerySet(SoftDeleteQuerySet):
-    def soft_delete(self, user):
-        from .additional_sign import AdditionalSignReal
-
-        additional_signs = AdditionalSignReal.objects.filter(parent__in=self).active()
-
-        super().soft_delete(user)
-        additional_signs.soft_delete(user)
-
-
-class TrafficSignReal(
-    DecimalValueFromDeviceTypeMixin,
-    SourceControlModel,
-    SoftDeleteModel,
-    UserControlModel,
-):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign):
     traffic_sign_plan = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Traffic Sign Plan"),
@@ -214,9 +208,6 @@ class TrafficSignReal(
         blank=True,
         null=True,
     )
-    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.IntegerField(_("Height"), blank=True, null=True)
-    direction = models.IntegerField(_("Direction"), default=0)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
@@ -225,15 +216,7 @@ class TrafficSignReal(
         blank=False,
         null=True,
     )
-    value = models.DecimalField(
-        _("Traffic Sign Code value"),
-        max_digits=10,
-        decimal_places=2,
-        blank=True,
-        null=True,
-    )
     legacy_code = models.CharField(_("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True)
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
     mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
@@ -241,32 +224,9 @@ class TrafficSignReal(
         blank=True,
         null=True,
     )
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
-    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        blank=True,
-        null=True,
-    )
     installation_id = models.CharField(_("Installation id"), max_length=254, blank=True, null=True)
     installation_details = models.CharField(_("Installation details"), max_length=254, blank=True, null=True)
     permit_decision_id = models.CharField(_("Permit decision id"), max_length=254, blank=True, null=True)
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    condition = EnumIntegerField(
-        Condition,
-        verbose_name=_("Condition"),
-        blank=True,
-        null=True,
-    )
     coverage_area = models.ForeignKey(
         CoverageArea,
         verbose_name=_("Coverage area"),
@@ -296,35 +256,24 @@ class TrafficSignReal(
         blank=True,
         null=True,
     )
-    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
-    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
     manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
-    lane_type = EnumField(
-        LaneType,
-        verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
-        blank=True,
-    )
-    location_specifier = EnumIntegerField(
-        LocationSpecifier,
-        verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
+    operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
+    attachment_url = models.URLField(_("Attachment url"), max_length=500, blank=True, null=True)
+    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
+        max_length=10,
         blank=True,
         null=True,
     )
-    operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
-    attachment_url = models.URLField(_("Attachment url"), max_length=500, blank=True, null=True)
+    condition = EnumIntegerField(
+        Condition,
+        verbose_name=_("Condition"),
+        blank=True,
+        null=True,
+    )
 
     objects = TrafficSignRealQuerySet.as_manager()
 
@@ -333,9 +282,6 @@ class TrafficSignReal(
         verbose_name = _("Traffic Sign Real")
         verbose_name_plural = _("Traffic Sign Reals")
         unique_together = ["source_name", "source_id"]
-
-    def __str__(self):
-        return f"{self.id} {self.device_type}"
 
     def save(self, *args, **kwargs):
         if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
@@ -350,14 +296,6 @@ class TrafficSignReal(
             )
 
         super().save(*args, **kwargs)
-
-    def has_additional_signs(self):
-        return self.additional_signs.active().exists()
-
-    @transaction.atomic
-    def soft_delete(self, user):
-        super().soft_delete(user)
-        self.additional_signs.soft_delete(user)
 
 
 class TrafficSignRealOperation(OperationBase):

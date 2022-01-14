@@ -29,7 +29,7 @@ from .common import (
     Size,
     TrafficControlDeviceType,
 )
-from .mount import MountPlan, MountReal, MountType
+from .mount import MountPlan, MountReal
 from .plan import Plan
 from .utils import SoftDeleteQuerySet
 
@@ -49,17 +49,26 @@ class LocationSpecifier(Enum):
         VERTICAL = _("Vertical")
 
 
-class SignpostPlan(
-    DecimalValueFromDeviceTypeMixin,
-    UpdatePlanLocationMixin,
-    SourceControlModel,
-    SoftDeleteModel,
-    UserControlModel,
-):
+class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
+    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
+    lane_type = EnumField(
+        LaneType,
+        verbose_name=_("Lane type"),
+        default=LaneType.MAIN,
+        blank=True,
+    )
     direction = models.IntegerField(_("Direction"), default=0)
+    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
+    mount_type = models.ForeignKey(
+        "MountType",
+        verbose_name=_("Mount type"),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
@@ -68,37 +77,6 @@ class SignpostPlan(
     )
     value = models.DecimalField(_("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
-    parent = models.ForeignKey(
-        "self",
-        verbose_name=_("Parent Signpost Plan"),
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-    mount_plan = models.ForeignKey(
-        MountPlan,
-        verbose_name=_("Mount Plan"),
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    plan = models.ForeignKey(
-        Plan,
-        verbose_name=_("Plan"),
-        on_delete=models.PROTECT,
-        related_name="signpost_plans",
-        blank=True,
-        null=True,
-    )
     owner = models.ForeignKey(
         "traffic_control.Owner",
         verbose_name=_("Owner"),
@@ -122,26 +100,57 @@ class SignpostPlan(
         blank=True,
         null=True,
     )
-    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
-    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
     attachment_class = models.CharField(_("Attachment class"), max_length=254, blank=True, null=True)
     target_id = models.CharField(_("Target ID"), max_length=254, blank=True, null=True)
     target_txt = models.CharField(_("Target txt"), max_length=254, blank=True, null=True)
     responsible_entity = models.CharField(_("Responsible entity"), max_length=254, blank=True, null=True)
     electric_maintainer = models.CharField(_("Electric maintainer"), max_length=254, blank=True, null=True)
     lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
-    lane_type = EnumField(
-        LaneType,
-        verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
-        blank=True,
-    )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
         default=LocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
+    )
+    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
+    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
+    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
+    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.id} {self.device_type} {self.txt}"
+
+    def save(self, *args, **kwargs):
+        if not self.device_type.validate_relation(DeviceTypeTargetModel.SIGNPOST):
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for signposts')
+
+        super().save(*args, **kwargs)
+
+
+class SignpostPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, AbstractSignpost):
+    mount_plan = models.ForeignKey(
+        MountPlan,
+        verbose_name=_("Mount Plan"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+    parent = models.ForeignKey(
+        "self",
+        verbose_name=_("Parent Signpost Plan"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.PROTECT,
+        related_name="signpost_plans",
         blank=True,
         null=True,
     )
@@ -154,23 +163,8 @@ class SignpostPlan(
         verbose_name_plural = _("Signpost Plans")
         unique_together = ["source_name", "source_id"]
 
-    def __str__(self):
-        return f"{self.id} {self.device_type} {self.txt}"
 
-    def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.SIGNPOST):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for signposts')
-
-        super().save(*args, **kwargs)
-
-
-class SignpostReal(
-    DecimalValueFromDeviceTypeMixin,
-    SourceControlModel,
-    SoftDeleteModel,
-    UserControlModel,
-):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost):
     signpost_plan = models.ForeignKey(
         SignpostPlan,
         verbose_name=_("Signpost Plan"),
@@ -178,17 +172,6 @@ class SignpostReal(
         blank=True,
         null=True,
     )
-    location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
-    direction = models.IntegerField(_("Direction"), default=0)
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)),
-    )
-    value = models.DecimalField(_("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True)
-    txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
     parent = models.ForeignKey(
         "self",
         verbose_name=_("Parent Signpost Real"),
@@ -203,13 +186,9 @@ class SignpostReal(
         blank=True,
         null=True,
     )
-    mount_type = models.ForeignKey(
-        MountType,
-        verbose_name=_("Mount type"),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
+    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
+    organization = models.CharField(_("Organization"), max_length=254, blank=True, null=True)
+    manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
     installation_date = models.DateField(_("Installation date"), blank=True, null=True)
     installation_status = EnumField(
         InstallationStatus,
@@ -219,8 +198,6 @@ class SignpostReal(
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     condition = EnumIntegerField(
         Condition,
         verbose_name=_("Condition"),
@@ -228,56 +205,6 @@ class SignpostReal(
         blank=True,
         null=True,
     )
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
-    size = EnumField(
-        Size,
-        verbose_name=_("Size"),
-        max_length=1,
-        default=Size.MEDIUM,
-        blank=True,
-        null=True,
-    )
-    reflection_class = EnumField(
-        Reflection,
-        verbose_name=_("Reflection"),
-        max_length=2,
-        default=Reflection.R1,
-        blank=True,
-        null=True,
-    )
-    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
-    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
-    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-    organization = models.CharField(_("Organization"), max_length=254, blank=True, null=True)
-    manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
-    attachment_class = models.CharField(_("Attachment class"), max_length=254, blank=True, null=True)
-    target_id = models.CharField(_("Target ID"), max_length=254, blank=True, null=True)
-    target_txt = models.CharField(_("Target txt"), max_length=254, blank=True, null=True)
-    responsible_entity = models.CharField(_("Responsible entity"), max_length=254, blank=True, null=True)
-    electric_maintainer = models.CharField(_("Electric maintainer"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
-    lane_type = EnumField(
-        LaneType,
-        verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
-        blank=True,
-    )
-    location_specifier = EnumIntegerField(
-        LocationSpecifier,
-        verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
-        blank=True,
-        null=True,
-    )
-
     objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
@@ -285,15 +212,6 @@ class SignpostReal(
         verbose_name = _("Signpost Real")
         verbose_name_plural = _("Signpost Reals")
         unique_together = ["source_name", "source_id"]
-
-    def __str__(self):
-        return f"{self.id} {self.device_type} {self.txt}"
-
-    def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.SIGNPOST):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for signposts')
-
-        super().save(*args, **kwargs)
 
 
 class SignpostRealOperation(OperationBase):
