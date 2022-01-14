@@ -6,6 +6,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
+from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.mixins.models import (
     AbstractFileModel,
     SoftDeleteModel,
@@ -13,7 +14,7 @@ from traffic_control.mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from traffic_control.models.common import Condition, InstallationStatus, Lifecycle, OperationBase, OperationType
+from traffic_control.models.common import OperationBase, OperationType
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
 

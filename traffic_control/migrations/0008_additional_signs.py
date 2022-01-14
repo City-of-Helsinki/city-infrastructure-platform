@@ -8,6 +8,8 @@ import enumfields.fields
 from django.conf import settings
 from django.db import migrations, models
 
+import traffic_control.enums
+import traffic_control.models.additional_sign
 import traffic_control.models.common
 import traffic_control.models.traffic_sign
 
@@ -68,7 +70,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default="R1",
-                        enum=traffic_control.models.common.Reflection,
+                        enum=traffic_control.enums.Reflection,
                         max_length=2,
                         null=True,
                         verbose_name="Reflection",
@@ -79,7 +81,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default="FLAT",
-                        enum=traffic_control.models.common.Surface,
+                        enum=traffic_control.enums.Surface,
                         max_length=6,
                         null=True,
                         verbose_name="Surface",
@@ -90,7 +92,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumIntegerField(
                         blank=True,
                         default=1,
-                        enum=traffic_control.models.common.Color,
+                        enum=traffic_control.models.additional_sign.Color,
                         null=True,
                         verbose_name="Color",
                     ),
@@ -106,7 +108,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default="11",
-                        enum=traffic_control.models.common.LaneNumber,
+                        enum=traffic_control.enums.LaneNumber,
                         max_length=10,
                         verbose_name="Lane number",
                     ),
@@ -116,7 +118,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default=1,
-                        enum=traffic_control.models.common.LaneType,
+                        enum=traffic_control.enums.LaneType,
                         max_length=10,
                         verbose_name="Lane type",
                     ),
@@ -161,7 +163,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default="IN_USE",
-                        enum=traffic_control.models.common.InstallationStatus,
+                        enum=traffic_control.enums.InstallationStatus,
                         max_length=10,
                         null=True,
                         verbose_name="Installation status",
@@ -206,7 +208,7 @@ class Migration(migrations.Migration):
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
                         default=3,
-                        enum=traffic_control.models.common.Lifecycle,
+                        enum=traffic_control.enums.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
                 ),
@@ -316,7 +318,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default="R1",
-                        enum=traffic_control.models.common.Reflection,
+                        enum=traffic_control.enums.Reflection,
                         max_length=2,
                         null=True,
                         verbose_name="Reflection",
@@ -327,7 +329,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default="FLAT",
-                        enum=traffic_control.models.common.Surface,
+                        enum=traffic_control.enums.Surface,
                         max_length=6,
                         null=True,
                         verbose_name="Surface",
@@ -338,7 +340,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumIntegerField(
                         blank=True,
                         default=1,
-                        enum=traffic_control.models.common.Color,
+                        enum=traffic_control.models.additional_sign.Color,
                         null=True,
                         verbose_name="Color",
                     ),
@@ -354,7 +356,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default="11",
-                        enum=traffic_control.models.common.LaneNumber,
+                        enum=traffic_control.enums.LaneNumber,
                         max_length=10,
                         verbose_name="Lane number",
                     ),
@@ -364,7 +366,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default=1,
-                        enum=traffic_control.models.common.LaneType,
+                        enum=traffic_control.enums.LaneType,
                         max_length=10,
                         verbose_name="Lane type",
                     ),
@@ -409,7 +411,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumField(
                         blank=True,
                         default="IN_USE",
-                        enum=traffic_control.models.common.InstallationStatus,
+                        enum=traffic_control.enums.InstallationStatus,
                         max_length=10,
                         null=True,
                         verbose_name="Installation status",
@@ -454,7 +456,7 @@ class Migration(migrations.Migration):
                     "lifecycle",
                     enumfields.fields.EnumIntegerField(
                         default=3,
-                        enum=traffic_control.models.common.Lifecycle,
+                        enum=traffic_control.enums.Lifecycle,
                         verbose_name="Lifecycle",
                     ),
                 ),
@@ -463,7 +465,7 @@ class Migration(migrations.Migration):
                     enumfields.fields.EnumIntegerField(
                         blank=True,
                         default=5,
-                        enum=traffic_control.models.common.Condition,
+                        enum=traffic_control.enums.Condition,
                         null=True,
                         verbose_name="Condition",
                     ),
@@ -585,7 +587,7 @@ class Migration(migrations.Migration):
                                 ("target_model", None),
                                 (
                                     "target_model",
-                                    traffic_control.models.common.DeviceTypeTargetModel(
+                                    traffic_control.enums.DeviceTypeTargetModel(
                                         "traffic_sign"
                                     ),
                                 ),
@@ -666,7 +668,7 @@ class Migration(migrations.Migration):
                                 ("target_model", None),
                                 (
                                     "target_model",
-                                    traffic_control.models.common.DeviceTypeTargetModel(
+                                    traffic_control.enums.DeviceTypeTargetModel(
                                         "traffic_sign"
                                     ),
                                 ),

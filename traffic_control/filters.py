@@ -4,6 +4,7 @@ from django_filters import ChoiceFilter
 from django_filters.rest_framework import FilterSet
 from rest_framework_gis.filters import GeometryFilter
 
+from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.models import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,
@@ -27,7 +28,6 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.models.common import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_CHOICES
 
 
 class GenericMeta:

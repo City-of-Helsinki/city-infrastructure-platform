@@ -4,9 +4,9 @@ from django.forms import forms
 from django.test import TestCase
 from enumfields import Enum, EnumIntegerField
 
+from traffic_control.enums import Lifecycle
 from traffic_control.forms import AdminEnumChoiceField, TrafficSignRealModelForm
 from traffic_control.models import TrafficSignReal
-from traffic_control.models.common import Lifecycle
 from traffic_control.tests.factories import get_owner, get_traffic_control_device_type, get_user
 
 

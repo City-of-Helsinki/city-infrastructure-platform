@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
-from traffic_control.models.common import DeviceTypeTargetModel
+from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
     get_additional_sign_content_plan,
     get_additional_sign_content_real,

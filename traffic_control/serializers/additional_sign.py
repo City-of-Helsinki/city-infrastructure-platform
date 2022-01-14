@@ -2,6 +2,7 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
+from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,
@@ -10,7 +11,6 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.additional_sign import AdditionalSignRealOperation
-from traffic_control.models.common import DeviceTypeTargetModel
 
 
 class WritableNestedContentSerializerMixin:

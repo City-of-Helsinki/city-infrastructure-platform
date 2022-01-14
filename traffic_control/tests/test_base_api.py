@@ -2,7 +2,8 @@ from django.conf import settings
 from django.contrib.gis.geos import LineString, MultiPolygon, Point, Polygon
 from rest_framework.test import APITestCase
 
-from traffic_control.models import Lifecycle, MountType, Owner, TrafficControlDeviceType
+from traffic_control.enums import Lifecycle
+from traffic_control.models import MountType, Owner, TrafficControlDeviceType
 from users.models import User
 
 test_point = Point(10.0, 10.0, 0.0, srid=settings.SRID)

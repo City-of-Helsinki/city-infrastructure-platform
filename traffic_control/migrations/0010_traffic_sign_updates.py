@@ -3,6 +3,8 @@
 import enumfields.fields
 from django.db import migrations, models
 
+import traffic_control.enums
+import traffic_control.models.additional_sign
 import traffic_control.models.common
 import traffic_control.models.traffic_sign
 
@@ -30,7 +32,7 @@ class Migration(migrations.Migration):
             field=enumfields.fields.EnumIntegerField(
                 blank=True,
                 default=1,
-                enum=traffic_control.models.common.Color,
+                enum=traffic_control.models.additional_sign.Color,
                 null=True,
                 verbose_name="Color",
             ),
