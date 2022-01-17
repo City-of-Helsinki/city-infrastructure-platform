@@ -19,7 +19,6 @@ from traffic_control.mixins.models import (
 from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
-from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class TrafficLightSoundBeaconValue(Enum):
@@ -181,8 +180,6 @@ class TrafficLightPlan(UpdatePlanLocationMixin, AbstractTrafficLight):
         null=True,
     )
 
-    objects = SoftDeleteQuerySet.as_manager()
-
     class Meta:
         db_table = "traffic_light_plan"
         verbose_name = _("Traffic Light Plan")
@@ -221,8 +218,6 @@ class TrafficLightReal(AbstractTrafficLight):
         blank=True,
         null=True,
     )
-
-    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "traffic_light_real"

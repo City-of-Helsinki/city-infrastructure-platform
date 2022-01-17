@@ -7,6 +7,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from traffic_control.models.utils import SoftDeleteQuerySet
+
 logger = logging.getLogger("traffic_control")
 
 
@@ -21,6 +23,8 @@ class SoftDeleteModel(models.Model):
         blank=True,
         null=True,
     )
+
+    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         abstract = True

@@ -18,7 +18,6 @@ from traffic_control.mixins.models import (
 )
 from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
 from traffic_control.models.plan import Plan
-from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class ConnectionType(Enum):
@@ -117,8 +116,6 @@ class BarrierPlan(UpdatePlanLocationMixin, AbstractBarrier):
         null=True,
     )
 
-    objects = SoftDeleteQuerySet.as_manager()
-
     class Meta:
         db_table = "barrier_plan"
         verbose_name = _("Barrier Plan")
@@ -150,8 +147,6 @@ class BarrierReal(AbstractBarrier):
         blank=True,
         null=True,
     )
-
-    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "barrier_real"

@@ -9,7 +9,6 @@ from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.mixins.models import SoftDeleteModel, SourceControlModel, UserControlModel
-from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
@@ -30,8 +29,6 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     location = models.MultiPolygonField(_("Location (3D)"), dim=3, srid=settings.SRID, null=True, blank=True)
     planner = models.CharField(_("Planner"), blank=True, max_length=200)
     decision_maker = models.CharField(_("Decision maker"), blank=True, max_length=200)
-
-    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "plan"

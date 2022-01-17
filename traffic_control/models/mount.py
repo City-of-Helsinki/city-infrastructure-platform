@@ -16,7 +16,7 @@ from traffic_control.mixins.models import (
 )
 from traffic_control.models.common import OperationBase, OperationType
 from traffic_control.models.plan import Plan
-from traffic_control.models.utils import order_queryset_by_z_coord_desc, SoftDeleteQuerySet
+from traffic_control.models.utils import order_queryset_by_z_coord_desc
 
 
 class MountType(models.Model):
@@ -127,8 +127,6 @@ class MountPlan(UpdatePlanLocationMixin, AbstractMount):
         null=True,
     )
 
-    objects = SoftDeleteQuerySet.as_manager()
-
     class Meta:
         db_table = "mount_plan"
         verbose_name = _("Mount Plan")
@@ -162,8 +160,6 @@ class MountReal(AbstractMount):
         blank=True,
         null=True,
     )
-
-    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "mount_real"
