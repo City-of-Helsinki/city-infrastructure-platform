@@ -25,7 +25,6 @@ from traffic_control.models.common import OperationBase, OperationType, TrafficC
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
-from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class Color(Enum):
@@ -96,8 +95,6 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
     seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
     seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
     lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-
-    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         abstract = True

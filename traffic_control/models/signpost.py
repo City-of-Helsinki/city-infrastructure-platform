@@ -29,7 +29,6 @@ from traffic_control.mixins.models import (
 from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
-from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class LocationSpecifier(Enum):
@@ -153,8 +152,6 @@ class SignpostPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, Abs
         null=True,
     )
 
-    objects = SoftDeleteQuerySet.as_manager()
-
     class Meta:
         db_table = "signpost_plan"
         verbose_name = _("Signpost Plan")
@@ -203,7 +200,6 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost):
         blank=True,
         null=True,
     )
-    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "signpost_real"

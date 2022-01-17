@@ -27,7 +27,6 @@ from traffic_control.mixins.models import (
 from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
-from traffic_control.models.utils import SoftDeleteQuerySet
 
 
 class LineDirection(Enum):
@@ -192,8 +191,6 @@ class RoadMarkingPlan(UpdatePlanLocationMixin, AbstractRoadMarking):
         null=True,
     )
 
-    objects = SoftDeleteQuerySet.as_manager()
-
     class Meta:
         db_table = "road_marking_plan"
         verbose_name = _("Road Marking Plan")
@@ -241,8 +238,6 @@ class RoadMarkingReal(AbstractRoadMarking):
         blank=True,
         null=True,
     )
-
-    objects = SoftDeleteQuerySet.as_manager()
 
     class Meta:
         db_table = "road_marking_real"
