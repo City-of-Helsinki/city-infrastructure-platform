@@ -156,6 +156,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "users.apps.UsersConfig",
     "traffic_control.apps.TrafficControlConfig",
+    "city_furniture.apps.CityFurnitureConfig",
     "map.apps.MapConfig",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
