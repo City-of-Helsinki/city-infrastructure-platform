@@ -155,6 +155,7 @@ class OperationType(models.Model):
     barrier = models.BooleanField(_("Barrier"), default=False)
     signpost = models.BooleanField(_("Signpost"), default=False)
     traffic_light = models.BooleanField(_("Traffic light"), default=False)
+    furniture_signpost = models.BooleanField(_("Furniture signpost"), default=False)
     mount = models.BooleanField(_("Mount"), default=False)
 
     class Meta:

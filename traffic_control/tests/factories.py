@@ -387,6 +387,7 @@ def get_operation_type(name="Test operation type"):
             "signpost": True,
             "traffic_light": True,
             "mount": True,
+            "furniture_signpost": True,
         },
     )[0]
 

@@ -152,6 +152,7 @@ THIRD_PARTY_APPS = [
     "drf_yasg",
     "django_filters",
     "auditlog",
+    "colorfield",
 ]
 LOCAL_APPS = [
     "users.apps.UsersConfig",
