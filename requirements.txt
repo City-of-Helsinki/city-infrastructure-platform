@@ -18,6 +18,7 @@ cryptography==3.3.1       # via authlib, azure-storage-common, drf-oidc-auth, so
 defusedxml==0.7.0rc1      # via python3-openid, social-auth-core
 django==2.2.26
 django-auditlog==0.4.7
+django-colorfield==0.6.3
 django-cors-headers==3.6.0
 django-enumfields==2.1.1
 django-environ==0.4.5
@@ -42,6 +43,7 @@ markupsafe==1.1.1         # via jinja2
 oauthlib==3.1.0           # via requests-oauthlib, social-auth-core
 packaging==20.8           # via drf-yasg
 psycopg2==2.8.6
+pillow==9.0.0             # via django-colorfield
 pyasn1==0.4.8             # via python-jose, rsa
 pycparser==2.20           # via cffi
 pyjwt==1.7.1              # via social-auth-core
