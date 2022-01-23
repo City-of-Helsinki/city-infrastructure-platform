@@ -28,6 +28,7 @@ django-jsonfield==1.4.1   # via django-auditlog
 django-storages[azure]==1.10.1
 djangorestframework==3.13.1
 djangorestframework-gis==0.16
+drf-nested-routers==0.93.4
 drf-oidc-auth==1.0.0      # via django-helusers
 drf-yasg[validation]==1.20.0
 ecdsa==0.14.1             # via python-jose
