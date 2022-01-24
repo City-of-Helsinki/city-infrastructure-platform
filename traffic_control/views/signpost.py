@@ -3,8 +3,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
-from traffic_control.filters import SignpostPlanFilterSet, SignpostRealFilterSet
-from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
+from traffic_control.filters import SignpostPlanFilterSet, SignpostRealFilterSet, SignpostRealOperationFilterSet
+from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile, SignpostRealOperation
 from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from traffic_control.serializers.signpost import (
     SignpostPlanFileSerializer,
@@ -12,9 +12,10 @@ from traffic_control.serializers.signpost import (
     SignpostPlanSerializer,
     SignpostRealFileSerializer,
     SignpostRealGeoJSONSerializer,
+    SignpostRealOperationSerializer,
     SignpostRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
 
 __all__ = ("SignpostPlanViewSet", "SignpostRealViewSet")
 
@@ -175,3 +176,9 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     )
     def change_file(self, request, file_pk, *args, **kwargs):
         return super().change_file(request, file_pk, *args, **kwargs)
+
+
+class SignpostRealOperationViewSet(OperationViewSet):
+    serializer_class = SignpostRealOperationSerializer
+    queryset = SignpostRealOperation.objects.all()
+    filterset_class = SignpostRealOperationFilterSet

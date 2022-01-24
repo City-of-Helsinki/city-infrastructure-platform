@@ -3,7 +3,14 @@ from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
 from traffic_control.enums import DeviceTypeTargetModel
-from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile, TrafficControlDeviceType
+from traffic_control.models import (
+    BarrierPlan,
+    BarrierPlanFile,
+    BarrierReal,
+    BarrierRealFile,
+    OperationType,
+    TrafficControlDeviceType,
+)
 from traffic_control.models.barrier import BarrierRealOperation
 
 
@@ -42,10 +49,26 @@ class BarrierRealFileSerializer(serializers.ModelSerializer):
 
 class BarrierRealOperationSerializer(serializers.ModelSerializer):
     operation_type = serializers.StringRelatedField()
+    operation_type_id = serializers.PrimaryKeyRelatedField(
+        queryset=OperationType.objects.filter(barrier=True),
+        source="operation_type",
+    )
 
     class Meta:
         model = BarrierRealOperation
-        fields = ("id", "operation_type", "operation_date")
+        fields = ("id", "operation_type", "operation_type_id", "operation_date")
+
+    def create(self, validated_data):
+        # Inject related object to validated data
+        barrier_real = BarrierReal.objects.get(pk=self.context["view"].kwargs["barrier_real_pk"])
+        validated_data["barrier_real"] = barrier_real
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Inject related object to validated data
+        barrier_real = BarrierReal.objects.get(pk=self.context["view"].kwargs["barrier_real_pk"])
+        validated_data["barrier_real"] = barrier_real
+        return super().update(instance, validated_data)
 
 
 class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):

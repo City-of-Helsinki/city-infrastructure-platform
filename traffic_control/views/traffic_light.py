@@ -3,8 +3,18 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
-from traffic_control.filters import TrafficLightPlanFilterSet, TrafficLightRealFilterSet
-from traffic_control.models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
+from traffic_control.filters import (
+    TrafficLightPlanFilterSet,
+    TrafficLightRealFilterSet,
+    TrafficLightRealOperationFilterSet,
+)
+from traffic_control.models import (
+    TrafficLightPlan,
+    TrafficLightPlanFile,
+    TrafficLightReal,
+    TrafficLightRealFile,
+    TrafficLightRealOperation,
+)
 from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from traffic_control.serializers.traffic_light import (
     TrafficLightPlanFileSerializer,
@@ -12,9 +22,10 @@ from traffic_control.serializers.traffic_light import (
     TrafficLightPlanSerializer,
     TrafficLightRealFileSerializer,
     TrafficLightRealGeoJSONSerializer,
+    TrafficLightRealOperationSerializer,
     TrafficLightRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
 
 __all__ = ("TrafficLightPlanViewSet", "TrafficLightRealViewSet")
 
@@ -175,3 +186,9 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     )
     def change_file(self, request, file_pk, *args, **kwargs):
         return super().change_file(request, file_pk, *args, **kwargs)
+
+
+class TrafficLightRealOperationViewSet(OperationViewSet):
+    serializer_class = TrafficLightRealOperationSerializer
+    queryset = TrafficLightRealOperation.objects.all()
+    filterset_class = TrafficLightRealOperationFilterSet

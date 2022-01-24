@@ -10,6 +10,7 @@ from traffic_control.filters import (
     TrafficControlDeviceTypeFilterSet,
     TrafficSignPlanFilterSet,
     TrafficSignRealFilterSet,
+    TrafficSignRealOperationFilterSet,
 )
 from traffic_control.models import (
     TrafficControlDeviceType,
@@ -17,6 +18,7 @@ from traffic_control.models import (
     TrafficSignPlanFile,
     TrafficSignReal,
     TrafficSignRealFile,
+    TrafficSignRealOperation,
 )
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
@@ -27,9 +29,10 @@ from traffic_control.serializers.traffic_sign import (
     TrafficSignPlanSerializer,
     TrafficSignRealFileSerializer,
     TrafficSignRealGeoJSONSerializer,
+    TrafficSignRealOperationSerializer,
     TrafficSignRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
 
 __all__ = (
     "TrafficControlDeviceTypeViewSet",
@@ -228,3 +231,9 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     )
     def change_file(self, request, file_pk, *args, **kwargs):
         return super().change_file(request, file_pk, *args, **kwargs)
+
+
+class TrafficSignRealOperationViewSet(OperationViewSet):
+    serializer_class = TrafficSignRealOperationSerializer
+    queryset = TrafficSignRealOperation.objects.all()
+    filterset_class = TrafficSignRealOperationFilterSet

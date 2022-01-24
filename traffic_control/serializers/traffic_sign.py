@@ -4,6 +4,7 @@ from rest_framework_gis.fields import GeometryField
 
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import (
+    OperationType,
     TrafficControlDeviceType,
     TrafficSignPlan,
     TrafficSignPlanFile,
@@ -48,10 +49,26 @@ class TrafficSignRealFileSerializer(serializers.ModelSerializer):
 
 class TrafficSignRealOperationSerializer(serializers.ModelSerializer):
     operation_type = serializers.StringRelatedField()
+    operation_type_id = serializers.PrimaryKeyRelatedField(
+        queryset=OperationType.objects.filter(traffic_sign=True),
+        source="operation_type",
+    )
 
     class Meta:
         model = TrafficSignRealOperation
-        fields = ("id", "operation_type", "operation_date")
+        fields = ("id", "operation_type", "operation_type_id", "operation_date")
+
+    def create(self, validated_data):
+        # Inject related object to validated data
+        traffic_sign_real = TrafficSignReal.objects.get(pk=self.context["view"].kwargs["traffic_sign_real_pk"])
+        validated_data["traffic_sign_real"] = traffic_sign_real
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Inject related object to validated data
+        traffic_sign_real = TrafficSignReal.objects.get(pk=self.context["view"].kwargs["traffic_sign_real_pk"])
+        validated_data["traffic_sign_real"] = traffic_sign_real
+        return super().update(instance, validated_data)
 
 
 class TrafficSignRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):

@@ -10,6 +10,7 @@ from traffic_control.filters import (
     AdditionalSignContentRealFilterSet,
     AdditionalSignPlanFilterSet,
     AdditionalSignRealFilterSet,
+    AdditionalSignRealOperationFilterSet,
 )
 from traffic_control.mixins import UserCreateMixin, UserUpdateMixin
 from traffic_control.models import (
@@ -17,6 +18,7 @@ from traffic_control.models import (
     AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
+    AdditionalSignRealOperation,
 )
 from traffic_control.schema import location_parameter
 from traffic_control.serializers.additional_sign import (
@@ -25,9 +27,10 @@ from traffic_control.serializers.additional_sign import (
     AdditionalSignPlanGeoJSONSerializer,
     AdditionalSignPlanSerializer,
     AdditionalSignRealGeoJSONSerializer,
+    AdditionalSignRealOperationSerializer,
     AdditionalSignRealSerializer,
 )
-from traffic_control.views._common import TrafficControlViewSet
+from traffic_control.views._common import OperationViewSet, TrafficControlViewSet
 
 
 @method_decorator(
@@ -200,3 +203,9 @@ class AdditionalSignContentRealViewSet(ModelViewSet, UserCreateMixin, UserUpdate
     serializer_class = AdditionalSignContentRealSerializer
     queryset = AdditionalSignContentReal.objects.all()
     filterset_class = AdditionalSignContentRealFilterSet
+
+
+class AdditionalSignRealOperationViewSet(OperationViewSet):
+    serializer_class = AdditionalSignRealOperationSerializer
+    queryset = AdditionalSignRealOperation.objects.all()
+    filterset_class = AdditionalSignRealOperationFilterSet

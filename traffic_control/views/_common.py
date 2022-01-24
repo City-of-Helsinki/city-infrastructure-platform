@@ -13,7 +13,7 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.permissions import ObjectInsideOperationalAreaOrAnonReadOnly
 
-__all__ = ("FileUploadViews", "TrafficControlViewSet")
+__all__ = ("FileUploadViews", "TrafficControlViewSet", "OperationViewSet")
 
 
 class TrafficControlViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin):
@@ -114,3 +114,13 @@ class FileUploadViews(GenericViewSet):
             return Response(serializer.data)
 
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+class OperationViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = "__all__"
+    ordering = ["-created_at"]
+    permission_classes = [
+        DjangoModelPermissionsOrAnonReadOnly,
+    ]
+    serializer_classes = {}

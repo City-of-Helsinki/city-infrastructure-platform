@@ -8,6 +8,7 @@ from traffic_control.models import (
     AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
+    OperationType,
     TrafficControlDeviceType,
 )
 from traffic_control.models.additional_sign import AdditionalSignRealOperation
@@ -179,10 +180,26 @@ class NestedAdditionalSignContentRealSerializer(
 
 class AdditionalSignRealOperationSerializer(serializers.ModelSerializer):
     operation_type = serializers.StringRelatedField()
+    operation_type_id = serializers.PrimaryKeyRelatedField(
+        queryset=OperationType.objects.filter(additional_sign=True),
+        source="operation_type",
+    )
 
     class Meta:
         model = AdditionalSignRealOperation
-        fields = ("id", "operation_type", "operation_date")
+        fields = ("id", "operation_type", "operation_type_id", "operation_date")
+
+    def create(self, validated_data):
+        # Inject related object to validated data
+        additional_sign_real = AdditionalSignReal.objects.get(pk=self.context["view"].kwargs["additional_sign_real_pk"])
+        validated_data["additional_sign_real"] = additional_sign_real
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Inject related object to validated data
+        additional_sign_real = AdditionalSignReal.objects.get(pk=self.context["view"].kwargs["additional_sign_real_pk"])
+        validated_data["additional_sign_real"] = additional_sign_real
+        return super().update(instance, validated_data)
 
 
 class AdditionalSignRealSerializer(

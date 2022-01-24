@@ -10,23 +10,30 @@ from traffic_control.models import (
     AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
+    AdditionalSignRealOperation,
     BarrierPlan,
     BarrierReal,
+    BarrierRealOperation,
     MountPlan,
     MountReal,
+    MountRealOperation,
     MountType,
     Owner,
     Plan,
     PortalType,
     RoadMarkingPlan,
     RoadMarkingReal,
+    RoadMarkingRealOperation,
     SignpostPlan,
     SignpostReal,
+    SignpostRealOperation,
     TrafficControlDeviceType,
     TrafficLightPlan,
     TrafficLightReal,
+    TrafficLightRealOperation,
     TrafficSignPlan,
     TrafficSignReal,
+    TrafficSignRealOperation,
 )
 
 
@@ -160,3 +167,39 @@ class TrafficSignPlanFilterSet(FilterSet):
 class TrafficSignRealFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = TrafficSignReal
+
+
+# Operations
+class BarrierRealOperationFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = BarrierRealOperation
+
+
+class TrafficLightRealOperationFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = TrafficLightRealOperation
+
+
+class TrafficSignRealOperationFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = TrafficSignRealOperation
+
+
+class AdditionalSignRealOperationFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = AdditionalSignRealOperation
+
+
+class MountRealOperationFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = MountRealOperation
+
+
+class SignpostRealOperationFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = SignpostRealOperation
+
+
+class RoadMarkingRealOperationFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = RoadMarkingRealOperation
