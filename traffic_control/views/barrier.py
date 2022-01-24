@@ -3,8 +3,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
-from traffic_control.filters import BarrierPlanFilterSet, BarrierRealFilterSet
-from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
+from traffic_control.filters import BarrierPlanFilterSet, BarrierRealFilterSet, BarrierRealOperationFilterSet
+from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile, BarrierRealOperation
 from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from traffic_control.serializers.barrier import (
     BarrierPlanFileSerializer,
@@ -12,9 +12,10 @@ from traffic_control.serializers.barrier import (
     BarrierPlanSerializer,
     BarrierRealFileSerializer,
     BarrierRealGeoJSONSerializer,
+    BarrierRealOperationSerializer,
     BarrierRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
 
 __all__ = ("BarrierPlanViewSet", "BarrierRealViewSet")
 
@@ -175,3 +176,9 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
     )
     def change_file(self, request, file_pk, *args, **kwargs):
         return super().change_file(request, file_pk, *args, **kwargs)
+
+
+class BarrierRealOperationViewSet(OperationViewSet):
+    serializer_class = BarrierRealOperationSerializer
+    queryset = BarrierRealOperation.objects.all()
+    filterset_class = BarrierRealOperationFilterSet

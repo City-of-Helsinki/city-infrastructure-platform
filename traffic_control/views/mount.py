@@ -6,8 +6,22 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
-from traffic_control.filters import MountPlanFilterSet, MountRealFilterSet, MountTypeFilterSet, PortalTypeFilterSet
-from traffic_control.models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
+from traffic_control.filters import (
+    MountPlanFilterSet,
+    MountRealFilterSet,
+    MountRealOperationFilterSet,
+    MountTypeFilterSet,
+    PortalTypeFilterSet,
+)
+from traffic_control.models import (
+    MountPlan,
+    MountPlanFile,
+    MountReal,
+    MountRealFile,
+    MountRealOperation,
+    MountType,
+    PortalType,
+)
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from traffic_control.serializers.mount import (
@@ -16,11 +30,12 @@ from traffic_control.serializers.mount import (
     MountPlanSerializer,
     MountRealFileSerializer,
     MountRealGeoJSONSerializer,
+    MountRealOperationSerializer,
     MountRealSerializer,
     MountTypeSerializer,
     PortalTypeSerializer,
 )
-from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
+from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
 
 __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
 
@@ -250,3 +265,9 @@ class MountTypeViewSet(ModelViewSet):
     serializer_class = MountTypeSerializer
     queryset = MountType.objects.all()
     filterset_class = MountTypeFilterSet
+
+
+class MountRealOperationViewSet(OperationViewSet):
+    serializer_class = MountRealOperationSerializer
+    queryset = MountRealOperation.objects.all()
+    filterset_class = MountRealOperationFilterSet
