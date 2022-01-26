@@ -11,6 +11,7 @@ from traffic_control.tests.factories import (
     add_traffic_light_real_operation,
     get_api_client,
     get_mount_type,
+    get_operation_type,
     get_traffic_control_device_type,
     get_traffic_light_plan,
     get_traffic_light_real,
@@ -497,6 +498,39 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_operation_traffic_light_real(self):
+        traffic_light_real = self.__create_test_traffic_light_real()
+        operation_type = get_operation_type()
+        data = {
+            "operation_date": "2020-01-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse("traffic-light-real-operations-list", kwargs={"traffic_light_real_pk": traffic_light_real.pk})
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(traffic_light_real.operations.all().count(), 1)
+
+    def test_update_operation_traffic_light_real(self):
+        traffic_light_real = self.__create_test_traffic_light_real()
+        operation_type = get_operation_type()
+        operation = add_traffic_light_real_operation(
+            traffic_light_real=traffic_light_real,
+            operation_type=operation_type,
+            operation_date=datetime.date(2020, 1, 1),
+        )
+        data = {
+            "operation_date": "2020-02-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse(
+            "traffic-light-real-operations-detail",
+            kwargs={"traffic_light_real_pk": traffic_light_real.pk, "pk": operation.pk},
+        )
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(traffic_light_real.operations.all().count(), 1)
+        self.assertEqual(traffic_light_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
     def __create_test_traffic_light_real(self):
         traffic_light_plan = TrafficLightPlan.objects.create(
