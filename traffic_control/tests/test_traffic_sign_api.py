@@ -11,6 +11,7 @@ from traffic_control.models import TrafficSignPlan, TrafficSignReal
 from traffic_control.tests.factories import (
     add_traffic_sign_real_operation,
     get_api_client,
+    get_operation_type,
     get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_traffic_sign_real,
@@ -407,7 +408,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         traffic_sign_real_geojson = GeoJsonDict(traffic_sign_real.location.json)
         self.assertEqual(traffic_sign_real_geojson, response.data.get("location"))
 
-    def test_create_traffic_sign_plan(self):
+    def test_create_traffic_sign_real(self):
         """
         Ensure we can create a new traffic sign real object.
         """
@@ -489,6 +490,37 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_operation_traffic_sign_real(self):
+        traffic_sign_real = self.__create_test_traffic_sign_real()
+        operation_type = get_operation_type()
+        data = {
+            "operation_date": "2020-01-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse("traffic-sign-real-operations-list", kwargs={"traffic_sign_real_pk": traffic_sign_real.pk})
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(traffic_sign_real.operations.all().count(), 1)
+
+    def test_update_operation_traffic_sign_real(self):
+        traffic_sign_real = self.__create_test_traffic_sign_real()
+        operation_type = get_operation_type()
+        operation = add_traffic_sign_real_operation(
+            traffic_sign_real=traffic_sign_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+        )
+        data = {
+            "operation_date": "2020-02-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse(
+            "traffic-sign-real-operations-detail",
+            kwargs={"traffic_sign_real_pk": traffic_sign_real.pk, "pk": operation.pk},
+        )
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(traffic_sign_real.operations.all().count(), 1)
+        self.assertEqual(traffic_sign_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
     def __create_test_traffic_sign_real(self):
         traffic_sign_plan = TrafficSignPlan.objects.create(

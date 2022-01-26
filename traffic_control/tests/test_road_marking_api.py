@@ -10,6 +10,7 @@ from traffic_control.models import RoadMarkingColor, RoadMarkingPlan, RoadMarkin
 from traffic_control.tests.factories import (
     add_road_marking_real_operation,
     get_api_client,
+    get_operation_type,
     get_road_marking_plan,
     get_road_marking_real,
     get_traffic_control_device_type,
@@ -500,6 +501,37 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_operation_road_marking_real(self):
+        road_marking_real = self.__create_test_road_marking_real()
+        operation_type = get_operation_type()
+        data = {
+            "operation_date": "2020-01-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse("road-marking-real-operations-list", kwargs={"road_marking_real_pk": road_marking_real.pk})
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(road_marking_real.operations.all().count(), 1)
+
+    def test_update_operation_road_marking_real(self):
+        road_marking_real = self.__create_test_road_marking_real()
+        operation_type = get_operation_type()
+        operation = add_road_marking_real_operation(
+            road_marking_real=road_marking_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+        )
+        data = {
+            "operation_date": "2020-02-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse(
+            "road-marking-real-operations-detail",
+            kwargs={"road_marking_real_pk": road_marking_real.pk, "pk": operation.pk},
+        )
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(road_marking_real.operations.all().count(), 1)
+        self.assertEqual(road_marking_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
     def __create_test_road_marking_real(self):
         road_marking_plan = RoadMarkingPlan.objects.create(

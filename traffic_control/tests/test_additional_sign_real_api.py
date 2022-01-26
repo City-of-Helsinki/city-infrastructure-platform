@@ -12,6 +12,7 @@ from traffic_control.tests.factories import (
     get_additional_sign_content_real,
     get_additional_sign_real,
     get_api_client,
+    get_operation_type,
     get_owner,
     get_traffic_control_device_type,
     get_traffic_sign_real,
@@ -729,3 +730,47 @@ def test__additional_sign_content_real__delete(admin_user):
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert AdditionalSignContentReal.objects.filter(pk=ascr.pk).exists()
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_real_operation__create(admin_user):
+    client = get_api_client(user=get_user(admin=admin_user))
+    asr = get_additional_sign_real()
+    operation_type = get_operation_type()
+    data = {"operation_date": "2020-01-01", "operation_type_id": operation_type.pk}
+    url = reverse("additional-sign-real-operations-list", kwargs={"additional_sign_real_pk": asr.pk})
+    response = client.post(url, data, format="json")
+
+    if admin_user:
+        assert response.status_code == status.HTTP_201_CREATED
+        assert asr.operations.all().count() == 1
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asr.operations.all().count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_real_operation__update(admin_user):
+    client = get_api_client(user=get_user(admin=admin_user))
+    asr = get_additional_sign_real()
+    operation_type = get_operation_type()
+    operation = add_additional_sign_real_operation(
+        additional_sign_real=asr, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+    )
+    data = {"operation_date": "2020-02-01", "operation_type_id": operation_type.pk}
+    url = reverse(
+        "additional-sign-real-operations-detail",
+        kwargs={"additional_sign_real_pk": asr.pk, "pk": operation.pk},
+    )
+    response = client.put(url, data, format="json")
+
+    if admin_user:
+        assert response.status_code == status.HTTP_200_OK
+        assert asr.operations.all().count() == 1
+        assert asr.operations.all().first().operation_date == datetime.date(2020, 2, 1)
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asr.operations.all().count() == 1
+        assert asr.operations.all().first().operation_date == datetime.date(2020, 1, 1)

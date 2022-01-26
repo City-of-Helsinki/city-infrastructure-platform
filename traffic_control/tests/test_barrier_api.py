@@ -12,6 +12,7 @@ from traffic_control.tests.factories import (
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
+    get_operation_type,
     get_traffic_control_device_type,
     get_user,
 )
@@ -493,6 +494,37 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_operation_barrier_real(self):
+        barrier_real = self.__create_test_barrier_real()
+        operation_type = get_operation_type()
+        data = {
+            "operation_date": "2020-01-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse("barrier-real-operations-list", kwargs={"barrier_real_pk": barrier_real.pk})
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(barrier_real.operations.all().count(), 1)
+
+    def test_update_operation_barrier_real(self):
+        barrier_real = self.__create_test_barrier_real()
+        operation_type = get_operation_type()
+        operation = add_barrier_real_operation(
+            barrier_real=barrier_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+        )
+        data = {
+            "operation_date": "2020-02-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse(
+            "barrier-real-operations-detail",
+            kwargs={"barrier_real_pk": barrier_real.pk, "pk": operation.pk},
+        )
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(barrier_real.operations.all().count(), 1)
+        self.assertEqual(barrier_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
     def __create_test_barrier_real(self):
         barrier_plan = BarrierPlan.objects.create(

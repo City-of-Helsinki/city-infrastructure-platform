@@ -6,7 +6,13 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import MountPlan, MountReal
-from traffic_control.tests.factories import add_mount_real_operation, get_api_client, get_mount_plan, get_mount_real
+from traffic_control.tests.factories import (
+    add_mount_real_operation,
+    get_api_client,
+    get_mount_plan,
+    get_mount_real,
+    get_operation_type,
+)
 from traffic_control.tests.test_base_api import (
     line_location_error_test_data,
     line_location_test_data,
@@ -373,6 +379,37 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             reverse("v1:mountreal-detail", kwargs={"pk": mount_real.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_operation_mount_real(self):
+        mount_real = self.__create_test_mount_real()
+        operation_type = get_operation_type()
+        data = {
+            "operation_date": "2020-01-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse("mount-real-operations-list", kwargs={"mount_real_pk": mount_real.pk})
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(mount_real.operations.all().count(), 1)
+
+    def test_update_operation_mount_real(self):
+        mount_real = self.__create_test_mount_real()
+        operation_type = get_operation_type()
+        operation = add_mount_real_operation(
+            mount_real=mount_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+        )
+        data = {
+            "operation_date": "2020-02-01",
+            "operation_type_id": operation_type.pk,
+        }
+        url = reverse(
+            "mount-real-operations-detail",
+            kwargs={"mount_real_pk": mount_real.pk, "pk": operation.pk},
+        )
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(mount_real.operations.all().count(), 1)
+        self.assertEqual(mount_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
     def __create_test_mount_real(self):
         mount_plan = MountPlan.objects.create(
