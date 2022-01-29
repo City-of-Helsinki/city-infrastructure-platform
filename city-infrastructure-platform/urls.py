@@ -13,6 +13,7 @@ from traffic_control.views import (
     additional_sign as additional_sign_views,
     barrier as barrier_views,
     mount as mount_views,
+    operation_type as operation_type_views,
     operational_area as operational_area_views,
     owner as owner_views,
     plan as plan_views,
@@ -44,6 +45,7 @@ router.register("plans", plan_views.PlanViewSet)
 router.register("portal-types", mount_views.PortalTypeViewSet)
 router.register("mount-types", mount_views.MountTypeViewSet)
 router.register("operational-areas", operational_area_views.OperationalAreaViewSet)
+router.register("operation-types", operation_type_views.OperationTypeViewSet)
 router.register("owners", owner_views.OwnerViewSet)
 
 # Nested routes for operations
