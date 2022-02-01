@@ -1,0 +1,35 @@
+code,class_type,function_type,icon,description,size,target_model
+C1-A,1030,1090,,"Vitriinitaulu - Yksiosainen, Yksipuolinen",(846*2000) 700 * 1000,furniture_signpost
+C1-B,1030,1090,,"Vitriinitaulu - Yksiosainen, Kaksipuolinen",(846*2000) 700 * 1000,furniture_signpost
+C1-C,1030,1090,,"Vitriinitaulu - Kaksiosainen, Yksipuolinen",(1576*2000) 2 * 700 * 1000,furniture_signpost
+C1-D,1030,1090,,"Vitriinitaulu - Kaksiosainen, Kaksipuolinen",(1576*2000) 2 * 700 * 1000,furniture_signpost
+C2-A,1030,1090,,Ilmoitustaulu - Yksiosainen,700 * 1000,furniture_signpost
+C2-B,1030,1090,,Ilmoitustaulu - Kaksiosainen,2 * 700 * 1000,furniture_signpost
+C3-A,1030,1090,,"Opasteet, matala",300 * 400,furniture_signpost
+C3-B,1030,1090,,"Opasteet, matala",600 * 400,furniture_signpost
+C3-C,1030,1090,,"Opasteet, matala",900 * 400,furniture_signpost
+C3-D,1030,1090,,"Opasteet, matala",1200 * 400,furniture_signpost
+C4-A,1030,1090,,"Opasteet, korkea A",1200 * 400,furniture_signpost
+C4-B,1030,1090,,"Opasteet, korkea B",1200 * 800,furniture_signpost
+C4-C,1030,1090,,"Opasteet, korkea C",400 * 1200,furniture_signpost
+C4-D,1030,1090,,"Opasteet, korkea D",700 * 1800,furniture_signpost
+C4-E,1030,1090,,"Opasteet, korkea E",1000 * vaihtelee,furniture_signpost
+C4-F,1030,1090,,"Opasteet, korkea F",1200 * 2000,furniture_signpost
+C4-G,1030,1090,,"Opasteet, korkea G",2000 * 1000,furniture_signpost
+C4-H,1030,1090,,"Opasteet, korkea H",2500 * 1000,furniture_signpost
+C5-A,1030,1090,,"Opasteet, puistopalvelu",420 * 640,furniture_signpost
+C5-B,1030,1090,,"Opasteet, puistopalvelu",640 * 420,furniture_signpost
+Rantareitti-1A,1030,1320,,Reittivahvennelaatta A,200*200,furniture_signpost
+Rantareitti-1B,1030,1320,,Reittivahvennelaatta B,200*200,furniture_signpost
+Rantareitti-2A,1030,1320,,Reittivahvennetarra A,200,furniture_signpost
+Rantareitti-2B,1030,1320,,Reittivahvennetarra B,330,furniture_signpost
+Rantareitti-3,1030,1320,,Reittivahvennepollari,? * 1400,furniture_signpost
+Rantareitti-4A,1030,1090,,Karttaopaste,1200 * 400,furniture_signpost
+Rantareitti-4B,1030,1090,,Karttaopaste,900 * ?,furniture_signpost
+Rantareitti-5,1030,1090,,Viitta,? * 150,furniture_signpost
+Puisto-A,1030,1090,,Koko alueen kattava opaskartta,700 * 1200,furniture_signpost
+Puisto-B,1030,1090,,Osan puistoa kattava opaskartta,1200 * 2000,furniture_signpost
+Puisto-C,1030,1090,,Osan puistoa kattava opaskartta sekä suuntaopaste,2000 * ?,furniture_signpost
+Puisto-D,1030,1090,,Suuntaopaste,1000 * ?,furniture_signpost
+Puisto-E,1030,1320,,Reittivahvenne,200 * 200,furniture_signpost
+Puisto-F,1030,1090,,Tervetuloa puistoon kyltti,1000 * 250,furniture_signpost
