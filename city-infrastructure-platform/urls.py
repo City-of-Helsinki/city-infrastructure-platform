@@ -8,6 +8,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 from rest_framework_nested.routers import NestedSimpleRouter
 
+from city_furniture.views import furniture_signpost as furniture_signpost_views
 from map import views as map_views
 from traffic_control.views import (
     additional_sign as additional_sign_views,
@@ -47,6 +48,9 @@ router.register("mount-types", mount_views.MountTypeViewSet)
 router.register("operational-areas", operational_area_views.OperationalAreaViewSet)
 router.register("operation-types", operation_type_views.OperationTypeViewSet)
 router.register("owners", owner_views.OwnerViewSet)
+
+router.register("furniture-signpost-plans", furniture_signpost_views.FurnitureSignpostPlanViewSet)
+router.register("furniture-signpost-reals", furniture_signpost_views.FurnitureSignpostRealViewSet)
 
 # Nested routes for operations
 # e.g. /barrier-reals/{id}/operations
