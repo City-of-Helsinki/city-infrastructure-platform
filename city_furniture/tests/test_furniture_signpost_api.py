@@ -13,7 +13,7 @@ from city_furniture.tests.factories import (
     get_furniture_signpost_plan,
     get_furniture_signpost_real,
 )
-from traffic_control.tests.factories import get_api_client, get_owner, get_user
+from traffic_control.tests.factories import get_api_client, get_operation_type, get_owner, get_user
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
 
 
@@ -319,3 +319,48 @@ def test__furniture_signpost_real__soft_deleted_get_404_response():
     response = client.get(reverse("v1:furnituresignpostreal-detail", kwargs={"pk": obj.pk}))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+# Operations
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__furniture_signpost_real_operation__create(admin_user):
+    client = get_api_client(user=get_user(admin=admin_user))
+    obj = get_furniture_signpost_real()
+    operation_type = get_operation_type()
+    data = {"operation_date": "2020-01-01", "operation_type_id": operation_type.pk}
+    url = reverse("furniture-signpost-real-operations-list", kwargs={"furniture_signpost_real_pk": obj.pk})
+    response = client.post(url, data, format="json")
+
+    if admin_user:
+        assert response.status_code == status.HTTP_201_CREATED
+        assert obj.operations.all().count() == 1
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert obj.operations.all().count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__furniture_signpost_real_operation__update(admin_user):
+    client = get_api_client(user=get_user(admin=admin_user))
+    obj = get_furniture_signpost_real()
+    operation_type = get_operation_type()
+    operation = add_furniture_signpost_real_operation(
+        furniture_signpost_real=obj, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+    )
+    data = {"operation_date": "2020-02-01", "operation_type_id": operation_type.pk}
+    url = reverse(
+        "furniture-signpost-real-operations-detail",
+        kwargs={"furniture_signpost_real_pk": obj.pk, "pk": operation.pk},
+    )
+    response = client.put(url, data, format="json")
+
+    if admin_user:
+        assert response.status_code == status.HTTP_200_OK
+        assert obj.operations.all().count() == 1
+        assert obj.operations.all().first().operation_date == datetime.date(2020, 2, 1)
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert obj.operations.all().count() == 1
+        assert obj.operations.all().first().operation_date == datetime.date(2020, 1, 1)
