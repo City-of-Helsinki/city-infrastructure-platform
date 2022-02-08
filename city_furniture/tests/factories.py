@@ -3,13 +3,36 @@ from typing import Optional
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, FurnitureSignpostRealOperation
-from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType
+from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
 from traffic_control.tests.factories import get_operation_type, get_owner, get_user
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
 def get_city_furniture_color(name="Color", rgb="#FFFFFF"):
     return CityFurnitureColor.objects.get_or_create(name=name, defaults=dict(rgb=rgb))[0]
+
+
+def get_city_furniture_target(
+    name_fi: str = "Turun tuomiokirkko",
+    name_sw: Optional[str] = "Åbo domkyrka",
+    name_en: Optional[str] = "Turku Cathedral",
+    description: Optional[str] = (
+        "Turun tuomiokirkko on Suomen Turussa I kaupunginosassa Aurajoen rannalla sijaitseva, "
+        "monessa vaiheessa rakennettu kivikirkko, joka on suurimmaksi osaksi keskiajalta."
+    ),
+    source_id: Optional[str] = "Turun_tuomiokirkko",
+    source_name: Optional[str] = "Wikipedia",
+):
+    return CityFurnitureTarget.objects.get_or_create(
+        name_fi=name_fi,
+        defaults=dict(
+            name_sw=name_sw,
+            name_en=name_en,
+            description=description,
+            source_id=source_id,
+            source_name=source_name,
+        ),
+    )[0]
 
 
 def get_city_furniture_device_type(

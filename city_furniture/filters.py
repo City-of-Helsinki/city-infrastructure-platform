@@ -1,7 +1,7 @@
 from django_filters.rest_framework import FilterSet
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
-from city_furniture.models.common import CityFurnitureDeviceType
+from city_furniture.models.common import CityFurnitureDeviceType, CityFurnitureTarget
 from traffic_control.filters import GenericMeta
 
 
@@ -18,3 +18,8 @@ class FurnitureSignpostRealFilterSet(FilterSet):
 class CityFurnitureDeviceTypeFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = CityFurnitureDeviceType
+
+
+class CityFurnitureTargetFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = CityFurnitureTarget
