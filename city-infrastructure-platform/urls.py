@@ -95,6 +95,15 @@ road_marking_operations_router.register(
     "operations", road_marking_views.RoadMarkingRealOperationViewSet, basename="road-marking-real-operations"
 )
 
+furniture_signpost_operations_router = NestedSimpleRouter(
+    router, "furniture-signpost-reals", lookup="furniture_signpost_real"
+)
+furniture_signpost_operations_router.register(
+    "operations",
+    furniture_signpost_views.FurnitureSignpostRealOperationViewSet,
+    basename="furniture-signpost-real-operations",
+)
+
 schema_view = get_schema_view(
     openapi.Info(
         title="City Infrastructure Platform REST API",
@@ -129,6 +138,7 @@ urlpatterns = [
     path("v1/", include(mount_operations_router.urls)),
     path("v1/", include(signpost_operations_router.urls)),
     path("v1/", include(road_marking_operations_router.urls)),
+    path("v1/", include(furniture_signpost_operations_router.urls)),
     path("auth/", include("social_django.urls", namespace="social")),
     url(
         r"^swagger(?P<format>\.json|\.yaml)$",

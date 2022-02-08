@@ -3,12 +3,17 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
-from city_furniture.filters import FurnitureSignpostPlanFilterSet, FurnitureSignpostRealFilterSet
+from city_furniture.filters import (
+    FurnitureSignpostPlanFilterSet,
+    FurnitureSignpostRealFilterSet,
+    FurnitureSignpostRealOperationFilterSet,
+)
 from city_furniture.models import (
     FurnitureSignpostPlan,
     FurnitureSignpostPlanFile,
     FurnitureSignpostReal,
     FurnitureSignpostRealFile,
+    FurnitureSignpostRealOperation,
 )
 from city_furniture.serializers.furniture_signpost import (
     FurnitureSignpostPlanFileSerializer,
@@ -16,10 +21,11 @@ from city_furniture.serializers.furniture_signpost import (
     FurnitureSignpostPlanSerializer,
     FurnitureSignpostRealFileSerializer,
     FurnitureSignpostRealGeoJSONSerializer,
+    FurnitureSignpostRealOperationSerializer,
     FurnitureSignpostRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, TrafficControlViewSet
 from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
 
 __all__ = (
     "FurnitureSignpostPlanViewSet",
@@ -183,3 +189,9 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     )
     def change_file(self, request, file_pk, *args, **kwargs):
         return super().change_file(request, file_pk, *args, **kwargs)
+
+
+class FurnitureSignpostRealOperationViewSet(OperationViewSet):
+    serializer_class = FurnitureSignpostRealOperationSerializer
+    queryset = FurnitureSignpostRealOperation.objects.all()
+    filterset_class = FurnitureSignpostRealOperationFilterSet
