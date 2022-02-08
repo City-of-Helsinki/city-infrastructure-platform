@@ -10,6 +10,7 @@ from rest_framework_nested.routers import NestedSimpleRouter
 
 from city_furniture.views import (
     city_furniture_device_type as city_furniture_device_type_views,
+    city_furniture_target as city_furniture_target_views,
     furniture_signpost as furniture_signpost_views,
 )
 from map import views as map_views
@@ -55,6 +56,7 @@ router.register("owners", owner_views.OwnerViewSet)
 router.register("furniture-signpost-plans", furniture_signpost_views.FurnitureSignpostPlanViewSet)
 router.register("furniture-signpost-reals", furniture_signpost_views.FurnitureSignpostRealViewSet)
 router.register("city-furniture-device-types", city_furniture_device_type_views.CityFurnitureDeviceTypeViewSet)
+router.register("city-furniture-targets", city_furniture_target_views.CityFurnitureTargetViewSet)
 
 # Nested routes for operations
 # e.g. /barrier-reals/{id}/operations
