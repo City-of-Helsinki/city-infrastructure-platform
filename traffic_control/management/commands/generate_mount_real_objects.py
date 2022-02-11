@@ -4,6 +4,8 @@ from django.contrib.gis.measure import D
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
+from city_furniture.models import FurnitureSignpostReal
+
 from ...models import AdditionalSignReal, MountReal, TrafficSignReal
 from ...utils import get_default_owner
 
@@ -28,8 +30,11 @@ class Command(BaseCommand):
         standalone_additional_signs = AdditionalSignReal.objects.active().filter(
             mount_real__isnull=True, mount_type__isnull=False, parent__isnull=True
         )
+        furniture_signposts = FurnitureSignpostReal.objects.active().filter(
+            mount_real__isnull=True, mount_type__isnull=False, parent__isnull=True
+        )
 
-        for traffic_sign in list(chain(traffic_signs, standalone_additional_signs)):
+        for traffic_sign in list(chain(traffic_signs, standalone_additional_signs, furniture_signposts)):
             # wrap MountReal object creation and traffic sign
             # linking in a transaction so that unlinked main traffic
             # signs and linked additional traffic signs can still be
