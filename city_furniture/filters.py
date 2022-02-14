@@ -1,7 +1,12 @@
 from django_filters.rest_framework import FilterSet
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, FurnitureSignpostRealOperation
-from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from city_furniture.models.common import (
+    CityFurnitureColor,
+    CityFurnitureDeviceType,
+    CityFurnitureTarget,
+    ResponsibleEntity,
+)
 from traffic_control.filters import GenericMeta
 
 
@@ -33,3 +38,8 @@ class CityFurnitureTargetFilterSet(FilterSet):
 class CityFurnitureColorFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = CityFurnitureColor
+
+
+class ResponsibleEntityFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = ResponsibleEntity
