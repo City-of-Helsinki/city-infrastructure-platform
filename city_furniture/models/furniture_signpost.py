@@ -9,7 +9,12 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
-from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from city_furniture.models.common import (
+    CityFurnitureColor,
+    CityFurnitureDeviceType,
+    CityFurnitureTarget,
+    ResponsibleEntity,
+)
 from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.mixins.models import (
     AbstractFileModel,
@@ -51,6 +56,13 @@ class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControl
         verbose_name=_("Owner"),
         blank=False,
         null=False,
+        on_delete=models.PROTECT,
+    )
+    responsible_entity = models.ForeignKey(
+        ResponsibleEntity,
+        verbose_name=_("Responsible entity"),
+        blank=True,
+        null=True,
         on_delete=models.PROTECT,
     )
     lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)

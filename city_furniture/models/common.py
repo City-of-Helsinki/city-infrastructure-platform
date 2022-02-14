@@ -9,7 +9,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from city_furniture.enums import CityFurnitureClassType, CityFurnitureDeviceTypeTargetModel, CityFurnitureFunctionType
+from city_furniture.enums import (
+    CityFurnitureClassType,
+    CityFurnitureDeviceTypeTargetModel,
+    CityFurnitureFunctionType,
+    OrganizationLevel,
+)
 from traffic_control.mixins.models import SourceControlModel
 
 
@@ -140,6 +145,37 @@ class CityFurnitureTarget(SourceControlModel):
         db_table = "city_furniture_target"
         verbose_name = _("City Furniture Target")
         verbose_name_plural = _("City Furniture Targets")
+
+
+class ResponsibleEntity(models.Model):
+    """
+    Responsible Entity for a City Furniture Device
+
+    Organization chain is most often the following:
+    Toimiala > Palvelu > Henkilö
+    e.g.
+    KYMP > Yleiset Alueet > Matti Meikäläinen
+    """
+
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    name = models.CharField(_("Name"), max_length=254)
+    organization_level = EnumIntegerField(
+        OrganizationLevel,
+        verbose_name=_("Organization level"),
+        default=OrganizationLevel.PERSON,
+    )
+    parent = models.ForeignKey(
+        "self",
+        verbose_name=_("Parent Responsible Entity"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        db_table = "responsible_entity"
+        verbose_name = _("Responsible Entity")
+        verbose_name_plural = _("Responsible Entities")
 
 
 auditlog.register(CityFurnitureDeviceType)

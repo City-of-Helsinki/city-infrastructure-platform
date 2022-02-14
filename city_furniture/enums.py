@@ -137,3 +137,16 @@ class CityFurnitureFunctionType(Enum):
         DELIMITATION_STAKE = _("Boundary post")
         BENCH = _("Bench")
         UNKNOWN = _("Others")
+
+
+class OrganizationLevel(Enum):
+    """Responsible Entity Organization levels"""
+
+    DIVISION = 1
+    SERVICE = 2
+    PERSON = 3
+
+    class Labels:
+        DIVISION = _("division")
+        SERVICE = _("service")
+        PERSON = _("person")
