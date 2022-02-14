@@ -1,11 +1,40 @@
 import datetime
 from typing import Optional
 
-from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
+from city_furniture.enums import CityFurnitureDeviceTypeTargetModel, OrganizationLevel
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, FurnitureSignpostRealOperation
-from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from city_furniture.models.common import (
+    CityFurnitureColor,
+    CityFurnitureDeviceType,
+    CityFurnitureTarget,
+    ResponsibleEntity,
+)
 from traffic_control.tests.factories import get_operation_type, get_owner, get_user
 from traffic_control.tests.test_base_api_3d import test_point_3d
+
+
+def get_responsible_entity_person(name="Matti Meikäläinen"):
+    division = ResponsibleEntity.objects.get_or_create(
+        name="KYMP",
+        defaults=dict(
+            organization_level=OrganizationLevel.DIVISION,
+        ),
+    )[0]
+    service = ResponsibleEntity.objects.get_or_create(
+        name="Yleiset alueet",
+        defaults=dict(
+            parent=division,
+            organization_level=OrganizationLevel.DIVISION,
+        ),
+    )[0]
+    person = ResponsibleEntity.objects.get_or_create(
+        name=name,
+        defaults=dict(
+            parent=service,
+            organization_level=OrganizationLevel.PERSON,
+        ),
+    )[0]
+    return person
 
 
 def get_city_furniture_color(name="Color", rgb="#FFFFFF"):
