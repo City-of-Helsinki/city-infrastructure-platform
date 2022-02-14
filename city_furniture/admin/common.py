@@ -1,6 +1,11 @@
 from django.contrib.gis import admin
 
-from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from city_furniture.models.common import (
+    CityFurnitureColor,
+    CityFurnitureDeviceType,
+    CityFurnitureTarget,
+    ResponsibleEntity,
+)
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.mixins import EnumChoiceValueDisplayAdminMixin
 
@@ -46,4 +51,16 @@ class CityFurnitureTargetAdmin(AuditLogHistoryAdmin):
         "source_name",
     )
     ordering = ("name_fi",)
+    actions = None
+
+
+@admin.register(ResponsibleEntity)
+class ResponsibleEntityAdmin(AuditLogHistoryAdmin):
+    list_display = (
+        "id",
+        "name",
+        "organization_level",
+        "parent",
+    )
+    ordering = ("organization_level",)
     actions = None
