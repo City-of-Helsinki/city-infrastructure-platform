@@ -1,4 +1,5 @@
 import datetime
+import uuid
 from typing import Optional
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel, OrganizationLevel
@@ -9,7 +10,7 @@ from city_furniture.models.common import (
     CityFurnitureTarget,
     ResponsibleEntity,
 )
-from traffic_control.tests.factories import get_operation_type, get_owner, get_user
+from traffic_control.tests.factories import get_mount_type, get_operation_type, get_owner, get_user
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
@@ -80,29 +81,36 @@ def get_city_furniture_device_type(
     )[0]
 
 
-def get_furniture_signpost_plan(location=test_point_3d, owner=None, device_type=None):
+def get_furniture_signpost_plan(location=None, owner=None, device_type=None):
     user = get_user("test_user")
-    owner = owner or get_owner()
-    device_type = device_type or get_city_furniture_device_type()
 
     return FurnitureSignpostPlan.objects.get_or_create(
-        location=location,
-        owner=owner,
-        device_type=device_type,
+        location=location or test_point_3d,
+        owner=owner or get_owner(),
+        device_type=device_type or get_city_furniture_device_type(),
+        direction=90,
+        mount_type=get_mount_type(),
+        source_name="Some_source",
+        source_id=uuid.uuid4(),
+        project_id="ABC123",
         created_by=user,
         updated_by=user,
     )[0]
 
 
-def get_furniture_signpost_real(location=test_point_3d, owner=None, device_type=None):
+def get_furniture_signpost_real(location=None, owner=None, device_type=None):
     user = get_user("test_user")
-    owner = owner or get_owner()
-    device_type = device_type or get_city_furniture_device_type()
 
     return FurnitureSignpostReal.objects.get_or_create(
-        location=location,
-        owner=owner,
-        device_type=device_type,
+        location=location or test_point_3d,
+        owner=owner or get_owner(),
+        device_type=device_type or get_city_furniture_device_type(),
+        direction=90,
+        mount_type=get_mount_type(),
+        installation_date=datetime.date(2020, 1, 20),
+        source_name="Some_source",
+        source_id=uuid.uuid4(),
+        project_id="ABC123",
         created_by=user,
         updated_by=user,
     )[0]
