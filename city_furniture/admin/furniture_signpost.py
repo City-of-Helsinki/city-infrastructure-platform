@@ -2,6 +2,7 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
+from import_export.admin import ImportExportActionModelAdmin
 
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
@@ -11,6 +12,7 @@ from city_furniture.models import (
     FurnitureSignpostRealFile,
     FurnitureSignpostRealOperation,
 )
+from city_furniture.resources.furniture_signpost import FurnitureSignpostPlanResource, FurnitureSignpostRealResource
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
@@ -52,6 +54,7 @@ class AbstractFurnitureSignpostAdmin(
     Point3DFieldAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    ImportExportActionModelAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -137,6 +140,7 @@ class AbstractFurnitureSignpostAdmin(
 
 @admin.register(FurnitureSignpostPlan)
 class FurnitureSignpostPlanAdmin(AbstractFurnitureSignpostAdmin):
+    resource_class = FurnitureSignpostPlanResource
     form = FurnitureSignpostPlanModelForm
     fieldsets = (
         AbstractFurnitureSignpostAdmin._fieldset_general_information,
@@ -153,6 +157,7 @@ class FurnitureSignpostPlanAdmin(AbstractFurnitureSignpostAdmin):
 
 @admin.register(FurnitureSignpostReal)
 class FurnitureSignpostRealAdmin(UserStampedInlineAdminMixin, AbstractFurnitureSignpostAdmin):
+    resource_class = FurnitureSignpostRealResource
     form = FurnitureSignpostRealModelForm
     fieldsets = (
         AbstractFurnitureSignpostAdmin._fieldset_general_information,
