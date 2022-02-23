@@ -153,6 +153,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "auditlog",
     "colorfield",
+    "import_export",
 ]
 LOCAL_APPS = [
     "users.apps.UsersConfig",
@@ -294,3 +295,6 @@ BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 LOCALE_PATHS = [
     "./templates/locale",
 ]
+
+# Import / Export
+IMPORT_EXPORT_USE_TRANSACTIONS = True
