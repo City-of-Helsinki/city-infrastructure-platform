@@ -22,7 +22,7 @@ flake8==3.8.4
 flake8-polyfill==1.0.2    # via pep8-naming
 importmagic==0.1.7
 iniconfig==1.1.1          # via pytest
-ipython==7.16.1
+ipython==7.16.3
 ipython-genutils==0.2.0   # via traitlets
 isort==5.10.1
 jedi==0.17.2
