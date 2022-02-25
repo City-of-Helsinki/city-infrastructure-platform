@@ -37,14 +37,16 @@ The virtualenv will automatically activate. To activate it in the future, just d
 
     workon city-infrastructure-platform
 
+Install [Poetry](https://github.com/python-poetry/poetry#installation) for installing requirements
+
 ### Creating and updating requirements
 
-* Run `prequ update`
+* Run `poetry update`
 
 ### Installing Python requirements
 
-* Run `pip install -r requirements.txt`
-* For development also run `pip install -r requirements-dev.txt`
+* For development run `poetry install`
+* For production run  `poetry install --no-dev`
 
 ### Prepare the database
 

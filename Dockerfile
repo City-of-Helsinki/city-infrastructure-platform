@@ -10,8 +10,6 @@ RUN mkdir /city-infrastructure-platform && \
     useradd -u 1000 -g appuser -ms /bin/bash appuser
 WORKDIR /city-infrastructure-platform
 
-COPY requirements.txt /city-infrastructure-platform/
-COPY requirements-prod.txt /city-infrastructure-platform/
 
 RUN apt-get update && \
     mkdir -p /usr/share/man/man1/ /usr/share/man/man3/ /usr/share/man/man7/ && \
@@ -23,9 +21,16 @@ RUN apt-get update && \
         git \
         gettext \
         mime-support \
+        curl \
         nodejs \
         npm && \
-    pip install --no-cache-dir -r requirements.txt -r requirements-prod.txt && \
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+
+ENV PATH = "${PATH}:/root/.poetry/bin"
+COPY poetry.lock pyproject.toml /city-infrastructure-platform/
+
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-dev --no-interaction && \
     apt-get remove -y build-essential libpq-dev && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
@@ -38,14 +43,13 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 # ==============================
 FROM base AS development
 # ==============================
-COPY requirements-dev.txt /city-infrastructure-platform/
-RUN pip install --no-cache-dir -r requirements-dev.txt
 
 ENV DEBUG=1
 ENV APPLY_MIGRATIONS=1
 ENV COLLECT_STATIC=1
 ENV DEV_SERVER=1
 
+RUN poetry install
 COPY . /city-infrastructure-platform
 RUN chown -R appuser:appuser /city-infrastructure-platform
 USER appuser
