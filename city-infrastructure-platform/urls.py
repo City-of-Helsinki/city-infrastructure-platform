@@ -14,6 +14,7 @@ from city_furniture.views import (
     city_furniture_target as city_furniture_target_views,
     furniture_signpost as furniture_signpost_views,
     responsible_entity as responsible_entity_views,
+    wfs as wfs_views,
 )
 from map import views as map_views
 from traffic_control.views import (
@@ -142,20 +143,14 @@ urlpatterns = [
     path("v1/", include(road_marking_operations_router.urls)),
     path("v1/", include(furniture_signpost_operations_router.urls)),
     path("auth/", include("social_django.urls", namespace="social")),
-    url(
-        r"^swagger(?P<format>\.json|\.yaml)$",
-        schema_view.without_ui(cache_timeout=0),
-        name="schema-json",
-    ),
-    url(
-        r"^swagger/$",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
-    ),
+    path("wfs/city-furniture", wfs_views.CityFurnitureWFSView.as_view(), name="wfs-city-furniture"),
+    url(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    url(r"^swagger/$", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     url(r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("sentry-debug/", lambda a: 1 / 0),
 ]
 
+# Admin
 urlpatterns += i18n_patterns(
     path("admin/", admin.site.urls),
     path("map/", map_views.map_view, name="map-view"),

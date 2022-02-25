@@ -2,6 +2,8 @@ import datetime
 import uuid
 from typing import Optional
 
+from django.urls import reverse
+
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel, OrganizationLevel
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, FurnitureSignpostRealOperation
 from city_furniture.models.common import (
@@ -83,11 +85,14 @@ def get_city_furniture_device_type(
 
 def get_furniture_signpost_plan(location=None, owner=None, device_type=None):
     user = get_user("test_user")
+    location = location or test_point_3d
+    owner = owner or get_owner()
+    device_type = device_type or get_city_furniture_device_type()
 
     return FurnitureSignpostPlan.objects.get_or_create(
-        location=location or test_point_3d,
-        owner=owner or get_owner(),
-        device_type=device_type or get_city_furniture_device_type(),
+        location=location,
+        owner=owner,
+        device_type=device_type,
         direction=90,
         mount_type=get_mount_type(),
         source_name="Some_source",
@@ -100,11 +105,15 @@ def get_furniture_signpost_plan(location=None, owner=None, device_type=None):
 
 def get_furniture_signpost_real(location=None, owner=None, device_type=None):
     user = get_user("test_user")
+    location = location or test_point_3d
+    owner = owner or get_owner()
+    device_type = device_type or get_city_furniture_device_type()
 
     return FurnitureSignpostReal.objects.get_or_create(
-        location=location or test_point_3d,
-        owner=owner or get_owner(),
-        device_type=device_type or get_city_furniture_device_type(),
+        furniture_signpost_plan=get_furniture_signpost_plan(location=location, owner=owner, device_type=device_type),
+        location=location,
+        owner=owner,
+        device_type=device_type,
         direction=90,
         mount_type=get_mount_type(),
         installation_date=datetime.date(2020, 1, 20),
@@ -129,3 +138,9 @@ def add_furniture_signpost_real_operation(furniture_signpost_real, operation_typ
         created_by=user,
         updated_by=user,
     )
+
+
+def get_wfs_url(model_name: str = "furnituresignpostreal", output_format: str = "application/gml+xml") -> str:
+    url = f"{reverse('wfs-city-furniture')}?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature"
+    url += f"&TYPENAMES={model_name}&OUTPUTFORMAT={output_format}"
+    return url
