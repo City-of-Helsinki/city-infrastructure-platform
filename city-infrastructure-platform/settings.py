@@ -154,6 +154,7 @@ THIRD_PARTY_APPS = [
     "auditlog",
     "colorfield",
     "import_export",
+    "gisserver",
 ]
 LOCAL_APPS = [
     "users.apps.UsersConfig",
