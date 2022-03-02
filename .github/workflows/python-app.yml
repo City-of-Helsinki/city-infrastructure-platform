@@ -21,22 +21,31 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
       with:
         python-version: 3.7
+
     - name: Install required Ubuntu packages
       run: |
         sudo apt-get install gdal-bin
-    - name: Install PyPI dependencies
+
+    - name: Install poetry
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt -r requirements-dev.txt
+        curl --silent --show-error -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+
+    - name: "Install test dependencies"
+      run: ~/.poetry/bin/poetry install --no-root
+      env:
+        POETRY_VIRTUALENVS_CREATE: 0
+
     - name: Run Python side code neatness tests
       run: |
         flake8
         black --check .
         isort . -c
+
     - name: Run pytest code functionality tests
       run: |
         pytest -ra -vvv --cov=.
