@@ -59,7 +59,9 @@ EXPOSE 8000
 FROM base AS build
 # ===================================
 COPY map-view/ /map-view/
-RUN cd /map-view && yarn install && yarn build
+RUN cd /map-view && \
+    yarn install --frozen-lockfile --no-cache --production && \
+    yarn build
 
 # ==============================
 FROM base AS production
