@@ -35,7 +35,9 @@ RUN poetry config virtualenvs.create false && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives && \
-    npm install -g yarn
+    rm -rf /root/.cache/pip && \
+    npm install -g yarn && \
+    npm cache clean --force
 
 COPY docker-entrypoint.sh /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
