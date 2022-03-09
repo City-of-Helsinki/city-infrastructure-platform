@@ -131,18 +131,6 @@ class Map {
 
   private createOverlayLayerGroup(layerConfig: LayerConfig) {
     const { layers, sourceUrl } = layerConfig;
-    const vectorLayerStyle = new Style({
-      image: new Circle({
-        radius: 6,
-        fill: new Fill({
-          color: "#ff0000",
-        }),
-      }),
-      stroke: new Stroke({
-        color: "#ffcc33",
-        width: 2,
-      }),
-    });
 
     // Fetch device layers
     const overlayLayers = layers.map(({ identifier }) => {
@@ -153,7 +141,20 @@ class Map {
 
       const vectorLayer = new VectorLayer({
         source: vectorSource,
-        style: vectorLayerStyle,
+        style: (feature) => {
+          return new Style({
+            image: new Circle({
+              radius: 8,
+              fill: new Fill({
+                color: feature.get("color_code"),
+              }),
+              stroke: new Stroke({
+                color: "#000",
+                width: 2,
+              }),
+            }),
+          });
+        },
         visible: false,
       });
 
