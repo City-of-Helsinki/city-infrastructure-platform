@@ -25,7 +25,7 @@ RUN apt-get update && \
         curl \
         nodejs \
         npm && \
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - && \
+    curl -sSL https://install.python-poetry.org | python - && \
     /root/.local/bin/poetry config virtualenvs.create false && \
     /root/.local/bin/poetry install --no-dev --no-interaction && \
     npm install -g yarn && \
