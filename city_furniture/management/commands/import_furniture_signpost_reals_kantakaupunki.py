@@ -83,16 +83,20 @@ class Command(BaseCommand):
         try:
             return datetime.strptime(date_str, "%Y-%m-%d")
         except ValueError:
-            return datetime.strptime(date_str, "%m/%d/%y")
+            try:
+                return datetime.strptime(date_str, "%d.%m.%Y")
+            except ValueError:
+                return datetime.strptime(date_str, "%m/%d/%y")
 
     def import_row_signpost(self, row):
         location = Point(float(row["latitude"]), float(row["longitude"]), 0, srid=settings.SRID)
+        device_type = self.get_device_type(row["device_type"])
 
-        signpost, _ = FurnitureSignpostReal.objects.update_or_create(
+        signpost, created = FurnitureSignpostReal.objects.update_or_create(
             source_name=SOURCE_NAME,
-            source_id=row["id"],
+            source_id=f"{row['id']}-{device_type.code}",
+            device_type=device_type,
             defaults={
-                "device_type": self.get_device_type(row["device_type"]),
                 "location": location,
                 "owner": self.owner,
                 "target": self.target,
@@ -121,6 +125,7 @@ class Command(BaseCommand):
                 "source_name": SOURCE_NAME,
             },
         )
+        return created
 
     @atomic
     def handle(self, *args, **options):
@@ -134,8 +139,9 @@ class Command(BaseCommand):
         with open(filename, encoding="utf-8-sig") as f:
             csv_reader = csv.DictReader(f, delimiter=",")
             for row in csv_reader:
-                self.import_row_signpost(row)
-                count += 1
+                created = self.import_row_signpost(row)
+                if created:
+                    count += 1
 
                 if count % self.step == 0:
                     self.stdout.write(f"{count} traffic signs are imported...")
