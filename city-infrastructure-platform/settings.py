@@ -60,7 +60,6 @@ env = environ.Env(
     OIDC_ENDPOINT=(str, None),
     HELUSERS_ADGROUPS_CLAIM=(str, "groups"),
     LOGGING_AUTH_DEBUG=(bool, False),
-    OVERLAY_SOURCE_URL=(str, "https://geoserver.hel.fi/geoserver/city-infra/wms"),
     BASEMAP_SOURCE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/wms"),
     STATIC_URL=(str, "/static/"),
     MEDIA_URL=(str, "/media/"),
@@ -290,7 +289,6 @@ if SENTRY_DSN:
 # Custom settings
 SRID = 3879  # the spatial reference id used for geometries
 
-OVERLAY_SOURCE_URL = env.str("OVERLAY_SOURCE_URL")
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 
 LOCALE_PATHS = [

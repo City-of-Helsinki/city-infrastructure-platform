@@ -14,9 +14,7 @@ import ImageWMS from "ol/source/ImageWMS";
 import GeoJson from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import Style from "ol/style/Style";
-import Icon from "ol/style/Icon";
-import ArrowIcon from "../assets/arrow.svg";
+import { Circle, Fill, Stroke, Style } from "ol/style";
 
 class Map {
   /**
@@ -36,17 +34,13 @@ class Map {
    */
   private geojsonFormat = new GeoJson();
   /**
-   * A layer to draw temporary vector features on the map
-   */
-  private vectorLayer: VectorLayer;
-  /**
    * Available basemap layers
    */
   private basemapLayers: { [identifier: string]: ImageLayer } = {};
   /**
    * Available overlay layers
    */
-  private overlayLayers: { [identifier: string]: ImageLayer } = {};
+  private overlayLayers: { [identifier: string]: VectorLayer } = {};
   /**
    * Callback function to process features returned from GetFeatureInfo requests
    *
@@ -64,7 +58,7 @@ class Map {
     const { basemapConfig, overlayConfig } = mapConfig;
     const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
     const overlayLayerGroup = this.createOverlayLayerGroup(overlayConfig);
-    this.vectorLayer = this.createVectorLayer();
+
     const helsinkiCoords = [25499052.02, 6675851.38];
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
     const projection = this.getProjection();
@@ -77,36 +71,22 @@ class Map {
     });
     this.map = new OLMap({
       target: target,
-      layers: [basemapLayerGroup, overlayLayerGroup, this.vectorLayer],
+      layers: [basemapLayerGroup, overlayLayerGroup],
       controls: this.getControls(),
       view,
     });
 
     this.map.on("singleclick", (event) => {
-      const viewResolution = view.getResolution();
       const visibleLayers = Object.values(this.overlayLayers).filter((layer) => layer.getVisible());
       if (visibleLayers.length > 0) {
-        const layerNames = visibleLayers.map((layer) => (layer.getSource() as ImageWMS).getParams().LAYERS);
-        const url = (visibleLayers[0].getSource() as ImageWMS).getFeatureInfoUrl(
-          event.coordinate,
-          viewResolution as number,
-          projection,
-          {
-            INFO_FORMAT: "application/json",
-            LAYERS: layerNames.join(","),
-            QUERY_LAYERS: layerNames.join(","),
-            FEATURE_COUNT: 10,
+        // Combine the topmost feature from all visible layers into a single array
+        Promise.all(visibleLayers.map((layer) => layer.getFeatures(event.pixel))).then((features) => {
+          if (features.length) {
+            // @ts-ignore
+            const all_features = [].concat.apply([], features);
+            this.featureInfoCallback(all_features);
           }
-        );
-
-        if (url) {
-          fetch(url)
-            .then((response) => response.text())
-            .then((responseText) => {
-              const data = JSON.parse(responseText);
-              this.featureInfoCallback(data["features"]);
-            });
-        }
+        });
       }
     });
   }
@@ -124,31 +104,6 @@ class Map {
 
   setOverlayVisible(overlay: string, visible: boolean) {
     this.overlayLayers[overlay].setVisible(visible);
-  }
-
-  /**
-   * Show a direction arrow on the feature
-   *
-   * @param feature Target feature on which a direction arrow will be shown
-   */
-  showDirectionArrow(feature: Feature) {
-    this.vectorLayer.getSource().clear();
-    const olFeature = this.geojsonFormat.readFeature(feature);
-    const rotation = (olFeature.get("direction") * Math.PI) / 180;
-    const arrowStyle = new Style({
-      image: new Icon({
-        src: ArrowIcon,
-        scale: 2.0,
-        rotation,
-      }),
-    });
-    olFeature.setStyle(arrowStyle);
-    this.vectorLayer.getSource().addFeature(olFeature);
-  }
-
-  private createVectorLayer() {
-    const vectorSource = new VectorSource();
-    return new VectorLayer({ source: vectorSource });
   }
 
   private createBasemapLayerGroup(layerConfig: LayerConfig) {
@@ -176,17 +131,34 @@ class Map {
 
   private createOverlayLayerGroup(layerConfig: LayerConfig) {
     const { layers, sourceUrl } = layerConfig;
+    const vectorLayerStyle = new Style({
+      image: new Circle({
+        radius: 6,
+        fill: new Fill({
+          color: "#ff0000",
+        }),
+      }),
+      stroke: new Stroke({
+        color: "#ffcc33",
+        width: 2,
+      }),
+    });
+
+    // Fetch device layers
     const overlayLayers = layers.map(({ identifier }) => {
-      const wmsSource = new ImageWMS({
-        url: sourceUrl,
-        params: { LAYERS: identifier },
+      const vectorSource = new VectorSource({
+        format: this.geojsonFormat,
+        url: sourceUrl + `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=geojson&TYPENAMES=${identifier}`,
       });
-      const layer = new ImageLayer({
-        source: wmsSource,
+
+      const vectorLayer = new VectorLayer({
+        source: vectorSource,
+        style: vectorLayerStyle,
         visible: false,
       });
-      this.overlayLayers[identifier] = layer;
-      return layer;
+
+      this.overlayLayers[identifier] = vectorLayer;
+      return vectorLayer;
     });
     return new LayerGroup({
       layers: overlayLayers,

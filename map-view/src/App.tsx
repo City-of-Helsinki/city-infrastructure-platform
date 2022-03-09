@@ -64,14 +64,8 @@ class App extends React.Component<AppProps, AppState> {
     const { open, mapConfig, features } = this.state;
     return (
       <div className="App">
-        <div id={this.mapId}></div>
-        {features.length > 0 && (
-          <FeatureInfo
-            features={features}
-            onSelectFeature={(feature: Feature) => Map.showDirectionArrow(feature)}
-            onClose={() => this.setState({ features: [] })}
-          />
-        )}
+        <div id={this.mapId} />
+        {features.length > 0 && <FeatureInfo features={features} onClose={() => this.setState({ features: [] })} />}
         <Fab size="medium" color="primary" onClick={() => this.setState({ open: !open })} className={classes.mapButton}>
           <LayersIcon />
         </Fab>

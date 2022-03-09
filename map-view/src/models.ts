@@ -26,7 +26,7 @@ export interface FeatureProperties {
 export interface Feature {
   geometry: object;
   geometry_name: string;
-  id: string;
-  properties: FeatureProperties;
+  id_: string;
+  values_: FeatureProperties;
   type: string;
 }

@@ -56,12 +56,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
     const { name, layers } = basemapConfig;
     const { visibleBasemap } = this.state;
     const basemapRadios = layers.map((layer) => (
-      <FormControlLabel
-        key={layer.identifier}
-        control={<Radio />}
-        label={layer.name}
-        value={layer.identifier}
-      ></FormControlLabel>
+      <FormControlLabel key={layer.identifier} control={<Radio />} label={layer.name} value={layer.identifier} />
     ));
     const changeBasemap = (event: React.ChangeEvent<HTMLInputElement>) => {
       const basemap = (event.target as HTMLInputElement).value;

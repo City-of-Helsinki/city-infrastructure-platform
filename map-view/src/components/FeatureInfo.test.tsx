@@ -8,8 +8,8 @@ test("renders feature info", () => {
     {
       geometry: { type: "Point", coordinates: [1, 1] },
       geometry_name: "location",
-      id: "traffic_sign_real.20950c38-eb7e-11ea-adc1-0242ac120002",
-      properties: {
+      id_: "traffic_sign_real.20950c38-eb7e-11ea-adc1-0242ac120002",
+      values_: {
         id: "fcdbbc6f-5903-4574-baa3-fef33a4b0621",
         direction: "DIR-1",
         txt: "sample text",
@@ -20,9 +20,7 @@ test("renders feature info", () => {
       type: "Feature",
     },
   ];
-  const { getByText } = render(
-    <FeatureInfo features={mockFeatures} onSelectFeature={(feature: Feature) => {}} onClose={() => {}} />
-  );
+  const { getByText } = render(<FeatureInfo features={mockFeatures} onClose={() => {}} />);
   const featureInfoTitle = getByText(/traffic_sign_real/i);
   expect(featureInfoTitle).toBeInTheDocument();
 });

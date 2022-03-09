@@ -36,7 +36,6 @@ const styles = (theme: Theme) =>
 
 interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
   features: Feature[];
-  onSelectFeature: (feature: Feature) => void;
   onClose: () => void;
 }
 
@@ -57,23 +56,20 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
   }
 
   getAdminLink(feature: Feature) {
-    const fid = feature["id"];
+    const fid = feature["id_"];
     const featureType = fid.split(".")[0];
-    const featureId = feature["properties"]["id"];
+    const featureId = feature["values_"]["id"];
     return `${APIBaseUrl}/admin/traffic_control/${featureType.replace(/_/g, "")}/${featureId}/change`;
   }
 
   render() {
-    const { features, classes, onSelectFeature, onClose, t } = this.props;
+    const { features, classes, onClose, t } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
-    onSelectFeature(feature);
-    const fid = feature["id"];
+    const fid = feature["id_"];
     const featureType = fid.split(".")[0];
-    const { id, value, txt, direction, device_type_code, device_type_description } = feature["properties"];
-    const deviceTypeText = value
-      ? `${device_type_code} - ${device_type_description} (${value})`
-      : `${device_type_code} - ${device_type_description}`;
+    const { id, value, txt, direction, device_type_code } = feature["values_"];
+    const deviceTypeText = value ? `${device_type_code} (${value})` : `${device_type_code}`;
 
     return (
       <Card className={classes.root}>
@@ -96,7 +92,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
           <Button color="primary" target="_blank" href={this.getAdminLink(feature)}>
             {t("edit")}
           </Button>
-          <div className={classes.spacer}></div>
+          <div className={classes.spacer} />
           <Typography color="textSecondary">
             {featureIndex + 1} / {features.length}
           </Typography>
