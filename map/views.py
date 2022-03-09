@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from .models import Layer
@@ -41,7 +42,7 @@ def map_config(request):
         "overlayConfig": {
             "name": _("Overlays"),
             "layers": overlays,
-            "sourceUrl": settings.OVERLAY_SOURCE_URL,
+            "sourceUrl": request.build_absolute_uri("/")[:-1] + reverse("wfs-city-furniture"),
         },
     }
     return JsonResponse(config)
