@@ -69,7 +69,7 @@ class CityFurnitureWFSView(WFSView):
         "location_additional_info",
         "direction",
         field("device_type_code", model_attribute="device_type.code"),
-        field("color_name", model_attribute="color.name"),
+        field("color_code", model_attribute="color.rgb"),
         "height",
         field("mount_type_description_fi", model_attribute="mount_type.description_fi"),
         field("parent_id", model_attribute="parent.id"),
