@@ -30,6 +30,7 @@ def map_config(request):
             {
                 "identifier": overlay.identifier,
                 "name": getattr(overlay, f"name_{language_code}"),
+                "app_name": overlay.app_name,
             }
         )
 
