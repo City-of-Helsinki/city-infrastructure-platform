@@ -16,6 +16,7 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { Circle, Fill, Stroke, Style } from "ol/style";
 import { Pixel } from "ol/pixel";
+import ImageSource from "ol/source/Image";
 
 class Map {
   /**
@@ -37,11 +38,11 @@ class Map {
   /**
    * Available basemap layers
    */
-  private basemapLayers: { [identifier: string]: ImageLayer } = {};
+  private basemapLayers: { [identifier: string]: ImageLayer<ImageSource> } = {};
   /**
    * Available overlay layers
    */
-  private overlayLayers: { [identifier: string]: VectorLayer } = {};
+  private overlayLayers: { [identifier: string]: VectorLayer<VectorSource> } = {};
   /**
    * Callback function to process features returned from GetFeatureInfo requests
    *
@@ -77,7 +78,7 @@ class Map {
       view,
     });
 
-    async function getFeatureFromLayer(layer: VectorLayer, pixel: Pixel) {
+    async function getFeatureFromLayer(layer: VectorLayer<VectorSource>, pixel: Pixel) {
       // Save layer model's app name to feature so it can be used when making the Admin URL
       return await layer.getFeatures(pixel).then((features) => {
         if (features.length) {
