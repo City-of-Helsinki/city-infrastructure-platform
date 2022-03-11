@@ -22,10 +22,12 @@ export const mockMapConfig: MapConfig = {
       {
         identifier: "overlay-1",
         name: "Overlay 1",
+        app_name: "traffic_control",
       },
       {
         identifier: "overlay-2",
         name: "Overlay 2",
+        app_name: "city_furniture",
       },
     ],
   },

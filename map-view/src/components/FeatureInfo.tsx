@@ -56,10 +56,11 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
   }
 
   getAdminLink(feature: Feature) {
+    const app_name = feature["app_name"];
     const fid = feature["id_"];
     const featureType = fid.split(".")[0];
     const featureId = feature["values_"]["id"];
-    return `${APIBaseUrl}/admin/traffic_control/${featureType.replace(/_/g, "")}/${featureId}/change`;
+    return `${APIBaseUrl}/admin/${app_name}/${featureType.replace(/_/g, "")}/${featureId}/change`;
   }
 
   render() {
