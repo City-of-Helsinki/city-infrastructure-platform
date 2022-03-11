@@ -91,6 +91,8 @@ class AbstractFurnitureSignpostAdmin(
                 "additional_material_url",
                 "source_id",
                 "source_name",
+                "project_id",
+                "responsible_entity",
             )
         },
     )
