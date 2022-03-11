@@ -5,19 +5,13 @@ from import_export.widgets import ForeignKeyWidget
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.models.common import CityFurnitureDeviceType, CityFurnitureTarget, ResponsibleEntity
 from city_furniture.resources.common import ResourceEnumIntegerField
-from traffic_control.enums import Condition, InstallationStatus, Lifecycle
+from traffic_control.enums import Condition, Lifecycle
 from traffic_control.models import MountType, Owner
 from users.utils import get_system_user
 
 
 class AbstractFurnitureSignpostResource(resources.ModelResource):
     lifecycle = ResourceEnumIntegerField(attribute="lifecycle", column_name="lifecycle", enum=Lifecycle)
-    condition = ResourceEnumIntegerField(attribute="condition", column_name="condition", enum=Condition)
-    installation_status = ResourceEnumIntegerField(
-        attribute="installation_status",
-        column_name="installation_status",
-        enum=InstallationStatus,
-    )
     owner = Field(
         attribute="owner",
         column_name="owner__name_fi",
@@ -56,12 +50,10 @@ class AbstractFurnitureSignpostResource(resources.ModelResource):
         )
         common_fields = (
             "id",
-            "source_name",
-            "source_id",
             "project_id",
             "owner__name_fi",
             "responsible_entity__name",
-            "location",  # TODO: Split into Lat and Long?
+            "location",
             "location_name",
             "location_additional_info",
             "direction",
@@ -69,7 +61,7 @@ class AbstractFurnitureSignpostResource(resources.ModelResource):
             "color__name",
             "height",
             "mount_type__code",
-            "parent",
+            "parent__id",
             "order",
             "pictogram",
             "value",
@@ -80,8 +72,8 @@ class AbstractFurnitureSignpostResource(resources.ModelResource):
             "text_content_fi",
             "text_content_sw",
             "text_content_en",
-            "validity_period_end",
             "validity_period_start",
+            "validity_period_end",
             "additional_material_url",
             "lifecycle",
         )
@@ -107,19 +99,20 @@ class FurnitureSignpostPlanResource(AbstractFurnitureSignpostResource):
         model = FurnitureSignpostPlan
 
         fields = AbstractFurnitureSignpostResource.Meta.common_fields + (
-            "mount_plan",
-            "plan",
+            "mount_plan__id",
+            "plan__plan_number",
         )
         export_order = fields
 
 
 class FurnitureSignpostRealResource(AbstractFurnitureSignpostResource):
+    condition = ResourceEnumIntegerField(attribute="condition", column_name="condition", enum=Condition)
+
     class Meta(AbstractFurnitureSignpostResource.Meta):
         model = FurnitureSignpostReal
 
         fields = AbstractFurnitureSignpostResource.Meta.common_fields + (
             "condition",
-            "installation_status",
             "installation_date",
             "furniture_signpost_plan__id",
             "mount_real__id",
