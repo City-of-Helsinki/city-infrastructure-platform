@@ -144,6 +144,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "cachetools"
+version = "5.0.0"
+description = "Extensible memoizing collections and decorators"
+category = "main"
+optional = false
+python-versions = "~=3.7"
+
+[[package]]
 name = "certifi"
 version = "2021.10.8"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -266,6 +274,17 @@ description = "XML bomb protection for Python stdlib modules"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "deprecation"
+version = "2.1.0"
+description = "A library to handle automated deprecations"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+packaging = "*"
 
 [[package]]
 name = "diff-match-patch"
@@ -394,24 +413,18 @@ resolved_reference = "4e8ece0bc458129fd247014ec0ec4413a0c2afd6"
 
 [[package]]
 name = "django-helusers"
-version = "0.5.6"
-description = ""
+version = "0.7.1"
+description = "Django app for the user infrastructure of the City of Helsinki"
 category = "main"
 optional = false
 python-versions = "*"
-develop = false
 
 [package.dependencies]
-Django = "*"
-drf-oidc-auth = ">=0.9"
+cachetools = ">=3.0.0"
+deprecation = ">=2"
+Django = ">=2.2,<4"
 python-jose = "*"
 requests = "*"
-
-[package.source]
-type = "git"
-url = "https://github.com/City-of-Helsinki/django-helusers"
-reference = "a2705b992be69fc39f30558beb20f750fc5fe6e5"
-resolved_reference = "a2705b992be69fc39f30558beb20f750fc5fe6e5"
 
 [[package]]
 name = "django-import-export"
@@ -1644,7 +1657,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "2569a3afbf1f127999a0cbae5210d86b3d426d478140acb77d980ae5443c13df"
+content-hash = "8a902f0a7597bf8f755c37acf0e16983a761e859a36c8b4b1549d231cb6b44cf"
 
 [metadata.files]
 appnope = [
@@ -1714,6 +1727,10 @@ black = [
 bump2version = [
     {file = "bump2version-1.0.1-py2.py3-none-any.whl", hash = "sha256:37f927ea17cde7ae2d7baf832f8e80ce3777624554a653006c9144f8017fe410"},
     {file = "bump2version-1.0.1.tar.gz", hash = "sha256:762cb2bfad61f4ec8e2bdf452c7c267416f8c70dd9ecb1653fd0bbb01fa936e6"},
+]
+cachetools = [
+    {file = "cachetools-5.0.0-py3-none-any.whl", hash = "sha256:8fecd4203a38af17928be7b90689d8083603073622229ca7077b72d8e5a976e4"},
+    {file = "cachetools-5.0.0.tar.gz", hash = "sha256:486471dfa8799eb7ec503a8059e263db000cdda20075ce5e48903087f79d5fd6"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
@@ -1864,6 +1881,10 @@ defusedxml = [
     {file = "defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61"},
     {file = "defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69"},
 ]
+deprecation = [
+    {file = "deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a"},
+    {file = "deprecation-2.1.0.tar.gz", hash = "sha256:72b3bde64e5d778694b0cf68178aed03d15e15477116add3fb773e581f9518ff"},
+]
 diff-match-patch = [
     {file = "diff-match-patch-20200713.tar.gz", hash = "sha256:da6f5a01aa586df23dfc89f3827e1cafbb5420be9d87769eeb079ddfd9477a18"},
     {file = "diff_match_patch-20200713-py3-none-any.whl", hash = "sha256:8bf9d9c4e059d917b5c6312bac0c137971a32815ddbda9c682b949f2986b4d34"},
@@ -1874,7 +1895,6 @@ django = [
 ]
 django-auditlog = [
     {file = "django-auditlog-1.0.0.tar.gz", hash = "sha256:c5fa676359df1e0bf573410cc1a12b9d0653f6cf44303c8a01edb36f42f5aec0"},
-    {file = "django_auditlog-1.0.0-py3-none-any.whl", hash = "sha256:72a4a94f13a349072716212dc6f7e802857e06ba89c4e589463fb633b60dcb45"},
 ]
 django-colorfield = [
     {file = "django-colorfield-0.6.3.tar.gz", hash = "sha256:441172f8c6024f70b01e3f63195fe83afc554387b34ad999880e86fde989e5af"},
@@ -1901,7 +1921,10 @@ django-filter = [
     {file = "django_filter-21.1-py3-none-any.whl", hash = "sha256:f4a6737a30104c98d2e2a5fb93043f36dd7978e0c7ddc92f5998e85433ea5063"},
 ]
 django-gisserver = []
-django-helusers = []
+django-helusers = [
+    {file = "django-helusers-0.7.1.tar.gz", hash = "sha256:7c63ff403d3db5136fbc61dbb96db7858a74157c832953c1f9dd9032ffac7236"},
+    {file = "django_helusers-0.7.1-py3-none-any.whl", hash = "sha256:de84fde5449556622cb1364fd93bde6c58e6037aac64cc72880fccee564776bb"},
+]
 django-import-export = [
     {file = "django-import-export-2.7.1.tar.gz", hash = "sha256:4bc65943a5ce66aeaf2b5d0d6f75b1863b63b10323bf235e46500bef5d6dd85b"},
     {file = "django_import_export-2.7.1-py3-none-any.whl", hash = "sha256:254ca359782efca932c398edabc15dd51d31da241e85cc03af5b720173e0b2fe"},
