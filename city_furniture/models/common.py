@@ -146,6 +146,9 @@ class CityFurnitureTarget(SourceControlModel):
         verbose_name = _("City Furniture Target")
         verbose_name_plural = _("City Furniture Targets")
 
+    def __str__(self):
+        return self.name_fi
+
 
 class ResponsibleEntity(models.Model):
     """
@@ -176,6 +179,17 @@ class ResponsibleEntity(models.Model):
         db_table = "responsible_entity"
         verbose_name = _("Responsible Entity")
         verbose_name_plural = _("Responsible Entities")
+
+    def get_full_path(self):
+        obj = self
+        path = obj.name
+        while obj.parent is not None:
+            obj = obj.parent
+            path = f"{obj.name} > {path}"
+        return path
+
+    def __str__(self):
+        return self.get_full_path()
 
 
 auditlog.register(CityFurnitureDeviceType)
