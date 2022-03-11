@@ -1,6 +1,7 @@
 export interface Layer {
   identifier: string;
   name: string;
+  app_name?: string;
 }
 
 export interface LayerConfig {
@@ -29,4 +30,5 @@ export interface Feature {
   id_: string;
   values_: FeatureProperties;
   type: string;
+  app_name?: string;
 }

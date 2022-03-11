@@ -15,6 +15,7 @@ import GeoJson from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { Circle, Fill, Stroke, Style } from "ol/style";
+import { Pixel } from "ol/pixel";
 
 class Map {
   /**
@@ -76,16 +77,31 @@ class Map {
       view,
     });
 
+    async function getFeatureFromLayer(layer: VectorLayer, pixel: Pixel) {
+      // Save layer model's app name to feature so it can be used when making the Admin URL
+      return await layer.getFeatures(pixel).then((features) => {
+        if (features.length) {
+          // @ts-ignore
+          let feature: Feature = features[0];
+          const featureType: string = feature["id_"].split(".")[0];
+          const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
+          feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
+          return [feature];
+        }
+        return features
+      });
+    }
+
     this.map.on("singleclick", (event) => {
       const visibleLayers = Object.values(this.overlayLayers).filter((layer) => layer.getVisible());
       if (visibleLayers.length > 0) {
         // Combine the topmost feature from all visible layers into a single array
-        Promise.all(visibleLayers.map((layer) => layer.getFeatures(event.pixel))).then((features) => {
-          if (features.length) {
-            // @ts-ignore
-            const all_features = [].concat.apply([], features);
-            this.featureInfoCallback(all_features);
-          }
+        Promise.all(visibleLayers.map((layer) => getFeatureFromLayer(layer, event.pixel))).then((features) => {
+        // @ts-ignore
+        const all_features = [].concat.apply([], features);
+        if (all_features.length > 0) {
+          this.featureInfoCallback(all_features);
+        }
         });
       }
     });
