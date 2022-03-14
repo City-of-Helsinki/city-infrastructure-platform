@@ -217,6 +217,8 @@ WSGI_APPLICATION = "city-infrastructure-platform.wsgi.application"
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
