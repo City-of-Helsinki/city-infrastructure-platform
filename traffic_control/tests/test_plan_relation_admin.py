@@ -41,7 +41,7 @@ def teardown_module():
 def _reload_urls():
     urls = importlib.import_module("city-infrastructure-platform.urls")
     importlib.reload(urls)
-    django.urls.resolvers.get_resolver.cache_clear()
+    django.urls.resolvers._get_cached_resolver.cache_clear()
 
 
 @pytest.mark.django_db
