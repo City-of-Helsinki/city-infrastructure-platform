@@ -2,10 +2,10 @@
 Django settings for city-infrastructure-platform project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/2.2/topics/settings/
+https://docs.djangoproject.com/en/3.2/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/2.2/ref/settings/
+https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
@@ -133,8 +133,8 @@ LOGGING = {
 
 # Application definition
 DJANGO_APPS = [
-    "helusers",
     "social_django",
+    "helusers.apps.HelusersConfig",
     "helusers.apps.HelusersAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -212,13 +212,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "city-infrastructure-platform.wsgi.application"
 
 # Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 # Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -228,7 +230,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
 LANGUAGE_CODE = "fi"
 LANGUAGES = [("fi", _("Finnish")), ("en", _("English"))]
 TIME_ZONE = "Europe/Helsinki"
@@ -237,7 +239,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
 var_root = env.path("VAR_ROOT")
 STATIC_ROOT = var_root("static")
 MEDIA_ROOT = var_root("media")
@@ -297,3 +299,11 @@ LOCALE_PATHS = [
 
 # Import / Export
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+SILENCED_SYSTEM_CHECKS = [
+    # django-auditlog imports django-jsonfield-backport, which raises a warning
+    # on Django 3.1 and newer, because it already has a built-in JSONField.
+    # This can be ignored.
+    # See discussion: https://github.com/jazzband/django-auditlog/issues/356
+    "django_jsonfield_backport.W001",
+]
