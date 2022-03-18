@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 from import_export.admin import ImportExportActionModelAdmin
 
+from city_furniture.admin.common import SimplifiedRelatedFieldListFilter
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
     FurnitureSignpostPlan,
@@ -62,9 +63,12 @@ class AbstractFurnitureSignpostAdmin(
 
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        "owner",
+        ("owner", SimplifiedRelatedFieldListFilter),
         "project_id",
+        ("target", SimplifiedRelatedFieldListFilter),
+        ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
+        "validity_period_start",
     ]
     readonly_fields = (
         "created_at",
@@ -77,8 +81,8 @@ class AbstractFurnitureSignpostAdmin(
     list_display = (
         "id",
         "device_type",
+        "location_name",
         "lifecycle",
-        "location",
     )
     _fieldset_general_information = (
         _("General information"),
@@ -182,7 +186,7 @@ class FurnitureSignpostRealAdmin(UserStampedInlineAdminMixin, AbstractFurnitureS
     raw_id_fields = ("furniture_signpost_plan", "mount_real")
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
         ("condition", EnumFieldListFilter),
-        ("installation_status", EnumFieldListFilter),
+        "installation_date",
     ]
     search_fields = (
         "furniture_signpost_plan__id",
@@ -195,5 +199,8 @@ class FurnitureSignpostRealAdmin(UserStampedInlineAdminMixin, AbstractFurnitureS
         "owner",
         "source_id",
         "source_name",
+        "text_content_fi",
+        "text_content_sw",
+        "text_content_en",
     )
     inlines = (FurnitureSignpostRealFileInline, FurnitureSignpostRealOperationInline)
