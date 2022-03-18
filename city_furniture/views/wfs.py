@@ -44,7 +44,7 @@ class CustomGetFeature(GetFeature):
 
 class CityFurnitureWFSView(WFSView):
     service_description = ServiceDescription(title="City Furniture")
-    xml_namespace = "http://example.org/gisserver"
+    index_template_name = "wfs/index.html"
 
     accept_operations = {
         "WFS": {
