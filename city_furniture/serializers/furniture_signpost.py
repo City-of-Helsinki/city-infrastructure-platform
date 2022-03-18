@@ -25,6 +25,8 @@ class FurnitureSignpostPlanSerializer(EnumSupportSerializerMixin, serializers.Mo
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=CityFurnitureDeviceType.objects.for_target_model(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
     )
+    target_name = serializers.CharField(read_only=True, source="target.name")
+    device_type_description = serializers.CharField(read_only=True, source="device_type.description")
 
     class Meta:
         model = FurnitureSignpostPlan
@@ -81,6 +83,8 @@ class FurnitureSignpostRealSerializer(EnumSupportSerializerMixin, serializers.Mo
         queryset=CityFurnitureDeviceType.objects.for_target_model(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
     )
     operations = FurnitureSignpostRealOperationSerializer(many=True, required=False, read_only=True)
+    target_name = serializers.CharField(read_only=True, source="target.name_fi")
+    device_type_description = serializers.CharField(read_only=True, source="device_type.description")
 
     class Meta:
         model = FurnitureSignpostReal
