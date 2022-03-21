@@ -7,15 +7,19 @@ from city_furniture.models.common import (
     CityFurnitureTarget,
     ResponsibleEntity,
 )
-from traffic_control.filters import GenericMeta
+from traffic_control.filters import GenericMeta, OperationalAreaFilter
 
 
 class FurnitureSignpostPlanFilterSet(FilterSet):
+    operational_area = OperationalAreaFilter()
+
     class Meta(GenericMeta):
         model = FurnitureSignpostPlan
 
 
 class FurnitureSignpostRealFilterSet(FilterSet):
+    operational_area = OperationalAreaFilter()
+
     class Meta(GenericMeta):
         model = FurnitureSignpostReal
 
