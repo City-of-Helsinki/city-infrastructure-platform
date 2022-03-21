@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.forms import AdminFileWidget, TrafficSignPlanModelForm, TrafficSignRealModelForm
@@ -332,6 +332,7 @@ class TrafficSignRealAdmin(
         ("surface_class", EnumFieldListFilter),
         ("location_specifier", EnumFieldListFilter),
         "owner",
+        OperationalAreaListFilter,
     ]
     search_fields = (
         "traffic_sign_plan__id",
