@@ -15,7 +15,7 @@ from city_furniture.models import (
 )
 from city_furniture.resources.furniture_signpost import FurnitureSignpostPlanResource, FurnitureSignpostRealResource
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
@@ -68,6 +68,7 @@ class AbstractFurnitureSignpostAdmin(
         ("target", SimplifiedRelatedFieldListFilter),
         ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
+        OperationalAreaListFilter,
         "validity_period_start",
     ]
     readonly_fields = (
