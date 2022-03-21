@@ -1,7 +1,8 @@
 from django.contrib.gis.db.models import GeometryField
 from django.utils.translation import gettext_lazy as _
-from django_filters import ChoiceFilter
+from django_filters import ChoiceFilter, Filter
 from django_filters.rest_framework import FilterSet
+from rest_framework.exceptions import NotFound
 from rest_framework_gis.filters import GeometryFilter
 
 from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_CHOICES
@@ -18,6 +19,7 @@ from traffic_control.models import (
     MountReal,
     MountRealOperation,
     MountType,
+    OperationalArea,
     Owner,
     Plan,
     PortalType,
@@ -37,6 +39,19 @@ from traffic_control.models import (
 )
 
 
+class OperationalAreaFilter(Filter):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def filter(self, qs, value):
+        if value:
+            operational_area = OperationalArea.objects.filter(id=value).first()
+            if operational_area is None:
+                raise NotFound({"operational_area": f"Operational area with ID `{value}` was not found."})
+            qs = qs.filter(location__contained=operational_area.location)
+        return qs
+
+
 class GenericMeta:
     model = None
     fields = "__all__"
@@ -49,11 +64,15 @@ class GenericMeta:
 
 
 class AdditionalSignContentPlanFilterSet(FilterSet):
+    operational_area = OperationalAreaFilter()
+
     class Meta(GenericMeta):
         model = AdditionalSignContentPlan
 
 
 class AdditionalSignContentRealFilterSet(FilterSet):
+    operational_area = OperationalAreaFilter()
+
     class Meta(GenericMeta):
         model = AdditionalSignContentReal
 
@@ -160,11 +179,15 @@ class TrafficControlDeviceTypeFilterSet(FilterSet):
 
 
 class TrafficSignPlanFilterSet(FilterSet):
+    operational_area = OperationalAreaFilter()
+
     class Meta(GenericMeta):
         model = TrafficSignPlan
 
 
 class TrafficSignRealFilterSet(FilterSet):
+    operational_area = OperationalAreaFilter()
+
     class Meta(GenericMeta):
         model = TrafficSignReal
 
