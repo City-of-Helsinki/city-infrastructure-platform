@@ -148,7 +148,7 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     filterset_class = FurnitureSignpostRealFilterSet
     file_queryset = FurnitureSignpostRealFile.objects.all()
     file_serializer = FurnitureSignpostRealFileSerializer
-    file_relation = "furniture_sigpost_real"
+    file_relation = "furniture_signpost_real"
 
     @swagger_auto_schema(
         method="post",
