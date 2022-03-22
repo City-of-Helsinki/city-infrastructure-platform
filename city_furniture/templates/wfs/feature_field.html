@@ -2,6 +2,7 @@
     <th><code>{{ field.name }}</code></th>
     <td>{{ field.xsd_element.type }}</td>
     <td>{{ field.abstract|default:'' }}</td>
+    <td>{{ field.description|default:'-' }}</td>
 </tr>
 {% if field.fields %}
   {% for sub_field in field.fields %}
