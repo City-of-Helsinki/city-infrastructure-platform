@@ -1,3 +1,5 @@
+import { Point } from "ol/geom";
+
 export interface Layer {
   identifier: string;
   name: string;
@@ -17,6 +19,7 @@ export interface MapConfig {
 
 export interface FeatureProperties {
   id: string;
+  geometry: Point;
   txt: string;
   direction: string;
   value: number;
