@@ -164,6 +164,9 @@ class CityFurnitureWFSView(WFSView):
             + [
                 DescribedFeatureField("installation_date", description="Date that the signpost was installed on."),
                 DescribedFeatureField("condition", description="Condition of the signpost"),
+                DescribedFeatureField(
+                    "device_plan_id", model_attribute="furniture_signpost_plan", description="Condition of the signpost"
+                ),
             ],
             other_crs=[RD_NEW],
         ),
