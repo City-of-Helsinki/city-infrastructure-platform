@@ -36,6 +36,7 @@ const styles = (theme: Theme) =>
 
 interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
   features: Feature[];
+  onSelectFeature: (feature: Feature) => void;
   onClose: () => void;
 }
 
@@ -64,9 +65,10 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
   }
 
   render() {
-    const { features, classes, onClose, t } = this.props;
+    const { features, classes, onSelectFeature, onClose, t } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
+    onSelectFeature(feature);
     const fid = feature["id_"];
     const featureType = fid.split(".")[0];
     const { id, value, txt, direction, device_type_code } = feature["values_"];

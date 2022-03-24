@@ -65,7 +65,13 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <div className="App">
         <div id={this.mapId} />
-        {features.length > 0 && <FeatureInfo features={features} onClose={() => this.setState({ features: [] })} />}
+        {features.length > 0 && mapConfig && (
+          <FeatureInfo
+            features={features}
+            onSelectFeature={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
+            onClose={() => this.setState({ features: [] })}
+          />
+        )}
         <Fab size="medium" color="primary" onClick={() => this.setState({ open: !open })} className={classes.mapButton}>
           <LayersIcon />
         </Fab>
