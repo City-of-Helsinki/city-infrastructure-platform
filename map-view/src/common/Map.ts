@@ -16,7 +16,9 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { Circle, Fill, Stroke, Style } from "ol/style";
 import { Pixel } from "ol/pixel";
+import { Feature as OlFeature } from "ol";
 import ImageSource from "ol/source/Image";
+import { LineString } from "ol/geom";
 
 class Map {
   /**
@@ -137,6 +139,22 @@ class Map {
 &FILTER=%3CFilter%3E%3CResourceId%20rid=%22${feature_layer.identifier}.${feature.values_.device_plan_id}%22/%3E%3C/Filter%3E`,
         });
         this.extraVectorLayer.setSource(vectorSource);
+
+        // Add a line between the plan and real points
+        vectorSource.on("featuresloadend", (featureEvent) => {
+          const features = featureEvent.features;
+          if (features) {
+            // @ts-ignore
+            const plan_location = features[0].values_.geometry.flatCoordinates;
+            // @ts-ignore
+            const real_location = feature.values_.geometry.flatCoordinates;
+            const lineString = new LineString([plan_location, real_location]);
+            const olFeature = new OlFeature({
+              geometry: lineString,
+              name: "Line",
+            });
+            this.extraVectorLayer.getSource()!.addFeature(olFeature);
+          }
         });
       }
     }
@@ -160,6 +178,11 @@ class Map {
             color: "#222",
             width: 1,
           }),
+        }),
+        // Line style
+        stroke: new Stroke({
+          color: "#222",
+          width: 4,
         }),
       }),
     });
