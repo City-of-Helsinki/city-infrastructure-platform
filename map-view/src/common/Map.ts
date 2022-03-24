@@ -44,6 +44,11 @@ class Map {
    */
   private overlayLayers: { [identifier: string]: VectorLayer<VectorSource> } = {};
   /**
+   * A layer to draw temporary vector features on the map
+   */
+  private extraVectorLayer: VectorLayer<VectorSource>;
+
+  /**
    * Callback function to process features returned from GetFeatureInfo requests
    *
    * @param features Features returned from GetFeatureInfo requests
@@ -60,6 +65,7 @@ class Map {
     const { basemapConfig, overlayConfig } = mapConfig;
     const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
     const overlayLayerGroup = this.createOverlayLayerGroup(overlayConfig);
+    this.extraVectorLayer = Map.createExtraVectorLayer();
 
     const helsinkiCoords = [25499052.02, 6675851.38];
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
@@ -73,7 +79,7 @@ class Map {
     });
     this.map = new OLMap({
       target: target,
-      layers: [basemapLayerGroup, overlayLayerGroup],
+      layers: [basemapLayerGroup, overlayLayerGroup, this.extraVectorLayer],
       controls: this.getControls(),
       view,
     });
@@ -89,7 +95,7 @@ class Map {
           feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
           return [feature];
         }
-        return features
+        return features;
       });
     }
 
@@ -98,13 +104,64 @@ class Map {
       if (visibleLayers.length > 0) {
         // Combine the topmost feature from all visible layers into a single array
         Promise.all(visibleLayers.map((layer) => getFeatureFromLayer(layer, event.pixel))).then((features) => {
-        // @ts-ignore
-        const all_features = [].concat.apply([], features);
-        if (all_features.length > 0) {
-          this.featureInfoCallback(all_features);
-        }
+          // @ts-ignore
+          const all_features = [].concat.apply([], features);
+          if (all_features.length > 0) {
+            this.featureInfoCallback(all_features);
+          }
         });
       }
+    });
+  }
+
+  /**
+   * Show a plan object of the selected real device on map
+   *
+   * @param feature Target feature of which the plan/real device will be shown
+   * @param mapConfig
+   */
+  showPlanOfRealDevice(feature: Feature, mapConfig: MapConfig) {
+    if (feature.values_.device_plan_id) {
+      const { overlayConfig } = mapConfig;
+
+      // Find selected Real device's Plan layer's config
+      const featureType: string = feature["id_"].split(".")[0].replace("real", "plan");
+      const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
+
+      if (feature_layer) {
+        const vectorSource = new VectorSource({
+          format: this.geojsonFormat,
+          url:
+            overlayConfig.sourceUrl +
+            `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=geojson&TYPENAMES=${feature_layer.identifier}
+&FILTER=%3CFilter%3E%3CResourceId%20rid=%22${feature_layer.identifier}.${feature.values_.device_plan_id}%22/%3E%3C/Filter%3E`,
+        });
+        this.extraVectorLayer.setSource(vectorSource);
+        });
+      }
+    }
+    else {
+      this.extraVectorLayer.getSource()!.clear();
+    }
+  }
+
+  private static createExtraVectorLayer() {
+    const extraVectorLayer = new VectorSource({});
+    return new VectorLayer({
+      source: extraVectorLayer,
+      // Point style
+      style: new Style({
+        image: new Circle({
+          radius: 6,
+          fill: new Fill({
+            color: "#F20",
+          }),
+          stroke: new Stroke({
+            color: "#222",
+            width: 1,
+          }),
+        }),
+      }),
     });
   }
 
