@@ -55,10 +55,11 @@ class UserStampedInlineAdminMixin:
         objects = formset.save(commit=False)
 
         for obj in objects:
-            if not obj.created_by_id:
-                obj.created_by = request.user
-
-            obj.updated_by = request.user
+            # Validate that object has a created_by field, and skip models such as Files
+            if hasattr(obj, "created_by_id"):
+                if not obj.created_by_id:
+                    obj.created_by = request.user
+                obj.updated_by = request.user
             obj.save()
 
 
