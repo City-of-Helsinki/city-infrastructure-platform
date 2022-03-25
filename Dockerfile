@@ -70,6 +70,10 @@ ENV COLLECT_STATIC=1
 
 COPY . /city-infrastructure-platform
 COPY --from=build /map-view/build/ /city-infrastructure-platform/map-view/build/
-RUN chown -R appuser:appuser /city-infrastructure-platform
-USER appuser
+
+# OpenShift runs container in arbitrary user which belongs to group `root` (0)
+RUN chgrp -R 0 /city-infrastructure-platform && \
+    chmod -R g=u /city-infrastructure-platform
+USER appuser:0
+
 EXPOSE 8000
