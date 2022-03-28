@@ -123,44 +123,55 @@ class Map {
    * @param mapConfig
    */
   showPlanOfRealDevice(feature: Feature, mapConfig: MapConfig) {
-    if (feature.values_.device_plan_id) {
-      const { overlayConfig } = mapConfig;
+    return new Promise((resolve) => {
+      if (feature.values_.device_plan_id) {
+        const { overlayConfig } = mapConfig;
 
-      // Find selected Real device's Plan layer's config
-      const featureType: string = feature["id_"].split(".")[0].replace("real", "plan");
-      const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
+        // Find selected Real device's Plan layer's config
+        const featureType: string = feature["id_"].split(".")[0].replace("real", "plan");
+        const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
 
-      if (feature_layer) {
-        const vectorSource = new VectorSource({
-          format: this.geojsonFormat,
-          url:
-            overlayConfig.sourceUrl +
-            `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=geojson&TYPENAMES=${feature_layer.identifier}
+        if (feature_layer) {
+          const vectorSource = new VectorSource({
+            format: this.geojsonFormat,
+            url:
+              overlayConfig.sourceUrl +
+              `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=geojson&TYPENAMES=${feature_layer.identifier}
 &FILTER=%3CFilter%3E%3CResourceId%20rid=%22${feature_layer.identifier}.${feature.values_.device_plan_id}%22/%3E%3C/Filter%3E`,
-        });
-        this.extraVectorLayer.setSource(vectorSource);
+          });
+          this.extraVectorLayer.setSource(vectorSource);
 
-        // Add a line between the plan and real points
-        vectorSource.on("featuresloadend", (featureEvent) => {
-          const features = featureEvent.features;
-          if (features) {
-            // @ts-ignore
-            const plan_location = features[0].values_.geometry.flatCoordinates;
-            // @ts-ignore
-            const real_location = feature.values_.geometry.flatCoordinates;
-            const lineString = new LineString([plan_location, real_location]);
-            const olFeature = new OlFeature({
-              geometry: lineString,
-              name: "Line",
-            });
-            this.extraVectorLayer.getSource()!.addFeature(olFeature);
-          }
-        });
+          // Add a line between the plan and real points
+          vectorSource.on("featuresloadend", (featureEvent) => {
+            const features = featureEvent.features;
+            if (features) {
+              // @ts-ignore
+              const plan_location = features[0].values_.geometry.flatCoordinates;
+              // @ts-ignore
+              const real_location = feature.values_.geometry.flatCoordinates;
+              const lineString = new LineString([plan_location, real_location]);
+              const olFeature = new OlFeature({
+                geometry: lineString,
+                name: "Line",
+              });
+              this.extraVectorLayer.getSource()!.addFeature(olFeature);
+
+              // Calculate distance between Real and Plan
+              const distance =
+                Math.round(
+                  Math.sqrt(
+                    (real_location[0] - plan_location[0]) * (real_location[0] - plan_location[0]) +
+                      (real_location[1] - plan_location[1]) * (real_location[1] - plan_location[1])
+                  ) * 100
+                ) / 100;
+              resolve(distance);
+            }
+          });
+        }
+      } else {
+        this.extraVectorLayer.getSource()!.clear();
       }
-    }
-    else {
-      this.extraVectorLayer.getSource()!.clear();
-    }
+    });
   }
 
   private static createExtraVectorLayer() {
