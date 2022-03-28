@@ -36,12 +36,13 @@ const styles = (theme: Theme) =>
 
 interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
   features: Feature[];
-  onSelectFeature: (feature: Feature) => void;
+  onSelectFeature: (feature: Feature) => Promise<any>;
   onClose: () => void;
 }
 
 interface FeatureInfoState {
   featureIndex: number;
+  realPlanDistance?: number;
 }
 
 class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
@@ -49,11 +50,12 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     super(props);
     this.state = {
       featureIndex: 0,
+      realPlanDistance: undefined,
     };
   }
 
   UNSAFE_componentWillReceiveProps() {
-    this.setState({ featureIndex: 0 });
+    this.setState({ featureIndex: 0, realPlanDistance: undefined });
   }
 
   getAdminLink(feature: Feature) {
@@ -68,11 +70,14 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     const { features, classes, onSelectFeature, onClose, t } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
-    onSelectFeature(feature);
     const fid = feature["id_"];
     const featureType = fid.split(".")[0];
     const { id, value, txt, direction, device_type_code } = feature["values_"];
     const deviceTypeText = value ? `${device_type_code} (${value})` : `${device_type_code}`;
+
+    if (this.state.realPlanDistance === undefined) {
+      onSelectFeature(feature).then((distance: number) => this.setState({ realPlanDistance: distance }));
+    }
 
     return (
       <Card className={classes.root}>
@@ -88,6 +93,12 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
             <b>{t("Direction")}</b>: {direction}
             <br />
             <b>{t("Additional info")}</b>: {txt}
+            {feature.values_.device_plan_id && (
+              <>
+                <br />
+                <b>{t("Distance")}</b>: {this.state.realPlanDistance} m
+              </>
+            )}
           </Typography>
         </CardContent>
         <CardActions>
