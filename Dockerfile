@@ -59,8 +59,8 @@ FROM base AS build
 # ===================================
 COPY map-view/ /map-view/
 RUN cd /map-view && \
-    yarn install --frozen-lockfile --no-cache --production && \
-    yarn build
+    yarn install --frozen-lockfile --no-cache --production --network-timeout 300000 && \
+    yarn build --network-timeout 300000
 
 # ==============================
 FROM base AS production
