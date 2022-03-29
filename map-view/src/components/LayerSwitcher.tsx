@@ -35,6 +35,7 @@ interface LayerSwitcherStates {
   visibleOverlays: {
     [identifier: string]: boolean;
   };
+  displayRealPlanDifference: boolean;
 }
 
 class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherStates> {
@@ -46,9 +47,11 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
     overlayConfig.layers.forEach(({ identifier }) => {
       visibleOverlays[identifier] = false;
     });
+    const displayRealPlanDifference = true;
     this.state = {
       visibleBasemap,
       visibleOverlays,
+      displayRealPlanDifference,
     };
   }
 
@@ -81,6 +84,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
     const { overlayConfig } = this.props.mapConfig;
     const { name, layers } = overlayConfig;
     const { visibleOverlays } = this.state;
+
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
       const identifier = event.target.name;
       const checked = event.target.checked;
@@ -110,6 +114,29 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
     );
   }
 
+  renderDisplayRealPlanDifferenceToggle() {
+    const { displayRealPlanDifference } = this.state;
+
+    const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const checked = event.target.checked;
+      Map.setExtraVectorLayerVisible(checked);
+      this.setState({ displayRealPlanDifference: checked });
+    };
+
+    return (
+      <div className="real-plan-difference-toggle">
+        <h4>Settings</h4>
+        <FormGroup>
+          <FormControlLabel
+            key={"real-plan-difference"}
+            control={<Checkbox checked={displayRealPlanDifference} onChange={changeOverlayVisibility} />}
+            label={"Display Plan/Real difference"}
+          />
+        </FormGroup>
+      </div>
+    );
+  }
+
   render() {
     const { classes, onClose } = this.props;
     return (
@@ -127,6 +154,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
         <div className={classes.layers}>
           {this.renderBasemapGroup()}
           {this.renderOverlayGroup()}
+          {this.renderDisplayRealPlanDifferenceToggle()}
         </div>
       </div>
     );
