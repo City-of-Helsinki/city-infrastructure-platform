@@ -214,6 +214,10 @@ class Map {
     this.overlayLayers[overlay].setVisible(visible);
   }
 
+  setExtraVectorLayerVisible(visible: boolean) {
+    this.extraVectorLayer.setVisible(visible);
+  }
+
   clearExtraVectorLayer() {
     this.extraVectorLayer.getSource()!.clear();
   }
