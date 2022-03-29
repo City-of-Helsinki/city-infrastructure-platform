@@ -214,6 +214,10 @@ class Map {
     this.overlayLayers[overlay].setVisible(visible);
   }
 
+  clearExtraVectorLayer() {
+    this.extraVectorLayer.getSource()!.clear();
+  }
+
   private createBasemapLayerGroup(layerConfig: LayerConfig) {
     const { layers, sourceUrl } = layerConfig;
     const basemapLayers = layers.map(({ identifier }, index) => {
