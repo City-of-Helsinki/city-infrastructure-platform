@@ -87,7 +87,18 @@ class App extends React.Component<AppProps, AppState> {
             paper: classes.drawerPaper,
           }}
         >
-          {mapConfig && <LayerSwitcher mapConfig={mapConfig} onClose={() => this.setState({ open: false })} />}
+          {mapConfig && (
+            <LayerSwitcher
+              mapConfig={mapConfig}
+              onClose={() => this.setState({ open: false })}
+              onOverlayToggle={(checked) => {
+                if (!checked) {
+                  this.setState({ features: [] });
+                  Map.clearExtraVectorLayer();
+                }
+              }}
+            />
+          )}
         </Drawer>
       </div>
     );

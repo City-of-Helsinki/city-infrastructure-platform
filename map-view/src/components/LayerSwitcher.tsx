@@ -27,6 +27,7 @@ const styles = (theme: Theme) =>
 interface LayerSwitcherProps extends WithStyles<typeof styles> {
   mapConfig: MapConfig;
   onClose: () => void;
+  onOverlayToggle: (checked: boolean) => void;
 }
 
 interface LayerSwitcherStates {
@@ -76,12 +77,14 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
   }
 
   renderOverlayGroup() {
+    const { onOverlayToggle } = this.props;
     const { overlayConfig } = this.props.mapConfig;
     const { name, layers } = overlayConfig;
     const { visibleOverlays } = this.state;
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
       const identifier = event.target.name;
       const checked = event.target.checked;
+      onOverlayToggle(checked);
       visibleOverlays[identifier] = checked;
       Map.setOverlayVisible(identifier, checked);
       this.setState({ visibleOverlays });
