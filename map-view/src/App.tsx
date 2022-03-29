@@ -69,7 +69,10 @@ class App extends React.Component<AppProps, AppState> {
           <FeatureInfo
             features={features}
             onSelectFeature={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
-            onClose={() => this.setState({ features: [] })}
+            onClose={() => {
+              this.setState({ features: [] });
+              Map.clearExtraVectorLayer();
+            }}
           />
         )}
         <Fab size="medium" color="primary" onClick={() => this.setState({ open: !open })} className={classes.mapButton}>
