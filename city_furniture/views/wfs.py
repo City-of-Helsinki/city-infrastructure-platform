@@ -98,11 +98,10 @@ class CityFurnitureWFSView(WFSView):
         ),
         DescribedFeatureField(
             "direction",
-            description="The direction, in which a person is standing when looking directly at the signpost.",
+            description="The direction, in which a person is standing when looking directly at the signpost."
+            "e.g. when looking directly north, the direction should be 0, East=90, South=180 and West=270.",
         ),
-        DescribedFeatureField(
-            "device_type_code", model_attribute="device_type.code", description="Device type description."
-        ),
+        DescribedFeatureField("device_type_code", model_attribute="device_type.code", description="Device type code."),
         DescribedFeatureField(
             "device_type_description",
             model_attribute="device_type.description",
@@ -165,7 +164,9 @@ class CityFurnitureWFSView(WFSView):
                 DescribedFeatureField("installation_date", description="Date that the signpost was installed on."),
                 DescribedFeatureField("condition", description="Condition of the signpost"),
                 DescribedFeatureField(
-                    "device_plan_id", model_attribute="furniture_signpost_plan", description="Condition of the signpost"
+                    "device_plan_id",
+                    model_attribute="furniture_signpost_plan",
+                    description="ID of this Signpost's plan.",
                 ),
             ],
             other_crs=[RD_NEW],
