@@ -105,7 +105,8 @@ class Map {
     }
 
     this.map.on("singleclick", (event) => {
-      const visibleLayers = Object.values(this.overlayLayers).filter((layer) => layer.getVisible());
+      const layers = { ...this.overlayLayers, extraVectorLayer: this.extraVectorLayer };
+      const visibleLayers = Object.values(layers).filter((layer) => layer.getVisible());
       if (visibleLayers.length > 0) {
         // Combine the topmost feature from all visible layers into a single array
         Promise.all(visibleLayers.map((layer) => getFeatureFromLayer(layer, event.pixel))).then((features) => {
@@ -172,7 +173,13 @@ class Map {
           });
         }
       } else {
-        this.extraVectorLayer.getSource()!.clear();
+        // If clicked feature belongs to extraVectorLayer, don't clear the layer
+        const extraVectorLayerSource = this.extraVectorLayer.getSource();
+        // @ts-ignore
+        const extraFeatures = Object.values(extraVectorLayerSource!.getFeatures()).filter((f) => f.id_ === feature.id_);
+        if (!extraFeatures.length) {
+          extraVectorLayerSource!.clear();
+        }
       }
     });
   }
