@@ -91,11 +91,14 @@ class Map {
       return await layer.getFeatures(pixel).then((features) => {
         if (features.length) {
           // @ts-ignore
-          let feature: Feature = features[0];
-          const featureType: string = feature["id_"].split(".")[0];
-          const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
-          feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
-          return [feature];
+          const feature: Feature = features[0];
+          // Only get features that have ids (devices)
+          if (feature["id_"]) {
+            const featureType: string = feature["id_"].split(".")[0];
+            const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
+            feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
+            return [feature];
+          }
         }
         return features;
       });
