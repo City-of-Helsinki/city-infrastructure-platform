@@ -2,38 +2,40 @@ from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
-from city_furniture.models.common import CityFurnitureDeviceType, CityFurnitureTarget, ResponsibleEntity
+from city_furniture.models.common import (
+    CityFurnitureColor,
+    CityFurnitureDeviceType,
+    CityFurnitureTarget,
+    ResponsibleEntity,
+)
 from city_furniture.resources.common import GenericDeviceBaseResource, ResourceEnumIntegerField
 from traffic_control.enums import Condition, Lifecycle
-from traffic_control.models import MountType, Owner
+from traffic_control.models import MountPlan, MountReal, MountType, Owner, Plan
 
 
 class AbstractFurnitureSignpostResource(GenericDeviceBaseResource):
-    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", column_name="lifecycle", enum=Lifecycle)
-    owner = Field(
-        attribute="owner",
-        column_name="owner__name_fi",
-        widget=ForeignKeyWidget(Owner, "name_fi"),
+    lifecycle = ResourceEnumIntegerField(
+        attribute="lifecycle", column_name="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE
     )
-    responsible_entity = Field(
+    owner__name_fi = Field(attribute="owner", column_name="owner__name_fi", widget=ForeignKeyWidget(Owner, "name_fi"))
+    responsible_entity__name = Field(
         attribute="responsible_entity",
         column_name="responsible_entity__name",
         widget=ForeignKeyWidget(ResponsibleEntity, "name"),
     )
-    device_type = Field(
+    device_type__code = Field(
         attribute="device_type",
         column_name="device_type__code",
         widget=ForeignKeyWidget(CityFurnitureDeviceType, "code"),
     )
-    mount_type = Field(
-        attribute="mount_type",
-        column_name="mount_type__code",
-        widget=ForeignKeyWidget(MountType, "code"),
+    mount_type__code = Field(
+        attribute="mount_type", column_name="mount_type__code", widget=ForeignKeyWidget(MountType, "code")
     )
-    target = Field(
-        attribute="target",
-        column_name="target__name_fi",
-        widget=ForeignKeyWidget(CityFurnitureTarget, "name_fi"),
+    target__name_fi = Field(
+        attribute="target", column_name="target__name_fi", widget=ForeignKeyWidget(CityFurnitureTarget, "name_fi")
+    )
+    color__name = Field(
+        attribute="color", column_name="color__name", widget=ForeignKeyWidget(CityFurnitureColor, "name")
     )
 
     class Meta:
@@ -78,6 +80,20 @@ class AbstractFurnitureSignpostResource(GenericDeviceBaseResource):
 
 
 class FurnitureSignpostPlanResource(AbstractFurnitureSignpostResource):
+    parent__id = Field(
+        attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(FurnitureSignpostPlan, "id")
+    )
+    mount_plan__id = Field(
+        attribute="mount_plan",
+        column_name="mount_plan__id",
+        widget=ForeignKeyWidget(MountPlan, "id"),
+    )
+    plan__plan_number = Field(
+        attribute="plan",
+        column_name="plan__plan_number",
+        widget=ForeignKeyWidget(Plan, "plan_number"),
+    )
+
     class Meta(AbstractFurnitureSignpostResource.Meta):
         model = FurnitureSignpostPlan
 
@@ -89,7 +105,22 @@ class FurnitureSignpostPlanResource(AbstractFurnitureSignpostResource):
 
 
 class FurnitureSignpostRealResource(AbstractFurnitureSignpostResource):
-    condition = ResourceEnumIntegerField(attribute="condition", column_name="condition", enum=Condition)
+    parent__id = Field(
+        attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(FurnitureSignpostReal, "id")
+    )
+    condition = ResourceEnumIntegerField(
+        attribute="condition", column_name="condition", enum=Condition, default=Condition.VERY_GOOD
+    )
+    furniture_signpost_plan__id = Field(
+        attribute="furniture_signpost_plan",
+        column_name="furniture_signpost_plan__id",
+        widget=ForeignKeyWidget(FurnitureSignpostPlan, "id"),
+    )
+    mount_real__id = Field(
+        attribute="mount_real",
+        column_name="mount_real__id",
+        widget=ForeignKeyWidget(MountReal, "id"),
+    )
 
     class Meta(AbstractFurnitureSignpostResource.Meta):
         model = FurnitureSignpostReal
