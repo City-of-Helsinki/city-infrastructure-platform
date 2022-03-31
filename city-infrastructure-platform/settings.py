@@ -47,6 +47,7 @@ env = environ.Env(
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
     SENTRY_DSN=(str, ""),
+    OPENSHIFT_DEPLOYMENT=(bool, False),
     AZURE_DEPLOYMENT=(bool, False),
     AZURE_ACCOUNT_KEY=(str, False),
     AZURE_CONTAINER=(str, False),
@@ -178,6 +179,7 @@ SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
 
 MIDDLEWARE = [
     "deployment.middleware.HealthCheckMiddleware",
+    "openshift_client_ip.middleware.OpenShiftClientIPMiddleware",
     "azure_client_ip.middleware.AzureClientIPMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -272,6 +274,9 @@ REST_FRAMEWORK = {
 # django-cors
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
+
+# OpenShift client IP middleware
+OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
 
 # Azure CLIENT_IP middleware
 AZURE_DEPLOYMENT = env.bool("AZURE_DEPLOYMENT")
