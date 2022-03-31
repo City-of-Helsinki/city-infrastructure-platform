@@ -66,15 +66,17 @@ class CityFurnitureDeviceType(models.Model):
         type value.
         """
         relations = [
-            "furnituresignpost",
+            "furnituresignpostplan",
+            "furnituresignpostreal",
         ]
         ignore_prefix = target_type.value.replace("_", "")
         relevant_relations = [relation for relation in relations if not relation.startswith(ignore_prefix)]
 
         related_pks = []
-        queryset = CityFurnitureDeviceType.objects.filter(pk=self.pk).values_list(*relevant_relations)
-        if queryset.exists():
-            related_pks = queryset.first()
+        if relevant_relations:
+            queryset = CityFurnitureDeviceType.objects.filter(pk=self.pk).values_list(*relevant_relations)
+            if queryset.exists():
+                related_pks = queryset.first()
 
         return any(related_pks)
 
