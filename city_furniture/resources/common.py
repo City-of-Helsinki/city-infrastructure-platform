@@ -1,6 +1,9 @@
 from django.db.models import NOT_PROVIDED
 from django.utils.encoding import force_str
 from import_export import fields, widgets
+from import_export.resources import ModelResource
+
+from users.utils import get_system_user
 
 
 class EnumIntegerWidget(widgets.Widget):
@@ -36,3 +39,20 @@ class ResourceEnumIntegerField(fields.Field):
             )
         data[self.column_name] = enum_value
         return super().clean(data, **kwargs)
+
+
+class GenericDeviceBaseResource(ModelResource):
+    def get_queryset(self):
+        return self._meta.model.objects.active()
+
+    def after_import_instance(self, instance, new, row_number=None, **kwargs):
+        """Set created_by and updated_by users"""
+        user = kwargs.pop("user", None)
+        if user is None:
+            user = get_system_user()
+
+        instance.updated_by = user
+        if new:
+            instance.created_by = user
+
+        super().after_import_instance(instance, new, row_number=None, **kwargs)

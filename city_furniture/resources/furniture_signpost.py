@@ -1,16 +1,14 @@
-from import_export import resources
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.models.common import CityFurnitureDeviceType, CityFurnitureTarget, ResponsibleEntity
-from city_furniture.resources.common import ResourceEnumIntegerField
+from city_furniture.resources.common import GenericDeviceBaseResource, ResourceEnumIntegerField
 from traffic_control.enums import Condition, Lifecycle
 from traffic_control.models import MountType, Owner
-from users.utils import get_system_user
 
 
-class AbstractFurnitureSignpostResource(resources.ModelResource):
+class AbstractFurnitureSignpostResource(GenericDeviceBaseResource):
     lifecycle = ResourceEnumIntegerField(attribute="lifecycle", column_name="lifecycle", enum=Lifecycle)
     owner = Field(
         attribute="owner",
@@ -77,21 +75,6 @@ class AbstractFurnitureSignpostResource(resources.ModelResource):
             "additional_material_url",
             "lifecycle",
         )
-
-    def get_queryset(self):
-        return self._meta.model.objects.active()
-
-    def after_import_instance(self, instance, new, row_number=None, **kwargs):
-        """Set created_by and updated_by users"""
-        user = kwargs.pop("user", None)
-        if user is None:
-            user = get_system_user()
-
-        instance.updated_by = user
-        if new:
-            instance.created_by = user
-
-        super().after_import_instance(instance, new, row_number=None, **kwargs)
 
 
 class FurnitureSignpostPlanResource(AbstractFurnitureSignpostResource):
