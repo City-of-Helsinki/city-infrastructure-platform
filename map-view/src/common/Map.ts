@@ -232,6 +232,25 @@ class Map {
     this.extraVectorLayer.getSource()!.clear();
   }
 
+  applyProjectFilters(layerConfig: LayerConfig, projectId: string) {
+    const { sourceUrl } = layerConfig;
+    let wfsFilter = "";
+    if (projectId) {
+      wfsFilter = `&FILTER=%3CFilter%3E%3CPropertyIsLike%20wildCard=%27*%27%20singleChar=%27.%27%20escapeChar=%27!%27%3E%3CPropertyName%3Eproject_id%3C/PropertyName%3E%3CLiteral%3E${projectId}%3C/Literal%3E%3C/PropertyIsLike%3E%3C/Filter%3E`;
+    }
+
+    // Override layer source to apply the filter
+    for (const [identifier, layer] of Object.entries(this.overlayLayers)) {
+      const vectorSource = new VectorSource({
+        format: this.geojsonFormat,
+        url:
+          sourceUrl +
+          `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=geojson&TYPENAMES=${identifier}${wfsFilter}`,
+      });
+      layer.setSource(vectorSource);
+    }
+  }
+
   private createBasemapLayerGroup(layerConfig: LayerConfig) {
     const { layers, sourceUrl } = layerConfig;
     const basemapLayers = layers.map(({ identifier }, index) => {
