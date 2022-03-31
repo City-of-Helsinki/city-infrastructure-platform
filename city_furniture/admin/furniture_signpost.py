@@ -69,6 +69,7 @@ class AbstractFurnitureSignpostAdmin(
         ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         OperationalAreaListFilter,
+        ("created_by", SimplifiedRelatedFieldListFilter),
         "validity_period_start",
     ]
     readonly_fields = (
