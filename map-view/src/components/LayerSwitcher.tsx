@@ -1,4 +1,4 @@
-import { createStyles, Theme, withStyles, WithStyles } from "@material-ui/core";
+import { createStyles, TextField, Theme, withStyles, WithStyles } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
@@ -36,6 +36,7 @@ interface LayerSwitcherStates {
     [identifier: string]: boolean;
   };
   displayRealPlanDifference: boolean;
+  projectIdFilter: string;
 }
 
 class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherStates> {
@@ -47,11 +48,11 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
     overlayConfig.layers.forEach(({ identifier }) => {
       visibleOverlays[identifier] = false;
     });
-    const displayRealPlanDifference = true;
     this.state = {
       visibleBasemap,
       visibleOverlays,
-      displayRealPlanDifference,
+      displayRealPlanDifference: true,
+      projectIdFilter: "",
     };
   }
 
@@ -114,23 +115,38 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
     );
   }
 
-  renderDisplayRealPlanDifferenceToggle() {
+  renderSettings() {
+    const { overlayConfig } = this.props.mapConfig;
     const { displayRealPlanDifference } = this.state;
 
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const checked = event.target.checked;
+      const checked: boolean = event.target.checked;
       Map.setExtraVectorLayerVisible(checked);
       this.setState({ displayRealPlanDifference: checked });
     };
 
+    const changeProjectIdFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const text: string = event.target.value || "";
+      Map.applyProjectFilters(overlayConfig, text);
+      this.setState({ projectIdFilter: text });
+    };
+
     return (
-      <div className="real-plan-difference-toggle">
+      <div className="settings-group">
         <h4>Settings</h4>
         <FormGroup>
           <FormControlLabel
             key={"real-plan-difference"}
             control={<Checkbox checked={displayRealPlanDifference} onChange={changeOverlayVisibility} />}
             label={"Display Plan/Real difference"}
+          />
+        </FormGroup>
+        <FormGroup>
+          <TextField
+            id="project-id-filter"
+            label={"Filter by Project ID"}
+            variant={"standard"}
+            onChange={changeProjectIdFilter}
           />
         </FormGroup>
       </div>
@@ -154,7 +170,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
         <div className={classes.layers}>
           {this.renderBasemapGroup()}
           {this.renderOverlayGroup()}
-          {this.renderDisplayRealPlanDifferenceToggle()}
+          {this.renderSettings()}
         </div>
       </div>
     );
