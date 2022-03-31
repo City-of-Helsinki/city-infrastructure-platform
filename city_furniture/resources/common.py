@@ -34,9 +34,17 @@ class ResourceEnumIntegerField(fields.Field):
         try:
             enum_value = self.enum.__getattr__(name)
         except AttributeError:
-            raise KeyError(
-                "Key '%s' not found in enum. Available keys are: %s" % (self.column_name, [e.name for e in self.enum])
-            )
+            if name in self.empty_values and self.default != NOT_PROVIDED:
+                if callable(self.default):
+                    enum_value = self.default()
+                else:
+                    enum_value = self.default
+            else:
+                raise KeyError(
+                    "Key '%s' not found in enum. Available keys are: %s"
+                    % (self.column_name, [e.name for e in self.enum])
+                )
+
         data[self.column_name] = enum_value
         return super().clean(data, **kwargs)
 
