@@ -19,6 +19,7 @@ import { Pixel } from "ol/pixel";
 import { Feature as OlFeature } from "ol";
 import ImageSource from "ol/source/Image";
 import { LineString } from "ol/geom";
+import { calculateDistance } from "./functions";
 
 class Map {
   /**
@@ -161,14 +162,8 @@ class Map {
               this.extraVectorLayer.getSource()!.addFeature(olFeature);
 
               // Calculate distance between Real and Plan
-              const distance =
-                Math.round(
-                  Math.sqrt(
-                    (real_location[0] - plan_location[0]) * (real_location[0] - plan_location[0]) +
-                      (real_location[1] - plan_location[1]) * (real_location[1] - plan_location[1])
-                  ) * 100
-                ) / 100;
-              resolve(distance);
+
+              resolve(calculateDistance(real_location, plan_location));
             }
           });
         }
