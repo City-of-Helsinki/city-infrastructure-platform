@@ -7,3 +7,30 @@ export function calculateDistance(location1: number[], location2: number[]) {
   // Round to two decimal places
   return Math.round(distance * 100) / 100;
 }
+
+export function buildWFSQuery(identifier: string, filterField?: string, filterValue?: string) {
+  let searchParams = new URLSearchParams({
+    SERVICE: "WFS",
+    VERSION: "2.0.0",
+    REQUEST: "GetFeature",
+    OUTPUTFORMAT: "geojson",
+    TYPENAMES: identifier,
+  });
+
+  // Apply filter, if it's defined
+  if (filterField !== undefined && filterValue !== undefined) {
+    // Use simpler query filter if filtered field is ID
+    if (filterField === "id") {
+      searchParams.set("FILTER", `<Filter><ResourceId rid="${identifier}.${filterValue}"/></Filter>`);
+    } else {
+      searchParams.set(
+        "FILTER",
+        "<Filter><PropertyIsLike wildCard='*' singleChar='.' escapeChar='!'>" +
+          `<PropertyName>${filterField}</PropertyName><Literal>${filterValue}</Literal>` +
+          "</PropertyIsLike></Filter>"
+      );
+    }
+  }
+
+  return searchParams.toString();
+}

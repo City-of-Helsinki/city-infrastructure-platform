@@ -19,7 +19,7 @@ import { Pixel } from "ol/pixel";
 import { Feature as OlFeature } from "ol";
 import ImageSource from "ol/source/Image";
 import { LineString } from "ol/geom";
-import { calculateDistance } from "./functions";
+import { buildWFSQuery, calculateDistance } from "./functions";
 
 class Map {
   /**
@@ -141,8 +141,7 @@ class Map {
             format: this.geojsonFormat,
             url:
               overlayConfig.sourceUrl +
-              `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=geojson&TYPENAMES=${feature_layer.identifier}
-&FILTER=%3CFilter%3E%3CResourceId%20rid=%22${feature_layer.identifier}.${feature.values_.device_plan_id}%22/%3E%3C/Filter%3E`,
+              `?${buildWFSQuery(feature_layer.identifier, "id", feature.values_.device_plan_id)}`,
           });
           this.extraVectorLayer.setSource(vectorSource);
 
@@ -229,18 +228,12 @@ class Map {
 
   applyProjectFilters(layerConfig: LayerConfig, projectId: string) {
     const { sourceUrl } = layerConfig;
-    let wfsFilter = "";
-    if (projectId) {
-      wfsFilter = `&FILTER=%3CFilter%3E%3CPropertyIsLike%20wildCard=%27*%27%20singleChar=%27.%27%20escapeChar=%27!%27%3E%3CPropertyName%3Eproject_id%3C/PropertyName%3E%3CLiteral%3E${projectId}%3C/Literal%3E%3C/PropertyIsLike%3E%3C/Filter%3E`;
-    }
 
     // Override layer source to apply the filter
     for (const [identifier, layer] of Object.entries(this.overlayLayers)) {
       const vectorSource = new VectorSource({
         format: this.geojsonFormat,
-        url:
-          sourceUrl +
-          `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=geojson&TYPENAMES=${identifier}${wfsFilter}`,
+        url: sourceUrl + `?${buildWFSQuery(identifier, "project_id", projectId)}`,
       });
       layer.setSource(vectorSource);
     }
@@ -276,7 +269,7 @@ class Map {
     const overlayLayers = layers.map(({ identifier }) => {
       const vectorSource = new VectorSource({
         format: this.geojsonFormat,
-        url: sourceUrl + `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=geojson&TYPENAMES=${identifier}`,
+        url: sourceUrl + `?${buildWFSQuery(identifier)}`,
       });
 
       const vectorLayer = new VectorLayer({
