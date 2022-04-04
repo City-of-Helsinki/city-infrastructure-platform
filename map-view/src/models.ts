@@ -29,10 +29,10 @@ export interface FeatureProperties {
 }
 
 export interface Feature {
+  id_: string;
   geometry: object;
   geometry_name: string;
-  id_: string;
-  values_: FeatureProperties;
   type: string;
   app_name?: string;
+  getProperties(): FeatureProperties;
 }
