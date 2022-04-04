@@ -129,7 +129,7 @@ class Map {
    */
   showPlanOfRealDevice(feature: Feature, mapConfig: MapConfig) {
     return new Promise((resolve) => {
-      if (feature.values_.device_plan_id) {
+      if (feature.getProperties().device_plan_id) {
         const { overlayConfig } = mapConfig;
 
         // Find selected Real device's Plan layer's config
@@ -141,7 +141,7 @@ class Map {
             format: this.geojsonFormat,
             url:
               overlayConfig.sourceUrl +
-              `?${buildWFSQuery(feature_layer.identifier, "id", feature.values_.device_plan_id)}`,
+              `?${buildWFSQuery(feature_layer.identifier, "id", feature.getProperties().device_plan_id)}`,
           });
           this.extraVectorLayer.setSource(vectorSource);
 
@@ -149,10 +149,8 @@ class Map {
           vectorSource.on("featuresloadend", (featureEvent) => {
             const features = featureEvent.features;
             if (features) {
-              // @ts-ignore
-              const plan_location = features[0].values_.geometry.flatCoordinates;
-              // @ts-ignore
-              const real_location = feature.values_.geometry.flatCoordinates;
+              const plan_location = features[0].getProperties().geometry.getFlatCoordinates();
+              const real_location = feature.getProperties().geometry.getFlatCoordinates();
               const lineString = new LineString([plan_location, real_location]);
               const olFeature = new OlFeature({
                 geometry: lineString,

@@ -62,7 +62,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     const app_name = feature["app_name"];
     const fid = feature["id_"];
     const featureType = fid.split(".")[0];
-    const featureId = feature["values_"]["id"];
+    const featureId = feature.getProperties().id;
     return `${APIBaseUrl}/admin/${app_name}/${featureType.replace(/_/g, "")}/${featureId}/change`;
   }
 
@@ -72,7 +72,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     const feature = features[featureIndex];
     const fid = feature["id_"];
     const featureType = fid.split(".")[0];
-    const { id, value, txt, direction, device_type_code } = feature["values_"];
+    const { id, value, txt, direction, device_type_code } = feature.getProperties();
     const deviceTypeText = value ? `${device_type_code} (${value})` : `${device_type_code}`;
 
     if (this.state.realPlanDistance === undefined) {
@@ -93,7 +93,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
             <b>{t("Direction")}</b>: {direction}
             <br />
             <b>{t("Additional info")}</b>: {txt}
-            {feature.values_.device_plan_id && (
+            {feature.getProperties().device_plan_id && (
               <>
                 <br />
                 <b>{t("Distance")}</b>: {this.state.realPlanDistance} m
