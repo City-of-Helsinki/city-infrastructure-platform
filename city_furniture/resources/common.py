@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from django.db.models import NOT_PROVIDED
 from django.utils.encoding import force_str
 from import_export import fields, widgets
@@ -49,7 +51,19 @@ class ResourceEnumIntegerField(fields.Field):
         return super().clean(data, **kwargs)
 
 
+class ResourceUUIDField(fields.Field):
+    def get_value(self, obj):
+        """Convert UUID to string to prevent the importer from thinking the value is changed, when it's not"""
+
+        value = super().get_value(obj)
+        if type(value) == UUID:
+            value = str(value)
+        return value
+
+
 class GenericDeviceBaseResource(ModelResource):
+    id = ResourceUUIDField(attribute="id", column_name="id", default=None)
+
     def get_queryset(self):
         return self._meta.model.objects.active()
 
@@ -64,3 +78,7 @@ class GenericDeviceBaseResource(ModelResource):
             instance.created_by = user
 
         super().after_import_instance(instance, new, row_number=None, **kwargs)
+
+    class Meta:
+        skip_unchanged = True
+        report_skipped = True

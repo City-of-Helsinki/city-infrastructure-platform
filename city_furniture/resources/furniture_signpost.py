@@ -38,7 +38,7 @@ class AbstractFurnitureSignpostResource(GenericDeviceBaseResource):
         attribute="color", column_name="color__name", widget=ForeignKeyWidget(CityFurnitureColor, "name")
     )
 
-    class Meta:
+    class Meta(GenericDeviceBaseResource.Meta):
         exclude = (
             "is_active",
             "deleted_at",
