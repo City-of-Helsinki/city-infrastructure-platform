@@ -50,7 +50,7 @@ from traffic_control.tests.test_base_api_3d import test_point_3d
 
 def get_user(username=None, admin=False):
     if not username:
-        username = get_random_string()  # pragma: no cover
+        username = get_random_string(length=12)  # pragma: no cover
     return get_user_model().objects.get_or_create(
         username=username,
         password="x",
