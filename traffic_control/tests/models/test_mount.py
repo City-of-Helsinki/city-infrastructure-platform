@@ -51,5 +51,5 @@ class MountRealTestCase(TestCase):
         )
         self.assertQuerysetEqual(
             self.mount_real.ordered_traffic_signs,
-            [repr(traffic_sign_2), repr(traffic_sign_1), repr(traffic_sign_3)],
+            [traffic_sign_2, traffic_sign_1, traffic_sign_3],
         )
