@@ -281,11 +281,12 @@ OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
 # Azure CLIENT_IP middleware
 AZURE_DEPLOYMENT = env.bool("AZURE_DEPLOYMENT")
 
-if AZURE_DEPLOYMENT:
-    AZURE_ACCOUNT_KEY = env.str("AZURE_ACCOUNT_KEY")
-    AZURE_CONTAINER = env.str("AZURE_CONTAINER")
-    AZURE_ACCOUNT_NAME = env.str("AZURE_ACCOUNT_NAME")
+if OPENSHIFT_DEPLOYMENT:
+    # Use Azure Storage Container as file storage in OpenShift deployment
     DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
+    AZURE_ACCOUNT_NAME = env.str("AZURE_ACCOUNT_NAME")
+    AZURE_CONTAINER = env.str("AZURE_CONTAINER")
+    AZURE_ACCOUNT_KEY = env.str("AZURE_ACCOUNT_KEY")
 
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
