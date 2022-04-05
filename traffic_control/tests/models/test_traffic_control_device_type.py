@@ -43,7 +43,7 @@ def test__traffic_control_device_type__target_model__restricts_relations(allowed
     related_obj = factory()
 
     for choice in DeviceTypeTargetModel:
-        device_type = get_traffic_control_device_type(code=get_random_string(), target_model=choice)
+        device_type = get_traffic_control_device_type(code=get_random_string(length=12), target_model=choice)
 
         if choice == allowed_value:
             related_obj.device_type = device_type
