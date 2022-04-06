@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 from import_export.admin import ImportExportActionModelAdmin
 
-from city_furniture.admin.common import SimplifiedRelatedFieldListFilter
+from city_furniture.admin.common import MultiResourceExportActionAdminMixin, SimplifiedRelatedFieldListFilter
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
     FurnitureSignpostPlan,
@@ -147,8 +147,11 @@ class AbstractFurnitureSignpostAdmin(
 
 
 @admin.register(FurnitureSignpostPlan)
-class FurnitureSignpostPlanAdmin(AbstractFurnitureSignpostAdmin):
+class FurnitureSignpostPlanAdmin(MultiResourceExportActionAdminMixin, AbstractFurnitureSignpostAdmin):
     resource_class = FurnitureSignpostPlanResource
+    export_resource_classes = [
+        FurnitureSignpostPlanResource,
+    ]
     form = FurnitureSignpostPlanModelForm
     fieldsets = (
         AbstractFurnitureSignpostAdmin._fieldset_general_information,
