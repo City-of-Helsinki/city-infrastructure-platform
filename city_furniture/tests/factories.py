@@ -141,6 +141,6 @@ def add_furniture_signpost_real_operation(furniture_signpost_real, operation_typ
 
 
 def get_wfs_url(model_name: str = "furnituresignpostreal", output_format: str = "application/gml+xml") -> str:
-    url = f"{reverse('wfs-city-furniture')}?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature"
+    url = f"{reverse('wfs-city-infrastructure')}?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature"
     url += f"&TYPENAMES={model_name}&OUTPUTFORMAT={output_format}"
     return url

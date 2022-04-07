@@ -14,7 +14,6 @@ from city_furniture.views import (
     city_furniture_target as city_furniture_target_views,
     furniture_signpost as furniture_signpost_views,
     responsible_entity as responsible_entity_views,
-    wfs as wfs_views,
 )
 from map import views as map_views
 from traffic_control.views import (
@@ -30,6 +29,7 @@ from traffic_control.views import (
     traffic_light as traffic_light_views,
     traffic_sign as traffic_sign_views,
 )
+from traffic_control.views.wfs.views import CityInfrastructureWFSView
 
 router = routers.DefaultRouter()
 router.register("barrier-plans", barrier_views.BarrierPlanViewSet)
@@ -143,7 +143,7 @@ urlpatterns = [
     path("v1/", include(road_marking_operations_router.urls)),
     path("v1/", include(furniture_signpost_operations_router.urls)),
     path("auth/", include("social_django.urls", namespace="social")),
-    path("wfs/city-furniture", wfs_views.CityFurnitureWFSView.as_view(), name="wfs-city-furniture"),
+    path("wfs/", CityInfrastructureWFSView.as_view(), name="wfs-city-infrastructure"),
     url(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
     url(r"^swagger/$", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     url(r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),

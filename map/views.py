@@ -43,7 +43,7 @@ def map_config(request):
         "overlayConfig": {
             "name": _("Overlays"),
             "layers": overlays,
-            "sourceUrl": request.build_absolute_uri("/")[:-1] + reverse("wfs-city-furniture"),
+            "sourceUrl": request.build_absolute_uri("/")[:-1] + reverse("wfs-city-infrastructure"),
         },
     }
     return JsonResponse(config)
