@@ -304,6 +304,7 @@ class Map {
           });
         },
         visible: false,
+        opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
       });
 
       this.overlayLayers[identifier] = vectorLayer;
