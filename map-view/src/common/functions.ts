@@ -18,7 +18,7 @@ export function buildWFSQuery(identifier: string, filterField?: string, filterVa
   });
 
   // Apply filter, if it's defined
-  if (filterField !== undefined && filterValue !== undefined) {
+  if (filterField !== undefined && filterValue !== undefined && filterValue !== "") {
     // Use simpler query filter if filtered field is ID
     if (filterField === "id") {
       searchParams.set("FILTER", `<Filter><ResourceId rid="${identifier}.${filterValue}"/></Filter>`);
