@@ -18,7 +18,7 @@ _base_fields = [
     DescribedFeatureField(
         "owner_name_fi",
         model_attribute="owner.name_fi",
-        description="Entity that's responsible for ordering and mainteinance of this signpost.",
+        description="Entity that's responsible for ordering and maintenance of this signpost.",
     ),
     DescribedFeatureField(
         "responsible_entity_name",

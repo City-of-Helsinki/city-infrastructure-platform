@@ -3,6 +3,12 @@ from gisserver.operations import wfs20
 from gisserver.views import WFSView
 
 from city_furniture.views.wfs import FurnitureSignpostPlanFeatureType, FurnitureSignpostRealFeatureType
+from traffic_control.views.wfs import (
+    AdditionalSignPlanFeatureType,
+    AdditionalSignRealFeatureType,
+    TrafficSignPlanFeatureType,
+    TrafficSignRealFeatureType,
+)
 from traffic_control.views.wfs.common import CustomGetFeature
 
 
@@ -24,4 +30,8 @@ class CityInfrastructureWFSView(WFSView):
     feature_types = [
         FurnitureSignpostRealFeatureType,
         FurnitureSignpostPlanFeatureType,
+        TrafficSignRealFeatureType,
+        TrafficSignPlanFeatureType,
+        AdditionalSignRealFeatureType,
+        AdditionalSignPlanFeatureType,
     ]
