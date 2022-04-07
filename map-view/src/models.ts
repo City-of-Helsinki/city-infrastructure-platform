@@ -4,6 +4,7 @@ export interface Layer {
   identifier: string;
   name: string;
   app_name?: string;
+  filter_fields?: string[];
 }
 
 export interface LayerConfig {

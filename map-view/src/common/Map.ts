@@ -224,21 +224,26 @@ class Map {
     this.extraVectorLayer.getSource()!.clear();
   }
 
-  applyProjectFilters(layerConfig: LayerConfig, projectId: string) {
-    const { sourceUrl } = layerConfig;
+  applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {
+    const { sourceUrl } = overlayConfig;
+    const filter_field = "project_id";
 
     // Override layer source to apply the filter
     for (const [identifier, layer] of Object.entries(this.overlayLayers)) {
-      const vectorSource = new VectorSource({
-        format: this.geojsonFormat,
-        url: sourceUrl + `?${buildWFSQuery(identifier, "project_id", projectId)}`,
-      });
-      layer.setSource(vectorSource);
+      // Make sure filter can be applied to the layer
+      const layer_config = overlayConfig["layers"].find((l) => l.identifier === identifier);
+      if (layer_config !== undefined && layer_config.filter_fields!.includes(filter_field)) {
+        const vectorSource = new VectorSource({
+          format: this.geojsonFormat,
+          url: sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId)}`,
+        });
+        layer.setSource(vectorSource);
+      }
     }
   }
 
-  private createBasemapLayerGroup(layerConfig: LayerConfig) {
-    const { layers, sourceUrl } = layerConfig;
+  private createBasemapLayerGroup(basemapConfig: LayerConfig) {
+    const { layers, sourceUrl } = basemapConfig;
     const basemapLayers = layers.map(({ identifier }, index) => {
       const wmsSource = new ImageWMS({
         url: sourceUrl,
@@ -260,8 +265,8 @@ class Map {
     });
   }
 
-  private createOverlayLayerGroup(layerConfig: LayerConfig) {
-    const { layers, sourceUrl } = layerConfig;
+  private createOverlayLayerGroup(overlayConfig: LayerConfig) {
+    const { layers, sourceUrl } = overlayConfig;
 
     // Fetch device layers
     const overlayLayers = layers.map(({ identifier }) => {
