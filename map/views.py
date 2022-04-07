@@ -36,6 +36,7 @@ def map_config(request):
             }
         )
 
+    traffic_sign_icons_url = f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/svg/traffic_sign_icons/"
     config = {
         "basemapConfig": {
             "name": _("Basemaps"),
@@ -47,5 +48,6 @@ def map_config(request):
             "layers": overlays,
             "sourceUrl": request.build_absolute_uri("/")[:-1] + reverse("wfs-city-infrastructure"),
         },
+        "traffic_sign_icons_url": traffic_sign_icons_url,
     }
     return JsonResponse(config)

@@ -16,6 +16,7 @@ export interface LayerConfig {
 export interface MapConfig {
   basemapConfig: LayerConfig;
   overlayConfig: LayerConfig;
+  traffic_sign_icons_url: string;
 }
 
 export interface FeatureProperties {
