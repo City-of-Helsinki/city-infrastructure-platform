@@ -9,6 +9,7 @@ class Layer(models.Model):
     name_en = models.CharField(_("English name"), max_length=200)
     is_basemap = models.BooleanField(_("Is basemap"), default=False)
     order = models.IntegerField(_("Order"), default=1)
+    filter_fields = models.CharField(_("Filter fields"), max_length=200, blank=True)
 
     class Meta:
         verbose_name = _("Layer")
