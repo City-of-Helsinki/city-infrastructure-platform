@@ -5,6 +5,7 @@ export interface Layer {
   name: string;
   app_name?: string;
   filter_fields?: string[];
+  use_traffic_sign_icons?: boolean;
 }
 
 export interface LayerConfig {

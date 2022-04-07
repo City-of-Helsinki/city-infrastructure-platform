@@ -14,12 +14,13 @@ import ImageWMS from "ol/source/ImageWMS";
 import GeoJson from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import { Circle, Fill, Stroke, Style } from "ol/style";
+import { Circle, Fill, Icon, Stroke, Style } from "ol/style";
 import { Pixel } from "ol/pixel";
 import { Feature as OlFeature } from "ol";
 import ImageSource from "ol/source/Image";
 import { LineString } from "ol/geom";
 import { buildWFSQuery, calculateDistance } from "./functions";
+import { FeatureLike } from "ol/Feature";
 
 class Map {
   /**
@@ -67,7 +68,7 @@ class Map {
   initialize(target: string, mapConfig: MapConfig) {
     const { basemapConfig, overlayConfig } = mapConfig;
     const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
-    const overlayLayerGroup = this.createOverlayLayerGroup(overlayConfig);
+    const overlayLayerGroup = this.createOverlayLayerGroup(mapConfig);
     this.extraVectorLayer = Map.createExtraVectorLayer();
 
     const helsinkiCoords = [25499052.02, 6675851.38];
@@ -265,30 +266,41 @@ class Map {
     });
   }
 
-  private createOverlayLayerGroup(overlayConfig: LayerConfig) {
+  private createOverlayLayerGroup(mapConfig: MapConfig) {
+    const { overlayConfig, traffic_sign_icons_url } = mapConfig;
     const { layers, sourceUrl } = overlayConfig;
 
     // Fetch device layers
-    const overlayLayers = layers.map(({ identifier }) => {
+    const overlayLayers = layers.map(({ identifier, use_traffic_sign_icons }) => {
       const vectorSource = new VectorSource({
         format: this.geojsonFormat,
         url: sourceUrl + `?${buildWFSQuery(identifier)}`,
       });
 
+      const getImageStyle = (feature: FeatureLike) => {
+        if (use_traffic_sign_icons && feature.get("device_type_code") !== null) {
+          return new Icon({
+            src: `${traffic_sign_icons_url}${feature.get("device_type_code")}.svg`,
+            scale: 0.075,
+          });
+        } else {
+          return new Circle({
+            radius: 8,
+            fill: new Fill({
+              color: feature.get("color_code") || "#FFF",
+            }),
+            stroke: new Stroke({
+              color: "#000",
+              width: 2,
+            }),
+          });
+        }
+      };
       const vectorLayer = new VectorLayer({
         source: vectorSource,
-        style: (feature) => {
+        style: (feature: FeatureLike) => {
           return new Style({
-            image: new Circle({
-              radius: 8,
-              fill: new Fill({
-                color: feature.get("color_code"),
-              }),
-              stroke: new Stroke({
-                color: "#000",
-                width: 2,
-              }),
-            }),
+            image: getImageStyle(feature),
           });
         },
         visible: false,
