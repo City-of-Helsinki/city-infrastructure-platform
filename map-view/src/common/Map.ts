@@ -14,13 +14,14 @@ import ImageWMS from "ol/source/ImageWMS";
 import GeoJson from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import { Circle, Fill, Icon, Stroke, Style } from "ol/style";
+import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
 import { Pixel } from "ol/pixel";
 import { Feature as OlFeature } from "ol";
 import ImageSource from "ol/source/Image";
 import { LineString } from "ol/geom";
 import { buildWFSQuery, calculateDistance } from "./functions";
 import { FeatureLike } from "ol/Feature";
+import { Cluster } from "ol/source";
 
 class Map {
   /**
@@ -112,6 +113,13 @@ class Map {
       if (visibleLayers.length > 0) {
         // Combine the topmost feature from all visible layers into a single array
         Promise.all(visibleLayers.map((layer) => getFeatureFromLayer(layer, event.pixel))).then((features) => {
+          // Extract features from a cluster
+          // @ts-ignore
+          if (features.length && features[0].length && features[0][0].get("features")) {
+            // @ts-ignore
+            features = features[0][0].get("features");
+          }
+
           // @ts-ignore
           const all_features = [].concat.apply([], features);
           if (all_features.length > 0) {
@@ -234,11 +242,10 @@ class Map {
       // Make sure filter can be applied to the layer
       const layer_config = overlayConfig["layers"].find((l) => l.identifier === identifier);
       if (layer_config !== undefined && layer_config.filter_fields!.includes(filter_field)) {
-        const vectorSource = new VectorSource({
-          format: this.geojsonFormat,
-          url: sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId)}`,
-        });
-        layer.setSource(vectorSource);
+        const clusterSource = this.createClusterSource(
+          sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId)}`
+        );
+        layer.setSource(clusterSource);
       }
     }
   }
@@ -272,10 +279,6 @@ class Map {
 
     // Fetch device layers
     const overlayLayers = layers.map(({ identifier, use_traffic_sign_icons }) => {
-      const vectorSource = new VectorSource({
-        format: this.geojsonFormat,
-        url: sourceUrl + `?${buildWFSQuery(identifier)}`,
-      });
 
       const getImageStyle = (feature: FeatureLike) => {
         if (use_traffic_sign_icons && feature.get("device_type_code") !== null) {
@@ -296,8 +299,9 @@ class Map {
           });
         }
       };
+      const clusterSource = this.createClusterSource(sourceUrl + `?${buildWFSQuery(identifier)}`);
       const vectorLayer = new VectorLayer({
-        source: vectorSource,
+        source: clusterSource,
         style: (feature: FeatureLike) => {
           return new Style({
             image: getImageStyle(feature),
@@ -312,6 +316,16 @@ class Map {
     });
     return new LayerGroup({
       layers: overlayLayers,
+    });
+  }
+
+  private createClusterSource(wfsUrl: string) {
+    return new Cluster({
+      distance: 40, // Distance in pixels within which features will be clustered together.
+      source: new VectorSource({
+        format: this.geojsonFormat,
+        url: wfsUrl,
+      }),
     });
   }
 
