@@ -279,34 +279,81 @@ class Map {
 
     // Fetch device layers
     const overlayLayers = layers.map(({ identifier, use_traffic_sign_icons }) => {
+      const styleCache: { [key: string]: Style } = {};
+      const getCachedStyle = (feature: FeatureLike) => {
+        const features = feature.get("features");
 
-      const getImageStyle = (feature: FeatureLike) => {
+        if (features !== undefined && features.length > 1) {
+          return styleCache[features.length.toString()];
+        }
+        return styleCache[feature.get("features")[0].get("device_type_code")];
+      };
+      const getClusterStyle = (clusterFeature: FeatureLike) => {
+        return new Style({
+          image: new Circle({
+            radius: 10,
+            stroke: new Stroke({
+              color: "#fff",
+            }),
+            fill: new Fill({
+              color: "#3399CC",
+            }),
+          }),
+          text: new Text({
+            text: clusterFeature.get("features").length.toString(),
+            fill: new Fill({
+              color: "#fff",
+            }),
+          }),
+        });
+      };
+      const getSinglePointStyle = (feature: FeatureLike) => {
         if (use_traffic_sign_icons && feature.get("device_type_code") !== null) {
-          return new Icon({
-            src: `${traffic_sign_icons_url}${feature.get("device_type_code")}.svg`,
-            scale: 0.075,
+          // Traffic sign style
+          return new Style({
+            image: new Icon({
+              src: `${traffic_sign_icons_url}${feature.get("device_type_code")}.svg`,
+              scale: 0.075,
+            }),
           });
         } else {
-          return new Circle({
-            radius: 8,
-            fill: new Fill({
-              color: feature.get("color_code") || "#FFF",
-            }),
-            stroke: new Stroke({
-              color: "#000",
-              width: 2,
+          // Circle style
+          return new Style({
+            image: new Circle({
+              radius: 8,
+              fill: new Fill({
+                color: feature.get("color_code") || "#FFF",
+              }),
+              stroke: new Stroke({
+                color: "#000",
+                width: 2,
+              }),
             }),
           });
         }
       };
+      const getImageStyle = (clusterFeature: FeatureLike) => {
+        if (clusterFeature.get("features") === undefined) return;
+
+        let style = getCachedStyle(clusterFeature);
+        if (!style) {
+          const size: number = clusterFeature.get("features") ? clusterFeature.get("features").length : 0;
+          if (size > 1) {
+            style = getClusterStyle(clusterFeature);
+            styleCache[size] = style;
+          } else {
+            const feature = clusterFeature.get("features")[0];
+            style = getSinglePointStyle(feature);
+            styleCache[feature.get("device_type_code")] = style;
+          }
+        }
+        return style;
+      };
+
       const clusterSource = this.createClusterSource(sourceUrl + `?${buildWFSQuery(identifier)}`);
       const vectorLayer = new VectorLayer({
         source: clusterSource,
-        style: (feature: FeatureLike) => {
-          return new Style({
-            image: getImageStyle(feature),
-          });
-        },
+        style: (clusterFeature: FeatureLike) => getImageStyle(clusterFeature),
         visible: false,
         opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
       });
