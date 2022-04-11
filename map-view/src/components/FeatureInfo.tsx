@@ -66,8 +66,19 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     return `${APIBaseUrl}/admin/${app_name}/${featureType.replace(/_/g, "")}/${featureId}/change`;
   }
 
+  runOnSelectFeature(featureIndex: number) {
+    const { features, onSelectFeature } = this.props;
+    const feature = features[featureIndex];
+    onSelectFeature(feature).then((distance: number) => this.setState({ realPlanDistance: distance }));
+  }
+
+  setFeatureIndex(featureIndex: number) {
+    this.setState({ featureIndex: featureIndex });
+    this.runOnSelectFeature(featureIndex);
+  }
+
   render() {
-    const { features, classes, onSelectFeature, onClose, t } = this.props;
+    const { features, classes, onClose, t } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
     const fid = feature["id_"];
@@ -75,8 +86,9 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     const { id, value, txt, direction, device_type_code, device_type_description } = feature.getProperties();
     const deviceTypeText = `${device_type_code} - ${device_type_description}${value ? ` (${value})` : ""}`;
 
+    // Only run when distance is undefined (don't spam requests)
     if (this.state.realPlanDistance === undefined) {
-      onSelectFeature(feature).then((distance: number) => this.setState({ realPlanDistance: distance }));
+      this.runOnSelectFeature(featureIndex);
     }
 
     return (
@@ -113,14 +125,14 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
           <IconButton
             color="primary"
             disabled={featureIndex === 0}
-            onClick={() => this.setState({ featureIndex: featureIndex - 1 })}
+            onClick={() => this.setFeatureIndex(featureIndex - 1)}
           >
             <NavigateBefore />
           </IconButton>
           <IconButton
             color="primary"
             disabled={featureIndex === features.length - 1}
-            onClick={() => this.setState({ featureIndex: featureIndex + 1 })}
+            onClick={() => this.setFeatureIndex(featureIndex + 1)}
           >
             <NavigateNext />
           </IconButton>
