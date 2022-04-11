@@ -72,8 +72,8 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     const feature = features[featureIndex];
     const fid = feature["id_"];
     const featureType = fid.split(".")[0];
-    const { id, value, txt, direction, device_type_code } = feature.getProperties();
-    const deviceTypeText = value ? `${device_type_code} (${value})` : `${device_type_code}`;
+    const { id, value, txt, direction, device_type_code, device_type_description } = feature.getProperties();
+    const deviceTypeText = `${device_type_code} - ${device_type_description}${value ? ` (${value})` : ""}`;
 
     if (this.state.realPlanDistance === undefined) {
       onSelectFeature(feature).then((distance: number) => this.setState({ realPlanDistance: distance }));
