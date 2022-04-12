@@ -82,3 +82,6 @@ class GenericDeviceBaseResource(ModelResource):
     class Meta:
         skip_unchanged = True
         report_skipped = True
+
+    def __str__(self):
+        return self.__class__.__name__

@@ -161,3 +161,6 @@ class FurnitureSignpostPlanTemplateResource(AbstractFurnitureSignpostResource):
         if method is not None:
             return method(obj)
         return field.export(obj)
+
+    def __str__(self):
+        return "Template for Real Import"

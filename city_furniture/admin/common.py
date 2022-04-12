@@ -97,7 +97,7 @@ class MultiResourceExportActionAdminMixin:
         if len(self.extra_export_resource_classes):
             export_resource_choices.append(("", "Default"))
             for i, rc in enumerate(self.extra_export_resource_classes):
-                export_resource_choices.append((str(i), rc.__name__))
+                export_resource_choices.append((str(i), rc))
 
             # Extract file_format choices from already created action_form
             file_format_choices = self.action_form.base_fields["file_format"].choices
