@@ -13,7 +13,11 @@ from city_furniture.models import (
     FurnitureSignpostRealFile,
     FurnitureSignpostRealOperation,
 )
-from city_furniture.resources.furniture_signpost import FurnitureSignpostPlanResource, FurnitureSignpostRealResource
+from city_furniture.resources.furniture_signpost import (
+    FurnitureSignpostPlanResource,
+    FurnitureSignpostPlanTemplateResource,
+    FurnitureSignpostRealResource,
+)
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
@@ -151,6 +155,7 @@ class FurnitureSignpostPlanAdmin(MultiResourceExportActionAdminMixin, AbstractFu
     resource_class = FurnitureSignpostPlanResource
     export_resource_classes = [
         FurnitureSignpostPlanResource,
+        FurnitureSignpostPlanTemplateResource,
     ]
     form = FurnitureSignpostPlanModelForm
     fieldsets = (
