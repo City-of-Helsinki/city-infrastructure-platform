@@ -86,16 +86,17 @@ class MultiResourceExportActionAdminMixin:
     """Mixin to allow user to select the ModelResource to be used for exporting objects"""
 
     # List of ModelResource classes that can be used for exporting. Used only if more than 1 is specified.
-    export_resource_classes: list[Type[ModelResource]] = []
+    # `resource_class` is added as a default option to the list
+    extra_export_resource_classes: list[Type[ModelResource]] = []
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         # Add a dropdown to select the used export resource
         export_resource_choices = []
-        if len(self.export_resource_classes) > 1:
+        if len(self.extra_export_resource_classes):
             export_resource_choices.append(("", "Default"))
-            for i, rc in enumerate(self.export_resource_classes):
+            for i, rc in enumerate(self.extra_export_resource_classes):
                 export_resource_choices.append((str(i), rc.__name__))
 
             # Extract file_format choices from already created action_form
@@ -115,7 +116,7 @@ class MultiResourceExportActionAdminMixin:
         if export_resource is None or export_resource == "":
             return super().get_export_resource_class()
 
-        return self.export_resource_classes[int(export_resource)]
+        return self.extra_export_resource_classes[int(export_resource)]
 
     def get_data_for_export(self, request, queryset, *args, **kwargs) -> tablib.Dataset:
         """Override super's method to pass `request` to `self.get_export_resource_class` as a kwarg"""
