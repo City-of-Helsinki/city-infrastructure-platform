@@ -132,3 +132,32 @@ class FurnitureSignpostRealResource(AbstractFurnitureSignpostResource):
             "mount_real__id",
         )
         export_order = fields
+
+
+class FurnitureSignpostPlanTemplateResource(AbstractFurnitureSignpostResource):
+    """Resource for exporting a Plan and making the output importable as a real"""
+
+    parent__id = Field()
+    condition = Field()
+    installation_date = Field()
+    furniture_signpost_plan__id = Field()
+    mount_real__id = Field()
+
+    class Meta(AbstractFurnitureSignpostResource.Meta):
+        model = FurnitureSignpostPlan
+
+        fields = AbstractFurnitureSignpostResource.Meta.common_fields
+        export_order = fields
+
+    def dehydrate_id(self, obj: FurnitureSignpostPlan):
+        return None
+
+    def dehydrate_furniture_signpost_plan__id(self, obj: FurnitureSignpostPlan):
+        return obj.id
+
+    def export_field(self, field, obj):
+        field_name = self.get_field_name(field)
+        method = getattr(self, "dehydrate_%s" % field_name, None)
+        if method is not None:
+            return method(obj)
+        return field.export(obj)
