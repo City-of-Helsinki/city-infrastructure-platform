@@ -153,8 +153,7 @@ class AbstractFurnitureSignpostAdmin(
 @admin.register(FurnitureSignpostPlan)
 class FurnitureSignpostPlanAdmin(MultiResourceExportActionAdminMixin, AbstractFurnitureSignpostAdmin):
     resource_class = FurnitureSignpostPlanResource
-    export_resource_classes = [
-        FurnitureSignpostPlanResource,
+    extra_export_resource_classes = [
         FurnitureSignpostPlanTemplateResource,
     ]
     form = FurnitureSignpostPlanModelForm
