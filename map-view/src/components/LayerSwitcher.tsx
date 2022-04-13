@@ -144,7 +144,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
         <FormGroup>
           <TextField
             id="project-id-filter"
-            label={"Filter by Project ID"}
+            label={"Filter by Project"}
             variant={"standard"}
             onChange={changeProjectIdFilter}
           />
