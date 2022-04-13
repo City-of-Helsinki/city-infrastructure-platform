@@ -1,4 +1,4 @@
-from typing import Type
+from typing import List, Tuple, Type
 
 import tablib
 from django import forms
@@ -87,7 +87,7 @@ class MultiResourceExportActionAdminMixin:
 
     # List of ModelResource classes that can be used for exporting. Used only if more than 1 is specified.
     # `resource_class` is added as a default option to the list
-    extra_export_resource_classes: list[Type[ModelResource]] = []
+    extra_export_resource_classes: List[Type[ModelResource]] = []
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -131,8 +131,8 @@ class MultiResourceExportActionAdminMixin:
 
     @staticmethod
     def get_export_action_form(
-        file_format_choices: list[tuple[str, str]],
-        export_resource_choices: list[tuple[str, str]],
+        file_format_choices: List[Tuple[str, str]],
+        export_resource_choices: List[Tuple[str, str]],
     ) -> Type[ActionForm]:
         """Returns an ActionForm subclass containing ChoiceFields populated with the given choices."""
 
