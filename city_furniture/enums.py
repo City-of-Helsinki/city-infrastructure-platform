@@ -142,11 +142,15 @@ class CityFurnitureFunctionType(Enum):
 class OrganizationLevel(Enum):
     """Responsible Entity Organization levels"""
 
-    DIVISION = 1
-    SERVICE = 2
-    PERSON = 3
+    DIVISION = 10
+    SERVICE = 20
+    UNIT = 30
+    PERSON = 40
+    PROJECT = 50
 
     class Labels:
         DIVISION = _("division")
         SERVICE = _("service")
+        UNIT = _("unit")
         PERSON = _("person")
+        PROJECT = _("project")
