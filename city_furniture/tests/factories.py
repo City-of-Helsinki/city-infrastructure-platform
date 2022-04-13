@@ -16,28 +16,28 @@ from traffic_control.tests.factories import get_mount_type, get_operation_type, 
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
-def get_responsible_entity_person(name="Matti Meikäläinen"):
+def get_responsible_entity(name="ABC-123"):
     division = ResponsibleEntity.objects.get_or_create(
         name="KYMP",
-        defaults=dict(
-            organization_level=OrganizationLevel.DIVISION,
-        ),
+        defaults=dict(organization_level=OrganizationLevel.DIVISION),
     )[0]
     service = ResponsibleEntity.objects.get_or_create(
         name="Yleiset alueet",
-        defaults=dict(
-            parent=division,
-            organization_level=OrganizationLevel.DIVISION,
-        ),
+        defaults=dict(parent=division, organization_level=OrganizationLevel.SERVICE),
+    )[0]
+    unit = ResponsibleEntity.objects.get_or_create(
+        name="Unit Name",
+        defaults=dict(parent=service, organization_level=OrganizationLevel.UNIT),
     )[0]
     person = ResponsibleEntity.objects.get_or_create(
-        name=name,
-        defaults=dict(
-            parent=service,
-            organization_level=OrganizationLevel.PERSON,
-        ),
+        name="Matti Meikäläinen",
+        defaults=dict(parent=unit, organization_level=OrganizationLevel.PERSON),
     )[0]
-    return person
+    project = ResponsibleEntity.objects.get_or_create(
+        name=name,
+        defaults=dict(parent=person, organization_level=OrganizationLevel.PROJECT),
+    )[0]
+    return project
 
 
 def get_city_furniture_color(name="Color", rgb="#FFFFFF"):
@@ -97,7 +97,7 @@ def get_furniture_signpost_plan(location=None, owner=None, device_type=None):
         mount_type=get_mount_type(),
         source_name="Some_source",
         source_id=uuid.uuid4(),
-        project_id="ABC123",
+        responsible_entity=get_responsible_entity(),
         created_by=user,
         updated_by=user,
     )[0]
@@ -119,7 +119,7 @@ def get_furniture_signpost_real(location=None, owner=None, device_type=None):
         installation_date=datetime.date(2020, 1, 20),
         source_name="Some_source",
         source_id=uuid.uuid4(),
-        project_id="ABC123",
+        responsible_entity=get_responsible_entity(),
         created_by=user,
         updated_by=user,
     )[0]
