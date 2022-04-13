@@ -3,8 +3,9 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
+from city_furniture.enums import OrganizationLevel
 from city_furniture.models.common import ResponsibleEntity
-from city_furniture.tests.factories import get_responsible_entity_person
+from city_furniture.tests.factories import get_responsible_entity
 from traffic_control.tests.factories import get_api_client, get_user
 
 
@@ -13,13 +14,13 @@ from traffic_control.tests.factories import get_api_client, get_user
 def test__responsible_entity__list():
     client = get_api_client()
     for name in ["foo", "bar", "baz"]:
-        get_responsible_entity_person(name=name)
+        get_responsible_entity(name=name)
 
     response = client.get(reverse("v1:responsibleentity-list"))
     response_data = response.json()
 
     assert response.status_code == status.HTTP_200_OK
-    assert response_data["count"] == 5
+    assert response_data["count"] == 7
     for result in response_data["results"]:
         obj = ResponsibleEntity.objects.get(pk=result["id"])
         assert result["name"] == obj.name
@@ -28,7 +29,7 @@ def test__responsible_entity__list():
 @pytest.mark.django_db
 def test__responsible_entity__detail():
     client = get_api_client()
-    obj = get_responsible_entity_person()
+    obj = get_responsible_entity()
 
     response = client.get(reverse("v1:responsibleentity-detail", kwargs={"pk": obj.pk}))
     response_data = response.json()
@@ -44,7 +45,7 @@ def test__responsible_entity__detail():
 def test__responsible_entity__create(admin_user):
     ResponsibleEntity.objects.all().delete()  # Clear colors created in migrations
     client = get_api_client(user=get_user(admin=admin_user))
-    data = {"name": "TEST", "organization_level": "1"}
+    data = {"name": "TEST", "organization_level": OrganizationLevel.DIVISION.value}
 
     response = client.post(reverse("v1:responsibleentity-list"), data=data)
     response_data = response.json()
@@ -69,7 +70,7 @@ def test__responsible_entity__create_with_incomplete_data(admin_user):
     validation error correctly if required data is missing.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    data = {"organization_level": "2"}
+    data = {"organization_level": OrganizationLevel.SERVICE.value}
 
     response = client.post(reverse("v1:responsibleentity-list"), data=data)
     response_data = response.json()
@@ -92,7 +93,7 @@ def test__responsible_entity__update(admin_user):
     is successful when content is not defined. Old content should be deleted.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    obj = get_responsible_entity_person(name="ORIGINAL_NAME")
+    obj = get_responsible_entity(name="ORIGINAL_NAME")
     data = {"name": "UPDATED_NAME"}
 
     response = client.put(reverse("v1:responsibleentity-detail", kwargs={"pk": obj.pk}), data=data)
@@ -114,14 +115,14 @@ def test__responsible_entity__update(admin_user):
 def test__responsible_entity__delete(admin_user):
     user = get_user(admin=admin_user)
     client = get_api_client(user=user)
-    obj = get_responsible_entity_person()
+    obj = get_responsible_entity()
 
     response = client.delete(reverse("v1:responsibleentity-detail", kwargs={"pk": obj.pk}))
 
     if admin_user:
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert ResponsibleEntity.objects.count() == 2
+        assert ResponsibleEntity.objects.count() == 4
 
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
-        assert ResponsibleEntity.objects.count() == 3
+        assert ResponsibleEntity.objects.count() == 5
