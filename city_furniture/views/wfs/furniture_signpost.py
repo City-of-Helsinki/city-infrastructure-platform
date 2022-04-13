@@ -14,7 +14,6 @@ RD_NEW = CRS.from_srid(settings.SRID)
 
 _base_fields = [
     DescribedFeatureField("id", description="ID of the Furniture Signpost."),
-    DescribedFeatureField("project_id", description="The Project ID that this signpost belongs to in Projectwise."),
     DescribedFeatureField(
         "owner_name_fi",
         model_attribute="owner.name_fi",
@@ -23,7 +22,7 @@ _base_fields = [
     DescribedFeatureField(
         "responsible_entity_name",
         model_attribute="responsible_entity.name",
-        description="Person who is responsible for this signpost.",
+        description="Entity who is responsible for this signpost.",
     ),
     DescribedFeatureField("location", description="Signpost's location (point) in EPSG:3879 coordinates."),
     DescribedFeatureField(

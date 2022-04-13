@@ -123,8 +123,13 @@ class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControl
     validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
     validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
 
-    project_id = models.CharField(_("External project ID"), max_length=254, blank=True, null=True)
-    additional_material_url = models.CharField(_("Additional material URL"), max_length=254, blank=True, null=True)
+    additional_material_url = models.CharField(
+        _("Additional material URL"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Additional material about the device. This should be publicly available."),
+    )
 
     class Meta:
         abstract = True

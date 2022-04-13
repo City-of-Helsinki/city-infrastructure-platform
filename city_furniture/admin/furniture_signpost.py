@@ -68,7 +68,7 @@ class AbstractFurnitureSignpostAdmin(
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("owner", SimplifiedRelatedFieldListFilter),
-        "project_id",
+        "responsible_entity",
         ("target", SimplifiedRelatedFieldListFilter),
         ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
@@ -101,7 +101,6 @@ class AbstractFurnitureSignpostAdmin(
                 "additional_material_url",
                 "source_id",
                 "source_name",
-                "project_id",
                 "responsible_entity",
             )
         },

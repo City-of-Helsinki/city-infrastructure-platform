@@ -50,7 +50,6 @@ class AbstractFurnitureSignpostResource(GenericDeviceBaseResource):
         )
         common_fields = (
             "id",
-            "project_id",
             "owner__name_fi",
             "responsible_entity__name",
             "location",
