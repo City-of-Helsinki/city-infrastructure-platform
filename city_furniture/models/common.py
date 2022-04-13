@@ -163,11 +163,11 @@ class ResponsibleEntity(models.Model):
     """
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    name = models.CharField(_("Name"), max_length=254)
+    name = models.CharField(_("Name"), max_length=254, help_text=_("Name (for projects use Projectwise ID)"))
     organization_level = EnumIntegerField(
         OrganizationLevel,
         verbose_name=_("Organization level"),
-        default=OrganizationLevel.PERSON,
+        default=OrganizationLevel.PROJECT,
     )
     parent = models.ForeignKey(
         "self",
@@ -197,3 +197,4 @@ class ResponsibleEntity(models.Model):
 auditlog.register(CityFurnitureDeviceType)
 auditlog.register(CityFurnitureColor)
 auditlog.register(CityFurnitureTarget)
+auditlog.register(ResponsibleEntity)
