@@ -65,7 +65,7 @@ RUN cd /map-view && \
 # ==============================
 FROM base AS production
 # ==============================
-ENV APPLY_MIGRATIONS=1
+ENV APPLY_MIGRATIONS=0
 ENV COLLECT_STATIC=1
 
 COPY . /city-infrastructure-platform
