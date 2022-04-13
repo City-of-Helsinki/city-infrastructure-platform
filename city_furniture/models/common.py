@@ -190,6 +190,14 @@ class ResponsibleEntity(models.Model):
             path = f"{obj.name} > {path}"
         return path
 
+    def clean_parent(self):
+        if self.parent and self.parent.organization_level.value > self.organization_level.value:
+            raise ValidationError({"parent": "Parent's organization level can't be below this object's level."})
+
+    def clean_fields(self, exclude=None):
+        super(ResponsibleEntity, self).clean_fields()
+        self.clean_parent()
+
     def __str__(self):
         return self.get_full_path()
 
