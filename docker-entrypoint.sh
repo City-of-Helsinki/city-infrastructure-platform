@@ -2,10 +2,19 @@
 
 set -e
 
-# Apply database migrations
+# Apply or validate database migrations
 if [[ "$APPLY_MIGRATIONS" = "1" ]]; then
     echo "Applying database migrations..."
-    python ./manage.py migrate --noinput
+    ./apply-migrations.sh
+else
+    echo "Checking that migrations are applied..."
+    error_code=0
+    ./check-migrations.sh || error_code=$?
+
+    if [ "$error_code" -ne 0 ]; then
+        echo "Migrations are not applied!"
+        exit $error_code
+    fi
 fi
 
 # Collect static files
