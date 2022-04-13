@@ -52,7 +52,10 @@ class UserStampedInlineAdminMixin:
     """
 
     def save_formset(self, request, form, formset, change):
-        objects = formset.save(commit=False)
+        # If there are deleted related models, commit changes,
+        # else don't commit, as created_by field is filled to the object before saving.
+        # This means that sometimes save might be called twice to objects.
+        objects = formset.save(commit=len(formset.deleted_forms))
 
         for obj in objects:
             # Validate that object has a created_by field, and skip models such as Files
