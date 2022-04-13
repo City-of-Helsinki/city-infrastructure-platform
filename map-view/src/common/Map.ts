@@ -235,7 +235,7 @@ class Map {
 
   applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {
     const { sourceUrl } = overlayConfig;
-    const filter_field = "project_id";
+    const filter_field = "responsible_entity_name";
 
     // Override layer source to apply the filter
     for (const [identifier, layer] of Object.entries(this.overlayLayers)) {
