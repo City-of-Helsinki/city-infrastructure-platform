@@ -4,7 +4,11 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 from import_export.admin import ImportExportActionModelAdmin
 
-from city_furniture.admin.common import MultiResourceExportActionAdminMixin, SimplifiedRelatedFieldListFilter
+from city_furniture.admin.common import (
+    MultiResourceExportActionAdminMixin,
+    SimplifiedRelatedFieldListFilter,
+    TreeModelFieldListFilter,
+)
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
     FurnitureSignpostPlan,
@@ -68,7 +72,7 @@ class AbstractFurnitureSignpostAdmin(
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("owner", SimplifiedRelatedFieldListFilter),
-        "responsible_entity",
+        ("responsible_entity", TreeModelFieldListFilter),
         ("target", SimplifiedRelatedFieldListFilter),
         ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
