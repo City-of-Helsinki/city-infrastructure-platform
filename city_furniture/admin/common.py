@@ -28,6 +28,37 @@ class SimplifiedRelatedFieldListFilter(RelatedFieldListFilter):
         return field.get_choices(include_blank=False, ordering=ordering, limit_choices_to={"id__in": used_ids})
 
 
+class TreeModelFieldListFilter(RelatedFieldListFilter):
+    def field_choices(self, field, request, model_admin):
+        """Return only choices, which are actually used. Include children of selected object in the results"""
+
+        used_ids = model_admin.model.objects.values_list(field.attname, flat=True).distinct()
+        qs = field.related_model.objects.filter(pk__in=used_ids)
+
+        # Include ancestors as available choices
+        choice_ids = (
+            field.related_model.objects.get_queryset_ancestors(qs, include_self=True)
+            .values_list("id", flat=True)
+            .distinct()
+        )
+
+        ordering = self.field_admin_ordering(field, request, model_admin)
+        return field.get_choices(include_blank=False, ordering=ordering, limit_choices_to={"id__in": choice_ids})
+
+    def queryset(self, request, queryset):
+        """
+        Remove old filter and replace it with a filter that includes children of selected object.
+        This way when a parent is selected, objects belonging to a descendant are also included.
+        """
+
+        filter_used = self.used_parameters.pop(f"{self.field_path}__id__exact", None)
+        if filter_used is not None:
+            selected_object = self.field.related_model.objects.get(id=self.lookup_val)
+            descendant_ids = selected_object.get_descendants(include_self=True).values_list("id", flat=True).distinct()
+            self.used_parameters.update({f"{self.field_path}__id__in": descendant_ids})
+        return super().queryset(request, queryset)
+
+
 @admin.register(CityFurnitureDeviceType)
 class CityFurnitureDeviceTypeAdmin(EnumChoiceValueDisplayAdminMixin, AuditLogHistoryAdmin):
     list_display = (
