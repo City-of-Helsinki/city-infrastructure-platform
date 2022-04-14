@@ -8,6 +8,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
 from city_furniture.enums import (
     CityFurnitureClassType,
@@ -152,7 +154,7 @@ class CityFurnitureTarget(SourceControlModel):
         return self.name_fi
 
 
-class ResponsibleEntity(models.Model):
+class ResponsibleEntity(MPTTModel):
     """
     Responsible Entity for a City Furniture Device
 
@@ -169,12 +171,13 @@ class ResponsibleEntity(models.Model):
         verbose_name=_("Organization level"),
         default=OrganizationLevel.PROJECT,
     )
-    parent = models.ForeignKey(
+    parent = TreeForeignKey(
         "self",
         verbose_name=_("Parent Responsible Entity"),
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        related_name="children",
     )
 
     class Meta:
