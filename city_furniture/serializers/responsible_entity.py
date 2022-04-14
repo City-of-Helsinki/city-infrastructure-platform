@@ -7,4 +7,9 @@ from city_furniture.models.common import ResponsibleEntity
 class ResponsibleEntitySerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = ResponsibleEntity
-        fields = "__all__"
+        fields = [
+            "id",
+            "name",
+            "organization_level",
+            "parent",
+        ]
