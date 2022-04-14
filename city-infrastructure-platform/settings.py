@@ -154,6 +154,7 @@ THIRD_PARTY_APPS = [
     "colorfield",
     "import_export",
     "gisserver",
+    "mptt",
 ]
 LOCAL_APPS = [
     "users.apps.UsersConfig",
