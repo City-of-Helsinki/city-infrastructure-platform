@@ -70,6 +70,13 @@ class CityFurnitureTargetAdmin(AuditLogHistoryAdmin):
     actions = None
 
 
+class ResponsibleEntityAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        parent_choices = ((re.id, re) for re in ResponsibleEntity.objects.exclude(id=self.instance.id))
+        self.fields["parent"].choices = (("", "---"), *parent_choices)
+
+
 @admin.register(ResponsibleEntity)
 class ResponsibleEntityAdmin(AuditLogHistoryAdmin):
     list_display = (
@@ -80,6 +87,7 @@ class ResponsibleEntityAdmin(AuditLogHistoryAdmin):
     )
     ordering = ("organization_level",)
     actions = None
+    form = ResponsibleEntityAdminForm
 
 
 class MultiResourceExportActionAdminMixin:
