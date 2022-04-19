@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 from import_export.admin import ImportExportActionModelAdmin
 
-from city_furniture.admin.common import (
+from city_furniture.admin.utils import (
     MultiResourceExportActionAdminMixin,
     SimplifiedRelatedFieldListFilter,
     TreeModelFieldListFilter,
