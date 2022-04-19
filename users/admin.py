@@ -16,8 +16,20 @@ class UserAdmin(BaseUserAdmin):
                 )
             },
         ),
+        (
+            _("Responsible Entity"),
+            {
+                "fields": (
+                    "bypass_responsible_entity",
+                    "responsible_entities",
+                )
+            },
+        ),
     )
-    filter_horizontal = BaseUserAdmin.filter_horizontal + ("operational_areas",)
+    filter_horizontal = BaseUserAdmin.filter_horizontal + (
+        "operational_areas",
+        "responsible_entities",
+    )
 
 
 admin.site.register(User, UserAdmin)
