@@ -159,9 +159,9 @@ class ResponsibleEntity(MPTTModel):
     Responsible Entity for a City Furniture Device
 
     Organization chain is most often the following:
-    Toimiala > Palvelu > Henkilö
+    Toimiala > Palvelu > Yksikkö > Henkilö > Projekti (Projectwise projektin ID)
     e.g.
-    KYMP > Yleiset Alueet > Matti Meikäläinen
+    KYMP > Yleiset Alueet > Tiimi X > Matti Meikäläinen > ABC123
     """
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
