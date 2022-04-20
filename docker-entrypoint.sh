@@ -2,6 +2,8 @@
 
 set -e
 
+echo "Version: $VERSION"
+
 # Apply or validate database migrations
 if [[ "$APPLY_MIGRATIONS" = "1" ]]; then
     echo "Applying database migrations..."

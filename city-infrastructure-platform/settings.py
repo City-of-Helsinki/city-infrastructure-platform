@@ -17,8 +17,6 @@ from django.utils.translation import gettext_lazy as _
 from helusers.defaults import SOCIAL_AUTH_PIPELINE  # noqa: F401
 from sentry_sdk.integrations.django import DjangoIntegration
 
-from .utils import git_version
-
 # Set up .env file
 checkout_dir = environ.Path(__file__) - 2
 assert os.path.exists(checkout_dir("manage.py"))
@@ -47,6 +45,7 @@ env = environ.Env(
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
     SENTRY_DSN=(str, ""),
+    VERSION=(str, ""),
     OPENSHIFT_DEPLOYMENT=(bool, False),
     AZURE_ACCOUNT_KEY=(str, False),
     AZURE_CONTAINER=(str, False),
@@ -286,7 +285,7 @@ if OPENSHIFT_DEPLOYMENT:
 
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
-VERSION = git_version()
+VERSION = env.str("VERSION")
 if SENTRY_DSN:
     sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()], release=VERSION)
 

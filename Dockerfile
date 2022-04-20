@@ -1,3 +1,5 @@
+ARG VERSION=""
+
 # ==============================
 FROM python:3.8-slim AS base
 # ==============================
@@ -65,6 +67,9 @@ RUN cd /map-view && \
 # ==============================
 FROM base AS production
 # ==============================
+ARG VERSION
+
+ENV VERSION=${VERSION}
 ENV APPLY_MIGRATIONS=0
 ENV COLLECT_STATIC=1
 
