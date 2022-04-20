@@ -45,6 +45,7 @@ env = environ.Env(
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
     SENTRY_DSN=(str, ""),
+    SENTRY_DEBUG=(bool, False),
     VERSION=(str, ""),
     OPENSHIFT_DEPLOYMENT=(bool, False),
     AZURE_ACCOUNT_KEY=(str, False),
@@ -285,6 +286,7 @@ if OPENSHIFT_DEPLOYMENT:
 
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
+SENTRY_DEBUG = env.bool("SENTRY_DEBUG")
 VERSION = env.str("VERSION")
 if SENTRY_DSN:
     sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()], release=VERSION)
