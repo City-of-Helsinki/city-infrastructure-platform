@@ -6,6 +6,7 @@ from import_export.admin import ImportExportActionModelAdmin
 
 from city_furniture.admin.utils import (
     MultiResourceExportActionAdminMixin,
+    ResponsibleEntityPermissionAdminMixin,
     SimplifiedRelatedFieldListFilter,
     TreeModelFieldListFilter,
 )
@@ -57,6 +58,7 @@ class FurnitureSignpostRealOperationInline(TrafficControlOperationInlineBase):
 
 
 class AbstractFurnitureSignpostAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,

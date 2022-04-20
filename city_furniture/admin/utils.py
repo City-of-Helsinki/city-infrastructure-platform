@@ -109,3 +109,49 @@ class MultiResourceExportActionAdminMixin:
 
         _ExportActionForm.__name__ = str("ExportActionForm")
         return _ExportActionForm
+
+
+class ResponsibleEntityPermissionAdminMixin:
+    def has_bypass_responsible_entity_permission(self, request):
+        if request.user.is_superuser or request.user.bypass_responsible_entity:
+            return True
+        return False
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+
+        if self.has_bypass_responsible_entity_permission(request):
+            return qs
+
+        return qs.exclude(responsible_entity__isnull=True).filter(
+            responsible_entity__in=request.user.responsible_entities.all().get_descendants(include_self=True)
+        )
+
+    def get_form(self, request, *args, **kwargs):
+        form = super().get_form(request, *args, **kwargs)
+        form.user = request.user
+        return form
+
+    def has_add_permission(self, request):
+        if not self.has_bypass_responsible_entity_permission(request) and not request.user.responsible_entities.count():
+            return False
+        return super().has_add_permission(request)
+
+    def has_import_permission(self, request):
+        if not self.has_bypass_responsible_entity_permission(request) and not request.user.responsible_entities.count():
+            return False
+        return super().has_import_permission(request)
+
+
+class ResponsibleEntityPermissionAdminFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.user is None or self.user.is_superuser or self.user.bypass_responsible_entity:
+            return
+
+        # Restrict available choices to ResponsibleEntities that are valid for logged in user
+        responsible_entity_choices = []
+        for i, entity in enumerate(self.user.responsible_entities.all().get_descendants(include_self=True)):
+            responsible_entity_choices.append((str(i), entity))
+        self.fields["responsible_entity"].choices = responsible_entity_choices
