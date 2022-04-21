@@ -1,11 +1,14 @@
 import pytest
+from django.core.exceptions import ValidationError
 
-from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
+from city_furniture.enums import OrganizationLevel
+from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, ResponsibleEntity
 from city_furniture.resources.furniture_signpost import (
     FurnitureSignpostPlanTemplateResource,
     FurnitureSignpostRealResource,
 )
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
+from traffic_control.tests.factories import get_user
 
 
 @pytest.mark.django_db
@@ -48,3 +51,35 @@ def test__furniture_signpost_plan_export_real_import():
     assert FurnitureSignpostPlan.objects.all().count() == 1
     assert FurnitureSignpostReal.objects.all().count() == 1
     assert FurnitureSignpostReal.objects.first().furniture_signpost_plan_id == FurnitureSignpostPlan.objects.first().id
+
+
+@pytest.mark.django_db
+def test__furniture_signpost_real__import__responsible_entity_permission():
+    get_furniture_signpost_real()
+    dataset = FurnitureSignpostRealResource().export()
+
+    user = get_user()
+    with pytest.raises(ValidationError):
+        FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
+
+    user.responsible_entities.add(ResponsibleEntity.objects.get(organization_level=OrganizationLevel.PROJECT))
+    result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
+    assert not result.has_errors()
+
+    user.responsible_entities.clear()
+    user.responsible_entities.add(ResponsibleEntity.objects.get(organization_level=OrganizationLevel.DIVISION))
+    result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
+    assert not result.has_errors()
+
+
+@pytest.mark.django_db
+def test__furniture_signpost_real__import__responsible_entity_permission_bypass():
+    get_furniture_signpost_real()
+    dataset = FurnitureSignpostRealResource().export()
+
+    user = get_user()
+    user.bypass_responsible_entity = True
+    user.save()
+
+    result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
+    assert not result.has_errors()
