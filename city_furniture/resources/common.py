@@ -1,10 +1,12 @@
 from uuid import UUID
 
+from django.core.exceptions import ValidationError
 from django.db.models import NOT_PROVIDED
 from django.utils.encoding import force_str
 from import_export import fields, widgets
 from import_export.resources import ModelResource
 
+from city_furniture.models import ResponsibleEntity
 from users.utils import get_system_user
 
 
@@ -85,3 +87,30 @@ class GenericDeviceBaseResource(ModelResource):
 
     def __str__(self):
         return self.__class__.__name__
+
+
+class ResponsibleEntityPermissionImportMixin:
+    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+        super().before_import(dataset, using_transactions, dry_run, **kwargs)
+        user = kwargs.pop("user", None)
+
+        if user is None:
+            return
+
+        if user.is_superuser or user.bypass_responsible_entity:
+            return
+
+        for row in dataset.dict:
+            responsible_entity_name = row.get("responsible_entity__name")
+
+            if responsible_entity_name is None or responsible_entity_name == "":
+                raise ValidationError("You do not have permissions to create devices without a Responsible Entity set.")
+
+            responsible_entity = ResponsibleEntity.objects.filter(name=responsible_entity_name).first()
+            if responsible_entity is not None:
+                user_has_permission = responsible_entity.get_ancestors(include_self=True).filter(users=user).exists()
+                if not user_has_permission:
+                    raise ValidationError(
+                        "You do not have permissions to create or modify devices with given "
+                        f"Responsible Entity ({responsible_entity})"
+                    )

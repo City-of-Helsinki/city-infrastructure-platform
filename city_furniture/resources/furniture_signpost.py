@@ -8,12 +8,16 @@ from city_furniture.models.common import (
     CityFurnitureTarget,
     ResponsibleEntity,
 )
-from city_furniture.resources.common import GenericDeviceBaseResource, ResourceEnumIntegerField
+from city_furniture.resources.common import (
+    GenericDeviceBaseResource,
+    ResourceEnumIntegerField,
+    ResponsibleEntityPermissionImportMixin,
+)
 from traffic_control.enums import Condition, Lifecycle
 from traffic_control.models import MountPlan, MountReal, MountType, Owner, Plan
 
 
-class AbstractFurnitureSignpostResource(GenericDeviceBaseResource):
+class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
     lifecycle = ResourceEnumIntegerField(
         attribute="lifecycle", column_name="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE
     )
