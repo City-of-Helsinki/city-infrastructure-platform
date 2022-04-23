@@ -1,6 +1,7 @@
 import datetime
 
 import pytest
+from django.contrib.auth.models import Permission
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
@@ -12,6 +13,7 @@ from city_furniture.tests.factories import (
     get_city_furniture_device_type,
     get_furniture_signpost_plan,
     get_furniture_signpost_real,
+    get_responsible_entity,
 )
 from traffic_control.tests.factories import get_api_client, get_operation_type, get_owner, get_user
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
@@ -364,3 +366,31 @@ def test__furniture_signpost_real_operation__update(admin_user):
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert obj.operations.all().count() == 1
         assert obj.operations.all().first().operation_date == datetime.date(2020, 1, 1)
+
+
+# Responsible Entity permissions
+@pytest.mark.parametrize("add_to_responsible_entity", (False, True))
+@pytest.mark.django_db
+def test__furniture_signpost_real__create__responsible_entity_permission(add_to_responsible_entity):
+    user = get_user(admin=False)
+    user.user_permissions.add(Permission.objects.get(codename="add_furnituresignpostreal"))
+    user.bypass_operational_area = True
+    user.save()
+    client = get_api_client(user=user)
+    responsible_entity = get_responsible_entity()
+    data = {
+        "location": str(test_point_3d),
+        "owner": get_owner().pk,
+        "device_type": get_city_furniture_device_type().pk,
+        "responsible_entity": responsible_entity.pk,
+    }
+
+    if add_to_responsible_entity:
+        user.responsible_entities.add(responsible_entity)
+        response = client.post(reverse("v1:furnituresignpostreal-list"), data=data)
+        assert response.status_code == status.HTTP_201_CREATED
+        assert FurnitureSignpostReal.objects.count() == 1
+    else:
+        response = client.post(reverse("v1:furnituresignpostreal-list"), data=data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert FurnitureSignpostReal.objects.count() == 0

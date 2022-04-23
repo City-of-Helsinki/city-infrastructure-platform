@@ -24,6 +24,7 @@ from city_furniture.serializers.furniture_signpost import (
     FurnitureSignpostRealOperationSerializer,
     FurnitureSignpostRealSerializer,
 )
+from city_furniture.views.common import ResponsibleEntityPermission
 from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
 from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
 
@@ -65,6 +66,7 @@ class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": FurnitureSignpostPlanSerializer,
         "geojson": FurnitureSignpostPlanGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = FurnitureSignpostPlan.objects.active()
     filterset_class = FurnitureSignpostPlanFilterSet
     file_queryset = FurnitureSignpostPlanFile.objects.all()
@@ -144,6 +146,7 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": FurnitureSignpostRealSerializer,
         "geojson": FurnitureSignpostRealGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = FurnitureSignpostReal.objects.active()
     filterset_class = FurnitureSignpostRealFilterSet
     file_queryset = FurnitureSignpostRealFile.objects.all()
