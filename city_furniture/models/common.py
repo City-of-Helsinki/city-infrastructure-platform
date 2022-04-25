@@ -8,15 +8,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
-from mptt.fields import TreeForeignKey
-from mptt.models import MPTTModel
 
-from city_furniture.enums import (
-    CityFurnitureClassType,
-    CityFurnitureDeviceTypeTargetModel,
-    CityFurnitureFunctionType,
-    OrganizationLevel,
-)
+from city_furniture.enums import CityFurnitureClassType, CityFurnitureDeviceTypeTargetModel, CityFurnitureFunctionType
 from traffic_control.mixins.models import SourceControlModel
 
 
@@ -154,58 +147,6 @@ class CityFurnitureTarget(SourceControlModel):
         return self.name_fi
 
 
-class ResponsibleEntity(MPTTModel):
-    """
-    Responsible Entity for a City Furniture Device
-
-    Organization chain is most often the following:
-    Toimiala > Palvelu > Yksikkö > Henkilö > Projekti (Projectwise projektin ID)
-    e.g.
-    KYMP > Yleiset Alueet > Tiimi X > Matti Meikäläinen > ABC123
-    """
-
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    name = models.CharField(_("Name"), max_length=254, help_text=_("Name (for projects use Projectwise ID)"))
-    organization_level = EnumIntegerField(
-        OrganizationLevel,
-        verbose_name=_("Organization level"),
-        default=OrganizationLevel.PROJECT,
-    )
-    parent = TreeForeignKey(
-        "self",
-        verbose_name=_("Parent Responsible Entity"),
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-        related_name="children",
-    )
-
-    class Meta:
-        db_table = "responsible_entity"
-        verbose_name = _("Responsible Entity")
-        verbose_name_plural = _("Responsible Entities")
-
-    def get_full_path(self):
-        obj = self
-        path = obj.name
-        while obj.parent is not None:
-            obj = obj.parent
-            path = f"{obj.name} > {path}"
-        return path
-
-    def clean_parent(self):
-        if self.parent and self.parent.organization_level.value > self.organization_level.value:
-            raise ValidationError({"parent": "Parent's organization level can't be below this object's level."})
-
-    def clean_fields(self, exclude=None):
-        super(ResponsibleEntity, self).clean_fields()
-        self.clean_parent()
-
-    def __str__(self):
-        return self.get_full_path()
-
-
 auditlog.register(CityFurnitureDeviceType)
 auditlog.register(CityFurnitureColor)
 auditlog.register(CityFurnitureTarget)
-auditlog.register(ResponsibleEntity)

@@ -5,7 +5,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
 from city_furniture.filters import ResponsibleEntityFilterSet
-from city_furniture.models.common import ResponsibleEntity
+from city_furniture.models import ResponsibleEntity
 from city_furniture.serializers.responsible_entity import ResponsibleEntitySerializer
 from traffic_control.permissions import IsAdminUserOrReadOnly
 
