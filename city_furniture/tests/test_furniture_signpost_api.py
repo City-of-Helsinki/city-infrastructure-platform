@@ -1,13 +1,14 @@
 import datetime
 
 import pytest
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group, Permission
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
+from city_furniture.models.responsible_entity import GroupResponsibleEntity
 from city_furniture.tests.factories import (
     add_furniture_signpost_real_operation,
     get_city_furniture_device_type,
@@ -387,6 +388,36 @@ def test__furniture_signpost_real__create__responsible_entity_permission(add_to_
 
     if add_to_responsible_entity:
         user.responsible_entities.add(responsible_entity)
+        response = client.post(reverse("v1:furnituresignpostreal-list"), data=data)
+        assert response.status_code == status.HTTP_201_CREATED
+        assert FurnitureSignpostReal.objects.count() == 1
+    else:
+        response = client.post(reverse("v1:furnituresignpostreal-list"), data=data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert FurnitureSignpostReal.objects.count() == 0
+
+
+@pytest.mark.parametrize("add_to_responsible_entity", (False, True))
+@pytest.mark.django_db
+def test__furniture_signpost_real__create__responsible_entity_permission__group(add_to_responsible_entity):
+    user = get_user(admin=False)
+    user.user_permissions.add(Permission.objects.get(codename="add_furnituresignpostreal"))
+    user.bypass_operational_area = True
+    user.save()
+    group = Group.objects.create(name="test group")
+    user.groups.add(group)
+    client = get_api_client(user=user)
+    responsible_entity = get_responsible_entity()
+    data = {
+        "location": str(test_point_3d),
+        "owner": get_owner().pk,
+        "device_type": get_city_furniture_device_type().pk,
+        "responsible_entity": responsible_entity.pk,
+    }
+
+    if add_to_responsible_entity:
+        gre = GroupResponsibleEntity.objects.create(group=group)
+        gre.responsible_entities.add(responsible_entity)
         response = client.post(reverse("v1:furnituresignpostreal-list"), data=data)
         assert response.status_code == status.HTTP_201_CREATED
         assert FurnitureSignpostReal.objects.count() == 1
