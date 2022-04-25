@@ -63,4 +63,31 @@ class ResponsibleEntity(MPTTModel):
         return self.get_full_path()
 
 
+class GroupResponsibleEntity(models.Model):
+    """Model to link ResponsibleEntities to django.contrib.auth.Group model"""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    group = models.OneToOneField(
+        Group,
+        unique=True,
+        related_name="group_responsible_entity",
+        verbose_name=_("Group"),
+        on_delete=models.CASCADE,
+    )
+    responsible_entities = models.ManyToManyField(
+        "ResponsibleEntity",
+        related_name="groups",
+        verbose_name=_("Responsible Entities"),
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = _("Group responsible entity")
+        verbose_name_plural = _("Group responsible entities")
+
+    def __str__(self):
+        return f"GroupResponsibleEntity {self.group.name}"
+
+
 auditlog.register(ResponsibleEntity)
+auditlog.register(GroupResponsibleEntity)
