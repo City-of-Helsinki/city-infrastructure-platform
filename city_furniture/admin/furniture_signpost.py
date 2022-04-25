@@ -7,6 +7,7 @@ from import_export.admin import ImportExportActionModelAdmin
 from city_furniture.admin.utils import (
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
+    ResponsibleEntityPermissionFilter,
     SimplifiedRelatedFieldListFilter,
     TreeModelFieldListFilter,
 )
@@ -73,6 +74,7 @@ class AbstractFurnitureSignpostAdmin(
 
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
         ("owner", SimplifiedRelatedFieldListFilter),
         ("responsible_entity", TreeModelFieldListFilter),
         ("target", SimplifiedRelatedFieldListFilter),
