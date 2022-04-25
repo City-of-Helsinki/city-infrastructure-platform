@@ -17,4 +17,4 @@ class ResponsibleEntityPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return request.user.has_bypass_responsible_entity_permission(obj)
+        return request.user.has_responsible_entity_permission(obj.responsible_entity)

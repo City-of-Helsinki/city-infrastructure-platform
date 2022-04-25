@@ -1,9 +1,13 @@
 import uuid
+from typing import Optional, TYPE_CHECKING
 
 from django.contrib.auth.models import Group
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from helusers.models import AbstractUser
+
+if TYPE_CHECKING:
+    from city_furniture.models import ResponsibleEntity
 
 
 class User(AbstractUser):
@@ -52,17 +56,17 @@ class User(AbstractUser):
     def has_bypass_responsible_entity_permission(self):
         return self.is_superuser or self.bypass_responsible_entity
 
-    def has_responsible_entity_permission_for_device(self, device):
+    def has_responsible_entity_permission(self, responsible_entity: Optional["ResponsibleEntity"]):
         """
         Check if user has permissions to edit given device based on ResponsibleEntity
         """
         if self.has_bypass_responsible_entity_permission():
             return True
 
-        if device.responsible_entity is None:
+        if responsible_entity is None:
             return False
 
-        return device.responsible_entity.get_ancestors(include_self=True).filter(users=self).exists()
+        return responsible_entity.get_ancestors(include_self=True).filter(users=self).exists()
 
     class Meta:
         verbose_name = _("User")
