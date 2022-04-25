@@ -7,6 +7,7 @@ from import_export import fields, widgets
 from import_export.resources import ModelResource
 
 from city_furniture.models import ResponsibleEntity
+from users.models import User
 from users.utils import get_system_user
 
 
@@ -92,7 +93,7 @@ class GenericDeviceBaseResource(ModelResource):
 class ResponsibleEntityPermissionImportMixin:
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):
         super().before_import(dataset, using_transactions, dry_run, **kwargs)
-        user = kwargs.pop("user", None)
+        user: User = kwargs.pop("user", None)
 
         if user is None:
             return
@@ -108,8 +109,7 @@ class ResponsibleEntityPermissionImportMixin:
 
             responsible_entity = ResponsibleEntity.objects.filter(name=responsible_entity_name).first()
             if responsible_entity is not None:
-                user_has_permission = responsible_entity.get_ancestors(include_self=True).filter(users=user).exists()
-                if not user_has_permission:
+                if not user.has_responsible_entity_permission(responsible_entity):
                     raise ValidationError(
                         "You do not have permissions to create or modify devices with given "
                         f"Responsible Entity ({responsible_entity})"

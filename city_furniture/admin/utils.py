@@ -165,13 +165,13 @@ class ResponsibleEntityPermissionAdminMixin:
 
     def has_change_permission(self, request, obj=None):
         """User should be able to change devices that they have permission to"""
-        if obj is not None and not request.user.has_responsible_entity_permission_for_device(obj):
+        if obj is not None and not request.user.has_responsible_entity_permission(obj.responsible_entity):
             return False
         return super().has_change_permission(request, obj=obj)
 
     def has_delete_permission(self, request, obj=None):
         """User should be able to delete devices that they have permission to"""
-        if obj is not None and not request.user.has_responsible_entity_permission_for_device(obj):
+        if obj is not None and not request.user.has_responsible_entity_permission(obj.responsible_entity):
             return False
         return super().has_delete_permission(request, obj=obj)
 
