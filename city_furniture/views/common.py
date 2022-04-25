@@ -8,7 +8,10 @@ class ResponsibleEntityPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        if request.user.has_bypass_responsible_entity_permission() or request.user.responsible_entities.exists():
+        if (
+            request.user.has_bypass_responsible_entity_permission()
+            or request.user.can_create_responsible_entity_devices()
+        ):
             return True
 
         return False

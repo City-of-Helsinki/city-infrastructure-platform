@@ -1,8 +1,10 @@
 import pytest
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 
 from city_furniture.enums import OrganizationLevel
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, ResponsibleEntity
+from city_furniture.models.responsible_entity import GroupResponsibleEntity
 from city_furniture.resources.furniture_signpost import (
     FurnitureSignpostPlanTemplateResource,
     FurnitureSignpostRealResource,
@@ -68,6 +70,28 @@ def test__furniture_signpost_real__import__responsible_entity_permission():
 
     user.responsible_entities.clear()
     user.responsible_entities.add(ResponsibleEntity.objects.get(organization_level=OrganizationLevel.DIVISION))
+    result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
+    assert not result.has_errors()
+
+
+@pytest.mark.django_db
+def test__furniture_signpost_real__import__responsible_entity_permission__group():
+    get_furniture_signpost_real()
+    dataset = FurnitureSignpostRealResource().export()
+
+    user = get_user()
+    with pytest.raises(ValidationError):
+        FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
+
+    group = Group.objects.create(name="test group")
+    user.groups.add(group)
+    gre = GroupResponsibleEntity.objects.create(group=group)
+    gre.responsible_entities.add(ResponsibleEntity.objects.get(organization_level=OrganizationLevel.PROJECT))
+    result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
+    assert not result.has_errors()
+
+    gre.responsible_entities.clear()
+    gre.responsible_entities.add(ResponsibleEntity.objects.get(organization_level=OrganizationLevel.DIVISION))
     result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
     assert not result.has_errors()
 

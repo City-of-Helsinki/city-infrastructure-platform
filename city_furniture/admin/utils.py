@@ -4,6 +4,7 @@ import tablib
 from django import forms
 from django.contrib.admin import RelatedFieldListFilter, SimpleListFilter
 from django.contrib.admin.helpers import ActionForm
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from import_export.resources import ModelResource
@@ -68,9 +69,12 @@ class ResponsibleEntityPermissionFilter(SimpleListFilter):
         if not self.value():
             return queryset
 
+        responsible_entity_qs = ResponsibleEntity.objects.filter(
+            Q(pk__in=request.user.responsible_entities.all()) | Q(groups__group__user=request.user)
+        )
         choice_ids = (
             ResponsibleEntity.objects.get_queryset_descendants(
-                ResponsibleEntity.objects.filter(pk__in=request.user.responsible_entities.all()),
+                responsible_entity_qs,
                 include_self=True,
             )
             .values_list("id", flat=True)
