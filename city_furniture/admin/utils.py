@@ -163,6 +163,18 @@ class ResponsibleEntityPermissionAdminMixin:
         form.user = request.user
         return form
 
+    def has_change_permission(self, request, obj=None):
+        """User should be able to change devices that they have permission to"""
+        if obj is not None and not request.user.has_responsible_entity_permission_for_device(obj):
+            return False
+        return super().has_change_permission(request, obj=obj)
+
+    def has_delete_permission(self, request, obj=None):
+        """User should be able to delete devices that they have permission to"""
+        if obj is not None and not request.user.has_responsible_entity_permission_for_device(obj):
+            return False
+        return super().has_delete_permission(request, obj=obj)
+
     def has_add_permission(self, request):
         """User can't add new devices if they don't have any valid ResponsibleEntity targets"""
         if (
@@ -189,6 +201,7 @@ class ResponsibleEntityPermissionAdminFormMixin:
         if (
             self.user is None
             or self.user.has_bypass_responsible_entity_permission()
+            or "responsible_entity" not in self.fields  # Form is in read-only mode, so the field doesn't exist
         ):
             # Don't modify available choices, all ResponsibleEntities should be available
             return

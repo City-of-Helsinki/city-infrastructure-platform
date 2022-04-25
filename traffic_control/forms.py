@@ -103,6 +103,11 @@ class Point3DFieldForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Form is in read-only mode, so the field doesn't exist
+        if "location" not in self.fields:
+            return
+
         self.fields["location"].label = _("Location (x,y)")
         if self.instance.location:
             self.fields["z_coord"].initial = self.instance.location.z
