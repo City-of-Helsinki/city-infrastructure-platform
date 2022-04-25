@@ -2,10 +2,13 @@ from typing import List, Tuple, Type
 
 import tablib
 from django import forms
-from django.contrib.admin import RelatedFieldListFilter
+from django.contrib.admin import RelatedFieldListFilter, SimpleListFilter
 from django.contrib.admin.helpers import ActionForm
+from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from import_export.resources import ModelResource
+
+from city_furniture.models import ResponsibleEntity
 
 
 class SimplifiedRelatedFieldListFilter(RelatedFieldListFilter):
@@ -45,6 +48,39 @@ class TreeModelFieldListFilter(RelatedFieldListFilter):
             descendant_ids = selected_object.get_descendants(include_self=True).values_list("id", flat=True).distinct()
             self.used_parameters.update({f"{self.field_path}__id__in": descendant_ids})
         return super().queryset(request, queryset)
+
+
+class ResponsibleEntityPermissionFilter(SimpleListFilter):
+    title = _("Responsible Entity Permission")
+    parameter_name = "responsible_entity_permission"
+
+    def lookups(self, request, model_admin):
+        # Don't show filter if user has access to all devices
+        if request.user.bypass_responsible_entity or request.user.is_superuser:
+            return []
+
+        return [
+            (True, "Has permission"),
+            (False, "No permission"),
+        ]
+
+    def queryset(self, request, queryset):
+        if not self.value():
+            return queryset
+
+        choice_ids = (
+            ResponsibleEntity.objects.get_queryset_descendants(
+                ResponsibleEntity.objects.filter(pk__in=request.user.responsible_entities.all()),
+                include_self=True,
+            )
+            .values_list("id", flat=True)
+            .distinct()
+        )
+
+        if self.value() == "True":
+            return queryset.filter(responsible_entity__pk__in=choice_ids)
+        elif self.value() == "False":
+            return queryset.exclude(responsible_entity__pk__in=choice_ids)
 
 
 class MultiResourceExportActionAdminMixin:
@@ -112,20 +148,20 @@ class MultiResourceExportActionAdminMixin:
 
 
 class ResponsibleEntityPermissionAdminMixin:
+    def changelist_view(self, request, extra_context=None):
+        """Use responsible_entity_permission=yes filter by default if user doesn't have access to all devices"""
+        if not (request.user.bypass_responsible_entity or request.user.is_superuser) and (
+            not request.META["QUERY_STRING"]  # No filters selected
+            # Don't apply this filter if user modified filters (referer is from the same URL)
+            and not request.META.get("HTTP_REFERER", "").startswith(request.build_absolute_uri())
+        ):
+            return HttpResponseRedirect(request.path + "?responsible_entity_permission=True")
+        return super().changelist_view(request, extra_context=extra_context)
+
     def has_bypass_responsible_entity_permission(self, request):
         if request.user.is_superuser or request.user.bypass_responsible_entity:
             return True
         return False
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-
-        if self.has_bypass_responsible_entity_permission(request):
-            return qs
-
-        return qs.exclude(responsible_entity__isnull=True).filter(
-            responsible_entity__in=request.user.responsible_entities.all().get_descendants(include_self=True)
-        )
 
     def get_form(self, request, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)
