@@ -1,5 +1,3 @@
-from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
-from django.contrib.auth.models import Group
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
@@ -12,10 +10,6 @@ class GroupOperationalAreaInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = _("Operational areas")
     filter_horizontal = ("areas",)
-
-
-class GroupAdmin(BaseGroupAdmin):
-    inlines = (GroupOperationalAreaInline,)
 
 
 class OperationalAreaAdmin(admin.OSMGeoAdmin):
@@ -36,6 +30,4 @@ class OperationalAreaAdmin(admin.OSMGeoAdmin):
     list_filter = ("area_type", "contractor", "status")
 
 
-admin.site.unregister(Group)
-admin.site.register(Group, GroupAdmin)
 admin.site.register(OperationalArea, OperationalAreaAdmin)
