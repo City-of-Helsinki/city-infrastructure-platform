@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
 from city_furniture.enums import OrganizationLevel
-from city_furniture.models.common import ResponsibleEntity
+from city_furniture.models import ResponsibleEntity
 from city_furniture.tests.factories import get_responsible_entity
 from traffic_control.tests.factories import get_api_client, get_user
 

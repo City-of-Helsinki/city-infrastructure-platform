@@ -5,13 +5,13 @@ from typing import Optional
 from django.urls import reverse
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel, OrganizationLevel
-from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, FurnitureSignpostRealOperation
-from city_furniture.models.common import (
-    CityFurnitureColor,
-    CityFurnitureDeviceType,
-    CityFurnitureTarget,
+from city_furniture.models import (
+    FurnitureSignpostPlan,
+    FurnitureSignpostReal,
+    FurnitureSignpostRealOperation,
     ResponsibleEntity,
 )
+from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
 from traffic_control.tests.factories import get_mount_type, get_operation_type, get_owner, get_user
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
