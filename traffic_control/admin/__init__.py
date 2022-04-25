@@ -16,7 +16,6 @@ from traffic_control.admin.mount import (
     MountRealFileInline,
     PortalTypeAdmin,
 )
-from traffic_control.admin.operational_area import GroupAdmin, OperationalAreaAdmin
 from traffic_control.admin.owner import OwnerAdmin
 from traffic_control.admin.plan import PlanAdmin
 from traffic_control.admin.road_marking import (

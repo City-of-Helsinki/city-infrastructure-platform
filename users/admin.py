@@ -1,6 +1,10 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin, UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import Group
+from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
+
+from city_furniture.admin.responsible_entity import GroupResponsibleEntityInline
+from traffic_control.admin.operational_area import GroupOperationalAreaInline
 
 from .models import User
 
@@ -33,3 +37,14 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+
+
+class GroupAdmin(BaseGroupAdmin):
+    inlines = (
+        GroupOperationalAreaInline,
+        GroupResponsibleEntityInline,
+    )
+
+
+admin.site.unregister(Group)
+admin.site.register(Group, GroupAdmin)
