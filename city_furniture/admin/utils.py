@@ -158,23 +158,26 @@ class ResponsibleEntityPermissionAdminMixin:
             return HttpResponseRedirect(request.path + "?responsible_entity_permission=True")
         return super().changelist_view(request, extra_context=extra_context)
 
-    def has_bypass_responsible_entity_permission(self, request):
-        if request.user.is_superuser or request.user.bypass_responsible_entity:
-            return True
-        return False
-
     def get_form(self, request, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)
         form.user = request.user
         return form
 
     def has_add_permission(self, request):
-        if not self.has_bypass_responsible_entity_permission(request) and not request.user.responsible_entities.count():
+        """User can't add new devices if they don't have any valid ResponsibleEntity targets"""
+        if (
+            not request.user.has_bypass_responsible_entity_permission()
+            and not request.user.responsible_entities.count()
+        ):
             return False
         return super().has_add_permission(request)
 
     def has_import_permission(self, request):
-        if not self.has_bypass_responsible_entity_permission(request) and not request.user.responsible_entities.count():
+        """User can't import new devices if they don't have any valid ResponsibleEntity targets"""
+        if (
+            not request.user.has_bypass_responsible_entity_permission()
+            and not request.user.responsible_entities.count()
+        ):
             return False
         return super().has_import_permission(request)
 
@@ -183,7 +186,11 @@ class ResponsibleEntityPermissionAdminFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if self.user is None or self.user.is_superuser or self.user.bypass_responsible_entity:
+        if (
+            self.user is None
+            or self.user.has_bypass_responsible_entity_permission()
+        ):
+            # Don't modify available choices, all ResponsibleEntities should be available
             return
 
         # Restrict available choices to ResponsibleEntities that are valid for logged in user

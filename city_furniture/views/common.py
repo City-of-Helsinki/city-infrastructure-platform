@@ -8,21 +8,13 @@ class ResponsibleEntityPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        if request.user.is_superuser or request.user.bypass_responsible_entity:
+        if request.user.has_bypass_responsible_entity_permission() or request.user.responsible_entities.exists():
             return True
 
-        if request.user.responsible_entities.exists():
-            return True
         return False
 
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        if request.user.is_superuser or request.user.bypass_responsible_entity:
-            return True
-
-        if obj.responsible_entity is None:
-            return False
-
-        return obj.responsible_entity.get_ancestors(include_self=True).filter(users=request.user).exists()
+        return request.user.has_bypass_responsible_entity_permission(obj)
