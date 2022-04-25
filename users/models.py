@@ -49,6 +49,21 @@ class User(AbstractUser):
             or groups.filter(operational_area__areas__location__contains=location).exists()
         )
 
+    def has_bypass_responsible_entity_permission(self):
+        return self.is_superuser or self.bypass_responsible_entity
+
+    def has_responsible_entity_permission_for_device(self, device):
+        """
+        Check if user has permissions to edit given device based on ResponsibleEntity
+        """
+        if self.has_bypass_responsible_entity_permission():
+            return True
+
+        if device.responsible_entity is None:
+            return False
+
+        return device.responsible_entity.get_ancestors(include_self=True).filter(users=self).exists()
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
