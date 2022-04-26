@@ -9,3 +9,5 @@ var/
 .*
 **/node_modules
 **/build
+.git/
+.env
