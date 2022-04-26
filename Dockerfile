@@ -7,7 +7,6 @@ LABEL vendor="Anders Innovations Oy"
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /city-infrastructure-platform && \
-    mkdir /map-view && \
     groupadd -g 1000 appuser && \
     useradd -u 1000 -g appuser -ms /bin/bash appuser
 WORKDIR /city-infrastructure-platform
@@ -24,19 +23,15 @@ RUN apt-get update && \
         git \
         gettext \
         mime-support \
-        curl \
-        nodejs \
-        npm && \
+        curl && \
     curl -sSL --retry 5 https://install.python-poetry.org | python - && \
     /root/.local/bin/poetry config virtualenvs.create false && \
     /root/.local/bin/poetry install --no-dev --no-interaction && \
-    npm install -g yarn && \
     apt-get remove -y build-essential libpq-dev && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives && \
-    rm -rf /root/.cache/pip && \
-    npm cache clean --force
+    rm -rf /root/.cache/pip
 
 COPY docker-entrypoint.sh /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
@@ -57,7 +52,7 @@ USER appuser
 EXPOSE 8000
 
 # ===================================
-FROM base AS build
+FROM node:16-slim AS build
 # ===================================
 COPY map-view/ /map-view/
 RUN cd /map-view && \
