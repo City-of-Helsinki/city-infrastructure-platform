@@ -29,6 +29,11 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Set up NodeJS 16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
     - name: Install required Ubuntu packages
       run: |
         sudo apt-get install gdal-bin
@@ -52,6 +57,23 @@ jobs:
     - name: Run pytest code functionality tests
       run: |
         pytest -ra -vvv --cov=.
+
+    - name: Install NodeJS dependencies
+      run: |
+        yarn --cwd map-view install --frozen-lockfile
+
+    - name: Run NodeJS code neatness tests
+      run: |
+        yarn --cwd map-view lint
+        yarn --cwd map-view validate-ts
+
+    - name: Run NodeJS build
+      run: |
+        yarn --cwd map-view build
+
+    - name: Run NodeJS code functionality tests
+      run: |
+        yarn --cwd map-view test
 
     # Majority of the tests require database
     services:
