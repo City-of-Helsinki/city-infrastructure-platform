@@ -31,6 +31,7 @@ RUN apt-get update && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives && \
+    rm -rf /root/.cache/pypoetry && \
     rm -rf /root/.cache/pip
 
 COPY docker-entrypoint.sh /usr/local/bin
