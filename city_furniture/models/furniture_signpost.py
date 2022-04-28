@@ -54,7 +54,7 @@ class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControl
         on_delete=models.PROTECT,
     )
     responsible_entity = models.ForeignKey(
-        "ResponsibleEntity",
+        "traffic_control.ResponsibleEntity",
         verbose_name=_("Responsible entity"),
         blank=True,
         null=True,

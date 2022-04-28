@@ -10,4 +10,3 @@ from .furniture_signpost import (
     FurnitureSignpostRealFile,
     FurnitureSignpostRealOperation,
 )
-from .responsible_entity import ResponsibleEntity

@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from helusers.models import AbstractUser
 
 if TYPE_CHECKING:
-    from city_furniture.models import ResponsibleEntity
+    from traffic_control.models import ResponsibleEntity
 
 
 class User(AbstractUser):
@@ -30,7 +30,7 @@ class User(AbstractUser):
         default=False,
     )
     responsible_entities = models.ManyToManyField(
-        "city_furniture.ResponsibleEntity",
+        "traffic_control.ResponsibleEntity",
         related_name="users",
         verbose_name=_("Responsible entities"),
         help_text=_(
@@ -58,7 +58,7 @@ class User(AbstractUser):
         return self.is_superuser or self.bypass_responsible_entity
 
     def can_create_responsible_entity_devices(self):
-        from city_furniture.models.responsible_entity import GroupResponsibleEntity
+        from traffic_control.models import GroupResponsibleEntity
 
         return (
             self.has_bypass_responsible_entity_permission()

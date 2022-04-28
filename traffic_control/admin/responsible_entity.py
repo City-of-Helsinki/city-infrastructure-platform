@@ -2,9 +2,8 @@ from django import forms
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
-from city_furniture.models import ResponsibleEntity
-from city_furniture.models.responsible_entity import GroupResponsibleEntity
 from traffic_control.admin import AuditLogHistoryAdmin
+from traffic_control.models import GroupResponsibleEntity, ResponsibleEntity
 
 
 class ResponsibleEntityAdminForm(forms.ModelForm):

@@ -4,10 +4,10 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
-from city_furniture.filters import ResponsibleEntityFilterSet
-from city_furniture.models import ResponsibleEntity
-from city_furniture.serializers.responsible_entity import ResponsibleEntitySerializer
+from traffic_control.filters import ResponsibleEntityFilterSet
+from traffic_control.models import ResponsibleEntity
 from traffic_control.permissions import IsAdminUserOrReadOnly
+from traffic_control.serializers.responsible_entity import ResponsibleEntitySerializer
 
 __all__ = ("ResponsibleEntityViewSet",)
 

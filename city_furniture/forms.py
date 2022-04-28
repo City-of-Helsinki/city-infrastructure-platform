@@ -1,5 +1,5 @@
-from city_furniture.admin.utils import ResponsibleEntityPermissionAdminFormMixin
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
+from traffic_control.admin.utils import ResponsibleEntityPermissionAdminFormMixin
 from traffic_control.forms import Point3DFieldForm
 
 

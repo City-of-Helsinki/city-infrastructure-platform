@@ -7,6 +7,7 @@ from django.contrib.gis.geos import MultiPolygon
 from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
+from city_furniture.enums import OrganizationLevel
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle
 from traffic_control.models import (
     AdditionalSignContentPlan,
@@ -26,6 +27,7 @@ from traffic_control.models import (
     Owner,
     Plan,
     Reflective,
+    ResponsibleEntity,
     RoadMarkingColor,
     RoadMarkingPlan,
     RoadMarkingReal,
@@ -523,3 +525,27 @@ def add_traffic_light_real_operation(
         created_by=user,
         updated_by=user,
     )
+
+
+def get_responsible_entity(name="ABC-123"):
+    division = ResponsibleEntity.objects.get_or_create(
+        name="KYMP",
+        defaults=dict(organization_level=OrganizationLevel.DIVISION),
+    )[0]
+    service = ResponsibleEntity.objects.get_or_create(
+        name="Yleiset alueet",
+        defaults=dict(parent=division, organization_level=OrganizationLevel.SERVICE),
+    )[0]
+    unit = ResponsibleEntity.objects.get_or_create(
+        name="Unit Name",
+        defaults=dict(parent=service, organization_level=OrganizationLevel.UNIT),
+    )[0]
+    person = ResponsibleEntity.objects.get_or_create(
+        name="Matti Meikäläinen",
+        defaults=dict(parent=unit, organization_level=OrganizationLevel.PERSON),
+    )[0]
+    project = ResponsibleEntity.objects.get_or_create(
+        name=name,
+        defaults=dict(parent=person, organization_level=OrganizationLevel.PROJECT),
+    )[0]
+    return project

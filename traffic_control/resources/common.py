@@ -6,7 +6,7 @@ from django.utils.encoding import force_str
 from import_export import fields, widgets
 from import_export.resources import ModelResource
 
-from city_furniture.models import ResponsibleEntity
+from traffic_control.models import ResponsibleEntity
 from users.models import User
 from users.utils import get_system_user
 

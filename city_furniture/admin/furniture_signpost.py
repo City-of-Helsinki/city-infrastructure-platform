@@ -4,13 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 from import_export.admin import ImportExportActionModelAdmin
 
-from city_furniture.admin.utils import (
-    MultiResourceExportActionAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
-    ResponsibleEntityPermissionFilter,
-    SimplifiedRelatedFieldListFilter,
-    TreeModelFieldListFilter,
-)
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
     FurnitureSignpostPlan,
@@ -26,6 +19,13 @@ from city_furniture.resources.furniture_signpost import (
 )
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
+from traffic_control.admin.utils import (
+    MultiResourceExportActionAdminMixin,
+    ResponsibleEntityPermissionAdminMixin,
+    ResponsibleEntityPermissionFilter,
+    SimplifiedRelatedFieldListFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
@@ -75,8 +75,8 @@ class AbstractFurnitureSignpostAdmin(
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
-        ("owner", SimplifiedRelatedFieldListFilter),
         ("responsible_entity", TreeModelFieldListFilter),
+        ("owner", SimplifiedRelatedFieldListFilter),
         ("target", SimplifiedRelatedFieldListFilter),
         ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
@@ -103,13 +103,13 @@ class AbstractFurnitureSignpostAdmin(
         {
             "fields": (
                 "owner",
+                "responsible_entity",
                 "device_type",
                 "target",
                 "mount_type",
                 "additional_material_url",
                 "source_id",
                 "source_name",
-                "responsible_entity",
             )
         },
     )

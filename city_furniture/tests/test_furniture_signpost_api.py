@@ -8,15 +8,20 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
-from city_furniture.models.responsible_entity import GroupResponsibleEntity
 from city_furniture.tests.factories import (
     add_furniture_signpost_real_operation,
     get_city_furniture_device_type,
     get_furniture_signpost_plan,
     get_furniture_signpost_real,
-    get_responsible_entity,
 )
-from traffic_control.tests.factories import get_api_client, get_operation_type, get_owner, get_user
+from traffic_control.models import GroupResponsibleEntity
+from traffic_control.tests.factories import (
+    get_api_client,
+    get_operation_type,
+    get_owner,
+    get_responsible_entity,
+    get_user,
+)
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
 
 
