@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models.common import CityFurnitureDeviceType
+from traffic_control.models import MountType
 
 
 class Command(BaseCommand):
@@ -62,3 +63,26 @@ class Command(BaseCommand):
 
                 count += 1
         self.stdout.write(f"{count} traffic control device types are imported")
+
+        # Create new MountTypes
+        MountType.objects.get_or_create(
+            description_fi="Ristikkopylväs",
+            defaults=dict(
+                code="LATTICECOLUMN",
+                description="Lattice column",
+            ),
+        )
+        MountType.objects.get_or_create(
+            description_fi="Katuvalopylväs",
+            defaults=dict(
+                code="STREETLIGHTPOLE",
+                description="Street light pole",
+            ),
+        )
+        MountType.objects.get_or_create(
+            description_fi="Opaste",
+            defaults=dict(
+                code="POLE",
+                description="Pole",
+            ),
+        )
