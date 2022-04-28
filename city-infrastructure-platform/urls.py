@@ -12,7 +12,6 @@ from city_furniture.views import (
     city_furniture_device_type as city_furniture_device_type_views,
     city_furniture_target as city_furniture_target_views,
     furniture_signpost as furniture_signpost_views,
-    responsible_entity as responsible_entity_views,
 )
 from map import views as map_views
 from traffic_control.views import (
@@ -23,6 +22,7 @@ from traffic_control.views import (
     operational_area as operational_area_views,
     owner as owner_views,
     plan as plan_views,
+    responsible_entity as responsible_entity_views,
     road_marking as road_marking_views,
     signpost as signpost_views,
     traffic_light as traffic_light_views,

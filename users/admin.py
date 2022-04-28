@@ -3,8 +3,8 @@ from django.contrib.auth.models import Group
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
-from city_furniture.admin.responsible_entity import GroupResponsibleEntityInline
 from traffic_control.admin.operational_area import GroupOperationalAreaInline
+from traffic_control.admin.responsible_entity import GroupResponsibleEntityInline
 
 from .models import User
 

@@ -29,6 +29,7 @@ from traffic_control.models.mount import (
 )
 from traffic_control.models.operational_area import GroupOperationalArea, OperationalArea
 from traffic_control.models.plan import Plan
+from traffic_control.models.responsible_entity import GroupResponsibleEntity, ResponsibleEntity
 from traffic_control.models.road_marking import (
     ArrowDirection,
     LineDirection,

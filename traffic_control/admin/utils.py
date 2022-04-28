@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from import_export.resources import ModelResource
 
-from city_furniture.models import ResponsibleEntity
+from traffic_control.models import ResponsibleEntity
 
 
 class SimplifiedRelatedFieldListFilter(RelatedFieldListFilter):

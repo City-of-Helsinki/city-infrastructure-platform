@@ -39,7 +39,6 @@ class ResponsibleEntity(MPTTModel):
     )
 
     class Meta:
-        db_table = "responsible_entity"
         verbose_name = _("Responsible Entity")
         verbose_name_plural = _("Responsible Entities")
 

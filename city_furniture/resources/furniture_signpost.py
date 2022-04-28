@@ -1,15 +1,15 @@
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
-from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, ResponsibleEntity
+from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
-from city_furniture.resources.common import (
+from traffic_control.enums import Condition, Lifecycle
+from traffic_control.models import MountPlan, MountReal, MountType, Owner, Plan, ResponsibleEntity
+from traffic_control.resources.common import (
     GenericDeviceBaseResource,
     ResourceEnumIntegerField,
     ResponsibleEntityPermissionImportMixin,
 )
-from traffic_control.enums import Condition, Lifecycle
-from traffic_control.models import MountPlan, MountReal, MountType, Owner, Plan
 
 
 class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):

@@ -1,7 +1,7 @@
 from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 
-from city_furniture.models import ResponsibleEntity
+from traffic_control.models import ResponsibleEntity
 
 
 class ResponsibleEntitySerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):

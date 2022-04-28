@@ -23,6 +23,7 @@ from traffic_control.models import (
     Owner,
     Plan,
     PortalType,
+    ResponsibleEntity,
     RoadMarkingPlan,
     RoadMarkingReal,
     RoadMarkingRealOperation,
@@ -226,3 +227,23 @@ class SignpostRealOperationFilterSet(FilterSet):
 class RoadMarkingRealOperationFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = RoadMarkingRealOperation
+
+
+class ResponsibleEntityFilter(Filter):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def filter(self, qs, value):
+        if value:
+            selected_object = ResponsibleEntity.objects.filter(id=value).first()
+            if selected_object is None:
+                raise NotFound({"responsible_entity": f"Responsible Entity with ID `{value}` was not found."})
+
+            descendant_ids = selected_object.get_descendants(include_self=True).values_list("id", flat=True).distinct()
+            qs = qs.filter(responsible_entity__id__in=descendant_ids)
+        return qs
+
+
+class ResponsibleEntityFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = ResponsibleEntity

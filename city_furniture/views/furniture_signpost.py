@@ -24,9 +24,13 @@ from city_furniture.serializers.furniture_signpost import (
     FurnitureSignpostRealOperationSerializer,
     FurnitureSignpostRealSerializer,
 )
-from city_furniture.views.common import ResponsibleEntityPermission
 from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
-from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
+from traffic_control.views._common import (
+    FileUploadViews,
+    OperationViewSet,
+    ResponsibleEntityPermission,
+    TrafficControlViewSet,
+)
 
 __all__ = (
     "FurnitureSignpostPlanViewSet",

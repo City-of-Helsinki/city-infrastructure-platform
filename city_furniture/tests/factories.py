@@ -4,40 +4,17 @@ from typing import Optional
 
 from django.urls import reverse
 
-from city_furniture.enums import CityFurnitureDeviceTypeTargetModel, OrganizationLevel
-from city_furniture.models import (
-    FurnitureSignpostPlan,
-    FurnitureSignpostReal,
-    FurnitureSignpostRealOperation,
-    ResponsibleEntity,
-)
+from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
+from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, FurnitureSignpostRealOperation
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
-from traffic_control.tests.factories import get_mount_type, get_operation_type, get_owner, get_user
+from traffic_control.tests.factories import (
+    get_mount_type,
+    get_operation_type,
+    get_owner,
+    get_responsible_entity,
+    get_user,
+)
 from traffic_control.tests.test_base_api_3d import test_point_3d
-
-
-def get_responsible_entity(name="ABC-123"):
-    division = ResponsibleEntity.objects.get_or_create(
-        name="KYMP",
-        defaults=dict(organization_level=OrganizationLevel.DIVISION),
-    )[0]
-    service = ResponsibleEntity.objects.get_or_create(
-        name="Yleiset alueet",
-        defaults=dict(parent=division, organization_level=OrganizationLevel.SERVICE),
-    )[0]
-    unit = ResponsibleEntity.objects.get_or_create(
-        name="Unit Name",
-        defaults=dict(parent=service, organization_level=OrganizationLevel.UNIT),
-    )[0]
-    person = ResponsibleEntity.objects.get_or_create(
-        name="Matti Meikäläinen",
-        defaults=dict(parent=unit, organization_level=OrganizationLevel.PERSON),
-    )[0]
-    project = ResponsibleEntity.objects.get_or_create(
-        name=name,
-        defaults=dict(parent=person, organization_level=OrganizationLevel.PROJECT),
-    )[0]
-    return project
 
 
 def get_city_furniture_color(name="Color", rgb="#FFFFFF"):
