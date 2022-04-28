@@ -4,6 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.utils import (
+    ResponsibleEntityPermissionAdminMixin,
+    ResponsibleEntityPermissionFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
@@ -33,6 +38,7 @@ class SignpostPlanFileInline(admin.TabularInline):
 
 @admin.register(SignpostPlan)
 class SignpostPlanAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -97,7 +103,11 @@ class SignpostPlanAdmin(
         "lifecycle",
         "location",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -124,6 +134,7 @@ class SignpostRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(SignpostReal)
 class SignpostRealAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -207,7 +218,11 @@ class SignpostRealAdmin(
         "location",
         "installation_date",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",
