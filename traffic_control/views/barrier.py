@@ -15,7 +15,12 @@ from traffic_control.serializers.barrier import (
     BarrierRealOperationSerializer,
     BarrierRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
+from traffic_control.views._common import (
+    FileUploadViews,
+    OperationViewSet,
+    ResponsibleEntityPermission,
+    TrafficControlViewSet,
+)
 
 __all__ = ("BarrierPlanViewSet", "BarrierRealViewSet")
 
@@ -52,6 +57,7 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": BarrierPlanSerializer,
         "geojson": BarrierPlanGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = BarrierPlan.objects.active()
     filterset_class = BarrierPlanFilterSet
     file_queryset = BarrierPlanFile.objects.all()
@@ -131,6 +137,7 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": BarrierRealSerializer,
         "geojson": BarrierRealGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = BarrierReal.objects.active()
     filterset_class = BarrierRealFilterSet
     file_queryset = BarrierRealFile.objects.all()

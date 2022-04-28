@@ -25,7 +25,12 @@ from traffic_control.serializers.road_marking import (
     RoadMarkingRealOperationSerializer,
     RoadMarkingRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
+from traffic_control.views._common import (
+    FileUploadViews,
+    OperationViewSet,
+    ResponsibleEntityPermission,
+    TrafficControlViewSet,
+)
 
 __all__ = ("RoadMarkingPlanViewSet", "RoadMarkingRealViewSet")
 
@@ -62,6 +67,7 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": RoadMarkingPlanSerializer,
         "geojson": RoadMarkingPlanGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = RoadMarkingPlan.objects.active()
     filterset_class = RoadMarkingPlanFilterSet
     file_queryset = RoadMarkingPlanFile.objects.all()
@@ -141,6 +147,7 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": RoadMarkingRealSerializer,
         "geojson": RoadMarkingRealGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = RoadMarkingReal.objects.active()
     filterset_class = RoadMarkingRealFilterSet
     file_queryset = RoadMarkingRealFile.objects.all()

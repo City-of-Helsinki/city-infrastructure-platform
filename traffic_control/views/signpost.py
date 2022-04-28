@@ -15,7 +15,12 @@ from traffic_control.serializers.signpost import (
     SignpostRealOperationSerializer,
     SignpostRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
+from traffic_control.views._common import (
+    FileUploadViews,
+    OperationViewSet,
+    ResponsibleEntityPermission,
+    TrafficControlViewSet,
+)
 
 __all__ = ("SignpostPlanViewSet", "SignpostRealViewSet")
 
@@ -52,6 +57,7 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": SignpostPlanSerializer,
         "geojson": SignpostPlanGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = SignpostPlan.objects.active()
     filterset_class = SignpostPlanFilterSet
     file_queryset = SignpostPlanFile.objects.all()
@@ -131,6 +137,7 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": SignpostRealSerializer,
         "geojson": SignpostRealGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = SignpostReal.objects.active()
     filterset_class = SignpostRealFilterSet
     file_queryset = SignpostRealFile.objects.all()
