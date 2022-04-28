@@ -89,18 +89,29 @@ class Map {
       view,
     });
 
+    /**
+     * Return all features that exist in the position that user clicked the map
+     * This is ran once per visible layer
+     */
     async function getFeatureFromLayer(layer: VectorLayer<VectorSource>, pixel: Pixel) {
-      // Save layer model's app name to feature so it can be used when making the Admin URL
+      // Get features from clicked pixel
       return await layer.getFeatures(pixel).then((features) => {
         if (features.length) {
-          // @ts-ignore
-          const feature: Feature = features[0];
-          // Only get features that have ids (devices)
-          if (feature["id_"]) {
-            const featureType: string = feature["id_"].split(".")[0];
-            const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
-            feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
-            return [feature];
+          // `features` always contains zero or only one Feature
+          const clusterFeature: FeatureLike = features[0];
+          // Only get features are devices, ignore any non-device features such as lines between real and plan
+          const clusterFeatures = clusterFeature.get("features");
+          if (clusterFeatures !== undefined && clusterFeatures.length) {
+            // Add `app_name` property to all features inside the `clusterFeature`
+            clusterFeature.set(
+              "features",
+              clusterFeatures.map((feature: Feature) => {
+                const featureType: string = feature["id_"].split(".")[0];
+                const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
+                feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
+                return feature;
+              })
+            );
           }
         }
         return features;
@@ -113,10 +124,9 @@ class Map {
       if (visibleLayers.length > 0) {
         // Combine the topmost feature from all visible layers into a single array
         Promise.all(visibleLayers.map((layer) => getFeatureFromLayer(layer, event.pixel))).then((features) => {
+          features = features.filter((f) => f.length > 0);
           // Extract features from a cluster
-          // @ts-ignore
           if (features.length && features[0].length && features[0][0].get("features")) {
-            // @ts-ignore
             features = features[0][0].get("features");
           }
 
@@ -167,8 +177,7 @@ class Map {
               });
               this.extraVectorLayer.getSource()!.addFeature(olFeature);
 
-              // Calculate distance between Real and Plan
-
+              // Return distance between Real and Plan
               resolve(calculateDistance(real_location, plan_location));
             }
           });
