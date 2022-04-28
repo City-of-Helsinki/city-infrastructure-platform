@@ -48,9 +48,10 @@ from traffic_control.models import (
 from traffic_control.models.common import OperationType
 from traffic_control.tests.test_base_api import test_multi_polygon, test_point, test_polygon
 from traffic_control.tests.test_base_api_3d import test_point_3d
+from users.models import User
 
 
-def get_user(username=None, admin=False):
+def get_user(username=None, admin=False, bypass_operational_area=False, bypass_responsible_entity=False) -> User:
     if not username:
         username = get_random_string(length=12)  # pragma: no cover
     return get_user_model().objects.get_or_create(
@@ -61,6 +62,8 @@ def get_user(username=None, admin=False):
         email="test@example.com",
         is_staff=admin,
         is_superuser=admin,
+        bypass_responsible_entity=bypass_responsible_entity,
+        bypass_operational_area=bypass_operational_area,
     )[0]
 
 

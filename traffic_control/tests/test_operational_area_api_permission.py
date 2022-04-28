@@ -137,7 +137,7 @@ model_factory_map = {
 )
 def test__api_operational_area_permission__create(model, location, success):
     operational_area = get_operational_area()
-    user = get_user()
+    user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
     user.user_permissions.add(*perms)
@@ -198,7 +198,7 @@ def test__api_operational_area_permission__create(model, location, success):
 )
 def test__api_operational_area_permission__create__geojson(location, success):
     operational_area = get_operational_area()
-    user = get_user()
+    user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains="barrierplan")
     user.operational_areas.add(operational_area)
     user.user_permissions.add(*perms)
@@ -268,7 +268,7 @@ def test__api_operational_area_permission__create__geojson(location, success):
 )
 def test__api_operational_area_permission__update(model, location, success):
     operational_area = get_operational_area()
-    user = get_user()
+    user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
     user.user_permissions.add(*perms)
@@ -360,7 +360,7 @@ def test__api_operational_area_permission__update(model, location, success):
 )
 def test__api_operational_area_permission__partial_update(model, location, success):
     operational_area = get_operational_area()
-    user = get_user()
+    user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
     user.user_permissions.add(*perms)
@@ -423,7 +423,7 @@ def test__api_operational_area_permission__partial_update(model, location, succe
 )
 def test__api_operational_area_permission__delete(model, location, success):
     operational_area = get_operational_area()
-    user = get_user()
+    user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
     user.user_permissions.add(*perms)

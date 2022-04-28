@@ -32,7 +32,12 @@ from traffic_control.serializers.traffic_sign import (
     TrafficSignRealOperationSerializer,
     TrafficSignRealSerializer,
 )
-from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
+from traffic_control.views._common import (
+    FileUploadViews,
+    OperationViewSet,
+    ResponsibleEntityPermission,
+    TrafficControlViewSet,
+)
 
 __all__ = (
     "TrafficControlDeviceTypeViewSet",
@@ -107,6 +112,7 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": TrafficSignPlanSerializer,
         "geojson": TrafficSignPlanGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = TrafficSignPlan.objects.active()
     filterset_class = TrafficSignPlanFilterSet
     file_queryset = TrafficSignPlanFile.objects.all()
@@ -186,6 +192,7 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": TrafficSignRealSerializer,
         "geojson": TrafficSignRealGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = TrafficSignReal.objects.active()
     filterset_class = TrafficSignRealFilterSet
     file_queryset = TrafficSignRealFile.objects.all()

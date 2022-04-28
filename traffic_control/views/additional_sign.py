@@ -30,7 +30,7 @@ from traffic_control.serializers.additional_sign import (
     AdditionalSignRealOperationSerializer,
     AdditionalSignRealSerializer,
 )
-from traffic_control.views._common import OperationViewSet, TrafficControlViewSet
+from traffic_control.views._common import OperationViewSet, ResponsibleEntityPermission, TrafficControlViewSet
 
 
 @method_decorator(
@@ -71,6 +71,7 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet):
         "default": AdditionalSignPlanSerializer,
         "geojson": AdditionalSignPlanGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = AdditionalSignPlan.objects.active()
     filterset_class = AdditionalSignPlanFilterSet
 
@@ -113,6 +114,7 @@ class AdditionalSignRealViewSet(TrafficControlViewSet):
         "default": AdditionalSignRealSerializer,
         "geojson": AdditionalSignRealGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = AdditionalSignReal.objects.none()
     filterset_class = AdditionalSignRealFilterSet
 

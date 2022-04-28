@@ -377,11 +377,9 @@ def test__furniture_signpost_real_operation__update(admin_user):
 # Responsible Entity permissions
 @pytest.mark.parametrize("add_to_responsible_entity", (False, True))
 @pytest.mark.django_db
-def test__furniture_signpost_real__create__responsible_entity_permission(add_to_responsible_entity):
-    user = get_user(admin=False)
+def test__furniture_signpost_real__responsible_entity_permission__create(add_to_responsible_entity):
+    user = get_user(admin=False, bypass_operational_area=True)
     user.user_permissions.add(Permission.objects.get(codename="add_furnituresignpostreal"))
-    user.bypass_operational_area = True
-    user.save()
     client = get_api_client(user=user)
     responsible_entity = get_responsible_entity()
     data = {
@@ -404,11 +402,30 @@ def test__furniture_signpost_real__create__responsible_entity_permission(add_to_
 
 @pytest.mark.parametrize("add_to_responsible_entity", (False, True))
 @pytest.mark.django_db
+def test__furniture_signpost_real__responsible_entity_permission__delete(add_to_responsible_entity):
+    user = get_user(admin=False, bypass_operational_area=True)
+    user.user_permissions.add(Permission.objects.get(codename="delete_furnituresignpostreal"))
+    client = get_api_client(user=user)
+    instance = get_furniture_signpost_real()
+
+    if add_to_responsible_entity:
+        user.responsible_entities.add(instance.responsible_entity)
+        response = client.delete(reverse("v1:furnituresignpostreal-detail", kwargs={"pk": instance.pk}))
+        instance.refresh_from_db()
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not instance.is_active
+    else:
+        response = client.delete(reverse("v1:furnituresignpostreal-detail", kwargs={"pk": instance.pk}))
+        instance.refresh_from_db()
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert instance.is_active
+
+
+@pytest.mark.parametrize("add_to_responsible_entity", (False, True))
+@pytest.mark.django_db
 def test__furniture_signpost_real__create__responsible_entity_permission__group(add_to_responsible_entity):
-    user = get_user(admin=False)
+    user = get_user(admin=False, bypass_operational_area=True)
     user.user_permissions.add(Permission.objects.get(codename="add_furnituresignpostreal"))
-    user.bypass_operational_area = True
-    user.save()
     group = Group.objects.create(name="test group")
     user.groups.add(group)
     client = get_api_client(user=user)

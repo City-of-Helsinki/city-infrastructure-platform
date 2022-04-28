@@ -35,7 +35,12 @@ from traffic_control.serializers.mount import (
     MountTypeSerializer,
     PortalTypeSerializer,
 )
-from traffic_control.views._common import FileUploadViews, OperationViewSet, TrafficControlViewSet
+from traffic_control.views._common import (
+    FileUploadViews,
+    OperationViewSet,
+    ResponsibleEntityPermission,
+    TrafficControlViewSet,
+)
 
 __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
 
@@ -72,6 +77,7 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "default": MountPlanSerializer,
         "geojson": MountPlanGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = MountPlan.objects.active()
     filterset_class = MountPlanFilterSet
     file_queryset = MountPlanFile.objects.all()
@@ -151,6 +157,7 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": MountRealSerializer,
         "geojson": MountRealGeoJSONSerializer,
     }
+    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     serializer_class = MountRealSerializer
     queryset = MountReal.objects.active()
     filterset_class = MountRealFilterSet
