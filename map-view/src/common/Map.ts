@@ -19,7 +19,7 @@ import { Pixel } from "ol/pixel";
 import { Feature as OlFeature } from "ol";
 import ImageSource from "ol/source/Image";
 import { LineString } from "ol/geom";
-import { buildWFSQuery, calculateDistance } from "./functions";
+import { buildWFSQuery, getDistanceBetweenFeatures } from "./functions";
 import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
 
@@ -141,6 +141,20 @@ class Map {
   }
 
   /**
+   * Draw a line to extraVectorLayer between two features
+   */
+  drawLineBetweenFeatures(feature1: Feature | FeatureLike, feature2: Feature | FeatureLike) {
+    const location1 = feature1.getProperties().geometry.getFlatCoordinates();
+    const location2 = feature2.getProperties().geometry.getFlatCoordinates();
+    const lineString = new LineString([location1, location2]);
+    const olFeature = new OlFeature({
+      geometry: lineString,
+      name: "Line",
+    });
+    this.extraVectorLayer.getSource()!.addFeature(olFeature);
+  }
+
+  /**
    * Show a plan object of the selected real device on map
    *
    * @param feature Target feature of which the plan/real device will be shown
@@ -164,21 +178,13 @@ class Map {
           });
           this.extraVectorLayer.setSource(vectorSource);
 
-          // Add a line between the plan and real points
           vectorSource.on("featuresloadend", (featureEvent) => {
             const features = featureEvent.features;
             if (features) {
-              const plan_location = features[0].getProperties().geometry.getFlatCoordinates();
-              const real_location = feature.getProperties().geometry.getFlatCoordinates();
-              const lineString = new LineString([plan_location, real_location]);
-              const olFeature = new OlFeature({
-                geometry: lineString,
-                name: "Line",
-              });
-              this.extraVectorLayer.getSource()!.addFeature(olFeature);
+              this.drawLineBetweenFeatures(feature, features[0]);
 
               // Return distance between Real and Plan
-              resolve(calculateDistance(real_location, plan_location));
+              resolve(getDistanceBetweenFeatures(feature, features[0]));
             }
           });
         }
