@@ -119,6 +119,13 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel)
     validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
     seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
+    responsible_entity = models.ForeignKey(
+        "traffic_control.ResponsibleEntity",
+        verbose_name=_("Responsible entity"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
 
     class Meta:
         abstract = True

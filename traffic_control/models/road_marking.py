@@ -149,6 +149,13 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel)
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
     amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
+    responsible_entity = models.ForeignKey(
+        "traffic_control.ResponsibleEntity",
+        verbose_name=_("Responsible entity"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
 
     class Meta:
         abstract = True

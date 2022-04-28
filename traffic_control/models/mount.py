@@ -109,6 +109,13 @@ class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel):
         on_delete=models.PROTECT,
     )
     lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
+    responsible_entity = models.ForeignKey(
+        "traffic_control.ResponsibleEntity",
+        verbose_name=_("Responsible entity"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
 
     class Meta:
         abstract = True

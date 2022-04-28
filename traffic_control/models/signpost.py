@@ -100,7 +100,6 @@ class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel):
     attachment_class = models.CharField(_("Attachment class"), max_length=254, blank=True, null=True)
     target_id = models.CharField(_("Target ID"), max_length=254, blank=True, null=True)
     target_txt = models.CharField(_("Target txt"), max_length=254, blank=True, null=True)
-    responsible_entity = models.CharField(_("Responsible entity"), max_length=254, blank=True, null=True)
     electric_maintainer = models.CharField(_("Electric maintainer"), max_length=254, blank=True, null=True)
     lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     location_specifier = EnumIntegerField(
@@ -114,6 +113,13 @@ class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel):
     validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
     seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
+    responsible_entity = models.ForeignKey(
+        "traffic_control.ResponsibleEntity",
+        verbose_name=_("Responsible entity"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
 
     class Meta:
         abstract = True
