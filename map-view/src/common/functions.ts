@@ -1,4 +1,10 @@
-export function calculateDistance(location1: number[], location2: number[]) {
+import { Feature } from "../models";
+import { FeatureLike } from "ol/Feature";
+
+export function getDistanceBetweenFeatures(feature1: Feature | FeatureLike, feature2: Feature | FeatureLike) {
+  const location1 = feature1.getProperties().geometry.getFlatCoordinates();
+  const location2 = feature2.getProperties().geometry.getFlatCoordinates();
+
   // Calculate distance between two points using Pythagorean theorem
   const distance = Math.sqrt(
     (location1[0] - location2[0]) * (location1[0] - location2[0]) +
