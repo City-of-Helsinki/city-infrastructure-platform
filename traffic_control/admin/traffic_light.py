@@ -4,6 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.utils import (
+    ResponsibleEntityPermissionAdminMixin,
+    ResponsibleEntityPermissionFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
@@ -33,6 +38,7 @@ class TrafficLightPlanFileInline(admin.TabularInline):
 
 @admin.register(TrafficLightPlan)
 class TrafficLightPlanAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -48,6 +54,7 @@ class TrafficLightPlanAdmin(
             {
                 "fields": (
                     "owner",
+                    "responsible_entity",
                     "device_type",
                     "type",
                     "vehicle_recognition",
@@ -93,7 +100,11 @@ class TrafficLightPlanAdmin(
         "lifecycle",
         "location",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -120,6 +131,7 @@ class TrafficLightRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(TrafficLightReal)
 class TrafficLightRealAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -136,6 +148,7 @@ class TrafficLightRealAdmin(
             {
                 "fields": (
                     "owner",
+                    "responsible_entity",
                     "device_type",
                     "type",
                     "vehicle_recognition",
@@ -186,7 +199,11 @@ class TrafficLightRealAdmin(
         "location",
         "installation_date",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",

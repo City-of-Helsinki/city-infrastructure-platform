@@ -4,6 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.utils import (
+    ResponsibleEntityPermissionAdminMixin,
+    ResponsibleEntityPermissionFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
@@ -33,6 +38,7 @@ class RoadMarkingPlanFileInline(admin.TabularInline):
 
 @admin.register(RoadMarkingPlan)
 class RoadMarkingPlanAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -48,6 +54,7 @@ class RoadMarkingPlanAdmin(
             {
                 "fields": (
                     "owner",
+                    "responsible_entity",
                     "device_type",
                     "type_specifier",
                     "value",
@@ -109,7 +116,11 @@ class RoadMarkingPlanAdmin(
         "lifecycle",
         "location",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -136,6 +147,7 @@ class RoadMarkingRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(RoadMarkingReal)
 class RoadMarkingRealAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -152,6 +164,7 @@ class RoadMarkingRealAdmin(
             {
                 "fields": (
                     "owner",
+                    "responsible_entity",
                     "device_type",
                     "type_specifier",
                     "value",
@@ -220,7 +233,11 @@ class RoadMarkingRealAdmin(
         "location",
         "installation_date",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",

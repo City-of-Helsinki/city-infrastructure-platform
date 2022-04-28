@@ -6,6 +6,11 @@ from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
+from traffic_control.admin.utils import (
+    ResponsibleEntityPermissionAdminMixin,
+    ResponsibleEntityPermissionFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.forms import AdminFileWidget, TrafficSignPlanModelForm, TrafficSignRealModelForm
@@ -77,6 +82,7 @@ class TrafficSignPlanFileInline(admin.TabularInline):
 
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -91,6 +97,7 @@ class TrafficSignPlanAdmin(
             {
                 "fields": (
                     "owner",
+                    "responsible_entity",
                     "device_type",
                     "mount_type",
                     "value",
@@ -151,7 +158,11 @@ class TrafficSignPlanAdmin(
         "location",
         "has_additional_signs",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -183,6 +194,7 @@ class TrafficSignRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(TrafficSignReal)
 class TrafficSignRealAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -198,6 +210,7 @@ class TrafficSignRealAdmin(
             {
                 "fields": (
                     "owner",
+                    "responsible_entity",
                     "device_type",
                     "mount_type",
                     "permit_decision_id",
@@ -325,6 +338,8 @@ class TrafficSignRealAdmin(
     raw_id_fields = ("traffic_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         ("installation_status", EnumFieldListFilter),
         ("condition", EnumFieldListFilter),

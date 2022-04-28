@@ -4,6 +4,11 @@ from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
+from traffic_control.admin.utils import (
+    ResponsibleEntityPermissionAdminMixin,
+    ResponsibleEntityPermissionFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import (
     AdditionalSignContentPlanForm,
@@ -61,6 +66,7 @@ class AdditionalSignRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(AdditionalSignPlan)
 class AdditionalSignPlanAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -73,7 +79,15 @@ class AdditionalSignPlanAdmin(
     fieldsets = (
         (
             _("General information"),
-            {"fields": ("owner", "mount_type", "source_id", "source_name")},
+            {
+                "fields": (
+                    "owner",
+                    "responsible_entity",
+                    "mount_type",
+                    "source_id",
+                    "source_name",
+                )
+            },
         ),
         (
             _("Location information"),
@@ -126,7 +140,11 @@ class AdditionalSignPlanAdmin(
         "source_id",
     )
     raw_id_fields = ("parent", "plan", "mount_plan")
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     ordering = ("-created_at",)
     inlines = (AdditionalSignContentPlanInline,)
 
@@ -148,6 +166,7 @@ class AdditionalSignRealAdmin(
             {
                 "fields": (
                     "owner",
+                    "responsible_entity",
                     "mount_type",
                     "permit_decision_id",
                     "attachment_url",
@@ -273,6 +292,8 @@ class AdditionalSignRealAdmin(
     raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         ("installation_status", EnumFieldListFilter),
         ("condition", EnumFieldListFilter),

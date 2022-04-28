@@ -5,6 +5,11 @@ from django.utils.translation import gettext_lazy as _
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.traffic_sign import OrderedTrafficSignRealInline
+from traffic_control.admin.utils import (
+    ResponsibleEntityPermissionAdminMixin,
+    ResponsibleEntityPermissionFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
@@ -35,6 +40,7 @@ class MountPlanFileInline(admin.TabularInline):
 
 @admin.register(MountPlan)
 class MountPlanAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -47,7 +53,14 @@ class MountPlanAdmin(
     fieldsets = (
         (
             _("General information"),
-            {"fields": ("owner", "electric_accountable", "txt")},
+            {
+                "fields": (
+                    "owner",
+                    "responsible_entity",
+                    "electric_accountable",
+                    "txt",
+                )
+            },
         ),
         (_("Location information"), {"fields": ("location",)}),
         (
@@ -85,7 +98,11 @@ class MountPlanAdmin(
         "lifecycle",
         "location",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -112,6 +129,7 @@ class MountRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(MountReal)
 class MountRealAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -125,7 +143,15 @@ class MountRealAdmin(
     fieldsets = (
         (
             _("General information"),
-            {"fields": ("owner", "electric_accountable", "inspected_at", "txt")},
+            {
+                "fields": (
+                    "owner",
+                    "responsible_entity",
+                    "electric_accountable",
+                    "inspected_at",
+                    "txt",
+                )
+            },
         ),
         (_("Location information"), {"fields": ("location",)}),
         (
@@ -169,7 +195,11 @@ class MountRealAdmin(
         "lifecycle",
         "location",
     )
-    list_filter = SoftDeleteAdminMixin.list_filter + ["owner"]
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ResponsibleEntityPermissionFilter,
+        ("responsible_entity", TreeModelFieldListFilter),
+        "owner",
+    ]
     readonly_fields = (
         "created_at",
         "updated_at",
