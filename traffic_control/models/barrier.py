@@ -92,6 +92,13 @@ class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel):
     length = models.IntegerField(_("Length"), blank=True, null=True)
     count = models.IntegerField(_("Count"), blank=True, null=True)
     txt = models.TextField(_("Txt"), blank=True, null=True)
+    responsible_entity = models.ForeignKey(
+        "traffic_control.ResponsibleEntity",
+        verbose_name=_("Responsible entity"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
 
     class Meta:
         abstract = True
