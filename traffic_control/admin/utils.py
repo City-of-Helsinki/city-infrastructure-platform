@@ -1,15 +1,82 @@
+import datetime
 from typing import List, Tuple, Type
 
 import tablib
+from dateutil.relativedelta import relativedelta
 from django import forms
-from django.contrib.admin import RelatedFieldListFilter, SimpleListFilter
+from django.contrib.admin import DateFieldListFilter, RelatedFieldListFilter, SimpleListFilter
 from django.contrib.admin.helpers import ActionForm
+from django.db import models
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from import_export.resources import ModelResource
 
 from traffic_control.models import ResponsibleEntity
+
+
+class CustomDateFieldListFilter(DateFieldListFilter):
+    def __init__(self, field, request, params, model, model_admin, field_path):
+        """
+        Replace `this` filters with `last`
+        e.g. instead of filtering results to `this calendar year`, filter to `past 365 days`.
+        """
+        super().__init__(field, request, params, model, model_admin, field_path)
+
+        now = timezone.now()
+        if isinstance(field, models.DateTimeField):
+            today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        else:  # field is a models.DateField
+            today = now.date()
+        tomorrow = today + datetime.timedelta(days=1)
+
+        self.lookup_kwarg_since = "%s__gte" % field_path
+        self.lookup_kwarg_until = "%s__lt" % field_path
+        self.links = (
+            (_("Any date"), {}),
+            (
+                _("Today"),
+                {
+                    self.lookup_kwarg_since: str(today),
+                    self.lookup_kwarg_until: str(tomorrow),
+                },
+            ),
+            (
+                _("Last 7 days"),
+                {
+                    self.lookup_kwarg_since: str(today - datetime.timedelta(days=7)),
+                    self.lookup_kwarg_until: str(tomorrow),
+                },
+            ),
+            (
+                _("Last month"),
+                {
+                    self.lookup_kwarg_since: str(today - relativedelta(months=1)),
+                    self.lookup_kwarg_until: str(tomorrow),
+                },
+            ),
+            (
+                _("Last 6 months"),
+                {
+                    self.lookup_kwarg_since: str(today - relativedelta(months=6)),
+                    self.lookup_kwarg_until: str(tomorrow),
+                },
+            ),
+            (
+                _("Last year"),
+                {
+                    self.lookup_kwarg_since: str(today - relativedelta(years=1)),
+                    self.lookup_kwarg_until: str(tomorrow),
+                },
+            ),
+        )
+        if field.null:
+            self.lookup_kwarg_isnull = "%s__isnull" % field_path
+            self.links += (
+                (_("No date"), {self.field_generic + "isnull": "True"}),
+                (_("Has date"), {self.field_generic + "isnull": "False"}),
+            )
 
 
 class SimplifiedRelatedFieldListFilter(RelatedFieldListFilter):
