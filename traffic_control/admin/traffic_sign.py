@@ -161,6 +161,7 @@ class TrafficSignPlanAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
         ("responsible_entity", TreeModelFieldListFilter),
+        ("lifecycle", EnumFieldListFilter),
         "owner",
     ]
     readonly_fields = (
