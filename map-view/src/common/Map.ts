@@ -170,6 +170,7 @@ class Map {
         const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
 
         if (feature_layer) {
+          // Fetch feature's Plan from WFS API if it exists
           const vectorSource = new VectorSource({
             format: this.geojsonFormat,
             url:
@@ -198,6 +199,55 @@ class Map {
         }
       }
     });
+  }
+
+  showAllPlanAndRealDifferences(realLayer: VectorLayer<VectorSource>, planLayer: VectorLayer<VectorSource>) {
+    let realFeatures: FeatureLike[],
+      planFeatures: FeatureLike[] = [];
+    if (realLayer.getSource()?.getFeatures() !== undefined && planLayer.getSource()?.getFeatures() !== undefined) {
+      // Get all features to single flat lists
+      realFeatures = realLayer
+        .getSource()!
+        .getFeatures()
+        .map((clusterFeature) => clusterFeature!.get("features"))
+        .flat(1);
+      planFeatures = planLayer
+        .getSource()!
+        .getFeatures()
+        .map((clusterFeature) => clusterFeature!.get("features"))
+        .flat(1);
+
+      if (realFeatures.length && planFeatures.length) {
+        realFeatures.forEach((realFeature) => {
+          const device_plan_id = realFeature.get("device_plan_id");
+          if (device_plan_id) {
+            const planFeature = planFeatures.filter((planFeature) => planFeature.get("id") === device_plan_id);
+            if (planFeature.length) {
+              this.drawLineBetweenFeatures(realFeature, planFeature[0]);
+            }
+          }
+        });
+      }
+    }
+  }
+
+  handleShowAllPlanAndRealDifferences() {
+    // Make sure plan/real difference setting is enabled
+    if (!this.extraVectorLayer.getVisible()) {
+      return;
+    }
+
+    // Get only visible layers
+    const visibleLayers = Object.fromEntries(
+      Object.entries(this.overlayLayers).filter(([key, layer]) => layer.getVisible())
+    );
+
+    for (const [identifier, layer] of Object.entries(visibleLayers)) {
+      // Check if real layer and its plan layer are both visible
+      if (identifier.includes("real") && identifier.replace("real", "plan") in visibleLayers) {
+        this.showAllPlanAndRealDifferences(layer, visibleLayers[identifier.replace("real", "plan")]);
+      }
+    }
   }
 
   private static createExtraVectorLayer() {
@@ -236,12 +286,20 @@ class Map {
     this.basemapLayers[this.visibleBasemap].setVisible(true);
   }
 
-  setOverlayVisible(overlay: string, visible: boolean) {
-    this.overlayLayers[overlay].setVisible(visible);
+  setOverlayVisible(overlayIdentifier: string, visible: boolean) {
+    this.overlayLayers[overlayIdentifier].setVisible(visible);
+
+    if (visible) {
+      this.handleShowAllPlanAndRealDifferences();
+    }
   }
 
   setExtraVectorLayerVisible(visible: boolean) {
     this.extraVectorLayer.setVisible(visible);
+
+    if (visible) {
+      this.handleShowAllPlanAndRealDifferences();
+    }
   }
 
   clearExtraVectorLayer() {
@@ -382,12 +440,22 @@ class Map {
   }
 
   private createClusterSource(wfsUrl: string) {
+    const vectorSource = new VectorSource({
+      format: this.geojsonFormat,
+      url: wfsUrl,
+    });
+
+    // When features are loaded, check if difference between plans/reals should be shown
+    vectorSource.on("featuresloadend", (featureEvent) => {
+      const features = featureEvent.features;
+      if (features) {
+        this.handleShowAllPlanAndRealDifferences();
+      }
+    });
+
     return new Cluster({
       distance: 40, // Distance in pixels within which features will be clustered together.
-      source: new VectorSource({
-        format: this.geojsonFormat,
-        url: wfsUrl,
-      }),
+      source: vectorSource,
     });
   }
 
