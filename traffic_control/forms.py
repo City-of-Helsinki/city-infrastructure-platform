@@ -114,9 +114,10 @@ class Point3DFieldForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        z_coord = cleaned_data.pop("z_coord", 0)
-        location = cleaned_data["location"]
-        cleaned_data["location"] = Point(location.x, location.y, z_coord, srid=settings.SRID)
+        if "location" in cleaned_data:
+            z_coord = cleaned_data.pop("z_coord", 0)
+            location = cleaned_data["location"]
+            cleaned_data["location"] = Point(location.x, location.y, z_coord, srid=settings.SRID)
         return cleaned_data
 
 
