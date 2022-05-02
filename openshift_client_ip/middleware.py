@@ -26,14 +26,24 @@ class OpenShiftClientIPMiddleware:
         if "HTTP_X_FORWARDED_FOR" in request.META:
             xff = request.META["HTTP_X_FORWARDED_FOR"]
 
-            # Test if valid IP address
+            request.META["HTTP_X_FORWARDED_FOR_ORIGINAL"] = xff
+
+            # Test if field is a valid IP address
             try:
                 ipaddress.ip_address(xff)
             except ValueError:
-                # Try removing port number from the end
-                xff = xff.split(":")[0]
-                ipaddress.ip_address(xff)
+                # If there are proxy IPs listed, the first one should be client IP
+                xff = xff.split(",")[0]
 
+                # Remove port number from the end of IP if there is such
+                xff = xff.split(":")[0]
+
+                try:
+                    ipaddress.ip_address(xff)
+                except ValueError:
+                    raise ValueError(f"Could not parse IP from '{xff}'.")
+
+            # Overwrite validated client IP in meta
             request.META["HTTP_X_FORWARDED_FOR"] = xff
 
         return None

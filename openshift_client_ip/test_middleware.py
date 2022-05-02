@@ -42,6 +42,24 @@ class OpenShiftClientIPMiddlewareTests(TestCase):
         self.assertEqual(self.request.META.get("HTTP_X_FORWARDED_FOR"), "123.123.123.123")
 
     @override_settings(OPENSHIFT_DEPLOYMENT=True)
+    def test__process_request__openshift_deployment_true_ip4_proxy(self):
+        self.request.META["HTTP_X_FORWARDED_FOR"] = "123.123.123.123, 10.10.10.10"
+        self.middleware.process_request(self.request)
+        self.assertEqual(self.request.META.get("HTTP_X_FORWARDED_FOR"), "123.123.123.123")
+
+    @override_settings(OPENSHIFT_DEPLOYMENT=True)
+    def test__process_request__openshift_deployment_true_ip4_with_port_proxy(self):
+        self.request.META["HTTP_X_FORWARDED_FOR"] = "123.123.123.123:8000, 10.10.10.10"
+        self.middleware.process_request(self.request)
+        self.assertEqual(self.request.META.get("HTTP_X_FORWARDED_FOR"), "123.123.123.123")
+
+    @override_settings(OPENSHIFT_DEPLOYMENT=True)
+    def test__process_request__openshift_deployment_true_ip4_with_port_proxy_port(self):
+        self.request.META["HTTP_X_FORWARDED_FOR"] = "123.123.123.123:8000, 10.10.10.10:9999"
+        self.middleware.process_request(self.request)
+        self.assertEqual(self.request.META.get("HTTP_X_FORWARDED_FOR"), "123.123.123.123")
+
+    @override_settings(OPENSHIFT_DEPLOYMENT=True)
     def test__process_request__openshift_deployment_true_ip6(self):
         self.request.META["HTTP_X_FORWARDED_FOR"] = "2001:db8::8a2e:370:7334"
         self.middleware.process_request(self.request)
