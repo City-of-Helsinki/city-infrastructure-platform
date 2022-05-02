@@ -1,6 +1,7 @@
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
@@ -101,6 +102,7 @@ class MountPlanAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
         ("responsible_entity", TreeModelFieldListFilter),
+        ("lifecycle", EnumFieldListFilter),
         "owner",
     ]
     readonly_fields = (
@@ -198,6 +200,7 @@ class MountRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
         ("responsible_entity", TreeModelFieldListFilter),
+        ("lifecycle", EnumFieldListFilter),
         "owner",
     ]
     readonly_fields = (

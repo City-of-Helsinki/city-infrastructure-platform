@@ -143,6 +143,7 @@ class AdditionalSignPlanAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
         ("responsible_entity", TreeModelFieldListFilter),
+        ("lifecycle", EnumFieldListFilter),
         "owner",
     ]
     ordering = ("-created_at",)
