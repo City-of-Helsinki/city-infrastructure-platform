@@ -452,6 +452,14 @@ python-versions = ">=3.5"
 Django = ">=2.2"
 
 [[package]]
+name = "django-light"
+version = "0.1.0.post3"
+description = "Disable dark mode in Django admin UI."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "django-mptt"
 version = "0.13.4"
 description = "Utilities for implementing Modified Preorder Tree Traversal with your Django Models and working with trees of Model instances."
@@ -1624,7 +1632,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e44d7648a79282d941777a4e6ddb15913e2701c2df7e18c23ad7f263a5e5c2f2"
+content-hash = "de782a8319a09c5e4838a173e92fb0d96c3c2008183db53ef0bb738fc58a97b8"
 
 [metadata.files]
 appnope = [
@@ -1854,7 +1862,6 @@ django = [
 ]
 django-auditlog = [
     {file = "django-auditlog-1.0.0.tar.gz", hash = "sha256:c5fa676359df1e0bf573410cc1a12b9d0653f6cf44303c8a01edb36f42f5aec0"},
-    {file = "django_auditlog-1.0.0-py3-none-any.whl", hash = "sha256:72a4a94f13a349072716212dc6f7e802857e06ba89c4e589463fb633b60dcb45"},
 ]
 django-colorfield = [
     {file = "django-colorfield-0.6.3.tar.gz", hash = "sha256:441172f8c6024f70b01e3f63195fe83afc554387b34ad999880e86fde989e5af"},
@@ -1893,6 +1900,10 @@ django-js-asset = [
 django-jsonfield-backport = [
     {file = "django-jsonfield-backport-1.0.5.tar.gz", hash = "sha256:40c39b1f1bade47bd2715664de14983f2e0a96175f65abbad2688029c255c685"},
     {file = "django_jsonfield_backport-1.0.5-py3-none-any.whl", hash = "sha256:727b402bad632e38539b489e48aefa6ffe03cedba76ac1f11b455423b3225a2d"},
+]
+django-light = [
+    {file = "django-light-0.1.0.post3.tar.gz", hash = "sha256:74e7fc67c4aaaae304cb34529b5bb9e46b78ce6c87381c5edc00b7f4f84a422e"},
+    {file = "django_light-0.1.0.post3-py3-none-any.whl", hash = "sha256:921a09124f2a8db0c0ea3a8f06dede5782180b0398f901bc595305db7b622a90"},
 ]
 django-mptt = [
     {file = "django-mptt-0.13.4.tar.gz", hash = "sha256:80c9fb34df7796a4e5af0cb6b8ade3697555b1aa438bd07a01f32b3ab5202b63"},
