@@ -21,10 +21,10 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
         )
 
     @patch("os.path.exists", return_value=True)
-    def test_import_traffic_signs_success(self, mock_exists):
+    def test_import_furniture_signposts_success(self, mock_exists):
         data = os.linesep.join(
             [
-                "id,device_type,longitude,latitude,location_name,direction,height,order,mount_type,arrow_direction,sign_color,pictogram,value,text_content_fi,text_content_sw,text_content_en,content_responsible_entity,validity_period_start,validity_period_end,additional_material_url",  # noqa: E501
+                "id,device_type,longitude,latitude,location_name_fi,direction,height,order,mount_type,arrow_direction,sign_color,pictogram,value,text_content_fi,text_content_sw,text_content_en,content_responsible_entity,validity_period_start,validity_period_end,additional_material_url",  # noqa: E501
                 "A42,reittivahvennelaatta,25497601.12758740,6672058.993934970,Laivasillankatu,45,140,,Tolppa,,Kantakaupunki,,,,,,,,,,",  # noqa: E501
                 "A1B,reittivahvennelaatta,25497601.12758740,6672058.993934970,JokuKatu,0,220,1,Katuvalopylväs,UP,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
                 "A2B,tarrat,25496195.72344000,6673869.586320790,JokuKatu,0,220,1,Katuvalopylväs,UP,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501

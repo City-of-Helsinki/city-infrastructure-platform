@@ -26,7 +26,16 @@ _base_fields = [
     ),
     DescribedFeatureField("location", description="Signpost's location (point) in EPSG:3879 coordinates."),
     DescribedFeatureField(
-        "location_name", description="Verbose name for the signpost's location, e.g. street, park or island."
+        "location_name_fi",
+        description="Verbose name for the signpost's location, e.g. street, park or island in Finnish.",
+    ),
+    DescribedFeatureField(
+        "location_name_sw",
+        description="Verbose name for the signpost's location, e.g. street, park or island in Swedish.",
+    ),
+    DescribedFeatureField(
+        "location_name_en",
+        description="Verbose name for the signpost's location, e.g. street, park or island in English.",
     ),
     DescribedFeatureField("location_additional_info", description="Additional information about the install location."),
     DescribedFeatureField(
@@ -37,7 +46,7 @@ _base_fields = [
     DescribedFeatureField("device_type_code", model_attribute="device_type.code", description="Device type code."),
     DescribedFeatureField(
         "device_type_description",
-        model_attribute="device_type.description",
+        model_attribute="device_type.description_fi",
         description="Device type description.",
     ),
     DescribedFeatureField("color_code", model_attribute="color.rgb", description="Signpost color in rgb hex format."),

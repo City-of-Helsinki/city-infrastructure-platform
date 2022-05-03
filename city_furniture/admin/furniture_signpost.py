@@ -95,7 +95,7 @@ class AbstractFurnitureSignpostAdmin(
     list_display = (
         "id",
         "device_type",
-        "location_name",
+        "location_name_fi",
         "lifecycle",
     )
     _fieldset_general_information = (
@@ -118,7 +118,9 @@ class AbstractFurnitureSignpostAdmin(
         {
             "fields": (
                 ("location", "z_coord"),
-                "location_name",
+                "location_name_fi",
+                "location_name_sw",
+                "location_name_en",
                 "location_additional_info",
                 "direction",
                 "height",

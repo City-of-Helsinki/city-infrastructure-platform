@@ -29,7 +29,9 @@ class CityFurnitureDeviceType(models.Model):
     class_type = EnumIntegerField(CityFurnitureClassType, verbose_name=_("City Furniture Class type"))
     function_type = EnumIntegerField(CityFurnitureFunctionType, verbose_name=_("City Furniture Function or Usage type"))
     icon = models.CharField(_("Icon"), max_length=100, blank=True)  # Icon of the actual device
-    description = models.CharField(_("Description"), max_length=254, blank=True, null=True)
+    description_fi = models.CharField(_("Finnish Description"), max_length=254, blank=True, null=True)
+    description_sw = models.CharField(_("Swedish Description"), max_length=254, blank=True, null=True)
+    description_en = models.CharField(_("English Description"), max_length=254, blank=True, null=True)
     size = models.CharField(_("Size"), max_length=50, blank=True)
     target_model = EnumField(
         CityFurnitureDeviceTypeTargetModel,
@@ -47,7 +49,7 @@ class CityFurnitureDeviceType(models.Model):
         verbose_name_plural = _("City Furniture Device Types")
 
     def __str__(self) -> str:
-        return f"{self.code} - {self.description}"
+        return f"{self.code} - {self.description_fi}"
 
     def save(self, validate_target_model_change=True, *args, **kwargs) -> None:
         if self.pk:
