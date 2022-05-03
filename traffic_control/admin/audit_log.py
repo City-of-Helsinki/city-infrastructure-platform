@@ -5,7 +5,7 @@ from django.contrib.admin.utils import unquote
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from traffic_control.admin.utils import CustomDateFieldListFilter
+from traffic_control.admin.utils import CustomDateFieldListFilter, SimplifiedRelatedFieldListFilter
 
 __all__ = ("AuditLogHistoryAdmin",)
 
@@ -24,6 +24,8 @@ class CustomLogEntryAdmin(LogEntryAdmin):
     list_filter = [
         *LogEntryAdmin.list_filter,
         ("timestamp", CustomDateFieldListFilter),
+        ("actor", SimplifiedRelatedFieldListFilter),
+        "actor__groups",
     ]
 
 
