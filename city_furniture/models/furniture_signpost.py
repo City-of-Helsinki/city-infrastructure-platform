@@ -63,7 +63,15 @@ class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControl
     lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
 
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    location_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
+    location_name_fi = models.CharField(
+        _("Finnish location name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Verbose name for the signpost's location, e.g. street, park or island."),
+    )
+    location_name_sw = models.CharField(_("Swedish location name"), max_length=254, blank=True, null=True)
+    location_name_en = models.CharField(_("English location name"), max_length=254, blank=True, null=True)
     direction = models.IntegerField(
         _("Direction"),
         default=0,

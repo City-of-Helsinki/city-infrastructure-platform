@@ -1,4 +1,4 @@
-code,class_type,function_type,icon,description,size,target_model
+code,class_type,function_type,icon,description_fi,size,target_model
 C1-A,1030,1090,,"Vitriinitaulu - Yksiosainen, Yksipuolinen",(846*2000) 700 * 1000,furniture_signpost
 C1-B,1030,1090,,"Vitriinitaulu - Yksiosainen, Kaksipuolinen",(846*2000) 700 * 1000,furniture_signpost
 C1-C,1030,1090,,"Vitriinitaulu - Kaksiosainen, Yksipuolinen",(1576*2000) 2 * 700 * 1000,furniture_signpost

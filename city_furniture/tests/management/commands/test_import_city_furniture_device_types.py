@@ -16,7 +16,7 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
     def test_import_city_furniture_device_types_success(self, mock_exists):
         data = os.linesep.join(
             [
-                "code,class_type,function_type,icon,description,size,target_model",
+                "code,class_type,function_type,icon,description_fi,size,target_model",
                 "C3-A,1030,1090,,Opasteet matala,300 * 400,furniture_signpost",
                 "C3-B,1030,1090,,Opasteet matala,600 * 400,furniture_signpost",
                 "C3-B,1030,1090,,Opasteet matala,900 * 400,furniture_signpost",

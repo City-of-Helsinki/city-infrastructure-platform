@@ -100,7 +100,7 @@ class Command(BaseCommand):
                 "location": location,
                 "owner": self.owner,
                 "target": self.target,
-                "location_name": row["location_name"],
+                "location_name_fi": row["location_name_fi"],
                 "direction": int(row["direction"]) if row["direction"] else 0,
                 "height": int(row["height"]) if row["height"] else None,
                 "order": int(row["order"]) if row["order"] else 1,

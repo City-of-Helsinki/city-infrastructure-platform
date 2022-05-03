@@ -31,14 +31,14 @@ class Command(BaseCommand):
             csv_reader = csv.reader(f)
             next(csv_reader, None)  # skip header
             for row in csv_reader:
-                (code, class_type, function_type, icon, description, size, target_model) = row
+                (code, class_type, function_type, icon, description_fi, size, target_model) = row
 
                 defaults = {
                     "code": code,
                     "class_type": class_type,
                     "function_type": function_type,
                     "icon": icon,
-                    "description": description,
+                    "description_fi": description_fi,
                     "size": size,
                     "target_model": target_model,
                 }

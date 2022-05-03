@@ -15,7 +15,7 @@ class CityFurnitureDeviceTypeAdmin(EnumChoiceValueDisplayAdminMixin, AuditLogHis
         "class_type",
         "function_type",
         "icon",
-        "description",
+        "description_fi",
         "size",
         "target_model",
     )
