@@ -29,7 +29,7 @@ jobs:
 
     - name: Install required Ubuntu packages
       run: |
-        sudo apt-get install gdal-bin
+        sudo apt-get install gdal-bin gettext
 
     - name: Install poetry
       run: |
@@ -49,6 +49,11 @@ jobs:
     - name: Run pytest code functionality tests
       run: |
         pytest -ra -vvv --cov=.
+
+    - name: Test for missing translations
+      run: |
+        ./makemessages.sh
+        git diff --ignore-matching-lines=POT-Creation-Date --exit-code
 
     # Majority of the tests require database
     services:
