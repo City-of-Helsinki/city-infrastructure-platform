@@ -282,3 +282,7 @@ class ResponsibleEntityPermissionAdminFormMixin:
         for i, entity in enumerate(self.user.responsible_entities.all().get_descendants(include_self=True)):
             responsible_entity_choices.append((str(i), entity))
         self.fields["responsible_entity"].choices = responsible_entity_choices
+
+
+class DeviceComparisonAdminMixin:
+    change_form_template = "admin/comparison/change_form.html"

@@ -1,0 +1,10 @@
+{# Override field_sets template #}
+
+{% extends 'admin/change_form.html' %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block field_sets %}
+{% for fieldset in adminform %}
+  {% include "admin/comparison/includes/fieldset.html" %}
+{% endfor %}
+{% endblock %}
