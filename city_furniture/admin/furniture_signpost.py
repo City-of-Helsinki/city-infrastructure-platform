@@ -20,6 +20,7 @@ from city_furniture.resources.furniture_signpost import (
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
@@ -180,7 +181,12 @@ class FurnitureSignpostPlanAdmin(MultiResourceExportActionAdminMixin, AbstractFu
 
 
 @admin.register(FurnitureSignpostReal)
-class FurnitureSignpostRealAdmin(UserStampedInlineAdminMixin, AbstractFurnitureSignpostAdmin):
+class FurnitureSignpostRealAdmin(
+    DeviceComparisonAdminMixin,
+    UserStampedInlineAdminMixin,
+    AbstractFurnitureSignpostAdmin,
+):
+    plan_model_field_name = "furniture_signpost_plan"
     resource_class = FurnitureSignpostRealResource
     form = FurnitureSignpostRealModelForm
     fieldsets = (
