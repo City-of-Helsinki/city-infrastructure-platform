@@ -354,16 +354,11 @@ class TrafficSignRealAdmin(
         OperationalAreaListFilter,
     ]
     search_fields = (
-        "traffic_sign_plan__id",
-        "device_type__code",
-        "device_type__description",
         "value",
         "size",
-        "mount_real__id",
         "height",
         "reflection_class",
         "surface_class",
-        "owner",
         "road_name",
         "lane_number",
         "lane_type",

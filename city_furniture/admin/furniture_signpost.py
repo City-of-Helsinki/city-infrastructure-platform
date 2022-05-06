@@ -213,14 +213,9 @@ class FurnitureSignpostRealAdmin(
         "installation_date",
     ]
     search_fields = (
-        "furniture_signpost_plan__id",
-        "device_type__code",
-        "device_type__description",
         "value",
         "size",
-        "mount_real__id",
         "height",
-        "owner",
         "source_id",
         "source_name",
         "text_content_fi",
