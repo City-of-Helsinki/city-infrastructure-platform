@@ -6,6 +6,7 @@ from enumfields.admin import EnumFieldListFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    DeviceComparisonAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
@@ -149,6 +150,7 @@ class RoadMarkingRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(RoadMarkingReal)
 class RoadMarkingRealAdmin(
+    DeviceComparisonAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
@@ -157,6 +159,7 @@ class RoadMarkingRealAdmin(
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
 ):
+    plan_model_field_name = "road_marking_plan"
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

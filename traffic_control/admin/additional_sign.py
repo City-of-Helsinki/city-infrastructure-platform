@@ -5,6 +5,7 @@ from enumfields.admin import EnumFieldListFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    DeviceComparisonAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
@@ -152,6 +153,7 @@ class AdditionalSignPlanAdmin(
 
 @admin.register(AdditionalSignReal)
 class AdditionalSignRealAdmin(
+    DeviceComparisonAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -160,6 +162,7 @@ class AdditionalSignRealAdmin(
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
 ):
+    plan_model_field_name = "additional_sign_plan"
     form = AdditionalSignRealModelForm
     fieldsets = (
         (
