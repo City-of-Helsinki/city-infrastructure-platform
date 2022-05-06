@@ -22,6 +22,12 @@
                     {% if field.field.help_text %}
                         <div class="help">{{ field.field.help_text|safe }}</div>
                     {% endif %}
+
+                    {% if plan_differences is not none and plan_differences|has_key:field.field.name %}
+                        <div class="help" style="color: #ffb700">
+                            Plan <i>{{ field.field.label }}</i> value: {{ plan_differences|get_item:field.field.name }}
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

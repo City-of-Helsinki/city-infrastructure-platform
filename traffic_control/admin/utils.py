@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.contrib.admin import DateFieldListFilter, RelatedFieldListFilter, SimpleListFilter
 from django.contrib.admin.helpers import ActionForm
+from django.contrib.admin.utils import unquote
 from django.db import models
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -286,3 +287,34 @@ class ResponsibleEntityPermissionAdminFormMixin:
 
 class DeviceComparisonAdminMixin:
     change_form_template = "admin/comparison/change_form.html"
+    plan_model_field_name = None  # FK-Field to the Plan model which the Real object is compared against
+
+    def get_real_and_plan_field_differences(self, real_object, plan_object) -> dict:
+        def _should_ignore_field(f):
+            ignored_fields = ["id", "parent", "created_at", "updated_at", "created_by", "updated_by"]
+            return f.one_to_many or f.name in ignored_fields
+
+        # Get common fields between Real and Plan object
+        common_fields = set(f.name for f in real_object._meta.get_fields() if not _should_ignore_field(f)) & set(
+            f.name for f in plan_object._meta.get_fields()
+        )
+
+        # Find fields that have different values between the Real and Plan
+        differences = {}
+        for field_name in common_fields:
+            if getattr(real_object, field_name) != getattr(plan_object, field_name):
+                differences[field_name] = getattr(plan_object, field_name)
+        return differences
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        """Add a dict containing Reals and Plans differences to context"""
+
+        real_object = self.get_object(request, unquote(object_id), "id")
+        plan_object = getattr(real_object, self.plan_model_field_name)
+
+        if plan_object is not None:
+            extra_context = extra_context or {}
+            extra_context.update(
+                {"plan_differences": self.get_real_and_plan_field_differences(real_object, plan_object)}
+            )
+        return super().change_view(request, object_id, form_url, extra_context)
