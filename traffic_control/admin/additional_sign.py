@@ -309,16 +309,10 @@ class AdditionalSignRealAdmin(
         OperationalAreaListFilter,
     ]
     search_fields = (
-        "additional_sign_plan__id",
-        "content__device_type__code",
-        "content__device_type__description",
-        "content__text",
         "size",
-        "mount_real__id",
         "height",
         "reflection_class",
         "surface_class",
-        "owner",
         "road_name",
         "lane_number",
         "lane_type",
