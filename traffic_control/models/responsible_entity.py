@@ -9,7 +9,7 @@ from enumfields import EnumIntegerField
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from city_furniture.enums import OrganizationLevel
+from traffic_control.enums import OrganizationLevel
 
 
 class ResponsibleEntity(MPTTModel):

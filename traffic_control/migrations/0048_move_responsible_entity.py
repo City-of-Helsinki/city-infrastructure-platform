@@ -7,7 +7,7 @@ import enumfields.fields
 import mptt.fields
 from django.db import migrations, models
 
-import city_furniture.enums
+import traffic_control.enums
 
 
 class Migration(migrations.Migration):
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
                 ('name', models.CharField(help_text='Name (for projects use Projectwise ID)', max_length=254, verbose_name='Name')),
-                ('organization_level', enumfields.fields.EnumIntegerField(default=50, enum=city_furniture.enums.OrganizationLevel, verbose_name='Organization level')),
+                ('organization_level', enumfields.fields.EnumIntegerField(default=50, enum=traffic_control.enums.OrganizationLevel, verbose_name='Organization level')),
                 ('lft', models.PositiveIntegerField(editable=False)),
                 ('rght', models.PositiveIntegerField(editable=False)),
                 ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),

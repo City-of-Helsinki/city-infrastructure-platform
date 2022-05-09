@@ -178,3 +178,20 @@ class TrafficControlDeviceTypeType(Enum):
         LONGITUDINAL = _("Longitudinal")
         TRANSVERSE = _("Transverse")
         OTHER = _("Other road marking")
+
+
+class OrganizationLevel(Enum):
+    """Responsible Entity Organization levels"""
+
+    DIVISION = 10
+    SERVICE = 20
+    UNIT = 30
+    PERSON = 40
+    PROJECT = 50
+
+    class Labels:
+        DIVISION = _("division")
+        SERVICE = _("service")
+        UNIT = _("unit")
+        PERSON = _("person")
+        PROJECT = _("project")

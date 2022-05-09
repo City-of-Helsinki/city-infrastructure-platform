@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
-from city_furniture.enums import OrganizationLevel
+from traffic_control.enums import OrganizationLevel
 from traffic_control.models import ResponsibleEntity
 from traffic_control.tests.factories import get_api_client, get_responsible_entity, get_user
 
