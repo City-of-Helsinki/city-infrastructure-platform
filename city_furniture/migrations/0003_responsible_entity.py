@@ -6,7 +6,7 @@ import django.db.models.deletion
 import enumfields.fields
 from django.db import migrations, models
 
-import city_furniture.enums
+import traffic_control.enums
 
 
 class Migration(migrations.Migration):
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
                 ('name', models.CharField(max_length=254, verbose_name='Name')),
-                ('organization_level', enumfields.fields.EnumIntegerField(default=3, enum=city_furniture.enums.OrganizationLevel, verbose_name='Organization level')),
+                ('organization_level', enumfields.fields.EnumIntegerField(default=3, enum=traffic_control.enums.OrganizationLevel, verbose_name='Organization level')),
                 ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='city_furniture.ResponsibleEntity', verbose_name='Parent Responsible Entity')),
             ],
             options={

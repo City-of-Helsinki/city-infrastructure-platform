@@ -2,13 +2,13 @@ import pytest
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 
-from city_furniture.enums import OrganizationLevel
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.resources.furniture_signpost import (
     FurnitureSignpostPlanTemplateResource,
     FurnitureSignpostRealResource,
 )
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
+from traffic_control.enums import OrganizationLevel
 from traffic_control.models import GroupResponsibleEntity, ResponsibleEntity
 from traffic_control.tests.factories import get_user
 

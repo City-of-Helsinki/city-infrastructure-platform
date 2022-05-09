@@ -3,7 +3,7 @@
 import enumfields.fields
 from django.db import migrations, models
 
-import city_furniture.enums
+import traffic_control.enums
 
 
 def migrate_responsible_entity(apps, schema_editor):
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='responsibleentity',
             name='organization_level',
-            field=enumfields.fields.EnumIntegerField(default=50, enum=city_furniture.enums.OrganizationLevel, verbose_name='Organization level'),
+            field=enumfields.fields.EnumIntegerField(default=50, enum=traffic_control.enums.OrganizationLevel, verbose_name='Organization level'),
         ),
         migrations.AlterField(
             model_name='responsibleentity',

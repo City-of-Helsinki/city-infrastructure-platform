@@ -7,8 +7,7 @@ from django.contrib.gis.geos import MultiPolygon
 from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
-from city_furniture.enums import OrganizationLevel
-from traffic_control.enums import DeviceTypeTargetModel, Lifecycle
+from traffic_control.enums import DeviceTypeTargetModel, Lifecycle, OrganizationLevel
 from traffic_control.models import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,
