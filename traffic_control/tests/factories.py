@@ -542,12 +542,8 @@ def get_responsible_entity(name="ABC-123"):
         name="Unit Name",
         defaults=dict(parent=service, organization_level=OrganizationLevel.UNIT),
     )[0]
-    person = ResponsibleEntity.objects.get_or_create(
-        name="Matti Meikäläinen",
-        defaults=dict(parent=unit, organization_level=OrganizationLevel.PERSON),
-    )[0]
     project = ResponsibleEntity.objects.get_or_create(
         name=name,
-        defaults=dict(parent=person, organization_level=OrganizationLevel.PROJECT),
+        defaults=dict(parent=unit, organization_level=OrganizationLevel.PROJECT),
     )[0]
     return project

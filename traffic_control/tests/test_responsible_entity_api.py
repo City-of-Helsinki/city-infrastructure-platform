@@ -19,7 +19,7 @@ def test__responsible_entity__list():
     response_data = response.json()
 
     assert response.status_code == status.HTTP_200_OK
-    assert response_data["count"] == 7
+    assert response_data["count"] == 6
     for result in response_data["results"]:
         obj = ResponsibleEntity.objects.get(pk=result["id"])
         assert result["name"] == obj.name
@@ -120,8 +120,8 @@ def test__responsible_entity__delete(admin_user):
 
     if admin_user:
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert ResponsibleEntity.objects.count() == 4
+        assert ResponsibleEntity.objects.count() == 3
 
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
-        assert ResponsibleEntity.objects.count() == 5
+        assert ResponsibleEntity.objects.count() == 4
