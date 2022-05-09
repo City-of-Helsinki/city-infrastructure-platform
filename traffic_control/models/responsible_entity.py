@@ -17,13 +17,20 @@ class ResponsibleEntity(MPTTModel):
     Responsible Entity for a City Furniture Device
 
     Organization chain is most often the following:
-    Toimiala > Palvelu > Yksikkö > Henkilö > Projekti (Projectwise projektin ID)
+    Toimiala > Palvelu > Yksikkö > Projekti
     e.g.
-    KYMP > Yleiset Alueet > Tiimi X > Matti Meikäläinen > ABC123
+    KYMP > Yleiset Alueet > Tiimi X > ABC123
     """
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     name = models.CharField(_("Name"), max_length=254, help_text=_("Name (for projects use Projectwise ID)"))
+    external_id = models.CharField(
+        _("External ID"),
+        max_length=254,
+        help_text=_("Use Projectwise ID for projects, can also be an abbreviation if entity has no ID"),
+        blank=True,
+        null=True,
+    )
     organization_level = EnumIntegerField(
         OrganizationLevel,
         verbose_name=_("Organization level"),
