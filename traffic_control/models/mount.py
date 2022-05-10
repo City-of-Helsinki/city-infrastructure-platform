@@ -6,9 +6,10 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from traffic_control.enums import Condition, InstallationStatus, Lifecycle
+from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -75,8 +76,7 @@ class PortalType(models.Model):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
 
 
-class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
     mount_type = models.ForeignKey(
@@ -101,21 +101,6 @@ class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel):
     electric_accountable = models.CharField(_("Electric accountable"), max_length=254, blank=True, null=True)
     is_foldable = models.BooleanField(_("Is foldable"), blank=True, null=True)
     cross_bar_length = models.DecimalField(_("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-    responsible_entity = models.ForeignKey(
-        "traffic_control.ResponsibleEntity",
-        verbose_name=_("Responsible entity"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-    )
 
     class Meta:
         abstract = True

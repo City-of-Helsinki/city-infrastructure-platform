@@ -1,5 +1,4 @@
 # flake8: noqa
-from traffic_control.enums import InstallationStatus
 from traffic_control.models.additional_sign import (
     AdditionalSignContentPlan,
     AdditionalSignContentReal,

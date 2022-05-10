@@ -1,5 +1,3 @@
-import uuid
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -15,7 +13,6 @@ from traffic_control.enums import (
     InstallationStatus,
     LaneNumber,
     LaneType,
-    Lifecycle,
     Reflection,
     Size,
     Surface,
@@ -23,6 +20,7 @@ from traffic_control.enums import (
 from traffic_control.mixins.models import (
     AbstractFileModel,
     DecimalValueFromDeviceTypeMixin,
+    OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -72,8 +70,7 @@ class TrafficSignRealQuerySet(SoftDeleteQuerySet):
         additional_signs.soft_delete(user)
 
 
-class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
@@ -100,14 +97,6 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel)
         null=True,
     )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
@@ -119,13 +108,6 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel)
     validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
     seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-    responsible_entity = models.ForeignKey(
-        "traffic_control.ResponsibleEntity",
-        verbose_name=_("Responsible entity"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-    )
 
     class Meta:
         abstract = True

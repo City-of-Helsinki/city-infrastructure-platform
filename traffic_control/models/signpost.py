@@ -1,5 +1,3 @@
-import uuid
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -14,13 +12,13 @@ from traffic_control.enums import (
     InstallationStatus,
     LaneNumber,
     LaneType,
-    Lifecycle,
     Reflection,
     Size,
 )
 from traffic_control.mixins.models import (
     AbstractFileModel,
     DecimalValueFromDeviceTypeMixin,
+    OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -46,8 +44,7 @@ class LocationSpecifier(Enum):
         VERTICAL = _("Vertical")
 
 
-class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
@@ -74,13 +71,6 @@ class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel):
     )
     value = models.DecimalField(_("Signpost value"), max_digits=10, decimal_places=2, blank=True, null=True)
     txt = models.CharField(_("Signpost txt"), max_length=254, blank=True, null=True)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
     size = EnumField(
         Size,
         verbose_name=_("Size"),
@@ -101,7 +91,6 @@ class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel):
     target_id = models.CharField(_("Target ID"), max_length=254, blank=True, null=True)
     target_txt = models.CharField(_("Target txt"), max_length=254, blank=True, null=True)
     electric_maintainer = models.CharField(_("Electric maintainer"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
@@ -113,13 +102,6 @@ class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel):
     validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
     seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-    responsible_entity = models.ForeignKey(
-        "traffic_control.ResponsibleEntity",
-        verbose_name=_("Responsible entity"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-    )
 
     class Meta:
         abstract = True

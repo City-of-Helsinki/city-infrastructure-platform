@@ -1,5 +1,3 @@
-import uuid
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -14,11 +12,11 @@ from traffic_control.enums import (
     InstallationStatus,
     LaneNumber,
     LaneType,
-    Lifecycle,
     TrafficControlDeviceTypeType,
 )
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -85,8 +83,7 @@ class LocationSpecifier(Enum):
         LEFT_SIDE_OF_LANE_OR_ROAD = _("Left side of lane or road")
 
 
-class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
@@ -133,15 +130,7 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel)
     type_specifier = models.CharField(_("Type specifier"), max_length=254, blank=True, null=True)
     seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
     seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
     symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
 
     length = models.IntegerField(_("Length"), blank=True, null=True)
     width = models.IntegerField(_("Width"), blank=True, null=True)
@@ -149,13 +138,6 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel)
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
     amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
-    responsible_entity = models.ForeignKey(
-        "traffic_control.ResponsibleEntity",
-        verbose_name=_("Responsible entity"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-    )
 
     class Meta:
         abstract = True
