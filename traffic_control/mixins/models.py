@@ -6,7 +6,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from enumfields import EnumIntegerField
 
+from traffic_control.enums import Lifecycle
 from traffic_control.models.utils import SoftDeleteQuerySet
 
 logger = logging.getLogger("traffic_control")
@@ -50,6 +52,32 @@ class UserControlModel(models.Model):
         verbose_name=_("Updated by"),
         related_name="updated_by_%(class)s_set",
         on_delete=models.PROTECT,
+    )
+
+    class Meta:
+        abstract = True
+
+
+class OwnedDeviceModel(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    owner = models.ForeignKey(
+        "traffic_control.Owner",
+        verbose_name=_("Owner"),
+        blank=False,
+        null=False,
+        on_delete=models.PROTECT,
+    )
+    responsible_entity = models.ForeignKey(
+        "traffic_control.ResponsibleEntity",
+        verbose_name=_("Responsible entity"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
+    lifecycle = EnumIntegerField(
+        Lifecycle,
+        verbose_name=_("Lifecycle"),
+        default=Lifecycle.ACTIVE,
     )
 
     class Meta:

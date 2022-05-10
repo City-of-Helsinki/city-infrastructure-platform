@@ -1,5 +1,3 @@
-import uuid
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -10,9 +8,10 @@ from enumfields import Enum, EnumField, EnumIntegerField
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
-from traffic_control.enums import Condition, InstallationStatus, Lifecycle
+from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -44,24 +43,7 @@ class ArrowDirection(Enum):
         BOTTOM_LEFT = _("Bottom left")
 
 
-class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
-    responsible_entity = models.ForeignKey(
-        "traffic_control.ResponsibleEntity",
-        verbose_name=_("Responsible entity"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-    )
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-
+class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     location_name_fi = models.CharField(
         _("Finnish location name"),

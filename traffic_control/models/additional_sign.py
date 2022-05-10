@@ -14,12 +14,17 @@ from traffic_control.enums import (
     InstallationStatus,
     LaneNumber,
     LaneType,
-    Lifecycle,
     Reflection,
     Size,
     Surface,
 )
-from traffic_control.mixins.models import SoftDeleteModel, SourceControlModel, UpdatePlanLocationMixin, UserControlModel
+from traffic_control.mixins.models import (
+    OwnedDeviceModel,
+    SoftDeleteModel,
+    SourceControlModel,
+    UpdatePlanLocationMixin,
+    UserControlModel,
+)
 from traffic_control.models.affect_area import CoverageArea
 from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
 from traffic_control.models.mount import MountPlan, MountReal, MountType
@@ -36,8 +41,7 @@ class Color(Enum):
         YELLOW = _("Yellow")
 
 
-class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.IntegerField(_("Height"), blank=True, null=True)
     direction = models.IntegerField(_("Direction"), default=0)
@@ -82,26 +86,10 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         null=True,
     )
 
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
-
     validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
     validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
     seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
-    responsible_entity = models.ForeignKey(
-        "traffic_control.ResponsibleEntity",
-        verbose_name=_("Responsible entity"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-    )
 
     class Meta:
         abstract = True

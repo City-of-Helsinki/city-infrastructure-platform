@@ -1,5 +1,3 @@
-import uuid
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -8,9 +6,10 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType, Lifecycle
+from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -51,8 +50,7 @@ class LocationSpecifier(Enum):
         LEFT = _("Left of road or lane")
 
 
-class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(_("Road name"), max_length=254)
     lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
@@ -78,27 +76,12 @@ class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel):
     connection_type = EnumIntegerField(ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED)
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     is_electric = models.BooleanField(_("Is electric"), default=False)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-    )
     reflective = EnumField(Reflective, verbose_name=_("Reflective"), blank=True, null=True)
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
     validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
     length = models.IntegerField(_("Length"), blank=True, null=True)
     count = models.IntegerField(_("Count"), blank=True, null=True)
     txt = models.TextField(_("Txt"), blank=True, null=True)
-    responsible_entity = models.ForeignKey(
-        "traffic_control.ResponsibleEntity",
-        verbose_name=_("Responsible entity"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-    )
 
     class Meta:
         abstract = True

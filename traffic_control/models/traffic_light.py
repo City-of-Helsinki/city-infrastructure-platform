@@ -1,5 +1,3 @@
-import uuid
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -8,9 +6,10 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType, Lifecycle
+from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
@@ -86,8 +85,7 @@ class PushButton(Enum):
         YES = _("Yes")
 
 
-class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
     lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
@@ -114,7 +112,6 @@ class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_LIGHT)),
     )
     txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    lifecycle = EnumIntegerField(Lifecycle, verbose_name=_("Lifecycle"), default=Lifecycle.ACTIVE)
     push_button = EnumIntegerField(
         PushButton,
         verbose_name=_("Push button"),
@@ -126,13 +123,6 @@ class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel
         verbose_name=_("Sound beacon"),
         blank=True,
         null=True,
-    )
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
     )
     vehicle_recognition = EnumIntegerField(
         VehicleRecognition,
@@ -148,13 +138,6 @@ class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel
         default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
-    )
-    responsible_entity = models.ForeignKey(
-        "traffic_control.ResponsibleEntity",
-        verbose_name=_("Responsible entity"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
     )
 
     class Meta:
