@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import NOT_PROVIDED
 from django.utils.encoding import force_str
 from import_export import fields, widgets
+from import_export.admin import ImportExportActionModelAdmin
+from import_export.formats import base_formats
 from import_export.resources import ModelResource
 
 from traffic_control.models import ResponsibleEntity
@@ -114,3 +116,8 @@ class ResponsibleEntityPermissionImportMixin:
                         "You do not have permissions to create or modify devices with given "
                         f"Responsible Entity ({responsible_entity})"
                     )
+
+
+class CustomImportExportActionModelAdmin(ImportExportActionModelAdmin):
+    # Set CSV and XLSX as the only available formats
+    formats = [f for f in base_formats.DEFAULT_FORMATS if f.__name__ in ["CSV", "XLSX"]]

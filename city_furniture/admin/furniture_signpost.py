@@ -2,7 +2,6 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
-from import_export.admin import ImportExportActionModelAdmin
 
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
@@ -36,6 +35,7 @@ from traffic_control.mixins import (
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
+from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 __all__ = (
     "FurnitureSignpostPlanAdmin",
@@ -67,7 +67,7 @@ class AbstractFurnitureSignpostAdmin(
     Point3DFieldAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
-    ImportExportActionModelAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
