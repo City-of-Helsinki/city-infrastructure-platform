@@ -66,6 +66,7 @@ class OwnedDeviceModel(models.Model):
         blank=False,
         null=False,
         on_delete=models.PROTECT,
+        help_text=_("Owner who orders and is responsible for the maintenance of the device."),
     )
     responsible_entity = models.ForeignKey(
         "traffic_control.ResponsibleEntity",
@@ -73,11 +74,13 @@ class OwnedDeviceModel(models.Model):
         blank=True,
         null=True,
         on_delete=models.PROTECT,
+        help_text=_("Organization or project that this device is assigned to."),
     )
     lifecycle = EnumIntegerField(
         Lifecycle,
         verbose_name=_("Lifecycle"),
         default=Lifecycle.ACTIVE,
+        help_text=_("Lifecycle of the device, which describes the activity status of the device."),
     )
 
     class Meta:
@@ -89,6 +92,7 @@ class InstalledDeviceModel(models.Model):
         _("Installation date"),
         blank=True,
         null=True,
+        help_text=_("Date on which this device was installed on."),
     )
     installation_status = EnumField(
         InstallationStatus,
@@ -97,6 +101,7 @@ class InstalledDeviceModel(models.Model):
         default=InstallationStatus.IN_USE,
         blank=True,
         null=True,
+        help_text=_("Describes this devices installation status."),
     )
     condition = EnumIntegerField(
         Condition,
@@ -104,6 +109,7 @@ class InstalledDeviceModel(models.Model):
         default=Condition.VERY_GOOD,
         blank=True,
         null=True,
+        help_text=_("Describes the condition of this device."),
     )
 
     class Meta:
@@ -111,8 +117,7 @@ class InstalledDeviceModel(models.Model):
 
 
 class UpdatePlanLocationMixin:
-    """A mixin class that updates plan location when the plan
-    field of target model is changed"""
+    """A mixin class that updates plan location when the plan field of target model is changed"""
 
     def save(self, *args, **kwargs):
         if self._state.adding:
@@ -137,8 +142,22 @@ class UpdatePlanLocationMixin:
 
 
 class SourceControlModel(models.Model):
-    source_id = models.CharField(_("Source id"), max_length=64, null=True, blank=True, default=None)
-    source_name = models.CharField(_("Source name"), max_length=254, null=True, blank=True, default=None)
+    source_id = models.CharField(
+        _("Source id"),
+        max_length=64,
+        null=True,
+        blank=True,
+        default=None,
+        help_text=_("ID of the device in the source where this device was imported from."),
+    )
+    source_name = models.CharField(
+        _("Source name"),
+        max_length=254,
+        null=True,
+        blank=True,
+        default=None,
+        help_text=_("Name of the source for where this device was imported from."),
+    )
 
     class Meta:
         abstract = True

@@ -32,20 +32,59 @@ class TrafficControlDeviceTypeQuerySet(models.QuerySet):
 
 class TrafficControlDeviceType(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    code = models.CharField(_("Code"), unique=True, max_length=32)
-    icon = models.CharField(_("Icon"), max_length=100, blank=True)
-    description = models.CharField(_("Description"), max_length=254, blank=True, null=True)
-    value = models.CharField(_("Value"), max_length=50, blank=True)
-    unit = models.CharField(_("Unit"), max_length=50, blank=True)
-    size = models.CharField(_("Size"), max_length=50, blank=True)
-    legacy_code = models.CharField(_("Legacy code"), max_length=32, blank=True, null=True)
-    legacy_description = models.CharField(_("Legacy description"), max_length=254, blank=True, null=True)
+    code = models.CharField(
+        _("Code"),
+        unique=True,
+        max_length=32,
+        help_text=_("Standardised code of the device type."),
+    )
+    icon = models.CharField(
+        _("Icon"),
+        max_length=100,
+        blank=True,
+    )
+    description = models.CharField(
+        _("Description"),
+        max_length=254,
+        blank=True,
+        null=True,
+    )
+    value = models.CharField(
+        _("Value"),
+        max_length=50,
+        blank=True,
+        help_text=_("Numeric value on the sign."),
+    )
+    unit = models.CharField(
+        _("Unit"),
+        max_length=50,
+        blank=True,
+        help_text=_("Unit, in which the numeric value is in."),
+    )
+    size = models.CharField(
+        _("Size"),
+        max_length=50,
+        blank=True,
+    )
+    legacy_code = models.CharField(
+        _("Legacy code"),
+        max_length=32,
+        blank=True,
+        null=True,
+    )
+    legacy_description = models.CharField(
+        _("Legacy description"),
+        max_length=254,
+        blank=True,
+        null=True,
+    )
     target_model = EnumField(
         DeviceTypeTargetModel,
         verbose_name=_("Target data model"),
         max_length=32,
         blank=True,
         null=True,
+        help_text=_("Defines which model this device type describes."),
     )
     type = EnumField(
         TrafficControlDeviceTypeType,
@@ -148,7 +187,7 @@ auditlog.register(TrafficControlDeviceType)
 
 
 class OperationType(models.Model):
-    name = models.CharField(_("Name"), max_length=200)
+    name = models.CharField(_("Name"), max_length=200, help_text=_("Name of the operation."))
     traffic_sign = models.BooleanField(_("Traffic sign"), default=False)
     additional_sign = models.BooleanField(_("Additional sign"), default=False)
     road_marking = models.BooleanField(_("Road marking"), default=False)

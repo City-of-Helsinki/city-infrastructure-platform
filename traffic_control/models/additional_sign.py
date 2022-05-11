@@ -35,8 +35,21 @@ class Color(Enum):
 
 class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.IntegerField(_("Height"), blank=True, null=True)
-    direction = models.IntegerField(_("Direction"), default=0)
+    height = models.IntegerField(
+        _("Height"),
+        blank=True,
+        null=True,
+        help_text=_("The height of the sign from the ground, measured from the top in centimeters."),
+    )
+    direction = models.IntegerField(
+        _("Direction"),
+        default=0,
+        help_text=_(
+            "Direction of the sign in degrees. "
+            "If 'road name' is entered the direction is in relation to the road. Otherwise cardinal direction is used. "
+            "e.g. 0 = North, 45 = North East, 90 = East, 180 = South."
+        ),
+    )
     reflection_class = EnumField(
         Reflection,
         verbose_name=_("Reflection"),
@@ -53,22 +66,41 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         blank=True,
         null=True,
     )
-    color = EnumIntegerField(Color, verbose_name=_("Color"), default=Color.BLUE, blank=True, null=True)
+    color = EnumIntegerField(
+        Color,
+        verbose_name=_("Color"),
+        default=Color.BLUE,
+        blank=True,
+        null=True,
+    )
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
+        help_text=_("Type of the mount this sign is attached to."),
     )
-
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
+    road_name = models.CharField(
+        _("Road name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Name of the road this sign is installed at."),
+    )
+    lane_number = EnumField(
+        LaneNumber,
+        verbose_name=_("Lane number"),
+        default=LaneNumber.MAIN_1,
+        blank=True,
+        help_text=_("Describes which lane of the road this sign affects."),
+    )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
         default=LaneType.MAIN,
         blank=True,
+        help_text=_("The type of lane which this sign affects."),
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
@@ -76,12 +108,32 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
+        help_text=_("Specifies where the sign is in relation to the road."),
     )
-
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
-    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
+    validity_period_start = models.DateField(
+        _("Validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this sign becomes active."),
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this sign becomes inactive."),
+    )
+    seasonal_validity_period_start = models.DateField(
+        _("Seasonal validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this sign becomes seasonally active."),
+    )
+    seasonal_validity_period_end = models.DateField(
+        _("Seasonal validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this sign becomes seasonally inactive."),
+    )
 
     class Meta:
         abstract = True
@@ -98,6 +150,7 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
         related_name="additional_signs",
         blank=True,
         null=True,
+        help_text=_("The traffic sign to which this additional sign is associated."),
     )
     mount_plan = models.ForeignKey(
         MountPlan,
@@ -105,6 +158,7 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Mount that this sign is mounted on."),
     )
     plan = models.ForeignKey(
         Plan,
@@ -113,6 +167,7 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
         related_name="additional_sign_plans",
         blank=True,
         null=True,
+        help_text=_("Plan which this Additional Sign Plan is a part of."),
     )
 
     class Meta:
@@ -130,6 +185,7 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         related_name="additional_signs",
         blank=True,
         null=True,
+        help_text=_("The traffic sign to which this additional sign is associated."),
     )
     additional_sign_plan = models.ForeignKey(
         AdditionalSignPlan,
@@ -137,6 +193,7 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("The plan for this Additional Sign."),
     )
     mount_real = models.ForeignKey(
         MountReal,
@@ -144,30 +201,91 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Mount that this sign is mounted on."),
     )
-    installation_id = models.CharField(_("Installation id"), max_length=254, blank=True, null=True)
-    installation_details = models.CharField(_("Installation details"), max_length=254, blank=True, null=True)
-    installed_by = models.CharField(_("Installed by"), max_length=256, blank=True)
-    manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
-    rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    legacy_code = models.CharField(_("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True)
-    permit_decision_id = models.CharField(_("Permit decision id"), max_length=254, blank=True, null=True)
-    operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
-    scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
+    installation_id = models.CharField(
+        _("Installation id"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("The id number of the installation record."),
+    )
+    installation_details = models.CharField(
+        _("Installation details"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Additional details about the installation."),
+    )
+    installed_by = models.CharField(
+        _("Installed by"),
+        max_length=254,
+        blank=True,
+        help_text=_("Name of the organization who installed this sign."),
+    )
+    manufacturer = models.CharField(
+        _("Manufacturer"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Name of the organization that manufactured this sign."),
+    )
+    rfid = models.CharField(
+        _("RFID"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("RFID tag of the sign (if any)."),
+    )
+    legacy_code = models.CharField(
+        _("Legacy Traffic Sign Code"),
+        max_length=32,
+        blank=True,
+        null=True,
+        help_text=_("The sign type code of the sign in the old Finnish road traffic law."),
+    )
+    permit_decision_id = models.CharField(
+        _("Permit decision id"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("The id number of the installation permit."),
+    )
+    operation = models.CharField(
+        _("Operation"),
+        max_length=64,
+        blank=True,
+        null=True,
+        help_text=_("Maintenance operations done to the sign, e.g. washing, straightening or painting."),
+    )
+    scanned_at = models.DateTimeField(
+        _("Scanned at"),
+        blank=True,
+        null=True,
+        help_text=_("Date and time on which this sign was last scanned at."),
+    )
     size = EnumField(
         Size,
         verbose_name=_("Size"),
         max_length=1,
+        default=Size.MEDIUM,
         blank=True,
         null=True,
     )
-    attachment_url = models.URLField(_("Attachment url"), max_length=500, blank=True, null=True)
+    attachment_url = models.URLField(
+        _("Attachment url"),
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text=_("URL to a file attachment related to this sign."),
+    )
     coverage_area = models.ForeignKey(
         CoverageArea,
         verbose_name=_("Coverage area"),
         blank=True,
         null=True,
         on_delete=models.PROTECT,
+        help_text=_("Coverage area that this sign belongs to."),
     )
 
     class Meta:
@@ -204,13 +322,23 @@ class AbstractAdditionalSignContent(SourceControlModel, UserControlModel):
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)),
         null=True,
         blank=False,
+        on_delete=models.PROTECT,
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
     )
     text = models.CharField(verbose_name=_("Content text"), max_length=256, blank=True)
-    order = models.SmallIntegerField(verbose_name=_("Order"), default=1, blank=False, null=False)
+    order = models.SmallIntegerField(
+        verbose_name=_("Order"),
+        default=1,
+        blank=False,
+        null=False,
+        help_text=_(
+            "The order of the sign in relation to the signs at the same point. "
+            "Order from top to bottom, from left to right starting at 1."
+        ),
+    )
 
     class Meta:
         abstract = True
@@ -241,6 +369,7 @@ class AdditionalSignContentPlan(AbstractAdditionalSignContent):
         related_name="content",
         blank=False,
         null=False,
+        help_text=_("Additional Sign which this content belongs to."),
     )
 
     class Meta:
@@ -257,6 +386,7 @@ class AdditionalSignContentReal(AbstractAdditionalSignContent):
         related_name="content",
         blank=False,
         null=False,
+        help_text=_("Additional Sign which this content belongs to."),
     )
 
     class Meta:

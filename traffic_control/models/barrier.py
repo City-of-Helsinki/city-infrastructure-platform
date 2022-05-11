@@ -53,13 +53,24 @@ class LocationSpecifier(Enum):
 
 class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    road_name = models.CharField(_("Road name"), max_length=254)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
+    road_name = models.CharField(
+        _("Road name"),
+        max_length=254,
+        help_text=_("Name of the road this barrier is installed at."),
+    )
+    lane_number = EnumField(
+        LaneNumber,
+        verbose_name=_("Lane number"),
+        default=LaneNumber.MAIN_1,
+        blank=True,
+        help_text=_("Describes which lane of the road this barrier affects."),
+    )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
         default=LaneType.MAIN,
         blank=True,
+        help_text=_("The type of lane which this barrier affects."),
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
@@ -67,22 +78,67 @@ class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, Own
         default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
+        help_text=_("Specifies where the barrier is in relation to the road."),
     )
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.BARRIER)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
     )
-    connection_type = EnumIntegerField(ConnectionType, verbose_name=_("Connection type"), default=ConnectionType.CLOSED)
-    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
-    is_electric = models.BooleanField(_("Is electric"), default=False)
-    reflective = EnumField(Reflective, verbose_name=_("Reflective"), blank=True, null=True)
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    length = models.IntegerField(_("Length"), blank=True, null=True)
-    count = models.IntegerField(_("Count"), blank=True, null=True)
-    txt = models.TextField(_("Txt"), blank=True, null=True)
+    connection_type = EnumIntegerField(
+        ConnectionType,
+        verbose_name=_("Connection type"),
+        default=ConnectionType.CLOSED,
+        help_text=_("Describes if the barrier is open or closed."),
+    )
+    material = models.CharField(
+        _("Material"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Describes the material that the barrier is made of."),
+    )
+    is_electric = models.BooleanField(
+        _("Is electric"),
+        default=False,
+    )
+    reflective = EnumField(
+        Reflective,
+        verbose_name=_("Reflective"),
+        blank=True,
+        null=True,
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this barrier becomes active."),
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this barrier becomes inactive."),
+    )
+    length = models.IntegerField(
+        _("Length"),
+        blank=True,
+        null=True,
+        help_text=_("Length of the barrier in centimeters."),
+    )
+    count = models.IntegerField(
+        _("Count"),
+        blank=True,
+        null=True,
+    )
+    txt = models.TextField(
+        _("Txt"),
+        blank=True,
+        null=True,
+        help_text=_("Text written on the barrier."),
+    )
 
     class Meta:
         abstract = True
@@ -105,6 +161,7 @@ class BarrierPlan(UpdatePlanLocationMixin, AbstractBarrier):
         related_name="barrier_plans",
         blank=True,
         null=True,
+        help_text=_("Plan which this Barrier Plan is a part of."),
     )
 
     class Meta:
@@ -121,6 +178,7 @@ class BarrierReal(AbstractBarrier, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("The plan for this barrier."),
     )
 
     class Meta:

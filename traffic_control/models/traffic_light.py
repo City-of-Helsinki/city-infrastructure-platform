@@ -88,57 +88,112 @@ class PushButton(Enum):
 
 class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
+    road_name = models.CharField(
+        _("Road name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Name of the road this traffic light is installed at."),
+    )
+    lane_number = EnumField(
+        LaneNumber,
+        verbose_name=_("Lane number"),
+        default=LaneNumber.MAIN_1,
+        blank=True,
+        help_text=_("Describes which lane of the road this traffic light affects."),
+    )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
         default=LaneType.MAIN,
         blank=True,
+        help_text=_("The type of lane which this traffic light affects."),
     )
-    direction = models.IntegerField(_("Direction"), default=0)
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
+    direction = models.IntegerField(
+        _("Direction"),
+        default=0,
+        help_text=_(
+            "Direction of the device in degrees. "
+            "If 'road name' is entered the direction is in relation to the road. Otherwise cardinal direction is used. "
+            "e.g. 0 = North, 45 = North East, 90 = East, 180 = South."
+        ),
+    )
+    height = models.DecimalField(
+        _("Height"),
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text=_("The height of the sign from the ground, measured from the top in centimeters."),
+    )
     mount_type = models.ForeignKey(
         "MountType",
         verbose_name=_("Mount type"),
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
+        help_text=_("Type of the mount this traffic light is attached to."),
     )
-    type = EnumField(TrafficLightType, blank=True, null=True)
+    type = EnumField(
+        TrafficLightType,
+        blank=True,
+        null=True,
+        help_text=_("Describes the type of traffic light this device is."),
+    )
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_LIGHT)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
     )
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
+    txt = models.CharField(
+        _("Txt"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Text on the traffic light."),
+    )
     push_button = EnumIntegerField(
         PushButton,
         verbose_name=_("Push button"),
         blank=True,
         null=True,
+        help_text=_("Describes if this traffic light has a push button attached."),
     )
     sound_beacon = EnumIntegerField(
         TrafficLightSoundBeaconValue,
         verbose_name=_("Sound beacon"),
         blank=True,
         null=True,
+        help_text=_("Describes if this traffic light has a sound beacon attached."),
     )
     vehicle_recognition = EnumIntegerField(
         VehicleRecognition,
         verbose_name=_("Vehicle recognition"),
         blank=True,
         null=True,
+        help_text=_("Describes the type of vehicle recognition this traffic light has."),
     )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
+    validity_period_start = models.DateField(
+        _("Validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this traffic light becomes active."),
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this traffic light becomes inactive."),
+    )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
         default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
+        help_text=_("Specifies where the traffic light is in relation to the road."),
     )
 
     class Meta:
@@ -161,6 +216,7 @@ class TrafficLightPlan(UpdatePlanLocationMixin, AbstractTrafficLight):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Mount that this traffic light is mounted on."),
     )
     plan = models.ForeignKey(
         Plan,
@@ -169,6 +225,7 @@ class TrafficLightPlan(UpdatePlanLocationMixin, AbstractTrafficLight):
         related_name="traffic_light_plans",
         blank=True,
         null=True,
+        help_text=_("Plan which this traffic light plan is a part of."),
     )
 
     class Meta:
@@ -185,6 +242,7 @@ class TrafficLightReal(AbstractTrafficLight, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("The plan for this traffic light."),
     )
     mount_real = models.ForeignKey(
         MountReal,
@@ -192,6 +250,7 @@ class TrafficLightReal(AbstractTrafficLight, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Mount that this traffic light is mounted on."),
     )
 
     class Meta:

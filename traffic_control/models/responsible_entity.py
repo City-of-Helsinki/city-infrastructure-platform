@@ -23,26 +23,31 @@ class ResponsibleEntity(MPTTModel):
     """
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    name = models.CharField(_("Name"), max_length=254, help_text=_("Name (for projects use Projectwise ID)"))
+    name = models.CharField(_("Name"), max_length=254)
     external_id = models.CharField(
         _("External ID"),
         max_length=254,
-        help_text=_("Use Projectwise ID for projects, can also be an abbreviation if entity has no ID"),
         blank=True,
         null=True,
+        help_text=_("Use Projectwise ID for projects, can also be an abbreviation if entity has no ID"),
     )
     organization_level = EnumIntegerField(
         OrganizationLevel,
         verbose_name=_("Organization level"),
         default=OrganizationLevel.PROJECT,
+        help_text=_("Describes the level of organization this is."),
     )
     parent = TreeForeignKey(
         "self",
+        related_name="children",
         verbose_name=_("Parent Responsible Entity"),
         on_delete=models.PROTECT,
         blank=True,
         null=True,
-        related_name="children",
+        help_text=_(
+            "Organization under which this object belongs to. "
+            "This objects organizational level must be lower than its parents."
+        ),
     )
 
     class Meta:

@@ -79,13 +79,26 @@ class LocationSpecifier(Enum):
 
 class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
+    road_name = models.CharField(
+        _("Road name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Name of the road this road marking is installed at."),
+    )
+    lane_number = EnumField(
+        LaneNumber,
+        verbose_name=_("Lane number"),
+        default=LaneNumber.MAIN_1,
+        blank=True,
+        help_text=_("Describes which lane of the road this road marking affects."),
+    )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
         default=LaneType.MAIN,
         blank=True,
+        help_text=_("The type of lane which this road marking affects."),
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
@@ -93,6 +106,7 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
         default=LocationSpecifier.RIGHT_SIDE_OF_LANE,
         blank=True,
         null=True,
+        help_text=_("Specifies where the road marking is in relation to the lane."),
     )
     line_direction = EnumField(
         LineDirection,
@@ -108,10 +122,22 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
         max_length=10,
         blank=True,
         null=True,
+        help_text=_("Direction of the arrow on the road."),
     )
-    value = models.CharField(_("Road Marking value"), max_length=254, blank=True, null=True)
-    size = models.CharField(_("Size"), max_length=254, blank=True, null=True)
-    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
+    value = models.CharField(
+        _("Road Marking value"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Numeric value on the marking."),
+    )
+    material = models.CharField(
+        _("Material"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Describes the material that the device is made of."),
+    )
     color = EnumIntegerField(
         RoadMarkingColor,
         verbose_name=_("Color"),
@@ -119,15 +145,63 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
         blank=True,
         null=True,
     )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    type_specifier = models.CharField(_("Type specifier"), max_length=254, blank=True, null=True)
-    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
-    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-    symbol = models.CharField(_("Symbol"), max_length=254, blank=True, null=True)
-
-    length = models.IntegerField(_("Length"), blank=True, null=True)
-    width = models.IntegerField(_("Width"), blank=True, null=True)
+    type_specifier = models.CharField(
+        _("Type specifier"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Additional device type codes specific to the local public authorities."),
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this road marking becomes active."),
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this road marking becomes inactive."),
+    )
+    seasonal_validity_period_start = models.DateField(
+        _("Seasonal validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this road marking becomes seasonally active."),
+    )
+    seasonal_validity_period_end = models.DateField(
+        _("Seasonal validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this road marking becomes seasonally inactive."),
+    )
+    symbol = models.CharField(
+        _("Symbol"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Symbol on the road marking."),
+    )
+    size = models.CharField(
+        _("Size"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Size of the road marking."),
+    )
+    length = models.IntegerField(
+        _("Length"),
+        blank=True,
+        null=True,
+        help_text=_("Length of the road marking in centimeters."),
+    )
+    width = models.IntegerField(
+        _("Width"),
+        blank=True,
+        null=True,
+        help_text=_("Width of the road marking in centimeters."),
+    )
     is_raised = models.BooleanField(_("Is raised"), null=True)
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
     additional_info = models.TextField(_("Additional info"), blank=True, null=True)
@@ -158,12 +232,14 @@ class RoadMarkingPlan(UpdatePlanLocationMixin, AbstractRoadMarking):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Traffic Sign related to this road marking."),
     )
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device Type"),
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
     )
     plan = models.ForeignKey(
         Plan,
@@ -172,6 +248,7 @@ class RoadMarkingPlan(UpdatePlanLocationMixin, AbstractRoadMarking):
         related_name="road_marking_plans",
         blank=True,
         null=True,
+        help_text=_("Plan which this road marking plan is a part of."),
     )
 
     class Meta:
@@ -188,12 +265,14 @@ class RoadMarkingReal(AbstractRoadMarking, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("The plan for this road marking."),
     )
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
     )
     traffic_sign_real = models.ForeignKey(
         TrafficSignReal,
@@ -201,9 +280,17 @@ class RoadMarkingReal(AbstractRoadMarking, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Traffic Sign related to this road marking."),
     )
     missing_traffic_sign_real_txt = models.CharField(
-        _("Missing Traffic Sign Real txt"), max_length=254, blank=True, null=True
+        _("Missing Traffic Sign Real txt"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Free-form text description of the traffic sign the road marking is connected to, "
+            "if the road marking doesn't have a traffic sign real id."
+        ),
     )
 
     class Meta:
