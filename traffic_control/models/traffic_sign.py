@@ -7,19 +7,11 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from traffic_control.enums import (
-    Condition,
-    DeviceTypeTargetModel,
-    InstallationStatus,
-    LaneNumber,
-    LaneType,
-    Reflection,
-    Size,
-    Surface,
-)
+from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
     AbstractFileModel,
     DecimalValueFromDeviceTypeMixin,
+    InstalledDeviceModel,
     OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
@@ -187,7 +179,7 @@ class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, 
         super().save(*args, **kwargs)
 
 
-class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign):
+class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, InstalledDeviceModel):
     traffic_sign_plan = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Traffic Sign Plan"),
@@ -247,20 +239,6 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign):
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
     operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
     attachment_url = models.URLField(_("Attachment url"), max_length=500, blank=True, null=True)
-    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        blank=True,
-        null=True,
-    )
-    condition = EnumIntegerField(
-        Condition,
-        verbose_name=_("Condition"),
-        blank=True,
-        null=True,
-    )
 
     objects = TrafficSignRealQuerySet.as_manager()
 

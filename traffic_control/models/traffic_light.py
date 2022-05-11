@@ -6,9 +6,10 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType
+from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    InstalledDeviceModel,
     OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
@@ -177,7 +178,7 @@ class TrafficLightPlan(UpdatePlanLocationMixin, AbstractTrafficLight):
         unique_together = ["source_name", "source_id"]
 
 
-class TrafficLightReal(AbstractTrafficLight):
+class TrafficLightReal(AbstractTrafficLight, InstalledDeviceModel):
     traffic_light_plan = models.ForeignKey(
         TrafficLightPlan,
         verbose_name=_("Traffic Light Plan"),
@@ -189,22 +190,6 @@ class TrafficLightReal(AbstractTrafficLight):
         MountReal,
         verbose_name=_("Mount Real"),
         on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        default=InstallationStatus.IN_USE,
-        blank=True,
-        null=True,
-    )
-    condition = EnumIntegerField(
-        Condition,
-        verbose_name=_("Condition"),
-        default=Condition.VERY_GOOD,
         blank=True,
         null=True,
     )

@@ -4,13 +4,13 @@ from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumField, EnumIntegerField
+from enumfields import Enum, EnumIntegerField
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
-from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    InstalledDeviceModel,
     OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
@@ -160,7 +160,7 @@ class FurnitureSignpostPlan(UpdatePlanLocationMixin, FurnitureAbstractSignpost):
         unique_together = ["source_name", "source_id"]
 
 
-class FurnitureSignpostReal(FurnitureAbstractSignpost):
+class FurnitureSignpostReal(FurnitureAbstractSignpost, InstalledDeviceModel):
     furniture_signpost_plan = models.ForeignKey(
         FurnitureSignpostPlan,
         verbose_name=_("Furniture Signpost Plan"),
@@ -179,22 +179,6 @@ class FurnitureSignpostReal(FurnitureAbstractSignpost):
         MountReal,
         verbose_name=_("Mount Real"),
         on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        default=InstallationStatus.IN_USE,
-        blank=True,
-        null=True,
-    )
-    condition = EnumIntegerField(
-        Condition,
-        verbose_name=_("Condition"),
-        default=Condition.VERY_GOOD,
         blank=True,
         null=True,
     )

@@ -4,11 +4,10 @@ from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
-from enumfields import EnumField, EnumIntegerField
 
-from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    InstalledDeviceModel,
     OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
@@ -126,7 +125,7 @@ class MountPlan(UpdatePlanLocationMixin, AbstractMount):
         unique_together = ["source_name", "source_id"]
 
 
-class MountReal(AbstractMount):
+class MountReal(AbstractMount, InstalledDeviceModel):
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -136,22 +135,6 @@ class MountReal(AbstractMount):
     )
     inspected_at = models.DateTimeField(_("Inspected at"), blank=True, null=True)
     diameter = models.DecimalField(_("Diameter"), max_digits=5, decimal_places=2, blank=True, null=True)
-    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        default=InstallationStatus.IN_USE,
-        blank=True,
-        null=True,
-    )
-    condition = EnumIntegerField(
-        Condition,
-        verbose_name=_("Condition"),
-        default=Condition.VERY_GOOD,
-        blank=True,
-        null=True,
-    )
 
     class Meta:
         db_table = "mount_real"
