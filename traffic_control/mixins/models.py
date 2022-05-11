@@ -6,9 +6,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from enumfields import EnumIntegerField
+from enumfields import EnumField, EnumIntegerField
 
-from traffic_control.enums import Lifecycle
+from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.models.utils import SoftDeleteQuerySet
 
 logger = logging.getLogger("traffic_control")
@@ -78,6 +78,32 @@ class OwnedDeviceModel(models.Model):
         Lifecycle,
         verbose_name=_("Lifecycle"),
         default=Lifecycle.ACTIVE,
+    )
+
+    class Meta:
+        abstract = True
+
+
+class InstalledDeviceModel(models.Model):
+    installation_date = models.DateField(
+        _("Installation date"),
+        blank=True,
+        null=True,
+    )
+    installation_status = EnumField(
+        InstallationStatus,
+        verbose_name=_("Installation status"),
+        max_length=10,
+        default=InstallationStatus.IN_USE,
+        blank=True,
+        null=True,
+    )
+    condition = EnumIntegerField(
+        Condition,
+        verbose_name=_("Condition"),
+        default=Condition.VERY_GOOD,
+        blank=True,
+        null=True,
     )
 
     class Meta:

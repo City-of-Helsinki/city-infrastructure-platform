@@ -8,17 +8,9 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from traffic_control.enums import (
-    Condition,
-    DeviceTypeTargetModel,
-    InstallationStatus,
-    LaneNumber,
-    LaneType,
-    Reflection,
-    Size,
-    Surface,
-)
+from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
+    InstalledDeviceModel,
     OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
@@ -130,7 +122,7 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
         unique_together = ["source_name", "source_id"]
 
 
-class AdditionalSignReal(AbstractAdditionalSign):
+class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
     parent = models.ForeignKey(
         TrafficSignReal,
         verbose_name=_("Parent Traffic Sign Real"),
@@ -153,24 +145,8 @@ class AdditionalSignReal(AbstractAdditionalSign):
         blank=True,
         null=True,
     )
-    condition = EnumIntegerField(
-        Condition,
-        verbose_name=_("Condition"),
-        default=Condition.VERY_GOOD,
-        blank=True,
-        null=True,
-    )
     installation_id = models.CharField(_("Installation id"), max_length=254, blank=True, null=True)
     installation_details = models.CharField(_("Installation details"), max_length=254, blank=True, null=True)
-    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        default=InstallationStatus.IN_USE,
-        blank=True,
-        null=True,
-    )
     installed_by = models.CharField(_("Installed by"), max_length=256, blank=True)
     manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
     rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)

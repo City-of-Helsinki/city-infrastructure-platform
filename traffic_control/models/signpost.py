@@ -6,18 +6,11 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum, EnumField, EnumIntegerField
 
-from traffic_control.enums import (
-    Condition,
-    DeviceTypeTargetModel,
-    InstallationStatus,
-    LaneNumber,
-    LaneType,
-    Reflection,
-    Size,
-)
+from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size
 from traffic_control.mixins.models import (
     AbstractFileModel,
     DecimalValueFromDeviceTypeMixin,
+    InstalledDeviceModel,
     OwnedDeviceModel,
     SoftDeleteModel,
     SourceControlModel,
@@ -147,7 +140,7 @@ class SignpostPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, Abs
         unique_together = ["source_name", "source_id"]
 
 
-class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost):
+class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledDeviceModel):
     signpost_plan = models.ForeignKey(
         SignpostPlan,
         verbose_name=_("Signpost Plan"),
@@ -172,22 +165,6 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost):
     material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
     organization = models.CharField(_("Organization"), max_length=254, blank=True, null=True)
     manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
-    installation_date = models.DateField(_("Installation date"), blank=True, null=True)
-    installation_status = EnumField(
-        InstallationStatus,
-        verbose_name=_("Installation status"),
-        max_length=10,
-        default=InstallationStatus.IN_USE,
-        blank=True,
-        null=True,
-    )
-    condition = EnumIntegerField(
-        Condition,
-        verbose_name=_("Condition"),
-        default=Condition.VERY_GOOD,
-        blank=True,
-        null=True,
-    )
 
     class Meta:
         db_table = "signpost_real"
