@@ -77,7 +77,14 @@ class PortalType(models.Model):
 
 class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
+    height = models.DecimalField(
+        _("Height"),
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text=_("The height of the mount from the ground, measured from the top in centimeters."),
+    )
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
@@ -92,14 +99,54 @@ class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel, Owned
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Id number of the portal type in the portal_type table."),
     )
-    material = models.CharField(_("Material"), max_length=254, blank=True, null=True)
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    electric_accountable = models.CharField(_("Electric accountable"), max_length=254, blank=True, null=True)
-    is_foldable = models.BooleanField(_("Is foldable"), blank=True, null=True)
-    cross_bar_length = models.DecimalField(_("Cross bar length"), max_digits=5, decimal_places=2, blank=True, null=True)
+    material = models.CharField(
+        _("Material"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Describes the material that the mount is made of."),
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this mount becomes active."),
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this mount becomes inactive."),
+    )
+    txt = models.CharField(
+        _("Txt"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Text written on the mount."),
+    )
+    electric_accountable = models.CharField(
+        _("Electric accountable"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("The entity responsible for the mount (if electric)."),
+    )
+    is_foldable = models.BooleanField(
+        _("Is foldable"),
+        blank=True,
+        null=True,
+    )
+    cross_bar_length = models.DecimalField(
+        _("Cross bar length"),
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text=_("Length of the cross bar for this mount in centimeters."),
+    )
 
     class Meta:
         abstract = True
@@ -116,6 +163,7 @@ class MountPlan(UpdatePlanLocationMixin, AbstractMount):
         related_name="mount_plans",
         blank=True,
         null=True,
+        help_text=_("Plan which this mount plan is a part of."),
     )
 
     class Meta:
@@ -132,9 +180,22 @@ class MountReal(AbstractMount, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("The plan for this mount."),
     )
-    inspected_at = models.DateTimeField(_("Inspected at"), blank=True, null=True)
-    diameter = models.DecimalField(_("Diameter"), max_digits=5, decimal_places=2, blank=True, null=True)
+    inspected_at = models.DateTimeField(
+        _("Inspected at"),
+        blank=True,
+        null=True,
+        help_text=_("Date and time on which this mount was last inspected at."),
+    )
+    diameter = models.DecimalField(
+        _("Diameter"),
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text=_("Diameter of the mount in centimeters."),
+    )
 
     class Meta:
         db_table = "mount_real"

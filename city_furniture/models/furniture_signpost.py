@@ -50,14 +50,29 @@ class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControl
         max_length=254,
         blank=True,
         null=True,
-        help_text=_("Verbose name for the signpost's location, e.g. street, park or island."),
+        help_text=_("Verbose name for the furniture signposts location in Finnish, e.g. street, park or island."),
     )
-    location_name_sw = models.CharField(_("Swedish location name"), max_length=254, blank=True, null=True)
-    location_name_en = models.CharField(_("English location name"), max_length=254, blank=True, null=True)
+    location_name_sw = models.CharField(
+        _("Swedish location name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Verbose name for the furniture signposts location in Swedish, e.g. street, park or island."),
+    )
+    location_name_en = models.CharField(
+        _("English location name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Verbose name for the furniture signposts location in English, e.g. street, park or island."),
+    )
     direction = models.IntegerField(
         _("Direction"),
         default=0,
-        help_text=_("The direction in which the person is standing, when looking directly at the sign."),
+        help_text=_(
+            "The direction in which the person is standing, when looking directly at the sign. "
+            "e.g. 0 = North, 45 = North East, 90 = East, 180 = South."
+        ),
     )
     location_additional_info = models.CharField(
         _("Additional location info"),
@@ -73,40 +88,119 @@ class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControl
         limit_choices_to=Q(
             Q(target_model=None) | Q(target_model=CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
         ),
+        help_text=_("Type of the device from Helsinki Design Manual."),
     )
     # Size should be required if device type is non-standard
-    size = models.CharField(_("Size"), max_length=254, blank=True, null=True)
-    height = models.DecimalField(_("Height"), max_digits=5, decimal_places=2, blank=True, null=True)
-    order = models.SmallIntegerField(verbose_name=_("Order"), default=1)
+    size = models.CharField(
+        _("Size"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Size of the signpost. Enter only if device has a non-standard size."),
+    )
+    height = models.DecimalField(
+        _("Height"),
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text=_("The height of the sign from the ground, measured from the top in centimeters."),
+    )
+    order = models.SmallIntegerField(
+        verbose_name=_("Order"),
+        default=1,
+        help_text=_(
+            "The order of the sign in relation to the signs at the same point. "
+            "Order from top to bottom, from left to right starting at 1."
+        ),
+    )
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
+        help_text=_("Type of the mount this device is attached to."),
     )
-    arrow_direction = EnumIntegerField(ArrowDirection, verbose_name=_("Arrow direction"), blank=True, null=True)
+    arrow_direction = EnumIntegerField(
+        ArrowDirection,
+        verbose_name=_("Arrow direction"),
+        blank=True,
+        null=True,
+        help_text=_("Direction of the arrow on this device in relation to the sign."),
+    )
     color = models.ForeignKey(
-        CityFurnitureColor, verbose_name=_("Color"), on_delete=models.PROTECT, blank=True, null=True
+        CityFurnitureColor,
+        verbose_name=_("Color"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        help_text=_("Color of the device from Helsinki Design Manual."),
     )
 
     # Image on the sign
-    pictogram = models.CharField(_("Pictogram"), max_length=254, blank=True, null=True)
-    value = models.DecimalField(_("Furniture signpost value"), max_digits=10, decimal_places=2, blank=True, null=True)
-    text_content_fi = models.TextField(_("Finnish text content"), blank=True, null=True)
-    text_content_sw = models.TextField(_("Swedish text content"), blank=True, null=True)
-    text_content_en = models.TextField(_("English text content"), blank=True, null=True)
-    content_responsible_entity = models.CharField(
-        _("Content's responsible entity"), max_length=254, blank=True, null=True
+    pictogram = models.CharField(
+        _("Pictogram"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Description of the pictogram on the sign."),
     )
-
+    value = models.DecimalField(
+        _("Furniture signpost value"),
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text=_("Numeric value on the sign."),
+    )
+    text_content_fi = models.TextField(
+        _("Finnish text content"),
+        blank=True,
+        null=True,
+        help_text=_("Content of the sign in Finnish."),
+    )
+    text_content_sw = models.TextField(
+        _("Swedish text content"),
+        blank=True,
+        null=True,
+        help_text=_("Content of the sign in Swedish."),
+    )
+    text_content_en = models.TextField(
+        _("English text content"),
+        blank=True,
+        null=True,
+        help_text=_("Content of the sign in English."),
+    )
+    content_responsible_entity = models.CharField(
+        _("Content's responsible entity"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Entity responsible for the device's content."),
+    )
     target = models.ForeignKey(
-        CityFurnitureTarget, verbose_name=_("Target"), on_delete=models.PROTECT, blank=True, null=True
+        CityFurnitureTarget,
+        verbose_name=_("Target"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        help_text=_("Target subject, which this device relates to."),
     )
 
     # Validity fields are required if device is temporary
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
+    validity_period_start = models.DateField(
+        _("Validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this device becomes active."),
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this device becomes inactive."),
+    )
 
     additional_material_url = models.CharField(
         _("Additional material URL"),
@@ -136,6 +230,7 @@ class FurnitureSignpostPlan(UpdatePlanLocationMixin, FurnitureAbstractSignpost):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Mount that this device is mounted on."),
     )
     parent = models.ForeignKey(
         "self",
@@ -143,6 +238,7 @@ class FurnitureSignpostPlan(UpdatePlanLocationMixin, FurnitureAbstractSignpost):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Furniture Signpost inside which this device is located."),
     )
     plan = models.ForeignKey(
         Plan,
@@ -151,6 +247,7 @@ class FurnitureSignpostPlan(UpdatePlanLocationMixin, FurnitureAbstractSignpost):
         related_name="furniture_signpost_plans",
         blank=True,
         null=True,
+        help_text=_("Plan which this Device Plan is a part of."),
     )
 
     class Meta:
@@ -167,6 +264,7 @@ class FurnitureSignpostReal(FurnitureAbstractSignpost, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("The plan for this device."),
     )
     parent = models.ForeignKey(
         "self",
@@ -174,6 +272,7 @@ class FurnitureSignpostReal(FurnitureAbstractSignpost, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Furniture Signpost inside which this device is located."),
     )
     mount_real = models.ForeignKey(
         MountReal,
@@ -181,6 +280,7 @@ class FurnitureSignpostReal(FurnitureAbstractSignpost, InstalledDeviceModel):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Mount that this device is mounted on."),
     )
 
     class Meta:

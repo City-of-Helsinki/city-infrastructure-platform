@@ -25,20 +25,62 @@ class CityFurnitureDeviceType(models.Model):
     """
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    code = models.CharField(_("Code"), unique=True, max_length=32)
-    class_type = EnumIntegerField(CityFurnitureClassType, verbose_name=_("City Furniture Class type"))
-    function_type = EnumIntegerField(CityFurnitureFunctionType, verbose_name=_("City Furniture Function or Usage type"))
-    icon = models.CharField(_("Icon"), max_length=100, blank=True)  # Icon of the actual device
-    description_fi = models.CharField(_("Finnish Description"), max_length=254, blank=True, null=True)
-    description_sw = models.CharField(_("Swedish Description"), max_length=254, blank=True, null=True)
-    description_en = models.CharField(_("English Description"), max_length=254, blank=True, null=True)
-    size = models.CharField(_("Size"), max_length=50, blank=True)
+    code = models.CharField(
+        _("Code"),
+        unique=True,
+        max_length=32,
+        help_text=_("Code of the Device Type in the Helsinki Design Manual."),
+    )
+    class_type = EnumIntegerField(
+        CityFurnitureClassType,
+        verbose_name=_("City Furniture Class type"),
+        help_text=_("OGC CityGML City Furniture Class"),
+    )
+    function_type = EnumIntegerField(
+        CityFurnitureFunctionType,
+        verbose_name=_("City Furniture Function or Usage type"),
+        help_text=_("OGC CityGML City Furniture Function or Usage type"),
+    )
+    icon = models.CharField(
+        _("Icon"),
+        max_length=100,
+        blank=True,
+        help_text=_("Icon of the actual device"),
+    )
+    description_fi = models.CharField(
+        _("Finnish Description"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Description of the Device Type in Finnish."),
+    )
+    description_sw = models.CharField(
+        _("Swedish Description"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Description of the Device Type in Swedish."),
+    )
+    description_en = models.CharField(
+        _("English Description"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Description of the Device Type in English."),
+    )
+    size = models.CharField(
+        _("Size"),
+        max_length=50,
+        blank=True,
+        help_text=_("Standard size of the Device Type."),
+    )
     target_model = EnumField(
         CityFurnitureDeviceTypeTargetModel,
         verbose_name=_("Target data model"),
         max_length=32,
         blank=True,
         null=True,
+        help_text=_("City Furniture model that this Device Type is usable for."),
     )
 
     objects = CityFurnitureDeviceTypeQuerySet.as_manager()
@@ -98,7 +140,7 @@ class CityFurnitureDeviceType(models.Model):
 
         if raise_exception and has_invalid_relations:
             raise ValidationError(
-                f"Some traffic control devices related to this device type instance "
+                f"Some city furniture devices related to this device type instance "
                 f"will become invalid if target_model value is changed to "
                 f"{new_target_type.value}. target_model can not be changed until this "
                 f"is resolved."
@@ -119,8 +161,15 @@ class CityFurnitureDeviceType(models.Model):
 
 class CityFurnitureColor(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    name = models.CharField(_("Name"), max_length=64, unique=True)
-    rgb = ColorField()
+    name = models.CharField(
+        _("Name"),
+        max_length=64,
+        unique=True,
+        help_text=_("Name of the color in Helsinki Design System or Manual."),
+    )
+    rgb = ColorField(
+        help_text=_("RGB Hex value of the color"),
+    )
 
     class Meta:
         db_table = "city_furniture_color"
@@ -135,10 +184,32 @@ class CityFurnitureTarget(SourceControlModel):
     """Details about the guided object target (Opastettava kohde) that city furniture devices are related to"""
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    name_fi = models.CharField(_("Finnish name"), max_length=254)
-    name_sw = models.CharField(_("Swedish name"), max_length=254, blank=True, null=True)
-    name_en = models.CharField(_("English name"), max_length=254, blank=True, null=True)
-    description = models.CharField(_("Description"), max_length=254, blank=True, null=True)
+    name_fi = models.CharField(
+        _("Finnish name"),
+        max_length=254,
+        help_text=_("Name of the target in Finnish."),
+    )
+    name_sw = models.CharField(
+        _("Swedish name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Name of the target in Swedish."),
+    )
+    name_en = models.CharField(
+        _("English name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Name of the target in English."),
+    )
+    description = models.CharField(
+        _("Description"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Description of the target."),
+    )
 
     class Meta:
         db_table = "city_furniture_target"

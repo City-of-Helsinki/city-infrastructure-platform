@@ -64,22 +64,49 @@ class TrafficSignRealQuerySet(SoftDeleteQuerySet):
 
 class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
-    road_name = models.CharField(_("Road name"), max_length=254, blank=True, null=True)
-    lane_number = EnumField(LaneNumber, verbose_name=_("Lane number"), default=LaneNumber.MAIN_1, blank=True)
+    road_name = models.CharField(
+        _("Road name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Name of the road this road name is installed at."),
+    )
+    lane_number = EnumField(
+        LaneNumber,
+        verbose_name=_("Lane number"),
+        default=LaneNumber.MAIN_1,
+        blank=True,
+        help_text=_("Describes which lane of the road this sign affects."),
+    )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
         default=LaneType.MAIN,
         blank=True,
+        help_text=_("The type of lane which this sign affects."),
     )
-    direction = models.IntegerField(_("Direction"), default=0)
-    height = models.IntegerField(_("Height"), blank=True, null=True)
+    direction = models.IntegerField(
+        _("Direction"),
+        default=0,
+        help_text=_(
+            "Direction of the device in degrees. "
+            "If 'road name' is entered the direction is in relation to the road. Otherwise cardinal direction is used. "
+            "e.g. 0 = North, 45 = North East, 90 = East, 180 = South."
+        ),
+    )
+    height = models.IntegerField(
+        _("Height"),
+        blank=True,
+        null=True,
+        help_text=_("The height of the sign from the ground, measured from the top in centimeters."),
+    )
     mount_type = models.ForeignKey(
         "MountType",
         verbose_name=_("Mount type"),
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
+        help_text=_("Type of the mount this sign is attached to."),
     )
     value = models.DecimalField(
         _("Traffic Sign Code value"),
@@ -87,57 +114,7 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel,
         decimal_places=2,
         blank=True,
         null=True,
-    )
-    txt = models.CharField(_("Txt"), max_length=254, blank=True, null=True)
-    location_specifier = EnumIntegerField(
-        LocationSpecifier,
-        verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
-        blank=True,
-        null=True,
-    )
-    validity_period_start = models.DateField(_("Validity period start"), blank=True, null=True)
-    validity_period_end = models.DateField(_("Validity period end"), blank=True, null=True)
-    seasonal_validity_period_start = models.DateField(_("Seasonal validity period start"), blank=True, null=True)
-    seasonal_validity_period_end = models.DateField(_("Seasonal validity period end"), blank=True, null=True)
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return f"{self.id} {self.device_type}"
-
-    def has_additional_signs(self):
-        return self.additional_signs.active().exists()
-
-    @transaction.atomic
-    def soft_delete(self, user):
-        super().soft_delete(user)
-        self.additional_signs.soft_delete(user)
-
-
-class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, AbstractTrafficSign):
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
-    )
-    mount_plan = models.ForeignKey(
-        MountPlan,
-        verbose_name=_("Mount Plan"),
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-    affect_area = models.PolygonField(_("Affect area (2D)"), srid=settings.SRID, blank=True, null=True)
-    plan = models.ForeignKey(
-        Plan,
-        verbose_name=_("Plan"),
-        on_delete=models.PROTECT,
-        related_name="traffic_sign_plans",
-        blank=True,
-        null=True,
+        help_text=_("Numeric value on the sign."),
     )
     size = EnumField(
         Size,
@@ -163,6 +140,87 @@ class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, 
         blank=True,
         null=True,
     )
+    txt = models.CharField(
+        _("Txt"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Text written on the sign."),
+    )
+    location_specifier = EnumIntegerField(
+        LocationSpecifier,
+        verbose_name=_("Location specifier"),
+        default=LocationSpecifier.RIGHT,
+        blank=True,
+        null=True,
+        help_text=_("Specifies where the sign is in relation to the road."),
+    )
+    validity_period_start = models.DateField(
+        _("Validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this sign becomes active."),
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this sign becomes inactive."),
+    )
+    seasonal_validity_period_start = models.DateField(
+        _("Seasonal validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this sign becomes seasonally active."),
+    )
+    seasonal_validity_period_end = models.DateField(
+        _("Seasonal validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this sign becomes seasonally inactive."),
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.id} {self.device_type}"
+
+    def has_additional_signs(self):
+        return self.additional_signs.active().exists()
+
+    @transaction.atomic
+    def soft_delete(self, user):
+        super().soft_delete(user)
+        self.additional_signs.soft_delete(user)
+
+
+class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, AbstractTrafficSign):
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
+    )
+    mount_plan = models.ForeignKey(
+        MountPlan,
+        verbose_name=_("Mount Plan"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        help_text=_("Mount that this sign is mounted on."),
+    )
+    affect_area = models.PolygonField(_("Affect area (2D)"), srid=settings.SRID, blank=True, null=True)
+    plan = models.ForeignKey(
+        Plan,
+        verbose_name=_("Plan"),
+        on_delete=models.PROTECT,
+        related_name="traffic_sign_plans",
+        blank=True,
+        null=True,
+        help_text=_("Plan which this traffic sign plan is a part of."),
+    )
 
     objects = TrafficSignPlanQuerySet.as_manager()
 
@@ -186,59 +244,95 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("The plan for this traffic sign."),
     )
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
         blank=False,
         null=True,
+        on_delete=models.PROTECT,
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
     )
-    legacy_code = models.CharField(_("Legacy Traffic Sign Code"), max_length=32, blank=True, null=True)
+    legacy_code = models.CharField(
+        _("Legacy Traffic Sign Code"),
+        max_length=32,
+        blank=True,
+        null=True,
+        help_text=_("The device type code of the sign in the old Finnish road traffic law."),
+    )
     mount_real = models.ForeignKey(
         MountReal,
         verbose_name=_("Mount Real"),
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+        help_text=_("Mount that this sign is mounted on."),
     )
-    installation_id = models.CharField(_("Installation id"), max_length=254, blank=True, null=True)
-    installation_details = models.CharField(_("Installation details"), max_length=254, blank=True, null=True)
-    permit_decision_id = models.CharField(_("Permit decision id"), max_length=254, blank=True, null=True)
+    installation_id = models.CharField(
+        _("Installation id"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("The id number of the installation record."),
+    )
+    installation_details = models.CharField(
+        _("Installation details"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Additional details about the installation."),
+    )
+    permit_decision_id = models.CharField(
+        _("Permit decision id"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("The id number of the installation permit."),
+    )
     coverage_area = models.ForeignKey(
         CoverageArea,
         verbose_name=_("Coverage area"),
         blank=True,
         null=True,
         on_delete=models.PROTECT,
+        help_text=_("Coverage area that this traffic sign belongs to."),
     )
-    scanned_at = models.DateTimeField(_("Scanned at"), blank=True, null=True)
-    size = EnumField(
-        Size,
-        verbose_name=_("Size"),
-        max_length=1,
+    scanned_at = models.DateTimeField(
+        _("Scanned at"),
         blank=True,
         null=True,
+        help_text=_("Date and time on which this sign was last scanned at."),
     )
-    reflection_class = EnumField(
-        Reflection,
-        verbose_name=_("Reflection"),
-        max_length=2,
+    manufacturer = models.CharField(
+        _("Manufacturer"),
+        max_length=254,
         blank=True,
         null=True,
+        help_text=_("Name of the organization that manufactured this sign."),
     )
-    surface_class = EnumField(
-        Surface,
-        verbose_name=_("Surface"),
-        max_length=6,
+    rfid = models.CharField(
+        _("RFID"),
+        max_length=254,
         blank=True,
         null=True,
+        help_text=_("RFID tag of the sign (if any)."),
     )
-    manufacturer = models.CharField(_("Manufacturer"), max_length=254, blank=True, null=True)
-    rfid = models.CharField(_("RFID"), max_length=254, blank=True, null=True)
-    operation = models.CharField(_("Operation"), max_length=64, blank=True, null=True)
-    attachment_url = models.URLField(_("Attachment url"), max_length=500, blank=True, null=True)
+    operation = models.CharField(
+        _("Operation"),
+        max_length=64,
+        blank=True,
+        null=True,
+        help_text=_("Maintenance operations done to the sign, e.g. washing, straightening or painting."),
+    )
+    attachment_url = models.URLField(
+        _("Attachment url"),
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text=_("URL to a file attachment related to this sign."),
+    )
 
     objects = TrafficSignRealQuerySet.as_manager()
 

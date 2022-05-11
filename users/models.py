@@ -15,30 +15,31 @@ class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     bypass_operational_area = models.BooleanField(
         verbose_name=_("Bypass operational area"),
-        help_text=_("Disable operational area permission checks for this user."),
         default=False,
+        help_text=_("Disable operational area permission checks for this user."),
     )
     operational_areas = models.ManyToManyField(
         "traffic_control.OperationalArea",
         related_name="users",
         verbose_name=_("Operational areas"),
         blank=True,
+        help_text=_("Operational areas, on which this user has permission to modify devices in."),
     )
     bypass_responsible_entity = models.BooleanField(
         verbose_name=_("Bypass responsible entity"),
-        help_text=_("Disable responsible entity permission checks for this user."),
         default=False,
+        help_text=_("Disable responsible entity permission checks for this user."),
     )
     responsible_entities = models.ManyToManyField(
         "traffic_control.ResponsibleEntity",
         related_name="users",
         verbose_name=_("Responsible entities"),
+        blank=True,
         help_text=_(
             "Responsible entities that this user is belongs to. "
             "This gives the users write permission to devices that belong to the Responsible Entities "
             "or any Responsible Entity that's hierarchically under the selected ones."
         ),
-        blank=True,
     )
 
     def location_is_in_operational_area(self, location):
