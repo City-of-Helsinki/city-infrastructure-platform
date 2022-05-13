@@ -1,0 +1,52 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block coltype %}colSM{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; <a href="{% url 'django-admindocs-docroot' %}">{% translate 'Documentation' %}</a>
+&rsaquo; {% translate 'Instructions' %}
+</div>
+{% endblock %}
+
+{% block title %}{% translate 'Instructions' %}{% endblock %}
+
+{# Disable models sidebar #}
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<h1>{% translate 'City Infrastructure Platform Instructions' %}</h1>
+
+<div id="content-main">
+{% regroup sections by category as categories %}
+{% for category in categories %}
+<div class="module">
+    <h2>{% firstof category.grouper %}</h2>
+    {% for section in category.list %}
+    <h3 id="{{ category.grouper|default:"built_in" }}-{{ section.name }}">{{ section.name }}</h3>
+    <h4>{{ section.description|striptags }}</h4>
+    {{ section.body }}
+    {% if not forloop.last %}<hr>{% endif %}
+    {% endfor %}
+</div>
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+{% regroup sections by category as categories %}
+{% for category in categories %}
+<div class="module">
+    <h2>{% firstof category.grouper %}</h2>
+    <ul>
+    {% for section in category.list %}
+        <li><a href="#{{ category.grouper|default:"built_in" }}-{{ section.name }}">{{ section.name }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+{% endfor %}
+</div>
+{% endblock %}
