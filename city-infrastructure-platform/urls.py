@@ -155,6 +155,7 @@ if settings.SENTRY_DEBUG:
 
 # Admin
 urlpatterns += i18n_patterns(
+    path("admin/doc/", include("city_infra_instructions.urls")),
     path("admin/", admin.site.urls),
     path("map/", map_views.map_view, name="map-view"),
     path("map-config/", map_views.map_config, name="map-config"),
