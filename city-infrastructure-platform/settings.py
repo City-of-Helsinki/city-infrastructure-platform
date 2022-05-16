@@ -143,6 +143,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.gis",
+    "django.contrib.admindocs",
 ]
 THIRD_PARTY_APPS = [
     "django_extensions",

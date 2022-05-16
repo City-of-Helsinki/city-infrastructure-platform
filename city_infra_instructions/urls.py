@@ -14,5 +14,14 @@ urlpatterns = [
         views.InstructionsIndexView.as_view(),
         name="django-admindocs-instructions",
     ),
+    path(
+        "models/",
+        admindoc_views.ModelIndexView.as_view(),
+        name="django-admindocs-models-index",
+    ),
+    re_path(
+        r"^models/(?P<app_label>[^\.]+)\.(?P<model_name>[^/]+)/$",
+        admindoc_views.ModelDetailView.as_view(),
+        name="django-admindocs-models-detail",
     ),
 ]
