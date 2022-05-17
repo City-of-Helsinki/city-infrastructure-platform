@@ -165,7 +165,7 @@ LOCAL_APPS = [
     "map.apps.MapConfig",
     "city_infra_instructions.apps.CityInfraInstructionsConfig",
 ]
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
 AUTHENTICATION_BACKENDS = (
     "helusers.tunnistamo_oidc.TunnistamoOIDCAuth",
