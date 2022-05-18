@@ -16,6 +16,7 @@ COPY poetry.lock pyproject.toml /city-infrastructure-platform/
 RUN apt-get update && \
     mkdir -p /usr/share/man/man1/ /usr/share/man/man3/ /usr/share/man/man7/ && \
     apt-get install -y --no-install-recommends \
+        libpcre3-dev \
         libpq-dev \
         build-essential \
         gdal-bin \
