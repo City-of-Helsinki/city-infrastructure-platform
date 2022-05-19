@@ -221,5 +221,8 @@ class FurnitureSignpostRealAdmin(
         "text_content_fi",
         "text_content_sw",
         "text_content_en",
+        "location_name_fi",
+        "location_name_en",
+        "location_name_sw",
     )
     inlines = (FurnitureSignpostRealFileInline, FurnitureSignpostRealOperationInline)
