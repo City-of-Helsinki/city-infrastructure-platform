@@ -1,0 +1,1597 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-23 15:42+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "City Infrastructure Platform"
+msgstr "Infraomaisuuden hallinta-alusta"
+
+msgid "Finnish"
+msgstr "Suomi"
+
+msgid "English"
+msgstr "Englanti"
+
+msgid "General information"
+msgstr "Yleiset tiedot"
+
+msgid "Location information"
+msgstr "Sijaintitiedot"
+
+msgid "Content and physical properties"
+msgstr ""
+
+msgid "Validity"
+msgstr "Voimassaolo"
+
+msgid "Metadata"
+msgstr "Metatiedot"
+
+msgid "Related models"
+msgstr "Liittyvät tietomallit"
+
+msgid "Installation information"
+msgstr "Asennuksen tiedot"
+
+msgid "City furniture"
+msgstr ""
+
+msgid "Furniture signpost"
+msgstr ""
+
+msgid "Traffic"
+msgstr ""
+
+msgid "Communication"
+msgstr ""
+
+msgid "Security"
+msgstr ""
+
+msgid "Others"
+msgstr ""
+
+msgid "Communication fixture"
+msgstr ""
+
+msgid "Telephone box"
+msgstr ""
+
+msgid "Postbox"
+msgstr ""
+
+msgid "Emergency call fixture"
+msgstr ""
+
+msgid "Fire detector"
+msgstr ""
+
+msgid "Police call post"
+msgstr ""
+
+msgid "Switching unit"
+msgstr ""
+
+msgid "Road sign"
+msgstr ""
+
+msgid "Traffic light"
+msgstr "Liikennevalo"
+
+msgid "Free-standing sign"
+msgstr ""
+
+msgid "Free-standing warning sign"
+msgstr ""
+
+msgid "Bus stop"
+msgstr ""
+
+msgid "Milestone"
+msgstr ""
+
+msgid "Rail level crossing"
+msgstr ""
+
+msgid "Gate"
+msgstr ""
+
+msgid "Streetlamp, latern or candelabra"
+msgstr ""
+
+msgid "Column"
+msgstr ""
+
+msgid "Lamp post"
+msgstr ""
+
+msgid "Flagpole"
+msgstr ""
+
+msgid "Street sink box"
+msgstr ""
+
+msgid "Rubbish bin"
+msgstr ""
+
+msgid "Clock"
+msgstr ""
+
+msgid "Directional spot light"
+msgstr ""
+
+msgid "Floodlight mast"
+msgstr ""
+
+msgid "Windmill"
+msgstr ""
+
+msgid "Solar cell"
+msgstr ""
+
+msgid "Water wheel"
+msgstr ""
+
+msgid "Pole"
+msgstr ""
+
+msgid "Radio mast"
+msgstr ""
+
+msgid "Aerial"
+msgstr ""
+
+msgid "Radio telescope"
+msgstr ""
+
+msgid "Chimney"
+msgstr ""
+
+msgid "Marker"
+msgstr ""
+
+msgid "Hydrant"
+msgstr ""
+
+msgid "Upper corridor fire-hydrant"
+msgstr ""
+
+msgid "Lower floor panel fire-hydrant"
+msgstr ""
+
+msgid "Slidegate valve cap"
+msgstr ""
+
+msgid "Entrance shaft"
+msgstr ""
+
+msgid "Converter"
+msgstr ""
+
+msgid "Stair"
+msgstr ""
+
+msgid "Outside staircase"
+msgstr ""
+
+msgid "Escalator"
+msgstr ""
+
+msgid "Ramp"
+msgstr ""
+
+msgid "Patio"
+msgstr ""
+
+msgid "Fence"
+msgstr ""
+
+msgid "Memorial/monument"
+msgstr ""
+
+msgid "Wayside shrine"
+msgstr ""
+
+msgid "Crossroads"
+msgstr ""
+
+msgid "Cross on the summit of a mountain"
+msgstr ""
+
+msgid "Fountain"
+msgstr ""
+
+msgid "Block mark"
+msgstr ""
+
+msgid "Boundary post"
+msgstr ""
+
+msgid "Bench"
+msgstr ""
+
+msgid "Code"
+msgstr "Koodi"
+
+msgid "City Furniture Class type"
+msgstr ""
+
+msgid "City Furniture Function or Usage type"
+msgstr ""
+
+msgid "Icon"
+msgstr "Kuvaustyyli"
+
+msgid "Finnish Description"
+msgstr ""
+
+msgid "Swedish Description"
+msgstr ""
+
+msgid "English Description"
+msgstr ""
+
+msgid "Size"
+msgstr "Koko"
+
+msgid "Target data model"
+msgstr "Kohde tietomalli"
+
+msgid "City Furniture Device Type"
+msgstr ""
+
+msgid "City Furniture Device Types"
+msgstr ""
+
+msgid "Name"
+msgstr "Nimi"
+
+msgid "City Furniture Color"
+msgstr ""
+
+msgid "City Furniture Colors"
+msgstr ""
+
+msgid "Finnish name"
+msgstr "Suomenkielinen nimi"
+
+msgid "Swedish name"
+msgstr ""
+
+msgid "English name"
+msgstr "Englanninkielinen nimi"
+
+msgid "Description"
+msgstr "Kuvaus"
+
+msgid "City Furniture Target"
+msgstr ""
+
+msgid "City Furniture Targets"
+msgstr ""
+
+msgid "Up"
+msgstr ""
+
+msgid "Down"
+msgstr ""
+
+msgid "Left"
+msgstr "Vasemmalle"
+
+msgid "Right"
+msgstr "Oikealle"
+
+msgid "Top right"
+msgstr ""
+
+msgid "Bottom right"
+msgstr ""
+
+msgid "Top left"
+msgstr ""
+
+msgid "Bottom left"
+msgstr ""
+
+msgid "Owner"
+msgstr "Omistaja"
+
+msgid "Responsible entity"
+msgstr ""
+
+msgid "Lifecycle"
+msgstr "Elinkaari"
+
+msgid "Location (3D)"
+msgstr "Sijainti (3D)"
+
+msgid "Finnish location name"
+msgstr ""
+
+msgid "Verbose name for the signpost's location, e.g. street, park or island."
+msgstr ""
+
+msgid "Swedish location name"
+msgstr ""
+
+msgid "English location name"
+msgstr ""
+
+msgid "Direction"
+msgstr "Suunta"
+
+msgid ""
+"The direction in which the person is standing, when looking directly at the "
+"sign."
+msgstr ""
+
+msgid "Additional location info"
+msgstr ""
+
+msgid "Additional information about the install location."
+msgstr "Lisäkilven toimenpide"
+
+msgid "City Furniture Device type"
+msgstr ""
+
+msgid "Height"
+msgstr "Korkeus"
+
+msgid "Order"
+msgstr "Järjestys"
+
+msgid "Mount type"
+msgstr "Kiinnityskohteen tyyppi"
+
+msgid "Arrow direction"
+msgstr "Nuolen suunta"
+
+msgid "Color"
+msgstr "Väri"
+
+msgid "Pictogram"
+msgstr ""
+
+msgid "Furniture signpost value"
+msgstr ""
+
+msgid "Finnish text content"
+msgstr ""
+
+msgid "Swedish text content"
+msgstr ""
+
+msgid "English text content"
+msgstr ""
+
+msgid "Content's responsible entity"
+msgstr ""
+
+msgid "Target"
+msgstr ""
+
+msgid "Validity period start"
+msgstr "Voimassaoloaika alkaa"
+
+msgid "Validity period end"
+msgstr "Voimassaoloaika loppuu"
+
+msgid "Additional material URL"
+msgstr ""
+
+msgid ""
+"Additional material about the device. This should be publicly available."
+msgstr ""
+
+msgid "Mount Plan"
+msgstr "Kiinnityskohde (suunnitelma)"
+
+msgid "Parent Furniture Signpost Plan"
+msgstr ""
+
+msgid "Plan"
+msgstr "Suunnitelma"
+
+msgid "Furniture Signpost Plan"
+msgstr ""
+
+msgid "Furniture Signpost Plans"
+msgstr ""
+
+msgid "Parent Furniture Signpost Real"
+msgstr ""
+
+msgid "Mount Real"
+msgstr "Kiinnityskohde (toteuma)"
+
+msgid "Installation date"
+msgstr "Asennuspvm"
+
+msgid "Installation status"
+msgstr "Asennuksen tila"
+
+msgid "Condition"
+msgstr "Kunto"
+
+msgid "Furniture Signpost Real"
+msgstr ""
+
+msgid "Furniture Signpost Reals"
+msgstr ""
+
+msgid "operation type"
+msgstr "toimenpiteen tyyppi"
+
+msgid "Furniture Signpost Real operation"
+msgstr ""
+
+msgid "Furniture Signpost Real operations"
+msgstr ""
+
+msgid "File"
+msgstr "Tiedosto"
+
+msgid "Furniture Signpost Plan File"
+msgstr ""
+
+msgid "Furniture Signpost Plan Files"
+msgstr ""
+
+msgid "Furniture Signpost Real File"
+msgstr ""
+
+msgid "Furniture Signpost Real Files"
+msgstr ""
+
+msgid "This field is required."
+msgstr "Tämä kenttä vaaditaan"
+
+msgid "Map"
+msgstr "Kartta"
+
+msgid "Identifier"
+msgstr "Tunniste"
+
+msgid "App Name"
+msgstr ""
+
+msgid "Is basemap"
+msgstr "On pohjakartta"
+
+msgid "Filter fields"
+msgstr ""
+
+msgid "Use Traffic Sign Icons"
+msgstr ""
+
+msgid "Layer"
+msgstr "Taso"
+
+msgid "Layers"
+msgstr "tasot"
+
+msgid "Basemaps"
+msgstr "Pohjakartat"
+
+msgid "Overlays"
+msgstr "Tasot"
+
+msgid "View map"
+msgstr "Näytä kartta"
+
+msgid "View API"
+msgstr "Rajapinta"
+
+msgid "View API documentation"
+msgstr "Rajapinnan dokumentaatio"
+
+msgid "Change password"
+msgstr "Vaihda salasana"
+
+msgid "Log out"
+msgstr "Kirjaudu ulos"
+
+msgid "Additional sign content"
+msgstr "Lisäkilven sisältö"
+
+msgid "Additional sign contents"
+msgstr "Lisäkilven sisällöt"
+
+msgid "Physical properties"
+msgstr "Fyysiset ominaisuudet"
+
+msgid "Operational area"
+msgstr "Toiminta-alue"
+
+msgid "Operational areas"
+msgstr "Toiminta-alue"
+
+#, python-format
+msgid "Set related plans for plan %s"
+msgstr "Aseta liittyviä suunnitelmia suunnitelmalle %s"
+
+msgid "Responsible entities"
+msgstr ""
+
+msgid "Traffic sign type"
+msgstr "Liikennemerkkityyppi"
+
+msgid "No"
+msgstr "Ei"
+
+msgid "Yes"
+msgstr "Kyllä"
+
+msgid "has additional signs"
+msgstr "Sisältää lisämerkkejä"
+
+msgid "Ordered traffic sign"
+msgstr "Järjestetty liikennemerkki"
+
+msgid "Ordered traffic signs"
+msgstr "Järjestetyt liikennemerkit"
+
+msgid "Location (z)"
+msgstr "Sijainti (z)"
+
+msgid "Any date"
+msgstr ""
+
+msgid "Today"
+msgstr ""
+
+msgid "Last 7 days"
+msgstr ""
+
+msgid "Last month"
+msgstr ""
+
+msgid "Last 6 months"
+msgstr ""
+
+msgid "Last year"
+msgstr ""
+
+msgid "No date"
+msgstr ""
+
+msgid "Has date"
+msgstr ""
+
+msgid "Responsible Entity Permission"
+msgstr ""
+
+msgid "Format"
+msgstr ""
+
+msgid "Export resource"
+msgstr ""
+
+msgid "Traffic control"
+msgstr "Liikenteenohjauslaitteet"
+
+msgid "Warning sign"
+msgstr "Varoitusmerkki"
+
+msgid "Priority or give-way sign"
+msgstr "Etuajo-oikeus- tai väistämismerkki"
+
+msgid "Prohibitory or restrictive sign"
+msgstr "Kielto- tai rajoitusmerkki"
+
+msgid "Mandatory sign"
+msgstr "Määräysmerkki"
+
+msgid "Regulatory sign"
+msgstr "Sääntömerkki"
+
+msgid "Information sign"
+msgstr "Opastusmerkki"
+
+msgid "Service sign"
+msgstr "Palvelukohteen opastusmerkki"
+
+msgid "Additional sign"
+msgstr "Lisäkilpi"
+
+msgid "Other road sign"
+msgstr "Muu merkki"
+
+msgid "Very bad"
+msgstr "Erittäin huono"
+
+msgid "Bad"
+msgstr "Huono"
+
+msgid "Average"
+msgstr "Tyydyttävä"
+
+msgid "Good"
+msgstr "Hyvä"
+
+msgid "Very good"
+msgstr "Erittäin hyvä"
+
+msgid "Barrier"
+msgstr "Ajoeste"
+
+msgid "Road marking"
+msgstr "Tiemerkintä"
+
+msgid "Signpost"
+msgstr "Opaste"
+
+msgid "Traffic sign"
+msgstr "Liikennemerkki"
+
+msgid "Other"
+msgstr "Muu"
+
+msgid "In use"
+msgstr "Käytössä"
+
+msgid "Covered"
+msgstr "Huputettu"
+
+msgid "Fallen"
+msgstr "Kaatunut"
+
+msgid "Missing"
+msgstr "Kadonnut"
+
+msgid "Main lane"
+msgstr "Pääkaista"
+
+msgid "Lane allowing traffic to both directions"
+msgstr "Molempiin suuntiin liikenteen salliva kaista"
+
+msgid "First left additional lane"
+msgstr "Ensimmäinen lisäkaista pääkaistan vasemmalla puolella"
+
+msgid "First right additional lane"
+msgstr "Ensimmäinen lisäkaista pääkaistan oikealla puolella"
+
+msgid "Second left additional lane"
+msgstr "Toinen lisäkaista pääkaistan vasemmalla puolella"
+
+msgid "Second right additional lane"
+msgstr "Toinen lisäkaista pääkaistan oikealla puolella"
+
+msgid "Third left additional lane"
+msgstr "Kolmas lisäkaista pääkaistan vasemmalla puolella"
+
+msgid "Third right additional lane"
+msgstr "Kolmas lisäkaista pääkaistan oikealla puolella"
+
+msgid "Fourth left additional lane"
+msgstr "Neljäs lisäkaista pääkaistan vasemmalla puolella"
+
+msgid "Fourth right additional lane"
+msgstr "Neljäs lisäkaista pääkaistan oikealla puolella"
+
+msgid "Fast lane"
+msgstr "Ohituskaista"
+
+msgid "Turn right lane"
+msgstr "Kääntymiskaista oikealle"
+
+msgid "Turn left lane"
+msgstr "Kääntymiskaista vasemmalle"
+
+msgid "Auxiliary straight lane"
+msgstr "Lisäkaista suoraan ajaville"
+
+msgid "Merge lane"
+msgstr "Liittymiskaista"
+
+msgid "Exit lane"
+msgstr "Erkanemiskaista"
+
+msgid "Weaving lane"
+msgstr "Sekoittumiskaista"
+
+msgid "Public transport lane / taxi lane"
+msgstr "Joukkoliikenteen kaista / taksikaista"
+
+msgid "Heavy vehicle lane"
+msgstr "Raskaan liikenteen kaista"
+
+msgid "Reversible lane"
+msgstr "Vaihtuvasuuntainen kaista"
+
+msgid "Pedestrian and bike lane"
+msgstr "Yhdistetty jalankulun ja pyöräilyn kaista"
+
+msgid "Pedestrian lane"
+msgstr "Jalankulun kaista"
+
+msgid "Bike lane"
+msgstr "Pyöräilykaista"
+
+msgid "Active"
+msgstr "Käytössä pysyvästi"
+
+msgid "Temporarily active"
+msgstr "Käytössä tilapäisesti"
+
+msgid "Temporarily inactive"
+msgstr "Tilapäisesti poissa käytöstä"
+
+msgid "Inactive"
+msgstr "Pysyvästi poissa käytöstä"
+
+msgid "r1"
+msgstr "r1"
+
+msgid "r2"
+msgstr "r2"
+
+msgid "r3"
+msgstr "r3"
+
+msgid "Small"
+msgstr "Pieni"
+
+msgid "Medium"
+msgstr "Normaali"
+
+msgid "Large"
+msgstr "Suuri"
+
+msgid "Convex"
+msgstr "Kupera"
+
+msgid "Flat"
+msgstr "Suora"
+
+msgid "Longitudinal"
+msgstr "Pituussuuntainen"
+
+msgid "Transverse"
+msgstr "Poikkisuuntainen"
+
+msgid "Other road marking"
+msgstr "Muu tiemerkintä"
+
+msgid "division"
+msgstr ""
+
+msgid "service"
+msgstr ""
+
+msgid "unit"
+msgstr ""
+
+msgid "project"
+msgstr ""
+
+msgid "Location (x,y)"
+msgstr "Sijainti (x,y)"
+
+msgid "Barrier Plans"
+msgstr "Ajoeste (suunnitelmat)"
+
+msgid "Mount Plans"
+msgstr "Kiinnityskohde (suunnitelmat)"
+
+msgid "Road Marking Plans"
+msgstr "Tiemerkintä (suunnitelmat)"
+
+msgid "Signpost Plans"
+msgstr "Opaste (suunnitelmat)"
+
+msgid "Traffic Light Plans"
+msgstr "Liikennevalo (suunnitelmat)"
+
+msgid "Traffic Sign Plans"
+msgstr "Liikennemerkki (suunnitelmat)"
+
+msgid "Additional Sign Plans"
+msgstr "Lisäkilpi (suunnitelmat)"
+
+msgid "Marked as deleted (hidden from API)"
+msgstr "Merkitty poistetuksi (piilotettu rajapinnasta)"
+
+msgid "Mark selected objects as deleted"
+msgstr "Merkitse valitut kohteet poistetuksi"
+
+msgid "Mark selected objects as not deleted"
+msgstr "Kumoa valittujen kohteiden poistettu merkintä"
+
+msgid "Deleted at"
+msgstr "Poistettu-aikaleima"
+
+msgid "Deleted by"
+msgstr "Poistaja"
+
+msgid "Created at"
+msgstr "Luotu-aikaleima"
+
+msgid "Updated at"
+msgstr "Päivitetty-aikaleima"
+
+msgid "Created by"
+msgstr "Luoja"
+
+msgid "Updated by"
+msgstr "Päivittäjä"
+
+msgid "Source id"
+msgstr "Lähteen id"
+
+msgid "Source name"
+msgstr "Lähteen nimi"
+
+msgid "Blue"
+msgstr "Sininen"
+
+msgid "Yellow"
+msgstr "Keltainen"
+
+msgid "Reflection"
+msgstr "Kalvo"
+
+msgid "Surface"
+msgstr "Pinta"
+
+msgid "Road name"
+msgstr "Kadun/tien nimi"
+
+msgid "Lane number"
+msgstr "Kaistanumero"
+
+msgid "Lane type"
+msgstr "Kaistatyyppi"
+
+msgid "Location specifier"
+msgstr "Sijaintitarkenne"
+
+msgid "Seasonal validity period start"
+msgstr "Kausiluontoinen voimassaoloaika alkaa"
+
+msgid "Seasonal validity period end"
+msgstr "Kausiluontoinen voimassaoloaika loppuu"
+
+msgid "Parent Traffic Sign Plan"
+msgstr "Isäntäkilpi (suunnitelma)"
+
+msgid "Additional Sign Plan"
+msgstr "Lisäkilpi (suunnitelma)"
+
+msgid "Parent Traffic Sign Real"
+msgstr "Isäntäkilpi (toteuma)"
+
+msgid "Installation id"
+msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
+
+msgid "Installation details"
+msgstr "Asennuksen lisätiedot"
+
+msgid "Installed by"
+msgstr "Asentaja"
+
+msgid "Manufacturer"
+msgstr "Valmistaja"
+
+msgid "RFID"
+msgstr "RFID"
+
+msgid "Legacy Traffic Sign Code"
+msgstr "Vanha merkkikoodi"
+
+msgid "Permit decision id"
+msgstr "Lupapäätöksen tunnistenumero"
+
+msgid "Operation"
+msgstr "Toimenpide"
+
+msgid "Scanned at"
+msgstr "Kuvattu-aikaleima"
+
+msgid "Attachment url"
+msgstr "Liite (url)"
+
+msgid "Coverage area"
+msgstr "Vaikutusalue"
+
+msgid "Additional Sign Real"
+msgstr "Lisäkilpi (toteuma)"
+
+msgid "Additional Sign Reals"
+msgstr "Lisäkilpi (toteumat)"
+
+msgid "additional sign real"
+msgstr "Lisäkilpi (toteuma)"
+
+msgid "Additional sign real operation"
+msgstr "Lisäkilven toimenpide"
+
+msgid "Additional sign real operations"
+msgstr "Lisäkilven toimenpiteet"
+
+msgid "Device type"
+msgstr "Laitteen tyyppi"
+
+msgid "Content text"
+msgstr "Sisältöteksti"
+
+msgid "Parent Additional Sign Plan"
+msgstr "Isäntäkilpi (suunnitelma)"
+
+msgid "Additional Sign Content Plan"
+msgstr "Lisäkilven sisältö (suunnitelma)"
+
+msgid "Additional Sign Content Plans"
+msgstr "Lisäkilpien sisällöt (suunnitelmat)"
+
+msgid "Parent Additional Sign Real"
+msgstr "Isäntäkilpi (toteuma)"
+
+msgid "Additional Sign Content Real"
+msgstr "Lisäkilven sisältö (toteuma)"
+
+msgid "Additional Sign Content Reals"
+msgstr "Lisäkilpien sisällöt (toteumat)"
+
+msgid "Coverage area category"
+msgstr "Vaikutusalueen luokka"
+
+msgid "Coverage area categories"
+msgstr "Vaikutusalueen luokat"
+
+msgid "Category"
+msgstr "Luokka"
+
+msgid "Area type"
+msgstr "Aluetyyppi"
+
+msgid "Season"
+msgstr "Kausi"
+
+msgid "Resident parking id"
+msgstr "Asukaspysäköintitunnus"
+
+msgid "Position"
+msgstr "Sijainti"
+
+msgid "Duration"
+msgstr "Kesto"
+
+msgid "Surface area"
+msgstr "Pinta-ala"
+
+msgid "Parking slots"
+msgstr "Pysäköintipaikat"
+
+msgid "Additional info"
+msgstr "Lisätieto"
+
+msgid "Stopping prohibited"
+msgstr "Pysäköinti kielletty"
+
+msgid "Coverage areas"
+msgstr "Vaikutusalueet"
+
+msgid "Closed"
+msgstr "Suljettu yhteys"
+
+msgid "Open out"
+msgstr "Avattava yhteys"
+
+msgid "Red-yellow"
+msgstr "Punakeltainen"
+
+msgid "Middle of road or lane"
+msgstr "Ajoradan tai kaistan keskellä"
+
+msgid "Right of road or lane"
+msgstr "Ajoradan tai kaistan oikea reuna"
+
+msgid "Left of road or lane"
+msgstr "Ajoradan tai kaistan vasen reuna"
+
+msgid "Connection type"
+msgstr "Avattava yhteys"
+
+msgid "Material"
+msgstr "Materiaali"
+
+msgid "Is electric"
+msgstr "Sähköinen"
+
+msgid "Reflective"
+msgstr "Heijastava"
+
+msgid "Length"
+msgstr "Pituus"
+
+msgid "Count"
+msgstr "Määrä"
+
+msgid "Txt"
+msgstr "Lisätieto"
+
+msgid "Barrier Plan"
+msgstr "Ajoeste (suunnitelma)"
+
+msgid "Barrier real"
+msgstr "Ajoeste (toteuma)"
+
+msgid "Barrier reals"
+msgstr "Ajoeste (toteumat)"
+
+msgid "barrier real"
+msgstr "Ajoeste (toteuma)"
+
+msgid "Barrier real operation"
+msgstr "Ajoesteen toimenpide"
+
+msgid "Barrier real operations"
+msgstr "Ajoesteen toimenpiteet"
+
+msgid "Barrier Plan File"
+msgstr "Suunnitelmadokumentti (ajoeste)"
+
+msgid "Barrier Plan Files"
+msgstr "Suunnitelmadokumentit (ajoeste)"
+
+msgid "Barrier Real File"
+msgstr "Toteumadokumentti (ajoeste)"
+
+msgid "Barrier Real Files"
+msgstr "Toteumadokumentit (ajoeste)"
+
+msgid "Name (fi)"
+msgstr "Nimi (fi)"
+
+msgid "Name (en)"
+msgstr "Nimi (en)"
+
+msgid "Owners"
+msgstr "Omistajat"
+
+msgid "Value"
+msgstr "Arvo"
+
+msgid "Unit"
+msgstr "Mittayksikkö"
+
+msgid "Legacy code"
+msgstr "Vanha merkkikoodi"
+
+msgid "Legacy description"
+msgstr "Vanha kuvaus"
+
+msgid "Type"
+msgstr "Tyyppi"
+
+msgid "Traffic Control Device Type"
+msgstr "Liikenteenohjauslaitteen tyyppi"
+
+msgid "Traffic Control Device Types"
+msgstr "Liikenteenohjauslaitteiden tyypit"
+
+msgid "Mount"
+msgstr "Kiinnityskohde"
+
+msgid "Operation type"
+msgstr "Toimenpiteen tyyppi"
+
+msgid "Operation types"
+msgstr "Toimenpidetyypit"
+
+msgid "Operation date"
+msgstr "Toimenpide pvm"
+
+msgid "Straightness value"
+msgstr "Suoruusarvo"
+
+msgid "Quality requirements fulfilled"
+msgstr "Hoidon laatuvaatimusten mukainen"
+
+msgid "Description (fi)"
+msgstr "Kuvaus (fi)"
+
+msgid "Digiroad code"
+msgstr "Digiroad koodi"
+
+msgid "Digiroad description"
+msgstr "Digiroad selite"
+
+msgid "Mount types"
+msgstr "Kiinnityskohteen tyypit"
+
+msgid "Portal structure"
+msgstr "Rakenne"
+
+msgid "Portal build type"
+msgstr "Tyyppi"
+
+msgid "Portal model"
+msgstr "Malli"
+
+msgid "Portal type"
+msgstr "Portaalityyppi"
+
+msgid "Portal types"
+msgstr "Portaalityypit"
+
+msgid "Base"
+msgstr "Jalusta"
+
+msgid "Electric accountable"
+msgstr "Sähköisen vastuutaho"
+
+msgid "Is foldable"
+msgstr "Kaadettava/taitettava"
+
+msgid "Cross bar length"
+msgstr "Poikkiorren pituus"
+
+msgid "Inspected at"
+msgstr "Tarkastettu-aikaleima"
+
+msgid "Diameter"
+msgstr "Kantavuus / jalustan halkaisija"
+
+msgid "Mount Reals"
+msgstr "Kiinnityskohde (toteumat)"
+
+msgid "mount real"
+msgstr "Kiinnityskohde (toteuma)"
+
+msgid "Mount real operation"
+msgstr "Kiinnityskohteen toimenpide"
+
+msgid "Mount real operations"
+msgstr "Kiinnityskohteen toimenpiteet"
+
+msgid "Mount Plan File"
+msgstr "Suunnitelmadokumentti (kiinnityskohde)"
+
+msgid "Mount Plan Files"
+msgstr "Suunnitelmadokumentit (kiinnityskohde)"
+
+msgid "Mount Real File"
+msgstr "Toteumadokumentti (kiinnityskohde)"
+
+msgid "Mount Real Files"
+msgstr "Toteumadokumentit (kiinnityskohde)"
+
+msgid "Group"
+msgstr "Ryhmä"
+
+msgid "Group operational area"
+msgstr "Ryhmän toiminta-alue"
+
+msgid "Group operational areas"
+msgstr "Ryhmien toiminta-alueet"
+
+msgid "Name short"
+msgstr "Nimi (lyhyt)"
+
+msgid "Contractor"
+msgstr "Urakoitsija"
+
+msgid "Start date"
+msgstr "Aloitus pvm"
+
+msgid "End date"
+msgstr "Lopetus pvm"
+
+msgid "Updated date"
+msgstr "Päivitetty-aikaleima"
+
+msgid "Task"
+msgstr "Tehtävä"
+
+msgid "Status"
+msgstr "Tila"
+
+msgid "Plan number"
+msgstr "Suunnitelman numero"
+
+msgid "Year and verdict section separated with a dash"
+msgstr "Vuosi ja päätöspykälä väliviivalla erotettuna"
+
+msgid "Planner"
+msgstr "Suunnittelija"
+
+msgid "Decision maker"
+msgstr "Päättäjä"
+
+msgid "Plans"
+msgstr "Suunnitelmat"
+
+msgid "Name (for projects use Projectwise ID)"
+msgstr ""
+
+msgid "External ID"
+msgstr ""
+
+msgid ""
+"Use Projectwise ID for projects, can also be an abbreviation if entity has "
+"no ID"
+msgstr ""
+
+msgid "Organization level"
+msgstr ""
+
+msgid "Parent Responsible Entity"
+msgstr ""
+
+msgid "Responsible Entity"
+msgstr ""
+
+msgid "Responsible Entities"
+msgstr ""
+
+msgid "Group responsible entity"
+msgstr ""
+
+msgid "Group responsible entities"
+msgstr ""
+
+msgid "Forward"
+msgstr "Eteenpäin"
+
+msgid "Backward"
+msgstr "Taaksepäin"
+
+msgid "Straight"
+msgstr "Suoraan"
+
+msgid "Right and straight"
+msgstr "Oikealle ja suoraan"
+
+msgid "Left and straight"
+msgstr "Vasemmalle ja suoraan"
+
+msgid "Lane ends"
+msgstr "Kaista päättyy"
+
+msgid "Right and left"
+msgstr "Oikealle ja vasemmalle"
+
+msgid "Straight, right and left"
+msgstr "Suoraan, oikealle ja vasemmalle"
+
+msgid "White"
+msgstr "Valkoinen"
+
+msgid "Both sides of road"
+msgstr "Ajoradan molemmissa reunoissa"
+
+msgid "Right side of lane"
+msgstr "Kaistan oikeassa reunassa ajosuuntaan nähden"
+
+msgid "Left side of lane"
+msgstr "Kaistan vasemmassa reunassa ajosuuntaan nähden"
+
+msgid "Both sides of lane "
+msgstr "Kaistan molemmin puolin"
+
+msgid "Middle of lane"
+msgstr "Kaistan keskellä"
+
+msgid "Left side of lane or road"
+msgstr "Ajoradan tai kaistan vasen puoli"
+
+msgid "Line direction"
+msgstr "Viivan piirtosuunta"
+
+msgid "Road Marking value"
+msgstr "Teksti"
+
+msgid "Type specifier"
+msgstr "Tyypin tarkenne"
+
+msgid "Symbol"
+msgstr "Symboli"
+
+msgid "Width"
+msgstr "Leveys"
+
+msgid "Is raised"
+msgstr "Koholla"
+
+msgid "Is grinded"
+msgstr "Rouhittu"
+
+msgid "Amount"
+msgstr "Määrä"
+
+msgid "Traffic Sign Plan"
+msgstr "Liikennemerkki (suunnitelma)"
+
+msgid "Device Type"
+msgstr "Laitteen tyyppi"
+
+msgid "Road Marking Plan"
+msgstr "Tiemerkintä (suunnitelma)"
+
+msgid "Traffic Sign Real"
+msgstr "Liikennemerkki (toteuma)"
+
+msgid "Missing Traffic Sign Real txt"
+msgstr "Puuttuva liikennemerkki (vapaa teksti)"
+
+msgid "Road Marking Real"
+msgstr "Tiemerkintä (toteuma)"
+
+msgid "Road Marking Reals"
+msgstr "Tiemerkintä (toteumat)"
+
+msgid "road marking real"
+msgstr "Tiemerkintä (toteuma)"
+
+msgid "Road marking real operation"
+msgstr "Tiemerkinnän toimenpide"
+
+msgid "Road marking real operations"
+msgstr "Tiemerkinnän toimenpiteet"
+
+msgid "RoadMarking Plan File"
+msgstr "Suunnitelmadokumentti (tiemerkintä)"
+
+msgid "RoadMarking Plan Files"
+msgstr "Suunnitelmadokumentit (tiemerkintä)"
+
+msgid "RoadMarking Real File"
+msgstr "Toteumadokumentti (tiemerkintä)"
+
+msgid "RoadMarking Real Files"
+msgstr "Toteumadokumentit (tiemerkintä)"
+
+msgid "Right side"
+msgstr "Oikea puoli"
+
+msgid "Left side"
+msgstr "Vasen puoli"
+
+msgid "Above"
+msgstr "Kaistan yläpuolella"
+
+msgid "Middle"
+msgstr "Keskisaareke tai liikenteenjakaja"
+
+msgid "Vertical"
+msgstr "Pitkittäin ajosuuntaan nähden"
+
+msgid "Signpost value"
+msgstr "Arvo"
+
+msgid "Signpost txt"
+msgstr "Opasteen sisältö"
+
+msgid "Attachment class"
+msgstr "Kiinnitysluokka"
+
+msgid "Target ID"
+msgstr "Opastettavan kohteen ID"
+
+msgid "Target txt"
+msgstr "Opastettavan kohteen vapaa kuvaus"
+
+msgid "Electric maintainer"
+msgstr "Sähköisen opastimen ylläpitäjä"
+
+msgid "Parent Signpost Plan"
+msgstr "Isäntäopaste (suunnitelma)"
+
+msgid "Signpost Plan"
+msgstr "Opaste (suunnitelma)"
+
+msgid "Parent Signpost Real"
+msgstr "Isäntäopaste (toteuma)"
+
+msgid "Organization"
+msgstr "Käyttäjä/organisaatio"
+
+msgid "Signpost Real"
+msgstr "Opaste (toteuma)"
+
+msgid "Signpost Reals"
+msgstr "Opaste (toteumat)"
+
+msgid "signpost real"
+msgstr "Opaste (toteuma)"
+
+msgid "Signpost real operation"
+msgstr "Opasteen toimenpide"
+
+msgid "Signpost real operations"
+msgstr "Opasteen toimenpiteet"
+
+msgid "Signpost Plan File"
+msgstr "Suunnitelmadokumentti (opaste)"
+
+msgid "Signpost Plan Files"
+msgstr "Suunnitelmadokumentit (opaste)"
+
+msgid "Signpost Real File"
+msgstr "Toteumadokumentti (opaste)"
+
+msgid "Signpost Real Files"
+msgstr "Toteumadokumentit (opaste)"
+
+msgid "Right side of the road (relative to traffic direction)"
+msgstr "Ajoradan oikea puoli (ajosuuntaan nähden)"
+
+msgid "Above the lanes"
+msgstr "Kaistojen yläpuolella"
+
+msgid "Island"
+msgstr "Keskisaareke tai liikenteenjakaja"
+
+msgid "Traffic signal"
+msgstr "Valo-opastin"
+
+msgid "Right-turn arrow signal"
+msgstr "Nuolivalo oikealle"
+
+msgid "Left-turn arrow signal"
+msgstr "Nuolivalo vasemmalle"
+
+msgid "Triangle signal"
+msgstr "Kolmio-opastin"
+
+msgid "Public transport signal"
+msgstr "Joukkoliikenneopastin"
+
+msgid "Bicycle signal"
+msgstr "Polkupyöräopastin"
+
+msgid "Bicycle turn arrow signal"
+msgstr "Polkupyörän nuolivalo"
+
+msgid "Pedestrian signal"
+msgstr "Jalankulkijan opastin"
+
+msgid "Lane signal"
+msgstr "Ajokaistaopastin"
+
+msgid "Loop sensor"
+msgstr "Silmukka"
+
+msgid "Infrared sensor"
+msgstr "Infrapunailmaisin"
+
+msgid "Radar i.e. microwave sensor"
+msgstr "Tutka eli mikroaaltoilmaisin"
+
+msgid "Push button"
+msgstr "Painonappi"
+
+msgid "Sound beacon"
+msgstr "Äänimajakka"
+
+msgid "Vehicle recognition"
+msgstr "Ajoneuvon tunnistin"
+
+msgid "Traffic Light Plan"
+msgstr "Liikennevalo (suunnitelma)"
+
+msgid "Traffic Light Real"
+msgstr "Liikennevalo (toteuma)"
+
+msgid "Traffic Light Reals"
+msgstr "Liikennevalo (toteumat)"
+
+msgid "traffic light real"
+msgstr "Liikennevalo (toteuma)"
+
+msgid "Traffic light real operation"
+msgstr "Liikennevalon toimenpide"
+
+msgid "Traffic light real operations"
+msgstr "Liikennevalon toimenpiteet"
+
+msgid "Traffic Light Plan File"
+msgstr "Suunnitelmadokumentti (liikennevalo)"
+
+msgid "Traffic Light Plan Files"
+msgstr "Suunnitelmadokumentit (liikennevalo)"
+
+msgid "Traffic Light Real File"
+msgstr "Toteumadokumentti (liikennevalo)"
+
+msgid "Traffic Light Real Files"
+msgstr "Toteumadokumentit (liikennevalo)"
+
+msgid "Outside"
+msgstr "Tie tai katuverkon ulkopuolella"
+
+msgid "Traffic Sign Code value"
+msgstr "Merkin numeerinen arvo"
+
+msgid "Affect area (2D)"
+msgstr "Vaikutusalue (2D)"
+
+msgid "Traffic Sign Reals"
+msgstr "Liikennemerkki (toteumat)"
+
+msgid "traffic sign real"
+msgstr "Liikennemerkki (toteuma)"
+
+msgid "Traffic sign real operation"
+msgstr "Liikennemerkin toimenpide"
+
+msgid "Traffic sign real operations"
+msgstr "Liikennemerkin toimenpiteet"
+
+msgid "Traffic Sign Plan File"
+msgstr "Suunnitelmadokumentti (liikennemerkki)"
+
+msgid "Traffic Sign Plan Files"
+msgstr "Suunnitelmadokumentit (liikennemerkki)"
+
+msgid "Traffic Sign Real File"
+msgstr "Toteumadokumentti (liikennemerkki)"
+
+msgid "Traffic Sign Real Files"
+msgstr "Toteumadokumentit (liikennemerkki)"
+
+msgid "Set related plans"
+msgstr "Aseta liittyvät suunnitelmat"
+
+msgid "Save"
+msgstr "Tallenna ja poistu"
+
+msgid "Save and continue editing"
+msgstr "Tallenna välillä ja jatka muokkaamista"
+
+msgid "Home"
+msgstr "Etusivu"
+
+msgid "Formats"
+msgstr ""
+
+msgid "Fields"
+msgstr ""
+
+msgid "This field may not be null."
+msgstr "Tämä kenttä ei voi olla tyhjä"
+
+msgid "File not found."
+msgstr "Tiedostoa ei löytynyt."
+
+msgid "Users"
+msgstr "Käyttäjät"
+
+msgid "Bypass operational area"
+msgstr "Ohita toiminta-alue"
+
+msgid "Disable operational area permission checks for this user."
+msgstr "Poista käytöstä toiminta-alueoikeuden tarkistus tältä käyttäjältä."
+
+msgid "Bypass responsible entity"
+msgstr ""
+
+msgid "Disable responsible entity permission checks for this user."
+msgstr ""
+
+msgid ""
+"Responsible entities that this user is belongs to. This gives the users "
+"write permission to devices that belong to the Responsible Entities or any "
+"Responsible Entity that's hierarchically under the selected ones."
+msgstr ""
+
+msgid "User"
+msgstr "Käyttäjä"

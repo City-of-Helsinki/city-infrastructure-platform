@@ -240,6 +240,10 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+LOCALE_PATHS = [
+    "./locale",
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 var_root = env.path("VAR_ROOT")
@@ -296,10 +300,6 @@ if SENTRY_DSN:
 SRID = 3879  # the spatial reference id used for geometries
 
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
-
-LOCALE_PATHS = [
-    "./templates/locale",
-]
 
 # Import / Export
 IMPORT_EXPORT_USE_TRANSACTIONS = True
