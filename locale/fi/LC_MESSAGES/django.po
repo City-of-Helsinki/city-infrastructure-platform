@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 15:42+0300\n"
+"POT-Creation-Date: 2022-05-23 17:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgid "Location information"
 msgstr "Sijaintitiedot"
 
 msgid "Content and physical properties"
-msgstr ""
+msgstr "Sisältö ja fyysiset ominaisuudet"
 
 msgid "Validity"
 msgstr "Voimassaolo"
@@ -49,202 +49,209 @@ msgid "Installation information"
 msgstr "Asennuksen tiedot"
 
 msgid "City furniture"
-msgstr ""
+msgstr "Kaupunkikalusteet"
 
 msgid "Furniture signpost"
-msgstr ""
+msgstr "Opastetaulu"
 
 msgid "Traffic"
-msgstr ""
+msgstr "Liikenne"
 
 msgid "Communication"
-msgstr ""
+msgstr "Viestintä"
 
 msgid "Security"
-msgstr ""
+msgstr "Turvallisuus"
 
 msgid "Others"
-msgstr ""
+msgstr "Muut"
 
 msgid "Communication fixture"
-msgstr ""
+msgstr "Viestintäkaluste"
 
 msgid "Telephone box"
-msgstr ""
+msgstr "Puhelinkoppi"
 
 msgid "Postbox"
-msgstr ""
+msgstr "Postilaatikko"
 
 msgid "Emergency call fixture"
-msgstr ""
+msgstr "Hätäpuhelinkaluste"
 
 msgid "Fire detector"
-msgstr ""
+msgstr "Paloilmaisin"
 
 msgid "Police call post"
-msgstr ""
+msgstr "Poliisipuhelinpylväs"
 
+#, fuzzy
 msgid "Switching unit"
 msgstr ""
 
 msgid "Road sign"
-msgstr ""
+msgstr "Tienviitta"
 
 msgid "Traffic light"
 msgstr "Liikennevalo"
 
 msgid "Free-standing sign"
-msgstr ""
+msgstr "Jalallinen kyltti"
 
 msgid "Free-standing warning sign"
-msgstr ""
+msgstr "Jalallinen varoituskyltti"
 
 msgid "Bus stop"
-msgstr ""
+msgstr "Pysäkki"
 
 msgid "Milestone"
-msgstr ""
+msgstr "Kilometripylväs"
 
 msgid "Rail level crossing"
-msgstr ""
+msgstr "Tasoristeys"
 
 msgid "Gate"
-msgstr ""
+msgstr "Portti"
 
 msgid "Streetlamp, latern or candelabra"
-msgstr ""
+msgstr "Katuvalo"
 
 msgid "Column"
-msgstr ""
+msgstr "Pylväs"
 
 msgid "Lamp post"
-msgstr ""
+msgstr "Lyhtypylväs"
 
 msgid "Flagpole"
-msgstr ""
+msgstr "Lippusalko"
 
+#, fuzzy
 msgid "Street sink box"
 msgstr ""
 
 msgid "Rubbish bin"
-msgstr ""
+msgstr "Jäteastia"
 
 msgid "Clock"
-msgstr ""
+msgstr "Kello"
 
 msgid "Directional spot light"
-msgstr ""
+msgstr "Kohdevalo"
 
 msgid "Floodlight mast"
-msgstr ""
+msgstr "Valonheitinpylväs"
 
 msgid "Windmill"
-msgstr ""
+msgstr "Tuulimylly"
 
 msgid "Solar cell"
-msgstr ""
+msgstr "Aurinkopaneeli"
 
 msgid "Water wheel"
-msgstr ""
+msgstr "Vesipyörä"
 
 msgid "Pole"
-msgstr ""
+msgstr "Salko"
 
 msgid "Radio mast"
-msgstr ""
+msgstr "Radiomasto"
 
 msgid "Aerial"
-msgstr ""
+msgstr "Antenni"
 
 msgid "Radio telescope"
-msgstr ""
+msgstr "Radioteleskooppi"
 
 msgid "Chimney"
-msgstr ""
+msgstr "Savupiippu"
 
 msgid "Marker"
-msgstr ""
+msgstr "Merkintä"
 
 msgid "Hydrant"
-msgstr ""
+msgstr "Paloposti"
 
+#, fuzzy
 msgid "Upper corridor fire-hydrant"
 msgstr ""
 
+#, fuzzy
 msgid "Lower floor panel fire-hydrant"
 msgstr ""
 
+#, fuzzy
 msgid "Slidegate valve cap"
 msgstr ""
 
+#, fuzzy
 msgid "Entrance shaft"
 msgstr ""
 
 msgid "Converter"
-msgstr ""
+msgstr "Muuntaja"
 
 msgid "Stair"
-msgstr ""
+msgstr "Portaat"
 
 msgid "Outside staircase"
-msgstr ""
+msgstr "Ulkoportaat"
 
 msgid "Escalator"
-msgstr ""
+msgstr "Liukuportaat"
 
 msgid "Ramp"
-msgstr ""
+msgstr "Luiska"
 
 msgid "Patio"
-msgstr ""
+msgstr "Patio"
 
 msgid "Fence"
-msgstr ""
+msgstr "Aita"
 
 msgid "Memorial/monument"
-msgstr ""
+msgstr "Muistomerkki"
 
 msgid "Wayside shrine"
-msgstr ""
+msgstr "Tienvarsipyhättö"
 
 msgid "Crossroads"
-msgstr ""
+msgstr "Risteys"
 
 msgid "Cross on the summit of a mountain"
-msgstr ""
+msgstr "Huippuristi"
 
 msgid "Fountain"
-msgstr ""
+msgstr "Suihkulähde"
 
+#, fuzzy
 msgid "Block mark"
 msgstr ""
 
 msgid "Boundary post"
-msgstr ""
+msgstr "Rajapyykki"
 
 msgid "Bench"
-msgstr ""
+msgstr "Penkki"
 
 msgid "Code"
 msgstr "Koodi"
 
 msgid "City Furniture Class type"
-msgstr ""
+msgstr "Kaupunkikalusteen luokan tyyppi"
 
 msgid "City Furniture Function or Usage type"
-msgstr ""
+msgstr "Kaupunkikalusteen toiminnon tai käytön tyyppi"
 
 msgid "Icon"
 msgstr "Kuvaustyyli"
 
 msgid "Finnish Description"
-msgstr ""
+msgstr "Kuvaus suomeksi"
 
 msgid "Swedish Description"
-msgstr ""
+msgstr "Kuvaus ruotsiksi"
 
 msgid "English Description"
-msgstr ""
+msgstr "Kuvaus englanniksi"
 
 msgid "Size"
 msgstr "Koko"
@@ -253,25 +260,25 @@ msgid "Target data model"
 msgstr "Kohde tietomalli"
 
 msgid "City Furniture Device Type"
-msgstr ""
+msgstr "Kaupunkikalusteen tyyppi"
 
 msgid "City Furniture Device Types"
-msgstr ""
+msgstr "Kaupunkikalusteiden tyypit"
 
 msgid "Name"
 msgstr "Nimi"
 
 msgid "City Furniture Color"
-msgstr ""
+msgstr "Kaupunkikalusteen väri"
 
 msgid "City Furniture Colors"
-msgstr ""
+msgstr "Kaupunkikalusteiden värit"
 
 msgid "Finnish name"
 msgstr "Suomenkielinen nimi"
 
 msgid "Swedish name"
-msgstr ""
+msgstr "Ruotsinkielinen nimi"
 
 msgid "English name"
 msgstr "Englanninkielinen nimi"
@@ -280,16 +287,16 @@ msgid "Description"
 msgstr "Kuvaus"
 
 msgid "City Furniture Target"
-msgstr ""
+msgstr "Kaupunkikalusteiden kohde"
 
 msgid "City Furniture Targets"
-msgstr ""
+msgstr "Kaupunkikalusteiden kohteet"
 
 msgid "Up"
-msgstr ""
+msgstr "Ylös"
 
 msgid "Down"
-msgstr ""
+msgstr "Alas"
 
 msgid "Left"
 msgstr "Vasemmalle"
@@ -298,22 +305,22 @@ msgid "Right"
 msgstr "Oikealle"
 
 msgid "Top right"
-msgstr ""
+msgstr "Ylä-oikealle"
 
 msgid "Bottom right"
-msgstr ""
+msgstr "Ala-oikealle"
 
 msgid "Top left"
-msgstr ""
+msgstr "Ylä-vasemmalle"
 
 msgid "Bottom left"
-msgstr ""
+msgstr "Ala-vasemalle"
 
 msgid "Owner"
 msgstr "Omistaja"
 
 msgid "Responsible entity"
-msgstr ""
+msgstr "Vastuutaho"
 
 msgid "Lifecycle"
 msgstr "Elinkaari"
@@ -322,16 +329,16 @@ msgid "Location (3D)"
 msgstr "Sijainti (3D)"
 
 msgid "Finnish location name"
-msgstr ""
+msgstr "Sijainnin nimi suomeksi"
 
 msgid "Verbose name for the signpost's location, e.g. street, park or island."
-msgstr ""
+msgstr "Opasteen sijainnin nimi, esim. katu, puisto tai saari."
 
 msgid "Swedish location name"
-msgstr ""
+msgstr "Sijainnin nimi ruotsiksi"
 
 msgid "English location name"
-msgstr ""
+msgstr "Sijainnin nimi englanniksi"
 
 msgid "Direction"
 msgstr "Suunta"
@@ -339,16 +346,16 @@ msgstr "Suunta"
 msgid ""
 "The direction in which the person is standing, when looking directly at the "
 "sign."
-msgstr ""
+msgstr "Suunta, johon henkilö katsoo, kun hän katsoo suoraan opastetta kohti."
 
 msgid "Additional location info"
-msgstr ""
+msgstr "Lisätietoja sijainnista"
 
 msgid "Additional information about the install location."
-msgstr "Lisäkilven toimenpide"
+msgstr "Lisätietoa asennuspaikasta."
 
 msgid "City Furniture Device type"
-msgstr ""
+msgstr "Kaupunkikalusteen tyyppi"
 
 msgid "Height"
 msgstr "Korkeus"
@@ -366,25 +373,25 @@ msgid "Color"
 msgstr "Väri"
 
 msgid "Pictogram"
-msgstr ""
+msgstr "Kuvakirjoitus"
 
 msgid "Furniture signpost value"
-msgstr ""
+msgstr "Opasteen arvo"
 
 msgid "Finnish text content"
-msgstr ""
+msgstr "Tekstisisältö suomeksi"
 
 msgid "Swedish text content"
-msgstr ""
+msgstr "Tekstisisältö ruotsiksi"
 
 msgid "English text content"
-msgstr ""
+msgstr "Tekstisisältö englanniksi"
 
 msgid "Content's responsible entity"
-msgstr ""
+msgstr "Sisällön vastuutaho"
 
 msgid "Target"
-msgstr ""
+msgstr "Kohde"
 
 msgid "Validity period start"
 msgstr "Voimassaoloaika alkaa"
@@ -393,29 +400,29 @@ msgid "Validity period end"
 msgstr "Voimassaoloaika loppuu"
 
 msgid "Additional material URL"
-msgstr ""
+msgstr "Lisämateriaalin URL"
 
 msgid ""
 "Additional material about the device. This should be publicly available."
-msgstr ""
+msgstr "Laitteen lisämateriaali. Tämän tulisi olla julkisesti saatavilla."
 
 msgid "Mount Plan"
 msgstr "Kiinnityskohde (suunnitelma)"
 
 msgid "Parent Furniture Signpost Plan"
-msgstr ""
+msgstr "Isäntäkaupunkiopaste (suunnitelma)"
 
 msgid "Plan"
 msgstr "Suunnitelma"
 
 msgid "Furniture Signpost Plan"
-msgstr ""
+msgstr "Kaupunkiopaste (suunnitelma)"
 
 msgid "Furniture Signpost Plans"
-msgstr ""
+msgstr "Kaupunkiopasteet (suunnitelmat)"
 
 msgid "Parent Furniture Signpost Real"
-msgstr ""
+msgstr "Isäntäkaupunkiopaste (toteuma)"
 
 msgid "Mount Real"
 msgstr "Kiinnityskohde (toteuma)"
@@ -430,34 +437,34 @@ msgid "Condition"
 msgstr "Kunto"
 
 msgid "Furniture Signpost Real"
-msgstr ""
+msgstr "Kaupunkiopaste (toteuma)"
 
 msgid "Furniture Signpost Reals"
-msgstr ""
+msgstr "Kaupunkiopasteet (toteumat)"
 
 msgid "operation type"
 msgstr "toimenpiteen tyyppi"
 
 msgid "Furniture Signpost Real operation"
-msgstr ""
+msgstr "Kaupunkiopastetoteuman toimenpide"
 
 msgid "Furniture Signpost Real operations"
-msgstr ""
+msgstr "Kaupunkiopastetetuman toimenpiteet"
 
 msgid "File"
 msgstr "Tiedosto"
 
 msgid "Furniture Signpost Plan File"
-msgstr ""
+msgstr "Kaupunkiopasteen suunnitelman tiedosto"
 
 msgid "Furniture Signpost Plan Files"
-msgstr ""
+msgstr "Kaupunkiopasteen suunnitelman tiedostot"
 
 msgid "Furniture Signpost Real File"
-msgstr ""
+msgstr "Kaupunkiopasteen toteuman tiedosto"
 
 msgid "Furniture Signpost Real Files"
-msgstr ""
+msgstr "Kaupunkiopasteen toteuman tiedostot"
 
 msgid "This field is required."
 msgstr "Tämä kenttä vaaditaan"
@@ -469,16 +476,16 @@ msgid "Identifier"
 msgstr "Tunniste"
 
 msgid "App Name"
-msgstr ""
+msgstr "Sovelluksen nimi"
 
 msgid "Is basemap"
 msgstr "On pohjakartta"
 
 msgid "Filter fields"
-msgstr ""
+msgstr "Suodatettavat kentät"
 
 msgid "Use Traffic Sign Icons"
-msgstr ""
+msgstr "Käytä liikennemerkkikuvia"
 
 msgid "Layer"
 msgstr "Taso"
@@ -527,7 +534,7 @@ msgid "Set related plans for plan %s"
 msgstr "Aseta liittyviä suunnitelmia suunnitelmalle %s"
 
 msgid "Responsible entities"
-msgstr ""
+msgstr "Vastuutahot"
 
 msgid "Traffic sign type"
 msgstr "Liikennemerkkityyppi"
@@ -551,37 +558,37 @@ msgid "Location (z)"
 msgstr "Sijainti (z)"
 
 msgid "Any date"
-msgstr ""
+msgstr "Mikä tahansa päivä"
 
 msgid "Today"
-msgstr ""
+msgstr "Tänään"
 
 msgid "Last 7 days"
-msgstr ""
+msgstr "Edelliset 7 päivää"
 
 msgid "Last month"
-msgstr ""
+msgstr "Edellinen kuukausi"
 
 msgid "Last 6 months"
-msgstr ""
+msgstr "Edelliset 6 kuukautta"
 
 msgid "Last year"
-msgstr ""
+msgstr "Edellinen vuosi"
 
 msgid "No date"
-msgstr ""
+msgstr "Ei päivämäärää"
 
 msgid "Has date"
-msgstr ""
+msgstr "On päivämäärä"
 
 msgid "Responsible Entity Permission"
-msgstr ""
+msgstr "Vastuutahon oikeus"
 
 msgid "Format"
-msgstr ""
+msgstr "Tiedostomuoto"
 
 msgid "Export resource"
-msgstr ""
+msgstr "Vie resurssi"
 
 msgid "Traffic control"
 msgstr "Liikenteenohjauslaitteet"
@@ -770,16 +777,16 @@ msgid "Other road marking"
 msgstr "Muu tiemerkintä"
 
 msgid "division"
-msgstr ""
+msgstr "toimiala"
 
 msgid "service"
-msgstr ""
+msgstr "palvelu"
 
 msgid "unit"
-msgstr ""
+msgstr "yksikkö"
 
 msgid "project"
-msgstr ""
+msgstr "projekti"
 
 msgid "Location (x,y)"
 msgstr "Sijainti (x,y)"
@@ -1220,33 +1227,35 @@ msgid "Plans"
 msgstr "Suunnitelmat"
 
 msgid "Name (for projects use Projectwise ID)"
-msgstr ""
+msgstr "Nimi (projektille käytä Projectwise ID:tä)"
 
 msgid "External ID"
-msgstr ""
+msgstr "Ulkoinen ID"
 
 msgid ""
 "Use Projectwise ID for projects, can also be an abbreviation if entity has "
 "no ID"
 msgstr ""
+"Käytä Projectwise ID:tä projekteille. Voi myös olla lyhenne, jos "
+"vastuutaholla ei ole ID:tä."
 
 msgid "Organization level"
-msgstr ""
+msgstr "Organisaatiotaso"
 
 msgid "Parent Responsible Entity"
-msgstr ""
+msgstr "Isäntävastuutaho"
 
 msgid "Responsible Entity"
-msgstr ""
+msgstr "Vastuutaho"
 
 msgid "Responsible Entities"
-msgstr ""
+msgstr "Vastuutahot"
 
 msgid "Group responsible entity"
-msgstr ""
+msgstr "Ryhmävastuutaho"
 
 msgid "Group responsible entities"
-msgstr ""
+msgstr "Ryhmävastuutahot"
 
 msgid "Forward"
 msgstr "Eteenpäin"
@@ -1561,10 +1570,10 @@ msgid "Home"
 msgstr "Etusivu"
 
 msgid "Formats"
-msgstr ""
+msgstr "Tiedostomuodot"
 
 msgid "Fields"
-msgstr ""
+msgstr "Kentät"
 
 msgid "This field may not be null."
 msgstr "Tämä kenttä ei voi olla tyhjä"
@@ -1582,16 +1591,19 @@ msgid "Disable operational area permission checks for this user."
 msgstr "Poista käytöstä toiminta-alueoikeuden tarkistus tältä käyttäjältä."
 
 msgid "Bypass responsible entity"
-msgstr ""
+msgstr "Ohita vastuutaho"
 
 msgid "Disable responsible entity permission checks for this user."
-msgstr ""
+msgstr "Poista käytöstä vastuutaho-oikeuksien tarkistukset tältä käyttäjältä."
 
 msgid ""
 "Responsible entities that this user is belongs to. This gives the users "
 "write permission to devices that belong to the Responsible Entities or any "
 "Responsible Entity that's hierarchically under the selected ones."
 msgstr ""
+"Vastuutahot, joihin tämä käyttäjä kuuluu. Tämä antaa käyttäjille "
+"kirjoitusoikeuden laitteisiin, jotka kuuluvat kyseiselle vastuutaholle tai "
+"vastuutaholle alempana hierarkiassa."
 
 msgid "User"
 msgstr "Käyttäjä"
