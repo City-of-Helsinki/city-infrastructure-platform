@@ -37,11 +37,11 @@ class ResourceEnumIntegerField(fields.Field):
         super().__init__(attribute, column_name, EnumIntegerWidget(), default, readonly, saves_null_values)
 
     def clean(self, data, **kwargs):
-        name = data[self.column_name]
+        field_value = data[self.column_name]
         try:
-            enum_value = self.enum.__getattr__(name)
-        except AttributeError:
-            if name in self.empty_values and self.default != NOT_PROVIDED:
+            enum_value = self.enum[field_value]
+        except KeyError:
+            if field_value in self.empty_values and self.default != NOT_PROVIDED:
                 if callable(self.default):
                     enum_value = self.default()
                 else:
