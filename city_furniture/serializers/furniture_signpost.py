@@ -12,6 +12,7 @@ from city_furniture.models import (
 )
 from city_furniture.models.common import CityFurnitureDeviceType
 from traffic_control.models import OperationType
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
 
 
 class FurnitureSignpostPlanFileSerializer(serializers.ModelSerializer):
@@ -20,7 +21,11 @@ class FurnitureSignpostPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class FurnitureSignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class FurnitureSignpostPlanSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = FurnitureSignpostPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=CityFurnitureDeviceType.objects.for_target_model(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
@@ -77,7 +82,11 @@ class FurnitureSignpostRealOperationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class FurnitureSignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class FurnitureSignpostRealSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = FurnitureSignpostRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=CityFurnitureDeviceType.objects.for_target_model(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)

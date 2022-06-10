@@ -11,6 +11,23 @@ from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceT
 from traffic_control.schema import TrafficSignType
 
 
+class HideFromAnonUserSerializerMixin:
+    """
+    Don't include object's user information to unauthenticated requests
+    """
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        user = self.context["request"].user
+
+        if not user.is_authenticated:
+            representation.pop("created_by", None)
+            representation.pop("updated_by", None)
+            representation.pop("deleted_by", None)
+
+        return representation
+
+
 class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     traffic_sign_type = serializers.SerializerMethodField(
         method_name="get_traffic_sign_type",

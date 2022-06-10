@@ -12,6 +12,7 @@ from traffic_control.models import (
     PortalType,
 )
 from traffic_control.models.mount import MountRealOperation
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
 
 
 class PortalTypeSerializer(serializers.ModelSerializer):
@@ -32,7 +33,11 @@ class MountPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MountPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class MountPlanSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = MountPlanFileSerializer(many=True, read_only=True)
 
     class Meta:
@@ -80,7 +85,11 @@ class MountRealOperationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class MountRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class MountRealSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     ordered_traffic_signs = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     files = MountRealFileSerializer(many=True, read_only=True)
     operations = MountRealOperationSerializer(many=True, required=False, read_only=True)

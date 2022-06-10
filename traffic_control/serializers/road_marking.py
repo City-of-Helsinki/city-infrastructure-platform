@@ -12,6 +12,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.road_marking import RoadMarkingRealOperation
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
 
 
 class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
@@ -20,7 +21,11 @@ class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class RoadMarkingPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class RoadMarkingPlanSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = RoadMarkingPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING)
@@ -71,7 +76,11 @@ class RoadMarkingRealOperationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class RoadMarkingRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class RoadMarkingRealSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = RoadMarkingRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING)

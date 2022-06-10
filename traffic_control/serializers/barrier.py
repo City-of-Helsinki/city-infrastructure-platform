@@ -12,6 +12,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.barrier import BarrierRealOperation
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
 
 
 class BarrierPlanFileSerializer(serializers.ModelSerializer):
@@ -20,7 +21,11 @@ class BarrierPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BarrierPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class BarrierPlanSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = BarrierPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER)
@@ -71,7 +76,11 @@ class BarrierRealOperationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class BarrierRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class BarrierRealSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = BarrierRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER)
