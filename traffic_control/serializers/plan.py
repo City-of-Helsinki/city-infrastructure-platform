@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
 from traffic_control.models import Plan
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
 
 
 class PlanRelationSerializer(serializers.ModelSerializer):
@@ -61,7 +62,7 @@ class PlanRelationSerializer(serializers.ModelSerializer):
         )
 
 
-class PlanSerializer(serializers.ModelSerializer):
+class PlanSerializer(HideFromAnonUserSerializerMixin, serializers.ModelSerializer):
     linked_objects = PlanRelationSerializer(source="*", required=False, read_only=True)
 
     class Meta:

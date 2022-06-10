@@ -12,6 +12,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.additional_sign import AdditionalSignRealOperation
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
 
 
 class WritableNestedContentSerializerMixin:
@@ -99,7 +100,7 @@ class NestedAdditionalSignContentSerializerMixin:
         return value
 
 
-class AdditionalSignContentPlanSerializer(serializers.ModelSerializer):
+class AdditionalSignContentPlanSerializer(HideFromAnonUserSerializerMixin, serializers.ModelSerializer):
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN)
     )
@@ -114,7 +115,9 @@ class AdditionalSignContentPlanSerializer(serializers.ModelSerializer):
 
 
 class NestedAdditionalSignContentPlanSerializer(
-    NestedAdditionalSignContentSerializerMixin, serializers.ModelSerializer
+    NestedAdditionalSignContentSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
 ):
     id = serializers.UUIDField(required=False)
     device_type = serializers.PrimaryKeyRelatedField(
@@ -130,6 +133,7 @@ class NestedAdditionalSignContentPlanSerializer(
 class AdditionalSignPlanSerializer(
     WritableNestedContentSerializerMixin,
     EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
     content = NestedAdditionalSignContentPlanSerializer(many=True, required=False)
@@ -150,7 +154,7 @@ class AdditionalSignPlanGeoJSONSerializer(AdditionalSignPlanSerializer):
     location = GeometryField(required=False)
 
 
-class AdditionalSignContentRealSerializer(serializers.ModelSerializer):
+class AdditionalSignContentRealSerializer(HideFromAnonUserSerializerMixin, serializers.ModelSerializer):
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN)
     )
@@ -165,7 +169,9 @@ class AdditionalSignContentRealSerializer(serializers.ModelSerializer):
 
 
 class NestedAdditionalSignContentRealSerializer(
-    NestedAdditionalSignContentSerializerMixin, serializers.ModelSerializer
+    NestedAdditionalSignContentSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
 ):
     id = serializers.UUIDField(required=False)
     device_type = serializers.PrimaryKeyRelatedField(
@@ -205,6 +211,7 @@ class AdditionalSignRealOperationSerializer(serializers.ModelSerializer):
 class AdditionalSignRealSerializer(
     WritableNestedContentSerializerMixin,
     EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
     content = NestedAdditionalSignContentRealSerializer(many=True, required=False)

@@ -12,6 +12,7 @@ from traffic_control.models import (
     TrafficLightRealFile,
 )
 from traffic_control.models.traffic_light import TrafficLightRealOperation
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
 
 
 class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
@@ -20,7 +21,11 @@ class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TrafficLightPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class TrafficLightPlanSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = TrafficLightPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT)
@@ -71,7 +76,11 @@ class TrafficLightRealOperationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class TrafficLightRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class TrafficLightRealSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = TrafficLightRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT)

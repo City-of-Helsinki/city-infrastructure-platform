@@ -625,7 +625,8 @@ def test__additional_sign_content_plan__list():
 
 @pytest.mark.django_db
 def test__additional_sign_content_plan__detail():
-    client = get_api_client()
+    user = get_user()
+    client = get_api_client(user=user)
     dt = get_traffic_control_device_type(code="H17.1")
     ascp = get_additional_sign_content_plan(device_type=dt)
 

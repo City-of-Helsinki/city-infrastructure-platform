@@ -12,6 +12,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.signpost import SignpostRealOperation
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
 
 
 class SignpostPlanFileSerializer(serializers.ModelSerializer):
@@ -20,7 +21,11 @@ class SignpostPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SignpostPlanSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class SignpostPlanSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = SignpostPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST)
@@ -71,7 +76,11 @@ class SignpostRealOperationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class SignpostRealSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class SignpostRealSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    serializers.ModelSerializer,
+):
     files = SignpostRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST)

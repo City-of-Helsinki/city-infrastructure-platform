@@ -634,7 +634,8 @@ def test__additional_sign_content_real__list():
 
 @pytest.mark.django_db
 def test__additional_sign_content_real__detail():
-    client = get_api_client()
+    user = get_user()
+    client = get_api_client(user)
     dt = get_traffic_control_device_type(code="H17.1")
     ascr = get_additional_sign_content_real(device_type=dt)
 
