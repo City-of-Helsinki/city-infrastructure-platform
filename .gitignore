@@ -27,6 +27,7 @@
 .grunt
 .hypothesis/
 .idea
+.vscode/
 .installed.cfg
 .ipynb_checkpoints
 .lock-wscript
