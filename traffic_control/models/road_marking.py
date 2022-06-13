@@ -116,6 +116,13 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
         blank=True,
         null=True,
     )
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        on_delete=models.PROTECT,
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
+    )
     arrow_direction = EnumField(
         ArrowDirection,
         verbose_name=_("Arrow direction"),
@@ -234,13 +241,6 @@ class RoadMarkingPlan(UpdatePlanLocationMixin, AbstractRoadMarking):
         null=True,
         help_text=_("Traffic Sign related to this road marking."),
     )
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device Type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
-        help_text=_("Type of the device from Helsinki Design Manual."),
-    )
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -266,13 +266,6 @@ class RoadMarkingReal(AbstractRoadMarking, InstalledDeviceModel):
         blank=True,
         null=True,
         help_text=_("The plan for this road marking."),
-    )
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
-        help_text=_("Type of the device from Helsinki Design Manual."),
     )
     traffic_sign_real = models.ForeignKey(
         TrafficSignReal,
