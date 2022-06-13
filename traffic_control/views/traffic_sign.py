@@ -1,6 +1,6 @@
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
@@ -48,27 +48,27 @@ __all__ = (
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new TrafficSign Code"),
+    decorator=extend_schema(description="Create new TrafficSign Code"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(operation_description="Retrieve all TrafficSign Codes"),
+    decorator=extend_schema(description="Retrieve all TrafficSign Codes"),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficSign Code"),
+    decorator=extend_schema(description="Retrieve single TrafficSign Code"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single TrafficSign Code"),
+    decorator=extend_schema(description="Update single TrafficSign Code"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single TrafficSign Code"),
+    decorator=extend_schema(description="Partially update single TrafficSign Code"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Delete single TrafficSign Code"),
+    decorator=extend_schema(description="Delete single TrafficSign Code"),
 )
 class TrafficControlDeviceTypeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -82,30 +82,30 @@ class TrafficControlDeviceTypeViewSet(ModelViewSet):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new TrafficSign Plan"),
+    decorator=extend_schema(description="Create new TrafficSign Plan"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all TrafficSign Plans",
-        manual_parameters=[location_parameter],
+    decorator=extend_schema(
+        description="Retrieve all TrafficSign Plans",
+        parameters=[location_parameter],
     ),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficSign Plan"),
+    decorator=extend_schema(description="Retrieve single TrafficSign Plan"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single TrafficSign Plan"),
+    decorator=extend_schema(description="Update single TrafficSign Plan"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single TrafficSign Plan"),
+    decorator=extend_schema(description="Partially update single TrafficSign Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single TrafficSign Plan"),
+    decorator=extend_schema(description="Soft-delete single TrafficSign Plan"),
 )
 class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -119,10 +119,10 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = TrafficSignPlanFileSerializer
     file_relation = "traffic_sign_plan"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to TrafficSign Plan",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods="post",
+        description="Add one or more files to TrafficSign Plan",
+        request=MultiFileUploadSchema,
         responses={200: TrafficSignPlanFileSerializer(many=True)},
     )
     @action(
@@ -134,17 +134,17 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from TrafficSign Plan",
-        request_body=None,
+    @extend_schema(
+        methods="delete",
+        description="Delete single file from TrafficSign Plan",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from TrafficSign Plan",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods="patch",
+        description="Update single file from TrafficSign Plan",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: TrafficSignPlanFileSerializer},
     )
     @action(
@@ -162,30 +162,30 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new TrafficSign Real"),
+    decorator=extend_schema(description="Create new TrafficSign Real"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all TrafficSign Reals",
-        manual_parameters=[location_parameter],
+    decorator=extend_schema(
+        description="Retrieve all TrafficSign Reals",
+        parameters=[location_parameter],
     ),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficSign Real"),
+    decorator=extend_schema(description="Retrieve single TrafficSign Real"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single TrafficSign Real"),
+    decorator=extend_schema(description="Update single TrafficSign Real"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single TrafficSign Real"),
+    decorator=extend_schema(description="Partially update single TrafficSign Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single TrafficSign Real"),
+    decorator=extend_schema(description="Soft-delete single TrafficSign Real"),
 )
 class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -199,10 +199,10 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = TrafficSignRealFileSerializer
     file_relation = "traffic_sign_real"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to TrafficSign Real",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods="post",
+        description="Add one or more files to TrafficSign Real",
+        request=MultiFileUploadSchema,
         responses={200: TrafficSignRealFileSerializer(many=True)},
     )
     @action(
@@ -214,17 +214,17 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from TrafficSign Real",
-        request_body=None,
+    @extend_schema(
+        methods="delete",
+        description="Delete single file from TrafficSign Real",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from TrafficSign Real",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods="patch",
+        description="Update single file from TrafficSign Real",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: TrafficSignRealFileSerializer},
     )
     @action(

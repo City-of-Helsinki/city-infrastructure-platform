@@ -21,10 +21,10 @@ django-helusers = "^0.7.1"
 django-import-export = "^2.7.1"
 django-storages = {extras = ["azure"], version = "^1.12.3"}
 djangorestframework = "^3.13.1"
-djangorestframework-gis = "^0.18"
+djangorestframework-gis = "^1.0.0"
 drf-nested-routers = "^0.93.4"
 drf-oidc-auth = "^2.0.0"
-drf-yasg = {extras = ["validation"], version = "^1.20.0"}
+drf-spectacular = { git = "https://github.com/tfranzel/drf-spectacular.git", rev = "df9e115ca9b9a3ec84d60df942be28ce3cda13fa"}
 psycopg2 = "2.8.6"
 python-dateutil = "^2.8.2"
 pytz = "^2021.3"

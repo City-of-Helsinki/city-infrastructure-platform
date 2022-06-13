@@ -1,5 +1,5 @@
 from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
@@ -27,30 +27,30 @@ __all__ = ("BarrierPlanViewSet", "BarrierRealViewSet")
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new Barrier Plan"),
+    decorator=extend_schema(description="Create new Barrier Plan"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all Barrier Plans",
-        manual_parameters=[location_parameter],
+    decorator=extend_schema(
+        description="Retrieve all Barrier Plans",
+        parameters=[location_parameter],
     ),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single Barrier Plan"),
+    decorator=extend_schema(description="Retrieve single Barrier Plan"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single Barrier Plan"),
+    decorator=extend_schema(description="Update single Barrier Plan"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single Barrier Plan"),
+    decorator=extend_schema(description="Partially update single Barrier Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single Barrier Plan"),
+    decorator=extend_schema(description="Soft-delete single Barrier Plan"),
 )
 class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -64,10 +64,10 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = BarrierPlanFileSerializer
     file_relation = "barrier_plan"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to Barrier Plan",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods="post",
+        description="Add one or more files to Barrier Plan",
+        request=MultiFileUploadSchema,
         responses={200: BarrierPlanFileSerializer(many=True)},
     )
     @action(
@@ -79,17 +79,17 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from Barrier Plan",
-        request_body=None,
+    @extend_schema(
+        methods="delete",
+        description="Delete single file from Barrier Plan",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from Barrier Plan",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods="patch",
+        description="Update single file from Barrier Plan",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: BarrierPlanFileSerializer},
     )
     @action(
@@ -107,30 +107,30 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new Barrier Real"),
+    decorator=extend_schema(description="Create new Barrier Real"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all Barrier Reals",
-        manual_parameters=[location_parameter],
+    decorator=extend_schema(
+        description="Retrieve all Barrier Reals",
+        parameters=[location_parameter],
     ),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single Barrier Real"),
+    decorator=extend_schema(description="Retrieve single Barrier Real"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single Barrier Real"),
+    decorator=extend_schema(description="Update single Barrier Real"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single Barrier Real"),
+    decorator=extend_schema(description="Partially update single Barrier Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single Barrier Real"),
+    decorator=extend_schema(description="Soft-delete single Barrier Real"),
 )
 class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -144,10 +144,10 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = BarrierRealFileSerializer
     file_relation = "barrier_real"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to Barrier Real",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods="post",
+        description="Add one or more files to Barrier Real",
+        request=MultiFileUploadSchema,
         responses={200: BarrierRealFileSerializer(many=True)},
     )
     @action(
@@ -159,17 +159,17 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from Barrier Real",
-        request_body=None,
+    @extend_schema(
+        methods="delete",
+        description="Delete single file from Barrier Real",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from Barrier Real",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods="patch",
+        description="Update single file from Barrier Real",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: BarrierRealFileSerializer},
     )
     @action(

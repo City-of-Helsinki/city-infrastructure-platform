@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+from textwrap import dedent
 
 import environ
 import sentry_sdk
@@ -150,7 +151,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
-    "drf_yasg",
+    "drf_spectacular",
     "django_filters",
     "auditlog",
     "colorfield",
@@ -271,6 +272,35 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
     "OIDC_LEEWAY": env("TOKEN_AUTH_MAX_TOKEN_AGE"),
     "GROUP_CLAIM_NAME": "groups",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "ENUM_NAME_OVERRIDES": {
+        "TrafficLightTypeEnum": "traffic_control.models.traffic_light.TrafficLightType",
+    },
+    "ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE": False,
+    "POSTPROCESSING_HOOKS": [
+        "traffic_control.schema.process_enum_values",
+    ],
+    "TITLE": "City Infrastructure Platform REST API",
+    "VERSION": "v1",
+    "LICENSE": {"name": "MIT", "url": "https://opensource.org/licenses/MIT"},
+    "DESCRIPTION": dedent(
+        """\
+        **Traffic Control devices**
+
+        Provides REST API for Traffic Control devices, such as Traffic Signs, Traffic Lights, Barriers,
+        SignPosts, Mounts and Road Markings.
+
+        These devices have planned and realized entities in the platform and therefore also equivalent
+        REST-endpoints.
+
+        Entity location output format can be controlled via "geo_format" GET-parameter.
+        Supported formats are ewkt and geojson. EWKT is the default format.
+        """
+    ),
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 # django-cors

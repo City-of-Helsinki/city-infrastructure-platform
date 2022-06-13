@@ -1,6 +1,6 @@
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
@@ -47,30 +47,30 @@ __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new Mount Plan"),
+    decorator=extend_schema(description="Create new Mount Plan"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all Mount Plans",
-        manual_parameters=[location_parameter],
+    decorator=extend_schema(
+        description="Retrieve all Mount Plans",
+        parameters=[location_parameter],
     ),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single Mount Plan"),
+    decorator=extend_schema(description="Retrieve single Mount Plan"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single Mount Plan"),
+    decorator=extend_schema(description="Update single Mount Plan"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single Mount Plan"),
+    decorator=extend_schema(description="Partially update single Mount Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single Mount Plan"),
+    decorator=extend_schema(description="Soft-delete single Mount Plan"),
 )
 class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -84,10 +84,10 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = MountPlanFileSerializer
     file_relation = "mount_plan"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to Mount Plan",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods="post",
+        description="Add one or more files to Mount Plan",
+        request=MultiFileUploadSchema,
         responses={200: MountPlanFileSerializer(many=True)},
     )
     @action(
@@ -99,17 +99,17 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from Mount Plan",
-        request_body=None,
+    @extend_schema(
+        methods="delete",
+        description="Delete single file from Mount Plan",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from Mount Plan",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods="patch",
+        description="Update single file from Mount Plan",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: MountPlanFileSerializer},
     )
     @action(
@@ -127,30 +127,30 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new Mount Real"),
+    decorator=extend_schema(description="Create new Mount Real"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all Mount Reals",
-        manual_parameters=[location_parameter],
+    decorator=extend_schema(
+        description="Retrieve all Mount Reals",
+        parameters=[location_parameter],
     ),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single Mount Real"),
+    decorator=extend_schema(description="Retrieve single Mount Real"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single Mount Real"),
+    decorator=extend_schema(description="Update single Mount Real"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single Mount Real"),
+    decorator=extend_schema(description="Partially update single Mount Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single Mount Real"),
+    decorator=extend_schema(description="Soft-delete single Mount Real"),
 )
 class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -165,10 +165,10 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = MountRealFileSerializer
     file_relation = "mount_real"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to Mount Real",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods="post",
+        description="Add one or more files to Mount Real",
+        request=MultiFileUploadSchema,
         responses={200: MountRealFileSerializer(many=True)},
     )
     @action(
@@ -180,17 +180,17 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from Mount Real",
-        request_body=None,
+    @extend_schema(
+        methods="delete",
+        description="Delete single file from Mount Real",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from Mount Real",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods="patch",
+        description="Update single file from Mount Real",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: MountRealFileSerializer},
     )
     @action(
@@ -208,27 +208,27 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new PortalType"),
+    decorator=extend_schema(description="Create new PortalType"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(operation_description="Retrieve all PortalTypes"),
+    decorator=extend_schema(description="Retrieve all PortalTypes"),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single PortalType"),
+    decorator=extend_schema(description="Retrieve single PortalType"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single PortalType"),
+    decorator=extend_schema(description="Update single PortalType"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single PortalType"),
+    decorator=extend_schema(description="Partially update single PortalType"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Delete single PortalType"),
+    decorator=extend_schema(description="Delete single PortalType"),
 )
 class PortalTypeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -242,27 +242,27 @@ class PortalTypeViewSet(ModelViewSet):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new MountType"),
+    decorator=extend_schema(description="Create new MountType"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(operation_description="Retrieve all MountTypes"),
+    decorator=extend_schema(description="Retrieve all MountTypes"),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single MountType"),
+    decorator=extend_schema(description="Retrieve single MountType"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single MountType"),
+    decorator=extend_schema(description="Update single MountType"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single MountType"),
+    decorator=extend_schema(description="Partially update single MountType"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Delete single MountType"),
+    decorator=extend_schema(description="Delete single MountType"),
 )
 class MountTypeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]

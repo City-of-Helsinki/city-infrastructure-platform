@@ -1,6 +1,6 @@
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
@@ -14,27 +14,27 @@ __all__ = ("ResponsibleEntityViewSet",)
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new ResponsibleEntity"),
+    decorator=extend_schema(description="Create new ResponsibleEntity"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(operation_description="Retrieve all ResponsibleEntitys"),
+    decorator=extend_schema(description="Retrieve all ResponsibleEntitys"),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single ResponsibleEntity"),
+    decorator=extend_schema(description="Retrieve single ResponsibleEntity"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single ResponsibleEntity"),
+    decorator=extend_schema(description="Update single ResponsibleEntity"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single ResponsibleEntity"),
+    decorator=extend_schema(description="Partially update single ResponsibleEntity"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Delete single ResponsibleEntity"),
+    decorator=extend_schema(description="Delete single ResponsibleEntity"),
 )
 class ResponsibleEntityViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]

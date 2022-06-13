@@ -1,5 +1,5 @@
 from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
@@ -37,30 +37,30 @@ __all__ = ("RoadMarkingPlanViewSet", "RoadMarkingRealViewSet")
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new RoadMarking Plan"),
+    decorator=extend_schema(description="Create new RoadMarking Plan"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all RoadMarking Plans",
-        manual_parameters=[location_parameter],
+    decorator=extend_schema(
+        description="Retrieve all RoadMarking Plans",
+        parameters=[location_parameter],
     ),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single RoadMarking Plan"),
+    decorator=extend_schema(description="Retrieve single RoadMarking Plan"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single RoadMarking Plan"),
+    decorator=extend_schema(description="Update single RoadMarking Plan"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single RoadMarking Plan"),
+    decorator=extend_schema(description="Partially update single RoadMarking Plan"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single RoadMarking Plan"),
+    decorator=extend_schema(description="Soft-delete single RoadMarking Plan"),
 )
 class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -74,10 +74,10 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = RoadMarkingPlanFileSerializer
     file_relation = "road_marking_plan"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to RoadMarking Plan",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods="post",
+        description="Add one or more files to RoadMarking Plan",
+        request=MultiFileUploadSchema,
         responses={200: RoadMarkingPlanFileSerializer(many=True)},
     )
     @action(
@@ -89,17 +89,17 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from RoadMarking Plan",
-        request_body=None,
+    @extend_schema(
+        methods="delete",
+        description="Delete single file from RoadMarking Plan",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from RoadMarking Plan",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods="patch",
+        description="Update single file from RoadMarking Plan",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: RoadMarkingPlanFileSerializer},
     )
     @action(
@@ -117,30 +117,30 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
 
 @method_decorator(
     name="create",
-    decorator=swagger_auto_schema(operation_description="Create new RoadMarking Real"),
+    decorator=extend_schema(description="Create new RoadMarking Real"),
 )
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all RoadMarking Reals",
-        manual_parameters=[location_parameter],
+    decorator=extend_schema(
+        description="Retrieve all RoadMarking Reals",
+        parameters=[location_parameter],
     ),
 )
 @method_decorator(
     name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single RoadMarking Real"),
+    decorator=extend_schema(description="Retrieve single RoadMarking Real"),
 )
 @method_decorator(
     name="update",
-    decorator=swagger_auto_schema(operation_description="Update single RoadMarking Real"),
+    decorator=extend_schema(description="Update single RoadMarking Real"),
 )
 @method_decorator(
     name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single RoadMarking Real"),
+    decorator=extend_schema(description="Partially update single RoadMarking Real"),
 )
 @method_decorator(
     name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single RoadMarking Real"),
+    decorator=extend_schema(description="Soft-delete single RoadMarking Real"),
 )
 class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -154,10 +154,10 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = RoadMarkingRealFileSerializer
     file_relation = "road_marking_real"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to RoadMarking Real",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods="post",
+        description="Add one or more files to RoadMarking Real",
+        request=MultiFileUploadSchema,
         responses={200: RoadMarkingRealFileSerializer(many=True)},
     )
     @action(
@@ -169,17 +169,17 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from RoadMarking Real",
-        request_body=None,
+    @extend_schema(
+        methods="delete",
+        description="Delete single file from RoadMarking Real",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from RoadMarking Real",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods="patch",
+        description="Update single file from RoadMarking Real",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: RoadMarkingRealFileSerializer},
     )
     @action(
