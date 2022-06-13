@@ -89,6 +89,15 @@ class GenericDeviceBaseResource(ModelResource):
     class Meta:
         skip_unchanged = True
         report_skipped = True
+        exclude = (
+            "is_active",
+            "deleted_at",
+            "deleted_by",
+            "created_at",
+            "created_by",
+            "updated_at",
+            "updated_by",
+        )
 
     def __str__(self):
         return self.__class__.__name__
