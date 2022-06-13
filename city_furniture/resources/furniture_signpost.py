@@ -38,15 +38,6 @@ class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, 
     )
 
     class Meta(GenericDeviceBaseResource.Meta):
-        exclude = (
-            "is_active",
-            "deleted_at",
-            "deleted_by",
-            "created_at",
-            "created_by",
-            "updated_at",
-            "updated_by",
-        )
         common_fields = (
             "id",
             "owner__name_fi",
