@@ -13,9 +13,7 @@ from traffic_control.resources.common import (
 
 
 class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
-    lifecycle = ResourceEnumIntegerField(
-        attribute="lifecycle", column_name="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE
-    )
+    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE)
     owner__name_fi = Field(attribute="owner", column_name="owner__name_fi", widget=ForeignKeyWidget(Owner, "name_fi"))
     responsible_entity__name = Field(
         attribute="responsible_entity",
@@ -99,9 +97,7 @@ class FurnitureSignpostRealResource(AbstractFurnitureSignpostResource):
     parent__id = Field(
         attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(FurnitureSignpostReal, "id")
     )
-    condition = ResourceEnumIntegerField(
-        attribute="condition", column_name="condition", enum=Condition, default=Condition.VERY_GOOD
-    )
+    condition = ResourceEnumIntegerField(attribute="condition", enum=Condition, default=Condition.VERY_GOOD)
     furniture_signpost_plan__id = Field(
         attribute="furniture_signpost_plan",
         column_name="furniture_signpost_plan__id",

@@ -27,16 +27,19 @@ class ResourceEnumIntegerField(fields.Field):
     def __init__(
         self,
         attribute=None,
-        column_name=None,
         enum=None,
         default=NOT_PROVIDED,
         readonly=False,
         saves_null_values=True,
     ):
         if enum is None:
-            raise TypeError
+            raise TypeError("Enum must be provided")
+        if default == NOT_PROVIDED:
+            # If field is nullable, default can be set to None
+            raise TypeError("Default value must be provided")
+
         self.enum = enum
-        super().__init__(attribute, column_name, EnumIntegerWidget(), default, readonly, saves_null_values)
+        super().__init__(attribute, attribute, EnumIntegerWidget(), default, readonly, saves_null_values)
 
     def clean(self, data, **kwargs):
         field_value = data[self.column_name]
