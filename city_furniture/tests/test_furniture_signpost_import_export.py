@@ -34,7 +34,7 @@ def test__furniture_signpost_real__import():
     # Remove ID from data to create new objects
     obj_data = dataset.dict[0]
     obj_data.pop("id")
-    dataset.dict[0] = obj_data
+    dataset.dict = [obj_data]
 
     result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True)
     assert not result.has_errors()
