@@ -1,4 +1,4 @@
-from drf_spectacular.extensions import OpenApiAuthenticationExtension
+from drf_spectacular.extensions import OpenApiAuthenticationExtension, OpenApiSerializerFieldExtension
 from drf_spectacular.plumbing import build_bearer_security_scheme_object
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter
@@ -6,14 +6,18 @@ from enumfields import Enum
 from rest_framework import serializers
 
 location_parameter = OpenApiParameter(
-    "location",
-    {"type": "string", "format": "WKT"},
+    name="location",
+    type={"type": "string", "format": "WKT"},
     description="Location (2D or 3D) to search from in WKT-format (EPSG:3879)",
+    # TODO:
+    # examples=[
+    #     OpenApiExample(name="2D polygon area", value="SRID=3879;POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))"),
+    # ],
 )
 
 file_uuid_parameter = OpenApiParameter(
-    "file_pk",
-    OpenApiTypes.UUID,
+    name="file_pk",
+    type=OpenApiTypes.UUID,
     location=OpenApiParameter.PATH,
     description="File object UUID",
 )

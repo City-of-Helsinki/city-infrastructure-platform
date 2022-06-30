@@ -120,7 +120,7 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_relation = "traffic_sign_plan"
 
     @extend_schema(
-        methods="post",
+        methods=["post"],
         description="Add one or more files to TrafficSign Plan",
         request=MultiFileUploadSchema,
         responses={200: TrafficSignPlanFileSerializer(many=True)},
@@ -135,10 +135,11 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().post_files(request, *args, **kwargs)
 
     @extend_schema(
-        methods="delete",
+        methods=["delete"],
         description="Delete single file from TrafficSign Plan",
         request=None,
         responses={204: ""},
+        parameters=[file_uuid_parameter],
     )
     @extend_schema(
         methods="patch",
@@ -200,7 +201,7 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_relation = "traffic_sign_real"
 
     @extend_schema(
-        methods="post",
+        methods=["post"],
         description="Add one or more files to TrafficSign Real",
         request=MultiFileUploadSchema,
         responses={200: TrafficSignRealFileSerializer(many=True)},
@@ -215,13 +216,14 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
         return super().post_files(request, *args, **kwargs)
 
     @extend_schema(
-        methods="delete",
+        methods=["delete"],
         description="Delete single file from TrafficSign Real",
         request=None,
         responses={204: ""},
+        parameters=[file_uuid_parameter],
     )
     @extend_schema(
-        methods="patch",
+        methods=["patch"],
         description="Update single file from TrafficSign Real",
         parameters=[file_uuid_parameter],
         request=FileUploadSchema,
