@@ -7,7 +7,7 @@ authors = []
 
 [tool.poetry.dependencies]
 python = "^3.7"
-django = "^3.2.13"
+django = "^3.2.14"
 
 django-auditlog = "^1.0.0"
 django-colorfield = "^0.6.3"
