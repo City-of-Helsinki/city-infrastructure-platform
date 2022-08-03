@@ -54,7 +54,7 @@ class AdminTrafficSignIconSelectWidget(Select):
             id_icon_values = TrafficControlDeviceType.objects.values_list("id", "icon")
             for uuid, icon in id_icon_values:
                 if icon:
-                    icon_name, ext = icon.rsplit(".", maxsplit=1)
+                    icon_name = icon.rsplit(".", maxsplit=1)[0]
                     icon_path = f"{settings.STATIC_URL}traffic_control/svg/traffic_sign_icons/{icon_name.upper()}.svg"
                     self.icon_url_mapping[uuid] = icon_path
         return self.icon_url_mapping.get(value, "")
