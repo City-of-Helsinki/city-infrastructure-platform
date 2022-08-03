@@ -20,6 +20,7 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import RoadMarkingPlan, RoadMarkingPlanFile, RoadMarkingReal, RoadMarkingRealFile
+from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 __all__ = (
     "RoadMarkingPlanAdmin",
@@ -46,6 +47,7 @@ class RoadMarkingPlanAdmin(
     UserStampedAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -158,6 +160,7 @@ class RoadMarkingRealAdmin(
     UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "road_marking_plan"
     default_lon = HELSINKI_LONGITUDE

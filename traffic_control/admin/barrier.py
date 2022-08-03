@@ -20,6 +20,7 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
+from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 __all__ = (
     "BarrierPlanAdmin",
@@ -46,6 +47,7 @@ class BarrierPlanAdmin(
     UserStampedAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -139,6 +141,7 @@ class BarrierRealAdmin(
     UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "barrier_plan"
     default_lon = HELSINKI_LONGITUDE
