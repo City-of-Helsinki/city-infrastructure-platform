@@ -20,6 +20,7 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
+from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 __all__ = (
     "SignpostPlanAdmin",
@@ -46,6 +47,7 @@ class SignpostPlanAdmin(
     UserStampedAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -145,6 +147,7 @@ class SignpostRealAdmin(
     UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "signpost_plan"
     default_lon = HELSINKI_LONGITUDE

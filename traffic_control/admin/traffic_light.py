@@ -20,6 +20,7 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
+from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 __all__ = (
     "TrafficLightPlanAdmin",
@@ -46,6 +47,7 @@ class TrafficLightPlanAdmin(
     UserStampedAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
@@ -142,6 +144,7 @@ class TrafficLightRealAdmin(
     UserStampedInlineAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "traffic_light_plan"
     default_lon = HELSINKI_LONGITUDE
