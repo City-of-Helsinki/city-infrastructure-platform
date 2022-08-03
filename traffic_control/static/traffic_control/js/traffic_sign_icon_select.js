@@ -6,5 +6,6 @@
  */
 function updateTrafficSignIcon(icon, iconUrl) {
   icon.src = iconUrl;
+  icon.alt = iconUrl.split("/").pop();
   icon.style.display = iconUrl ? "block" : "none";
 }
