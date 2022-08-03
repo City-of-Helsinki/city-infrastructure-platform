@@ -1,4 +1,7 @@
 {% load i18n %}
 {% load admin_urls %}
 
-<li><a href='{% url opts|admin_urlname:"export_empty" %}' class="import_link">{% trans "Export template" %}</a></li>
+<li>
+    <a href='{% url opts|admin_urlname:"export_empty" %}'
+       class="import_link">{% trans "Export template" %}</a>
+</li>

@@ -43,6 +43,7 @@ autoflake = "^1.4"
 autopep8 = "^1.6.0"
 black = "^22.1.0"
 bump2version = "^1.0.1"
+djlint = "^1.9.4"
 factory-boy = "^3.2.1"
 flake8 = "^5.0.4"
 importmagic = "^0.1.7"
@@ -65,3 +66,12 @@ yapf = "^0.32.0"
 [tool.black]
 extend-exclude = "migrations"
 line_length = 120
+
+[tool.djlint]
+# Reference: https://djlint.com/docs/configuration/
+profile = "django"
+use_gitignore = true
+extend_exclude = "map-view,map"
+ignore = "T003,H006,H021,H023,H030,H031"
+preserve_blank_lines = true
+max_line_length = 120

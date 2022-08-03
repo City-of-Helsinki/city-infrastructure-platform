@@ -7,7 +7,7 @@
     <a href="{% url 'v1:api-root' %}">{% trans 'View API' %}</a> /
     <a href="{% url 'schema-swagger-ui' %}">{% trans 'View API documentation' %}</a> /
     {% if user.has_usable_password %}
-    <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+        <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
     {% endif %}
     <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
 {% endblock %}

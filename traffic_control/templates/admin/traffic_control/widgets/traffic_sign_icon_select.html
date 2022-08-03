@@ -1,19 +1,23 @@
 {% load static %}
 
-<img class="traffic-sign-icon" src="{{ icon_path }}" alt="{{ icon_path }}" {% if not icon_path %}style="display: none;"{% endif %}>
+<img class="traffic-sign-icon"
+     src="{{ icon_path }}"
+     alt="{{ icon_path }}"
+     {% if not icon_path %} style="display: none;"{% endif %}/>
 
 {# Default select widget template with added onchange attribute #}
-<select name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}
+<select name="{{ widget.name }}"
+        {% include "django/forms/widgets/attrs.html" %}
         onchange="updateTrafficSignIcon(this.previousElementSibling, this.options[this.selectedIndex].getAttribute('icon-url'));">
+
     {% for group_name, group_choices, group_index in widget.optgroups %}
-        {% if group_name %}
-            <optgroup label="{{ group_name }}">
-        {% endif %}
-    {% for option in group_choices %}
-        {% include option.template_name with widget=option %}
-    {% endfor %}
-    {% if group_name %}
-        </optgroup>
-    {% endif %}
+
+        {% if group_name %}<optgroup label="{{ group_name }}">{% endif %}
+
+        {% for option in group_choices %}
+            {% include option.template_name with widget=option %}
+        {% endfor %}
+
+        {% if group_name %}</optgroup>{% endif %}
     {% endfor %}
 </select>

@@ -2,24 +2,30 @@
 {% load i18n %}
 
 {% block breadcrumbs %}
-<div class="breadcrumbs">
-<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
-&rsaquo; {% translate 'Documentation' %}
-</div>
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+        &rsaquo; {% translate 'Documentation' %}
+    </div>
 {% endblock %}
-{% block title %}{% translate 'Documentation' %}{% endblock %}
-
+{% block title %}
+    {% translate 'Documentation' %}
+{% endblock %}
 {% block content %}
 
-<h1>{% translate 'Documentation' %}</h1>
+    <h1>{% translate 'Documentation' %}</h1>
 
-<div id="content-main">
-  <h3><a href="instructions/">{% translate 'Instructions' %}</a></h3>
-  <p>{% translate 'Instructions about City Infrastructure Platform.' %}</p>
+    <div id="content-main">
+        <h3>
+            <a href="{% url "django-admindocs-instructions" %}">{% translate 'Instructions' %}</a>
+        </h3>
+        <p>{% translate 'Instructions about City Infrastructure Platform.' %}</p>
 
-  <h3><a href="models/">{% translate 'Models' %}</a></h3>
-  <p>{% translate 'Models are descriptions of all the objects in the system and their associated fields. Each model has a list of fields which can be accessed as template variables' %}.</p>
-</div>
+        <h3>
+            <a href="{% url "django-admindocs-models-index" %}">{% translate 'Models' %}</a>
+        </h3>
 
+        <p>
+            {% translate 'Models are descriptions of all the objects in the system and their associated fields. Each model has a list of fields which can be accessed as template variables' %}.
+        </p>
+    </div>
 {% endblock %}
-
