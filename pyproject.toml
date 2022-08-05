@@ -60,6 +60,7 @@ pytest-django = "^4.5.2"
 pytest-watch = "^4.2.0"
 rope = "^0.22.0"
 yapf = "^0.32.0"
+coverage = "6.4.2"
 
 
 [tool.black]
