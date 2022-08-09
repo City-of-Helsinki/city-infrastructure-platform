@@ -21,6 +21,7 @@ from traffic_control.mixins import (
 )
 from traffic_control.models import RoadMarkingPlan, RoadMarkingPlanFile, RoadMarkingReal, RoadMarkingRealFile
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
+from traffic_control.resources.road_marking import RoadMarkingPlanResource, RoadMarkingRealResource
 
 __all__ = (
     "RoadMarkingPlanAdmin",
@@ -49,6 +50,7 @@ class RoadMarkingPlanAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
+    resource_class = RoadMarkingPlanResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
@@ -163,6 +165,7 @@ class RoadMarkingRealAdmin(
     CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "road_marking_plan"
+    resource_class = RoadMarkingRealResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
