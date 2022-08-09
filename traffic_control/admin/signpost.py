@@ -21,6 +21,7 @@ from traffic_control.mixins import (
 )
 from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
+from traffic_control.resources.signpost import SignpostPlanResource, SignpostRealResource
 
 __all__ = (
     "SignpostPlanAdmin",
@@ -49,6 +50,7 @@ class SignpostPlanAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
+    resource_class = SignpostPlanResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
@@ -150,6 +152,7 @@ class SignpostRealAdmin(
     CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "signpost_plan"
+    resource_class = SignpostRealResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

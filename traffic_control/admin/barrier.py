@@ -20,6 +20,7 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
+from traffic_control.resources.barrier import BarrierPlanResource, BarrierRealResource
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 __all__ = (
@@ -49,6 +50,7 @@ class BarrierPlanAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
+    resource_class = BarrierPlanResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
@@ -144,6 +146,7 @@ class BarrierRealAdmin(
     CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "barrier_plan"
+    resource_class = BarrierRealResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

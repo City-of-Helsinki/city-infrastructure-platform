@@ -21,6 +21,7 @@ from traffic_control.mixins import (
 )
 from traffic_control.models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
+from traffic_control.resources.traffic_light import TrafficLightPlanResource, TrafficLightRealResource
 
 __all__ = (
     "TrafficLightPlanAdmin",
@@ -49,6 +50,7 @@ class TrafficLightPlanAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
+    resource_class = TrafficLightPlanResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
@@ -147,6 +149,7 @@ class TrafficLightRealAdmin(
     CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "traffic_light_plan"
+    resource_class = TrafficLightRealResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

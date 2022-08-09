@@ -22,6 +22,7 @@ from traffic_control.mixins import (
 )
 from traffic_control.models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
+from traffic_control.resources.mount import MountPlanResource, MountRealResource
 
 __all__ = (
     "MountPlanAdmin",
@@ -51,6 +52,7 @@ class MountPlanAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
+    resource_class = MountPlanResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
@@ -145,6 +147,7 @@ class MountRealAdmin(
     CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "mount_plan"
+    resource_class = MountRealResource
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

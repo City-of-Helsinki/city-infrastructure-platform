@@ -31,6 +31,7 @@ from traffic_control.models import (
     AdditionalSignReal,
 )
 from traffic_control.models.additional_sign import AdditionalSignRealOperation
+from traffic_control.resources.additional_sign import AdditionalSignPlanResource, AdditionalSignRealResource
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 
@@ -78,6 +79,7 @@ class AdditionalSignPlanAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
+    resource_class = AdditionalSignPlanResource
     form = AdditionalSignPlanModelForm
     fieldsets = (
         (
@@ -166,6 +168,7 @@ class AdditionalSignRealAdmin(
     CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "additional_sign_plan"
+    resource_class = AdditionalSignRealResource
     form = AdditionalSignRealModelForm
     fieldsets = (
         (

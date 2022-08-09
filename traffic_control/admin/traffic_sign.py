@@ -32,6 +32,7 @@ from traffic_control.models import (
 from traffic_control.models.traffic_sign import TrafficSignRealOperation
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
+from traffic_control.resources.traffic_sign import TrafficSignPlanResource, TrafficSignRealResource
 
 __all__ = (
     "OrderedTrafficSignRealInline",
@@ -93,6 +94,7 @@ class TrafficSignPlanAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
+    resource_class = TrafficSignPlanResource
     form = TrafficSignPlanModelForm
     fieldsets = (
         (
@@ -210,6 +212,7 @@ class TrafficSignRealAdmin(
     CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "traffic_sign_plan"
+    resource_class = TrafficSignRealResource
     form = TrafficSignRealModelForm
     fieldsets = (
         (
