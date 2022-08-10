@@ -48,9 +48,9 @@ env = environ.Env(
     SENTRY_DEBUG=(bool, False),
     VERSION=(str, ""),
     OPENSHIFT_DEPLOYMENT=(bool, False),
-    AZURE_ACCOUNT_KEY=(str, False),
-    AZURE_CONTAINER=(str, False),
-    AZURE_ACCOUNT_NAME=(str, False),
+    AZURE_BLOB_STORAGE_SAS_TOKEN=(str, None),
+    AZURE_CONTAINER=(str, None),
+    AZURE_ACCOUNT_NAME=(str, None),
     OIDC_AUTHENTICATION_ENABLED=(bool, True),
     SOCIAL_AUTH_TUNNISTAMO_KEY=(str, None),
     SOCIAL_AUTH_TUNNISTAMO_SECRET=(str, None),
@@ -285,7 +285,11 @@ if OPENSHIFT_DEPLOYMENT:
     DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
     AZURE_ACCOUNT_NAME = env.str("AZURE_ACCOUNT_NAME")
     AZURE_CONTAINER = env.str("AZURE_CONTAINER")
-    AZURE_ACCOUNT_KEY = env.str("AZURE_ACCOUNT_KEY")
+    AZURE_BLOB_STORAGE_SAS_TOKEN = env.str("AZURE_BLOB_STORAGE_SAS_TOKEN")
+    AZURE_CONNECTION_STRING = (
+        f"BlobEndpoint=https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net;"
+        + f"SharedAccessSignature={AZURE_BLOB_STORAGE_SAS_TOKEN};"
+    )
 
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
