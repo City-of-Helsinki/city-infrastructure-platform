@@ -8,6 +8,7 @@ from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     DeviceComparisonAdminMixin,
+    MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
@@ -32,7 +33,11 @@ from traffic_control.models import (
 from traffic_control.models.traffic_sign import TrafficSignRealOperation
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
-from traffic_control.resources.traffic_sign import TrafficSignPlanResource, TrafficSignRealResource
+from traffic_control.resources.traffic_sign import (
+    TrafficSignPlanResource,
+    TrafficSignPlanToRealTemplateResource,
+    TrafficSignRealResource,
+)
 
 __all__ = (
     "OrderedTrafficSignRealInline",
@@ -85,6 +90,7 @@ class TrafficSignPlanFileInline(admin.TabularInline):
 
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(
+    MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
@@ -95,6 +101,9 @@ class TrafficSignPlanAdmin(
     CustomImportExportActionModelAdmin,
 ):
     resource_class = TrafficSignPlanResource
+    extra_export_resource_classes = [
+        TrafficSignPlanToRealTemplateResource,
+    ]
     form = TrafficSignPlanModelForm
     fieldsets = (
         (

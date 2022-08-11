@@ -1,7 +1,7 @@
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
-from traffic_control.enums import Condition, LaneNumber, LaneType, Lifecycle, Reflection, Size, Surface
+from traffic_control.enums import LaneNumber, LaneType, Lifecycle, Reflection, Size, Surface
 from traffic_control.models import (
     CoverageArea,
     MountPlan,
@@ -17,6 +17,7 @@ from traffic_control.models import (
 from traffic_control.models.traffic_sign import LocationSpecifier
 from traffic_control.resources.common import (
     GenericDeviceBaseResource,
+    InstalledDeviceModelResource,
     ResourceEnumIntegerField,
     ResponsibleEntityPermissionImportMixin,
 )
@@ -73,12 +74,10 @@ class AbstractTrafficSignResource(ResponsibleEntityPermissionImportMixin, Generi
             "validity_period_end",
             "seasonal_validity_period_start",
             "seasonal_validity_period_end",
-            "parent__id",
         )
 
 
 class TrafficSignPlanResource(AbstractTrafficSignResource):
-    parent__id = Field(attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(TrafficSignPlan, "id"))
     mount_plan__id = Field(
         attribute="mount_plan",
         column_name="mount_plan__id",
@@ -100,9 +99,7 @@ class TrafficSignPlanResource(AbstractTrafficSignResource):
         export_order = fields
 
 
-class TrafficSignRealResource(AbstractTrafficSignResource):
-    parent__id = Field(attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(TrafficSignReal, "id"))
-    condition = ResourceEnumIntegerField(attribute="condition", enum=Condition, default=Condition.VERY_GOOD)
+class TrafficSignRealResource(AbstractTrafficSignResource, InstalledDeviceModelResource):
     traffic_sign_plan__id = Field(
         attribute="traffic_sign_plan",
         column_name="traffic_sign_plan__id",
@@ -136,3 +133,23 @@ class TrafficSignRealResource(AbstractTrafficSignResource):
             "attachment_url",
         )
         export_order = fields
+
+
+class TrafficSignPlanToRealTemplateResource(TrafficSignRealResource):
+    traffic_sign_plan__id = Field()
+    installation_date = Field()
+    mount_real__id = Field()
+
+    class Meta(TrafficSignRealResource.Meta):
+        model = TrafficSignReal
+        fields = TrafficSignRealResource.Meta.fields
+        export_order = fields
+
+    def dehydrate_id(self, obj: TrafficSignPlan):
+        return None
+
+    def dehydrate_traffic_sign_plan__id(self, obj: TrafficSignPlan):
+        return obj.id
+
+    def __str__(self):
+        return "Template for Real Import"

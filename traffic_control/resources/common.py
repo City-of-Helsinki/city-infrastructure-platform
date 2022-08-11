@@ -10,6 +10,7 @@ from import_export.admin import ImportExportActionModelAdmin
 from import_export.formats import base_formats
 from import_export.resources import ModelResource
 
+from traffic_control.enums import Condition
 from traffic_control.models import ResponsibleEntity
 from users.models import User
 from users.utils import get_system_user
@@ -104,6 +105,12 @@ class GenericDeviceBaseResource(ModelResource):
 
     def __str__(self):
         return self.__class__.__name__
+
+
+class InstalledDeviceModelResource(ModelResource):
+    installation_date = fields.Field(attribute="installation_date")
+    installation_status = fields.Field(attribute="installation_status")
+    condition = ResourceEnumIntegerField(attribute="condition", enum=Condition, default=None)
 
 
 class ResponsibleEntityPermissionImportMixin:
