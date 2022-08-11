@@ -221,6 +221,7 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         _("Installed by"),
         max_length=254,
         blank=True,
+        null=True,
         help_text=_("Name of the organization who installed this sign."),
     )
     manufacturer = models.CharField(
