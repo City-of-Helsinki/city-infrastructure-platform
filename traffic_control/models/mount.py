@@ -92,7 +92,12 @@ class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel, Owned
         null=True,
         on_delete=models.PROTECT,
     )
-    base = models.CharField(verbose_name=_("Base"), max_length=128, blank=True)
+    base = models.CharField(
+        verbose_name=_("Base"),
+        max_length=128,
+        blank=True,
+        null=True,
+    )
     portal_type = models.ForeignKey(
         PortalType,
         verbose_name=_("Portal type"),
