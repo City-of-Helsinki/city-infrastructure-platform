@@ -203,7 +203,7 @@ msgid "Additional Sign Plan"
 msgstr "Lisäkilpi (suunnitelma)"
 
 msgid "Parent Traffic Sign Real"
-msgstr "Isäntäkilpi (toteuma)"
+msgstr "Isäntäliikennemerkki (toteuma)"
 
 msgid "Mount Real"
 msgstr "Kiinnityskohde (toteuma)"
