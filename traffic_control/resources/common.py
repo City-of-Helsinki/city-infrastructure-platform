@@ -5,6 +5,7 @@ from django.db.models import NOT_PROVIDED
 from django.http import HttpResponse
 from django.urls import path
 from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
 from import_export import fields, widgets
 from import_export.admin import ImportExportActionModelAdmin
 from import_export.formats import base_formats
@@ -53,9 +54,17 @@ class ResourceEnumIntegerField(fields.Field):
                 else:
                     enum_value = self.default
             else:
-                raise KeyError(
-                    "Key '%s' not found in enum. Available keys are: %s"
-                    % (self.column_name, [e.name for e in self.enum])
+                raise ValueError(
+                    _(
+                        "Column '%(column_name)s': Value '%(field_value)s' not valid. "
+                        + "Valid options are: %(enum_values)s."
+                    )
+                    % {
+                        "column_name": self.column_name,
+                        "field_value": field_value,
+                        "enum": self.enum,
+                        "enum_values": ", ".join([e.name for e in self.enum]),
+                    }
                 )
 
         data[self.column_name] = enum_value
