@@ -36,24 +36,23 @@ class ResourceEnumIntegerField(fields.Field):
     ):
         if enum is None:
             raise TypeError("Enum must be provided")
-        if default == NOT_PROVIDED:
-            # If field is nullable, default can be set to None
-            raise TypeError("Default value must be provided")
 
         self.enum = enum
         super().__init__(attribute, attribute, EnumIntegerWidget(), default, readonly, saves_null_values)
 
     def clean(self, data, **kwargs):
         field_value = data[self.column_name]
-        try:
-            enum_value = self.enum[field_value]
-        except KeyError:
-            if field_value in self.empty_values and self.default != NOT_PROVIDED:
-                if callable(self.default):
-                    enum_value = self.default()
-                else:
-                    enum_value = self.default
+        if field_value in self.empty_values and self.default == NOT_PROVIDED:
+            enum_value = None
+        elif field_value in self.empty_values and self.default != NOT_PROVIDED:
+            if callable(self.default):
+                enum_value = self.default()
             else:
+                enum_value = self.default
+        else:
+            try:
+                enum_value = self.enum[field_value]
+            except KeyError:
                 raise ValueError(
                     _(
                         "Column '%(column_name)s': Value '%(field_value)s' not valid. "
@@ -86,6 +85,9 @@ class GenericDeviceBaseResource(ModelResource):
 
     def get_queryset(self):
         return self._meta.model.objects.active()
+
+    def before_save_instance(self, instance, using_transactions, dry_run):
+        pass
 
     def after_import_instance(self, instance, new, row_number=None, **kwargs):
         """Set created_by and updated_by users"""
