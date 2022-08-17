@@ -19,7 +19,22 @@ _base_fields = [
         model_attribute="owner.name_fi",
         description="Entity that's responsible for ordering and maintenance of this sign.",
     ),
-    DescribedFeatureField("location", description="Sign's location (point) in EPSG:3879 coordinates."),
+    DescribedFeatureField(
+        "device_type_code",
+        model_attribute="device_type.code",
+        description="Device type code.",
+    ),
+    DescribedFeatureField(
+        "device_type_description",
+        model_attribute="device_type.description",
+        description="Device type description.",
+    ),
+    DescribedFeatureField(
+        "order",
+        description="Order of the additional sign that are in the same point. "
+        "From top to bottom, left to right, starting from 1.",
+    ),
+    DescribedFeatureField("content_s", description="Structured content of the additional sign."),
     DescribedFeatureField("road_name", description="Name of the road this sign is installed on."),
     DescribedFeatureField("lane_number", description="Which lane does this sign affect."),
     DescribedFeatureField("lane_type", description="The type of lane this sign affects."),

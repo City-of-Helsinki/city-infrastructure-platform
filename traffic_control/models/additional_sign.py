@@ -34,6 +34,30 @@ class Color(Enum):
 
 
 class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        null=True,
+        blank=False,
+        on_delete=models.PROTECT,
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)),
+    )
+    order = models.SmallIntegerField(
+        verbose_name=_("Order"),
+        default=1,
+        blank=False,
+        null=False,
+        help_text=_(
+            "The order of the sign in relation to the signs at the same point. "
+            "Order from top to bottom, from left to right starting at 1."
+        ),
+    )
+    content_s = models.JSONField(
+        verbose_name=_("Content"),
+        blank=True,
+        null=True,
+        help_text=_("Additional sign content as JSON document"),
+    )
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.IntegerField(
         _("Height"),
@@ -137,6 +161,12 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
 
     class Meta:
         abstract = True
+
+    def save(self, *args, **kwargs):
+        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ADDITIONAL_SIGN):
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.__class__.__name__} {self.id}"

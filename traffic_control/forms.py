@@ -143,12 +143,18 @@ class AdditionalSignRealModelForm(Point3DFieldForm):
     class Meta:
         model = AdditionalSignReal
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficSignIconSelectWidget,
+        }
 
 
 class AdditionalSignPlanModelForm(Point3DFieldForm):
     class Meta:
         model = AdditionalSignPlan
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficSignIconSelectWidget,
+        }
 
 
 class AdditionalSignContentPlanForm(forms.ModelForm):

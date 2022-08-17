@@ -81,11 +81,13 @@ class AdditionalSignContentRealFilterSet(FilterSet):
 class AdditionalSignPlanFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = AdditionalSignPlan
+        exclude = ["content_s"]
 
 
 class AdditionalSignRealFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = AdditionalSignReal
+        exclude = ["content_s"]
 
 
 class BarrierPlanFilterSet(FilterSet):
@@ -172,6 +174,7 @@ class TrafficControlDeviceTypeFilterSet(FilterSet):
 
     class Meta(GenericMeta):
         model = TrafficControlDeviceType
+        exclude = ["content_schema"]
 
     def filter_traffic_sign_type(self, queryset, name, value):
         if value:

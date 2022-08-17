@@ -8,6 +8,8 @@ from traffic_control.tests.factories import (
     get_additional_sign_real,
     get_owner,
     get_traffic_control_device_type,
+    get_traffic_sign_plan,
+    get_traffic_sign_real,
     get_user,
 )
 
@@ -37,7 +39,7 @@ class TrafficSignPlanTestCase(TestCase):
         self.assertFalse(self.main_sign.has_additional_signs())
 
     def test_queryset_soft_delete_handles_additional_signs(self):
-        get_additional_sign_plan()
+        get_additional_sign_plan(parent=get_traffic_sign_plan())
         additional_sign = get_additional_sign_plan(parent=self.main_sign)
         self.assertEqual(TrafficSignPlan.objects.count(), 2)
         TrafficSignPlan.objects.filter(pk=self.main_sign.pk).soft_delete(self.user)
@@ -88,7 +90,7 @@ class TrafficSignRealTestCase(TestCase):
         self.assertFalse(self.main_sign.has_additional_signs())
 
     def test_queryset_soft_delete_handles_additional_signs(self):
-        get_additional_sign_real()
+        get_additional_sign_real(parent=get_traffic_sign_real())
         additional_sign = get_additional_sign_real(parent=self.main_sign)
         self.assertEqual(TrafficSignReal.objects.count(), 2)
         TrafficSignReal.objects.filter(pk=self.main_sign.pk).soft_delete(self.user)

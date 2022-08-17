@@ -88,6 +88,8 @@ class AdditionalSignPlanAdmin(
                 "fields": (
                     "owner",
                     "responsible_entity",
+                    "device_type",
+                    "content_s",
                     "mount_type",
                     "source_id",
                     "source_name",
@@ -100,6 +102,7 @@ class AdditionalSignPlanAdmin(
                 "fields": (
                     ("location", "z_coord"),
                     "direction",
+                    "order",
                     "road_name",
                     "lane_number",
                     "lane_type",
@@ -177,6 +180,8 @@ class AdditionalSignRealAdmin(
                 "fields": (
                     "owner",
                     "responsible_entity",
+                    "device_type",
+                    "content_s",
                     "mount_type",
                     "permit_decision_id",
                     "attachment_url",
@@ -196,6 +201,7 @@ class AdditionalSignRealAdmin(
                 "fields": (
                     ("location", "z_coord"),
                     "direction",
+                    "order",
                     "road_name",
                     "lane_number",
                     "lane_type",

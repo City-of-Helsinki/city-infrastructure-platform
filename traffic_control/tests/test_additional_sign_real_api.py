@@ -51,8 +51,7 @@ def test__additional_sign_real__list(geo_format):
 @pytest.mark.django_db
 def test__additional_sign_real__detail(geo_format):
     client = get_api_client()
-    asr = get_additional_sign_real()
-    ascr = get_additional_sign_content_real(parent=asr)
+    asr = get_additional_sign_real(parent=get_traffic_sign_real())
     operation_1 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 5))
     operation_2 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 15))
     operation_3 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 10))
@@ -66,7 +65,6 @@ def test__additional_sign_real__detail(geo_format):
     assert response.status_code == status.HTTP_200_OK
     assert response_data["id"] == str(asr.pk)
     assert response_data["parent"] == str(asr.parent.pk)
-    assert response_data["content"][0]["id"] == str(ascr.pk)
     # verify operations are ordered by operation_date
     operation_ids = [operation["id"] for operation in response_data["operations"]]
     assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]
