@@ -24,8 +24,12 @@ from traffic_control.resources.common import (
 
 
 class AbstractTrafficSignResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
-    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE)
-    owner__name_fi = Field(attribute="owner", column_name="owner__name_fi", widget=ForeignKeyWidget(Owner, "name_fi"))
+    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", enum=Lifecycle)
+    owner__name_fi = Field(
+        attribute="owner",
+        column_name="owner__name_fi",
+        widget=ForeignKeyWidget(Owner, "name_fi"),
+    )
     responsible_entity__name = Field(
         attribute="responsible_entity",
         column_name="responsible_entity__name",
@@ -37,18 +41,16 @@ class AbstractTrafficSignResource(ResponsibleEntityPermissionImportMixin, Generi
         widget=ForeignKeyWidget(TrafficControlDeviceType, "code"),
     )
     mount_type__code = Field(
-        attribute="mount_type", column_name="mount_type__code", widget=ForeignKeyWidget(MountType, "code")
+        attribute="mount_type",
+        column_name="mount_type__code",
+        widget=ForeignKeyWidget(MountType, "code"),
     )
-    lane_number = ResourceEnumIntegerField(attribute="lane_number", enum=LaneNumber, default=LaneNumber.MAIN_1)
-    lane_type = ResourceEnumIntegerField(attribute="lane_type", enum=LaneType, default=LaneType.MAIN)
-    size = ResourceEnumIntegerField(attribute="size", enum=Size, default=Size.MEDIUM)
-    reflection_class = ResourceEnumIntegerField(attribute="reflection_class", enum=Reflection, default=Reflection.R1)
-    surface_class = ResourceEnumIntegerField(attribute="surface_class", enum=Surface, default=Surface.FLAT)
-    location_specifier = ResourceEnumIntegerField(
-        attribute="location_specifier",
-        enum=LocationSpecifier,
-        default=LocationSpecifier.RIGHT,
-    )
+    lane_number = ResourceEnumIntegerField(attribute="lane_number", enum=LaneNumber)
+    lane_type = ResourceEnumIntegerField(attribute="lane_type", enum=LaneType)
+    size = ResourceEnumIntegerField(attribute="size", enum=Size)
+    reflection_class = ResourceEnumIntegerField(attribute="reflection_class", enum=Reflection)
+    surface_class = ResourceEnumIntegerField(attribute="surface_class", enum=Surface)
+    location_specifier = ResourceEnumIntegerField(attribute="location_specifier", enum=LocationSpecifier)
 
     class Meta(GenericDeviceBaseResource.Meta):
         common_fields = (
