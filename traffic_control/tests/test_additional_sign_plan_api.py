@@ -47,8 +47,7 @@ def test__additional_sign_plan__list(geo_format):
 @pytest.mark.django_db
 def test__additional_sign_plan__detail(geo_format):
     client = get_api_client()
-    asp = get_additional_sign_plan()
-    ascp = get_additional_sign_content_plan(parent=asp)
+    asp = get_additional_sign_plan(parent=get_traffic_sign_plan())
 
     response = client.get(
         reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}),
@@ -59,7 +58,6 @@ def test__additional_sign_plan__detail(geo_format):
     assert response.status_code == status.HTTP_200_OK
     assert response_data["id"] == str(asp.pk)
     assert response_data["parent"] == str(asp.parent.pk)
-    assert response_data["content"][0]["id"] == str(ascp.pk)
 
     if geo_format == "geojson":
         assert response_data["location"] == GeoJsonDict(asp.location.json)

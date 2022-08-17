@@ -4,6 +4,7 @@ from typing import Optional
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.geos import MultiPolygon
+from django.db.models import Value
 from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
@@ -313,31 +314,60 @@ def get_traffic_sign_real(location="", device_type=None):
     )[0]
 
 
-def get_additional_sign_plan(location=test_point_3d, parent=None, owner=None, plan=None):
+def get_additional_sign_plan(
+    location=test_point_3d,
+    device_type=None,
+    parent=None,
+    owner=None,
+    plan=None,
+    content_s=None,
+) -> AdditionalSignPlan:
     user = get_user("test_user")
     owner = owner or get_owner()
 
-    return AdditionalSignPlan.objects.get_or_create(
-        parent=parent or get_traffic_sign_plan(),
+    if content_s is None:
+        # Distinguish between JSON null and SQL NULL
+        content_s = Value("null")
+
+    asp = AdditionalSignPlan.objects.get_or_create(
+        parent=parent,
         location=location,
+        device_type=device_type,
         owner=owner,
         plan=plan,
         created_by=user,
         updated_by=user,
+        content_s=content_s,
     )[0]
+    asp.refresh_from_db()
+    return asp
 
 
-def get_additional_sign_real(location=test_point_3d, parent=None, owner=None):
+def get_additional_sign_real(
+    location=test_point_3d,
+    device_type=None,
+    parent=None,
+    owner=None,
+    content_s=None,
+) -> AdditionalSignReal:
     user = get_user("test_user")
     owner = owner or get_owner()
 
-    return AdditionalSignReal.objects.get_or_create(
-        parent=parent or get_traffic_sign_real(),
+    if content_s is None:
+        # Distinguish between JSON null and SQL NULL
+        content_s = Value("null")
+
+    asr = AdditionalSignReal.objects.get_or_create(
+        parent=parent,
         location=location,
+        device_type=device_type,
         owner=owner,
         created_by=user,
         updated_by=user,
+        content_s=content_s,
     )[0]
+    asr.refresh_from_db()
+    return asr
 
 
 def get_additional_sign_content_plan(parent=None, device_type=None, order=1):

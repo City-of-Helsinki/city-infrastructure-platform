@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
-    get_additional_sign_content_plan,
-    get_additional_sign_content_real,
+    get_additional_sign_plan,
+    get_additional_sign_real,
     get_barrier_plan,
     get_barrier_real,
     get_road_marking_plan,
@@ -34,8 +34,8 @@ from traffic_control.tests.factories import (
         (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_real),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_content_plan),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_content_real),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_plan),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_real),
     ),
 )
 @pytest.mark.django_db
@@ -56,32 +56,6 @@ def test__traffic_control_device_type__target_model__restricts_relations(allowed
                 related_obj.save(update_fields=["device_type"])
 
 
-def _get_additional_sign_content_plan(device_type):
-    """
-    Get AdditionalSignContentPlan instance and set its related models
-    interfering device_types to universal one.
-    """
-    universal_device_type = get_traffic_control_device_type(code="123", target_model=None)
-    obj = get_additional_sign_content_plan(device_type=device_type)
-    obj.parent.parent.device_type = universal_device_type
-    obj.parent.parent.save()
-    return obj
-
-
-def _get_additional_sign_content_real(device_type):
-    """
-    Get AdditionalSignContentReal instance and set its related models
-    interfering device_types to universal one.
-    """
-    universal_device_type = get_traffic_control_device_type(code="123", target_model=None)
-    obj = get_additional_sign_content_real(device_type=device_type)
-    obj.parent.parent.device_type = universal_device_type
-    obj.parent.parent.save()
-    obj.parent.parent.traffic_sign_plan.device_type = universal_device_type
-    obj.parent.parent.traffic_sign_plan.save()
-    return obj
-
-
 @pytest.mark.parametrize(
     "new_target_model,factory",
     (
@@ -95,8 +69,8 @@ def _get_additional_sign_content_real(device_type):
         (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_real),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, _get_additional_sign_content_plan),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, _get_additional_sign_content_real),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_plan),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_real),
     ),
 )
 @pytest.mark.django_db
@@ -124,8 +98,8 @@ def test__traffic_control_device_type__target_model__update_is_valid(new_target_
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_real),
         (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_plan),
         (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_real),
-        (DeviceTypeTargetModel.BARRIER, get_additional_sign_content_plan),
-        (DeviceTypeTargetModel.BARRIER, get_additional_sign_content_real),
+        (DeviceTypeTargetModel.BARRIER, get_additional_sign_plan),
+        (DeviceTypeTargetModel.BARRIER, get_additional_sign_real),
     ),
 )
 @pytest.mark.django_db
@@ -154,8 +128,8 @@ def test__traffic_control_device_type__target_model__validate_multiple_invalid_r
     get_traffic_light_real(device_type=device_type)
     get_traffic_sign_plan(device_type=device_type)
     get_traffic_sign_real(device_type=device_type)
-    get_additional_sign_content_plan(device_type=device_type)
-    get_additional_sign_content_real(device_type=device_type)
+    get_additional_sign_plan(device_type=device_type)
+    get_additional_sign_real(device_type=device_type)
 
     for target_model in DeviceTypeTargetModel:
         with pytest.raises(ValidationError):

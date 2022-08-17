@@ -93,6 +93,11 @@ class TrafficControlDeviceType(models.Model):
         blank=True,
         null=True,
     )
+    content_schema = models.JSONField(
+        verbose_name=_("Content schema"),
+        null=True,
+        blank=True,
+    )
 
     objects = TrafficControlDeviceTypeQuerySet.as_manager()
 
@@ -132,6 +137,8 @@ class TrafficControlDeviceType(models.Model):
             "trafficsignreal",
             "additionalsigncontentplan",
             "additionalsigncontentreal",
+            "additionalsignplan",
+            "additionalsignreal",
         ]
         ignore_prefix = target_type.value.replace("_", "")
         relevant_relations = [relation for relation in relations if not relation.startswith(ignore_prefix)]
