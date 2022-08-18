@@ -6,7 +6,9 @@
       "trafficsignreal": "Liikennemerkkitoteuma",
       "trafficsignplan": "Liikennemerkkisuunnitelma",
       "additionalsignreal": "Lisäkilpitoteuma",
-      "additionalsignplan": "Lisäkilpisuunnitelma"
+      "additionalsignplan": "Lisäkilpisuunnitelma",
+      "furnituresignpostreal": "Kaupunkikalustetoteuma",
+      "furnituresignpostplan": "Kaupunkikalustesuunnitelma"
     },
     "Device type": "Merkki",
     "Direction": "Suunta",
