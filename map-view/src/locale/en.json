@@ -3,10 +3,10 @@
     "edit": "edit",
     "close": "close",
     "featureInfoTitle": {
-      "traffic_sign_real": "Traffic Sign Real",
-      "traffic_sign_plan": "Traffic Sign Plan",
-      "additional_sign_real": "Additional Sign Real",
-      "additional_sign_plan": "Additional Sign Plan"
+      "trafficsignreal": "Traffic Sign Real",
+      "trafficsignplan": "Traffic Sign Plan",
+      "additionalsignreal": "Additional Sign Real",
+      "additionalsignplan": "Additional Sign Plan"
     },
     "Device type": "Device type",
     "Direction": "Direction",

@@ -3,10 +3,10 @@
     "edit": "muokkaa",
     "close": "sulje",
     "featureInfoTitle": {
-      "traffic_sign_real": "Liikennemerkkitoteuma",
-      "traffic_sign_plan": "Liikennemerkkisuunnitelma",
-      "additional_sign_real": "Lisäkilpitoteuma",
-      "additional_sign_plan": "Lisäkilpisuunnitelma"
+      "trafficsignreal": "Liikennemerkkitoteuma",
+      "trafficsignplan": "Liikennemerkkisuunnitelma",
+      "additionalsignreal": "Lisäkilpitoteuma",
+      "additionalsignplan": "Lisäkilpisuunnitelma"
     },
     "Device type": "Merkki",
     "Direction": "Suunta",
