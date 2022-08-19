@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.admin import widgets
 from django.contrib.gis import forms
 from django.contrib.gis.geos import Point
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms.models import ModelChoiceIteratorValue
 from django.forms.widgets import Select
@@ -22,6 +23,7 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
+from traffic_control.validators import validate_structured_content
 
 
 class AdminFileWidget(widgets.AdminFileWidget):
@@ -96,6 +98,31 @@ class AdminEnumChoiceField(EnumChoiceField):
     widget = AdminEnumSelectWidget
 
 
+class StructuredContentModelFormMixin:
+    """
+    Validate structured content field against device type's content schema.
+    Raises `ValidationError` if content is invalid.
+    """
+
+    def clean(self):
+        validation_errors = {}
+
+        # Validate content according to device type's schema
+        cleaned_data = super().clean()
+        if "content_s" in cleaned_data:
+            content = cleaned_data.get("content_s")
+            device_type = cleaned_data.get("device_type")
+
+            errors = validate_structured_content(content, device_type)
+            if errors:
+                validation_errors["content_s"] = errors
+
+        if len(validation_errors) > 0:
+            raise ValidationError(validation_errors)
+
+        return cleaned_data
+
+
 class Point3DFieldForm(forms.ModelForm):
     """Form class that allows entering a z coordinate for 3d point"""
 
@@ -139,7 +166,7 @@ class TrafficSignPlanModelForm(Point3DFieldForm):
         }
 
 
-class AdditionalSignRealModelForm(Point3DFieldForm):
+class AdditionalSignRealModelForm(StructuredContentModelFormMixin, Point3DFieldForm):
     class Meta:
         model = AdditionalSignReal
         fields = "__all__"
@@ -148,7 +175,7 @@ class AdditionalSignRealModelForm(Point3DFieldForm):
         }
 
 
-class AdditionalSignPlanModelForm(Point3DFieldForm):
+class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, Point3DFieldForm):
     class Meta:
         model = AdditionalSignPlan
         fields = "__all__"

@@ -20,6 +20,45 @@ from traffic_control.tests.factories import (
     get_traffic_sign_real,
 )
 
+simple_schema = {
+    "type": "object",
+    "properties": {
+        "prop_str": {"type": "string"},
+    },
+    "additionalProperties": False,
+}
+
+
+content_valid_by_simple_schema = {
+    "prop_str": "string value",
+}
+
+another_content_valid_by_simple_schema = {
+    "prop_str": "another string value",
+}
+
+content_invalid_by_simple_schema = {
+    "prop_str": 123,
+}
+
+simple_schema_2 = {
+    "type": "object",
+    "properties": {
+        "prop_num": {"type": "number"},
+    },
+    "additionalProperties": False,
+}
+
+content_valid_by_simple_schema_2 = {
+    "prop_num": 123,
+}
+
+content_invalid_by_simple_schema_2 = {
+    "prop_num": "string value",
+}
+
+invalid_schema = {"type": "asdf"}
+
 
 @pytest.mark.parametrize(
     "allowed_value,factory",
