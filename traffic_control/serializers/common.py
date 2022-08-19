@@ -9,6 +9,7 @@ from rest_framework_gis.fields import GeometryField
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceType
 from traffic_control.schema import TrafficSignType
+from traffic_control.validators import validate_structured_content
 
 
 class HideFromAnonUserSerializerMixin:
@@ -26,6 +27,42 @@ class HideFromAnonUserSerializerMixin:
             representation.pop("deleted_by", None)
 
         return representation
+
+
+class StructuredContentValidator:
+    """
+    Validate structured content field against device type's content schema.
+    Raises `ValidationError` if content is invalid.
+    """
+
+    requires_context = True
+
+    def __call__(self, data, serializer):
+        method = serializer.context["request"].method
+        if method == "POST":
+            content = data.get("content_s")
+            device_type = data.get("device_type")
+
+        elif method in ("PUT", "PATCH"):
+            id = serializer.instance.id
+
+            if "content_s" in data:
+                content = data.get("content_s")
+            else:
+                content = serializer.Meta.model.objects.filter(id=id).first().content_s
+
+            if "device_type" in data:
+                device_type = data.get("device_type")
+            else:
+                device_type = serializer.Meta.model.objects.filter(id=id).first().device_type
+
+        validation_errors = validate_structured_content(content, device_type)
+
+        if validation_errors:
+            raised_errors = []
+            for e in validation_errors:
+                raised_errors += e.messages
+            raise serializers.ValidationError({"content_s": raised_errors})
 
 
 class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):

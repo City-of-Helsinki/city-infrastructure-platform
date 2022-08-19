@@ -12,7 +12,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.additional_sign import AdditionalSignRealOperation
-from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import HideFromAnonUserSerializerMixin, StructuredContentValidator
 
 
 class WritableNestedContentSerializerMixin:
@@ -148,6 +148,7 @@ class AdditionalSignPlanSerializer(
             "deleted_at",
         )
         exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        validators = (StructuredContentValidator(),)
 
 
 class AdditionalSignPlanGeoJSONSerializer(AdditionalSignPlanSerializer):
@@ -227,6 +228,7 @@ class AdditionalSignRealSerializer(
             "deleted_at",
         )
         exclude = ("mount_type", "legacy_code", "is_active", "deleted_at", "deleted_by")
+        validators = (StructuredContentValidator(),)
 
 
 class AdditionalSignRealGeoJSONSerializer(AdditionalSignRealSerializer):

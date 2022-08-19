@@ -38,7 +38,7 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
         null=True,
-        blank=False,
+        blank=True,
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)),
     )

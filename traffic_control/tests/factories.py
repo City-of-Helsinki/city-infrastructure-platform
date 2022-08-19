@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional
+from typing import Any, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -273,13 +273,21 @@ def get_traffic_control_device_type(
     description: str = "Test",
     target_model: Optional[DeviceTypeTargetModel] = None,
     value: str = "",
-):
-    return TrafficControlDeviceType.objects.get_or_create(
+    content_schema: Optional[Any] = None,
+) -> TrafficControlDeviceType:
+    if content_schema is None:
+        # Distinguish between JSON null and SQL NULL
+        content_schema = Value("null")
+
+    dt = TrafficControlDeviceType.objects.get_or_create(
         code=code,
         description=description,
         target_model=target_model,
         value=value,
+        content_schema=content_schema,
     )[0]
+    dt.refresh_from_db()
+    return dt
 
 
 def get_traffic_sign_plan(location="", plan=None, device_type=None):

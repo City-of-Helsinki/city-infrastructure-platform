@@ -1,5 +1,6 @@
 import pytest
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
@@ -13,6 +14,15 @@ from traffic_control.tests.factories import (
     get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_user,
+)
+from traffic_control.tests.models.test_traffic_control_device_type import (
+    another_content_valid_by_simple_schema,
+    content_invalid_by_simple_schema,
+    content_invalid_by_simple_schema_2,
+    content_valid_by_simple_schema,
+    content_valid_by_simple_schema_2,
+    simple_schema,
+    simple_schema_2,
 )
 from traffic_control.tests.test_base_api_3d import test_point_2_3d
 
@@ -103,20 +113,21 @@ def test__additional_sign_plan__create_without_content(admin_user):
 def test__additional_sign_plan__create_with_content(admin_user):
     """
     Test that AdditionalSignPlan API endpoint POST request creates
-    AdditionalSignContentPlan instances successfully
+    an AdditionalContentPlan with content_s.
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_plan()
-    dt = get_traffic_control_device_type()
+    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+
     data = {
-        "parent": tsp.pk,
+        "parent": str(tsp.pk),
         "location": str(tsp.location),
-        "owner": get_owner().pk,
-        "content": [
-            {"text": "Test content 1", "order": 1, "device_type": str(dt.pk)},
-            {"text": "Test content 2", "order": 2, "device_type": str(dt.pk)},
-        ],
+        "owner": str(get_owner().pk),
+        "device_type": str(dt.pk),
+        "content_s": content_valid_by_simple_schema,
     }
+
+    assert AdditionalSignPlan.objects.count() == 0
 
     response = client.post(reverse("v1:additionalsignplan-list"), data=data)
     response_data = response.json()
@@ -128,19 +139,119 @@ def test__additional_sign_plan__create_with_content(admin_user):
         assert response_data["id"] == str(asp.pk)
         assert response_data["parent"] == str(data["parent"])
         assert response_data["owner"] == str(data["owner"])
-        assert AdditionalSignContentPlan.objects.count() == 2
-        ascp_1 = asp.content.first()
-        assert ascp_1.text == "Test content 1"
-        assert ascp_1.order == 1
-        assert ascp_1.device_type.pk == dt.pk
-        ascp_2 = asp.content.last()
-        assert ascp_2.text == "Test content 2"
-        assert ascp_2.order == 2
-        assert ascp_2.device_type.pk == dt.pk
+        assert response_data["device_type"] == str(data["device_type"])
+        assert response_data["content_s"] == data["content_s"]
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert AdditionalSignPlan.objects.count() == 0
-        assert AdditionalSignContentPlan.objects.count() == 0
+
+
+@pytest.mark.parametrize(
+    "schema,content",
+    (
+        (None, simple_schema),
+        (simple_schema, content_invalid_by_simple_schema),
+    ),
+)
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__create_with_content_invalid(schema, content, admin_user):
+    """
+    Test that AdditionalSignPlan API endpoint POST doesn't create
+    an AdditionalContentPlan when content_s is invalid to device type's content_schema.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    tsp = get_traffic_sign_plan()
+    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=schema)
+
+    data = {
+        "parent": str(tsp.pk),
+        "location": str(tsp.location),
+        "owner": str(get_owner().pk),
+        "device_type": str(dt.pk),
+        "content_s": content,
+    }
+
+    response = client.post(reverse("v1:additionalsignplan-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert len(response_data["content_s"]) == 1
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    assert AdditionalSignPlan.objects.count() == 0
+
+
+old_schemas_and_contents = (
+    (None, None),
+    (simple_schema, content_valid_by_simple_schema),
+    (simple_schema_2, content_valid_by_simple_schema_2),
+)
+
+new_schemas_and_contents_and_expectations = (
+    (None, None, True),
+    (simple_schema, content_valid_by_simple_schema, True),
+    (simple_schema_2, content_valid_by_simple_schema_2, True),
+    (simple_schema, content_invalid_by_simple_schema, False),
+    (simple_schema_2, content_invalid_by_simple_schema_2, False),
+)
+
+
+@pytest.mark.parametrize("old_schema,old_content", old_schemas_and_contents)
+@pytest.mark.parametrize("new_schema,new_content,expect_valid", new_schemas_and_contents_and_expectations)
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__update_device_type_and_content(
+    old_schema,
+    old_content,
+    new_schema,
+    new_content,
+    expect_valid,
+    admin_user,
+):
+    """
+    Test that AdditionalSignPlan API endpoint PUT request update
+    is successful when changing both device_type and content_s, but is
+    not successful when structured content doesn't match device type's content_schema.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    old_dt = get_traffic_control_device_type(code="A1234", content_schema=old_schema)
+    new_dt = get_traffic_control_device_type(code="new_code", content_schema=new_schema)
+    tsp = get_traffic_sign_plan()
+    asp = get_additional_sign_plan(content_s=old_content, device_type=old_dt)
+
+    data = {
+        "parent": tsp.pk,
+        "location": str(tsp.location),
+        "owner": get_owner(name_en="New owner").pk,
+        "device_type": new_dt.id,
+        "content_s": new_content,
+    }
+
+    response = client.put(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        if expect_valid:
+            assert response.status_code == status.HTTP_200_OK
+            assert response_data["id"] == str(asp.pk)
+            assert response_data["owner"] == str(data["owner"])
+            assert response_data["device_type"] == str(data["device_type"])
+            assert response_data["content_s"] == data["content_s"]
+        else:
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+            assert len(response_data["content_s"]) == 1
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.owner.pk != data["owner"]
+        assert asp.device_type != data["device_type"]
+
+        if old_content == new_content:
+            assert asp.content_s == data["content_s"]
+        else:
+            assert asp.content_s != data["content_s"]
 
 
 @pytest.mark.parametrize("admin_user", (False, True))
@@ -562,6 +673,118 @@ def test__additional_sign_plan__partial_update_with_unrelated_content_id(admin_u
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert asp.owner != data["owner"]
         assert ascp.text != "Updated text"
+
+
+@pytest.mark.parametrize(
+    "schema,old_content,new_content,expect_valid",
+    (
+        (None, None, None, True),
+        (simple_schema, content_valid_by_simple_schema, another_content_valid_by_simple_schema, True),
+        (simple_schema, content_valid_by_simple_schema, content_invalid_by_simple_schema, False),
+        (None, None, content_valid_by_simple_schema, False),
+    ),
+)
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__partial_update_content(
+    schema,
+    old_content,
+    new_content,
+    expect_valid,
+    admin_user,
+):
+    """
+    Test that AdditionalSignPlan API endpoint PATCH request updates
+    structured content when it's valid according to device type's content schema.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    dt = get_traffic_control_device_type(code="DT1", content_schema=schema)
+    asp = get_additional_sign_plan(device_type=dt, content_s=old_content)
+    asp_id = str(asp.pk)
+    data = {
+        "content_s": new_content,
+    }
+
+    response = client.patch(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp_id}), data=data)
+    response_data = response.json()
+    asp.refresh_from_db()
+
+    if admin_user:
+        if expect_valid:
+            assert response.status_code == status.HTTP_200_OK
+            assert response_data["id"] == asp_id
+            assert response_data["content_s"] == new_content
+            assert response_data["device_type"] == str(dt.id)
+        else:
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+            assert len(response_data["content_s"]) == 1
+            assert asp.content_s == old_content
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.content_s == old_content
+
+
+@pytest.mark.parametrize(
+    "old_schema,old_content",
+    (
+        (None, None),
+        (simple_schema, content_valid_by_simple_schema),
+        (simple_schema, another_content_valid_by_simple_schema),
+        (simple_schema_2, content_valid_by_simple_schema_2),
+    ),
+)
+@pytest.mark.parametrize(
+    "new_schema,new_content,expect_valid",
+    (
+        (None, None, True),
+        (simple_schema, content_valid_by_simple_schema, True),
+        (None, content_valid_by_simple_schema, False),
+        (simple_schema, None, False),
+    ),
+)
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__partial_update_device_type_and_content(
+    old_schema,
+    new_schema,
+    old_content,
+    new_content,
+    expect_valid,
+    admin_user,
+):
+    """
+    Test that AdditionalSignPlan API endpoint PATCH request updates structured
+    content and device type when content is valid according to device type's content schema.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    old_dt = get_traffic_control_device_type(code="DT1", content_schema=old_schema)
+    new_dt = get_traffic_control_device_type(code="DT2", content_schema=new_schema)
+    asp = get_additional_sign_plan(device_type=old_dt, content_s=old_content)
+    asp_id = str(asp.pk)
+    data = {
+        "content_s": new_content,
+        "device_type": str(new_dt.id),
+    }
+
+    response = client.patch(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp_id}), data=data)
+    response_data = response.json()
+    asp.refresh_from_db()
+
+    if admin_user:
+        if expect_valid:
+            assert response.status_code == status.HTTP_200_OK
+            assert response_data["id"] == asp_id
+            assert response_data["content_s"] == new_content
+            assert response_data["device_type"] == str(new_dt.id)
+        else:
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+            assert len(response_data["content_s"]) == 1
+            assert asp.content_s == old_content
+            assert asp.device_type == old_dt
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert asp.content_s == old_content
+        assert asp.device_type == old_dt
 
 
 @pytest.mark.parametrize("admin_user", (False, True))
