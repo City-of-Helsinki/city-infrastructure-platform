@@ -1,3 +1,5 @@
+from contextlib import nullcontext as does_not_raise
+
 import pytest
 from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
@@ -200,3 +202,59 @@ def test__traffic_control_device_type__traffic_sign_type(code, expected_value):
     device_type = get_traffic_control_device_type(code=code)
 
     assert device_type.traffic_sign_type == expected_value
+
+
+@pytest.mark.parametrize(
+    "schema,expect_valid",
+    (
+        (None, True),
+        (simple_schema, True),
+        (invalid_schema, False),
+        ({}, True),
+        (True, False),
+        (False, False),
+        (123, False),
+        ("string", False),
+        ([], False),
+        (["string in array"], False),
+        ([{}], False),
+    ),
+    ids=lambda x: str(x),
+)
+@pytest.mark.django_db
+def test__traffic_control_device_type__content_schema__valid_values(schema, expect_valid):
+    expectation = does_not_raise() if expect_valid else pytest.raises(ValidationError)
+
+    device_type = get_traffic_control_device_type(content_schema=schema)
+    with expectation:
+        device_type.full_clean()
+
+    if expect_valid:
+        assert device_type.content_schema == schema
+
+
+@pytest.mark.parametrize(
+    "target_model,expect_valid",
+    (
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, True),
+        (DeviceTypeTargetModel.ROAD_MARKING, False),
+        (DeviceTypeTargetModel.SIGNPOST, False),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, False),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, False),
+        (DeviceTypeTargetModel.BARRIER, False),
+        (DeviceTypeTargetModel.OTHER, False),
+        (None, True),
+    ),
+)
+@pytest.mark.django_db
+def test__traffic_control_device_type__content_schema__valid_for_target_models(target_model, expect_valid):
+    content_schema = simple_schema
+    device_type = get_traffic_control_device_type(target_model=target_model, content_schema=content_schema)
+
+    if expect_valid:
+        device_type.full_clean()
+        assert device_type.target_model == target_model
+        assert device_type.content_schema == content_schema
+    else:
+        with pytest.raises(ValidationError):
+            device_type.full_clean()
