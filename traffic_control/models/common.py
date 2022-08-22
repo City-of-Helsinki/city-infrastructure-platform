@@ -1,6 +1,7 @@
 import uuid
 from typing import Optional
 
+import jsonschema
 from auditlog.registry import auditlog
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
@@ -10,6 +11,36 @@ from enumfields import EnumField
 
 from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_MAP, TrafficControlDeviceTypeType
 from traffic_control.mixins.models import UserControlModel
+
+
+class JSONSchemaField(models.JSONField):
+    """
+    Field for saving valid json-schema objects.
+    """
+
+    empty_values = [None]
+
+    def validate(self, value, model_instance):
+        super().validate(value, model_instance)
+
+        if not isinstance(value, dict):
+            raise ValidationError(_("Schema must be type of JSON object"))
+
+        meta_schema = jsonschema.Draft202012Validator.META_SCHEMA
+        meta_validator = jsonschema.Draft202012Validator(meta_schema)
+
+        validation_errors = []
+        for error in meta_validator.iter_errors(value):
+            message = error.message
+            if error.path:
+                # Add property path to the message
+                message = ".".join(error.path) + ": " + message
+            validation_errors.append(ValidationError(message))
+
+        if validation_errors:
+            # Remove duplicate validation errors
+            validation_errors_unique = list(set(validation_errors))
+            raise ValidationError(validation_errors_unique)
 
 
 class Owner(models.Model):
@@ -93,7 +124,7 @@ class TrafficControlDeviceType(models.Model):
         blank=True,
         null=True,
     )
-    content_schema = models.JSONField(
+    content_schema = JSONSchemaField(
         verbose_name=_("Content schema"),
         null=True,
         blank=True,
@@ -112,6 +143,21 @@ class TrafficControlDeviceType(models.Model):
     @property
     def traffic_sign_type(self):
         return TRAFFIC_SIGN_TYPE_MAP.get(self.code[0])
+
+    def clean(self):
+        self.validate_target_model_content_schema()
+
+    def validate_target_model_content_schema(self):
+        target_models_with_content_schema = (DeviceTypeTargetModel.ADDITIONAL_SIGN,)
+        if (
+            self.content_schema is not None
+            and self.target_model is not None
+            and self.target_model not in target_models_with_content_schema
+        ):
+            raise ValidationError(
+                _("Target model '%(target_model)s' does not support content schema"),
+                params={"target_model": self.target_model.label},
+            )
 
     def save(self, validate_target_model_change=True, *args, **kwargs):
         if self.pk:
