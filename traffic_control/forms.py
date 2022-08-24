@@ -6,6 +6,9 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms.models import ModelChoiceIteratorValue
 from django.forms.widgets import Select
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
@@ -72,6 +75,31 @@ class AdminTrafficSignIconSelectWidget(Select):
         option = super().create_option(name, value, *args, **kwargs)
         option["attrs"]["icon-url"] = self.get_icon_url(value)
         return option
+
+
+class AdminStructuredContentWidget(forms.Widget):
+    """
+    Widget that show a traffic sign icon representing the selected device type
+    next to the select input
+    """
+
+    template_name = "admin/traffic_control/widgets/structured_content_widget.html"
+
+    def render(self, name, value, device_type_name="device_type", attrs=None, renderer=None):
+        context = {
+            "name": name,
+            "data": value,
+            "device_type_name": device_type_name,
+            "devices_api_url": reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": "__id__"}),
+        }
+        return mark_safe(render_to_string(self.template_name, context))
+
+    class Media:
+        css = {"all": ("traffic_control/css/structured_content_widget.css",)}
+        js = (
+            "https://cdn.jsdelivr.net/npm/@json-editor/json-editor@2.8.0/dist/jsoneditor.js",
+            "traffic_control/js/structured_content_widget.js",
+        )
 
 
 class AdminEnumSelectWidget(Select):
@@ -172,6 +200,7 @@ class AdditionalSignRealModelForm(StructuredContentModelFormMixin, Point3DFieldF
         fields = "__all__"
         widgets = {
             "device_type": AdminTrafficSignIconSelectWidget,
+            "content_s": AdminStructuredContentWidget,
         }
 
 
@@ -181,6 +210,7 @@ class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, Point3DFieldF
         fields = "__all__"
         widgets = {
             "device_type": AdminTrafficSignIconSelectWidget,
+            "content_s": AdminStructuredContentWidget,
         }
 
 

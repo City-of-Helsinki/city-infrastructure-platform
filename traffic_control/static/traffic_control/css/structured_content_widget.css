@@ -1,0 +1,4 @@
+/* Fix JSONEditor line break problem */
+.je-object__container .row {
+    clear: left;
+}

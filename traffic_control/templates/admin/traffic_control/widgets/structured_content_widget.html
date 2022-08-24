@@ -1,0 +1,15 @@
+{% load static %}
+
+<div id="{{ name }}_editor">
+</div>
+
+<textarea id="id_{{ name }}" name="{{ name }}" style="display: none">
+{{ data|safe }}
+</textarea>
+
+<script>
+    createStructuredContentWidget("{{ name }}", {
+        deviceTypeName: "{{ device_type_name }}",
+        deviceTypeEndpoint: "{{ devices_api_url }}"
+    });
+</script>
