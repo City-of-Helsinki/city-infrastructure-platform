@@ -18,6 +18,8 @@ jobs:
       OIDC_AUTHENTICATION_ENABLED: 0
       # Database for tests
       DATABASE_URL: postgis://postgres:postgres@localhost/city-infrastructure-platform
+      POETRY_HOME: /opt/poetry
+      POETRY_VIRTUALENVS_CREATE: 0
 
     steps:
     - uses: actions/checkout@v2
@@ -31,14 +33,15 @@ jobs:
       run: |
         sudo apt-get install gdal-bin
 
-    - name: Install poetry
+    - name: Install Poetry
       run: |
-        curl --silent --show-error -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+        curl --silent --show-error https://install.python-poetry.org --output install-poetry.py
+        python3 install-poetry.py --version 1.2.0
+        rm install-poetry.py
+        $POETRY_HOME/bin/poetry --version
 
     - name: "Install test dependencies"
-      run: ~/.poetry/bin/poetry install --no-root
-      env:
-        POETRY_VIRTUALENVS_CREATE: 0
+      run: $POETRY_HOME/bin/poetry -v install --no-root
 
     - name: Run Python side code neatness tests
       run: |
