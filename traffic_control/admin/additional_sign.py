@@ -136,6 +136,7 @@ class AdditionalSignPlanAdmin(
     default_zoom = 12
     list_display = (
         "id",
+        "device_type",
         "lifecycle",
         "location",
     )
@@ -259,6 +260,7 @@ class AdditionalSignRealAdmin(
     default_zoom = 12
     list_display = (
         "id",
+        "device_type",
         "additional_sign_plan",
         "legacy_code",
         "installation_id",
