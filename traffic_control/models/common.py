@@ -132,6 +132,9 @@ class TrafficControlDeviceType(models.Model):
 
     objects = TrafficControlDeviceTypeQuerySet.as_manager()
 
+    validate_target_model_change = True
+    is_cleaned = False
+
     class Meta:
         db_table = "traffic_control_device_type"
         verbose_name = _("Traffic Control Device Type")
@@ -160,10 +163,15 @@ class TrafficControlDeviceType(models.Model):
             )
 
     def save(self, validate_target_model_change=True, *args, **kwargs):
-        if self.pk:
-            self.validate_change_target_model(self.target_model, raise_exception=validate_target_model_change)
-
+        self.validate_target_model_change = validate_target_model_change
+        if not self.is_cleaned:
+            self.full_clean()
         super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.pk and self.validate_target_model_change:
+            self.validate_change_target_model(self.target_model, raise_exception=self.validate_target_model_change)
+        self.is_cleaned = True
 
     def _has_invalid_related_models(self, target_type: DeviceTypeTargetModel) -> bool:
         """
