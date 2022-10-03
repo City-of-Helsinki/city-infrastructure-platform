@@ -10,8 +10,6 @@ from rest_framework.test import APIClient
 
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle, OrganizationLevel
 from traffic_control.models import (
-    AdditionalSignContentPlan,
-    AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
     AdditionalSignRealOperation,
@@ -376,38 +374,6 @@ def get_additional_sign_real(
     )[0]
     asr.refresh_from_db()
     return asr
-
-
-def get_additional_sign_content_plan(parent=None, device_type=None, order=1):
-    user = get_user("test_user")
-
-    if not device_type:
-        device_type = get_traffic_control_device_type()
-
-    return AdditionalSignContentPlan.objects.get_or_create(
-        parent=parent or get_additional_sign_plan(),
-        order=order,
-        text="Content",
-        device_type=device_type,
-        created_by=user,
-        updated_by=user,
-    )[0]
-
-
-def get_additional_sign_content_real(parent=None, device_type=None, order=1):
-    user = get_user("test_user")
-
-    if not device_type:
-        device_type = get_traffic_control_device_type()
-
-    return AdditionalSignContentReal.objects.get_or_create(
-        parent=parent or get_additional_sign_real(),
-        order=order,
-        text="Content",
-        device_type=device_type,
-        created_by=user,
-        updated_by=user,
-    )[0]
 
 
 def get_api_client(user=None):

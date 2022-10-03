@@ -13,8 +13,6 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
 from traffic_control.models import (
-    AdditionalSignContentPlan,
-    AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
     BarrierPlan,
@@ -211,24 +209,6 @@ class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, Point3DFieldF
         widgets = {
             "device_type": AdminTrafficSignIconSelectWidget,
             "content_s": AdminStructuredContentWidget,
-        }
-
-
-class AdditionalSignContentPlanForm(forms.ModelForm):
-    class Meta:
-        model = AdditionalSignContentPlan
-        fields = "__all__"
-        widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget,
-        }
-
-
-class AdditionalSignContentRealForm(forms.ModelForm):
-    class Meta:
-        model = AdditionalSignContentReal
-        fields = "__all__"
-        widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget,
         }
 
 
