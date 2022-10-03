@@ -5,8 +5,6 @@ from django.urls import reverse
 
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
 from traffic_control.tests.factories import (
-    get_additional_sign_content_plan,
-    get_additional_sign_content_real,
     get_additional_sign_plan,
     get_additional_sign_real,
     get_api_client,
@@ -53,8 +51,6 @@ def assert_no_user_ids(object: dict):
 @pytest.mark.parametrize(
     "endpoint_name,device_factory",
     (
-        ("v1:additionalsigncontentplan", get_additional_sign_content_plan),
-        ("v1:additionalsigncontentreal", get_additional_sign_content_real),
         ("v1:additionalsignplan", get_additional_sign_plan),
         ("v1:additionalsignreal", get_additional_sign_real),
         ("v1:barrierplan", get_barrier_plan),
@@ -93,8 +89,6 @@ def test__hide_user_info_from_anonymous_request_single(
 @pytest.mark.parametrize(
     "endpoint_name,device_factory",
     (
-        ("v1:additionalsigncontentplan", get_additional_sign_content_plan),
-        ("v1:additionalsigncontentreal", get_additional_sign_content_real),
         ("v1:additionalsignplan", get_additional_sign_plan),
         ("v1:additionalsignreal", get_additional_sign_real),
         ("v1:barrierplan", get_barrier_plan),

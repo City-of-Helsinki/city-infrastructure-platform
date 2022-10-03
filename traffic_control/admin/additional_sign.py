@@ -11,12 +11,7 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from traffic_control.forms import (
-    AdditionalSignContentPlanForm,
-    AdditionalSignContentRealForm,
-    AdditionalSignPlanModelForm,
-    AdditionalSignRealModelForm,
-)
+from traffic_control.forms import AdditionalSignPlanModelForm, AdditionalSignRealModelForm
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
@@ -24,43 +19,10 @@ from traffic_control.mixins import (
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from traffic_control.models import (
-    AdditionalSignContentPlan,
-    AdditionalSignContentReal,
-    AdditionalSignPlan,
-    AdditionalSignReal,
-)
+from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
 from traffic_control.models.additional_sign import AdditionalSignRealOperation
 from traffic_control.resources.additional_sign import AdditionalSignPlanResource, AdditionalSignRealResource
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
-
-
-class BaseAdditionalSignContentInline(admin.TabularInline):
-    model = None
-    fields = (
-        "order",
-        "text",
-        "device_type",
-        "created_at",
-        "updated_at",
-        "created_by",
-        "updated_by",
-    )
-    readonly_fields = ("created_at", "updated_at", "created_by", "updated_by")
-    verbose_name = _("Additional sign content")
-    verbose_name_plural = _("Additional sign contents")
-    extra = 0
-    ordering = ("order",)
-
-
-class AdditionalSignContentPlanInline(BaseAdditionalSignContentInline):
-    model = AdditionalSignContentPlan
-    form = AdditionalSignContentPlanForm
-
-
-class AdditionalSignContentRealInline(BaseAdditionalSignContentInline):
-    model = AdditionalSignContentReal
-    form = AdditionalSignContentRealForm
 
 
 class AdditionalSignRealOperationInline(TrafficControlOperationInlineBase):
@@ -156,7 +118,6 @@ class AdditionalSignPlanAdmin(
         "owner",
     ]
     ordering = ("-created_at",)
-    inlines = (AdditionalSignContentPlanInline,)
 
 
 @admin.register(AdditionalSignReal)
@@ -333,4 +294,3 @@ class AdditionalSignRealAdmin(
         "source_id",
         "source_name",
     )
-    inlines = (AdditionalSignContentRealInline, AdditionalSignRealOperationInline)

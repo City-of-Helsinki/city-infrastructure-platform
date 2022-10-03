@@ -7,8 +7,6 @@ from rest_framework_gis.filters import GeometryFilter
 
 from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.models import (
-    AdditionalSignContentPlan,
-    AdditionalSignContentReal,
     AdditionalSignPlan,
     AdditionalSignReal,
     AdditionalSignRealOperation,
@@ -62,20 +60,6 @@ class GenericMeta:
             "extra": lambda f: {"lookup_expr": "intersects"},
         },
     }
-
-
-class AdditionalSignContentPlanFilterSet(FilterSet):
-    operational_area = OperationalAreaFilter()
-
-    class Meta(GenericMeta):
-        model = AdditionalSignContentPlan
-
-
-class AdditionalSignContentRealFilterSet(FilterSet):
-    operational_area = OperationalAreaFilter()
-
-    class Meta(GenericMeta):
-        model = AdditionalSignContentReal
 
 
 class AdditionalSignPlanFilterSet(FilterSet):
