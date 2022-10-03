@@ -181,8 +181,6 @@ class TrafficControlDeviceType(models.Model):
             "trafficlightreal",
             "trafficsignplan",
             "trafficsignreal",
-            "additionalsigncontentplan",
-            "additionalsigncontentreal",
             "additionalsignplan",
             "additionalsignreal",
         ]
