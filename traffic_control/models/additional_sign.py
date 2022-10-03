@@ -1,5 +1,3 @@
-import uuid
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -358,86 +356,5 @@ class AdditionalSignRealOperation(OperationBase):
         verbose_name_plural = _("Additional sign real operations")
 
 
-class AbstractAdditionalSignContent(SourceControlModel, UserControlModel):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device type"),
-        null=True,
-        blank=False,
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)),
-        help_text=_("Type of the device from Helsinki Design Manual."),
-    )
-    text = models.CharField(verbose_name=_("Content text"), max_length=256, blank=True)
-    order = models.SmallIntegerField(
-        verbose_name=_("Order"),
-        default=1,
-        blank=False,
-        null=False,
-        help_text=_(
-            "The order of the sign in relation to the signs at the same point. "
-            "Order from top to bottom, from left to right starting at 1."
-        ),
-    )
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return f"{self.__class__.__name__} at position {self.order} for {self.parent}"
-
-    def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ADDITIONAL_SIGN):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
-
-        if not self.device_type:
-            self.device_type = (
-                TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN)
-                .filter(legacy_code=self.parent.legacy_code)
-                .order_by("code")
-                .first()
-            )
-
-        super().save(*args, **kwargs)
-
-
-class AdditionalSignContentPlan(AbstractAdditionalSignContent):
-    parent = models.ForeignKey(
-        AdditionalSignPlan,
-        verbose_name=_("Parent Additional Sign Plan"),
-        on_delete=models.CASCADE,
-        related_name="content",
-        blank=False,
-        null=False,
-        help_text=_("Additional Sign which this content belongs to."),
-    )
-
-    class Meta:
-        verbose_name = _("Additional Sign Content Plan")
-        verbose_name_plural = _("Additional Sign Content Plans")
-        ordering = ("parent", "order")
-
-
-class AdditionalSignContentReal(AbstractAdditionalSignContent):
-    parent = models.ForeignKey(
-        AdditionalSignReal,
-        verbose_name=_("Parent Additional Sign Real"),
-        on_delete=models.CASCADE,
-        related_name="content",
-        blank=False,
-        null=False,
-        help_text=_("Additional Sign which this content belongs to."),
-    )
-
-    class Meta:
-        verbose_name = _("Additional Sign Content Real")
-        verbose_name_plural = _("Additional Sign Content Reals")
-        ordering = ("parent", "order")
-
-
 auditlog.register(AdditionalSignPlan)
 auditlog.register(AdditionalSignReal)
-auditlog.register(AdditionalSignContentPlan)
-auditlog.register(AdditionalSignContentReal)
