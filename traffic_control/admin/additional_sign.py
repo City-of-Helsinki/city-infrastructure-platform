@@ -294,3 +294,4 @@ class AdditionalSignRealAdmin(
         "source_id",
         "source_name",
     )
+    inlines = (AdditionalSignRealOperationInline,)
