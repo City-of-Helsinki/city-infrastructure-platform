@@ -76,6 +76,11 @@ def legacy_code_to_device_code(apps, schema_editor):
                 additional_signs.update(device_type=device_type)
 
 
+def reverse(apps, schema_editor):
+    # Allow reversing migration for dev purposes, but don't reverse the actual change.
+    return
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -83,5 +88,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(legacy_code_to_device_code),
+        migrations.RunPython(legacy_code_to_device_code, reverse),
     ]
