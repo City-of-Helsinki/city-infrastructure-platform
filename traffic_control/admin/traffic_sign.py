@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
+from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
@@ -179,7 +180,7 @@ class TrafficSignPlanAdmin(
     )
     raw_id_fields = ("plan", "mount_plan")
     ordering = ("-created_at",)
-    inlines = (TrafficSignPlanFileInline,)
+    inlines = (TrafficSignPlanFileInline, AdditionalSignPlanInline)
 
     def has_additional_signs(self, obj):
         return (_("No"), _("Yes"))[obj.has_additional_signs()]
@@ -371,7 +372,11 @@ class TrafficSignRealAdmin(
         "source_id",
         "source_name",
     )
-    inlines = (TrafficSignRealFileInline, TrafficSignRealOperationInline)
+    inlines = (
+        TrafficSignRealFileInline,
+        TrafficSignRealOperationInline,
+        AdditionalSignRealInline,
+    )
 
     def has_additional_signs(self, obj):
         return (_("No"), _("Yes"))[obj.has_additional_signs()]
