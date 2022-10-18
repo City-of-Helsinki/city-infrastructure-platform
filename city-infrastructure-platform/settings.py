@@ -37,6 +37,7 @@ env = environ.Env(
     SECRET_KEY=(str, ""),
     VAR_ROOT=(str, default_var_root),
     ALLOWED_HOSTS=(list, []),
+    CORS_ALLOWED_ORIGIN_REGEXES=(list, []),
     TRUST_X_FORWARDED_HOST=(bool, False),
     DATABASE_URL=(
         str,
@@ -276,6 +277,7 @@ REST_FRAMEWORK = {
 # django-cors
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGIN_REGEXES = env("CORS_ALLOWED_ORIGIN_REGEXES")
 
 # OpenShift client IP middleware
 OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
