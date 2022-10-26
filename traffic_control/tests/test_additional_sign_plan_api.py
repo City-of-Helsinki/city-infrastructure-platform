@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -421,3 +423,35 @@ def test__additional_sign_plan__soft_deleted_get_404_response():
     response = client.get(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__additional_sign_plan__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    asp = get_additional_sign_plan(owner=get_owner(name_en="Old owner", name_fi="Vanha omistaja"))
+    kwargs = {"pk": asp.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:additionalsignplan-{view_type}", kwargs=kwargs)
+    data = {"owner": str(get_owner(name_en="New owner", name_fi="Uusi omistaja").pk)}
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert AdditionalSignPlan.objects.count() == 1
+    assert AdditionalSignPlan.objects.first().is_active
+    assert AdditionalSignPlan.objects.first().owner.name_en == "Old owner"
+    assert response.status_code == expected_status

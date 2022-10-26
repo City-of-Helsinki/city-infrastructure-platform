@@ -1,4 +1,5 @@
 import datetime
+import json
 from decimal import Decimal
 
 import pytest
@@ -12,6 +13,7 @@ from traffic_control.tests.factories import (
     add_signpost_real_operation,
     get_api_client,
     get_operation_type,
+    get_owner,
     get_signpost_plan,
     get_signpost_real,
     get_traffic_control_device_type,
@@ -539,3 +541,117 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             created_by=self.user,
             updated_by=self.user,
         )
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__signpost_plan__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    signpost = get_signpost_plan(location="SRID=3879;POINT Z (0 0 0)")
+    kwargs = {"pk": signpost.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:signpostplan-{view_type}", kwargs=kwargs)
+    data = {
+        "location": "SRID=3879;POINT Z (1 1 1)",
+        "device_type": str(get_traffic_control_device_type().id),
+        "owner": str(get_owner().id),
+    }
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert SignpostPlan.objects.count() == 1
+    assert SignpostPlan.objects.first().is_active
+    assert SignpostPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__signpost_real__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    signpost = get_signpost_real(location="SRID=3879;POINT Z (0 0 0)")
+    kwargs = {"pk": signpost.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:signpostreal-{view_type}", kwargs=kwargs)
+    data = {
+        "location": "SRID=3879;POINT Z (1 1 1)",
+        "device_type": str(get_traffic_control_device_type().id),
+        "owner": str(get_owner().id),
+    }
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert SignpostReal.objects.count() == 1
+    assert SignpostReal.objects.first().is_active
+    assert SignpostReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__signpost_real_operation__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    signpost = get_signpost_real()
+    operation_type = get_operation_type()
+    operation = add_signpost_real_operation(
+        signpost_real=signpost,
+        operation_type=operation_type,
+        operation_date=datetime.date(2020, 1, 1),
+    )
+
+    data = {"operation_date": "2020-02-01", "operation_type_id": operation_type.pk}
+
+    kwargs = {"signpost_real_pk": signpost.pk}
+    if view_type == "detail":
+        kwargs["pk"] = operation.pk
+
+    resource_path = reverse(f"signpost-real-operations-{view_type}", kwargs=kwargs)
+
+    response = client.generic(method, resource_path, data)
+
+    assert signpost.operations.all().count() == 1
+    assert signpost.operations.all().first().operation_date == datetime.date(2020, 1, 1)
+    assert response.status_code == expected_status

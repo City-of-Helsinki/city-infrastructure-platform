@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -125,3 +127,35 @@ def test__responsible_entity__delete(admin_user):
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert ResponsibleEntity.objects.count() == 4
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__responsible_entity__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    responsible_entity = get_responsible_entity(name="Responsible 1")
+    kwargs = {"pk": responsible_entity.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:responsibleentity-{view_type}", kwargs=kwargs)
+    data = {"name": "Responsible 2"}
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    queryset = ResponsibleEntity.objects.filter(id=responsible_entity.id)
+    assert queryset.count() == 1
+    assert queryset.first().name == "Responsible 1"
+    assert response.status_code == expected_status

@@ -1,8 +1,12 @@
+import json
+
+import pytest
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from traffic_control.models import PortalType
+from traffic_control.tests.factories import get_api_client, get_portal_type
 from users.models import User
 
 
@@ -157,3 +161,42 @@ class PortalTypeTests(APITestCase):
     @staticmethod
     def __create_test_portal_type():
         return PortalType.objects.create(structure="Test structure", build_type="Test build type", model="Test model")
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__portal_type__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    portal_type = get_portal_type(
+        model="Model 1",
+        build_type="Build type 1",
+        structure="Structure 1",
+    )
+    kwargs = {"pk": portal_type.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:portaltype-{view_type}", kwargs=kwargs)
+    data = {
+        "structure": "Structure 2",
+        "build_type": "Build type 2",
+        "model": "Model 2",
+    }
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert PortalType.objects.count() == 1
+    assert PortalType.objects.first().model == "Model 1"
+    assert response.status_code == expected_status

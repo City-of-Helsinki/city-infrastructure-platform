@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 import pytest
@@ -145,3 +146,35 @@ def test_plan_filter_location(location, location_query, expected):
     if expected == 1:
         data = response.data.get("results")[0]
         assert str(plan.id) == data.get("id")
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__plan__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    plan = get_plan(name="Plan 1")
+    kwargs = {"pk": plan.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:plan-{view_type}", kwargs=kwargs)
+    data = {"name": "Plan 2", "plan_number": "123"}
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert Plan.objects.count() == 1
+    assert Plan.objects.first().is_active
+    assert Plan.objects.first().name == "Plan 1"
+    assert response.status_code == expected_status

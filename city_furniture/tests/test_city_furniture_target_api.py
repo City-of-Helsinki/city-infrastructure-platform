@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -138,3 +140,34 @@ def test__city_furniture_target__delete(admin_user):
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert CityFurnitureTarget.objects.count() == 1
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__city_furniture_target__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    target = get_city_furniture_target(name_fi="Target 1")
+    kwargs = {"pk": target.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:cityfurnituretarget-{view_type}", kwargs=kwargs)
+    data = {"name_fi": "Target 2"}
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert CityFurnitureTarget.objects.count() == 1
+    assert CityFurnitureTarget.objects.first().name_fi == "Target 1"
+    assert response.status_code == expected_status

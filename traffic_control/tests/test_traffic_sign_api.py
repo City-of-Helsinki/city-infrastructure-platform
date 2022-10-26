@@ -1,4 +1,5 @@
 import datetime
+import json
 from decimal import Decimal
 
 import pytest
@@ -12,6 +13,7 @@ from traffic_control.tests.factories import (
     add_traffic_sign_real_operation,
     get_api_client,
     get_operation_type,
+    get_owner,
     get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_traffic_sign_real,
@@ -541,3 +543,117 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             created_by=self.user,
             updated_by=self.user,
         )
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__traffic_sign_plan__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    traffic_sign = get_traffic_sign_plan(location="SRID=3879;POINT Z (0 0 0)")
+    kwargs = {"pk": traffic_sign.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:trafficsignplan-{view_type}", kwargs=kwargs)
+    data = {
+        "location": "SRID=3879;POINT Z (1 1 1)",
+        "device_type": str(get_traffic_control_device_type().id),
+        "owner": str(get_owner().id),
+    }
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert TrafficSignPlan.objects.count() == 1
+    assert TrafficSignPlan.objects.first().is_active
+    assert TrafficSignPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__traffic_sign_real__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    traffic_sign = get_traffic_sign_real(location="SRID=3879;POINT Z (0 0 0)")
+    kwargs = {"pk": traffic_sign.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:trafficsignreal-{view_type}", kwargs=kwargs)
+    data = {
+        "location": "SRID=3879;POINT Z (1 1 1)",
+        "device_type": str(get_traffic_control_device_type().id),
+        "owner": str(get_owner().id),
+    }
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert TrafficSignReal.objects.count() == 1
+    assert TrafficSignReal.objects.first().is_active
+    assert TrafficSignReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__traffic_sign_real_operation__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    traffic_sign = get_traffic_sign_real()
+    operation_type = get_operation_type()
+    operation = add_traffic_sign_real_operation(
+        traffic_sign_real=traffic_sign,
+        operation_type=operation_type,
+        operation_date=datetime.date(2020, 1, 1),
+    )
+
+    data = {"operation_date": "2020-02-01", "operation_type_id": operation_type.pk}
+
+    kwargs = {"traffic_sign_real_pk": traffic_sign.pk}
+    if view_type == "detail":
+        kwargs["pk"] = operation.pk
+
+    resource_path = reverse(f"traffic-sign-real-operations-{view_type}", kwargs=kwargs)
+
+    response = client.generic(method, resource_path, data)
+
+    assert traffic_sign.operations.all().count() == 1
+    assert traffic_sign.operations.all().first().operation_date == datetime.date(2020, 1, 1)
+    assert response.status_code == expected_status

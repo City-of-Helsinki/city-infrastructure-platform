@@ -1,4 +1,5 @@
 import datetime
+import json
 
 import pytest
 from django.urls import reverse
@@ -554,3 +555,109 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             created_by=self.user,
             updated_by=self.user,
         )
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__barrier_plan__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    barrier = get_barrier_plan(location="SRID=3879;POINT Z (0 0 0)")
+    kwargs = {"pk": barrier.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:barrierplan-{view_type}", kwargs=kwargs)
+    data = {"location": "SRID=3879;POINT Z (1 1 1)"}
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert BarrierPlan.objects.count() == 1
+    assert BarrierPlan.objects.first().is_active
+    assert BarrierPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__barrier_real__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    barrier = get_barrier_real(location="SRID=3879;POINT Z (0 0 0)")
+    kwargs = {"pk": barrier.pk} if view_type == "detail" else None
+    resource_path = reverse(f"v1:barrierreal-{view_type}", kwargs=kwargs)
+    data = {"location": "SRID=3879;POINT Z (1 1 1)"}
+
+    response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
+
+    assert BarrierReal.objects.count() == 1
+    assert BarrierReal.objects.first().is_active
+    assert BarrierReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize(
+    "method, expected_status",
+    (
+        ("GET", status.HTTP_200_OK),
+        ("HEAD", status.HTTP_200_OK),
+        ("OPTIONS", status.HTTP_200_OK),
+        ("POST", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.parametrize("view_type", ("detail", "list"))
+@pytest.mark.django_db
+def test__barrier_real_operation__anonymous_user(method, expected_status, view_type):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    barrier = get_barrier_real()
+    operation_type = get_operation_type()
+    operation = add_barrier_real_operation(
+        barrier_real=barrier,
+        operation_type=operation_type,
+        operation_date=datetime.date(2020, 1, 1),
+    )
+
+    data = {"operation_date": "2020-02-01", "operation_type_id": operation_type.pk}
+
+    kwargs = {"barrier_real_pk": barrier.pk}
+    if view_type == "detail":
+        kwargs["pk"] = operation.pk
+
+    resource_path = reverse(f"barrier-real-operations-{view_type}", kwargs=kwargs)
+
+    response = client.generic(method, resource_path, data)
+
+    assert barrier.operations.all().count() == 1
+    assert barrier.operations.all().first().operation_date == datetime.date(2020, 1, 1)
+    assert response.status_code == expected_status
