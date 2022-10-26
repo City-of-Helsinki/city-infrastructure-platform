@@ -181,6 +181,11 @@ class TrafficSignRealFilterSet(FilterSet):
         model = TrafficSignReal
 
 
+class OperationalAreaFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = OperationalArea
+
+
 class OperationTypeFilterSet(FilterSet):
     class Meta(GenericMeta):
         model = OperationType

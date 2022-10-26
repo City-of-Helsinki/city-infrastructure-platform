@@ -1,8 +1,11 @@
 from django.utils.decorators import method_decorator
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 
+from traffic_control.filters import OperationalAreaFilterSet
 from traffic_control.models import OperationalArea
 from traffic_control.serializers.common import OperationalAreaSerializer
 
@@ -32,6 +35,10 @@ from traffic_control.serializers.common import OperationalAreaSerializer
     decorator=swagger_auto_schema(operation_description="Delete single Operational Area"),
 )
 class OperationalAreaViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = "__all__"
+    ordering = ["name"]
+    filterset_class = OperationalAreaFilterSet
     permission_classes = [IsAdminUser]
     serializer_class = OperationalAreaSerializer
     queryset = OperationalArea.objects.all()
