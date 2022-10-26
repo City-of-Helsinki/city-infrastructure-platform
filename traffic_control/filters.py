@@ -36,6 +36,7 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealOperation,
 )
+from traffic_control.models.common import OperationType
 
 
 class OperationalAreaFilter(Filter):
@@ -178,6 +179,11 @@ class TrafficSignRealFilterSet(FilterSet):
 
     class Meta(GenericMeta):
         model = TrafficSignReal
+
+
+class OperationTypeFilterSet(FilterSet):
+    class Meta(GenericMeta):
+        model = OperationType
 
 
 # Operations
