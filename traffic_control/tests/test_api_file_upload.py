@@ -326,3 +326,148 @@ def test_file_delete(factory, model_class, file_model_class, related_name, url_n
     assert model_class.objects.count() == 1
     assert obj.files.count() == 0
     assert not file_model_class.objects.filter(pk=file_obj.pk).exists()
+
+
+@pytest.mark.parametrize(
+    "factory, model_class, file_model_class, related_name, url_name",
+    (
+        (
+            get_barrier_plan,
+            BarrierPlan,
+            BarrierPlanFile,
+            "barrier_plan",
+            "barrierplan",
+        ),
+        (
+            get_barrier_real,
+            BarrierReal,
+            BarrierRealFile,
+            "barrier_real",
+            "barrierreal",
+        ),
+        (
+            get_mount_plan,
+            MountPlan,
+            MountPlanFile,
+            "mount_plan",
+            "mountplan",
+        ),
+        (
+            get_mount_real,
+            MountReal,
+            MountRealFile,
+            "mount_real",
+            "mountreal",
+        ),
+        (
+            get_road_marking_plan,
+            RoadMarkingPlan,
+            RoadMarkingPlanFile,
+            "road_marking_plan",
+            "roadmarkingplan",
+        ),
+        (
+            get_road_marking_real,
+            RoadMarkingReal,
+            RoadMarkingRealFile,
+            "road_marking_real",
+            "roadmarkingreal",
+        ),
+        (
+            get_signpost_plan,
+            SignpostPlan,
+            SignpostPlanFile,
+            "signpost_plan",
+            "signpostplan",
+        ),
+        (
+            get_signpost_real,
+            SignpostReal,
+            SignpostRealFile,
+            "signpost_real",
+            "signpostreal",
+        ),
+        (
+            get_traffic_light_plan,
+            TrafficLightPlan,
+            TrafficLightPlanFile,
+            "traffic_light_plan",
+            "trafficlightplan",
+        ),
+        (
+            get_traffic_light_real,
+            TrafficLightReal,
+            TrafficLightRealFile,
+            "traffic_light_real",
+            "trafficlightreal",
+        ),
+        (
+            get_traffic_sign_plan,
+            TrafficSignPlan,
+            TrafficSignPlanFile,
+            "traffic_sign_plan",
+            "trafficsignplan",
+        ),
+        (
+            get_traffic_sign_real,
+            TrafficSignReal,
+            TrafficSignRealFile,
+            "traffic_sign_real",
+            "trafficsignreal",
+        ),
+    ),
+)
+@pytest.mark.parametrize(
+    "method, view_type, expected_status",
+    (
+        ("OPTIONS", "change-file", status.HTTP_200_OK),
+        ("OPTIONS", "post-files", status.HTTP_200_OK),
+        ("GET", "change-file", status.HTTP_405_METHOD_NOT_ALLOWED),
+        ("GET", "post-files", status.HTTP_405_METHOD_NOT_ALLOWED),
+        ("HEAD", "change-file", status.HTTP_405_METHOD_NOT_ALLOWED),
+        ("HEAD", "post-files", status.HTTP_405_METHOD_NOT_ALLOWED),
+        ("POST", "change-file", status.HTTP_401_UNAUTHORIZED),
+        ("POST", "post-files", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", "change-file", status.HTTP_401_UNAUTHORIZED),
+        ("PUT", "post-files", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", "change-file", status.HTTP_401_UNAUTHORIZED),
+        ("PATCH", "post-files", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", "change-file", status.HTTP_401_UNAUTHORIZED),
+        ("DELETE", "post-files", status.HTTP_401_UNAUTHORIZED),
+    ),
+)
+@pytest.mark.django_db
+def test__file_operations_by_anonymous_user(
+    method,
+    view_type,
+    expected_status,
+    factory,
+    model_class,
+    file_model_class,
+    related_name,
+    url_name,
+):
+    """
+    Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
+    """
+    client = get_api_client(user=None)
+    obj = factory()
+    file_obj = file_model_class.objects.create(
+        **{
+            related_name: obj,
+            "file": SimpleUploadedFile("temp.txt", b"File contents"),
+        },
+    )
+    kwargs = {"pk": obj.id}
+    if view_type == "change-file":
+        kwargs["file_pk"] = file_obj.id
+
+    resource_path = reverse(f"v1:{url_name}-{view_type}", kwargs=kwargs)
+
+    response = client.generic(method, resource_path)
+
+    obj.refresh_from_db()
+    assert response.status_code == expected_status
+    assert model_class.objects.count() == 1
+    assert obj.files.count() == 1
+    assert file_model_class.objects.filter(pk=file_obj.pk).exists()
