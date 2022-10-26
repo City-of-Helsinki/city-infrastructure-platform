@@ -44,6 +44,7 @@ from traffic_control.models import (
     TrafficSignRealOperation,
 )
 from traffic_control.models.common import OperationType
+from traffic_control.models.mount import PortalType
 from traffic_control.tests.test_base_api import test_multi_polygon, test_point, test_polygon
 from traffic_control.tests.test_base_api_3d import test_point_3d
 from users.models import User
@@ -128,6 +129,18 @@ def get_barrier_real(location="", device_type=None):
 
 def get_mount_type(code="POST", description="Post"):
     return MountType.objects.get_or_create(code=code, description=description)[0]
+
+
+def get_portal_type(
+    structure="Structure",
+    build_type="Build type",
+    model="Model",
+) -> PortalType:
+    return PortalType.objects.get_or_create(
+        structure=structure,
+        build_type=build_type,
+        model=model,
+    )[0]
 
 
 def get_mount_plan(location="", plan=None):
