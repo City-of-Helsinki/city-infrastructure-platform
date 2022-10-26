@@ -66,9 +66,9 @@ def get_user(username=None, admin=False, bypass_operational_area=False, bypass_r
     )[0]
 
 
-def get_operational_area(area=None):
+def get_operational_area(area=None, name=None):
     return OperationalArea.objects.get_or_create(
-        name="Test operational area",
+        name=name or "Test operational area",
         location=area or MultiPolygon(test_polygon, srid=settings.SRID),
     )[0]
 
