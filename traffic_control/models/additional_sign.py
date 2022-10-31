@@ -22,6 +22,7 @@ from traffic_control.models.common import OperationBase, OperationType, TrafficC
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
+from traffic_control.validators import validate_structured_content
 
 
 class Color(Enum):
@@ -161,6 +162,16 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
 
     class Meta:
         abstract = True
+
+    def clean(self):
+        validation_errors = {}
+
+        content_s_validation_errors = validate_structured_content(self.content_s, self.device_type)
+        if len(content_s_validation_errors) > 0:
+            validation_errors["content_s"] = content_s_validation_errors
+
+        if len(validation_errors) > 0:
+            raise ValidationError(validation_errors)
 
     def save(self, *args, **kwargs):
         if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ADDITIONAL_SIGN):
