@@ -14,6 +14,7 @@ from traffic_control.models import (
     ResponsibleEntity,
 )
 from traffic_control.models.additional_sign import Color
+from traffic_control.models.common import TrafficControlDeviceType
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
 from traffic_control.resources.common import (
     GenericDeviceBaseResource,
@@ -30,6 +31,11 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
         column_name="responsible_entity__name",
         widget=ForeignKeyWidget(ResponsibleEntity, "name"),
     )
+    device_type__code = Field(
+        attribute="device_type",
+        column_name="device_type__code",
+        widget=ForeignKeyWidget(TrafficControlDeviceType, "code"),
+    )
     mount_type__code = Field(
         attribute="mount_type", column_name="mount_type__code", widget=ForeignKeyWidget(MountType, "code")
     )
@@ -45,6 +51,8 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             "id",
             "owner__name_fi",
             "responsible_entity__name",
+            "device_type__code",
+            "order",
             "lifecycle",
             "location",
             "height",
