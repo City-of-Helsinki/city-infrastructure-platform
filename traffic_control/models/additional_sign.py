@@ -164,7 +164,7 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
 
     def save(self, *args, **kwargs):
         if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ADDITIONAL_SIGN):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for additional signs')
 
         super().save(*args, **kwargs)
 
