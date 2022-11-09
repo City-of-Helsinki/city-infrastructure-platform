@@ -135,7 +135,6 @@ LOGGING = {
 # Application definition
 DJANGO_APPS = [
     "social_django",
-    "django_light",  # Force light theme in admin
     "helusers.apps.HelusersConfig",
     "helusers.apps.HelusersAdminConfig",
     "django.contrib.auth",
