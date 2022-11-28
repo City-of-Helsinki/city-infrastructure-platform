@@ -200,7 +200,7 @@ class MultiResourceExportActionAdminMixin:
     def media(self) -> forms.Media:
         """Override js file to allows for selecting the export type"""
         super_media = super().media
-        return forms.Media(js=super_media._js + ["city_furniture/action_formats.js"], css=super_media._css)
+        return forms.Media(js=super_media._js + ["traffic_control/js/action_formats.js"], css=super_media._css)
 
     @staticmethod
     def get_export_action_form(
