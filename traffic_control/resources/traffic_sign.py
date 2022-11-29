@@ -73,12 +73,10 @@ class AbstractTrafficSignResource(ResponsibleEntityPermissionImportMixin, Generi
             "validity_period_end",
             "seasonal_validity_period_start",
             "seasonal_validity_period_end",
-            "parent__id",
         )
 
 
 class TrafficSignPlanResource(AbstractTrafficSignResource):
-    parent__id = Field(attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(TrafficSignPlan, "id"))
     mount_plan__id = Field(
         attribute="mount_plan",
         column_name="mount_plan__id",
@@ -101,7 +99,6 @@ class TrafficSignPlanResource(AbstractTrafficSignResource):
 
 
 class TrafficSignRealResource(AbstractTrafficSignResource):
-    parent__id = Field(attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(TrafficSignReal, "id"))
     condition = ResourceEnumIntegerField(attribute="condition", enum=Condition, default=Condition.VERY_GOOD)
     traffic_sign_plan__id = Field(
         attribute="traffic_sign_plan",
