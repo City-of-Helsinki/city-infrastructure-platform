@@ -1,8 +1,8 @@
 import pytest
 
 from traffic_control.models import MountReal
-from traffic_control.resources.mount import MountRealResource
-from traffic_control.tests.factories import get_mount_real
+from traffic_control.resources.mount import MountPlanToRealTemplateResource, MountRealResource
+from traffic_control.tests.factories import get_mount_plan, get_mount_real
 
 
 @pytest.mark.django_db
@@ -29,3 +29,17 @@ def test__mount_real__import():
     result = MountRealResource().import_data(dataset, raise_errors=True)
     assert not result.has_errors()
     assert MountReal.objects.all().count() == 1
+
+
+@pytest.mark.django_db
+def test__mount_plan_export_real_import():
+    """Test that a plan object can be exported as its real object (referencing to the plan)"""
+
+    plan_obj = get_mount_plan()
+
+    exported_dataset = MountPlanToRealTemplateResource().export()
+    assert len(exported_dataset) == 1
+
+    real = exported_dataset.dict[0]
+    assert real["id"] is None
+    assert real["mount_plan__id"] == plan_obj.id

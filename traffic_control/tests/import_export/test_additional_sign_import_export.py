@@ -2,14 +2,21 @@ import pytest
 from tablib import Dataset
 
 from traffic_control.enums import DeviceTypeTargetModel
-from traffic_control.models import AdditionalSignReal
-from traffic_control.models.additional_sign import AdditionalSignPlan
-from traffic_control.resources.additional_sign import AdditionalSignPlanResource, AdditionalSignRealResource
+from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
+from traffic_control.resources.additional_sign import (
+    AdditionalSignPlanResource,
+    AdditionalSignPlanToRealTemplateResource,
+    AdditionalSignRealResource,
+)
 from traffic_control.tests.factories import (
     get_additional_sign_plan,
     get_additional_sign_real,
+    get_mount_plan,
+    get_mount_real,
     get_owner,
     get_traffic_control_device_type,
+    get_traffic_sign_plan,
+    get_traffic_sign_real,
 )
 from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
 from traffic_control.tests.test_base_api import test_point
@@ -732,3 +739,49 @@ def test__additional_sign__import__valid_and_invalid_content_properties(schema_p
             assert result.has_validation_errors()
             assert not result.has_errors()
             assert model.objects.all().count() == 0
+
+
+@pytest.mark.parametrize("has_mount_plan", (True, False), ids=lambda x: "mount_plan" if x else "no_mount_plan")
+@pytest.mark.parametrize("has_mount_real", (True, False), ids=lambda x: "mount_real" if x else "no_mount_real")
+@pytest.mark.parametrize(
+    "has_traffic_sign_plan",
+    (True, False),
+    ids=lambda x: "traffic_sign_plan" if x else "no_traffic_sign_plan",
+)
+@pytest.mark.parametrize(
+    "has_traffic_sign_real",
+    (True, False),
+    ids=lambda x: "traffic_sign_real" if x else "no_traffic_sign_real",
+)
+@pytest.mark.django_db
+def test__additional_sign_plan_export_real_import(
+    has_mount_plan,
+    has_mount_real,
+    has_traffic_sign_plan,
+    has_traffic_sign_real,
+):
+    """Test that a plan object can be exported as its real object (referencing to the plan)"""
+
+    mount_plan = get_mount_plan() if has_mount_plan else None
+    mount_real = get_mount_real() if has_mount_real else None
+    traffic_sign_plan = get_traffic_sign_plan() if has_traffic_sign_plan else None
+    traffic_sign_real = get_traffic_sign_real() if has_traffic_sign_real else None
+
+    plan_obj = get_additional_sign_plan(mount_plan=mount_plan, parent=traffic_sign_plan)
+
+    exported_dataset = AdditionalSignPlanToRealTemplateResource().export()
+    assert len(exported_dataset) == 1
+
+    real = exported_dataset.dict[0]
+    assert real["id"] is None
+    assert real["additional_sign_plan__id"] == plan_obj.id
+
+    if has_mount_plan and has_mount_real:
+        assert real["mount_real__id"] == mount_real.id
+    else:
+        assert real["mount_real__id"] is None
+
+    if has_traffic_sign_plan and has_traffic_sign_real:
+        assert real["parent__id"] == traffic_sign_real.id
+    else:
+        assert real["parent__id"] is None

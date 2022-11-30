@@ -7,6 +7,7 @@ from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     DeviceComparisonAdminMixin,
+    MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
@@ -21,7 +22,11 @@ from traffic_control.mixins import (
 )
 from traffic_control.models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
-from traffic_control.resources.traffic_light import TrafficLightPlanResource, TrafficLightRealResource
+from traffic_control.resources.traffic_light import (
+    TrafficLightPlanResource,
+    TrafficLightPlanToRealTemplateResource,
+    TrafficLightRealResource,
+)
 
 __all__ = (
     "TrafficLightPlanAdmin",
@@ -46,11 +51,13 @@ class TrafficLightPlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    MultiResourceExportActionAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
     resource_class = TrafficLightPlanResource
+    extra_export_resource_classes = [TrafficLightPlanToRealTemplateResource]
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

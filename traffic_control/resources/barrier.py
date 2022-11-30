@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
@@ -83,3 +84,18 @@ class BarrierRealResource(AbstractBarrierResource):
 
         fields = AbstractBarrierResource.Meta.common_fields + ("barrier_plan__id",)
         export_order = fields
+
+
+class BarrierPlanToRealTemplateResource(BarrierRealResource):
+    class Meta(AbstractBarrierResource.Meta):
+        model = BarrierPlan
+        verbose_name = _("Template for Real Import")
+
+    def dehydrate_id(self, obj: BarrierPlan):
+        return None
+
+    def dehydrate_barrier_plan__id(self, obj: BarrierPlan):
+        return obj.id
+
+    def __str__(self):
+        return self.Meta.verbose_name

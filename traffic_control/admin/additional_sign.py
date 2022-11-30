@@ -6,6 +6,7 @@ from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     DeviceComparisonAdminMixin,
+    MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
@@ -21,7 +22,11 @@ from traffic_control.mixins import (
 )
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
 from traffic_control.models.additional_sign import AdditionalSignRealOperation
-from traffic_control.resources.additional_sign import AdditionalSignPlanResource, AdditionalSignRealResource
+from traffic_control.resources.additional_sign import (
+    AdditionalSignPlanResource,
+    AdditionalSignPlanToRealTemplateResource,
+    AdditionalSignRealResource,
+)
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 
@@ -37,11 +42,13 @@ class AdditionalSignPlanAdmin(
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
     Point3DFieldAdminMixin,
+    MultiResourceExportActionAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
     resource_class = AdditionalSignPlanResource
+    extra_export_resource_classes = [AdditionalSignPlanToRealTemplateResource]
     form = AdditionalSignPlanModelForm
     fieldsets = (
         (

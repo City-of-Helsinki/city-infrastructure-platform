@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
@@ -133,3 +134,28 @@ class TrafficSignRealResource(AbstractTrafficSignResource):
             "attachment_url",
         )
         export_order = fields
+
+
+class TrafficSignPlanToRealTemplateResource(TrafficSignRealResource):
+    class Meta(AbstractTrafficSignResource.Meta):
+        model = TrafficSignPlan
+        verbose_name = _("Template for Real Import")
+
+    def dehydrate_id(self, obj: TrafficSignPlan):
+        return None
+
+    def dehydrate_traffic_sign_plan__id(self, obj: TrafficSignPlan):
+        return obj.id
+
+    def dehydrate_mount_real__id(self, obj: TrafficSignPlan):
+        if not obj.mount_plan:
+            return None
+
+        mount_reals = list(MountReal.objects.filter(mount_plan=obj.mount_plan))
+        if not mount_reals:
+            return None
+
+        return mount_reals[0].id
+
+    def __str__(self):
+        return self.Meta.verbose_name
