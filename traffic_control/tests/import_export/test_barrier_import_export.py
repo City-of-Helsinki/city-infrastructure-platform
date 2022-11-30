@@ -1,8 +1,8 @@
 import pytest
 
 from traffic_control.models import BarrierReal
-from traffic_control.resources.barrier import BarrierRealResource
-from traffic_control.tests.factories import get_barrier_real
+from traffic_control.resources.barrier import BarrierPlanToRealTemplateResource, BarrierRealResource
+from traffic_control.tests.factories import get_barrier_plan, get_barrier_real
 
 
 @pytest.mark.django_db
@@ -30,3 +30,17 @@ def test__barrier_real__import():
     result = BarrierRealResource().import_data(dataset, raise_errors=True)
     assert not result.has_errors()
     assert BarrierReal.objects.all().count() == 1
+
+
+@pytest.mark.django_db
+def test__barrier_plan_export_real_import():
+    """Test that a plan object can be exported as its real object (referencing to the plan)"""
+
+    plan_obj = get_barrier_plan()
+
+    exported_dataset = BarrierPlanToRealTemplateResource().export()
+    assert len(exported_dataset) == 1
+
+    real = exported_dataset.dict[0]
+    assert real["id"] is None
+    assert real["barrier_plan__id"] == plan_obj.id

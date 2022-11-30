@@ -7,6 +7,7 @@ from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     DeviceComparisonAdminMixin,
+    MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
@@ -20,7 +21,11 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile
-from traffic_control.resources.barrier import BarrierPlanResource, BarrierRealResource
+from traffic_control.resources.barrier import (
+    BarrierPlanResource,
+    BarrierPlanToRealTemplateResource,
+    BarrierRealResource,
+)
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 __all__ = (
@@ -46,11 +51,13 @@ class BarrierPlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    MultiResourceExportActionAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
     resource_class = BarrierPlanResource
+    extra_export_resource_classes = [BarrierPlanToRealTemplateResource]
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

@@ -1,15 +1,16 @@
+from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
 from traffic_control.enums import Condition, Lifecycle
 from traffic_control.models import (
-    MountPlan,
     Owner,
     Plan,
     ResponsibleEntity,
     RoadMarkingPlan,
     RoadMarkingReal,
     TrafficControlDeviceType,
+    TrafficSignPlan,
     TrafficSignReal,
 )
 from traffic_control.models.road_marking import LocationSpecifier, RoadMarkingColor
@@ -74,10 +75,10 @@ class AbstractRoadMarkingResource(ResponsibleEntityPermissionImportMixin, Generi
 
 
 class RoadMarkingPlanResource(AbstractRoadMarkingResource):
-    mount_plan__id = Field(
-        attribute="mount_plan",
-        column_name="mount_plan__id",
-        widget=ForeignKeyWidget(MountPlan, "id"),
+    traffic_sign_plan__id = Field(
+        attribute="traffic_sign_plan",
+        column_name="traffic_sign_plan__id",
+        widget=ForeignKeyWidget(TrafficSignPlan, "id"),
     )
     plan__plan_number = Field(
         attribute="plan",
@@ -89,7 +90,7 @@ class RoadMarkingPlanResource(AbstractRoadMarkingResource):
         model = RoadMarkingPlan
 
         fields = AbstractRoadMarkingResource.Meta.common_fields + (
-            "mount_plan__id",
+            "traffic_sign_plan__id",
             "plan__plan_number",
         )
         export_order = fields
@@ -119,3 +120,28 @@ class RoadMarkingRealResource(AbstractRoadMarkingResource):
             "missing_traffic_sign_real_txt",
         )
         export_order = fields
+
+
+class RoadMarkingPlanToRealTemplateResource(RoadMarkingRealResource):
+    class Meta(AbstractRoadMarkingResource.Meta):
+        model = RoadMarkingPlan
+        verbose_name = _("Template for Real Import")
+
+    def dehydrate_id(self, obj: RoadMarkingPlan):
+        return None
+
+    def dehydrate_road_marking_plan__id(self, obj: RoadMarkingPlan):
+        return obj.id
+
+    def dehydrate_traffic_sign_real__id(self, obj: RoadMarkingPlan):
+        if not obj.traffic_sign_plan:
+            return None
+
+        traffic_sign_plans = list(TrafficSignReal.objects.filter(traffic_sign_plan=obj.traffic_sign_plan))
+        if not traffic_sign_plans:
+            return None
+
+        return traffic_sign_plans[0].id
+
+    def __str__(self):
+        return self.Meta.verbose_name

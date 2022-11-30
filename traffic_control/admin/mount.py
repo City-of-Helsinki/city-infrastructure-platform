@@ -8,6 +8,7 @@ from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.traffic_sign import OrderedTrafficSignRealInline
 from traffic_control.admin.utils import (
     DeviceComparisonAdminMixin,
+    MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
@@ -22,7 +23,7 @@ from traffic_control.mixins import (
 )
 from traffic_control.models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
-from traffic_control.resources.mount import MountPlanResource, MountRealResource
+from traffic_control.resources.mount import MountPlanResource, MountPlanToRealTemplateResource, MountRealResource
 
 __all__ = (
     "MountPlanAdmin",
@@ -48,11 +49,13 @@ class MountPlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    MultiResourceExportActionAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
     resource_class = MountPlanResource
+    extra_export_resource_classes = [MountPlanToRealTemplateResource]
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

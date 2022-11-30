@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
@@ -76,3 +77,18 @@ class MountRealResource(AbstractMountResource):
             "mount_plan__id",
         )
         export_order = fields
+
+
+class MountPlanToRealTemplateResource(MountRealResource):
+    class Meta(AbstractMountResource.Meta):
+        model = MountPlan
+        verbose_name = _("Template for Real Import")
+
+    def dehydrate_id(self, obj: MountPlan):
+        return None
+
+    def dehydrate_mount_plan__id(self, obj: MountPlan):
+        return obj.id
+
+    def __str__(self):
+        return self.Meta.verbose_name
