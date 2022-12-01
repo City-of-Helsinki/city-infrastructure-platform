@@ -212,7 +212,7 @@ class MultiResourceExportActionAdminMixin:
         class _ExportActionForm(ActionForm):
             file_format = forms.ChoiceField(label=_("Format"), choices=file_format_choices, required=False)
             export_resource_class = forms.ChoiceField(
-                label=_("Export resource"), choices=export_resource_choices, required=False
+                label=_("Export type"), choices=export_resource_choices, required=False
             )
 
         _ExportActionForm.__name__ = str("ExportActionForm")
