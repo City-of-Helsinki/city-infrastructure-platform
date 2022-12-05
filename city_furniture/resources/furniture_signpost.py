@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
@@ -121,33 +122,32 @@ class FurnitureSignpostRealResource(AbstractFurnitureSignpostResource):
         export_order = fields
 
 
-class FurnitureSignpostPlanTemplateResource(AbstractFurnitureSignpostResource):
+class FurnitureSignpostPlanTemplateResource(FurnitureSignpostRealResource):
     """Resource for exporting a Plan and making the output importable as a real"""
-
-    parent__id = Field()
-    condition = Field()
-    installation_date = Field()
-    furniture_signpost_plan__id = Field()
-    mount_real__id = Field()
 
     class Meta(AbstractFurnitureSignpostResource.Meta):
         model = FurnitureSignpostPlan
-
-        fields = AbstractFurnitureSignpostResource.Meta.common_fields
-        export_order = fields
+        verbose_name = _("Template for Real Import")
 
     def dehydrate_id(self, obj: FurnitureSignpostPlan):
-        return None
+        related_reals = list(FurnitureSignpostReal.objects.filter(furniture_signpost_plan=obj.id))
+        if related_reals:
+            return related_reals[0].id
+        else:
+            return None
 
     def dehydrate_furniture_signpost_plan__id(self, obj: FurnitureSignpostPlan):
         return obj.id
 
-    def export_field(self, field, obj):
-        field_name = self.get_field_name(field)
-        method = getattr(self, "dehydrate_%s" % field_name, None)
-        if method is not None:
-            return method(obj)
-        return field.export(obj)
+    def dehydrate_mount_real__id(self, obj: FurnitureSignpostPlan):
+        if not obj.mount_plan:
+            return None
+
+        mount_reals = list(MountReal.objects.filter(mount_plan=obj.mount_plan))
+        if not mount_reals:
+            return None
+
+        return mount_reals[0].id
 
     def __str__(self):
-        return "Template for Real Import"
+        return self.Meta.verbose_name
