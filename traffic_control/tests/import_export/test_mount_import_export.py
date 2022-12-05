@@ -31,15 +31,21 @@ def test__mount_real__import():
     assert MountReal.objects.all().count() == 1
 
 
+@pytest.mark.parametrize("real_preexists", (True, False), ids=lambda x: "real_preexists" if x else "real_nonexists")
 @pytest.mark.django_db
-def test__mount_plan_export_real_import():
+def test__mount_plan_export_real_import(real_preexists):
     """Test that a plan object can be exported as its real object (referencing to the plan)"""
 
     plan_obj = get_mount_plan()
+    real_obj = get_mount_real() if real_preexists else None
 
     exported_dataset = MountPlanToRealTemplateResource().export()
     assert len(exported_dataset) == 1
 
     real = exported_dataset.dict[0]
-    assert real["id"] is None
     assert real["mount_plan__id"] == plan_obj.id
+
+    if real_preexists:
+        assert real["id"] == real_obj.id
+    else:
+        assert real["id"] is None

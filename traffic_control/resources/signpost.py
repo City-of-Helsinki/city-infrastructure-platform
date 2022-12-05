@@ -130,7 +130,11 @@ class SignpostPlanToRealTemplateResource(SignpostRealResource):
         verbose_name = _("Template for Real Import")
 
     def dehydrate_id(self, obj: SignpostPlan):
-        return None
+        related_reals = list(SignpostReal.objects.filter(signpost_plan=obj.id))
+        if related_reals:
+            return related_reals[0].id
+        else:
+            return None
 
     def dehydrate_signpost_plan__id(self, obj: SignpostPlan):
         return obj.id

@@ -85,7 +85,11 @@ class MountPlanToRealTemplateResource(MountRealResource):
         verbose_name = _("Template for Real Import")
 
     def dehydrate_id(self, obj: MountPlan):
-        return None
+        related_reals = list(MountReal.objects.filter(mount_plan=obj.id))
+        if related_reals:
+            return related_reals[0].id
+        else:
+            return None
 
     def dehydrate_mount_plan__id(self, obj: MountPlan):
         return obj.id

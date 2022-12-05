@@ -361,7 +361,11 @@ class AdditionalSignPlanToRealTemplateResource(AdditionalSignRealResource):
         verbose_name = _("Template for Real Import")
 
     def dehydrate_id(self, obj: AdditionalSignPlan):
-        return None
+        related_reals = list(AdditionalSignReal.objects.filter(additional_sign_plan=obj.id))
+        if related_reals:
+            return related_reals[0].id
+        else:
+            return None
 
     def dehydrate_additional_sign_plan__id(self, obj: AdditionalSignPlan):
         return obj.id

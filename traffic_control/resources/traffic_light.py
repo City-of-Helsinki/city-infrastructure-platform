@@ -137,7 +137,11 @@ class TrafficLightPlanToRealTemplateResource(TrafficLightRealResource):
         verbose_name = _("Template for Real Import")
 
     def dehydrate_id(self, obj: TrafficLightPlan):
-        return None
+        related_reals = list(TrafficLightReal.objects.filter(traffic_light_plan=obj.id))
+        if related_reals:
+            return related_reals[0].id
+        else:
+            return None
 
     def dehydrate_traffic_light_plan__id(self, obj: TrafficLightPlan):
         return obj.id

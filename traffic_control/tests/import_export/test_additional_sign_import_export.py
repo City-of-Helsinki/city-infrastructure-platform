@@ -753,12 +753,14 @@ def test__additional_sign__import__valid_and_invalid_content_properties(schema_p
     (True, False),
     ids=lambda x: "traffic_sign_real" if x else "no_traffic_sign_real",
 )
+@pytest.mark.parametrize("real_preexists", (True, False), ids=lambda x: "real_preexists" if x else "real_nonexists")
 @pytest.mark.django_db
 def test__additional_sign_plan_export_real_import(
     has_mount_plan,
     has_mount_real,
     has_traffic_sign_plan,
     has_traffic_sign_real,
+    real_preexists,
 ):
     """Test that a plan object can be exported as its real object (referencing to the plan)"""
 
@@ -768,12 +770,11 @@ def test__additional_sign_plan_export_real_import(
     traffic_sign_real = get_traffic_sign_real() if has_traffic_sign_real else None
 
     plan_obj = get_additional_sign_plan(mount_plan=mount_plan, parent=traffic_sign_plan)
+    real_obj = get_additional_sign_real(additional_sign_plan=plan_obj) if real_preexists else None
 
     exported_dataset = AdditionalSignPlanToRealTemplateResource().export()
-    assert len(exported_dataset) == 1
 
     real = exported_dataset.dict[0]
-    assert real["id"] is None
     assert real["additional_sign_plan__id"] == plan_obj.id
 
     if has_mount_plan and has_mount_real:
@@ -785,3 +786,8 @@ def test__additional_sign_plan_export_real_import(
         assert real["parent__id"] == traffic_sign_real.id
     else:
         assert real["parent__id"] is None
+
+    if real_preexists:
+        assert real["id"] == real_obj.id
+    else:
+        assert real["id"] is None
