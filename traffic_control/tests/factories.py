@@ -193,12 +193,12 @@ def get_road_marking_plan(location="", plan=None, device_type=None, traffic_sign
     )[0]
 
 
-def get_road_marking_real(location="", device_type=None, traffic_sign_real=None):
+def get_road_marking_real(location="", device_type=None, road_marking_plan=None, traffic_sign_real=None):
     user = get_user("test_user")
 
     return RoadMarkingReal.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
-        road_marking_plan=get_road_marking_plan(),
+        road_marking_plan=road_marking_plan or get_road_marking_plan(),
         value="30",
         color=RoadMarkingColor.WHITE,
         location=location or test_point,
@@ -231,12 +231,12 @@ def get_signpost_plan(location="", plan=None, device_type=None, parent=None, mou
     )[0]
 
 
-def get_signpost_real(location="", device_type=None, parent=None, mount_real=None):
+def get_signpost_real(location="", device_type=None, signpost_plan=None, parent=None, mount_real=None):
     user = get_user("test_user")
 
     return SignpostReal.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
-        signpost_plan=get_signpost_plan(),
+        signpost_plan=signpost_plan or get_signpost_plan(),
         location=location or test_point,
         installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
@@ -267,12 +267,12 @@ def get_traffic_light_plan(location="", plan=None, device_type=None, mount_plan=
     )[0]
 
 
-def get_traffic_light_real(location="", device_type=None, mount_real=None):
+def get_traffic_light_real(location="", device_type=None, traffic_light_plan=None, mount_real=None):
     user = get_user("test_user")
 
     return TrafficLightReal.objects.get_or_create(
         device_type=device_type or get_traffic_control_device_type(),
-        traffic_light_plan=get_traffic_light_plan(),
+        traffic_light_plan=traffic_light_plan or get_traffic_light_plan(),
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
         installation_date=datetime.date(2020, 1, 1),
@@ -324,14 +324,14 @@ def get_traffic_sign_plan(location="", plan=None, device_type=None, mount_plan=N
     )[0]
 
 
-def get_traffic_sign_real(location="", device_type=None, mount_real=None):
+def get_traffic_sign_real(location="", device_type=None, traffic_sign_plan=None, mount_real=None):
     user = get_user("test_user")
 
     if not device_type:
         device_type = get_traffic_control_device_type()
 
     return TrafficSignReal.objects.get_or_create(
-        traffic_sign_plan=get_traffic_sign_plan(device_type=device_type),
+        traffic_sign_plan=traffic_sign_plan or get_traffic_sign_plan(device_type=device_type),
         device_type=device_type,
         location=location or test_point_3d,
         installation_date=datetime.date(2020, 1, 1),
@@ -379,6 +379,7 @@ def get_additional_sign_real(
     device_type=None,
     parent=None,
     mount_real=None,
+    additional_sign_plan=None,
     owner=None,
     content_s=None,
 ) -> AdditionalSignReal:
@@ -392,6 +393,7 @@ def get_additional_sign_real(
     asr = AdditionalSignReal.objects.get_or_create(
         parent=parent,
         mount_real=mount_real,
+        additional_sign_plan=additional_sign_plan,
         location=location,
         device_type=device_type,
         owner=owner,

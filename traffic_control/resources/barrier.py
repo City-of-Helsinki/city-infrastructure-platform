@@ -92,7 +92,11 @@ class BarrierPlanToRealTemplateResource(BarrierRealResource):
         verbose_name = _("Template for Real Import")
 
     def dehydrate_id(self, obj: BarrierPlan):
-        return None
+        related_reals = list(BarrierReal.objects.filter(barrier_plan=obj.id))
+        if related_reals:
+            return related_reals[0].id
+        else:
+            return None
 
     def dehydrate_barrier_plan__id(self, obj: BarrierPlan):
         return obj.id

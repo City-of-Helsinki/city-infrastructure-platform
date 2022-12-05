@@ -128,7 +128,11 @@ class RoadMarkingPlanToRealTemplateResource(RoadMarkingRealResource):
         verbose_name = _("Template for Real Import")
 
     def dehydrate_id(self, obj: RoadMarkingPlan):
-        return None
+        related_reals = list(RoadMarkingReal.objects.filter(road_marking_plan=obj.id))
+        if related_reals:
+            return related_reals[0].id
+        else:
+            return None
 
     def dehydrate_road_marking_plan__id(self, obj: RoadMarkingPlan):
         return obj.id
