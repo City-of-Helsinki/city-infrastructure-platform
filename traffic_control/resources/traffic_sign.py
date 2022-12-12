@@ -2,7 +2,6 @@ from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
-from traffic_control.enums import Condition, LaneNumber, LaneType, Lifecycle, Reflection, Size, Surface
 from traffic_control.models import (
     CoverageArea,
     MountPlan,
@@ -15,17 +14,15 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.models.traffic_sign import LocationSpecifier
-from traffic_control.resources.common import (
-    GenericDeviceBaseResource,
-    ResourceEnumIntegerField,
-    ResponsibleEntityPermissionImportMixin,
-)
+from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
 
 
 class AbstractTrafficSignResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
-    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE)
-    owner__name_fi = Field(attribute="owner", column_name="owner__name_fi", widget=ForeignKeyWidget(Owner, "name_fi"))
+    owner__name_fi = Field(
+        attribute="owner",
+        column_name="owner__name_fi",
+        widget=ForeignKeyWidget(Owner, "name_fi"),
+    )
     responsible_entity__name = Field(
         attribute="responsible_entity",
         column_name="responsible_entity__name",
@@ -37,17 +34,9 @@ class AbstractTrafficSignResource(ResponsibleEntityPermissionImportMixin, Generi
         widget=ForeignKeyWidget(TrafficControlDeviceType, "code"),
     )
     mount_type__code = Field(
-        attribute="mount_type", column_name="mount_type__code", widget=ForeignKeyWidget(MountType, "code")
-    )
-    lane_number = ResourceEnumIntegerField(attribute="lane_number", enum=LaneNumber, default=LaneNumber.MAIN_1)
-    lane_type = ResourceEnumIntegerField(attribute="lane_type", enum=LaneType, default=LaneType.MAIN)
-    size = ResourceEnumIntegerField(attribute="size", enum=Size, default=Size.MEDIUM)
-    reflection_class = ResourceEnumIntegerField(attribute="reflection_class", enum=Reflection, default=Reflection.R1)
-    surface_class = ResourceEnumIntegerField(attribute="surface_class", enum=Surface, default=Surface.FLAT)
-    location_specifier = ResourceEnumIntegerField(
-        attribute="location_specifier",
-        enum=LocationSpecifier,
-        default=LocationSpecifier.RIGHT,
+        attribute="mount_type",
+        column_name="mount_type__code",
+        widget=ForeignKeyWidget(MountType, "code"),
     )
 
     class Meta(GenericDeviceBaseResource.Meta):
@@ -100,7 +89,6 @@ class TrafficSignPlanResource(AbstractTrafficSignResource):
 
 
 class TrafficSignRealResource(AbstractTrafficSignResource):
-    condition = ResourceEnumIntegerField(attribute="condition", enum=Condition, default=Condition.VERY_GOOD)
     traffic_sign_plan__id = Field(
         attribute="traffic_sign_plan",
         column_name="traffic_sign_plan__id",
@@ -121,6 +109,7 @@ class TrafficSignRealResource(AbstractTrafficSignResource):
         model = TrafficSignReal
 
         fields = AbstractTrafficSignResource.Meta.common_fields + (
+            "condition",
             "legacy_code",
             "traffic_sign_plan__id",
             "mount_real__id",

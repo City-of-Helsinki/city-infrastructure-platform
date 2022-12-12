@@ -6,7 +6,6 @@ from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget, Widget
 from tablib import Dataset
 
-from traffic_control.enums import Lifecycle
 from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignReal,
@@ -18,14 +17,9 @@ from traffic_control.models import (
     Plan,
     ResponsibleEntity,
 )
-from traffic_control.models.additional_sign import Color
 from traffic_control.models.common import TrafficControlDeviceType
-from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
-from traffic_control.resources.common import (
-    GenericDeviceBaseResource,
-    ResourceEnumIntegerField,
-    ResponsibleEntityPermissionImportMixin,
-)
+from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
+from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
 
 
 class StructuredContentWidget(Widget):
@@ -38,8 +32,11 @@ class StructuredContentWidget(Widget):
 
 
 class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
-    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE)
-    owner__name_fi = Field(attribute="owner", column_name="owner__name_fi", widget=ForeignKeyWidget(Owner, "name_fi"))
+    owner__name_fi = Field(
+        attribute="owner",
+        column_name="owner__name_fi",
+        widget=ForeignKeyWidget(Owner, "name_fi"),
+    )
     responsible_entity__name = Field(
         attribute="responsible_entity",
         column_name="responsible_entity__name",
@@ -51,15 +48,10 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
         widget=ForeignKeyWidget(TrafficControlDeviceType, "code"),
     )
     mount_type__code = Field(
-        attribute="mount_type", column_name="mount_type__code", widget=ForeignKeyWidget(MountType, "code")
+        attribute="mount_type",
+        column_name="mount_type__code",
+        widget=ForeignKeyWidget(MountType, "code"),
     )
-    color = ResourceEnumIntegerField(attribute="color", enum=Color, default=Color.BLUE)
-    location_specifier = ResourceEnumIntegerField(
-        attribute="location_specifier",
-        enum=LocationSpecifier,
-        default=LocationSpecifier.RIGHT,
-    )
-
     # `content_s` column is destructured to several columns in after_export() and built back in before_import()
     content_s = Field(
         attribute="content_s",
@@ -292,7 +284,11 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
 
 
 class AdditionalSignPlanResource(AbstractAdditionalSignResource):
-    parent__id = Field(attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(TrafficSignPlan, "id"))
+    parent__id = Field(
+        attribute="parent",
+        column_name="parent__id",
+        widget=ForeignKeyWidget(TrafficSignPlan, "id"),
+    )
     mount_plan__id = Field(
         attribute="mount_plan",
         column_name="mount_plan__id",
@@ -316,7 +312,11 @@ class AdditionalSignPlanResource(AbstractAdditionalSignResource):
 
 
 class AdditionalSignRealResource(AbstractAdditionalSignResource):
-    parent__id = Field(attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(TrafficSignReal, "id"))
+    parent__id = Field(
+        attribute="parent",
+        column_name="parent__id",
+        widget=ForeignKeyWidget(TrafficSignReal, "id"),
+    )
     additional_sign_plan__id = Field(
         attribute="additional_sign_plan",
         column_name="additional_sign_plan__id",
@@ -337,6 +337,7 @@ class AdditionalSignRealResource(AbstractAdditionalSignResource):
         model = AdditionalSignReal
 
         fields = AbstractAdditionalSignResource.Meta.common_fields + (
+            "condition",
             "installation_date",
             "additional_sign_plan__id",
             "mount_real__id",

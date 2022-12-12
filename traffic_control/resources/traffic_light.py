@@ -2,7 +2,6 @@ from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
-from traffic_control.enums import LaneNumber, LaneType, Lifecycle
 from traffic_control.models import (
     MountPlan,
     MountReal,
@@ -13,24 +12,16 @@ from traffic_control.models import (
     TrafficControlDeviceType,
     TrafficLightPlan,
     TrafficLightReal,
-    TrafficLightType,
 )
-from traffic_control.models.traffic_light import (
-    LocationSpecifier,
-    PushButton,
-    TrafficLightSoundBeaconValue,
-    VehicleRecognition,
-)
-from traffic_control.resources.common import (
-    GenericDeviceBaseResource,
-    ResourceEnumIntegerField,
-    ResponsibleEntityPermissionImportMixin,
-)
+from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
 
 
 class AbstractTrafficLightResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
-    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE)
-    owner__name_fi = Field(attribute="owner", column_name="owner__name_fi", widget=ForeignKeyWidget(Owner, "name_fi"))
+    owner__name_fi = Field(
+        attribute="owner",
+        column_name="owner__name_fi",
+        widget=ForeignKeyWidget(Owner, "name_fi"),
+    )
     responsible_entity__name = Field(
         attribute="responsible_entity",
         column_name="responsible_entity__name",
@@ -42,24 +33,9 @@ class AbstractTrafficLightResource(ResponsibleEntityPermissionImportMixin, Gener
         widget=ForeignKeyWidget(TrafficControlDeviceType, "code"),
     )
     mount_type__code = Field(
-        attribute="mount_type", column_name="mount_type__code", widget=ForeignKeyWidget(MountType, "code")
-    )
-    lane_number = ResourceEnumIntegerField(attribute="lane_number", enum=LaneNumber, default=LaneNumber.MAIN_1)
-    lane_type = ResourceEnumIntegerField(attribute="lane_type", enum=LaneType, default=LaneType.MAIN)
-    type = ResourceEnumIntegerField(attribute="type", enum=TrafficLightType, default=TrafficLightType.SIGNAL)
-    push_button = ResourceEnumIntegerField(attribute="push_button", enum=PushButton, default=PushButton.NO)
-    sound_beacon = ResourceEnumIntegerField(
-        attribute="sound_beacon",
-        enum=TrafficLightSoundBeaconValue,
-        default=TrafficLightSoundBeaconValue.NO,
-    )
-    vehicle_recognition = ResourceEnumIntegerField(
-        attribute="vehicle_recognition", enum=VehicleRecognition, default=None
-    )
-    location_specifier = ResourceEnumIntegerField(
-        attribute="location_specifier",
-        enum=LocationSpecifier,
-        default=LocationSpecifier.RIGHT,
+        attribute="mount_type",
+        column_name="mount_type__code",
+        widget=ForeignKeyWidget(MountType, "code"),
     )
 
     class Meta(GenericDeviceBaseResource.Meta):

@@ -4,18 +4,16 @@ from import_export.widgets import ForeignKeyWidget
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
-from traffic_control.enums import Condition, Lifecycle
 from traffic_control.models import MountPlan, MountReal, MountType, Owner, Plan, ResponsibleEntity
-from traffic_control.resources.common import (
-    GenericDeviceBaseResource,
-    ResourceEnumIntegerField,
-    ResponsibleEntityPermissionImportMixin,
-)
+from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
 
 
 class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
-    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE)
-    owner__name_fi = Field(attribute="owner", column_name="owner__name_fi", widget=ForeignKeyWidget(Owner, "name_fi"))
+    owner__name_fi = Field(
+        attribute="owner",
+        column_name="owner__name_fi",
+        widget=ForeignKeyWidget(Owner, "name_fi"),
+    )
     responsible_entity__name = Field(
         attribute="responsible_entity",
         column_name="responsible_entity__name",
@@ -27,13 +25,19 @@ class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, 
         widget=ForeignKeyWidget(CityFurnitureDeviceType, "code"),
     )
     mount_type__code = Field(
-        attribute="mount_type", column_name="mount_type__code", widget=ForeignKeyWidget(MountType, "code")
+        attribute="mount_type",
+        column_name="mount_type__code",
+        widget=ForeignKeyWidget(MountType, "code"),
     )
     target__name_fi = Field(
-        attribute="target", column_name="target__name_fi", widget=ForeignKeyWidget(CityFurnitureTarget, "name_fi")
+        attribute="target",
+        column_name="target__name_fi",
+        widget=ForeignKeyWidget(CityFurnitureTarget, "name_fi"),
     )
     color__name = Field(
-        attribute="color", column_name="color__name", widget=ForeignKeyWidget(CityFurnitureColor, "name")
+        attribute="color",
+        column_name="color__name",
+        widget=ForeignKeyWidget(CityFurnitureColor, "name"),
     )
 
     class Meta(GenericDeviceBaseResource.Meta):
@@ -71,7 +75,9 @@ class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, 
 
 class FurnitureSignpostPlanResource(AbstractFurnitureSignpostResource):
     parent__id = Field(
-        attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(FurnitureSignpostPlan, "id")
+        attribute="parent",
+        column_name="parent__id",
+        widget=ForeignKeyWidget(FurnitureSignpostPlan, "id"),
     )
     mount_plan__id = Field(
         attribute="mount_plan",
@@ -96,9 +102,10 @@ class FurnitureSignpostPlanResource(AbstractFurnitureSignpostResource):
 
 class FurnitureSignpostRealResource(AbstractFurnitureSignpostResource):
     parent__id = Field(
-        attribute="parent", column_name="parent__id", widget=ForeignKeyWidget(FurnitureSignpostReal, "id")
+        attribute="parent",
+        column_name="parent__id",
+        widget=ForeignKeyWidget(FurnitureSignpostReal, "id"),
     )
-    condition = ResourceEnumIntegerField(attribute="condition", enum=Condition, default=Condition.VERY_GOOD)
     furniture_signpost_plan__id = Field(
         attribute="furniture_signpost_plan",
         column_name="furniture_signpost_plan__id",
