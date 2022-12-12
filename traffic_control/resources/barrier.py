@@ -2,19 +2,16 @@ from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
-from traffic_control.enums import Lifecycle
 from traffic_control.models import BarrierPlan, BarrierReal, Owner, Plan, ResponsibleEntity, TrafficControlDeviceType
-from traffic_control.models.barrier import ConnectionType, LocationSpecifier
-from traffic_control.resources.common import (
-    GenericDeviceBaseResource,
-    ResourceEnumIntegerField,
-    ResponsibleEntityPermissionImportMixin,
-)
+from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
 
 
 class AbstractBarrierResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
-    lifecycle = ResourceEnumIntegerField(attribute="lifecycle", enum=Lifecycle, default=Lifecycle.ACTIVE)
-    owner__name_fi = Field(attribute="owner", column_name="owner__name_fi", widget=ForeignKeyWidget(Owner, "name_fi"))
+    owner__name_fi = Field(
+        attribute="owner",
+        column_name="owner__name_fi",
+        widget=ForeignKeyWidget(Owner, "name_fi"),
+    )
     responsible_entity__name = Field(
         attribute="responsible_entity",
         column_name="responsible_entity__name",
@@ -24,14 +21,6 @@ class AbstractBarrierResource(ResponsibleEntityPermissionImportMixin, GenericDev
         attribute="device_type",
         column_name="device_type__code",
         widget=ForeignKeyWidget(TrafficControlDeviceType, "code"),
-    )
-    location_specifier = ResourceEnumIntegerField(
-        attribute="location_specifier",
-        enum=LocationSpecifier,
-        default=LocationSpecifier.RIGHT,
-    )
-    connection_type = ResourceEnumIntegerField(
-        attribute="connection_type", enum=ConnectionType, default=ConnectionType.CLOSED
     )
 
     class Meta(GenericDeviceBaseResource.Meta):

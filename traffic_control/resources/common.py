@@ -1,10 +1,11 @@
 from uuid import UUID
 
 from django.core.exceptions import ValidationError
-from django.db.models import NOT_PROVIDED
 from django.http import HttpResponse
 from django.urls import path
 from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
+from enumfields import EnumField, EnumIntegerField
 from import_export import fields, widgets
 from import_export.admin import ImportExportActionModelAdmin
 from import_export.formats import base_formats
@@ -15,50 +16,25 @@ from users.models import User
 from users.utils import get_system_user
 
 
-class EnumIntegerWidget(widgets.Widget):
+class EnumWidget(widgets.Widget):
+    def __init__(self, enum=None):
+        self.enum = enum
+
     def clean(self, value, row=None, *args, **kwargs):
-        return value
+        if value in [None, ""]:
+            return None
+        try:
+            return self.enum[value]
+        except KeyError:
+            enum_values = ", ".join([e.name for e in self.enum])
+            message = _(
+                "Value '%(value)s' is invalid. Valid values are %(enum_values)s (%(enum)s)."
+                % {"value": value, "enum": self.enum, "enum_values": enum_values}
+            )
+            raise ValueError(message)
 
     def render(self, value, obj=None):
         return force_str(value.name)
-
-
-class ResourceEnumIntegerField(fields.Field):
-    def __init__(
-        self,
-        attribute=None,
-        enum=None,
-        default=NOT_PROVIDED,
-        readonly=False,
-        saves_null_values=True,
-    ):
-        if enum is None:
-            raise TypeError("Enum must be provided")
-        if default == NOT_PROVIDED:
-            # If field is nullable, default can be set to None
-            raise TypeError("Default value must be provided")
-
-        self.enum = enum
-        super().__init__(attribute, attribute, EnumIntegerWidget(), default, readonly, saves_null_values)
-
-    def clean(self, data, **kwargs):
-        field_value = data[self.column_name]
-        try:
-            enum_value = self.enum[field_value]
-        except KeyError:
-            if field_value in self.empty_values and self.default != NOT_PROVIDED:
-                if callable(self.default):
-                    enum_value = self.default()
-                else:
-                    enum_value = self.default
-            else:
-                raise KeyError(
-                    "Key '%s' not found in enum. Available keys are: %s"
-                    % (self.column_name, [e.name for e in self.enum])
-                )
-
-        data[self.column_name] = enum_value
-        return super().clean(data, **kwargs)
 
 
 class ResourceUUIDField(fields.Field):
@@ -73,6 +49,24 @@ class ResourceUUIDField(fields.Field):
 
 class GenericDeviceBaseResource(ModelResource):
     id = ResourceUUIDField(attribute="id", column_name="id", default=None)
+
+    @classmethod
+    def field_from_django_field(cls, field_name, django_field, readonly):
+        """
+        In case Django model field is an enum field, set resource widget accordingly.
+        Otherwise do ModelResource default behavior.
+        """
+        if type(django_field) in (EnumField, EnumIntegerField):
+            field = cls.DEFAULT_RESOURCE_FIELD(
+                attribute=field_name,
+                column_name=field_name,
+                widget=EnumWidget(django_field.enum),
+                readonly=readonly,
+                default=django_field.default,
+            )
+            return field
+        else:
+            return super().field_from_django_field(field_name, django_field, readonly)
 
     def get_queryset(self):
         return self._meta.model.objects.active()
