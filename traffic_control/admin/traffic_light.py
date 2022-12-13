@@ -6,6 +6,7 @@ from enumfields.admin import EnumFieldListFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
@@ -13,6 +14,7 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -21,6 +23,7 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import TrafficLightPlan, TrafficLightPlanFile, TrafficLightReal, TrafficLightRealFile
+from traffic_control.models.signpost import LocationSpecifier
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 from traffic_control.resources.traffic_light import (
     TrafficLightPlanResource,
@@ -37,6 +40,12 @@ __all__ = (
 
 from traffic_control.models.traffic_light import TrafficLightRealOperation
 
+shared_initial_values = {
+    "lane_number": LaneNumber.MAIN_1,
+    "lane_type": LaneType.MAIN,
+    "location_specifier": LocationSpecifier.RIGHT,
+}
+
 
 class TrafficLightPlanFileInline(admin.TabularInline):
     formfield_overrides = {
@@ -52,6 +61,7 @@ class TrafficLightPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     MultiResourceExportActionAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -130,6 +140,7 @@ class TrafficLightPlanAdmin(
     raw_id_fields = ("plan", "mount_plan")
     ordering = ("-created_at",)
     inlines = (TrafficLightPlanFileInline,)
+    initial_values = shared_initial_values
 
 
 class TrafficLightRealFileInline(admin.TabularInline):
@@ -151,6 +162,7 @@ class TrafficLightRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -234,3 +246,8 @@ class TrafficLightRealAdmin(
     raw_id_fields = ("traffic_light_plan", "mount_real")
     ordering = ("-created_at",)
     inlines = (TrafficLightRealFileInline, TrafficLightRealOperationInline)
+    initial_values = {
+        **shared_initial_values,
+        "installation_status": InstallationStatus.IN_USE,
+        "condition": Condition.VERY_GOOD,
+    }

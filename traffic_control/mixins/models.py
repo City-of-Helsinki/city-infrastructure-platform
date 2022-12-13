@@ -98,7 +98,6 @@ class InstalledDeviceModel(models.Model):
         InstallationStatus,
         verbose_name=_("Installation status"),
         max_length=10,
-        default=InstallationStatus.IN_USE,
         blank=True,
         null=True,
         help_text=_("Describes this devices installation status."),
@@ -106,7 +105,6 @@ class InstalledDeviceModel(models.Model):
     condition = EnumIntegerField(
         Condition,
         verbose_name=_("Condition"),
-        default=Condition.VERY_GOOD,
         blank=True,
         null=True,
         help_text=_("Describes the condition of this device."),

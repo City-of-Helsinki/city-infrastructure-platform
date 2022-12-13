@@ -6,6 +6,7 @@ from enumfields.admin import EnumFieldListFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
@@ -13,6 +14,7 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -35,7 +37,20 @@ __all__ = (
     "RoadMarkingRealFileInline",
 )
 
-from traffic_control.models.road_marking import RoadMarkingRealOperation
+from traffic_control.models.road_marking import (
+    LineDirection,
+    LocationSpecifier,
+    RoadMarkingColor,
+    RoadMarkingRealOperation,
+)
+
+shared_initial_values = {
+    "lane_number": LaneNumber.MAIN_1,
+    "lane_type": LaneType.MAIN,
+    "location_specifier": LocationSpecifier.RIGHT_SIDE_OF_LANE,
+    "line_direction": LineDirection.FORWARD,
+    "color": RoadMarkingColor.WHITE,
+}
 
 
 class RoadMarkingPlanFileInline(admin.TabularInline):
@@ -52,6 +67,7 @@ class RoadMarkingPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     MultiResourceExportActionAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -146,6 +162,7 @@ class RoadMarkingPlanAdmin(
     raw_id_fields = ("plan", "traffic_sign_plan")
     ordering = ("-created_at",)
     inlines = (RoadMarkingPlanFileInline,)
+    initial_values = shared_initial_values
 
 
 class RoadMarkingRealFileInline(admin.TabularInline):
@@ -167,6 +184,7 @@ class RoadMarkingRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -268,3 +286,8 @@ class RoadMarkingRealAdmin(
     raw_id_fields = ("road_marking_plan", "traffic_sign_real")
     ordering = ("-created_at",)
     inlines = (RoadMarkingRealFileInline, RoadMarkingRealOperationInline)
+    initial_values = {
+        **shared_initial_values,
+        "condition": Condition.VERY_GOOD,
+        "installation_status": InstallationStatus.IN_USE,
+    }

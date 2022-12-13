@@ -5,6 +5,7 @@ from enumfields.admin import EnumFieldListFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
@@ -12,6 +13,7 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.forms import AdditionalSignPlanModelForm, AdditionalSignRealModelForm
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -21,13 +23,23 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
-from traffic_control.models.additional_sign import AdditionalSignRealOperation
+from traffic_control.models.additional_sign import AdditionalSignRealOperation, Color
+from traffic_control.models.traffic_sign import LocationSpecifier
 from traffic_control.resources.additional_sign import (
     AdditionalSignPlanResource,
     AdditionalSignPlanToRealTemplateResource,
     AdditionalSignRealResource,
 )
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
+
+shared_initial_values = {
+    "reflection_class": Reflection.R1,
+    "surface_class": Surface.FLAT,
+    "color": Color.BLUE,
+    "lane_number": LaneNumber.MAIN_1,
+    "lane_type": LaneType.MAIN,
+    "location_specifier": LocationSpecifier.RIGHT,
+}
 
 
 class AdditionalSignRealOperationInline(TrafficControlOperationInlineBase):
@@ -43,6 +55,7 @@ class AdditionalSignPlanAdmin(
     UserStampedInlineAdminMixin,
     Point3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -118,6 +131,7 @@ class AdditionalSignPlanAdmin(
         "source_id",
     )
     raw_id_fields = ("parent", "plan", "mount_plan")
+
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
         ("responsible_entity", TreeModelFieldListFilter),
@@ -125,6 +139,7 @@ class AdditionalSignPlanAdmin(
         "owner",
     ]
     ordering = ("-created_at",)
+    initial_values = shared_initial_values
 
 
 @admin.register(AdditionalSignReal)
@@ -135,6 +150,7 @@ class AdditionalSignRealAdmin(
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
     Point3DFieldAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -302,6 +318,12 @@ class AdditionalSignRealAdmin(
         "source_name",
     )
     inlines = (AdditionalSignRealOperationInline,)
+    initial_values = {
+        **shared_initial_values,
+        "size": Size.MEDIUM,
+        "condition": Condition.VERY_GOOD,
+        "installation_status": InstallationStatus.IN_USE,
+    }
 
 
 class BaseAdditionalSignInline(admin.TabularInline):

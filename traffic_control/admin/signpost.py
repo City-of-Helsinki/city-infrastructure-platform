@@ -6,6 +6,7 @@ from enumfields.admin import EnumFieldListFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
@@ -13,6 +14,7 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -35,7 +37,15 @@ __all__ = (
     "SignpostRealFileInline",
 )
 
-from traffic_control.models.signpost import SignpostRealOperation
+from traffic_control.models.signpost import LocationSpecifier, SignpostRealOperation
+
+shared_initial_values = {
+    "lane_number": LaneNumber.MAIN_1,
+    "lane_type": LaneType.MAIN,
+    "size": Size.MEDIUM,
+    "reflection_class": Reflection.R1,
+    "location_specifier": LocationSpecifier.RIGHT,
+}
 
 
 class SignpostPlanFileInline(admin.TabularInline):
@@ -52,6 +62,7 @@ class SignpostPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     MultiResourceExportActionAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -133,6 +144,7 @@ class SignpostPlanAdmin(
     raw_id_fields = ("parent", "plan", "mount_plan")
     ordering = ("-created_at",)
     inlines = (SignpostPlanFileInline,)
+    initial_values = shared_initial_values
 
 
 class SignpostRealFileInline(admin.TabularInline):
@@ -154,6 +166,7 @@ class SignpostRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -253,3 +266,8 @@ class SignpostRealAdmin(
     raw_id_fields = ("parent", "signpost_plan", "mount_real")
     ordering = ("-created_at",)
     inline = (SignpostRealFileInline, SignpostRealOperationInline)
+    initial_values = {
+        **shared_initial_values,
+        "installation_status": InstallationStatus.IN_USE,
+        "condition": Condition.VERY_GOOD,
+    }

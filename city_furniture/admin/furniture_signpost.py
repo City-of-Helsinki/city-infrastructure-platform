@@ -19,6 +19,7 @@ from city_furniture.resources.furniture_signpost import (
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
@@ -27,6 +28,7 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -65,6 +67,7 @@ class AbstractFurnitureSignpostAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Point3DFieldAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -226,3 +229,7 @@ class FurnitureSignpostRealAdmin(
         "location_name_sw",
     )
     inlines = (FurnitureSignpostRealFileInline, FurnitureSignpostRealOperationInline)
+    initial_values = {
+        "installation_status": InstallationStatus.IN_USE,
+        "condition": Condition.VERY_GOOD,
+    }

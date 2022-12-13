@@ -7,6 +7,7 @@ from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.traffic_sign import OrderedTrafficSignRealInline
 from traffic_control.admin.utils import (
+    AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
@@ -14,6 +15,7 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -50,6 +52,7 @@ class MountPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     MultiResourceExportActionAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -124,6 +127,7 @@ class MountPlanAdmin(
     raw_id_fields = ("plan",)
     ordering = ("-created_at",)
     inlines = (MountPlanFileInline,)
+    initial_values = {}
 
 
 class MountRealFileInline(admin.TabularInline):
@@ -145,6 +149,7 @@ class MountRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -230,6 +235,10 @@ class MountRealAdmin(
         OrderedTrafficSignRealInline,
         MountRealOperationInline,
     )
+    initial_values = {
+        "installation_status": InstallationStatus.IN_USE,
+        "condition": Condition.VERY_GOOD,
+    }
 
 
 @admin.register(MountType)
