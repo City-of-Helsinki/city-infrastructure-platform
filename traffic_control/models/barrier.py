@@ -61,21 +61,20 @@ class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, Own
     lane_number = EnumField(
         LaneNumber,
         verbose_name=_("Lane number"),
-        default=LaneNumber.MAIN_1,
+        null=True,
         blank=True,
         help_text=_("Describes which lane of the road this barrier affects."),
     )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
+        null=True,
         blank=True,
         help_text=_("The type of lane which this barrier affects."),
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
         help_text=_("Specifies where the barrier is in relation to the road."),

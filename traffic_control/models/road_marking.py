@@ -89,21 +89,20 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
     lane_number = EnumField(
         LaneNumber,
         verbose_name=_("Lane number"),
-        default=LaneNumber.MAIN_1,
+        null=True,
         blank=True,
         help_text=_("Describes which lane of the road this road marking affects."),
     )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
+        null=True,
         blank=True,
         help_text=_("The type of lane which this road marking affects."),
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT_SIDE_OF_LANE,
         blank=True,
         null=True,
         help_text=_("Specifies where the road marking is in relation to the lane."),
@@ -112,7 +111,6 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
         LineDirection,
         verbose_name=_("Line direction"),
         max_length=10,
-        default=LineDirection.FORWARD,
         blank=True,
         null=True,
     )
@@ -148,7 +146,6 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
     color = EnumIntegerField(
         RoadMarkingColor,
         verbose_name=_("Color"),
-        default=RoadMarkingColor.WHITE,
         blank=True,
         null=True,
     )

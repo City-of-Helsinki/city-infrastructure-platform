@@ -318,3 +318,10 @@ class DeviceComparisonAdminMixin:
                 {"plan_differences": self.get_real_and_plan_field_differences(real_object, plan_object)}
             )
         return super().change_view(request, object_id, form_url, extra_context)
+
+
+class AdminFieldInitialValuesMixin:
+    initial_values = {}
+
+    def get_changeform_initial_data(self, request):
+        return self.initial_values

@@ -98,14 +98,14 @@ class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel
     lane_number = EnumField(
         LaneNumber,
         verbose_name=_("Lane number"),
-        default=LaneNumber.MAIN_1,
+        null=True,
         blank=True,
         help_text=_("Describes which lane of the road this traffic light affects."),
     )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
+        null=True,
         blank=True,
         help_text=_("The type of lane which this traffic light affects."),
     )
@@ -190,7 +190,6 @@ class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
         help_text=_("Specifies where the traffic light is in relation to the road."),

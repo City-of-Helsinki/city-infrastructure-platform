@@ -6,6 +6,7 @@ from enumfields.admin import EnumFieldListFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
@@ -13,6 +14,7 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -35,7 +37,13 @@ __all__ = (
     "BarrierRealFileInline",
 )
 
-from traffic_control.models.barrier import BarrierRealOperation
+from traffic_control.models.barrier import BarrierRealOperation, LocationSpecifier
+
+shared_initial_values = {
+    "lane_number": LaneNumber.MAIN_1,
+    "lane_type": LaneType.MAIN,
+    "location_specifier": LocationSpecifier.RIGHT,
+}
 
 
 class BarrierPlanFileInline(admin.TabularInline):
@@ -52,6 +60,7 @@ class BarrierPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     MultiResourceExportActionAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -127,6 +136,7 @@ class BarrierPlanAdmin(
     raw_id_fields = ("plan",)
     ordering = ("-created_at",)
     inlines = (BarrierPlanFileInline,)
+    initial_values = shared_initial_values
 
 
 class BarrierRealFileInline(admin.TabularInline):
@@ -148,6 +158,7 @@ class BarrierRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -231,3 +242,8 @@ class BarrierRealAdmin(
     raw_id_fields = ("barrier_plan",)
     ordering = ("-created_at",)
     inlines = (BarrierRealFileInline, BarrierRealOperationInline)
+    initial_values = {
+        **shared_initial_values,
+        "installation_status": InstallationStatus.IN_USE,
+        "condition": Condition.VERY_GOOD,
+    }

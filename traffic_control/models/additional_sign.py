@@ -77,7 +77,6 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         Reflection,
         verbose_name=_("Reflection"),
         max_length=2,
-        default=Reflection.R1,
         blank=True,
         null=True,
     )
@@ -85,14 +84,12 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         Surface,
         verbose_name=_("Surface"),
         max_length=6,
-        default=Surface.FLAT,
         blank=True,
         null=True,
     )
     color = EnumIntegerField(
         Color,
         verbose_name=_("Color"),
-        default=Color.BLUE,
         blank=True,
         null=True,
     )
@@ -114,21 +111,20 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
     lane_number = EnumField(
         LaneNumber,
         verbose_name=_("Lane number"),
-        default=LaneNumber.MAIN_1,
+        null=True,
         blank=True,
         help_text=_("Describes which lane of the road this sign affects."),
     )
     lane_type = EnumField(
         LaneType,
         verbose_name=_("Lane type"),
-        default=LaneType.MAIN,
+        null=True,
         blank=True,
         help_text=_("The type of lane which this sign affects."),
     )
     location_specifier = EnumIntegerField(
         LocationSpecifier,
         verbose_name=_("Location specifier"),
-        default=LocationSpecifier.RIGHT,
         blank=True,
         null=True,
         help_text=_("Specifies where the sign is in relation to the road."),
@@ -308,7 +304,6 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         Size,
         verbose_name=_("Size"),
         max_length=1,
-        default=Size.MEDIUM,
         blank=True,
         null=True,
     )

@@ -8,6 +8,7 @@ from traffic_control.admin.additional_sign import AdditionalSignPlanInline, Addi
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
+    AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
@@ -15,7 +16,16 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from traffic_control.enums import TRAFFIC_SIGN_TYPE_CHOICES
+from traffic_control.enums import (
+    Condition,
+    InstallationStatus,
+    LaneNumber,
+    LaneType,
+    Reflection,
+    Size,
+    Surface,
+    TRAFFIC_SIGN_TYPE_CHOICES,
+)
 from traffic_control.forms import AdminFileWidget, TrafficSignPlanModelForm, TrafficSignRealModelForm
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -31,7 +41,7 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
-from traffic_control.models.traffic_sign import TrafficSignRealOperation
+from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignRealOperation
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 from traffic_control.resources.traffic_sign import (
@@ -48,6 +58,15 @@ __all__ = (
     "TrafficSignRealAdmin",
     "TrafficSignRealFileInline",
 )
+
+shared_initial_values = {
+    "lane_number": LaneNumber.MAIN_1,
+    "lane_type": LaneType.MAIN,
+    "size": Size.MEDIUM,
+    "reflection_class": Reflection.R1,
+    "surface_class": Surface.FLAT,
+    "location_specifier": LocationSpecifier.RIGHT,
+}
 
 
 class TrafficSignTypeListFilter(SimpleListFilter):
@@ -97,6 +116,7 @@ class TrafficSignPlanAdmin(
     UserStampedAdminMixin,
     Point3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -188,6 +208,7 @@ class TrafficSignPlanAdmin(
     raw_id_fields = ("plan", "mount_plan")
     ordering = ("-created_at",)
     inlines = (TrafficSignPlanFileInline, AdditionalSignPlanInline)
+    initial_values = shared_initial_values
 
     def has_additional_signs(self, obj):
         return (_("No"), _("Yes"))[obj.has_additional_signs()]
@@ -215,6 +236,7 @@ class TrafficSignRealAdmin(
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
     Point3DFieldAdminMixin,
+    AdminFieldInitialValuesMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
@@ -384,6 +406,11 @@ class TrafficSignRealAdmin(
         TrafficSignRealOperationInline,
         AdditionalSignRealInline,
     )
+    initial_values = {
+        **shared_initial_values,
+        "condition": Condition.VERY_GOOD,
+        "installation_status": InstallationStatus.IN_USE,
+    }
 
     def has_additional_signs(self, obj):
         return (_("No"), _("Yes"))[obj.has_additional_signs()]
