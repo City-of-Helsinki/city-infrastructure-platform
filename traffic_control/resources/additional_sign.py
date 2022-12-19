@@ -98,6 +98,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
         Modifies `dataset` in-place.
         """
         device_type_column_in_dataset = True if "device_type__code" in dataset.headers else False
+        id_column_in_dataset = True if "id" in dataset.headers else False
 
         if device_type_column_in_dataset:
             # Get schemas for the devices used in import dataset
@@ -107,7 +108,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
                     "code", "content_schema"
                 )
             )
-        else:
+        elif id_column_in_dataset:
             # If device type code column is not present in the dataset, there will be  no changes
             # to device types, so we can use schemas from the database.
             device_type_ids = list(
@@ -119,6 +120,8 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             device_types_schemas = dict(
                 TrafficControlDeviceType.objects.filter(id__in=device_type_ids).values_list("code", "content_schema")
             )
+        else:
+            return
 
         column_names: list[str] = dataset.headers
         content_columns = [name for name in column_names if name is not None and name.startswith("content_s.")]
@@ -127,8 +130,11 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
         for row in dataset.dict:
             if device_type_column_in_dataset:
                 device_type_code = row.get("device_type__code")
+            elif row.get("id"):
+                id = UUID(row["id"])
+                device_type_code = additional_sign_device_types.get(id)
             else:
-                device_type_code = additional_sign_device_types[UUID(row["id"])]
+                device_type_code = None
 
             schema = device_types_schemas.get(device_type_code)
 

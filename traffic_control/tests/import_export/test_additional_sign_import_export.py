@@ -351,6 +351,43 @@ def test__additional_sign__import__create_with_invalid_device_type(model, resour
         (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
     ),
 )
+@pytest.mark.parametrize(
+    "columns",
+    (
+        ("location", "owner__name_fi"),
+        ("location", "owner__name_fi", "id"),
+        ("location", "owner__name_fi", "device_type__code"),
+        ("location", "owner__name_fi", "id", "device_type__code"),
+    ),
+)
+@pytest.mark.parametrize("format", file_formats)
+@pytest.mark.django_db
+def test__additional_sign__import__create_with_minimal_columns(model, resource, factory, columns, format):
+    factory()
+
+    dataset = get_import_dataset(resource, format=format)
+    all_columns = dataset.headers.copy()
+    for dataset_column in all_columns:
+        if dataset_column not in columns:
+            del dataset[dataset_column]
+    assert set(dataset.headers) == set(columns)
+
+    model.objects.all().delete()
+    assert model.objects.all().count() == 0
+    result = resource().import_data(dataset, raise_errors=False, collect_failed_rows=True)
+
+    assert not result.has_validation_errors()
+    assert not result.has_errors()
+    assert model.objects.all().count() == 1
+
+
+@pytest.mark.parametrize(
+    "model, resource, factory",
+    (
+        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+    ),
+)
 @pytest.mark.parametrize("has_device_type_column", (True, False))
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
