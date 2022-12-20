@@ -21,14 +21,13 @@ RUN apt-get update && \
         build-essential \
         gdal-bin \
         postgresql-client \
-        git \
         gettext \
         mime-support \
         curl && \
     curl -sSL --retry 5 https://install.python-poetry.org | python - && \
     /root/.local/bin/poetry config virtualenvs.create false && \
     /root/.local/bin/poetry install --no-dev --no-interaction && \
-    apt-get remove -y build-essential libpq-dev git && \
+    apt-get remove -y build-essential libpq-dev && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives && \

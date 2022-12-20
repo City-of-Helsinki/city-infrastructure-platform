@@ -16,7 +16,7 @@ django-enumfields = "^2.1.1"
 django-environ = "^0.8.1"
 django-extensions = "^3.1.5"
 django-filter = "^21.1"
-django-gisserver = { git = "https://github.com/Amsterdam/django-gisserver.git", rev = "4e8ece0bc458129fd247014ec0ec4413a0c2afd6"} # No new versions are released after 1.1.3
+django-gisserver = "1.2.4"
 django-helusers = "^0.7.1"
 django-import-export = "^2.7.1"
 django-storages = {extras = ["azure"], version = "^1.12.3"}
