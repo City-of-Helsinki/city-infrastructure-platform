@@ -1,16 +1,12 @@
 from copy import deepcopy
 
-from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
 from gisserver.features import FeatureType
-from gisserver.geometries import CRS
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
 from traffic_control.views.wfs.common import DescribedFeatureField
-
-RD_NEW = CRS.from_srid(settings.SRID)
 
 _base_fields = [
     DescribedFeatureField("id", description="ID of the Traffic Sign."),
@@ -84,7 +80,6 @@ TrafficSignRealFeatureType = FeatureType(
             description="ID of this Traffic Sign's plan.",
         ),
     ],
-    other_crs=[RD_NEW],
 )
 
 TrafficSignPlanFeatureType = FeatureType(
@@ -99,5 +94,4 @@ TrafficSignPlanFeatureType = FeatureType(
     + [
         DescribedFeatureField("plan_id", description="ID of the Plan that this traffic sign belongs to."),
     ],
-    other_crs=[RD_NEW],
 )

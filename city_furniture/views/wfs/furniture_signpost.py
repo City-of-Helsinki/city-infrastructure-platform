@@ -1,16 +1,12 @@
 from copy import deepcopy
 
-from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
 from gisserver.features import FeatureType
-from gisserver.geometries import CRS
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from traffic_control.enums import Lifecycle
 from traffic_control.views.wfs.common import DescribedFeatureField
-
-RD_NEW = CRS.from_srid(settings.SRID)
 
 _base_fields = [
     DescribedFeatureField("id", description="ID of the Furniture Signpost."),
@@ -107,7 +103,6 @@ FurnitureSignpostRealFeatureType = FeatureType(
             description="ID of this Signpost's plan.",
         ),
     ],
-    other_crs=[RD_NEW],
 )
 
 FurnitureSignpostPlanFeatureType = FeatureType(
@@ -121,5 +116,4 @@ FurnitureSignpostPlanFeatureType = FeatureType(
     + [
         DescribedFeatureField("plan_id", description="ID of the Plan that this signpost belongs to."),
     ],
-    other_crs=[RD_NEW],
 )
