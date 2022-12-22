@@ -132,36 +132,39 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
 
             schema = device_types_schemas.get(device_type_code)
 
-            if schema is None:
-                content_s_rows.append(None)
-            else:
-                schema_properties = schema.get("properties")
-                required_properties = schema.get("required", [])
-
-                content_s = {}
-                for property_name in schema_properties:
-                    property_type = schema_properties[property_name].get("type")
-                    column_name = f"content_s.{property_name}"
-                    is_required = property_name in required_properties
-
-                    value_from_data = row.get(column_name)
-                    value = self._clean_up_value(value_from_data, property_type, is_required)
-
-                    if value is not None:
-                        content_s[property_name] = value
-                    else:
-                        if is_required:
-                            content_s[property_name] = value
-
-                if content_s:
-                    content_s_rows.append(content_s)
-                else:
-                    content_s_rows.append(None)
+            content_s_rows.append(self._content_s_from_row(row, schema))
 
         dataset.append_col(content_s_rows, header="content_s")
 
         for content_column in content_columns:
             del dataset[content_column]
+
+    def _content_s_from_row(self, row, schema):
+        if schema is None:
+            return None
+        else:
+            schema_properties = schema.get("properties")
+            required_properties = schema.get("required", [])
+
+            content_s = {}
+            for property_name in schema_properties:
+                property_type = schema_properties[property_name].get("type")
+                column_name = f"content_s.{property_name}"
+                is_required = property_name in required_properties
+
+                value_from_data = row.get(column_name)
+                value = self._clean_up_value(value_from_data, property_type, is_required)
+
+                if value is not None:
+                    content_s[property_name] = value
+                else:
+                    if is_required:
+                        content_s[property_name] = value
+
+            if content_s:
+                return content_s
+            else:
+                return None
 
     @staticmethod
     def _clean_up_value(value, property_type: str, is_required: bool):
