@@ -19,6 +19,7 @@ _base_fields = [
         model_attribute="owner.name_fi",
         description="Entity that's responsible for ordering and maintenance of this sign.",
     ),
+    DescribedFeatureField("location", description="Additional sign's location (point) in EPSG:3879 coordinates."),
     DescribedFeatureField(
         "device_type_code",
         model_attribute="device_type.code",
