@@ -1,6 +1,6 @@
 import pytest
 
-from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
+from traffic_control.tests.factories import get_traffic_sign_plan, get_traffic_sign_real
 from traffic_control.tests.wfs.wfs_utils import (
     EPSG_3879_URN,
     geojson_crs,
@@ -20,12 +20,12 @@ from traffic_control.tests.wfs.wfs_utils import (
 @pytest.mark.parametrize(
     "model_name, factory",
     (
-        ("furnituresignpostplan", get_furniture_signpost_plan),
-        ("furnituresignpostreal", get_furniture_signpost_real),
+        ("trafficsignplan", get_traffic_sign_plan),
+        ("trafficsignreal", get_traffic_sign_real),
     ),
 )
 @pytest.mark.django_db
-def test__wfs_furniture_signpost__gml(model_name: str, factory):
+def test__wfs_traffic_sign__gml(model_name: str, factory):
     device = factory(location=test_point_helsinki)
 
     gml_xml = wfs_get_features_gml(model_name)
@@ -44,12 +44,12 @@ def test__wfs_furniture_signpost__gml(model_name: str, factory):
 @pytest.mark.parametrize(
     "model_name, factory",
     (
-        ("furnituresignpostplan", get_furniture_signpost_plan),
-        ("furnituresignpostreal", get_furniture_signpost_real),
+        ("trafficsignplan", get_traffic_sign_plan),
+        ("trafficsignreal", get_traffic_sign_real),
     ),
 )
 @pytest.mark.django_db
-def test__wfs_furniture_signpost__geojson(model_name: str, factory):
+def test__wfs_traffic_sign__geojson(model_name: str, factory):
     device = factory(location=test_point_helsinki)
 
     geojson = wfs_get_features_geojson(model_name)

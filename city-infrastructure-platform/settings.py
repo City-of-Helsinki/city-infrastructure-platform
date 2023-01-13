@@ -307,6 +307,9 @@ LOCALE_PATHS = [
 # Import / Export
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
+# WFS
+GISSERVER_USE_DB_RENDERING = False
+
 SILENCED_SYSTEM_CHECKS = [
     # django-auditlog imports django-jsonfield-backport, which raises a warning
     # on Django 3.1 and newer, because it already has a built-in JSONField.
