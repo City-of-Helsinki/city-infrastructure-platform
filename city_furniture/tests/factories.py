@@ -2,8 +2,6 @@ import datetime
 import uuid
 from typing import Optional
 
-from django.urls import reverse
-
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, FurnitureSignpostRealOperation
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
@@ -122,9 +120,3 @@ def add_furniture_signpost_real_operation(furniture_signpost_real, operation_typ
         created_by=user,
         updated_by=user,
     )
-
-
-def get_wfs_url(model_name: str = "furnituresignpostreal", output_format: str = "application/gml+xml") -> str:
-    url = f"{reverse('wfs-city-infrastructure')}?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature"
-    url += f"&TYPENAMES={model_name}&OUTPUTFORMAT={output_format}"
-    return url

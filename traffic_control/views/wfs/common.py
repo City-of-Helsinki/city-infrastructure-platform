@@ -8,6 +8,8 @@ from gisserver.operations.wfs20 import GetFeature
 from gisserver.output import GeoJsonRenderer
 from gisserver.types import XsdElement
 
+from .utils import YXGML32Renderer
+
 
 class CustomGeoJsonRenderer(GeoJsonRenderer):
     def _format_geojson_value(self, value):
@@ -20,8 +22,8 @@ class CustomGeoJsonRenderer(GeoJsonRenderer):
 class CustomGetFeature(GetFeature):
     # Use CustomGeoJsonRenderer
     output_formats = [
-        OutputFormat("application/gml+xml", version="3.2", renderer_class=output.gml32_renderer, title="GML"),
-        OutputFormat("text/xml", subtype="gml/3.2.1", renderer_class=output.gml32_renderer, title="GML 3.2.1"),
+        OutputFormat("application/gml+xml", version="3.2", renderer_class=YXGML32Renderer, title="GML"),
+        OutputFormat("text/xml", subtype="gml/3.2.1", renderer_class=YXGML32Renderer, title="GML 3.2.1"),
         OutputFormat(
             "application/json",
             subtype="geojson",
