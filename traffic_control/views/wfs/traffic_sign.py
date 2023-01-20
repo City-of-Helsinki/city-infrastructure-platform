@@ -2,56 +2,55 @@ from copy import deepcopy
 
 from django.db.models import Q
 from django.utils import timezone
-from gisserver.features import FeatureType
+from gisserver.features import FeatureField, FeatureType
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
-from traffic_control.views.wfs.common import DescribedFeatureField
 
 _base_fields = [
-    DescribedFeatureField("id", description="ID of the Traffic Sign."),
-    DescribedFeatureField(
+    FeatureField("id", abstract="ID of the Traffic Sign."),
+    FeatureField(
         "owner_name_fi",
         model_attribute="owner.name_fi",
-        description="Entity that's responsible for ordering and maintenance of this sign.",
+        abstract="Entity that's responsible for ordering and maintenance of this sign.",
     ),
-    DescribedFeatureField("location", description="Sign's location (point) in EPSG:3879 coordinates."),
-    DescribedFeatureField("road_name", description="Name of the road this sign is installed on."),
-    DescribedFeatureField("lane_number", description="Which lane does this sign affect."),
-    DescribedFeatureField("lane_type", description="The type of lane this sign affects."),
-    DescribedFeatureField("direction", description="Direction of the sign. North=0, East=90, South=180 and West=270."),
-    DescribedFeatureField("device_type_code", model_attribute="device_type.code", description="Device type code."),
-    DescribedFeatureField(
+    FeatureField("location", abstract="Sign's location (point) in EPSG:3879 coordinates."),
+    FeatureField("road_name", abstract="Name of the road this sign is installed on."),
+    FeatureField("lane_number", abstract="Which lane does this sign affect."),
+    FeatureField("lane_type", abstract="The type of lane this sign affects."),
+    FeatureField("direction", abstract="Direction of the sign. North=0, East=90, South=180 and West=270."),
+    FeatureField("device_type_code", model_attribute="device_type.code", abstract="Device type code."),
+    FeatureField(
         "device_type_description",
         model_attribute="device_type.description",
-        description="Device type description.",
+        abstract="Device type description.",
     ),
-    DescribedFeatureField("height", description="Sign's height measured from the top in centimeters."),
-    DescribedFeatureField(
+    FeatureField("height", abstract="Sign's height measured from the top in centimeters."),
+    FeatureField(
         "mount_type_description_fi",
         model_attribute="mount_type.description_fi",
-        description="Mount type description.",
+        abstract="Mount type description.",
     ),
-    DescribedFeatureField("value", description="Value in the sign, when its numeric."),
-    DescribedFeatureField("size", description="Size of the sign."),
-    DescribedFeatureField("txt", description="Text on the sign."),
-    DescribedFeatureField("reflection_class", description="The sign's reflection class."),
-    DescribedFeatureField("surface_class", description="The sign's surface class."),
-    DescribedFeatureField(
+    FeatureField("value", abstract="Value in the sign, when its numeric."),
+    FeatureField("size", abstract="Size of the sign."),
+    FeatureField("txt", abstract="Text on the sign."),
+    FeatureField("reflection_class", abstract="The sign's reflection class."),
+    FeatureField("surface_class", abstract="The sign's surface class."),
+    FeatureField(
         "validity_period_start",
-        description="Starting date for period that the sign is temporarily valid/invalid.",
+        abstract="Starting date for period that the sign is temporarily valid/invalid.",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "validity_period_end",
-        description="Ending date for period that the sign is temporarily valid/invalid.",
+        abstract="Ending date for period that the sign is temporarily valid/invalid.",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "seasonal_validity_period_start",
-        description="Starting date for period that the sign is valid/invalid",
+        abstract="Starting date for period that the sign is valid/invalid",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "seasonal_validity_period_end",
-        description="Ending date for period that the sign is temporarily valid/invalid",
+        abstract="Ending date for period that the sign is temporarily valid/invalid",
     ),
 ]
 
@@ -65,19 +64,19 @@ TrafficSignRealFeatureType = FeatureType(
     ),
     fields=deepcopy(_base_fields)
     + [
-        DescribedFeatureField("manufacturer", description="Manufacturer of the sign."),
-        DescribedFeatureField("legacy_code", description="Legacy code of the traffic sign type"),
-        DescribedFeatureField("permit_decision_id", description="Permit Decision ID"),
-        DescribedFeatureField("attachment_url", description="URL for additional material bout the signpost."),
-        DescribedFeatureField("installation_id", description="Installation ID"),
-        DescribedFeatureField("installation_details", description="Additional details about the installation."),
-        DescribedFeatureField("installation_date", description="Date that the sign was installed on."),
-        DescribedFeatureField("installation_status", description="Installation status of the sign."),
-        DescribedFeatureField("condition", description="Condition of the signpost"),
-        DescribedFeatureField(
+        FeatureField("manufacturer", abstract="Manufacturer of the sign."),
+        FeatureField("legacy_code", abstract="Legacy code of the traffic sign type"),
+        FeatureField("permit_decision_id", abstract="Permit Decision ID"),
+        FeatureField("attachment_url", abstract="URL for additional material bout the signpost."),
+        FeatureField("installation_id", abstract="Installation ID"),
+        FeatureField("installation_details", abstract="Additional details about the installation."),
+        FeatureField("installation_date", abstract="Date that the sign was installed on."),
+        FeatureField("installation_status", abstract="Installation status of the sign."),
+        FeatureField("condition", abstract="Condition of the signpost"),
+        FeatureField(
             "device_plan_id",
             model_attribute="traffic_sign_plan",
-            description="ID of this Traffic Sign's plan.",
+            abstract="ID of this Traffic Sign's plan.",
         ),
     ],
 )
@@ -92,6 +91,6 @@ TrafficSignPlanFeatureType = FeatureType(
     ),
     fields=deepcopy(_base_fields)
     + [
-        DescribedFeatureField("plan_id", description="ID of the Plan that this traffic sign belongs to."),
+        FeatureField("plan_id", abstract="ID of the Plan that this traffic sign belongs to."),
     ],
 )

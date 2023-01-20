@@ -2,88 +2,87 @@ from copy import deepcopy
 
 from django.db.models import Q
 from django.utils import timezone
-from gisserver.features import FeatureType
+from gisserver.features import FeatureField, FeatureType
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from traffic_control.enums import Lifecycle
-from traffic_control.views.wfs.common import DescribedFeatureField
 
 _base_fields = [
-    DescribedFeatureField("id", description="ID of the Furniture Signpost."),
-    DescribedFeatureField(
+    FeatureField("id", abstract="ID of the Furniture Signpost."),
+    FeatureField(
         "owner_name_fi",
         model_attribute="owner.name_fi",
-        description="Entity that's responsible for ordering and maintenance of this signpost.",
+        abstract="Entity that's responsible for ordering and maintenance of this signpost.",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "responsible_entity_name",
         model_attribute="responsible_entity.name",
-        description="Entity who is responsible for this signpost.",
+        abstract="Entity who is responsible for this signpost.",
     ),
-    DescribedFeatureField("location", description="Signpost's location (point) in EPSG:3879 coordinates."),
-    DescribedFeatureField(
+    FeatureField("location", abstract="Signpost's location (point) in EPSG:3879 coordinates."),
+    FeatureField(
         "location_name_fi",
-        description="Verbose name for the signpost's location, e.g. street, park or island in Finnish.",
+        abstract="Verbose name for the signpost's location, e.g. street, park or island in Finnish.",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "location_name_sw",
-        description="Verbose name for the signpost's location, e.g. street, park or island in Swedish.",
+        abstract="Verbose name for the signpost's location, e.g. street, park or island in Swedish.",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "location_name_en",
-        description="Verbose name for the signpost's location, e.g. street, park or island in English.",
+        abstract="Verbose name for the signpost's location, e.g. street, park or island in English.",
     ),
-    DescribedFeatureField("location_additional_info", description="Additional information about the install location."),
-    DescribedFeatureField(
+    FeatureField("location_additional_info", abstract="Additional information about the install location."),
+    FeatureField(
         "direction",
-        description="The direction, in which a person is standing when looking directly at the signpost."
+        abstract="The direction, in which a person is standing when looking directly at the signpost."
         "e.g. when looking directly north, the direction should be 0, East=90, South=180 and West=270.",
     ),
-    DescribedFeatureField("device_type_code", model_attribute="device_type.code", description="Device type code."),
-    DescribedFeatureField(
+    FeatureField("device_type_code", model_attribute="device_type.code", abstract="Device type code."),
+    FeatureField(
         "device_type_description",
         model_attribute="device_type.description_fi",
-        description="Device type description.",
+        abstract="Device type description.",
     ),
-    DescribedFeatureField("color_code", model_attribute="color.rgb", description="Signpost color in rgb hex format."),
-    DescribedFeatureField("height", description="Signpost height measured from the top in centimeters."),
-    DescribedFeatureField(
+    FeatureField("color_code", model_attribute="color.rgb", abstract="Signpost color in rgb hex format."),
+    FeatureField("height", abstract="Signpost height measured from the top in centimeters."),
+    FeatureField(
         "mount_type_description_fi",
         model_attribute="mount_type.description_fi",
-        description="Mount type description.",
+        abstract="Mount type description.",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "parent_id",
         model_attribute="parent.id",
-        description="ID of the Parent signpost that this signpost is inside of.",
+        abstract="ID of the Parent signpost that this signpost is inside of.",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "order",
-        description="Order of the signposts that are in the same point. "
+        abstract="Order of the signposts that are in the same point. "
         "From top to bottom, left to right, starting from 1.",
     ),
-    DescribedFeatureField("pictogram", description="Description of the pictogram in this signpost."),
-    DescribedFeatureField("value", description="Value in the signposts, when its numeric."),
-    DescribedFeatureField("size", description="Size of the signpost. Filled only if signpost is of non-standard size."),
-    DescribedFeatureField("arrow_direction", description="Direction of the arrow on the signpost."),
-    DescribedFeatureField(
+    FeatureField("pictogram", abstract="Description of the pictogram in this signpost."),
+    FeatureField("value", abstract="Value in the signposts, when its numeric."),
+    FeatureField("size", abstract="Size of the signpost. Filled only if signpost is of non-standard size."),
+    FeatureField("arrow_direction", abstract="Direction of the arrow on the signpost."),
+    FeatureField(
         "target_name_fi",
         model_attribute="target.name_fi",
-        description="Name of the target entity related to this signpost.",
+        abstract="Name of the target entity related to this signpost.",
     ),
-    DescribedFeatureField("content_responsible_entity", description="Entity responsible for this signpost's content."),
-    DescribedFeatureField("text_content_fi", description="Text content of the signpost in Finnish"),
-    DescribedFeatureField("text_content_sw", description="Text content of the signpost in Swedish"),
-    DescribedFeatureField("text_content_en", description="Text content of the signpost in English"),
-    DescribedFeatureField(
+    FeatureField("content_responsible_entity", abstract="Entity responsible for this signpost's content."),
+    FeatureField("text_content_fi", abstract="Text content of the signpost in Finnish"),
+    FeatureField("text_content_sw", abstract="Text content of the signpost in Swedish"),
+    FeatureField("text_content_en", abstract="Text content of the signpost in English"),
+    FeatureField(
         "validity_period_start",
-        description="Starting date for period that the signpost is temporarily valid/invalid.",
+        abstract="Starting date for period that the signpost is temporarily valid/invalid.",
     ),
-    DescribedFeatureField(
+    FeatureField(
         "validity_period_end",
-        description="Ending date for period that the signpost is temporarily valid/invalid.",
+        abstract="Ending date for period that the signpost is temporarily valid/invalid.",
     ),
-    DescribedFeatureField("additional_material_url", description="URL for additional material bout the signpost."),
+    FeatureField("additional_material_url", abstract="URL for additional material bout the signpost."),
 ]
 
 FurnitureSignpostRealFeatureType = FeatureType(
@@ -95,12 +94,12 @@ FurnitureSignpostRealFeatureType = FeatureType(
     ),
     fields=deepcopy(_base_fields)
     + [
-        DescribedFeatureField("installation_date", description="Date that the signpost was installed on."),
-        DescribedFeatureField("condition", description="Condition of the signpost"),
-        DescribedFeatureField(
+        FeatureField("installation_date", abstract="Date that the signpost was installed on."),
+        FeatureField("condition", abstract="Condition of the signpost"),
+        FeatureField(
             "device_plan_id",
             model_attribute="furniture_signpost_plan",
-            description="ID of this Signpost's plan.",
+            abstract="ID of this Signpost's plan.",
         ),
     ],
 )
@@ -114,6 +113,6 @@ FurnitureSignpostPlanFeatureType = FeatureType(
     ),
     fields=deepcopy(_base_fields)
     + [
-        DescribedFeatureField("plan_id", description="ID of the Plan that this signpost belongs to."),
+        FeatureField("plan_id", abstract="ID of the Plan that this signpost belongs to."),
     ],
 )
