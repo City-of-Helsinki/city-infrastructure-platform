@@ -1,7 +1,6 @@
 from typing import Optional, Type
 
 from enumfields import Enum
-from gisserver import output
 from gisserver.features import ComplexFeatureField, FeatureField
 from gisserver.operations.base import OutputFormat
 from gisserver.operations.wfs20 import GetFeature
@@ -31,7 +30,6 @@ class CustomGetFeature(GetFeature):
             renderer_class=CustomGeoJsonRenderer,
             title="GeoJSON",
         ),
-        OutputFormat("text/csv", subtype="csv", charset="utf-8", renderer_class=output.csv_renderer, title="CSV"),
     ]
 
 
