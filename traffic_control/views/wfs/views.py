@@ -14,7 +14,6 @@ from traffic_control.views.wfs.common import CustomGetFeature
 
 class CityInfrastructureWFSView(WFSView):
     service_description = ServiceDescription(title="City Infra WFS API")
-    index_template_name = "wfs/index.html"
 
     accept_operations = {
         "WFS": {
