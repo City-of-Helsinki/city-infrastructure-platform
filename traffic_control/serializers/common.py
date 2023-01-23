@@ -1,7 +1,7 @@
 from typing import Optional
 
 from django.core.exceptions import ValidationError
-from drf_yasg.utils import swagger_serializer_method
+from drf_spectacular.utils import extend_schema_field
 from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
@@ -74,7 +74,7 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
         model = TrafficControlDeviceType
         fields = "__all__"
 
-    @swagger_serializer_method(serializer_or_field=TrafficSignType)
+    @extend_schema_field(field=TrafficSignType)
     def get_traffic_sign_type(self, obj):
         value = obj.traffic_sign_type
         if value:

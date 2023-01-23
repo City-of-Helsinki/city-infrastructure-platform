@@ -1,5 +1,4 @@
-from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from traffic_control.filters import (
     AdditionalSignPlanFilterSet,
@@ -7,7 +6,7 @@ from traffic_control.filters import (
     AdditionalSignRealOperationFilterSet,
 )
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, AdditionalSignRealOperation
-from traffic_control.schema import location_parameter
+from traffic_control.schema import location_search_parameter
 from traffic_control.serializers.additional_sign import (
     AdditionalSignPlanGeoJSONSerializer,
     AdditionalSignPlanSerializer,
@@ -18,32 +17,13 @@ from traffic_control.serializers.additional_sign import (
 from traffic_control.views._common import OperationViewSet, ResponsibleEntityPermission, TrafficControlViewSet
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description=("Create new AdditionalSign Plan")),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all AdditionalSign Plans",
-        manual_parameters=[location_parameter],
-    ),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single AdditionalSign Plan"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description=("Update single AdditionalSign Plan")),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description=("Partially update single AdditionalSign Plan")),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single AdditionalSign Plan"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new AdditionalSign Plan"),
+    list=extend_schema(summary="Retrieve all AdditionalSign Plans", parameters=[location_search_parameter]),
+    retrieve=extend_schema(summary="Retrieve single AdditionalSign Plan"),
+    update=extend_schema(summary="Update single AdditionalSign Plan"),
+    partial_update=extend_schema(summary="Partially update single AdditionalSign Plan"),
+    destroy=extend_schema(summary="Soft-delete single AdditionalSign Plan"),
 )
 class AdditionalSignPlanViewSet(TrafficControlViewSet):
     serializer_classes = {
@@ -55,34 +35,13 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet):
     filterset_class = AdditionalSignPlanFilterSet
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(
-        operation_description=("Create new AdditionalSign Real"),
-    ),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all AdditionalSign Reals",
-        manual_parameters=[location_parameter],
-    ),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single AdditionalSign Real"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description=("Update single AdditionalSign Real")),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description=("Partially update single AdditionalSign Real")),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single AdditionalSign Real"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new AdditionalSign Real"),
+    list=extend_schema(summary="Retrieve all AdditionalSign Reals", parameters=[location_search_parameter]),
+    retrieve=extend_schema(summary="Retrieve single AdditionalSign Real"),
+    update=extend_schema(summary="Update single AdditionalSign Real"),
+    partial_update=extend_schema(summary="Partially update single AdditionalSign Real"),
+    destroy=extend_schema(summary="Soft-delete single AdditionalSign Real"),
 )
 class AdditionalSignRealViewSet(TrafficControlViewSet):
     serializer_classes = {
