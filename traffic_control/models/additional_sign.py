@@ -64,6 +64,13 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         null=True,
         help_text=_("The height of the sign from the ground, measured from the top in centimeters."),
     )
+    size = EnumField(
+        Size,
+        verbose_name=_("Size"),
+        max_length=1,
+        blank=True,
+        null=True,
+    )
     direction = models.IntegerField(
         _("Direction"),
         default=0,
@@ -299,13 +306,6 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         blank=True,
         null=True,
         help_text=_("Date and time on which this sign was last scanned at."),
-    )
-    size = EnumField(
-        Size,
-        verbose_name=_("Size"),
-        max_length=1,
-        blank=True,
-        null=True,
     )
     attachment_url = models.URLField(
         _("Attachment url"),

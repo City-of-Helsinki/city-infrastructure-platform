@@ -69,6 +69,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             "lifecycle",
             "location",
             "height",
+            "size",
             "direction",
             "reflection_class",
             "surface_class",
