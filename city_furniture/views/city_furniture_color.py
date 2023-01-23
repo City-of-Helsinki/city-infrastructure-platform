@@ -1,6 +1,5 @@
-from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
@@ -12,29 +11,13 @@ from traffic_control.permissions import IsAdminUserOrReadOnly
 __all__ = ("CityFurnitureColorViewSet",)
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description="Create new CityFurnitureColor"),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(operation_description="Retrieve all CityFurnitureColors"),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single CityFurnitureColor"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description="Update single CityFurnitureColor"),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single CityFurnitureColor"),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Delete single CityFurnitureColor"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new CityFurnitureColor"),
+    list=extend_schema(summary="Retrieve all CityFurnitureColors"),
+    retrieve=extend_schema(summary="Retrieve single CityFurnitureColor"),
+    update=extend_schema(summary="Update single CityFurnitureColor"),
+    partial_update=extend_schema(summary="Partially update single CityFurnitureColor"),
+    destroy=extend_schema(summary="Soft-delete single CityFurnitureColor"),
 )
 class CityFurnitureColorViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]

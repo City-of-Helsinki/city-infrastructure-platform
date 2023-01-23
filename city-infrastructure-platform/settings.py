@@ -153,7 +153,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
-    "drf_yasg",
+    "drf_spectacular",
     "django_filters",
     "auditlog",
     "colorfield",
@@ -274,6 +274,23 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
     "OIDC_LEEWAY": env("TOKEN_AUTH_MAX_TOKEN_AGE"),
     "GROUP_CLAIM_NAME": "groups",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "COMPONENT_SPLIT_REQUEST": True,
+    "POSTPROCESSING_HOOKS": [
+        "traffic_control.schema.process_enum_values",
+    ],
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SCHEMA_PATH_PREFIX": "/v1",
+    "TITLE": "City Infrastructure Platform REST API",
+    "VERSION": "v1",
+    "LICENSE": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT",
+    },
+    "DESCRIPTION": checkout_dir.file("city-infrastructure-platform/openapi.md").read(),
 }
 
 # django-cors

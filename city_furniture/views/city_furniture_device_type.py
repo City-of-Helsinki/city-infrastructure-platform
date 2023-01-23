@@ -1,6 +1,5 @@
-from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
@@ -12,29 +11,13 @@ from traffic_control.permissions import IsAdminUserOrReadOnly
 __all__ = ("CityFurnitureDeviceTypeViewSet",)
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description="Create new CityFurnitureDeviceType"),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(operation_description="Retrieve all CityFurnitureDeviceTypes"),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single CityFurnitureDeviceType"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description="Update single CityFurnitureDeviceType"),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single CityFurnitureDeviceType"),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Delete single CityFurnitureDeviceType"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new CityFurnitureDeviceType"),
+    list=extend_schema(summary="Retrieve all CityFurnitureDeviceTypes"),
+    retrieve=extend_schema(summary="Retrieve single CityFurnitureDeviceType"),
+    update=extend_schema(summary="Update single CityFurnitureDeviceType"),
+    partial_update=extend_schema(summary="Partially update single CityFurnitureDeviceType"),
+    destroy=extend_schema(summary="Soft-delete single CityFurnitureDeviceType"),
 )
 class CityFurnitureDeviceTypeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]

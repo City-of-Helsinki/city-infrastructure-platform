@@ -1,11 +1,15 @@
-from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
 from traffic_control.filters import SignpostPlanFilterSet, SignpostRealFilterSet, SignpostRealOperationFilterSet
 from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile, SignpostRealOperation
-from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.schema import (
+    file_uuid_parameter,
+    FileUploadSchema,
+    location_search_parameter,
+    MultiFileUploadSchema,
+)
 from traffic_control.serializers.signpost import (
     SignpostPlanFileSerializer,
     SignpostPlanGeoJSONSerializer,
@@ -25,32 +29,13 @@ from traffic_control.views._common import (
 __all__ = ("SignpostPlanViewSet", "SignpostRealViewSet")
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description="Create new Signpost Plan"),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(operation_description="Retrieve all Signpost Plans"),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve single Signpost Plan",
-        manual_parameters=[location_parameter],
-    ),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description="Update single Signpost Plan"),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single Signpost Plan"),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single Signpost Plan"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new Signpost Plan"),
+    list=extend_schema(summary="Retrieve all Signpost Plans"),
+    retrieve=extend_schema(summary="Retrieve single Signpost Plan", parameters=[location_search_parameter]),
+    update=extend_schema(summary="Update single Signpost Plan"),
+    partial_update=extend_schema(summary="Partially update single Signpost Plan"),
+    destroy=extend_schema(summary="Soft-delete single Signpost Plan"),
 )
 class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -64,10 +49,10 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = SignpostPlanFileSerializer
     file_relation = "signpost_plan"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to Signpost Plan",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods=("post",),
+        summary="Add one or more files to Signpost Plan",
+        request=MultiFileUploadSchema,
         responses={200: SignpostPlanFileSerializer(many=True)},
     )
     @action(
@@ -79,17 +64,17 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from Signpost Plan",
-        request_body=None,
+    @extend_schema(
+        methods=("delete",),
+        summary="Delete single file from Signpost Plan",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from Signpost Plan",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods=("patch",),
+        summary="Update single file from Signpost Plan",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: SignpostPlanFileSerializer},
     )
     @action(
@@ -105,32 +90,13 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description="Create new Signpost Real"),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all Signpost Reals",
-        manual_parameters=[location_parameter],
-    ),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single Signpost Real"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description="Update single Signpost Real"),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single Signpost Real"),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single Signpost Real"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new Signpost Real"),
+    list=extend_schema(summary="Retrieve all Signpost Reals", parameters=[location_search_parameter]),
+    retrieve=extend_schema(summary="Retrieve single Signpost Real"),
+    update=extend_schema(summary="Update single Signpost Real"),
+    partial_update=extend_schema(summary="Partially update single Signpost Real"),
+    destroy=extend_schema(summary="Soft-delete single Signpost Real"),
 )
 class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -144,10 +110,10 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = SignpostRealFileSerializer
     file_relation = "signpost_real"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to Signpost Real",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods=("post",),
+        summary="Add one or more files to Signpost Real",
+        request=MultiFileUploadSchema,
         responses={200: SignpostRealFileSerializer(many=True)},
     )
     @action(
@@ -159,17 +125,17 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from Signpost Real",
-        request_body=None,
+    @extend_schema(
+        methods=("delete",),
+        summary="Delete single file from Signpost Real",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from Signpost Real",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods=("patch",),
+        summary="Update single file from Signpost Real",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: SignpostRealFileSerializer},
     )
     @action(

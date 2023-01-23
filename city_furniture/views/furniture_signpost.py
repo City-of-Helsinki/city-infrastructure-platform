@@ -1,5 +1,4 @@
-from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
@@ -24,7 +23,12 @@ from city_furniture.serializers.furniture_signpost import (
     FurnitureSignpostRealOperationSerializer,
     FurnitureSignpostRealSerializer,
 )
-from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.schema import (
+    file_uuid_parameter,
+    FileUploadSchema,
+    location_search_parameter,
+    MultiFileUploadSchema,
+)
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
@@ -38,32 +42,13 @@ __all__ = (
 )
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description="Create new FurnitureSignpost Plan"),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all FurnitureSignpost Plans",
-        manual_parameters=[location_parameter],
-    ),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single FurnitureSignpost Plan"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description="Update single FurnitureSignpost Plan"),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single FurnitureSignpost Plan"),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single FurnitureSignpost Plan"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new FurnitureSignpost Plan"),
+    list=extend_schema(summary="Retrieve all FurnitureSignpost Plans", parameters=[location_search_parameter]),
+    retrieve=extend_schema(summary="Retrieve single FurnitureSignpost Plan"),
+    update=extend_schema(summary="Update single FurnitureSignpost Plan"),
+    partial_update=extend_schema(summary="Partially update single FurnitureSignpost Plan"),
+    destroy=extend_schema(summary="Soft-delete single FurnitureSignpost Plan"),
 )
 class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -77,10 +62,10 @@ class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = FurnitureSignpostPlanFileSerializer
     file_relation = "furniture_signpost_plan"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to Furniture Signpost Plan",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods=("post",),
+        summary="Add one or more files to Furniture Signpost Plan",
+        request=MultiFileUploadSchema,
         responses={200: FurnitureSignpostPlanFileSerializer(many=True)},
     )
     @action(
@@ -92,17 +77,17 @@ class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from Furniture Signpost Plan",
-        request_body=None,
+    @extend_schema(
+        methods=("delete",),
+        summary="Delete single file from Furniture Signpost Plan",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from Furniture Signpost Plan",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods=("patch",),
+        summary="Update single file from Furniture Signpost Plan",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: FurnitureSignpostPlanFileSerializer},
     )
     @action(
@@ -118,32 +103,13 @@ class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description="Create new FurnitureSignpost Real"),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all FurnitureSignpost Reals",
-        manual_parameters=[location_parameter],
-    ),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single FurnitureSignpost Real"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description="Update single FurnitureSignpost Real"),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single FurnitureSignpost Real"),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single FurnitureSignpost Real"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new FurnitureSignpost Real"),
+    list=extend_schema(summary="Retrieve all FurnitureSignpost Reals", parameters=[location_search_parameter]),
+    retrieve=extend_schema(summary="Retrieve single FurnitureSignpost Real"),
+    update=extend_schema(summary="Update single FurnitureSignpost Real"),
+    partial_update=extend_schema(summary="Partially update single FurnitureSignpost Real"),
+    destroy=extend_schema(summary="Soft-delete single FurnitureSignpost Real"),
 )
 class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -157,10 +123,10 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = FurnitureSignpostRealFileSerializer
     file_relation = "furniture_signpost_real"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to Furniture Signpost Real",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods=("post",),
+        summary="Add one or more files to Furniture Signpost Real",
+        request=MultiFileUploadSchema,
         responses={200: FurnitureSignpostRealFileSerializer(many=True)},
     )
     @action(
@@ -172,17 +138,17 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from Furniture Signpost Real",
-        request_body=None,
+    @extend_schema(
+        methods=("delete",),
+        summary="Delete single file from Furniture Signpost Real",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from Furniture Signpost Real",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods=("patch",),
+        summary="Update single file from Furniture Signpost Real",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: FurnitureSignpostRealFileSerializer},
     )
     @action(

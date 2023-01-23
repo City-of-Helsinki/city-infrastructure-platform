@@ -1,5 +1,4 @@
-from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 
@@ -15,7 +14,12 @@ from traffic_control.models import (
     TrafficLightRealFile,
     TrafficLightRealOperation,
 )
-from traffic_control.schema import file_uuid_parameter, FileUploadSchema, location_parameter, MultiFileUploadSchema
+from traffic_control.schema import (
+    file_uuid_parameter,
+    FileUploadSchema,
+    location_search_parameter,
+    MultiFileUploadSchema,
+)
 from traffic_control.serializers.traffic_light import (
     TrafficLightPlanFileSerializer,
     TrafficLightPlanGeoJSONSerializer,
@@ -35,32 +39,13 @@ from traffic_control.views._common import (
 __all__ = ("TrafficLightPlanViewSet", "TrafficLightRealViewSet")
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description="Create new TrafficLight Plan"),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all TrafficLight Plans",
-        manual_parameters=[location_parameter],
-    ),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficLight Plan"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description="Update single TrafficLight Plan"),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single TrafficLight Plan"),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single TrafficLight Plan"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new TrafficLight Plan"),
+    list=extend_schema(summary="Retrieve all TrafficLight Plans", parameters=[location_search_parameter]),
+    retrieve=extend_schema(summary="Retrieve single TrafficLight Plan"),
+    update=extend_schema(summary="Update single TrafficLight Plan"),
+    partial_update=extend_schema(summary="Partially update single TrafficLight Plan"),
+    destroy=extend_schema(summary="Soft-delete single TrafficLight Plan"),
 )
 class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -74,10 +59,10 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = TrafficLightPlanFileSerializer
     file_relation = "traffic_light_plan"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to TrafficLight Plan",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods=("post",),
+        summary="Add one or more files to TrafficLight Plan",
+        request=MultiFileUploadSchema,
         responses={200: TrafficLightPlanFileSerializer(many=True)},
     )
     @action(
@@ -89,17 +74,17 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from TrafficLight Plan",
-        request_body=None,
+    @extend_schema(
+        methods=("delete",),
+        summary="Delete single file from TrafficLight Plan",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from TrafficLight Plan",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods=("patch",),
+        summary="Update single file from TrafficLight Plan",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: TrafficLightPlanFileSerializer},
     )
     @action(
@@ -115,32 +100,13 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
-@method_decorator(
-    name="create",
-    decorator=swagger_auto_schema(operation_description="Create new TrafficLight Real"),
-)
-@method_decorator(
-    name="list",
-    decorator=swagger_auto_schema(
-        operation_description="Retrieve all TrafficLight Reals",
-        manual_parameters=[location_parameter],
-    ),
-)
-@method_decorator(
-    name="retrieve",
-    decorator=swagger_auto_schema(operation_description="Retrieve single TrafficLight Real"),
-)
-@method_decorator(
-    name="update",
-    decorator=swagger_auto_schema(operation_description="Update single TrafficLight Real"),
-)
-@method_decorator(
-    name="partial_update",
-    decorator=swagger_auto_schema(operation_description="Partially update single TrafficLight Real"),
-)
-@method_decorator(
-    name="destroy",
-    decorator=swagger_auto_schema(operation_description="Soft-delete single TrafficLight Real"),
+@extend_schema_view(
+    create=extend_schema(summary="Create new TrafficLight Real"),
+    list=extend_schema(summary="Retrieve all TrafficLight Reals", parameters=[location_search_parameter]),
+    retrieve=extend_schema(summary="Retrieve single TrafficLight Real"),
+    update=extend_schema(summary="Update single TrafficLight Real"),
+    partial_update=extend_schema(summary="Partially update single TrafficLight Real"),
+    destroy=extend_schema(summary="Soft-delete single TrafficLight Real"),
 )
 class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
@@ -154,10 +120,10 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_serializer = TrafficLightRealFileSerializer
     file_relation = "traffic_light_real"
 
-    @swagger_auto_schema(
-        method="post",
-        operation_description="Add one or more files to TrafficLight Real",
-        request_body=MultiFileUploadSchema,
+    @extend_schema(
+        methods=("post",),
+        summary="Add one or more files to TrafficLight Real",
+        request=MultiFileUploadSchema,
         responses={200: TrafficLightRealFileSerializer(many=True)},
     )
     @action(
@@ -169,17 +135,17 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     def post_files(self, request, *args, **kwargs):
         return super().post_files(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        method="delete",
-        operation_description="Delete single file from TrafficLight Real",
-        request_body=None,
+    @extend_schema(
+        methods=("delete",),
+        summary="Delete single file from TrafficLight Real",
+        request=None,
         responses={204: ""},
     )
-    @swagger_auto_schema(
-        method="patch",
-        operation_description="Update single file from TrafficLight Real",
-        manual_parameters=[file_uuid_parameter],
-        request_body=FileUploadSchema,
+    @extend_schema(
+        methods=("patch",),
+        summary="Update single file from TrafficLight Real",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
         responses={200: TrafficLightRealFileSerializer},
     )
     @action(
