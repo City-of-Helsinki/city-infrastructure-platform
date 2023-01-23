@@ -21,7 +21,7 @@ django-helusers = "^0.7.1"
 django-import-export = "^2.7.1"
 django-storages = {extras = ["azure"], version = "^1.12.3"}
 djangorestframework = "^3.13.1"
-djangorestframework-gis = "^0.18"
+djangorestframework-gis = "^1.0.0"
 drf-nested-routers = "^0.93.4"
 drf-oidc-auth = "^2.0.0"
 drf-yasg = {extras = ["validation"], version = "^1.20.0"}
