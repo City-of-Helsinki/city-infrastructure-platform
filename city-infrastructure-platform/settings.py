@@ -36,6 +36,8 @@ env = environ.Env(
     TIER=(str, "dev"),  # one of: prod, qa, stage, test, dev
     SECRET_KEY=(str, ""),
     VAR_ROOT=(str, default_var_root),
+    HOST=(str, "localhost"),
+    HOST_PUBLIC=(str, ""),
     ALLOWED_HOSTS=(list, []),
     CORS_ALLOWED_ORIGIN_REGEXES=(list, []),
     TRUST_X_FORWARDED_HOST=(bool, False),
@@ -91,6 +93,7 @@ SECRET_KEY = env("SECRET_KEY")
 if DEBUG and not SECRET_KEY:
     SECRET_KEY = "xxx"
 
+HOSTNAME = env("HOST_PUBLIC") or env("HOST")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
 if OIDC_AUTHENTICATION_ENABLED and (
