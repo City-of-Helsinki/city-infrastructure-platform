@@ -36,6 +36,7 @@ _base_fields = [
     FeatureField("lane_number", abstract="Which lane does this sign affect."),
     FeatureField("lane_type", abstract="The type of lane this sign affects."),
     FeatureField("direction", abstract="Direction of the sign. North=0, East=90, South=180 and West=270."),
+    FeatureField("size", abstract="Size of the additional sign."),
     FeatureField("height", abstract="Sign's height measured from the top in centimeters."),
     FeatureField("color", abstract="Color of the additional sign."),
     FeatureField(

@@ -33,6 +33,7 @@ from traffic_control.resources.additional_sign import (
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 shared_initial_values = {
+    "size": Size.MEDIUM,
     "reflection_class": Reflection.R1,
     "surface_class": Surface.FLAT,
     "color": Color.BLUE,
@@ -94,7 +95,7 @@ class AdditionalSignPlanAdmin(
         ),
         (
             _("Physical properties"),
-            {"fields": ("height", "color", "reflection_class", "surface_class")},
+            {"fields": ("size", "height", "color", "reflection_class", "surface_class")},
         ),
         (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
         (
@@ -320,7 +321,6 @@ class AdditionalSignRealAdmin(
     inlines = (AdditionalSignRealOperationInline,)
     initial_values = {
         **shared_initial_values,
-        "size": Size.MEDIUM,
         "condition": Condition.VERY_GOOD,
         "installation_status": InstallationStatus.IN_USE,
     }
