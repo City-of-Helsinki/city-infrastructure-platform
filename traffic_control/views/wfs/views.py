@@ -1,3 +1,4 @@
+from django.conf import settings
 from gisserver.features import ServiceDescription
 from gisserver.operations import wfs20
 from gisserver.views import WFSView
@@ -14,6 +15,8 @@ from traffic_control.views.wfs.common import CustomGetFeature
 
 class CityInfrastructureWFSView(WFSView):
     service_description = ServiceDescription(title="City Infra WFS API")
+
+    xml_namespace = f"http://{settings.HOSTNAME}/wfs"
 
     accept_operations = {
         "WFS": {

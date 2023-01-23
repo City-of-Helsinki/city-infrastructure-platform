@@ -3,6 +3,7 @@ from typing import List, Optional, Union
 from urllib.parse import urlencode
 from xml.etree import ElementTree
 
+from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.urls import reverse
 from rest_framework import status
@@ -14,7 +15,7 @@ test_point_helsinki = Point(25496751.5, 6673129.5, 1.5, srid=3879)
 EPSG_3879_URN = "urn:ogc:def:crs:EPSG::3879"
 
 namespaces = {
-    "app": "http://example.org/gisserver",
+    "app": f"http://{settings.HOSTNAME}/wfs",
     "wfs": "http://www.opengis.net/wfs/2.0",
     "gml": "http://www.opengis.net/gml/3.2",
     "xsi": "http://www.w3.org/2001/XMLSchema-instance",
