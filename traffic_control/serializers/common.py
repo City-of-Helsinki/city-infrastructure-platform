@@ -72,7 +72,7 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
 
     class Meta:
         model = TrafficControlDeviceType
-        exclude = ("legacy_code", "legacy_description")
+        fields = "__all__"
 
     @swagger_serializer_method(serializer_or_field=TrafficSignType)
     def get_traffic_sign_type(self, obj):
