@@ -1,13 +1,23 @@
 from typing import Optional, Type
 
+from django.conf import settings
 from enumfields import Enum
 from gisserver.features import ComplexFeatureField, FeatureField
+from gisserver.geometries import CRS
 from gisserver.operations.base import OutputFormat
 from gisserver.operations.wfs20 import GetFeature
 from gisserver.output import GeoJsonRenderer
 from gisserver.types import XsdElement
 
 from .utils import YXGML32Renderer
+
+DEFAULT_CRS = CRS.from_srid(settings.SRID)
+
+OTHER_CRS = [
+    CRS.from_srid(3067),  # ETRS89 / TM35FIN(E,N)
+    CRS.from_srid(4326),  # WGS84
+    CRS.from_srid(3857),  # WGS84 / Pseudo-Mercator
+]
 
 
 class CustomGeoJsonRenderer(GeoJsonRenderer):

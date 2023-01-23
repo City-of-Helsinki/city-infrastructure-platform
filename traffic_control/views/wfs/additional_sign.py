@@ -6,6 +6,7 @@ from gisserver.features import FeatureField, FeatureType
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
+from traffic_control.views.wfs.common import DEFAULT_CRS, OTHER_CRS
 
 _base_fields = [
     FeatureField("id", abstract="ID of the Additional Sign."),
@@ -63,6 +64,8 @@ _base_fields = [
 ]
 
 AdditionalSignRealFeatureType = FeatureType(
+    crs=DEFAULT_CRS,
+    other_crs=OTHER_CRS,
     queryset=AdditionalSignReal.objects.active()
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
     .filter(
@@ -89,6 +92,8 @@ AdditionalSignRealFeatureType = FeatureType(
 )
 
 AdditionalSignPlanFeatureType = FeatureType(
+    crs=DEFAULT_CRS,
+    other_crs=OTHER_CRS,
     queryset=AdditionalSignPlan.objects.active()
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
     .filter(
