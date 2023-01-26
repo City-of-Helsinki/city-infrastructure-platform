@@ -12,11 +12,8 @@ from traffic_control.schema import TrafficSignType
 from traffic_control.validators import validate_structured_content
 
 
+# Don't include object's user information to unauthenticated requests
 class HideFromAnonUserSerializerMixin:
-    """
-    Don't include object's user information to unauthenticated requests
-    """
-
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         user = self.context["request"].user
