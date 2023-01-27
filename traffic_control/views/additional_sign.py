@@ -56,6 +56,14 @@ class AdditionalSignRealViewSet(TrafficControlViewSet):
         return super().partial_update(request, *args, **kwargs)
 
 
+@extend_schema_view(
+    create=extend_schema(summary="Add a new operation to an additional sign real"),
+    list=extend_schema(summary="Retrieve all operations of an additional sign real"),
+    retrieve=extend_schema(summary="Retrieve an operation of an additional sign real"),
+    update=extend_schema(summary="Update an operation of an additional sign real"),
+    partial_update=extend_schema(summary="Partially update an operation of an additional sign real"),
+    destroy=extend_schema(summary="Delete an operation of an additional sign real"),
+)
 class AdditionalSignRealOperationViewSet(OperationViewSet):
     serializer_class = AdditionalSignRealOperationSerializer
     queryset = AdditionalSignRealOperation.objects.all()

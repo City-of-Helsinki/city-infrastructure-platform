@@ -208,6 +208,14 @@ class MountTypeViewSet(ModelViewSet):
     filterset_class = MountTypeFilterSet
 
 
+@extend_schema_view(
+    create=extend_schema(summary="Add a new operation to a mount real"),
+    list=extend_schema(summary="Retrieve all operations of a mount real"),
+    retrieve=extend_schema(summary="Retrieve an operation of a mount real"),
+    update=extend_schema(summary="Update an operation of a mount real"),
+    partial_update=extend_schema(summary="Partially update an operation of a mount real"),
+    destroy=extend_schema(summary="Delete an operation of a mount real"),
+)
 class MountRealOperationViewSet(OperationViewSet):
     serializer_class = MountRealOperationSerializer
     queryset = MountRealOperation.objects.all()

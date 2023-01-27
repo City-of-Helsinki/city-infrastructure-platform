@@ -164,6 +164,14 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@extend_schema_view(
+    create=extend_schema(summary="Add a new operation to a furniture signpost real"),
+    list=extend_schema(summary="Retrieve all operations of a furniture signpost real"),
+    retrieve=extend_schema(summary="Retrieve an operation of a furniture signpost real"),
+    update=extend_schema(summary="Update an operation of a furniture signpost real"),
+    partial_update=extend_schema(summary="Partially update an operation of a furniture signpost real"),
+    destroy=extend_schema(summary="Delete an operation of a furniture signpost real"),
+)
 class FurnitureSignpostRealOperationViewSet(OperationViewSet):
     serializer_class = FurnitureSignpostRealOperationSerializer
     queryset = FurnitureSignpostRealOperation.objects.all()

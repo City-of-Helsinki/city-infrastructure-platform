@@ -192,6 +192,14 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@extend_schema_view(
+    create=extend_schema(summary="Add a new operation to a traffic sign real"),
+    list=extend_schema(summary="Retrieve all operations of a traffic sign real"),
+    retrieve=extend_schema(summary="Retrieve an operation of a traffic sign real"),
+    update=extend_schema(summary="Update an operation of a traffic sign real"),
+    partial_update=extend_schema(summary="Partially update an operation of a traffic sign real"),
+    destroy=extend_schema(summary="Delete an operation of a traffic sign real"),
+)
 class TrafficSignRealOperationViewSet(OperationViewSet):
     serializer_class = TrafficSignRealOperationSerializer
     queryset = TrafficSignRealOperation.objects.all()
