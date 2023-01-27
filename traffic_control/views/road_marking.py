@@ -161,6 +161,14 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@extend_schema_view(
+    create=extend_schema(summary="Add a new operation to a road marking real"),
+    list=extend_schema(summary="Retrieve all operations of a road marking real"),
+    retrieve=extend_schema(summary="Retrieve an operation of a road marking real"),
+    update=extend_schema(summary="Update an operation of a road marking real"),
+    partial_update=extend_schema(summary="Partially update an operation of a road marking real"),
+    destroy=extend_schema(summary="Delete an operation of a road marking real"),
+)
 class RoadMarkingRealOperationViewSet(OperationViewSet):
     serializer_class = RoadMarkingRealOperationSerializer
     queryset = RoadMarkingRealOperation.objects.all()

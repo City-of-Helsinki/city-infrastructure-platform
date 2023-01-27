@@ -151,6 +151,14 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@extend_schema_view(
+    create=extend_schema(summary="Add a new operation to a barrier real"),
+    list=extend_schema(summary="Retrieve all operations of a barrier real"),
+    retrieve=extend_schema(summary="Retrieve an operation of a barrier real"),
+    update=extend_schema(summary="Update an operation of a barrier real"),
+    partial_update=extend_schema(summary="Partially update an operation of a barrier real"),
+    destroy=extend_schema(summary="Delete an operation of a barrier real"),
+)
 class BarrierRealOperationViewSet(OperationViewSet):
     serializer_class = BarrierRealOperationSerializer
     queryset = BarrierRealOperation.objects.all()

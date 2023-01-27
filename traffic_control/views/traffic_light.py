@@ -161,6 +161,14 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
         return super().change_file(request, file_pk, *args, **kwargs)
 
 
+@extend_schema_view(
+    create=extend_schema(summary="Add a new operation to a traffic light real"),
+    list=extend_schema(summary="Retrieve all operations of a traffic light real"),
+    retrieve=extend_schema(summary="Retrieve an operation of a traffic light real"),
+    update=extend_schema(summary="Update an operation of a traffic light real"),
+    partial_update=extend_schema(summary="Partially update an operation of a traffic light real"),
+    destroy=extend_schema(summary="Delete an operation of a traffic light real"),
+)
 class TrafficLightRealOperationViewSet(OperationViewSet):
     serializer_class = TrafficLightRealOperationSerializer
     queryset = TrafficLightRealOperation.objects.all()
