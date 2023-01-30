@@ -33,6 +33,14 @@ location_search_parameter = OpenApiParameter(
     ],
 )
 
+geo_format_parameter = OpenApiParameter(
+    name="geo_format",
+    enum=("default", "geojson"),
+    required=False,
+    description="Determine whether the location should be in EWKT (default) or GeoJSON format.",
+)
+
+
 file_uuid_parameter = OpenApiParameter(
     name="file_pk",
     type=OpenApiTypes.UUID,
