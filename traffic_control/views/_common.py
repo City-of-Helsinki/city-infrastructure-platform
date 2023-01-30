@@ -1,6 +1,7 @@
 from django.core import exceptions
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import permissions, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -12,10 +13,12 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.permissions import ObjectInsideOperationalAreaOrAnonReadOnly
+from traffic_control.schema import geo_format_parameter
 
 __all__ = ("FileUploadViews", "TrafficControlViewSet", "OperationViewSet")
 
 
+@extend_schema(methods=("get",), parameters=[geo_format_parameter])
 class TrafficControlViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
