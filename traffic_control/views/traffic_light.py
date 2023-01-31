@@ -77,6 +77,7 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from TrafficLight Plan",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )
@@ -138,6 +139,7 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from TrafficLight Real",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )

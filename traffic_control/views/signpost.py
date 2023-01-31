@@ -67,6 +67,7 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from Signpost Plan",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )
@@ -128,6 +129,7 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from Signpost Real",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )
