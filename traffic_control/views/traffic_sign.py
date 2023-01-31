@@ -106,9 +106,9 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from TrafficSign Plan",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
-        parameters=[file_uuid_parameter],
     )
     @extend_schema(
         methods=("patch",),
@@ -168,9 +168,9 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from TrafficSign Real",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
-        parameters=[file_uuid_parameter],
     )
     @extend_schema(
         methods=("patch",),

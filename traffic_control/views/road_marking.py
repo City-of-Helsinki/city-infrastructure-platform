@@ -77,6 +77,7 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from RoadMarking Plan",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )
@@ -138,6 +139,7 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from RoadMarking Real",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )

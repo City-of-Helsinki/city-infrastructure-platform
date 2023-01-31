@@ -87,6 +87,7 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from Mount Plan",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )
@@ -149,6 +150,7 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from Mount Real",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )

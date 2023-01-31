@@ -67,6 +67,7 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from Barrier Plan",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )
@@ -128,6 +129,7 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from Barrier Real",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )

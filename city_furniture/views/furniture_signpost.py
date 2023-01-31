@@ -80,6 +80,7 @@ class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from Furniture Signpost Plan",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )
@@ -141,6 +142,7 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     @extend_schema(
         methods=("delete",),
         summary="Delete single file from Furniture Signpost Real",
+        parameters=[file_uuid_parameter],
         request=None,
         responses={204: ""},
     )
