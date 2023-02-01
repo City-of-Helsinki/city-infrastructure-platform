@@ -23,6 +23,7 @@ from traffic_control.models import (
 )
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.schema import (
+    file_create_serializer,
     file_uuid_parameter,
     FileUploadSchema,
     location_search_parameter,
@@ -73,7 +74,7 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to Mount Plan",
         request=MultiFileUploadSchema,
-        responses={200: MountPlanFileSerializer(many=True)},
+        responses={200: file_create_serializer(MountPlanFileSerializer)},
     )
     @action(
         methods=("POST",),
@@ -136,7 +137,7 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to Mount Real",
         request=MultiFileUploadSchema,
-        responses={200: MountRealFileSerializer(many=True)},
+        responses={200: file_create_serializer(MountRealFileSerializer)},
     )
     @action(
         methods=("POST",),

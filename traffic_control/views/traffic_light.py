@@ -15,6 +15,7 @@ from traffic_control.models import (
     TrafficLightRealOperation,
 )
 from traffic_control.schema import (
+    file_create_serializer,
     file_uuid_parameter,
     FileUploadSchema,
     location_search_parameter,
@@ -63,7 +64,7 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to TrafficLight Plan",
         request=MultiFileUploadSchema,
-        responses={200: TrafficLightPlanFileSerializer(many=True)},
+        responses={200: file_create_serializer(TrafficLightPlanFileSerializer)},
     )
     @action(
         methods=("POST",),
@@ -125,7 +126,7 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to TrafficLight Real",
         request=MultiFileUploadSchema,
-        responses={200: TrafficLightRealFileSerializer(many=True)},
+        responses={200: file_create_serializer(TrafficLightRealFileSerializer)},
     )
     @action(
         methods=("POST",),

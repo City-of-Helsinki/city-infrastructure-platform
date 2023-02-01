@@ -24,6 +24,7 @@ from city_furniture.serializers.furniture_signpost import (
     FurnitureSignpostRealSerializer,
 )
 from traffic_control.schema import (
+    file_create_serializer,
     file_uuid_parameter,
     FileUploadSchema,
     location_search_parameter,
@@ -66,7 +67,7 @@ class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to Furniture Signpost Plan",
         request=MultiFileUploadSchema,
-        responses={200: FurnitureSignpostPlanFileSerializer(many=True)},
+        responses={200: file_create_serializer(FurnitureSignpostPlanFileSerializer)},
     )
     @action(
         methods=("POST",),
@@ -128,7 +129,7 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to Furniture Signpost Real",
         request=MultiFileUploadSchema,
-        responses={200: FurnitureSignpostRealFileSerializer(many=True)},
+        responses={200: file_create_serializer(FurnitureSignpostRealFileSerializer)},
     )
     @action(
         methods=("POST",),

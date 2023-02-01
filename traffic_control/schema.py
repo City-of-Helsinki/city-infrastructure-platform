@@ -1,7 +1,7 @@
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
 from drf_spectacular.plumbing import build_bearer_security_scheme_object
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiExample, OpenApiParameter
+from drf_spectacular.utils import inline_serializer, OpenApiExample, OpenApiParameter
 from enumfields import Enum
 from rest_framework import serializers
 
@@ -47,6 +47,19 @@ file_uuid_parameter = OpenApiParameter(
     location=OpenApiParameter.PATH,
     description="File object UUID",
 )
+
+
+def file_create_serializer(file_serializer: serializers.ModelSerializer):
+    """
+    Return the schema (inline serializer) for file post successful response.
+    """
+    name = file_serializer.Meta.model.__name__ + "CreateResponse"
+    return inline_serializer(
+        name=name,
+        fields={
+            "files": file_serializer(many=True),
+        },
+    )
 
 
 def process_enum_values(generator, request, public, result):

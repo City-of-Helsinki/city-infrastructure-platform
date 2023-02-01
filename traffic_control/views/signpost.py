@@ -5,6 +5,7 @@ from rest_framework.parsers import MultiPartParser
 from traffic_control.filters import SignpostPlanFilterSet, SignpostRealFilterSet, SignpostRealOperationFilterSet
 from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile, SignpostRealOperation
 from traffic_control.schema import (
+    file_create_serializer,
     file_uuid_parameter,
     FileUploadSchema,
     location_search_parameter,
@@ -53,7 +54,7 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to Signpost Plan",
         request=MultiFileUploadSchema,
-        responses={200: SignpostPlanFileSerializer(many=True)},
+        responses={200: file_create_serializer(SignpostPlanFileSerializer)},
     )
     @action(
         methods=("POST",),
@@ -115,7 +116,7 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to Signpost Real",
         request=MultiFileUploadSchema,
-        responses={200: SignpostRealFileSerializer(many=True)},
+        responses={200: file_create_serializer(SignpostRealFileSerializer)},
     )
     @action(
         methods=("POST",),
