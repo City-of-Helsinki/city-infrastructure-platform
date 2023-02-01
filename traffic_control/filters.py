@@ -1,6 +1,6 @@
 from django.contrib.gis.db.models import GeometryField
 from django.utils.translation import gettext_lazy as _
-from django_filters import ChoiceFilter, Filter
+from django_filters import ChoiceFilter, Filter, UUIDFilter
 from django_filters.rest_framework import FilterSet
 from rest_framework.exceptions import NotFound
 from rest_framework_gis.filters import GeometryFilter
@@ -39,7 +39,7 @@ from traffic_control.models import (
 from traffic_control.models.common import OperationType
 
 
-class OperationalAreaFilter(Filter):
+class OperationalAreaFilter(UUIDFilter):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
