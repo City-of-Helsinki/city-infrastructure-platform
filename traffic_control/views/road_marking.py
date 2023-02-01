@@ -15,6 +15,7 @@ from traffic_control.models import (
     RoadMarkingRealOperation,
 )
 from traffic_control.schema import (
+    file_create_serializer,
     file_uuid_parameter,
     FileUploadSchema,
     location_search_parameter,
@@ -63,7 +64,7 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to RoadMarking Plan",
         request=MultiFileUploadSchema,
-        responses={200: RoadMarkingPlanFileSerializer(many=True)},
+        responses={200: file_create_serializer(RoadMarkingPlanFileSerializer)},
     )
     @action(
         methods=("POST",),
@@ -125,7 +126,7 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to RoadMarking Real",
         request=MultiFileUploadSchema,
-        responses={200: RoadMarkingRealFileSerializer(many=True)},
+        responses={200: file_create_serializer(RoadMarkingRealFileSerializer)},
     )
     @action(
         methods=("POST",),

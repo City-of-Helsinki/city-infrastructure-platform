@@ -5,6 +5,7 @@ from rest_framework.parsers import MultiPartParser
 from traffic_control.filters import BarrierPlanFilterSet, BarrierRealFilterSet, BarrierRealOperationFilterSet
 from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile, BarrierRealOperation
 from traffic_control.schema import (
+    file_create_serializer,
     file_uuid_parameter,
     FileUploadSchema,
     location_search_parameter,
@@ -53,7 +54,7 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to Barrier Plan",
         request=MultiFileUploadSchema,
-        responses={200: BarrierPlanFileSerializer(many=True)},
+        responses={200: file_create_serializer(BarrierPlanFileSerializer)},
     )
     @action(
         methods=("POST",),
@@ -115,7 +116,7 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to Barrier Real",
         request=MultiFileUploadSchema,
-        responses={200: BarrierRealFileSerializer(many=True)},
+        responses={200: file_create_serializer(BarrierRealFileSerializer)},
     )
     @action(
         methods=("POST",),

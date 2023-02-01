@@ -21,6 +21,7 @@ from traffic_control.models import (
 )
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.schema import (
+    file_create_serializer,
     file_uuid_parameter,
     FileUploadSchema,
     location_search_parameter,
@@ -92,7 +93,7 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to TrafficSign Plan",
         request=MultiFileUploadSchema,
-        responses={200: TrafficSignPlanFileSerializer(many=True)},
+        responses={200: file_create_serializer(TrafficSignPlanFileSerializer)},
     )
     @action(
         methods=("POST",),
@@ -154,7 +155,7 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
         methods=("post",),
         summary="Add one or more files to TrafficSign Real",
         request=MultiFileUploadSchema,
-        responses={200: TrafficSignRealFileSerializer(many=True)},
+        responses={200: file_create_serializer(TrafficSignRealFileSerializer)},
     )
     @action(
         methods=("POST",),
