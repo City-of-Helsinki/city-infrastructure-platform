@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path
+from django.views.decorators.cache import cache_page
 from drf_spectacular.views import SpectacularRedocView, SpectacularSwaggerView, SpectacularYAMLAPIView
 from rest_framework import routers
 from rest_framework_nested.routers import NestedSimpleRouter
@@ -116,7 +117,14 @@ urlpatterns = [
     path("v1/", include(furniture_signpost_operations_router.urls)),
     path("auth/", include("social_django.urls", namespace="social")),
     path("wfs/", CityInfrastructureWFSView.as_view(), name="wfs-city-infrastructure"),
-    path("openapi.yaml", SpectacularYAMLAPIView.as_view(), name="schema-yaml"),
+]
+
+schema_yaml_view = SpectacularYAMLAPIView.as_view()
+if not settings.DEBUG:
+    schema_yaml_view = cache_page(60 * 10)(schema_yaml_view)
+
+urlpatterns += [
+    path("openapi.yaml", schema_yaml_view, name="schema-yaml"),
     path("swagger/", SpectacularSwaggerView.as_view(url_name="schema-yaml"), name="schema-swagger-ui"),
     path("redoc/", SpectacularRedocView.as_view(url_name="schema-yaml"), name="schema-redoc"),
 ]
