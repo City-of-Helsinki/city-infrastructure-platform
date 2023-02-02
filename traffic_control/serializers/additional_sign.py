@@ -4,7 +4,11 @@ from rest_framework_gis.fields import GeometryField
 
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, OperationType
 from traffic_control.models.additional_sign import AdditionalSignRealOperation
-from traffic_control.serializers.common import HideFromAnonUserSerializerMixin, StructuredContentValidator
+from traffic_control.serializers.common import (
+    EwktPointField,
+    HideFromAnonUserSerializerMixin,
+    StructuredContentValidator,
+)
 
 
 class AdditionalSignPlanSerializer(
@@ -12,6 +16,8 @@ class AdditionalSignPlanSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktPointField()
+
     class Meta:
         model = AdditionalSignPlan
         read_only_fields = (
@@ -57,6 +63,7 @@ class AdditionalSignRealSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktPointField()
     operations = AdditionalSignRealOperationSerializer(many=True, required=False, read_only=True)
 
     class Meta:

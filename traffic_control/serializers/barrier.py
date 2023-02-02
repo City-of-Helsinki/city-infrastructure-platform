@@ -12,7 +12,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.barrier import BarrierRealOperation
-from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import EwktGeometryField, HideFromAnonUserSerializerMixin
 
 
 class BarrierPlanFileSerializer(serializers.ModelSerializer):
@@ -26,6 +26,7 @@ class BarrierPlanSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktGeometryField()
     files = BarrierPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER)
@@ -81,6 +82,7 @@ class BarrierRealSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktGeometryField()
     files = BarrierRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER)

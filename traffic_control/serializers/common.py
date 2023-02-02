@@ -12,6 +12,65 @@ from traffic_control.schema import TrafficSignType
 from traffic_control.validators import validate_structured_content
 
 
+@extend_schema_field(
+    {
+        "type": "string",
+        "format": "EWKT",
+        "example": "SRID=3879;POINT Z (25496751.5 6673129.5 1.5)",
+    }
+)
+class EwktPointField(serializers.CharField):
+    pass
+
+
+@extend_schema_field(
+    {
+        "type": "string",
+        "format": "EWKT",
+        "example": "SRID=3879;POLYGON Z (("
+        + ", ".join(
+            [
+                "25497733.5 6672927.5 0",
+                "25497946.5 6673032.5 0",
+                "25498653.5 6673034.5 0",
+                "25498987.5 6672708.5 0",
+                "25498314.5 6672170.5 0",
+                "25497651.5 6672629.5 0",
+                "25497646.5 6672775.5 0",
+                "25497733.5 6672927.5 0",
+            ]
+        )
+        + "))",
+    }
+)
+class EwktPolygonField(serializers.CharField):
+    pass
+
+
+@extend_schema_field(
+    {
+        "type": "string",
+        "format": "EWKT",
+        "example": "SRID=3879;MULTIPOLYGON Z ((("
+        + ", ".join(
+            [
+                "25497733.5 6672927.5 0",
+                "25497946.5 6673032.5 0",
+                "25498653.5 6673034.5 0",
+                "25498987.5 6672708.5 0",
+                "25498314.5 6672170.5 0",
+                "25497651.5 6672629.5 0",
+                "25497646.5 6672775.5 0",
+                "25497733.5 6672927.5 0",
+            ]
+        )
+        + ")))",
+    }
+)
+class EwktGeometryField(serializers.CharField):
+    pass
+
+
 # Don't include object's user information to unauthenticated requests
 class HideFromAnonUserSerializerMixin:
     def to_representation(self, instance):

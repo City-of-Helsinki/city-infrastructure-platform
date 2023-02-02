@@ -12,7 +12,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.road_marking import RoadMarkingRealOperation
-from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import EwktGeometryField, HideFromAnonUserSerializerMixin
 
 
 class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
@@ -26,6 +26,7 @@ class RoadMarkingPlanSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktGeometryField()
     files = RoadMarkingPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING)
@@ -81,6 +82,7 @@ class RoadMarkingRealSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktGeometryField()
     files = RoadMarkingRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING)

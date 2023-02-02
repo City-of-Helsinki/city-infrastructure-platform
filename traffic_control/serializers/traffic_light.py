@@ -12,7 +12,7 @@ from traffic_control.models import (
     TrafficLightRealFile,
 )
 from traffic_control.models.traffic_light import TrafficLightRealOperation
-from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import EwktPointField, HideFromAnonUserSerializerMixin
 
 
 class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
@@ -26,6 +26,7 @@ class TrafficLightPlanSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktPointField()
     files = TrafficLightPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT)
@@ -81,6 +82,7 @@ class TrafficLightRealSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktPointField()
     files = TrafficLightRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT)
