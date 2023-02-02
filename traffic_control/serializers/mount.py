@@ -12,7 +12,7 @@ from traffic_control.models import (
     PortalType,
 )
 from traffic_control.models.mount import MountRealOperation
-from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import EwktGeometryField, HideFromAnonUserSerializerMixin
 
 
 class PortalTypeSerializer(serializers.ModelSerializer):
@@ -38,6 +38,7 @@ class MountPlanSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktGeometryField()
     files = MountPlanFileSerializer(many=True, read_only=True)
 
     class Meta:
@@ -90,6 +91,7 @@ class MountRealSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktGeometryField()
     ordered_traffic_signs = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     files = MountRealFileSerializer(many=True, read_only=True)
     operations = MountRealOperationSerializer(many=True, required=False, read_only=True)

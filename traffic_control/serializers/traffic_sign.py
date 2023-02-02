@@ -12,7 +12,7 @@ from traffic_control.models import (
     TrafficSignRealFile,
 )
 from traffic_control.models.traffic_sign import TrafficSignRealOperation
-from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import EwktPointField, EwktPolygonField, HideFromAnonUserSerializerMixin
 
 
 class TrafficSignPlanFileSerializer(serializers.ModelSerializer):
@@ -26,6 +26,8 @@ class TrafficSignPlanSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktPointField()
+    affect_area = EwktPolygonField(required=False)
     files = TrafficSignPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN)
@@ -81,6 +83,7 @@ class TrafficSignRealSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktPointField()
     files = TrafficSignRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN)

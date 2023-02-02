@@ -12,7 +12,7 @@ from city_furniture.models import (
 )
 from city_furniture.models.common import CityFurnitureDeviceType
 from traffic_control.models import OperationType
-from traffic_control.serializers.common import HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import EwktPointField, HideFromAnonUserSerializerMixin
 
 
 class FurnitureSignpostPlanFileSerializer(serializers.ModelSerializer):
@@ -26,6 +26,7 @@ class FurnitureSignpostPlanSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktPointField()
     files = FurnitureSignpostPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=CityFurnitureDeviceType.objects.for_target_model(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
@@ -87,6 +88,7 @@ class FurnitureSignpostRealSerializer(
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
+    location = EwktPointField()
     files = FurnitureSignpostRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=CityFurnitureDeviceType.objects.for_target_model(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
