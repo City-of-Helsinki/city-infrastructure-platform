@@ -94,7 +94,7 @@ def get_plan(location=test_multi_polygon, name="Test plan"):
 def get_barrier_plan(location="", plan=None, device_type=None):
     user = get_user("test_user")
     return BarrierPlan.objects.get_or_create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         location=location or test_point,
         lifecycle=Lifecycle.ACTIVE,
         material="Betoni",
@@ -112,7 +112,7 @@ def get_barrier_real(location="", device_type=None):
     user = get_user("test_user")
 
     return BarrierReal.objects.create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         barrier_plan=get_barrier_plan(),
         location=location or test_point,
         installation_date=datetime.date(2020, 1, 20),
@@ -176,7 +176,7 @@ def get_road_marking_plan(location="", plan=None, device_type=None, traffic_sign
     user = get_user("test_user")
 
     return RoadMarkingPlan.objects.get_or_create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         value="30",
         color=RoadMarkingColor.WHITE,
         location=location or test_point,
@@ -197,7 +197,7 @@ def get_road_marking_real(location="", device_type=None, road_marking_plan=None,
     user = get_user("test_user")
 
     return RoadMarkingReal.objects.get_or_create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         road_marking_plan=road_marking_plan or get_road_marking_plan(),
         value="30",
         color=RoadMarkingColor.WHITE,
@@ -219,7 +219,7 @@ def get_signpost_plan(location="", plan=None, device_type=None, parent=None, mou
     user = get_user("test_user")
 
     return SignpostPlan.objects.get_or_create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         location=location or test_point,
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
@@ -235,7 +235,7 @@ def get_signpost_real(location="", device_type=None, signpost_plan=None, parent=
     user = get_user("test_user")
 
     return SignpostReal.objects.get_or_create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         signpost_plan=signpost_plan or get_signpost_plan(),
         location=location or test_point,
         installation_date=datetime.date(2020, 1, 1),
@@ -252,7 +252,7 @@ def get_traffic_light_plan(location="", plan=None, device_type=None, mount_plan=
     user = get_user("test_user")
 
     return TrafficLightPlan.objects.get_or_create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
         lifecycle=Lifecycle.ACTIVE,
@@ -271,7 +271,7 @@ def get_traffic_light_real(location="", device_type=None, traffic_light_plan=Non
     user = get_user("test_user")
 
     return TrafficLightReal.objects.get_or_create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         traffic_light_plan=traffic_light_plan or get_traffic_light_plan(),
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
@@ -313,7 +313,7 @@ def get_traffic_sign_plan(location="", plan=None, device_type=None, mount_plan=N
     user = get_user("test_user")
 
     return TrafficSignPlan.objects.get_or_create(
-        device_type=device_type or get_traffic_control_device_type(),
+        device_type=device_type,
         location=location or test_point_3d,
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
@@ -327,11 +327,8 @@ def get_traffic_sign_plan(location="", plan=None, device_type=None, mount_plan=N
 def get_traffic_sign_real(location="", device_type=None, traffic_sign_plan=None, mount_real=None):
     user = get_user("test_user")
 
-    if not device_type:
-        device_type = get_traffic_control_device_type()
-
     return TrafficSignReal.objects.get_or_create(
-        traffic_sign_plan=traffic_sign_plan or get_traffic_sign_plan(device_type=device_type),
+        traffic_sign_plan=traffic_sign_plan or get_traffic_sign_plan(),
         device_type=device_type,
         location=location or test_point_3d,
         installation_date=datetime.date(2020, 1, 1),

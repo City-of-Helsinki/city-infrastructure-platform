@@ -29,7 +29,9 @@ class RoadMarkingPlanSerializer(
     location = EwktGeometryField()
     files = RoadMarkingPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING),
+        allow_null=True,
+        required=False,
     )
 
     class Meta:
@@ -85,7 +87,9 @@ class RoadMarkingRealSerializer(
     location = EwktGeometryField()
     files = RoadMarkingRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING),
+        allow_null=True,
+        required=False,
     )
     operations = RoadMarkingRealOperationSerializer(many=True, required=False, read_only=True)
 

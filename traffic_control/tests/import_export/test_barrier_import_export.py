@@ -12,7 +12,6 @@ def test__barrier_real__export():
 
     assert dataset.dict[0]["location"] == str(obj.location)
     assert dataset.dict[0]["owner__name_fi"] == obj.owner.name_fi
-    assert dataset.dict[0]["device_type__code"] == obj.device_type.code
     assert dataset.dict[0]["lifecycle"] == obj.lifecycle.name
 
 

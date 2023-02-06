@@ -29,7 +29,9 @@ class BarrierPlanSerializer(
     location = EwktGeometryField()
     files = BarrierPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER),
+        allow_null=True,
+        required=False,
     )
 
     class Meta:
@@ -85,7 +87,9 @@ class BarrierRealSerializer(
     location = EwktGeometryField()
     files = BarrierRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER),
+        allow_null=True,
+        required=False,
     )
     operations = BarrierRealOperationSerializer(many=True, required=False, read_only=True)
 

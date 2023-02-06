@@ -30,7 +30,9 @@ class TrafficSignPlanSerializer(
     affect_area = EwktPolygonField(required=False)
     files = TrafficSignPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN),
+        allow_null=True,
+        required=False,
     )
 
     class Meta:
@@ -86,7 +88,9 @@ class TrafficSignRealSerializer(
     location = EwktPointField()
     files = TrafficSignRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN),
+        allow_null=True,
+        required=False,
     )
     operations = TrafficSignRealOperationSerializer(many=True, required=False, read_only=True)
 
