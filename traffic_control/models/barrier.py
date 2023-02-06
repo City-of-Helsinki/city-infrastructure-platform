@@ -82,6 +82,8 @@ class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, Own
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
+        null=True,
+        blank=True,
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.BARRIER)),
         help_text=_("Type of the device from Helsinki Design Manual."),
@@ -146,7 +148,7 @@ class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, Own
         return f"{self.id} {self.device_type}"
 
     def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.BARRIER):
+        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.BARRIER):
             raise ValidationError(f'Device type "{self.device_type}" is not allowed for barriers')
 
         super().save(*args, **kwargs)

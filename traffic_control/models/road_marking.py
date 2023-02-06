@@ -117,6 +117,8 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
+        null=True,
+        blank=True,
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
         help_text=_("Type of the device from Helsinki Design Manual."),
@@ -218,10 +220,14 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
         return f"{self.id} {self.device_type} {self.value}"
 
     def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.ROAD_MARKING):
+        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ROAD_MARKING):
             raise ValidationError(f'Device type "{self.device_type}" is not allowed for road markings')
 
-        if self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE and self.road_name == "":
+        if (
+            self.device_type
+            and self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE
+            and self.road_name == ""
+        ):
             raise ValidationError(
                 f'Road name is required for "{TrafficControlDeviceTypeType.TRANSVERSE.value}" road marking'
             )

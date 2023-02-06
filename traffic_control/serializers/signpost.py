@@ -29,7 +29,9 @@ class SignpostPlanSerializer(
     location = EwktPointField()
     files = SignpostPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST),
+        allow_null=True,
+        required=False,
     )
 
     class Meta:
@@ -85,7 +87,9 @@ class SignpostRealSerializer(
     location = EwktPointField()
     files = SignpostRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST),
+        allow_null=True,
+        required=False,
     )
     operations = SignpostRealOperationSerializer(many=True, required=False, read_only=True)
 

@@ -233,7 +233,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
 @pytest.mark.django_db
 def test__device_type__target_model__valid(target_model, factory):
     client = get_api_client(user=get_user(admin=True))
-    related_model = factory()
+    related_model = factory(device_type=get_traffic_control_device_type())
     device_type = related_model.device_type
     data = {
         "target_model": target_model.value,
@@ -268,7 +268,7 @@ def test__device_type__target_model__valid(target_model, factory):
 @pytest.mark.django_db
 def test__device_type__target_model__invalid(target_model, factory):
     client = get_api_client(user=get_user(admin=True))
-    related_model = factory()
+    related_model = factory(device_type=get_traffic_control_device_type())
     device_type = related_model.device_type
     data = {
         "target_model": target_model.value,

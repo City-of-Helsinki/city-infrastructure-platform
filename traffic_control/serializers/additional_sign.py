@@ -2,8 +2,14 @@ from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
-from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, OperationType
-from traffic_control.models.additional_sign import AdditionalSignRealOperation
+from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.models import (
+    AdditionalSignPlan,
+    AdditionalSignReal,
+    AdditionalSignRealOperation,
+    OperationType,
+    TrafficControlDeviceType,
+)
 from traffic_control.serializers.common import (
     EwktPointField,
     HideFromAnonUserSerializerMixin,
@@ -17,6 +23,11 @@ class AdditionalSignPlanSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN),
+        allow_null=True,
+        required=False,
+    )
 
     class Meta:
         model = AdditionalSignPlan
@@ -64,6 +75,11 @@ class AdditionalSignRealSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN),
+        allow_null=True,
+        required=False,
+    )
     operations = AdditionalSignRealOperationSerializer(many=True, required=False, read_only=True)
 
     class Meta:

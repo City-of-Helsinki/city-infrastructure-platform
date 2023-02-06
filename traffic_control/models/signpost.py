@@ -88,6 +88,8 @@ class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, Ow
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
+        null=True,
+        blank=True,
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)),
         help_text=_("Type of the device from Helsinki Design Manual."),
@@ -191,7 +193,7 @@ class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, Ow
         return f"{self.id} {self.device_type} {self.txt}"
 
     def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.SIGNPOST):
+        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.SIGNPOST):
             raise ValidationError(f'Device type "{self.device_type}" is not allowed for signposts')
 
         super().save(*args, **kwargs)

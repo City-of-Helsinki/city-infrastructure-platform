@@ -64,6 +64,15 @@ class TrafficSignRealQuerySet(SoftDeleteQuerySet):
 
 class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
+    device_type = models.ForeignKey(
+        TrafficControlDeviceType,
+        verbose_name=_("Device type"),
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
+        help_text=_("Type of the device from Helsinki Design Manual."),
+    )
     road_name = models.CharField(
         _("Road name"),
         max_length=254,
@@ -185,6 +194,12 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel,
     def has_additional_signs(self):
         return self.additional_signs.active().exists()
 
+    def save(self, *args, **kwargs):
+        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
+            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
+
+        super().save(*args, **kwargs)
+
     @transaction.atomic
     def soft_delete(self, user):
         super().soft_delete(user)
@@ -192,13 +207,6 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel,
 
 
 class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, AbstractTrafficSign):
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device type"),
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
-        help_text=_("Type of the device from Helsinki Design Manual."),
-    )
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -226,12 +234,6 @@ class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, 
         verbose_name_plural = _("Traffic Sign Plans")
         unique_together = ["source_name", "source_id"]
 
-    def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
-
-        super().save(*args, **kwargs)
-
 
 class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, InstalledDeviceModel):
     traffic_sign_plan = models.ForeignKey(
@@ -241,15 +243,6 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         blank=True,
         null=True,
         help_text=_("The plan for this traffic sign."),
-    )
-    device_type = models.ForeignKey(
-        TrafficControlDeviceType,
-        verbose_name=_("Device type"),
-        blank=False,
-        null=True,
-        on_delete=models.PROTECT,
-        limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
-        help_text=_("Type of the device from Helsinki Design Manual."),
     )
     legacy_code = models.CharField(
         _("Legacy Traffic Sign Code"),
@@ -337,20 +330,6 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         verbose_name = _("Traffic Sign Real")
         verbose_name_plural = _("Traffic Sign Reals")
         unique_together = ["source_name", "source_id"]
-
-    def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
-
-        if not self.device_type:
-            self.device_type = (
-                TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN)
-                .filter(legacy_code=self.legacy_code)
-                .order_by("code")
-                .first()
-            )
-
-        super().save(*args, **kwargs)
 
 
 class TrafficSignRealOperation(OperationBase):

@@ -29,7 +29,9 @@ class TrafficLightPlanSerializer(
     location = EwktPointField()
     files = TrafficLightPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT),
+        allow_null=True,
+        required=False,
     )
 
     class Meta:
@@ -85,7 +87,9 @@ class TrafficLightRealSerializer(
     location = EwktPointField()
     files = TrafficLightRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
-        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT)
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT),
+        allow_null=True,
+        required=False,
     )
     operations = TrafficLightRealOperationSerializer(many=True, required=False, read_only=True)
 
