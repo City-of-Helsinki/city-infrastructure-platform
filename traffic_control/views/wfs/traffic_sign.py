@@ -60,7 +60,6 @@ TrafficSignRealFeatureType = FeatureType(
     other_crs=OTHER_CRS,
     queryset=TrafficSignReal.objects.active()
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(device_type__isnull=False)
     .filter(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
@@ -89,7 +88,6 @@ TrafficSignPlanFeatureType = FeatureType(
     other_crs=OTHER_CRS,
     queryset=TrafficSignPlan.objects.active()
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(device_type__isnull=False)
     .filter(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
