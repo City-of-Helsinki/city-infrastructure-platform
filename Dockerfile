@@ -24,7 +24,9 @@ RUN apt-get update && \
         gettext \
         mime-support \
         curl && \
-    curl -sSL --retry 5 https://install.python-poetry.org | python - && \
+    curl -sSL --retry 5 https://install.python-poetry.org --output install-poetry.py && \
+    python install-poetry.py --version=1.3.2 && \
+    rm install-poetry.py && \
     /root/.local/bin/poetry config virtualenvs.create false && \
     /root/.local/bin/poetry install --no-dev --no-interaction && \
     apt-get remove -y build-essential libpq-dev && \
