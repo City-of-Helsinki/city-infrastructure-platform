@@ -88,7 +88,7 @@ class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel, Owned
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
-        blank=False,
+        blank=True,
         null=True,
         on_delete=models.PROTECT,
     )
