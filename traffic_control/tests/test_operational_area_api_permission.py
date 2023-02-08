@@ -150,8 +150,6 @@ def test__api_operational_area_permission__create(model, location, success):
             "name": "Test plan",
             "plan_number": "2020_1",
             "location": location,
-            "planner": user.pk,
-            "decision_maker": user.pk,
             "linked_objects": {
                 "barrier_plan_ids": [],
                 "mount_plan_ids": [],
@@ -280,8 +278,6 @@ def test__api_operational_area_permission__update(model, location, success):
             "name": "Test plan",
             "plan_number": "2020_1",
             "location": location.ewkt,
-            "planner": user.pk,
-            "decision_maker": user.pk,
             "linked_objects": {
                 "barrier_plan_ids": [],
                 "mount_plan_ids": [],
