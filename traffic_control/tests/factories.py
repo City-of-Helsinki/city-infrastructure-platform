@@ -77,15 +77,12 @@ def get_owner(name_fi="Omistaja", name_en="Owner"):
     return Owner.objects.get_or_create(name_fi=name_fi, name_en=name_en)[0]
 
 
-def get_plan(location=test_multi_polygon, name="Test plan"):
+def get_plan(location=test_multi_polygon, name="Test plan") -> Plan:
     user = get_user("test_user")
-    superuser = get_user("super user", admin=True)
     return Plan.objects.get_or_create(
         name=name,
         plan_number="2020_1",
         location=location,
-        planner=user,
-        decision_maker=superuser,
         created_by=user,
         updated_by=user,
     )[0]

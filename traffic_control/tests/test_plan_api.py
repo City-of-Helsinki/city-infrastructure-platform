@@ -70,8 +70,6 @@ def test_plan_create():
             "name": "Test plan",
             "plan_number": "2020_1",
             "location": location,
-            "planner": "Planner",
-            "decision_maker": "Decision Maker",
             "created_by": user.pk,
             "updated_by": user.pk,
         },
@@ -86,8 +84,6 @@ def test_plan_create():
     assert plan.plan_number == "2020_1"
     assert plan.created_by == user
     assert plan.updated_by == user
-    assert plan.planner == "Planner"
-    assert plan.decision_maker == "Decision Maker"
 
 
 @pytest.mark.django_db

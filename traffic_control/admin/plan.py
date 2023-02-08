@@ -28,7 +28,7 @@ class PlanAdmin(
     fieldsets = (
         (
             _("General information"),
-            {"fields": ("name", "plan_number", "planner", "decision_maker")},
+            {"fields": ("name", "plan_number")},
         ),
         (_("Location information"), {"fields": ("location",)}),
         (

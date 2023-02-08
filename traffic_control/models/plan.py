@@ -27,8 +27,6 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         help_text=_("Year and verdict section separated with a dash"),
     )
     location = models.MultiPolygonField(_("Location (3D)"), dim=3, srid=settings.SRID, null=True, blank=True)
-    planner = models.CharField(_("Planner"), blank=True, max_length=200)
-    decision_maker = models.CharField(_("Decision maker"), blank=True, max_length=200)
 
     class Meta:
         db_table = "plan"

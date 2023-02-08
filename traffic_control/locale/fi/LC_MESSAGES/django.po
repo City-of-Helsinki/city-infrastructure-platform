@@ -766,12 +766,6 @@ msgstr "Suunnitelman numero"
 msgid "Year and verdict section separated with a dash"
 msgstr "Vuosi ja päätöspykälä väliviivalla erotettuna"
 
-msgid "Planner"
-msgstr "Suunnittelija"
-
-msgid "Decision maker"
-msgstr "Päättäjä"
-
 msgid "Plans"
 msgstr "Suunnitelmat"
 
