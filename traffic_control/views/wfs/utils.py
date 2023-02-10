@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.gis import geos
 from gisserver import queries
 from gisserver.geometries import BoundingBox
@@ -23,16 +24,21 @@ def _swap_x_y_coordinates(coordinates):
 
 class SwapBoundingBoxMixin:
     """
-    Hack to swap BBOX query parameter to be Y/X (latitude/longitude) in such coordinate reference systems.
+    Hack to swap BBOX query parameter to be order of Y/X (latitude/longitude) in such coordinate reference systems.
     """
 
     def get_query(self, **params) -> queries.QueryExpression:
-        """Create the query object that will process this request"""
         if params["STOREDQUERY_ID"]:
             query = params["STOREDQUERY_ID"]
         else:
-            if params["bbox"] and params["bbox"].crs.srid in _YX_CRS:
-                params["bbox"] = _swap_x_y_bbox(params["bbox"])
+            if params["bbox"]:
+                if params["bbox"].crs:
+                    srid = params["bbox"].crs.srid
+                else:
+                    srid = settings.SRID
+                if srid in _YX_CRS:
+                    params["bbox"] = _swap_x_y_bbox(params["bbox"])
+
             query = queries.AdhocQuery.from_kvp_request(**params)
 
         query.bind(

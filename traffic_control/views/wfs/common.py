@@ -9,7 +9,7 @@ from gisserver.operations.wfs20 import GetFeature
 from gisserver.output import GeoJsonRenderer
 from gisserver.types import XsdElement
 
-from .utils import YXGML32Renderer
+from traffic_control.views.wfs.utils import SwapBoundingBoxMixin, YXGML32Renderer
 
 DEFAULT_CRS = CRS.from_srid(settings.SRID)
 
@@ -28,7 +28,7 @@ class CustomGeoJsonRenderer(GeoJsonRenderer):
         return super()._format_geojson_value(value)
 
 
-class CustomGetFeature(GetFeature):
+class CustomGetFeature(SwapBoundingBoxMixin, GetFeature):
     # Use CustomGeoJsonRenderer
     output_formats = [
         OutputFormat("application/gml+xml", version="3.2", renderer_class=YXGML32Renderer, title="GML"),
