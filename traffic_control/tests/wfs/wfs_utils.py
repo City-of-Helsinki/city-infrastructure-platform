@@ -26,6 +26,7 @@ def wfs_url_get_features(
     type_names: Union[str, List[str]],
     srs_name: Optional[str] = None,
     output_format: Optional[str] = None,
+    bbox: Optional[str] = None,
 ) -> str:
     base_url = f"{reverse('wfs-city-infrastructure')}?"
 
@@ -39,6 +40,7 @@ def wfs_url_get_features(
         "typeNames": type_names,
         "outputFormat": output_format,
         "srsName": srs_name,
+        "bbox": bbox,
     }
 
     non_none_params = {k: v for k, v in params.items() if v is not None}
@@ -46,20 +48,26 @@ def wfs_url_get_features(
     return base_url + urlencode(non_none_params)
 
 
-def wfs_get_features_gml(model_name) -> ElementTree.Element:
+def wfs_get_features_gml(
+    model_name,
+    bbox: Optional[str] = None,
+) -> ElementTree.Element:
     client = get_api_client()
 
-    response = client.get(wfs_url_get_features(model_name))
+    response = client.get(wfs_url_get_features(model_name, bbox=bbox))
     assert response.status_code == status.HTTP_200_OK
 
     xml = get_response_content(response)
     return ElementTree.fromstring(xml)
 
 
-def wfs_get_features_geojson(model_name) -> dict:
+def wfs_get_features_geojson(
+    model_name,
+    bbox: Optional[str] = None,
+) -> dict:
     client = get_api_client()
 
-    response = client.get(wfs_url_get_features(model_name, output_format="geojson"))
+    response = client.get(wfs_url_get_features(model_name, output_format="geojson", bbox=bbox))
     assert response.status_code == status.HTTP_200_OK
 
     geojson = get_response_content(response)
