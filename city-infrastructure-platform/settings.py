@@ -203,7 +203,7 @@ ROOT_URLCONF = "city-infrastructure-platform.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [checkout_dir("templates"), checkout_dir("map-view/build")],
+        "DIRS": [checkout_dir("city-infrastructure-platform/templates"), checkout_dir("map-view/build")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
