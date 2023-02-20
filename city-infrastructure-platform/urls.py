@@ -30,6 +30,8 @@ from traffic_control.views import (
 )
 from traffic_control.views.wfs.views import CityInfrastructureWFSView
 
+from .admin.views import MyAccountView
+
 router = routers.DefaultRouter()
 router.register("barrier-plans", barrier_views.BarrierPlanViewSet)
 router.register("barrier-reals", barrier_views.BarrierRealViewSet)
@@ -136,6 +138,7 @@ if settings.SENTRY_DEBUG:
 
 # Admin
 urlpatterns += i18n_patterns(
+    path("admin/account/", MyAccountView.as_view(), name="my-account"),
     path("admin/doc/", include("city_infra_instructions.urls")),
     path("admin/", admin.site.urls),
     path("map/", map_views.map_view, name="map-view"),

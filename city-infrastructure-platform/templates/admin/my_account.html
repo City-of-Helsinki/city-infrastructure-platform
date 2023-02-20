@@ -1,0 +1,58 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url "admin:index" %}">{% translate "Home" %}</a>
+        &rsaquo; {{ title }}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+
+        <fieldset class="module aligned">
+
+            <h2>{% translate "Personal info" %}</h2>
+
+            <div class="form-row">
+                <label>{% translate "username"|capfirst %}:</label>
+                <div class="readonly">{{ user.username }}</div>
+            </div>
+
+            <div class="form-row">
+                <label>{% translate "first name"|capfirst %}:</label>
+                <div class="readonly">{{ user.first_name }}</div>
+            </div>
+
+            <div class="form-row">
+                <label>{% translate "last name"|capfirst %}:</label>
+                <div class="readonly">{{ user.last_name }}</div>
+            </div>
+
+            <div class="form-row">
+                <label>{% translate "email address"|capfirst %}:</label>
+                <div class="readonly">{{ user.email }}</div>
+            </div>
+
+            <h2>{% translate "actions"|capfirst %}</h2>
+
+            {% if user.has_usable_password %}
+            <div class="form-row">
+                <a href="{% url "admin:password_change" %}">{% translate "Change password" %}</a>
+            </div>
+            {% else %}
+            <div class="form-row">
+                -
+            </div>
+            {% endif %}
+
+        </fieldset>
+
+    </div>
+{% endblock %}

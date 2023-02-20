@@ -18,6 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "My account"
+msgstr "Omat tiedot"
+
 msgid "City Infrastructure Platform"
 msgstr ""
 
@@ -38,3 +41,6 @@ msgstr "Rajapinnan dokumentaatio"
 
 msgid "Log out"
 msgstr "Kirjaudu ulos"
+
+msgid "actions"
+msgstr "toiminnot"
