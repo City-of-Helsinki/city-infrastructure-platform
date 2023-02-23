@@ -18,6 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "City Infrastructure Platform"
+msgstr ""
+
+msgid "Finnish"
+msgstr "Suomi"
+
+msgid "English"
+msgstr "Englanti"
+
 msgid "View map"
 msgstr "Näytä kartta"
 
@@ -26,9 +35,6 @@ msgstr "Rajapinta"
 
 msgid "View API documentation"
 msgstr "Rajapinnan dokumentaatio"
-
-msgid "Change password"
-msgstr "Vaihda salasana"
 
 msgid "Log out"
 msgstr "Kirjaudu ulos"
