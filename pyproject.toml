@@ -46,6 +46,7 @@ bump2version = "^1.0.1"
 coverage = "6.5.0"
 factory-boy = "^3.2.1"
 flake8 = "^5.0.4"
+flake8-pyproject = "^1.2.2"
 importmagic = "^0.1.7"
 ipython = "^8.10.0"
 isort = "^5.10.1"
@@ -66,3 +67,9 @@ yapf = "^0.32.0"
 [tool.black]
 extend-exclude = "migrations"
 line_length = 120
+
+
+[tool.flake8]
+exclude = ["migrations", "venv"]
+max-line-length = 120
+max-complexity = 10
