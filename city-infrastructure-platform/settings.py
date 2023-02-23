@@ -321,7 +321,7 @@ SRID = 3879  # the spatial reference id used for geometries
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 
 LOCALE_PATHS = [
-    "./templates/locale",
+    "./locale",
 ]
 
 # Import / Export
