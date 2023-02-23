@@ -20,7 +20,7 @@ django-gisserver = "1.2.5"
 django-helusers = "^0.7.1"
 django-import-export = "^2.7.1"
 django-mptt = "^0.13.4"
-django-storages = {extras = ["azure"], version = "^1.12.3"}
+django-storages = { extras = ["azure"], version = "^1.12.3" }
 djangorestframework = "^3.13.1"
 djangorestframework-gis = "^1.0.0"
 docutils = "^0.18.1"
@@ -53,9 +53,9 @@ isort = "^5.10.1"
 jedi = "^0.18.1"
 pep8-naming = "^0.12.1"
 pydocstyle = "^6.1.1"
-pyobjc-core = {version = "^8.2", platform = "darwin"}
-pyobjc-framework-Cocoa = {version = "^8.2", platform = "darwin"}
-pyobjc-framework-FSEvents = {version = "^8.2", platform = "darwin"}
+pyobjc-core = { version = "^8.2", platform = "darwin" }
+pyobjc-framework-Cocoa = { version = "^8.2", platform = "darwin" }
+pyobjc-framework-FSEvents = { version = "^8.2", platform = "darwin" }
 pytest = "^7.0.1"
 pytest-cov = "^3.0.0"
 pytest-django = "^4.5.2"
@@ -87,3 +87,8 @@ use_parentheses = true
 exclude = ["migrations", "venv"]
 max-line-length = 120
 max-complexity = 10
+
+
+[tool.pydocstyle]
+match_dir = '[^\.,venv,migrations].*'
+ignore = ["D100", "D104", "D105", "D200", "D203", "D400"]
