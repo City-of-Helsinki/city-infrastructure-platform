@@ -92,3 +92,13 @@ max-complexity = 10
 [tool.pydocstyle]
 match_dir = '[^\.,venv,migrations].*'
 ignore = ["D100", "D104", "D105", "D200", "D203", "D400"]
+
+
+[tool.pytest.ini_options]
+norecursedirs = ["node_modules", ".git", "venv"]
+DJANGO_SETTINGS_MODULE = "city-infrastructure-platform.settings"
+doctest_optionflags = [
+  "NORMALIZE_WHITESPACE",
+  "IGNORE_EXCEPTION_DETAIL",
+  "ALLOW_UNICODE",
+]
