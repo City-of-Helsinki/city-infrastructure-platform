@@ -43,7 +43,7 @@ autoflake = "^1.4"
 autopep8 = "^1.6.0"
 black = "^22.1.0"
 bump2version = "^1.0.1"
-coverage = "6.5.0"
+coverage = { version = "6.5.0", extras = ["toml"] }
 factory-boy = "^3.2.1"
 flake8 = "^5.0.4"
 flake8-pyproject = "^1.2.2"
@@ -102,3 +102,8 @@ doctest_optionflags = [
   "IGNORE_EXCEPTION_DETAIL",
   "ALLOW_UNICODE",
 ]
+
+
+[tool.coverage.run]
+branch = true
+omit = ["*/migrations/*", "venv/*"]
