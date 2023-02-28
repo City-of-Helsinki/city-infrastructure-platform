@@ -28,6 +28,7 @@ from traffic_control.views import (
     traffic_light as traffic_light_views,
     traffic_sign as traffic_sign_views,
 )
+from traffic_control.views.device_catalog import AdditionalSignCatalog, TrafficSignCatalog
 from traffic_control.views.wfs.views import CityInfrastructureWFSView
 
 from .admin.views import MyAccountView
@@ -129,6 +130,11 @@ urlpatterns += [
     path("openapi.yaml", schema_yaml_view, name="schema-yaml"),
     path("swagger/", SpectacularSwaggerView.as_view(url_name="schema-yaml"), name="schema-swagger-ui"),
     path("redoc/", SpectacularRedocView.as_view(url_name="schema-yaml"), name="schema-redoc"),
+]
+
+urlpatterns += [
+    path("device-types/traffic-signs/", TrafficSignCatalog.as_view(), name="traffic-sign-catalog"),
+    path("device-types/additional-signs/", AdditionalSignCatalog.as_view(), name="traffic-sign-catalog"),
 ]
 
 if settings.SENTRY_DEBUG:

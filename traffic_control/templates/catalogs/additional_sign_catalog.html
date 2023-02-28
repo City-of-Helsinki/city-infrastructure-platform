@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <link
+            rel="stylesheet"
+            href="{% static 'traffic_control/css/catalog.css' %}"
+        />
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+
+        <table id="signs">
+            <colgroup>
+                <col span="1" class="code" />
+                <col span="1" class="description" />
+                <col span="1" class="icon" />
+                <col span="1" class="schema" />
+            </colgroup>
+
+            <tr>
+                <th>Code</th>
+                <th>Description</th>
+                <th>Icon</th>
+                <th>Content schema</th>
+            </tr>
+
+            {% for device_type in device_types %}
+            <tr>
+                <td>{{ device_type.code }}</td>
+                <td>{{ device_type.description }}</td>
+                <td>
+                    {% if device_type.icon %}
+                    <img
+                        src="{% static 'traffic_control/svg/traffic_sign_icons' %}/{{ device_type.icon }}"
+                    />
+                    {% else %} - {% endif %}
+                </td>
+                <td>
+                    <pre>{{ device_type.content_schema }}</pre>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
