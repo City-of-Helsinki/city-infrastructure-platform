@@ -1,0 +1,25 @@
+.description {
+    width: 400px;
+}
+.icon {
+    width: 240px;
+}
+
+td {
+    vertical-align: top;
+    border: 1px solid silver;
+    padding: 10px;
+}
+
+table tr:nth-child(even) td {
+    background-color: white;
+}
+
+table tr:nth-child(odd) td {
+    background-color: cornsilk;
+}
+
+img {
+    width: 200px;
+    height: auto;
+}
