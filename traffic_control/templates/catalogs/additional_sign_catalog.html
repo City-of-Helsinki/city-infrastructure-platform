@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %} {% get_static_prefix as STATIC_URL %}
 
 <!DOCTYPE html>
 <html>
@@ -34,7 +34,7 @@
                 <td>
                     {% if device_type.icon %}
                     <img
-                        src="{% static 'traffic_control/svg/traffic_sign_icons' %}/{{ device_type.icon }}"
+                        src="{{ STATIC_URL }}traffic_control/svg/traffic_sign_icons/{{ device_type.icon }}"
                     />
                     {% else %} - {% endif %}
                 </td>
