@@ -64,6 +64,7 @@ jobs:
 
     - name: Run NodeJS code neatness tests
       run: |
+        yarn --cwd map-view prettier
         yarn --cwd map-view lint
         yarn --cwd map-view validate-ts
 

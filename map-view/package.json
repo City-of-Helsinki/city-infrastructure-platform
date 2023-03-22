@@ -29,8 +29,9 @@
     "test": "react-scripts test",
     "lint": "eslint --max-warnings=0 ./src/**/*.{tsx,ts}",
     "validate-ts": "tsc --noEmit",
-    "eject": "react-scripts eject",
-    "prettier": "prettier \"src/**\" --write"
+    "prettier": "prettier --check .",
+    "format": "prettier --write .",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
