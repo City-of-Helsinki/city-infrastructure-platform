@@ -2,7 +2,6 @@ import { render } from "@testing-library/react";
 import React from "react";
 import { mockMapConfig } from "../api/__mocks__/mock-data";
 import LayerSwitcher from "./LayerSwitcher";
-import Map from "../common/Map";
 
 jest.mock("../common/Map");
 
