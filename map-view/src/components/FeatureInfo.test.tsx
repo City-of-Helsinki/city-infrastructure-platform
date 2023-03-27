@@ -3,6 +3,14 @@ import React from "react";
 import FeatureInfo from "./FeatureInfo";
 import { Feature } from "../models";
 
+jest.mock("react-i18next", () => ({
+  withTranslation: () => (Component: any) => {
+    // Ignore the translation by returning the searched string
+    Component.defaultProps = { ...Component.defaultProps, t: (str: string) => str };
+    return Component;
+  },
+}));
+
 test("renders feature info", () => {
   const mockFeatures: Feature[] = [
     {
