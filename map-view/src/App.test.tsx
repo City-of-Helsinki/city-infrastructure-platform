@@ -8,9 +8,16 @@ import Map from "./common/Map";
 jest.mock("./common/Map");
 jest.mock("./api/MapConfigAPI");
 
-test("should initialize map with mock map config", async () => {
-  const { findByText } = render(<App />);
-  expect(await findByText("Layers")).toBeInTheDocument();
-  expect(MapConfigAPI.getMapConfig).toHaveBeenCalled();
-  expect(Map.initialize).toHaveBeenCalledWith("map", mockMapConfig);
+describe("App", () => {
+  beforeEach(() => {
+    const addListener = MapConfigAPI.getMapConfig as jest.MockedFunction<typeof MapConfigAPI.getMapConfig>;
+    addListener.mockResolvedValue(mockMapConfig);
+  });
+
+  it("should initialize map with mock map config", async () => {
+    const { findByText } = render(<App />);
+    expect(await findByText("Layers")).toBeInTheDocument();
+    expect(MapConfigAPI.getMapConfig).toHaveBeenCalled();
+    expect(Map.initialize).toHaveBeenCalledWith("map", mockMapConfig);
+  });
 });
