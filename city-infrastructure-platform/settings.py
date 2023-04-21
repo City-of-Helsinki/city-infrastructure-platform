@@ -153,6 +153,10 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "health_check",
+    "health_check.db",
+    "health_check.cache",
+    "health_check.storage",
     "drf_spectacular",
     "django_filters",
     "auditlog",
@@ -184,7 +188,6 @@ WAGTAIL_SITE_NAME = _("City Infrastructure Platform")
 SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
 
 MIDDLEWARE = [
-    "deployment.middleware.HealthCheckMiddleware",
     "openshift_client_ip.middleware.OpenShiftClientIPMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",

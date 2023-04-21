@@ -743,6 +743,25 @@ orjson = ">=2.4.0"
 tests = ["django-environ (>=0.4.5)", "lxml (>=4.5.0)", "psycopg2-binary (>=2.8.4)", "pytest (>=6.2.3)", "pytest-cov (>=2.11.1)", "pytest-django (>=4.1.0)"]
 
 [[package]]
+name = "django-health-check"
+version = "3.17.0"
+description = "Run checks on services like databases, queue servers, celery processes, etc."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django-health-check-3.17.0.tar.gz", hash = "sha256:d1b8671e79d1de6e3dd1a9c69566222b0bfcfacca8b90511a4407b2d0d3d2778"},
+    {file = "django_health_check-3.17.0-py2.py3-none-any.whl", hash = "sha256:20dc5ccb516a4e7163593fd4026f0a7531e3027b47d23ebe3bd9dbc99ac4354c"},
+]
+
+[package.dependencies]
+django = ">=2.2"
+
+[package.extras]
+docs = ["sphinx"]
+test = ["celery", "pytest", "pytest-cov", "pytest-django", "redis"]
+
+[[package]]
 name = "django-helusers"
 version = "0.7.1"
 description = "Django app for the user infrastructure of the City of Helsinki"
@@ -2668,4 +2687,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "afb3e35c136657d76c3780f5d908f39f714446f8d7af2e41ef61a1f9382e661d"
+content-hash = "954a4db453e8957953fe00897336b789b97b7686bca199535b5ed8d65b66c030"

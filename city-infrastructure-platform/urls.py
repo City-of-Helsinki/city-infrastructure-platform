@@ -32,6 +32,7 @@ from traffic_control.views.device_catalog import AdditionalSignCatalog, TrafficS
 from traffic_control.views.wfs.views import CityInfrastructureWFSView
 
 from .admin.views import MyAccountView
+from .views import HealthCheckView
 
 router = routers.DefaultRouter()
 router.register("barrier-plans", barrier_views.BarrierPlanViewSet)
@@ -108,6 +109,8 @@ furniture_signpost_operations_router.register(
 )
 
 urlpatterns = [
+    path("healthz", HealthCheckView.as_view(), name="health-check"),
+    path("readiness", HealthCheckView.as_view(), name="readiness-check"),
     path("ha/", include("helusers.urls", namespace="helusers")),
     path("v1/", include((router.urls, "traffic_control"), namespace="v1")),
     path("v1/", include(barrier_operations_router.urls)),
