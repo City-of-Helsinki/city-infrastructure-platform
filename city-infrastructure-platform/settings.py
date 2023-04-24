@@ -33,7 +33,7 @@ BASE_DIR = checkout_dir()
 
 env = environ.Env(
     DEBUG=(bool, False),
-    TIER=(str, "dev"),  # one of: prod, qa, stage, test, dev
+    ENVIRONMENT_NAME=(str, ""),
     SECRET_KEY=(str, ""),
     VAR_ROOT=(str, default_var_root),
     HOST=(str, "localhost"),
@@ -88,7 +88,7 @@ OIDC_API_TOKEN_AUTH = {
 # General settings
 DEBUG = env("DEBUG")
 OIDC_AUTHENTICATION_ENABLED = env("OIDC_AUTHENTICATION_ENABLED")
-TIER = env("TIER")
+ENVIRONMENT_NAME = env("ENVIRONMENT_NAME")
 SECRET_KEY = env("SECRET_KEY")
 if DEBUG and not SECRET_KEY:
     SECRET_KEY = "xxx"
