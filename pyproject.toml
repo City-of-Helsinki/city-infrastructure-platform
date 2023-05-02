@@ -40,20 +40,16 @@ uWSGI = "^2.0.21"
 
 
 [tool.poetry.group.dev.dependencies]
-autoflake = "^1.4"
-autopep8 = "^1.6.0"
 black = "^22.1.0"
 bump2version = "^1.0.1"
 coverage = { version = "6.5.0", extras = ["toml"] }
 factory-boy = "^3.2.1"
 flake8 = "^5.0.4"
 flake8-pyproject = "^1.2.2"
-importmagic = "^0.1.7"
 ipython = "^8.10.0"
 isort = "^5.10.1"
 jedi = "^0.18.1"
 pep8-naming = "^0.12.1"
-pydocstyle = "^6.1.1"
 pyobjc-core = { version = "^8.2", platform = "darwin" }
 pyobjc-framework-Cocoa = { version = "^8.2", platform = "darwin" }
 pyobjc-framework-FSEvents = { version = "^8.2", platform = "darwin" }
@@ -62,7 +58,6 @@ pytest-cov = "^3.0.0"
 pytest-django = "^4.5.2"
 pytest-watch = "^4.2.0"
 rope = "^0.22.0"
-yapf = "^0.32.0"
 
 
 [tool.black]
