@@ -39,7 +39,7 @@ social-auth-app-django = "^5.2.0"
 uWSGI = "^2.0.21"
 
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 autoflake = "^1.4"
 autopep8 = "^1.6.0"
 black = "^22.1.0"
@@ -99,9 +99,9 @@ ignore = ["D100", "D104", "D105", "D200", "D203", "D400"]
 norecursedirs = ["node_modules", ".git", "venv"]
 DJANGO_SETTINGS_MODULE = "city-infrastructure-platform.settings"
 doctest_optionflags = [
-  "NORMALIZE_WHITESPACE",
-  "IGNORE_EXCEPTION_DETAIL",
-  "ALLOW_UNICODE",
+    "NORMALIZE_WHITESPACE",
+    "IGNORE_EXCEPTION_DETAIL",
+    "ALLOW_UNICODE",
 ]
 
 
