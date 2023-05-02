@@ -47,6 +47,9 @@ jobs:
         rm install-poetry.py
         $POETRY_HOME/bin/poetry --version
 
+    - name: "Check Poetry lockfile consistency"
+      run: $POETRY_HOME/bin/poetry -v lock --check
+
     - name: "Install test dependencies"
       run: $POETRY_HOME/bin/poetry -v install --no-root
 
