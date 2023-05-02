@@ -648,16 +648,19 @@ files = [
 Django = ">=3.2"
 
 [[package]]
-name = "django-enumfields"
-version = "2.1.1"
+name = "django-enumfields2"
+version = "3.0.2"
 description = "Real Python Enums for Django."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "django-enumfields-2.1.1.tar.gz", hash = "sha256:f64841732a9c343f5071220e0abcf5f51c9472c06e3c33d7c6a7ec27b6087561"},
-    {file = "django_enumfields-2.1.1-py3-none-any.whl", hash = "sha256:d32f2151801a5fc13c860276ee99495c2c9345e0a4281d0104276c39ddb22807"},
+    {file = "django_enumfields2-3.0.2-py3-none-any.whl", hash = "sha256:7ddcbdea6b97428f481f7191b53b110933be355f6d10656d59a4f886488a6cc4"},
+    {file = "django_enumfields2-3.0.2.tar.gz", hash = "sha256:787dd61d132f73ffadbcfd74dc5caa339505f506b1ebb60da9bf0344eacf2115"},
 ]
+
+[package.dependencies]
+django = ">=3.2"
 
 [[package]]
 name = "django-environ"
@@ -2598,4 +2601,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "1bd1d5b1903b546e1b9d81056a8e3d63fd41dca1e71264b30805988fde00ce0e"
+content-hash = "31385256c9508e74852d6d6dd02134f96832a5f786dd9f6782e06744b9af5d07"
