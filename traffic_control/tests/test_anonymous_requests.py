@@ -31,7 +31,6 @@ def validate_dict(object: dict, validate_keys: Callable[[dict], None]):
     validate_keys(object)
 
     for _, value in object.items():
-
         if isinstance(value, dict):
             validate_dict(value, validate_keys)
 

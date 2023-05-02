@@ -9,7 +9,6 @@ logger = logging.getLogger("openshift_client_ip")
 
 class OpenShiftClientIPMiddleware:
     def __init__(self, get_response):
-
         # Only use this middleware if we have defined the deployment to be in OpenShift environment.
         if not settings.OPENSHIFT_DEPLOYMENT:
             raise MiddlewareNotUsed

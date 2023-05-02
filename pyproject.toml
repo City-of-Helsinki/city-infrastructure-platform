@@ -6,7 +6,7 @@ authors = []
 
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.8.1"
 django = "^3.2.18"
 
 django-auditlog = "^1.0.0"
@@ -40,16 +40,16 @@ uWSGI = "^2.0.21"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.1.0"
+black = "^23.3.0"
 bump2version = "^1.0.1"
 coverage = { version = "6.5.0", extras = ["toml"] }
 factory-boy = "^3.2.1"
-flake8 = "^5.0.4"
-flake8-pyproject = "^1.2.2"
+flake8 = "^6.0.0"
+flake8-pyproject = "^1.2.3"
 ipython = "^8.10.0"
-isort = "^5.10.1"
+isort = "^5.12.0"
 jedi = "^0.18.1"
-pep8-naming = "^0.12.1"
+pep8-naming = "^0.13.3"
 pyobjc-core = { version = "^8.2", platform = "darwin" }
 pyobjc-framework-Cocoa = { version = "^8.2", platform = "darwin" }
 pyobjc-framework-FSEvents = { version = "^8.2", platform = "darwin" }
