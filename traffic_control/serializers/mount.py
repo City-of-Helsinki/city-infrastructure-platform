@@ -1,3 +1,5 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
@@ -86,13 +88,18 @@ class MountRealOperationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+@extend_schema_field(OpenApiTypes.UUID)
+class OrderedTrafficSignsField(serializers.PrimaryKeyRelatedField):
+    pass
+
+
 class MountRealSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
-    ordered_traffic_signs = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    ordered_traffic_signs = OrderedTrafficSignsField(read_only=True, many=True)
     files = MountRealFileSerializer(many=True, read_only=True)
     operations = MountRealOperationSerializer(many=True, required=False, read_only=True)
 
