@@ -603,19 +603,19 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 name = "django-auditlog"
-version = "1.0.0"
+version = "2.2.2"
 description = "Audit log app for Django"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "django-auditlog-1.0.0.tar.gz", hash = "sha256:c5fa676359df1e0bf573410cc1a12b9d0653f6cf44303c8a01edb36f42f5aec0"},
-    {file = "django_auditlog-1.0.0-py3-none-any.whl", hash = "sha256:72a4a94f13a349072716212dc6f7e802857e06ba89c4e589463fb633b60dcb45"},
+    {file = "django-auditlog-2.2.2.tar.gz", hash = "sha256:189bcc486e5c5720fac3070ac9bf1c3911f45618ed85a30dfa7d272324ef5e9a"},
+    {file = "django_auditlog-2.2.2-py3-none-any.whl", hash = "sha256:39008937a7161ff0fce75f5e3c028240049c64fb1b20f4caa325c5c835e28802"},
 ]
 
 [package.dependencies]
-django-jsonfield-backport = ">=1.0.0"
-python-dateutil = ">=2.6.0"
+Django = ">=3.2"
+python-dateutil = ">=2.7.0"
 
 [[package]]
 name = "django-colorfield"
@@ -802,21 +802,6 @@ Django = ">=2.2"
 
 [package.extras]
 tests = ["coverage"]
-
-[[package]]
-name = "django-jsonfield-backport"
-version = "1.0.5"
-description = "Backport of the cross-DB JSONField model and form fields from Django 3.1."
-category = "main"
-optional = false
-python-versions = ">=3.5"
-files = [
-    {file = "django-jsonfield-backport-1.0.5.tar.gz", hash = "sha256:40c39b1f1bade47bd2715664de14983f2e0a96175f65abbad2688029c255c685"},
-    {file = "django_jsonfield_backport-1.0.5-py3-none-any.whl", hash = "sha256:727b402bad632e38539b489e48aefa6ffe03cedba76ac1f11b455423b3225a2d"},
-]
-
-[package.dependencies]
-Django = ">=2.2"
 
 [[package]]
 name = "django-mptt"
@@ -2601,4 +2586,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "964428d64b647e10d1c08d8ed476c2347ae3c4fb797c40a3f3ca27fd08628a21"
+content-hash = "3984ab96e01c3b70666d1ca7d6d9e572896cf804f9fdad24deb85c0caa40df99"
