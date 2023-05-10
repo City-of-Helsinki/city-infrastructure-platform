@@ -180,20 +180,20 @@ class MultiResourceExportActionAdminMixin:
                 export_resource_choices=export_resource_choices,
             )
 
-    def get_export_resource_class(self, **kwargs) -> Type[ModelResource]:
+    def pick_export_resource_class(self, **kwargs) -> Type[ModelResource]:
         """Return export resource class to be used for exporting"""
         request = kwargs.pop("request", None)
         export_resource = request.POST.get("export_resource_class", None)
 
         # Use default export_resource if nothing is specified
         if export_resource is None or export_resource == "":
-            return super().get_export_resource_class()
+            return super().get_export_resource_classes()[0]
 
         return self.extra_export_resource_classes[int(export_resource)]
 
     def get_data_for_export(self, request, queryset, *args, **kwargs) -> tablib.Dataset:
-        """Override super's method to pass `request` to `self.get_export_resource_class` as a kwarg"""
-        resource_class: ModelResource = self.get_export_resource_class(request=request)()
+        """Override super's method to pass `request` to `self.pick_export_resource_class` as a kwarg"""
+        resource_class: ModelResource = self.pick_export_resource_class(request=request)()
         return resource_class.export(queryset, *args, **kwargs)
 
     @property
