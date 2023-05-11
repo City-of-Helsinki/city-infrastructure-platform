@@ -751,20 +751,20 @@ test = ["celery", "pytest", "pytest-cov", "pytest-django", "redis"]
 
 [[package]]
 name = "django-helusers"
-version = "0.7.1"
+version = "0.8.1"
 description = "Django app for the user infrastructure of the City of Helsinki"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "django-helusers-0.7.1.tar.gz", hash = "sha256:7c63ff403d3db5136fbc61dbb96db7858a74157c832953c1f9dd9032ffac7236"},
-    {file = "django_helusers-0.7.1-py3-none-any.whl", hash = "sha256:de84fde5449556622cb1364fd93bde6c58e6037aac64cc72880fccee564776bb"},
+    {file = "django-helusers-0.8.1.tar.gz", hash = "sha256:4b8a4566a1548405c03fc88fce971c04aef7210ac638a038d67c2ee52779e573"},
+    {file = "django_helusers-0.8.1-py3-none-any.whl", hash = "sha256:15f5747ab4dba992ec652f40c4c388fdb3d6c0ebeb3256d0346cd78d446175f2"},
 ]
 
 [package.dependencies]
 cachetools = ">=3.0.0"
 deprecation = ">=2"
-Django = ">=2.2,<4"
+Django = ">=3.0"
 python-jose = "*"
 requests = "*"
 
@@ -917,20 +917,21 @@ djangorestframework = ">=3.6.0"
 
 [[package]]
 name = "drf-oidc-auth"
-version = "2.0.0"
+version = "3.0.0"
 description = "OpenID Connect authentication for Django Rest Framework"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "drf-oidc-auth-2.0.0.tar.gz", hash = "sha256:dee7dc4e5a6de2d78a2e2de2468b961c6f928618015ed4302c5392a33d0114aa"},
+    {file = "drf-oidc-auth-3.0.0.tar.gz", hash = "sha256:9b3ee051e86709f2bb8bb9a7e9bb975b7d9a1cf2c55cadcdd5b6889454f99075"},
+    {file = "drf_oidc_auth-3.0.0-py2.py3-none-any.whl", hash = "sha256:243b44ffaf9bbb4a26445370616ab6b666a541479649e6bd3319ede502ea723b"},
 ]
 
 [package.dependencies]
 authlib = ">=0.15.0"
 cryptography = ">=2.6"
-django = ">=1.8.0"
-djangorestframework = ">=3.0.0"
+django = ">=2.2.0"
+djangorestframework = ">=3.11.0"
 requests = ">=2.20.0"
 
 [[package]]
@@ -2586,4 +2587,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "a93dd3f9c0634909ce93de444cc9eb42b1821aaf3f36b949205e356050dea19d"
+content-hash = "699cae156573cd58b3e543caad0af981c485318fed5650067cf8de7a65470952"
