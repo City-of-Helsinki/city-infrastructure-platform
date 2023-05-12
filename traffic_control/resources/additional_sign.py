@@ -87,6 +87,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
         )
 
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+        super().before_import(dataset, using_transactions, dry_run, **kwargs)
         self._content_s_from_columns(dataset)
 
     def after_export(self, queryset, data, *args, **kwargs):
