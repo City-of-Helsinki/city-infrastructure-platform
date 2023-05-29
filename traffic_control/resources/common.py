@@ -37,6 +37,18 @@ class EnumWidget(widgets.Widget):
         return force_str(value.name)
 
 
+class UUIDWidget(widgets.Widget):
+    def clean(self, value, row=None, *args, **kwargs):
+        if value in [None, ""]:
+            return None
+        if isinstance(value, UUID):
+            return value
+        try:
+            return UUID(str(value))
+        except ValueError:
+            raise ValueError("Value '%s' is not a valid UUID." % value)
+
+
 class ResourceUUIDField(fields.Field):
     def get_value(self, obj):
         """Convert UUID to string to prevent the importer from thinking the value is changed, when it's not"""
@@ -48,7 +60,7 @@ class ResourceUUIDField(fields.Field):
 
 
 class GenericDeviceBaseResource(ModelResource):
-    id = ResourceUUIDField(attribute="id", column_name="id", default=None)
+    id = ResourceUUIDField(attribute="id", column_name="id", default=None, widget=UUIDWidget())
 
     @classmethod
     def field_from_django_field(cls, field_name, django_field, readonly):
