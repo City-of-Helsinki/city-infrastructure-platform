@@ -332,3 +332,25 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # WFS
 GISSERVER_USE_DB_RENDERING = False
+
+
+DEBUG_TOOLBAR = False
+if DEBUG:
+    try:
+        import debug_toolbar  # noqa
+
+        DEBUG_TOOLBAR = True
+    except ImportError:
+        pass
+
+    if DEBUG_TOOLBAR:
+        INSTALLED_APPS.append("debug_toolbar")
+        MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+        import socket
+
+        try:
+            _, _, ips = socket.gethostbyname_ex(socket.gethostname())
+            INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1"]
+        except Exception:
+            INTERNAL_IPS = ["127.0.0.1", "localhost"]
