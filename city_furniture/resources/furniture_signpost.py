@@ -5,10 +5,19 @@ from import_export.widgets import ForeignKeyWidget
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
 from traffic_control.models import MountPlan, MountReal, MountType, Owner, Plan, ResponsibleEntity
-from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
+from traffic_control.resources.common import (
+    GenericDeviceBaseResource,
+    ParentChildReplacementImportMixin,
+    ParentChildReplacementPlanToRealExportMixin,
+    ResponsibleEntityPermissionImportMixin,
+)
 
 
-class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
+class AbstractFurnitureSignpostResource(
+    ResponsibleEntityPermissionImportMixin,
+    ParentChildReplacementImportMixin,
+    GenericDeviceBaseResource,
+):
     owner__name_fi = Field(
         attribute="owner",
         column_name="owner__name_fi",
@@ -40,7 +49,10 @@ class AbstractFurnitureSignpostResource(ResponsibleEntityPermissionImportMixin, 
         widget=ForeignKeyWidget(CityFurnitureColor, "name"),
     )
 
-    class Meta(GenericDeviceBaseResource.Meta):
+    class Meta(
+        ParentChildReplacementImportMixin.Meta,
+        GenericDeviceBaseResource.Meta,
+    ):
         common_fields = (
             "id",
             "owner__name_fi",
@@ -129,12 +141,11 @@ class FurnitureSignpostRealResource(AbstractFurnitureSignpostResource):
         export_order = fields
 
 
-class FurnitureSignpostPlanTemplateResource(FurnitureSignpostRealResource):
+class FurnitureSignpostPlanTemplateResource(
+    ParentChildReplacementPlanToRealExportMixin,
+    FurnitureSignpostRealResource,
+):
     """Resource for exporting a Plan and making the output importable as a real"""
-
-    class Meta(AbstractFurnitureSignpostResource.Meta):
-        model = FurnitureSignpostPlan
-        verbose_name = _("Template for Real Import")
 
     def dehydrate_id(self, obj: FurnitureSignpostPlan):
         related_reals = list(FurnitureSignpostReal.objects.filter(furniture_signpost_plan=obj.id))
@@ -156,5 +167,25 @@ class FurnitureSignpostPlanTemplateResource(FurnitureSignpostRealResource):
 
         return mount_reals[0].id
 
+    def dehydrate_parent__id(self, obj: FurnitureSignpostPlan):
+        if not obj.parent:
+            return None
+
+        parents = list(FurnitureSignpostReal.objects.filter(furniture_signpost_plan=obj.parent))
+        if not parents:
+            return None
+
+        return parents[0].id
+
     def __str__(self):
         return self.Meta.verbose_name
+
+    class Meta(
+        ParentChildReplacementPlanToRealExportMixin.Meta,
+        FurnitureSignpostRealResource.Meta,
+    ):
+        model = FurnitureSignpostPlan
+        plan_id_header = "furniture_signpost_plan__id"
+        real_model = FurnitureSignpostReal
+        real_model_plan_id_field = "furniture_signpost_plan_id"
+        verbose_name = _("Template for Real Import")

@@ -212,7 +212,14 @@ def get_road_marking_real(location="", device_type=None, road_marking_plan=None,
     )[0]
 
 
-def get_signpost_plan(location="", plan=None, device_type=None, parent=None, mount_plan=None):
+def get_signpost_plan(
+    location="",
+    plan=None,
+    device_type=None,
+    parent=None,
+    mount_plan=None,
+    txt=None,
+):
     user = get_user("test_user")
 
     return SignpostPlan.objects.get_or_create(
@@ -223,12 +230,20 @@ def get_signpost_plan(location="", plan=None, device_type=None, parent=None, mou
         owner=get_owner(),
         parent=parent,
         mount_plan=mount_plan,
+        txt=txt,
         created_by=user,
         updated_by=user,
     )[0]
 
 
-def get_signpost_real(location="", device_type=None, signpost_plan=None, parent=None, mount_real=None):
+def get_signpost_real(
+    location="",
+    device_type=None,
+    signpost_plan=None,
+    parent=None,
+    mount_real=None,
+    txt=None,
+):
     user = get_user("test_user")
 
     return SignpostReal.objects.get_or_create(
@@ -240,6 +255,7 @@ def get_signpost_real(location="", device_type=None, signpost_plan=None, parent=
         owner=get_owner(),
         parent=parent,
         mount_real=mount_real,
+        txt=txt,
         created_by=user,
         updated_by=user,
     )[0]

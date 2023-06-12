@@ -1,4 +1,5 @@
-from uuid import UUID
+from typing import Dict, List, Optional, Set
+from uuid import UUID, uuid4
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
@@ -10,8 +11,10 @@ from import_export import fields, widgets
 from import_export.admin import ImportExportActionModelAdmin
 from import_export.formats import base_formats
 from import_export.resources import ModelResource
+from tablib import Dataset
 
 from traffic_control.models import ResponsibleEntity
+from traffic_control.models.utils import SoftDeleteQuerySet
 from users.models import User
 from users.utils import get_system_user
 
@@ -110,6 +113,180 @@ class GenericDeviceBaseResource(ModelResource):
 
     def __str__(self):
         return self.__class__.__name__
+
+
+class ParentChildReplacementImportMixin:
+    """Mixing for replacing non-UUID id values with UUIDs in parent-child relations before import"""
+
+    def before_import(self, dataset: Dataset, using_transactions, dry_run, **kwargs):
+        super().before_import(dataset, using_transactions, dry_run, **kwargs)
+        self._link_children_to_parents(dataset)
+
+    def _link_children_to_parents(self, dataset: Dataset):
+        id_header = self._meta.id_header
+        parent_id_header = self._meta.parent_id_header
+
+        # We cannot do linking if id and parent id are not present the import dataset
+        if id_header not in dataset.headers or parent_id_header not in dataset.headers:
+            return
+
+        ids_column, replacements = self._get_id_column_and_replacements(dataset)
+        parent_ids_column = self._get_replaced_parent_id_column(dataset, replacements)
+
+        del dataset[id_header]
+        dataset.append_col(col=ids_column, header=id_header)
+        del dataset[parent_id_header]
+        dataset.append_col(col=parent_ids_column, header=parent_id_header)
+
+    def _get_id_column_and_replacements(self, dataset: Dataset):
+        ids_column = []
+        replacements = {}
+
+        for row in dataset.dict:
+            id_value = row[self._meta.id_header]
+            if id_value in [None, ""]:
+                ids_column.append(None)
+            else:
+                id_value = str(id_value)
+                try:
+                    # Try to interpret value as UUID
+                    device_id = UUID(id_value)
+                except ValueError:
+                    # If value cannot be interpreted as UUID then id_value was a replacement value
+                    device_id = uuid4()
+                    replacements[id_value] = device_id
+                ids_column.append(device_id)
+
+        return ids_column, replacements
+
+    def _get_replaced_parent_id_column(self, dataset: Dataset, replacements: Dict[str, UUID]):
+        parent_ids_column = []
+
+        for row in dataset.dict:
+            parent_id_value = row[self._meta.parent_id_header]
+            if parent_id_value in [None, ""]:
+                parent_ids_column.append(None)
+            else:
+                parent_id_value = str(parent_id_value)
+                try:
+                    # Try to interpret value as UUID
+                    parent_id = UUID(parent_id_value)
+                except ValueError:
+                    # If value cannot be interpreted as UUID then we find a replacement value, if available
+                    parent_id = replacements.get(parent_id_value, parent_id_value)
+                parent_ids_column.append(parent_id)
+
+        return parent_ids_column
+
+    class Meta:
+        id_header = "id"
+        parent_id_header = "parent__id"
+
+
+class ParentChildReplacementPlanToRealExportMixin:
+    """
+    Mixin to replace real device ids and parent ids with replaceable (non-UUID) values after export.
+    Any UUID references to existing real devices are retained.
+    """
+
+    def after_export(self, queryset: SoftDeleteQuerySet, data: Dataset, *args, **kwargs):
+        super().after_export(queryset, data, *args, **kwargs)
+        self._replace_ids_with_replaceable_values(queryset, data)
+
+    def _replace_ids_with_replaceable_values(self, queryset: SoftDeleteQuerySet, dataset: Dataset):
+        id_header = self._meta.id_header
+        parent_id_header = self._meta.parent_id_header
+        real_model_plan_id_field = self._meta.real_model_plan_id_field
+
+        plan_ids = list(queryset.values_list("id", flat=True))
+        plan_parent_ids = list(queryset.values_list("parent", flat=True))
+        plan_parent_ids_distinct = list(queryset.exclude(parent=None).values_list("parent", flat=True).distinct())
+
+        # Exclude plan ids which have existing reals
+        plan_ids_with_existing_reals = list(
+            self._meta.real_model.objects.filter(
+                **{f"{real_model_plan_id_field}__in": plan_parent_ids_distinct}
+            ).values_list(real_model_plan_id_field, flat=True)
+        )
+        plan_parent_ids_distinct = list(set(plan_parent_ids_distinct) - set(plan_ids_with_existing_reals))
+
+        ids_column = dataset[id_header]
+        parent_ids_column = dataset[parent_id_header]
+
+        # Assume that queryset elements match with dataset rows
+        for row_index, row in enumerate(dataset.dict):
+            # Replace id
+            try:
+                ids_column[row_index] = plan_parent_ids_distinct.index(plan_ids[row_index]) + 1
+            except ValueError:
+                pass
+            # Replace parent id
+            try:
+                parent_ids_column[row_index] = plan_parent_ids_distinct.index(plan_parent_ids[row_index]) + 1
+            except ValueError:
+                pass
+
+        # Replace columns in the dataset
+        del dataset[id_header]
+        dataset.insert_col(0, ids_column, id_header)
+        del dataset[parent_id_header]
+        dataset.insert_col(1, parent_ids_column, parent_id_header)
+
+        # Sort dataset so that parent objects are always before their children
+        self._sort_dataset(dataset, queryset)
+
+    def _sort_dataset(self, data: Dataset, queryset):
+        # Copy dataset so that we can edit the original in-place
+        original_data = Dataset(headers=data.headers, title=data.title)
+        for item in data.dict:
+            row = [item[key] for key in data.headers]
+            original_data.append(row=row)
+
+        # Wipe data and add rows back in sorted order
+        ordered_plan_ids = self._get_parent_child_id_order(queryset)
+        data.wipe()
+        data.headers = original_data.headers
+        data.title = original_data.title
+        sorted_dict = sorted(original_data.dict, key=lambda x: ordered_plan_ids.index(x[self._meta.plan_id_header]))
+        for item in sorted_dict:
+            row = [item[key] for key in data.headers]
+            data.append(row=row)
+
+    def _get_parent_child_id_order(
+        self,
+        queryset: SoftDeleteQuerySet,
+        parent_id: Optional[UUID] = None,
+        parent_child_id_order: Optional[List[UUID]] = None,
+    ) -> List[UUID]:
+        """Recursively build a list of ids in the order where parents are before their children."""
+
+        if parent_child_id_order is None:
+            parent_child_id_order = []
+
+        children_qs = queryset.filter(parent_id=parent_id)
+        # In the first recursive iteration we also must include orphaned devices
+        if parent_id is None:
+            children_qs = children_qs.union(queryset.filter(id__in=self._get_orphaned_devices(queryset)))
+
+        for child in children_qs.values_list("id", "parent_id", named=True):
+            parent_child_id_order.append(child.id)
+            self._get_parent_child_id_order(queryset, parent_id=child.id, parent_child_id_order=parent_child_id_order)
+        return parent_child_id_order
+
+    @staticmethod
+    def _get_orphaned_devices(queryset: SoftDeleteQuerySet) -> Set[UUID]:
+        """Returns devices which parents are not in the `queryset`."""
+
+        orphaned = set()
+        ids = set(queryset.values_list("id", flat=True))
+        for id, parent_id in queryset.values_list("id", "parent_id"):
+            if parent_id is not None and parent_id not in ids:
+                orphaned.add(id)
+        return orphaned
+
+    class Meta:
+        id_header = "id"
+        parent_id_header = "parent__id"
 
 
 class ResponsibleEntityPermissionImportMixin:

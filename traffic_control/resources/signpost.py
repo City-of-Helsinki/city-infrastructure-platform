@@ -13,10 +13,19 @@ from traffic_control.models import (
     SignpostReal,
     TrafficControlDeviceType,
 )
-from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
+from traffic_control.resources.common import (
+    GenericDeviceBaseResource,
+    ParentChildReplacementImportMixin,
+    ParentChildReplacementPlanToRealExportMixin,
+    ResponsibleEntityPermissionImportMixin,
+)
 
 
-class AbstractSignpostResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
+class AbstractSignpostResource(
+    ResponsibleEntityPermissionImportMixin,
+    ParentChildReplacementImportMixin,
+    GenericDeviceBaseResource,
+):
     owner__name_fi = Field(
         attribute="owner",
         column_name="owner__name_fi",
@@ -38,7 +47,10 @@ class AbstractSignpostResource(ResponsibleEntityPermissionImportMixin, GenericDe
         widget=ForeignKeyWidget(MountType, "code"),
     )
 
-    class Meta(GenericDeviceBaseResource.Meta):
+    class Meta(
+        ParentChildReplacementImportMixin.Meta,
+        GenericDeviceBaseResource.Meta,
+    ):
         common_fields = (
             "id",
             "owner__name_fi",
@@ -126,11 +138,10 @@ class SignpostRealResource(AbstractSignpostResource):
         export_order = fields
 
 
-class SignpostPlanToRealTemplateResource(SignpostRealResource):
-    class Meta(AbstractSignpostResource.Meta):
-        model = SignpostPlan
-        verbose_name = _("Template for Real Import")
-
+class SignpostPlanToRealTemplateResource(
+    ParentChildReplacementPlanToRealExportMixin,
+    SignpostRealResource,
+):
     def dehydrate_id(self, obj: SignpostPlan):
         related_reals = list(SignpostReal.objects.filter(signpost_plan=obj.id))
         if related_reals:
@@ -163,3 +174,13 @@ class SignpostPlanToRealTemplateResource(SignpostRealResource):
 
     def __str__(self):
         return self.Meta.verbose_name
+
+    class Meta(
+        ParentChildReplacementPlanToRealExportMixin.Meta,
+        SignpostRealResource.Meta,
+    ):
+        model = SignpostPlan
+        plan_id_header = "signpost_plan__id"
+        real_model = SignpostReal
+        real_model_plan_id_field = "signpost_plan_id"
+        verbose_name = _("Template for Real Import")
