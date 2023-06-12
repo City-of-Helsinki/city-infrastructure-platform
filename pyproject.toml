@@ -42,7 +42,7 @@ uWSGI = "^2.0.21"
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 bump2version = "^1.0.1"
-coverage = { version = "7.2.5", extras = ["toml"] }
+coverage = { version = "7.2.7", extras = ["toml"] }
 django-debug-toolbar = "^4.1.0"
 factory-boy = "^3.2.1"
 flake8 = "^6.0.0"
