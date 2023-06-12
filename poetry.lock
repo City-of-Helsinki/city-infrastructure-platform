@@ -696,18 +696,18 @@ Django = ">=3.2"
 
 [[package]]
 name = "django-gisserver"
-version = "1.2.5"
+version = "1.2.7"
 description = "Django speaking WFS 2.0 (exposing GeoDjango model fields)"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "django-gisserver-1.2.5.tar.gz", hash = "sha256:46771b96f49b9dd7a1bda3bed7bbbe6b0021f8ceca1777d5842a53abd32b818b"},
-    {file = "django_gisserver-1.2.5-py3-none-any.whl", hash = "sha256:853a88fd4739104f9f1722aaafd14f59e03134408071a685e8d589ad553f6b36"},
+    {file = "django-gisserver-1.2.7.tar.gz", hash = "sha256:625843059ccf496594b0d1ce83c7f49afd4081c1613e9107ef75744207d0ef0f"},
+    {file = "django_gisserver-1.2.7-py3-none-any.whl", hash = "sha256:a371ef22a5aacc4c1468fed096016921c091b33de1d26a99f773291dece97750"},
 ]
 
 [package.dependencies]
 defusedxml = ">=0.6.0"
-Django = ">=2.0"
+Django = ">=3.2"
 lru-dict = ">=1.1.7"
 orjson = ">=2.4.0"
 
@@ -2475,4 +2475,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "f0c166ca2abd4a183e5317d73315cc154e67deffe4cd7491366945bcef105ae2"
+content-hash = "ba59410972d57e0f5edc2ea044a5078c0afc773d02105145378bfc7f89c55e41"
