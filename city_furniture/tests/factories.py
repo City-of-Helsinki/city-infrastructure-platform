@@ -58,7 +58,14 @@ def get_city_furniture_device_type(
     )[0]
 
 
-def get_furniture_signpost_plan(location=None, owner=None, device_type=None, mount_plan=None):
+def get_furniture_signpost_plan(
+    location=None,
+    owner=None,
+    device_type=None,
+    parent=None,
+    mount_plan=None,
+    location_name_en=None,
+):
     user = get_user("test_user")
     location = location or test_point_3d
     owner = owner or get_owner()
@@ -66,6 +73,7 @@ def get_furniture_signpost_plan(location=None, owner=None, device_type=None, mou
 
     return FurnitureSignpostPlan.objects.get_or_create(
         location=location,
+        location_name_en=location_name_en,
         owner=owner,
         device_type=device_type,
         direction=90,
@@ -74,13 +82,20 @@ def get_furniture_signpost_plan(location=None, owner=None, device_type=None, mou
         source_name="Some_source",
         source_id=uuid.uuid4(),
         responsible_entity=get_responsible_entity(),
+        parent=parent,
         created_by=user,
         updated_by=user,
     )[0]
 
 
 def get_furniture_signpost_real(
-    location=None, owner=None, device_type=None, furniture_signpost_plan=None, mount_real=None
+    location=None,
+    owner=None,
+    device_type=None,
+    furniture_signpost_plan=None,
+    parent=None,
+    mount_real=None,
+    location_name_en=None,
 ):
     user = get_user("test_user")
     location = location or test_point_3d
@@ -93,6 +108,7 @@ def get_furniture_signpost_real(
             or get_furniture_signpost_plan(location=location, owner=owner, device_type=device_type)
         ),
         location=location,
+        location_name_en=location_name_en,
         owner=owner,
         device_type=device_type,
         direction=90,
@@ -102,6 +118,7 @@ def get_furniture_signpost_real(
         source_name="Some_source",
         source_id=uuid.uuid4(),
         responsible_entity=get_responsible_entity(),
+        parent=parent,
         created_by=user,
         updated_by=user,
     )[0]
