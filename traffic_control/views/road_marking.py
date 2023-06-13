@@ -54,7 +54,7 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": RoadMarkingPlanGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = RoadMarkingPlan.objects.active()
+    queryset = RoadMarkingPlan.objects.active().prefetch_related("files")
     filterset_class = RoadMarkingPlanFilterSet
     file_queryset = RoadMarkingPlanFile.objects.all()
     file_serializer = RoadMarkingPlanFileSerializer
@@ -116,7 +116,12 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": RoadMarkingRealGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = RoadMarkingReal.objects.active()
+    queryset = (
+        RoadMarkingReal.objects.active()
+        .prefetch_related("files")
+        .prefetch_related("operations")
+        .prefetch_related("operations__operation_type")
+    )
     filterset_class = RoadMarkingRealFilterSet
     file_queryset = RoadMarkingRealFile.objects.all()
     file_serializer = RoadMarkingRealFileSerializer

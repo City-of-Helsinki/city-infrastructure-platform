@@ -49,7 +49,11 @@ class AdditionalSignRealViewSet(TrafficControlViewSet):
         "geojson": AdditionalSignRealGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = AdditionalSignReal.objects.active()
+    queryset = (
+        AdditionalSignReal.objects.active()
+        .prefetch_related("operations")
+        .prefetch_related("operations__operation_type")
+    )
     filterset_class = AdditionalSignRealFilterSet
 
     def partial_update(self, request, *args, **kwargs):

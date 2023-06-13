@@ -64,7 +64,7 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": MountPlanGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = MountPlan.objects.active()
+    queryset = MountPlan.objects.active().prefetch_related("files")
     filterset_class = MountPlanFilterSet
     file_queryset = MountPlanFile.objects.all()
     file_serializer = MountPlanFileSerializer
@@ -127,7 +127,12 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     serializer_class = MountRealSerializer
-    queryset = MountReal.objects.active()
+    queryset = (
+        MountReal.objects.active()
+        .prefetch_related("files")
+        .prefetch_related("operations")
+        .prefetch_related("operations__operation_type")
+    )
     filterset_class = MountRealFilterSet
     file_queryset = MountRealFile.objects.all()
     file_serializer = MountRealFileSerializer

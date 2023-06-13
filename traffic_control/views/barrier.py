@@ -44,7 +44,7 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": BarrierPlanGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = BarrierPlan.objects.active()
+    queryset = BarrierPlan.objects.active().prefetch_related("files")
     filterset_class = BarrierPlanFilterSet
     file_queryset = BarrierPlanFile.objects.all()
     file_serializer = BarrierPlanFileSerializer
@@ -106,7 +106,12 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": BarrierRealGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = BarrierReal.objects.active()
+    queryset = (
+        BarrierReal.objects.active()
+        .prefetch_related("files")
+        .prefetch_related("operations")
+        .prefetch_related("operations__operation_type")
+    )
     filterset_class = BarrierRealFilterSet
     file_queryset = BarrierRealFile.objects.all()
     file_serializer = BarrierRealFileSerializer
