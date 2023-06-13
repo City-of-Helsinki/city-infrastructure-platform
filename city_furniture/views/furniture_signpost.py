@@ -57,7 +57,7 @@ class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": FurnitureSignpostPlanGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = FurnitureSignpostPlan.objects.active()
+    queryset = FurnitureSignpostPlan.objects.active().select_related("device_type").prefetch_related("files")
     filterset_class = FurnitureSignpostPlanFilterSet
     file_queryset = FurnitureSignpostPlanFile.objects.all()
     file_serializer = FurnitureSignpostPlanFileSerializer
@@ -119,7 +119,13 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": FurnitureSignpostRealGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = FurnitureSignpostReal.objects.active()
+    queryset = (
+        FurnitureSignpostReal.objects.active()
+        .select_related("device_type")
+        .prefetch_related("files")
+        .prefetch_related("operations")
+        .prefetch_related("operations__operation_type")
+    )
     filterset_class = FurnitureSignpostRealFilterSet
     file_queryset = FurnitureSignpostRealFile.objects.all()
     file_serializer = FurnitureSignpostRealFileSerializer

@@ -44,7 +44,7 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": SignpostPlanGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = SignpostPlan.objects.active()
+    queryset = SignpostPlan.objects.active().prefetch_related("files")
     filterset_class = SignpostPlanFilterSet
     file_queryset = SignpostPlanFile.objects.all()
     file_serializer = SignpostPlanFileSerializer
@@ -106,7 +106,12 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": SignpostRealGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = SignpostReal.objects.active()
+    queryset = (
+        SignpostReal.objects.active()
+        .prefetch_related("files")
+        .prefetch_related("operations")
+        .prefetch_related("operations__operation_type")
+    )
     filterset_class = SignpostRealFilterSet
     file_queryset = SignpostRealFile.objects.all()
     file_serializer = SignpostRealFileSerializer

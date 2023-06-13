@@ -83,7 +83,7 @@ class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": TrafficSignPlanGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = TrafficSignPlan.objects.active()
+    queryset = TrafficSignPlan.objects.active().prefetch_related("files")
     filterset_class = TrafficSignPlanFilterSet
     file_queryset = TrafficSignPlanFile.objects.all()
     file_serializer = TrafficSignPlanFileSerializer
@@ -145,7 +145,12 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
         "geojson": TrafficSignRealGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = TrafficSignReal.objects.active()
+    queryset = (
+        TrafficSignReal.objects.active()
+        .prefetch_related("files")
+        .prefetch_related("operations")
+        .prefetch_related("operations__operation_type")
+    )
     filterset_class = TrafficSignRealFilterSet
     file_queryset = TrafficSignRealFile.objects.all()
     file_serializer = TrafficSignRealFileSerializer

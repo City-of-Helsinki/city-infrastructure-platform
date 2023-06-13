@@ -20,5 +20,14 @@ class PlanViewSet(TrafficControlViewSet):
         "default": PlanSerializer,
         "geojson": PlanGeoJSONSerializer,
     }
-    queryset = Plan.objects.active()
+    queryset = (
+        Plan.objects.active()
+        .prefetch_related("additional_sign_plans")
+        .prefetch_related("barrier_plans")
+        .prefetch_related("mount_plans")
+        .prefetch_related("road_marking_plans")
+        .prefetch_related("signpost_plans")
+        .prefetch_related("traffic_light_plans")
+        .prefetch_related("traffic_sign_plans")
+    )
     filterset_class = PlanFilterSet
