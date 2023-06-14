@@ -55,12 +55,8 @@ class ResponsibleEntity(MPTTModel):
         verbose_name_plural = _("Responsible Entities")
 
     def get_full_path(self):
-        obj = self
-        path = obj.name
-        while obj.parent is not None:
-            obj = obj.parent
-            path = f"{obj.name} > {path}"
-        return path
+        ancestors = self.get_ancestors(include_self=True)
+        return " > ".join([ancestor.name for ancestor in ancestors])
 
     def clean_parent(self):
         if self.parent and self.parent.organization_level.value > self.organization_level.value:
