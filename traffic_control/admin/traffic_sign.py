@@ -210,6 +210,10 @@ class TrafficSignPlanAdmin(
     inlines = (TrafficSignPlanFileInline, AdditionalSignPlanInline)
     initial_values = shared_initial_values
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("device_type")
+
     def has_additional_signs(self, obj):
         return (_("No"), _("Yes"))[obj.has_additional_signs()]
 
@@ -411,6 +415,10 @@ class TrafficSignRealAdmin(
         "condition": Condition.VERY_GOOD,
         "installation_status": InstallationStatus.IN_USE,
     }
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("device_type")
 
     def has_additional_signs(self, obj):
         return (_("No"), _("Yes"))[obj.has_additional_signs()]

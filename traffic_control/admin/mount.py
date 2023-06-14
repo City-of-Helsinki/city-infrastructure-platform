@@ -129,6 +129,10 @@ class MountPlanAdmin(
     inlines = (MountPlanFileInline,)
     initial_values = {}
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("mount_type")
+
 
 class MountRealFileInline(admin.TabularInline):
     formfield_overrides = {
@@ -239,6 +243,10 @@ class MountRealAdmin(
         "installation_status": InstallationStatus.IN_USE,
         "condition": Condition.VERY_GOOD,
     }
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("mount_type")
 
 
 @admin.register(MountType)
