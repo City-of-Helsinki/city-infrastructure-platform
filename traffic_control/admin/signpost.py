@@ -146,6 +146,10 @@ class SignpostPlanAdmin(
     inlines = (SignpostPlanFileInline,)
     initial_values = shared_initial_values
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("device_type")
+
 
 class SignpostRealFileInline(admin.TabularInline):
     formfield_overrides = {
@@ -271,3 +275,7 @@ class SignpostRealAdmin(
         "installation_status": InstallationStatus.IN_USE,
         "condition": Condition.VERY_GOOD,
     }
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("device_type")

@@ -142,6 +142,10 @@ class AdditionalSignPlanAdmin(
     ordering = ("-created_at",)
     initial_values = shared_initial_values
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("device_type")
+
 
 @admin.register(AdditionalSignReal)
 class AdditionalSignRealAdmin(
@@ -324,6 +328,17 @@ class AdditionalSignRealAdmin(
         "condition": Condition.VERY_GOOD,
         "installation_status": InstallationStatus.IN_USE,
     }
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return (
+            qs.prefetch_related("device_type")
+            .prefetch_related("created_by")
+            .prefetch_related("updated_by")
+            .prefetch_related("additional_sign_plan")
+            .prefetch_related("mount_real")
+            .prefetch_related("mount_type")
+        )
 
 
 class BaseAdditionalSignInline(admin.TabularInline):
