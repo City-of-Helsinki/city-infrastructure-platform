@@ -257,3 +257,10 @@ class PlanRelationsForm(forms.Form):
         # Omit instances related to other plans from choices.
         for field_name, field in self.fields.items():
             field.queryset = field.queryset.filter(Q(plan=None) | Q(plan=plan))
+
+            # Optimize listing all plans. Devices have device type code and description in their "name",
+            # except mount which have its mount type.
+            if hasattr(field.queryset.model, "device_type"):
+                field.queryset = field.queryset.select_related("device_type")
+            elif hasattr(field.queryset.model, "mount_type"):
+                field.queryset = field.queryset.select_related("mount_type")
