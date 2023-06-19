@@ -89,7 +89,7 @@ msgstr ""
 
 msgid ""
 "On the top-right corner press 'Import' to begin. You are prompted to upload "
-"your file, select it's file type and then press 'Submit' to continue."
+"your file, select its file type and then press 'Submit' to continue."
 msgstr ""
 "Aloita tietojen tuominen painamalla oikeassa yläkulmassa olevaa 'Import' "
 "nappia. Sinua kehotetaan lataamaan tiedostosi, valitse sen tiedostotyyppi ja "

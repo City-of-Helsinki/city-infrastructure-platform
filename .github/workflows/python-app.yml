@@ -59,6 +59,8 @@ jobs:
         flake8
         black --check .
         isort . -c
+        djlint .
+        djlint --check .
 
     - name: Run pytest code functionality tests
       run: |

@@ -1,12 +1,18 @@
 {% load i18n %}
 
 {% block content %}
-{% spaceless %}
-
-<p>{% translate "To import data to the platform, first navigate to a model's list admin page which supports importing and exporting." %}</p>
-<p>{% translate "On the top-right corner press 'Import' to begin. You are prompted to upload your file, select it's file type and then press 'Submit' to continue." %}</p>
-<p>{% translate "You will be presented with a screen detailing what operations will be excecuted. Make sure all is in order with the changes and click the Confirm Import button. Ta-da! Your file has now been imported!" %}</p>
-<p>{% translate "When importing a file, the data will be validated for errors. If there are any errors in the file, you must take steps to correct them before trying again. It is not be possible to import any of the data in the file." %}</p>
-
-{% endspaceless %}
+    {% spaceless %}
+        <p>
+            {% translate "To import data to the platform, first navigate to a model's list admin page which supports importing and exporting." %}
+        </p>
+        <p>
+            {% translate "On the top-right corner press 'Import' to begin. You are prompted to upload your file, select its file type and then press 'Submit' to continue." %}
+        </p>
+        <p>
+            {% translate "You will be presented with a screen detailing what operations will be excecuted. Make sure all is in order with the changes and click the Confirm Import button. Ta-da! Your file has now been imported!" %}
+        </p>
+        <p>
+            {% translate "When importing a file, the data will be validated for errors. If there are any errors in the file, you must take steps to correct them before trying again. It is not be possible to import any of the data in the file." %}
+        </p>
+    {% endspaceless %}
 {% endblock %}

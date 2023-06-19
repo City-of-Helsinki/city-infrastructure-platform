@@ -44,6 +44,7 @@ black = "^23.3.0"
 bump2version = "^1.0.1"
 coverage = { version = "7.2.7", extras = ["toml"] }
 django-debug-toolbar = "^4.1.0"
+djlint = "^1.32.1"
 factory-boy = "^3.2.1"
 flake8 = "^6.0.0"
 flake8-pyproject = "^1.2.3"
@@ -84,6 +85,17 @@ use_parentheses = true
 exclude = ["migrations", "venv"]
 max-line-length = 120
 max-complexity = 10
+
+
+[tool.djlint]
+ignore = "T003,H023,H030,H031"
+use_gitignore = true
+extend_exclude = "map-view"
+profile = "django"
+max_line_length = 120
+max_blank_lines = 1
+max_attribute_length = 20
+close_void_tags = true
 
 
 [tool.pydocstyle]
