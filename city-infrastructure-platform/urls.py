@@ -29,6 +29,7 @@ from traffic_control.views import (
     traffic_sign as traffic_sign_views,
 )
 from traffic_control.views.device_catalog import AdditionalSignCatalog, TrafficSignCatalog
+from traffic_control.views.embed import TrafficSignPlanEmbed, TrafficSignRealEmbed
 from traffic_control.views.wfs.views import CityInfrastructureWFSView
 
 from .admin.views import MyAccountView
@@ -145,13 +146,14 @@ if settings.SENTRY_DEBUG:
         path("sentry-debug/", lambda a: 1 / 0),
     ]
 
-# Admin
 urlpatterns += i18n_patterns(
     path("admin/account/", MyAccountView.as_view(), name="my-account"),
     path("admin/doc/", include("city_infra_instructions.urls")),
     path("admin/", admin.site.urls),
     path("map/", map_views.map_view, name="map-view"),
     path("map-config/", map_views.map_config, name="map-config"),
+    path("embed/traffic-sign-plans/<uuid:pk>/", TrafficSignPlanEmbed.as_view(), name="traffic-sign-plan-embed"),
+    path("embed/traffic-sign-reals/<uuid:pk>/", TrafficSignRealEmbed.as_view(), name="traffic-sign-real-embed"),
 )
 
 if settings.DEBUG:

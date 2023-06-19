@@ -1,0 +1,55 @@
+body {
+    font-size: 0.9em;
+    font-family: Helvetica, Arial, sans-serif;
+    background-color: white;
+    color: rgb(34, 34, 34);
+    margin: 0px;
+    padding: 4px;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 180%;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 120%;
+    margin-top: 1.5em;
+}
+
+.traffic-sign-icon {
+    margin: 5px;
+}
+
+.additional-sign-icon {
+    width: 100px;
+    height: auto;
+    margin: 5px;
+    vertical-align: middle;
+}
+
+li:nth-child(even) {
+    background-color: rgb(235, 235, 235);
+}
+
+li:nth-child(odd) {
+    background-color: rgb(245, 245, 245);
+}
+
+dt {
+    font-weight: bold;
+}
+
+dd {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+ul.list-related {
+    padding-left: 0px;
+}
+
+ul.list-related li {
+    list-style-type: none;
+}

@@ -1,0 +1,87 @@
+{% load tz %}
+{% load i18n %}
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet"
+              href="{% static 'traffic_control/css/embed.css' %}" />
+    </head>
+
+    <body>
+        {% if object.device_type.icon %}
+            <img class="traffic-sign-icon"
+                 src="{{ STATIC_URL }}traffic_control/svg/traffic_sign_icons/{{ object.device_type.icon }}"
+                 alt="{{ object.device_type.description }}"
+                 width="120"
+                 height="120" />
+        {% endif %}
+        <dl>
+            {% for field, value in traffic_sign_fields %}
+                <dt>{{ field.verbose_name }}</dt>
+                <dd>
+                    {% if value != "" %}
+                        {{ value|default_if_none:"-" }}
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
+                </dd>
+            {% endfor %}
+        </dl>
+
+        <h2>{% translate "Additional signs" %}</h2>
+
+        <ul class="list-related">
+            {% for additional_sign in additional_signs %}
+                <li class="additional-sign">
+                    <div>
+                        {% if additional_sign.object.device_type.icon %}
+                            <img class="additional-sign-icon"
+                                 src="{{ STATIC_URL }}traffic_control/svg/traffic_sign_icons/{{ additional_sign.object.device_type.icon }}"
+                                 alt="{{ additional_sign.object.device_type.description }}"
+                                 width="100"
+                                 height="100" />
+                        {% endif %}
+                        <dl>
+                            {% for field, value in additional_sign.fields %}
+                                <dt>{{ field.verbose_name }}</dt>
+                                <dd>
+                                    {% if value != "" %}
+                                        {{ value|default_if_none:"-" }}
+                                    {% else %}
+                                        &nbsp;
+                                    {% endif %}
+                                </dd>
+                            {% endfor %}
+                        </dl>
+                    </div>
+                </li>
+            {% empty %}
+                <p>No additional signs</p>
+            {% endfor %}
+        </ul>
+
+        <h2>{% translate "Mount" %}</h2>
+
+        {% if mount_fields %}
+            <dl>
+                {% for field, value in mount_fields %}
+                    <dt>{{ field.verbose_name }}</dt>
+                    <dd>
+                        {% if value != "" %}
+                            {{ value|default_if_none:"-" }}
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                    </dd>
+                {% endfor %}
+            </dl>
+        {% else %}
+            <p>{% translate "No mount" %}</p>
+        {% endif %}
+
+    </body>
+</html>
