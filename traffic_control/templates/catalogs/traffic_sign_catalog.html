@@ -1,24 +1,27 @@
-{% load static %} {% get_static_prefix as STATIC_URL %}
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
 
 <!DOCTYPE html>
-<html>
+<html lang="fi">
     <head>
         <title>{{ title }}</title>
-        <link
-            rel="stylesheet"
-            href="{% static 'traffic_control/css/catalog.css' %}"
-        />
+        <link rel="stylesheet" href="{% static "traffic_control/css/catalog.css" %}" />
     </head>
     <body>
         <h1>{{ title }}</h1>
 
         <table id="signs">
             <colgroup>
-                <col span="1" class="code" />
-                <col span="1" class="description" />
-                <col span="1" class="icon" />
-                <col span="1" class="value" />
-                <col span="1" class="unit" />
+                <col span="1"
+                     class="code" />
+                <col span="1"
+                     class="description" />
+                <col span="1"
+                     class="icon" />
+                <col span="1"
+                     class="value" />
+                <col span="1"
+                     class="unit" />
             </colgroup>
 
             <tr>
@@ -30,19 +33,22 @@
             </tr>
 
             {% for device_type in device_types %}
-            <tr>
-                <td>{{ device_type.code }}</td>
-                <td>{{ device_type.description }}</td>
-                <td>
-                    {% if device_type.icon %}
-                    <img
-                        src="{{ STATIC_URL }}traffic_control/svg/traffic_sign_icons/{{ device_type.icon }}"
-                    />
-                    {% else %} - {% endif %}
-                </td>
-                <td>{{ device_type.value }}</td>
-                <td>{{ device_type.unit }}</td>
-            </tr>
+                <tr>
+                    <td>{{ device_type.code }}</td>
+                    <td>{{ device_type.description }}</td>
+                    <td>
+                        {% if device_type.icon %}
+                            <img src="{{ STATIC_URL }}traffic_control/svg/traffic_sign_icons/{{ device_type.icon }}"
+                                 width="200"
+                                 height="200"
+                                 alt="{{ device_type.icon }}" />
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ device_type.value }}</td>
+                    <td>{{ device_type.unit }}</td>
+                </tr>
             {% endfor %}
         </table>
     </body>

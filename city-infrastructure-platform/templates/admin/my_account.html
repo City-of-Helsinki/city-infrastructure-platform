@@ -3,7 +3,7 @@
 
 {% block extrastyle %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -43,13 +43,11 @@
             <h2>{% translate "actions"|capfirst %}</h2>
 
             {% if user.has_usable_password %}
-            <div class="form-row">
-                <a href="{% url "admin:password_change" %}">{% translate "Change password" %}</a>
-            </div>
+                <div class="form-row">
+                    <a href="{% url "admin:password_change" %}">{% translate "Change password" %}</a>
+                </div>
             {% else %}
-            <div class="form-row">
-                -
-            </div>
+                <div class="form-row">-</div>
             {% endif %}
 
         </fieldset>

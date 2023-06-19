@@ -1,10 +1,14 @@
 {% load i18n %}
 
 {% block content %}
-{% spaceless %}
+    {% spaceless %}
 
-<p>{% translate "To export data from the platform, first navigate to a model's list admin page which supports importing and exporting." %}</p>
-<p>{% translate "Select the devices you want to export by ticking the checkbox next to them. On the Action dropdown select: 'Export selected *model name*' and the desired format and press Go." %}</p>
+        <p>
+            {% translate "To export data from the platform, first navigate to a model's list admin page which supports importing and exporting." %}
+        </p>
+        <p>
+            {% translate "Select the devices you want to export by ticking the checkbox next to them. On the Action dropdown select: 'Export selected *model name*' and the desired format and press Go." %}
+        </p>
 
-{% endspaceless %}
+    {% endspaceless %}
 {% endblock %}
