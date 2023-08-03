@@ -206,7 +206,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
     def _clean_value_integer(value, is_required: bool):
         if not is_required and value in [None, ""]:
             return None
-        elif type(value) == str:
+        elif isinstance(value, str):
             try:
                 return int(value)
             except ValueError:
@@ -218,7 +218,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
     def _clean_value_number(value, is_required: bool):
         if not is_required and value in [None, ""]:
             return None
-        elif type(value) == str:
+        elif isinstance(value, str):
             try:
                 return float(value)
             except ValueError:
@@ -244,7 +244,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
     def _clean_value_object(value, is_required: bool):
         if not is_required and value in [None, ""]:
             return None
-        elif type(value) == str:
+        elif isinstance(value, str):
             try:
                 return json.loads(value)
             except json.decoder.JSONDecodeError:
@@ -277,7 +277,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
     def _get_values_for_property(property, content_rows):
         values = []
         for row in content_rows:
-            if type(row) == str:
+            if isinstance(row, str):
                 values.append(None)
             else:
                 values.append(row.get(property))
