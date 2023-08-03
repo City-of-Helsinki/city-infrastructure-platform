@@ -57,7 +57,7 @@ class ResourceUUIDField(fields.Field):
         """Convert UUID to string to prevent the importer from thinking the value is changed, when it's not"""
 
         value = super().get_value(obj)
-        if type(value) == UUID:
+        if isinstance(value, UUID):
             value = str(value)
         return value
 

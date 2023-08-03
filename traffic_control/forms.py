@@ -68,7 +68,7 @@ class AdminTrafficSignIconSelectWidget(Select):
         return context
 
     def create_option(self, name, value, *args, **kwargs):
-        if type(value) == ModelChoiceIteratorValue:
+        if isinstance(value, ModelChoiceIteratorValue):
             value = value.value
         option = super().create_option(name, value, *args, **kwargs)
         option["attrs"]["icon-url"] = self.get_icon_url(value)

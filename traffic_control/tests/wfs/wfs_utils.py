@@ -30,7 +30,7 @@ def wfs_url_get_features(
 ) -> str:
     base_url = f"{reverse('wfs-city-infrastructure')}?"
 
-    if type(type_names) == list:
+    if isinstance(type_names, list):
         type_names = ",".join(type_names)
 
     params = {
