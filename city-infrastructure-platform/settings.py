@@ -188,7 +188,6 @@ WAGTAIL_SITE_NAME = _("City Infrastructure Platform")
 SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
 
 MIDDLEWARE = [
-    "openshift_client_ip.middleware.OpenShiftClientIPMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -305,9 +304,8 @@ if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGIN_REGEXES = env("CORS_ALLOWED_ORIGIN_REGEXES")
 
-# OpenShift client IP middleware
+# OpenShift-specific configuration
 OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
-
 if OPENSHIFT_DEPLOYMENT:
     # Use Azure Storage Container as file storage in OpenShift deployment
     DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
