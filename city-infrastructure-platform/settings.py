@@ -198,7 +198,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    "auditlog.middleware.AuditlogMiddleware",
+    "auditlog_custom.middleware.AuditlogMiddleware",
 ]
 
 ROOT_URLCONF = "city-infrastructure-platform.urls"
