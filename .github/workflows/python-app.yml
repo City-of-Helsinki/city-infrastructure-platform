@@ -38,6 +38,7 @@ jobs:
 
     - name: Install required Ubuntu packages
       run: |
+        sudo apt-get update
         sudo apt-get install gdal-bin
 
     - name: Install Poetry
