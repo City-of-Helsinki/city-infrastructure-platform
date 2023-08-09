@@ -1,4 +1,6 @@
+from django.http import Http404, HttpResponse
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import DetailView
 
@@ -16,6 +18,21 @@ class TrafficSignEmbed(DetailView):
         if device_type:
             title += f" - {self.object.device_type.code} {self.object.device_type.description}"
         return title
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return self.handle_404(request, *args, **kwargs)
+
+    def handle_404(self, request, *args, **kwargs):
+        model_name = self.model._meta.verbose_name
+        object_id = kwargs.get("pk")
+        return HttpResponse(
+            _("Error: Could not find %(model_name)s with id %(id)s.") % {"model_name": model_name, "id": object_id},
+            content_type="text/plain;charset=utf-8",
+            status=404,
+        )
 
     def get_queryset(self):
         return (

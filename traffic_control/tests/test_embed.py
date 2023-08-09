@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 from django.urls import reverse
 
@@ -124,3 +126,11 @@ def test__embed__traffic_sign__context(
         assert context.get("mount_fields")[5][1] == mount.id
     else:
         assert context.get("mount_fields") == []
+
+
+@pytest.mark.parametrize("url_name", ("traffic-sign-plan-embed", "traffic-sign-real-embed"))
+@pytest.mark.django_db
+def test__embed__traffic_sign__not_found(client, url_name):
+    """Test that the embedded view returns 404 when the object is not found."""
+    response = client.get(reverse(url_name, kwargs={"pk": uuid.uuid4()}))
+    assert response.status_code == 404
