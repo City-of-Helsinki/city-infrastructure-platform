@@ -25,7 +25,7 @@ from traffic_control.tests.factories import (
 @pytest.mark.parametrize("has_additional_sign_device_types", (False, True))
 @pytest.mark.parametrize("has_mount", (False, True))
 @pytest.mark.django_db
-def test__embed__traffic_sign_plan_context(
+def test__embed__traffic_sign__context(
     settings,
     client,
     ts_factory,
@@ -89,6 +89,8 @@ def test__embed__traffic_sign_plan_context(
 
     response = client.get(reverse(url_name, kwargs={"pk": traffic_sign.id}))
     assert response.status_code == 200
+    # Must not deny frame-embedding embedded views
+    assert response.headers.get("x-frame-options") != "DENY"
 
     context = response.context
     assert context.get("object") == traffic_sign
