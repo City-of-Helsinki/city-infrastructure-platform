@@ -1,8 +1,11 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import DetailView
 
 from traffic_control.models import MountPlan, MountReal, TrafficSignPlan, TrafficSignReal
 
 
+@method_decorator(xframe_options_exempt, name="dispatch")
 class TrafficSignEmbed(DetailView):
     template_name = "embed/traffic_sign.html"
 
