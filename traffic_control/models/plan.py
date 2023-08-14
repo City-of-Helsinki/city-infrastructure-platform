@@ -26,6 +26,20 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         max_length=16,
         help_text=_("Year and verdict section separated with a dash"),
     )
+    diary_number = models.CharField(
+        verbose_name=_("Diary number"),
+        max_length=20,
+        unique=True,
+        # Diary number will be required field in the future
+        null=True,
+        blank=True,
+    )
+    drawing_number = models.CharField(
+        verbose_name=_("Drawing number"),
+        max_length=20,
+        null=True,
+        blank=True,
+    )
     location = models.MultiPolygonField(_("Location (3D)"), dim=3, srid=settings.SRID, null=True, blank=True)
 
     class Meta:

@@ -28,7 +28,14 @@ class PlanAdmin(
     fieldsets = (
         (
             _("General information"),
-            {"fields": ("name", "plan_number")},
+            {
+                "fields": (
+                    "name",
+                    "plan_number",
+                    "diary_number",
+                    "drawing_number",
+                )
+            },
         ),
         (_("Location information"), {"fields": ("location",)}),
         (
@@ -36,7 +43,7 @@ class PlanAdmin(
             {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
         ),
     )
-    list_display = ("plan_number", "name", "created_at")
+    list_display = ("plan_number", "name", "diary_number", "drawing_number", "created_at")
     readonly_fields = (
         "created_at",
         "updated_at",
