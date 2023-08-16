@@ -10,6 +10,7 @@ from django.contrib.gis.geos import MultiPolygon
 from django.test import override_settings
 from django.urls import reverse
 
+from city_furniture.tests.factories import get_furniture_signpost_plan
 from traffic_control.models import Plan
 from traffic_control.tests.factories import (
     get_additional_sign_plan,
@@ -82,6 +83,7 @@ def test_plan_relation_admin_view_requires_change_permission(client):
             "traffic_light_plans": [],
             "traffic_sign_plans": [],
             "additional_sign_plans": [],
+            "furniture_signpost_plans": [],
         },
     )
 
@@ -101,6 +103,7 @@ def test_plan_relation_admin_view_requires_change_permission(client):
             "traffic_light_plans": [],
             "traffic_sign_plans": [],
             "additional_sign_plans": [],
+            "furniture_signpost_plan": [],
         },
     )
 
@@ -120,12 +123,14 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
     traffic_light_plan = get_traffic_light_plan()
     traffic_sign_plan = get_traffic_sign_plan()
     additional_sign_plan = get_additional_sign_plan()
+    furniture_signpost_plan = get_furniture_signpost_plan()
 
     for p in [
         signpost_plan,
         traffic_light_plan,
         traffic_sign_plan,
         additional_sign_plan,
+        furniture_signpost_plan,
     ]:
         p.plan = plan
         p.save(update_fields=["plan"])
@@ -139,6 +144,7 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
         "traffic_light_plans": [],
         "traffic_sign_plans": [],
         "additional_sign_plans": [],
+        "furniture_signpost_plan": [],
     }
 
     if redirect_after_save:
@@ -159,14 +165,13 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
     assert plan.traffic_light_plans.count() == 0
     assert plan.traffic_sign_plans.count() == 0
     assert plan.additional_sign_plans.count() == 0
+    assert plan.furniture_signpost_plans.count() == 0
 
 
 @pytest.mark.django_db
 def test_plan_relation_admin_view_available_choices(admin_client):
     """
-    BarrierPlans, MountPlans, RoadMarkingPlans, SignpostPlans, TrafficLightPlans,
-    and TrafficSignPlans that are linked to other plan should not be listed as
-    available choice.
+    Planned devices that are linked to other plan should not be listed as available choice.
     """
     plan_1 = get_plan(location=MultiPolygon(test_polygon, srid=settings.SRID))
     plan_2 = get_plan(location=MultiPolygon(test_polygon_2, srid=settings.SRID))
@@ -182,6 +187,7 @@ def test_plan_relation_admin_view_available_choices(admin_client):
         get_traffic_light_plan(location=loc, plan=plan)
         get_traffic_sign_plan(location=loc_3d, plan=plan)
         get_additional_sign_plan(location=loc_3d, plan=plan)
+        get_furniture_signpost_plan(location=loc, plan=plan)
 
     plan_1.refresh_from_db()
     plan_2.refresh_from_db()
@@ -197,3 +203,5 @@ def test_plan_relation_admin_view_available_choices(admin_client):
     assert plan_2.traffic_light_plans.first() not in form.fields["traffic_light_plans"].queryset
     assert plan_2.traffic_sign_plans.first() not in form.fields["traffic_sign_plans"].queryset
     assert plan_2.additional_sign_plans.first() not in form.fields["additional_sign_plans"].queryset
+    assert plan_2.furniture_signpost_plans.first() not in form.fields["furniture_signpost_plans"].queryset
+

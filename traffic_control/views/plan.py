@@ -29,5 +29,6 @@ class PlanViewSet(TrafficControlViewSet):
         .prefetch_related("signpost_plans")
         .prefetch_related("traffic_light_plans")
         .prefetch_related("traffic_sign_plans")
+        .prefetch_related("furniture_signpost_plans")
     )
     filterset_class = PlanFilterSet

@@ -114,6 +114,7 @@ class PlanAdmin(
                 "traffic_light_plans": plan.traffic_light_plans.active(),
                 "traffic_sign_plans": plan.traffic_sign_plans.active(),
                 "additional_sign_plans": plan.additional_sign_plans.all(),
+                "furniture_signpost_plans": plan.furniture_signpost_plans.active(),
             }
             context["form"] = PlanRelationsForm(plan=plan, initial=initial)
 

@@ -71,6 +71,7 @@ def get_furniture_signpost_plan(
     parent=None,
     mount_plan=None,
     location_name_en=None,
+    plan=None,
 ) -> FurnitureSignpostPlan:
     user = get_user("test_user")
     location = location or test_point_3d
@@ -91,6 +92,7 @@ def get_furniture_signpost_plan(
         parent=parent,
         created_by=user,
         updated_by=user,
+        plan=plan,
     )[0]
 
 

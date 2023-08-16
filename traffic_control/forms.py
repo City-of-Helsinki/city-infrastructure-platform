@@ -12,6 +12,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
+from city_furniture.models import FurnitureSignpostPlan
 from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignReal,
@@ -247,6 +248,11 @@ class PlanRelationsForm(forms.Form):
         AdditionalSignPlan.objects.all(),
         required=False,
         widget=widgets.FilteredSelectMultiple(verbose_name=_("Additional Sign Plans"), is_stacked=False),
+    )
+    furniture_signpost_plans = forms.ModelMultipleChoiceField(
+        FurnitureSignpostPlan.objects.active(),
+        required=False,
+        widget=widgets.FilteredSelectMultiple(verbose_name=_("Furniture Signpost Plans"), is_stacked=False),
     )
 
     def __init__(self, *args, **kwargs):
