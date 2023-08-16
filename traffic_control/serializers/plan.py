@@ -48,6 +48,12 @@ class PlanRelationSerializer(serializers.ModelSerializer):
         required=False,
         read_only=True,
     )
+    furniture_signpost_plan_ids = serializers.PrimaryKeyRelatedField(
+        source="furniture_signpost_plans",
+        many=True,
+        required=False,
+        read_only=True,
+    )
 
     class Meta:
         model = Plan
@@ -59,6 +65,7 @@ class PlanRelationSerializer(serializers.ModelSerializer):
             "traffic_light_plan_ids",
             "traffic_sign_plan_ids",
             "additional_sign_plan_ids",
+            "furniture_signpost_plan_ids",
         )
 
 
