@@ -77,12 +77,13 @@ def get_owner(name_fi="Omistaja", name_en="Owner") -> Owner:
     return Owner.objects.get_or_create(name_fi=name_fi, name_en=name_en)[0]
 
 
-def get_plan(location=test_multi_polygon, name="Test plan") -> Plan:
+def get_plan(location=test_multi_polygon, name="Test plan", derive_location=False) -> Plan:
     user = get_user("test_user")
     return Plan.objects.get_or_create(
         name=name,
         plan_number="2020_1",
         location=location,
+        derive_location=derive_location,
         created_by=user,
         updated_by=user,
     )[0]

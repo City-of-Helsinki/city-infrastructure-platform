@@ -40,6 +40,14 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         null=True,
         blank=True,
     )
+    derive_location = models.BooleanField(
+        verbose_name=_("Derive location from devices"),
+        help_text=_(
+            "Derive the plan location (geometry area) from the locations of related devices. "
+            "Enable this if the plan does not have a predefined location."
+        ),
+        default=False,
+    )
     location = models.MultiPolygonField(_("Location (3D)"), dim=3, srid=settings.SRID, null=True, blank=True)
 
     class Meta:
@@ -64,6 +72,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
                 self.traffic_light_plans.values_list("location", flat=True),
                 self.traffic_sign_plans.values_list("location", flat=True),
                 self.additional_sign_plans.values_list("location", flat=True),
+                self.furniture_signpost_plans.values_list("location", flat=True),
             )
         )
 

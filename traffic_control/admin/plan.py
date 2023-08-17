@@ -37,7 +37,15 @@ class PlanAdmin(
                 )
             },
         ),
-        (_("Location information"), {"fields": ("location",)}),
+        (
+            _("Location information"),
+            {
+                "fields": (
+                    "derive_location",
+                    "location",
+                )
+            },
+        ),
         (
             _("Metadata"),
             {"fields": ("created_at", "updated_at", "created_by", "updated_by")},

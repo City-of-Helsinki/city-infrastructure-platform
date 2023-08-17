@@ -1,6 +1,6 @@
 import pytest
 from django.conf import settings
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 
 from city_furniture.tests.factories import get_furniture_signpost_plan
 from traffic_control.tests.factories import (
@@ -14,9 +14,24 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
 )
 
+test_point_outside_area = Point(-20.0, -20.0, 0.0, srid=settings.SRID)
+test_multipolygon = MultiPolygon(
+    Polygon(
+        (
+            (20.0, 20.0, 0.0),
+            (20.0, 30.0, 0.0),
+            (30.0, 30.0, 0.0),
+            (30.0, 20.0, 0.0),
+            (20.0, 20.0, 0.0),
+        ),
+        srid=settings.SRID,
+    ),
+    srid=settings.SRID,
+)
+
 
 @pytest.mark.django_db
-def test_plan_get_related_locations():
+def test__plan__get_related_locations():
     plan = get_plan()
     bp_1 = get_barrier_plan(location=Point(10.0, 10.0, 0.0, srid=settings.SRID), plan=plan)
     bp_2 = get_barrier_plan(location=Point(5.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
@@ -56,7 +71,7 @@ def test_plan_get_related_locations():
 
 
 @pytest.mark.django_db
-def test_plan_derive_location_from_related_plans():
+def test__plan__derive_location_from_related_plans():
     plan = get_plan()
     bp_1 = get_barrier_plan(location=Point(10.0, 10.0, 0.0, srid=settings.SRID), plan=plan)
     bp_2 = get_barrier_plan(location=Point(5.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
@@ -127,8 +142,13 @@ def test_plan_derive_location_from_related_plans():
         get_traffic_sign_plan,
     ),
 )
-def test_plan_location_is_updated_on_related_model_save(factory):
-    plan = get_plan()
+@pytest.mark.parametrize(
+    "derive_location",
+    (True, False),
+    ids=("derive_location", "no_derive_location"),
+)
+def test__plan__location_update_on_related_model_save(factory, derive_location: bool):
+    plan = get_plan(derive_location=derive_location)
     old_location = plan.location
 
     related_obj = factory()
@@ -136,7 +156,10 @@ def test_plan_location_is_updated_on_related_model_save(factory):
     related_obj.save()
 
     plan.refresh_from_db()
-    assert plan.location != old_location
+    if derive_location:
+        assert plan.location != old_location, "Expected plan location to be updated"
+    else:
+        assert plan.location == old_location, "Expected plan location to be unchanged"
 
 
 @pytest.mark.django_db
@@ -153,18 +176,37 @@ def test_plan_location_is_updated_on_related_model_save(factory):
         get_traffic_sign_plan,
     ),
 )
-def test_both_plan_locations_are_updated_when_plan_is_changed(factory):
-    plan_1 = get_plan(location=None, name="Test plan 1")
-    plan_2 = get_plan(location=None, name="Test plan 2")
-    related_object = factory(plan=plan_1)
+@pytest.mark.parametrize(
+    "derive_location",
+    (True, False),
+    ids=("derive_location", "no_derive_location"),
+)
+def test__plan__both_plan_locations_update_when_plan_is_changed(factory, derive_location: bool):
+    plan_1 = get_plan(location=test_multipolygon, name="Test plan 1", derive_location=derive_location)
+    plan_2 = get_plan(location=test_multipolygon, name="Test plan 2", derive_location=derive_location)
+    related_object = factory(location=test_point_outside_area, plan=plan_1)
     plan_1.refresh_from_db()
-    assert plan_1.location.covers(related_object.location)
+    if derive_location:
+        assert plan_1.location.covers(
+            related_object.location
+        ), "Expected plan location to cover related object location"
+    else:
+        assert plan_1.location == test_multipolygon, "Expected plan location to be unchanged"
+
     related_object.plan = plan_2
     related_object.save()
     plan_1.refresh_from_db()
-    assert plan_1.location is None
     plan_2.refresh_from_db()
-    assert plan_2.location.covers(related_object.location)
+    if derive_location:
+        assert plan_1.location is None, "Expected empty plan_1 location to be None"
+    else:
+        assert plan_1.location == test_multipolygon, "Expected plan_1 location to be unchanged"
+    if derive_location:
+        assert plan_2.location.covers(
+            related_object.location
+        ), "Expected plan_2 location to cover related object location"
+    else:
+        assert plan_2.location == test_multipolygon, "Expected plan_2 location to be unchanged"
 
 
 @pytest.mark.django_db
@@ -181,12 +223,59 @@ def test_both_plan_locations_are_updated_when_plan_is_changed(factory):
         get_traffic_sign_plan,
     ),
 )
-def test_plan_locations_are_updated_when_plan_is_removed_from_object(factory):
-    plan = get_plan(location=None, name="Test plan 1")
+@pytest.mark.parametrize(
+    "derive_location",
+    (True, False),
+    ids=("derive_location", "no_derive_location"),
+)
+def test__plan__location_update_when_plan_is_removed_from_object(factory, derive_location: bool):
+    plan = get_plan(location=test_multipolygon, name="Test plan 1", derive_location=derive_location)
     related_object = factory(plan=plan)
     plan.refresh_from_db()
-    assert plan.location.covers(related_object.location)
+    if derive_location:
+        assert plan.location.covers(related_object.location), "Expected plan location to cover related object location"
+    else:
+        assert plan.location == test_multipolygon, "Expected plan location to be unchanged"
     related_object.plan = None
     related_object.save()
     plan.refresh_from_db()
-    assert plan.location is None
+    if derive_location:
+        assert plan.location is None, "Expected empty plan location to be None"
+    else:
+        assert plan.location == test_multipolygon, "Expected plan location to be unchanged"
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "factory",
+    (
+        get_additional_sign_plan,
+        get_barrier_plan,
+        get_furniture_signpost_plan,
+        get_mount_plan,
+        get_road_marking_plan,
+        get_signpost_plan,
+        get_traffic_light_plan,
+        get_traffic_sign_plan,
+    ),
+)
+@pytest.mark.parametrize(
+    "derive_location",
+    (True, False),
+    ids=("derive_location", "no_derive_location"),
+)
+def test__plan__location_update_when_related_object_is_deleted(factory, derive_location: bool):
+    plan = get_plan(location=test_multipolygon, name="Test plan", derive_location=derive_location)
+    related_object = factory(plan=plan)
+    plan.refresh_from_db()
+    if derive_location:
+        assert plan.location.covers(related_object.location), "Expected plan location to cover related object location"
+    else:
+        assert plan.location == test_multipolygon, "Expected plan location to be unchanged"
+
+    related_object.delete()
+    plan.refresh_from_db()
+    if derive_location:
+        assert plan.location is None, "Expected empty plan location to be None"
+    else:
+        assert plan.location == test_multipolygon, "Expected plan location to be unchanged"
