@@ -3,8 +3,14 @@ import uuid
 from typing import Optional
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
-from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal, FurnitureSignpostRealOperation
-from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from city_furniture.models import (
+    CityFurnitureColor,
+    CityFurnitureDeviceType,
+    CityFurnitureTarget,
+    FurnitureSignpostPlan,
+    FurnitureSignpostReal,
+    FurnitureSignpostRealOperation,
+)
 from traffic_control.tests.factories import (
     get_mount_type,
     get_operation_type,
@@ -15,7 +21,7 @@ from traffic_control.tests.factories import (
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
-def get_city_furniture_color(name="Color", rgb="#FFFFFF"):
+def get_city_furniture_color(name="Color", rgb="#FFFFFF") -> CityFurnitureColor:
     return CityFurnitureColor.objects.get_or_create(name=name, defaults=dict(rgb=rgb))[0]
 
 
@@ -29,7 +35,7 @@ def get_city_furniture_target(
     ),
     source_id: Optional[str] = "Turun_tuomiokirkko",
     source_name: Optional[str] = "Wikipedia",
-):
+) -> CityFurnitureTarget:
     return CityFurnitureTarget.objects.get_or_create(
         name_fi=name_fi,
         defaults=dict(
@@ -47,7 +53,7 @@ def get_city_furniture_device_type(
     class_type: str = "1030",
     function_type: str = "1090",
     target_model: Optional[CityFurnitureDeviceTypeTargetModel] = None,
-):
+) -> CityFurnitureDeviceType:
     return CityFurnitureDeviceType.objects.get_or_create(
         code=code,
         defaults=dict(
@@ -65,7 +71,7 @@ def get_furniture_signpost_plan(
     parent=None,
     mount_plan=None,
     location_name_en=None,
-):
+) -> FurnitureSignpostPlan:
     user = get_user("test_user")
     location = location or test_point_3d
     owner = owner or get_owner()
@@ -96,7 +102,7 @@ def get_furniture_signpost_real(
     parent=None,
     mount_real=None,
     location_name_en=None,
-):
+) -> FurnitureSignpostReal:
     user = get_user("test_user")
     location = location or test_point_3d
     owner = owner or get_owner()

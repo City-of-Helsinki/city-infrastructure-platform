@@ -22,8 +22,10 @@ from traffic_control.models import (
     MountRealOperation,
     MountType,
     OperationalArea,
+    OperationType,
     Owner,
     Plan,
+    PortalType,
     Reflective,
     ResponsibleEntity,
     RoadMarkingColor,
@@ -43,8 +45,6 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealOperation,
 )
-from traffic_control.models.common import OperationType
-from traffic_control.models.mount import PortalType
 from traffic_control.tests.test_base_api import test_multi_polygon, test_point, test_polygon
 from traffic_control.tests.test_base_api_3d import test_point_3d
 from users.models import User
@@ -66,14 +66,14 @@ def get_user(username=None, admin=False, bypass_operational_area=False, bypass_r
     )[0]
 
 
-def get_operational_area(area=None, name=None):
+def get_operational_area(area=None, name=None) -> OperationalArea:
     return OperationalArea.objects.get_or_create(
         name=name or "Test operational area",
         location=area or MultiPolygon(test_polygon, srid=settings.SRID),
     )[0]
 
 
-def get_owner(name_fi="Omistaja", name_en="Owner"):
+def get_owner(name_fi="Omistaja", name_en="Owner") -> Owner:
     return Owner.objects.get_or_create(name_fi=name_fi, name_en=name_en)[0]
 
 
@@ -88,7 +88,7 @@ def get_plan(location=test_multi_polygon, name="Test plan") -> Plan:
     )[0]
 
 
-def get_barrier_plan(location="", plan=None, device_type=None):
+def get_barrier_plan(location="", plan=None, device_type=None) -> BarrierPlan:
     user = get_user("test_user")
     return BarrierPlan.objects.get_or_create(
         device_type=device_type,
@@ -105,7 +105,7 @@ def get_barrier_plan(location="", plan=None, device_type=None):
     )[0]
 
 
-def get_barrier_real(location="", device_type=None):
+def get_barrier_real(location="", device_type=None) -> BarrierReal:
     user = get_user("test_user")
 
     return BarrierReal.objects.create(
@@ -124,7 +124,7 @@ def get_barrier_real(location="", device_type=None):
     )
 
 
-def get_mount_type(code="POST", description="Post"):
+def get_mount_type(code="POST", description="Post") -> MountType:
     return MountType.objects.get_or_create(code=code, description=description)[0]
 
 
@@ -140,7 +140,7 @@ def get_portal_type(
     )[0]
 
 
-def get_mount_plan(location="", plan=None):
+def get_mount_plan(location="", plan=None) -> MountPlan:
     user = get_user("test_user")
 
     return MountPlan.objects.get_or_create(
@@ -154,7 +154,7 @@ def get_mount_plan(location="", plan=None):
     )[0]
 
 
-def get_mount_real(location=""):
+def get_mount_real(location="") -> MountReal:
     user = get_user("test_user")
 
     return MountReal.objects.get_or_create(
@@ -169,7 +169,12 @@ def get_mount_real(location=""):
     )[0]
 
 
-def get_road_marking_plan(location="", plan=None, device_type=None, traffic_sign_plan=None):
+def get_road_marking_plan(
+    location="",
+    plan=None,
+    device_type=None,
+    traffic_sign_plan=None,
+) -> RoadMarkingPlan:
     user = get_user("test_user")
 
     return RoadMarkingPlan.objects.get_or_create(
@@ -190,7 +195,12 @@ def get_road_marking_plan(location="", plan=None, device_type=None, traffic_sign
     )[0]
 
 
-def get_road_marking_real(location="", device_type=None, road_marking_plan=None, traffic_sign_real=None):
+def get_road_marking_real(
+    location="",
+    device_type=None,
+    road_marking_plan=None,
+    traffic_sign_real=None,
+) -> RoadMarkingReal:
     user = get_user("test_user")
 
     return RoadMarkingReal.objects.get_or_create(
@@ -219,7 +229,7 @@ def get_signpost_plan(
     parent=None,
     mount_plan=None,
     txt=None,
-):
+) -> SignpostPlan:
     user = get_user("test_user")
 
     return SignpostPlan.objects.get_or_create(
@@ -243,7 +253,7 @@ def get_signpost_real(
     parent=None,
     mount_real=None,
     txt=None,
-):
+) -> SignpostReal:
     user = get_user("test_user")
 
     return SignpostReal.objects.get_or_create(
@@ -261,7 +271,12 @@ def get_signpost_real(
     )[0]
 
 
-def get_traffic_light_plan(location="", plan=None, device_type=None, mount_plan=None):
+def get_traffic_light_plan(
+    location="",
+    plan=None,
+    device_type=None,
+    mount_plan=None,
+) -> TrafficLightPlan:
     user = get_user("test_user")
 
     return TrafficLightPlan.objects.get_or_create(
@@ -280,7 +295,12 @@ def get_traffic_light_plan(location="", plan=None, device_type=None, mount_plan=
     )[0]
 
 
-def get_traffic_light_real(location="", device_type=None, traffic_light_plan=None, mount_real=None):
+def get_traffic_light_real(
+    location="",
+    device_type=None,
+    traffic_light_plan=None,
+    mount_real=None,
+) -> TrafficLightReal:
     user = get_user("test_user")
 
     return TrafficLightReal.objects.get_or_create(
@@ -322,7 +342,12 @@ def get_traffic_control_device_type(
     return dt
 
 
-def get_traffic_sign_plan(location="", plan=None, device_type=None, mount_plan=None):
+def get_traffic_sign_plan(
+    location="",
+    plan=None,
+    device_type=None,
+    mount_plan=None,
+) -> TrafficSignPlan:
     user = get_user("test_user")
 
     return TrafficSignPlan.objects.get_or_create(
@@ -337,7 +362,12 @@ def get_traffic_sign_plan(location="", plan=None, device_type=None, mount_plan=N
     )[0]
 
 
-def get_traffic_sign_real(location="", device_type=None, traffic_sign_plan=None, mount_real=None):
+def get_traffic_sign_real(
+    location="",
+    device_type=None,
+    traffic_sign_plan=None,
+    mount_real=None,
+) -> TrafficSignReal:
     user = get_user("test_user")
 
     return TrafficSignReal.objects.get_or_create(
@@ -435,7 +465,7 @@ def get_api_client(user=None):
     return api_client
 
 
-def get_operation_type(name="Test operation type"):
+def get_operation_type(name="Test operation type") -> OperationType:
     return OperationType.objects.get_or_create(
         name=name,
         defaults={
@@ -584,7 +614,7 @@ def add_traffic_light_real_operation(
     )
 
 
-def get_responsible_entity(name="ABC-123"):
+def get_responsible_entity(name="ABC-123") -> ResponsibleEntity:
     division = ResponsibleEntity.objects.get_or_create(
         name="KYMP",
         defaults=dict(organization_level=OrganizationLevel.DIVISION),
