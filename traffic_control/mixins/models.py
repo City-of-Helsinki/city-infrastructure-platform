@@ -119,7 +119,10 @@ class InstalledDeviceModel(models.Model):
 
 
 class UpdatePlanLocationMixin:
-    """A mixin class that updates plan location when the plan field of target model is changed"""
+    """
+    A mixin class that updates `Plan` location when the `plan` field of target model is changed.
+    Affects only `Plan` objects with `derive_location` set to True.
+    """
 
     def save(self, *args, **kwargs):
         if self._state.adding:
@@ -132,14 +135,14 @@ class UpdatePlanLocationMixin:
         if self.plan != old_plan:
             # note that we also need to update the old plan location when
             # updating the plan field of existing traffic control objects.
-            if old_plan:
+            if old_plan and old_plan.derive_location:
                 old_plan.derive_location_from_related_plans()
-            if self.plan:
+            if self.plan and self.plan.derive_location:
                 self.plan.derive_location_from_related_plans()
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
-        if self.plan:
+        if self.plan and self.plan.derive_location:
             self.plan.derive_location_from_related_plans()
 
 

@@ -88,6 +88,7 @@ def test_plan_create():
     assert plan.updated_by == user
     assert plan.diary_number == "HEL 2023-000001"
     assert plan.drawing_number == "1234"
+    assert response.data.get("derive_location") is False
 
 
 @pytest.mark.django_db
