@@ -34,6 +34,7 @@ from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
     SoftDeleteAdminMixin,
+    UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -165,7 +166,11 @@ class AbstractFurnitureSignpostAdmin(
 
 
 @admin.register(FurnitureSignpostPlan)
-class FurnitureSignpostPlanAdmin(MultiResourceExportActionAdminMixin, AbstractFurnitureSignpostAdmin):
+class FurnitureSignpostPlanAdmin(
+    MultiResourceExportActionAdminMixin,
+    UpdatePlanLocationAdminMixin,
+    AbstractFurnitureSignpostAdmin,
+):
     resource_class = FurnitureSignpostPlanResource
     extra_export_resource_classes = [
         FurnitureSignpostPlanTemplateResource,

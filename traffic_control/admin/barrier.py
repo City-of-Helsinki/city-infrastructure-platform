@@ -19,6 +19,7 @@ from traffic_control.forms import AdminFileWidget
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
+    UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -61,6 +62,7 @@ class BarrierPlanAdmin(
     UserStampedAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
+    UpdatePlanLocationAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
