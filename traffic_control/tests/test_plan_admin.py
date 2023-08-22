@@ -205,3 +205,51 @@ def test_plan_relation_admin_view_available_choices(admin_client):
     assert plan_2.additional_sign_plans.first() not in form.fields["additional_sign_plans"].queryset
     assert plan_2.furniture_signpost_plans.first() not in form.fields["furniture_signpost_plans"].queryset
 
+
+@pytest.mark.parametrize(
+    "factory",
+    (
+        get_additional_sign_plan,
+        get_barrier_plan,
+        get_furniture_signpost_plan,
+        get_mount_plan,
+        get_road_marking_plan,
+        get_signpost_plan,
+        get_traffic_light_plan,
+        get_traffic_sign_plan,
+    ),
+)
+@pytest.mark.parametrize("derive_location", (False, True), ids=("no_derive_location", "derive_location"))
+@pytest.mark.django_db
+def test_plan_device_bulk_delete_update_plan_location(admin_client, factory, derive_location: bool):
+    """
+    Bulk-deleting planned devices using Admin UI should or should not update the Plan location
+    depending on Plan's derive_location.
+    """
+    plan = get_plan(location=None, derive_location=derive_location)
+    device1 = factory(location=test_point, plan=plan)
+    device2 = factory(location=test_point_2, plan=plan)
+    assert device1.id != device2.id
+
+    plan.refresh_from_db()
+    if derive_location:
+        assert plan.location is not None
+    else:
+        assert plan.location is None
+
+    plan_location_before_delete = plan.location
+    response = admin_client.post(
+        reverse(f"admin:{device1._meta.app_label}_{device1._meta.model_name}_changelist"),
+        data={
+            "action": "delete_selected",
+            "_selected_action": [device1.id, device2.id],
+            "post": "yes",
+        },
+    )
+    assert response.status_code == 302
+
+    plan.refresh_from_db()
+    if derive_location:
+        assert plan.location != plan_location_before_delete
+    else:
+        assert plan.location is None

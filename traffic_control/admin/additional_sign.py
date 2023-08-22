@@ -19,6 +19,7 @@ from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
     SoftDeleteAdminMixin,
+    UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -57,6 +58,7 @@ class AdditionalSignPlanAdmin(
     Point3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
+    UpdatePlanLocationAdminMixin,
     admin.OSMGeoAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,

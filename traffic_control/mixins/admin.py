@@ -1,6 +1,8 @@
 from django.contrib.admin import SimpleListFilter
 from django.utils.translation import gettext_lazy as _
 
+from traffic_control.models.plan import Plan
+
 
 class Point3DFieldAdminMixin:
     """A mixin class that shows a map for 3d geometries.
@@ -121,3 +123,16 @@ class SoftDeleteAdminMixin:
 
     action_undo_soft_delete.short_description = _("Mark selected objects as not deleted")
     action_undo_soft_delete.allowed_permissions = ("change",)
+
+
+class UpdatePlanLocationAdminMixin:
+    """
+    A mixin class for bulk-deleting planned devices to update their related Plan locations.
+    """
+
+    def delete_queryset(self, request, queryset):
+        related_plan_ids = list(queryset.values_list("plan_id", flat=True).distinct())
+        super().delete_queryset(request, queryset)
+        related_plans = Plan.objects.filter(id__in=related_plan_ids, derive_location=True)
+        for plan in related_plans:
+            plan.derive_location_from_related_plans()
