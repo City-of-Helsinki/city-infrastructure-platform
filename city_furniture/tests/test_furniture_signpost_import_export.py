@@ -217,25 +217,6 @@ def test__furniture_signpost_plan_export_real_parent_and_child(parent_real_preex
 
 
 @pytest.mark.django_db
-def test__furniture_signpost_real__import__responsible_entity_permission():
-    get_furniture_signpost_real(responsible_entity=get_responsible_entity_project())
-    dataset = FurnitureSignpostRealResource().export()
-
-    user = get_user()
-    with pytest.raises(ValidationError):
-        FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
-
-    user.responsible_entities.add(ResponsibleEntity.objects.get(organization_level=OrganizationLevel.PROJECT))
-    result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
-    assert not result.has_errors()
-
-    user.responsible_entities.clear()
-    user.responsible_entities.add(ResponsibleEntity.objects.get(organization_level=OrganizationLevel.DIVISION))
-    result = FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
-    assert not result.has_errors()
-
-
-@pytest.mark.django_db
 def test__furniture_signpost_real__import__responsible_entity_permission__group():
     get_furniture_signpost_real(responsible_entity=get_responsible_entity_project())
     dataset = FurnitureSignpostRealResource().export()

@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, OrderedDict, Set
 from uuid import UUID, uuid4
 
 from django.core.exceptions import ValidationError
@@ -290,7 +290,7 @@ class ParentChildReplacementPlanToRealExportMixin:
 
 
 class ResponsibleEntityPermissionImportMixin:
-    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+    def before_import(self, dataset: Dataset, using_transactions: bool, dry_run: bool, **kwargs):
         super().before_import(dataset, using_transactions, dry_run, **kwargs)
         user: User = kwargs.pop("user", None)
 
@@ -301,18 +301,54 @@ class ResponsibleEntityPermissionImportMixin:
             return
 
         for row in dataset.dict:
-            responsible_entity_name = row.get("responsible_entity__name")
+            # If device already exists, check that user has permission to modify it
+            self._validate_device_current_responsible_entity_permission(row, user)
 
-            if responsible_entity_name is None or responsible_entity_name == "":
-                raise ValidationError("You do not have permissions to create devices without a Responsible Entity set.")
+            # Check permissions for target responsible entity (create or update)
+            self._validate_device_target_responsible_entity_permission(row, user)
 
-            responsible_entity = ResponsibleEntity.objects.filter(name=responsible_entity_name).first()
-            if responsible_entity is not None:
-                if not user.has_responsible_entity_permission(responsible_entity):
-                    raise ValidationError(
-                        "You do not have permissions to create or modify devices with given "
-                        f"Responsible Entity ({responsible_entity})"
-                    )
+    def _validate_device_current_responsible_entity_permission(self, row: OrderedDict, user: User):
+        device_id = row.get("id")
+        if not device_id:
+            # There's no current device
+            return
+
+        device = self._meta.model.objects.filter(id=device_id).first()
+        if not device:
+            # Device with the ID does not exist yet
+            return
+
+        responsible_entity = device.responsible_entity
+        if not responsible_entity:
+            raise ValidationError(_("You do not have a permission to modify devices without a responsible entity."))
+
+        if not user.has_responsible_entity_permission(responsible_entity):
+            raise ValidationError(
+                _("You do not have a permission to modify devices of responsible entity '%(responsible_entity)s'."),
+                params={"responsible_entity": responsible_entity},
+            )
+
+    @staticmethod
+    def _validate_device_target_responsible_entity_permission(row: OrderedDict, user: User):
+        responsible_entity_name = row.get("responsible_entity__name")
+        if responsible_entity_name in (None, ""):
+            raise ValidationError(
+                _(
+                    "You do not have a permission to create devices without a responsible entity "
+                    "or to remove responsible entity from existing devices."
+                )
+            )
+
+        responsible_entity = ResponsibleEntity.objects.filter(name=responsible_entity_name).first()
+        if responsible_entity:
+            if not user.has_responsible_entity_permission(responsible_entity):
+                raise ValidationError(
+                    _(
+                        "You do not have a permission to create or modify devices with given "
+                        "responsible entity (%(responsible_entity)s)."
+                    ),
+                    params={"responsible_entity": responsible_entity},
+                )
 
 
 class CustomImportExportActionModelAdmin(ImportExportActionModelAdmin):

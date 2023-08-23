@@ -69,7 +69,7 @@ class User(AbstractUser):
             .exists()
         )
 
-    def has_responsible_entity_permission(self, responsible_entity: Optional["ResponsibleEntity"]):
+    def has_responsible_entity_permission(self, responsible_entity: Optional["ResponsibleEntity"]) -> bool:
         """
         Check if user has permissions to edit given device based on ResponsibleEntity
         """
