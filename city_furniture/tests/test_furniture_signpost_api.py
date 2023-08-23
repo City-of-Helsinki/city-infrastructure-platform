@@ -407,7 +407,8 @@ def test__furniture_signpost_real__responsible_entity_permission__delete(add_to_
     user = get_user(admin=False, bypass_operational_area=True)
     user.user_permissions.add(Permission.objects.get(codename="delete_furnituresignpostreal"))
     client = get_api_client(user=user)
-    instance = get_furniture_signpost_real()
+    responsible_entity = get_responsible_entity()
+    instance = get_furniture_signpost_real(responsible_entity=responsible_entity)
 
     if add_to_responsible_entity:
         user.responsible_entities.add(instance.responsible_entity)
