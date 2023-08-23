@@ -13,7 +13,7 @@ from city_furniture.resources.furniture_signpost import (
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
 from traffic_control.enums import OrganizationLevel
 from traffic_control.models import GroupResponsibleEntity, ResponsibleEntity
-from traffic_control.tests.factories import get_mount_plan, get_mount_real, get_responsible_entity, get_user
+from traffic_control.tests.factories import get_mount_plan, get_mount_real, get_responsible_entity_project, get_user
 from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
 from traffic_control.tests.test_base_api import test_point_2
 
@@ -218,7 +218,7 @@ def test__furniture_signpost_plan_export_real_parent_and_child(parent_real_preex
 
 @pytest.mark.django_db
 def test__furniture_signpost_real__import__responsible_entity_permission():
-    get_furniture_signpost_real(responsible_entity=get_responsible_entity())
+    get_furniture_signpost_real(responsible_entity=get_responsible_entity_project())
     dataset = FurnitureSignpostRealResource().export()
 
     user = get_user()
@@ -237,7 +237,7 @@ def test__furniture_signpost_real__import__responsible_entity_permission():
 
 @pytest.mark.django_db
 def test__furniture_signpost_real__import__responsible_entity_permission__group():
-    get_furniture_signpost_real(responsible_entity=get_responsible_entity())
+    get_furniture_signpost_real(responsible_entity=get_responsible_entity_project())
     dataset = FurnitureSignpostRealResource().export()
 
     user = get_user()

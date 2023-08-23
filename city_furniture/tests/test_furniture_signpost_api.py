@@ -20,7 +20,7 @@ from traffic_control.tests.factories import (
     get_api_client,
     get_operation_type,
     get_owner,
-    get_responsible_entity,
+    get_responsible_entity_project,
     get_user,
 )
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
@@ -382,7 +382,7 @@ def test__furniture_signpost_real__responsible_entity_permission__create(add_to_
     user = get_user(admin=False, bypass_operational_area=True)
     user.user_permissions.add(Permission.objects.get(codename="add_furnituresignpostreal"))
     client = get_api_client(user=user)
-    responsible_entity = get_responsible_entity()
+    responsible_entity = get_responsible_entity_project()
     data = {
         "location": str(test_point_3d),
         "owner": get_owner().pk,
@@ -407,7 +407,7 @@ def test__furniture_signpost_real__responsible_entity_permission__delete(add_to_
     user = get_user(admin=False, bypass_operational_area=True)
     user.user_permissions.add(Permission.objects.get(codename="delete_furnituresignpostreal"))
     client = get_api_client(user=user)
-    responsible_entity = get_responsible_entity()
+    responsible_entity = get_responsible_entity_project()
     instance = get_furniture_signpost_real(responsible_entity=responsible_entity)
 
     if add_to_responsible_entity:
@@ -431,7 +431,7 @@ def test__furniture_signpost_real__create__responsible_entity_permission__group(
     group = Group.objects.create(name="test group")
     user.groups.add(group)
     client = get_api_client(user=user)
-    responsible_entity = get_responsible_entity()
+    responsible_entity = get_responsible_entity_project()
     data = {
         "location": str(test_point_3d),
         "owner": get_owner().pk,
