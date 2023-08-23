@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-18 13:18+0300\n"
+"POT-Creation-Date: 2023-08-29 17:07+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2083,6 +2083,33 @@ msgid ""
 msgstr ""
 "Arvo '%(value)s' ei kelpaa. Kelvolliset arvot ovat %(enum_values)s "
 "(%(enum)s)."
+
+msgid ""
+"You do not have a permission to modify devices without a responsible entity."
+msgstr "Sinulla ei ole oikeutta muokata laitteita ilman vastuutahoa."
+
+#, python-format
+msgid ""
+"You do not have a permission to modify devices of responsible entity "
+"'%(responsible_entity)s'."
+msgstr ""
+"Sinulla ei ole oikeutta muokata vastuutahon '%(responsible_entity)s' "
+"laitteita."
+
+msgid ""
+"You do not have a permission to create devices without a responsible entity "
+"or to remove responsible entity from existing devices."
+msgstr ""
+"Sinulla ei ole oikeutta luoda laitteita ilman vastuutahoa tai poistaa "
+"vastuutahoa olemassa olevista laitteista."
+
+#, python-format
+msgid ""
+"You do not have a permission to create or modify devices with given "
+"responsible entity (%(responsible_entity)s)."
+msgstr ""
+"Sinulla ei ole oikeutta luoda tai muokata laitteita annetulla vastuutaholla "
+"(%(responsible_entity)s)."
 
 msgid "Export template"
 msgstr "Vie malli"

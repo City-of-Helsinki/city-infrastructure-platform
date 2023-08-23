@@ -89,7 +89,12 @@ def get_plan(location=test_multi_polygon, name="Test plan", derive_location=Fals
     )[0]
 
 
-def get_barrier_plan(location="", plan=None, device_type=None) -> BarrierPlan:
+def get_barrier_plan(
+    location="",
+    plan=None,
+    device_type=None,
+    responsible_entity=None,
+) -> BarrierPlan:
     user = get_user("test_user")
     return BarrierPlan.objects.get_or_create(
         device_type=device_type,
@@ -101,12 +106,17 @@ def get_barrier_plan(location="", plan=None, device_type=None) -> BarrierPlan:
         road_name="Testingroad",
         plan=plan,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
     )[0]
 
 
-def get_barrier_real(location="", device_type=None) -> BarrierReal:
+def get_barrier_real(
+    location="",
+    device_type=None,
+    responsible_entity=None,
+) -> BarrierReal:
     user = get_user("test_user")
 
     return BarrierReal.objects.create(
@@ -120,6 +130,7 @@ def get_barrier_real(location="", device_type=None) -> BarrierReal:
         connection_type=ConnectionType.OPEN_OUT,
         road_name="Testingroad",
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
     )
@@ -141,7 +152,7 @@ def get_portal_type(
     )[0]
 
 
-def get_mount_plan(location="", plan=None) -> MountPlan:
+def get_mount_plan(location="", plan=None, responsible_entity=None) -> MountPlan:
     user = get_user("test_user")
 
     return MountPlan.objects.get_or_create(
@@ -150,12 +161,13 @@ def get_mount_plan(location="", plan=None) -> MountPlan:
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
     )[0]
 
 
-def get_mount_real(location="") -> MountReal:
+def get_mount_real(location="", responsible_entity=None) -> MountReal:
     user = get_user("test_user")
 
     return MountReal.objects.get_or_create(
@@ -165,6 +177,7 @@ def get_mount_real(location="") -> MountReal:
         installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
     )[0]
@@ -175,6 +188,7 @@ def get_road_marking_plan(
     plan=None,
     device_type=None,
     traffic_sign_plan=None,
+    responsible_entity=None,
 ) -> RoadMarkingPlan:
     user = get_user("test_user")
 
@@ -190,6 +204,7 @@ def get_road_marking_plan(
         road_name="Testingroad",
         plan=plan,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         traffic_sign_plan=traffic_sign_plan,
         created_by=user,
         updated_by=user,
@@ -201,6 +216,7 @@ def get_road_marking_real(
     device_type=None,
     road_marking_plan=None,
     traffic_sign_real=None,
+    responsible_entity=None,
 ) -> RoadMarkingReal:
     user = get_user("test_user")
 
@@ -217,6 +233,7 @@ def get_road_marking_real(
         is_raised=False,
         road_name="Testingroad",
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         traffic_sign_real=traffic_sign_real,
         created_by=user,
         updated_by=user,
@@ -230,6 +247,7 @@ def get_signpost_plan(
     parent=None,
     mount_plan=None,
     txt=None,
+    responsible_entity=None,
 ) -> SignpostPlan:
     user = get_user("test_user")
 
@@ -239,6 +257,7 @@ def get_signpost_plan(
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         parent=parent,
         mount_plan=mount_plan,
         txt=txt,
@@ -254,6 +273,7 @@ def get_signpost_real(
     parent=None,
     mount_real=None,
     txt=None,
+    responsible_entity=None,
 ) -> SignpostReal:
     user = get_user("test_user")
 
@@ -264,6 +284,7 @@ def get_signpost_real(
         installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         parent=parent,
         mount_real=mount_real,
         txt=txt,
@@ -277,6 +298,7 @@ def get_traffic_light_plan(
     plan=None,
     device_type=None,
     mount_plan=None,
+    responsible_entity=None,
 ) -> TrafficLightPlan:
     user = get_user("test_user")
 
@@ -291,6 +313,7 @@ def get_traffic_light_plan(
         sound_beacon=TrafficLightSoundBeaconValue.YES,
         plan=plan,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
     )[0]
@@ -301,6 +324,7 @@ def get_traffic_light_real(
     device_type=None,
     traffic_light_plan=None,
     mount_real=None,
+    responsible_entity=None,
 ) -> TrafficLightReal:
     user = get_user("test_user")
 
@@ -316,6 +340,7 @@ def get_traffic_light_real(
         road_name="Testingroad",
         sound_beacon=TrafficLightSoundBeaconValue.YES,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
     )[0]
@@ -348,6 +373,7 @@ def get_traffic_sign_plan(
     plan=None,
     device_type=None,
     mount_plan=None,
+    responsible_entity=None,
 ) -> TrafficSignPlan:
     user = get_user("test_user")
 
@@ -357,6 +383,7 @@ def get_traffic_sign_plan(
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         mount_plan=mount_plan,
         created_by=user,
         updated_by=user,
@@ -368,6 +395,7 @@ def get_traffic_sign_real(
     device_type=None,
     traffic_sign_plan=None,
     mount_real=None,
+    responsible_entity=None,
 ) -> TrafficSignReal:
     user = get_user("test_user")
 
@@ -378,6 +406,7 @@ def get_traffic_sign_real(
         installation_date=datetime.date(2020, 1, 1),
         lifecycle=Lifecycle.ACTIVE,
         owner=get_owner(),
+        responsible_entity=responsible_entity,
         mount_real=mount_real,
         created_by=user,
         updated_by=user,
@@ -393,6 +422,7 @@ def get_additional_sign_plan(
     plan=None,
     content_s=None,
     order=None,
+    responsible_entity=None,
 ) -> AdditionalSignPlan:
     user = get_user("test_user")
     owner = owner or get_owner()
@@ -411,6 +441,7 @@ def get_additional_sign_plan(
         location=location,
         device_type=device_type,
         owner=owner,
+        responsible_entity=responsible_entity,
         plan=plan,
         created_by=user,
         updated_by=user,
@@ -430,6 +461,7 @@ def get_additional_sign_real(
     owner=None,
     content_s=None,
     order=None,
+    responsible_entity=None,
 ) -> AdditionalSignReal:
     user = get_user("test_user")
     owner = owner or get_owner()
@@ -449,6 +481,7 @@ def get_additional_sign_real(
         location=location,
         device_type=device_type,
         owner=owner,
+        responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
         content_s=content_s,
