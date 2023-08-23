@@ -11,13 +11,7 @@ from city_furniture.models import (
     FurnitureSignpostReal,
     FurnitureSignpostRealOperation,
 )
-from traffic_control.tests.factories import (
-    get_mount_type,
-    get_operation_type,
-    get_owner,
-    get_responsible_entity,
-    get_user,
-)
+from traffic_control.tests.factories import get_mount_type, get_operation_type, get_owner, get_user
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
@@ -66,6 +60,7 @@ def get_city_furniture_device_type(
 
 def get_furniture_signpost_plan(
     location=None,
+    responsible_entity=None,
     owner=None,
     device_type=None,
     parent=None,
@@ -88,7 +83,7 @@ def get_furniture_signpost_plan(
         mount_plan=mount_plan,
         source_name="Some_source",
         source_id=uuid.uuid4(),
-        responsible_entity=get_responsible_entity(),
+        responsible_entity=responsible_entity,
         parent=parent,
         created_by=user,
         updated_by=user,
@@ -98,6 +93,7 @@ def get_furniture_signpost_plan(
 
 def get_furniture_signpost_real(
     location=None,
+    responsible_entity=None,
     owner=None,
     device_type=None,
     furniture_signpost_plan=None,
@@ -125,7 +121,7 @@ def get_furniture_signpost_real(
         installation_date=datetime.date(2020, 1, 20),
         source_name="Some_source",
         source_id=uuid.uuid4(),
-        responsible_entity=get_responsible_entity(),
+        responsible_entity=responsible_entity,
         parent=parent,
         created_by=user,
         updated_by=user,
