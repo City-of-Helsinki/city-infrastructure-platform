@@ -615,21 +615,32 @@ def add_traffic_light_real_operation(
     )
 
 
-def get_responsible_entity(name="ABC-123") -> ResponsibleEntity:
-    division = ResponsibleEntity.objects.get_or_create(
-        name="KYMP",
+def get_responsible_entity_division(name="DIVISION") -> ResponsibleEntity:
+    return ResponsibleEntity.objects.get_or_create(
+        name=name,
         defaults=dict(organization_level=OrganizationLevel.DIVISION),
     )[0]
-    service = ResponsibleEntity.objects.get_or_create(
-        name="Yleiset alueet",
-        defaults=dict(parent=division, organization_level=OrganizationLevel.SERVICE),
-    )[0]
-    unit = ResponsibleEntity.objects.get_or_create(
-        name="Unit Name",
-        defaults=dict(parent=service, organization_level=OrganizationLevel.UNIT),
-    )[0]
-    project = ResponsibleEntity.objects.get_or_create(
+
+
+def get_responsible_entity_service(name="SERVICE") -> ResponsibleEntity:
+    parent = get_responsible_entity_division()
+    return ResponsibleEntity.objects.get_or_create(
         name=name,
-        defaults=dict(parent=unit, organization_level=OrganizationLevel.PROJECT),
+        defaults=dict(parent=parent, organization_level=OrganizationLevel.SERVICE),
     )[0]
-    return project
+
+
+def get_responsible_entity_unit(name="UNIT") -> ResponsibleEntity:
+    parent = get_responsible_entity_service()
+    return ResponsibleEntity.objects.get_or_create(
+        name=name,
+        defaults=dict(parent=parent, organization_level=OrganizationLevel.UNIT),
+    )[0]
+
+
+def get_responsible_entity_project(name="PROJECT") -> ResponsibleEntity:
+    parent = get_responsible_entity_unit()
+    return ResponsibleEntity.objects.get_or_create(
+        name=name,
+        defaults=dict(parent=parent, organization_level=OrganizationLevel.PROJECT),
+    )[0]

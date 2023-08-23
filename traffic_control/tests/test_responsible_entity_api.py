@@ -7,7 +7,7 @@ from rest_framework import status
 
 from traffic_control.enums import OrganizationLevel
 from traffic_control.models import ResponsibleEntity
-from traffic_control.tests.factories import get_api_client, get_responsible_entity, get_user
+from traffic_control.tests.factories import get_api_client, get_responsible_entity_project, get_user
 
 
 # Read
@@ -15,7 +15,7 @@ from traffic_control.tests.factories import get_api_client, get_responsible_enti
 def test__responsible_entity__list():
     client = get_api_client()
     for name in ["foo", "bar", "baz"]:
-        get_responsible_entity(name=name)
+        get_responsible_entity_project(name=name)
 
     response = client.get(reverse("v1:responsibleentity-list"))
     response_data = response.json()
@@ -30,7 +30,7 @@ def test__responsible_entity__list():
 @pytest.mark.django_db
 def test__responsible_entity__detail():
     client = get_api_client()
-    obj = get_responsible_entity()
+    obj = get_responsible_entity_project()
 
     response = client.get(reverse("v1:responsibleentity-detail", kwargs={"pk": obj.pk}))
     response_data = response.json()
@@ -94,7 +94,7 @@ def test__responsible_entity__update(admin_user):
     is successful when content is not defined. Old content should be deleted.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    obj = get_responsible_entity(name="ORIGINAL_NAME")
+    obj = get_responsible_entity_project(name="ORIGINAL_NAME")
     data = {"name": "UPDATED_NAME"}
 
     response = client.put(reverse("v1:responsibleentity-detail", kwargs={"pk": obj.pk}), data=data)
@@ -116,7 +116,7 @@ def test__responsible_entity__update(admin_user):
 def test__responsible_entity__delete(admin_user):
     user = get_user(admin=admin_user)
     client = get_api_client(user=user)
-    obj = get_responsible_entity()
+    obj = get_responsible_entity_project()
 
     response = client.delete(reverse("v1:responsibleentity-detail", kwargs={"pk": obj.pk}))
 
@@ -148,7 +148,7 @@ def test__responsible_entity__anonymous_user(method, expected_status, view_type)
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    responsible_entity = get_responsible_entity(name="Responsible 1")
+    responsible_entity = get_responsible_entity_project(name="Responsible 1")
     kwargs = {"pk": responsible_entity.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:responsibleentity-{view_type}", kwargs=kwargs)
     data = {"name": "Responsible 2"}

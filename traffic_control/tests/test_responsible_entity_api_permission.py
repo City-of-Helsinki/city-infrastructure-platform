@@ -8,7 +8,7 @@ from traffic_control.enums import Lifecycle
 from traffic_control.tests.factories import (
     get_api_client,
     get_owner,
-    get_responsible_entity,
+    get_responsible_entity_project,
     get_traffic_control_device_type,
     get_user,
 )
@@ -44,7 +44,7 @@ def test__api_responsible_area_permission__create(model, add_to_responsible_enti
     user = get_user(bypass_operational_area=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.user_permissions.add(*perms)
-    responsible_entity = get_responsible_entity()
+    responsible_entity = get_responsible_entity_project()
 
     data = {
         "location": str(test_point_3d),
