@@ -151,6 +151,7 @@ class AdditionalSignPlanAdmin(
 
 @admin.register(AdditionalSignReal)
 class AdditionalSignRealAdmin(
+    ResponsibleEntityPermissionAdminMixin,
     DeviceComparisonAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
