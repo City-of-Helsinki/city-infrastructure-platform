@@ -85,7 +85,7 @@ use_parentheses = true
 exclude = ["migrations", "venv"]
 max-line-length = 120
 max-complexity = 10
-
+per-file-ignores = ["**/__init__.py:F401"]
 
 [tool.djlint]
 ignore = "T003,H023,H030,H031"
