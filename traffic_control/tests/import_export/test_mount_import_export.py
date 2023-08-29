@@ -1,8 +1,9 @@
 import pytest
 
-from traffic_control.models import MountReal
-from traffic_control.resources.mount import MountPlanToRealTemplateResource, MountRealResource
+from traffic_control.models import MountPlan, MountReal
+from traffic_control.resources import MountPlanResource, MountPlanToRealTemplateResource, MountRealResource
 from traffic_control.tests.factories import get_mount_plan, get_mount_real
+from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
 
 
 @pytest.mark.django_db
@@ -15,20 +16,23 @@ def test__mount_real__export():
     assert dataset.dict[0]["lifecycle"] == obj.lifecycle.name
 
 
+@pytest.mark.parametrize(
+    ("model", "resource", "factory"),
+    (
+        (MountPlan, MountPlanResource, get_mount_plan),
+        (MountReal, MountRealResource, get_mount_real),
+    ),
+)
+@pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
-def test__mount_real__import():
-    get_mount_real()
-    dataset = MountRealResource().export()
-    MountReal.objects.all().delete()
+def test__mount__import(model, resource, factory, format):
+    factory()
+    dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
+    model.objects.all().delete()
 
-    # Remove ID from data to create new objects
-    obj_data = dataset.dict[0]
-    obj_data.pop("id")
-    dataset.dict = [obj_data]
-
-    result = MountRealResource().import_data(dataset, raise_errors=True)
+    result = resource().import_data(dataset, raise_errors=True)
     assert not result.has_errors()
-    assert MountReal.objects.all().count() == 1
+    assert model.objects.all().count() == 1
 
 
 @pytest.mark.parametrize("real_preexists", (True, False), ids=lambda x: "real_preexists" if x else "real_nonexists")
