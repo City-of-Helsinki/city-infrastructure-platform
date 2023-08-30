@@ -25,10 +25,10 @@ RUN apt-get update && \
         mime-support \
         curl && \
     curl -sSL --retry 5 https://install.python-poetry.org --output install-poetry.py && \
-    python install-poetry.py --version=1.5.1 && \
+    python install-poetry.py --version=1.6.1 && \
     rm install-poetry.py && \
     /root/.local/bin/poetry config virtualenvs.create false && \
-    /root/.local/bin/poetry install --no-dev --no-interaction && \
+    /root/.local/bin/poetry install --only main --no-interaction && \
     apt-get remove -y build-essential libpq-dev && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
