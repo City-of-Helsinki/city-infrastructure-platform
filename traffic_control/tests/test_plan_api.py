@@ -71,7 +71,7 @@ def test_plan_create():
             "plan_number": "2020_1",
             "location": location,
             "diary_number": "HEL 2023-000001",
-            "drawing_number": "1234",
+            "drawing_numbers": ["1234"],
             "created_by": user.pk,
             "updated_by": user.pk,
         },
@@ -87,7 +87,7 @@ def test_plan_create():
     assert plan.created_by == user
     assert plan.updated_by == user
     assert plan.diary_number == "HEL 2023-000001"
-    assert plan.drawing_number == "1234"
+    assert plan.drawing_numbers == ["1234"]
     assert response.data.get("derive_location") is False
 
 
@@ -147,6 +147,71 @@ def test_plan_filter_location(location, location_query, expected):
     if expected == 1:
         data = response.data.get("results")[0]
         assert str(plan.id) == data.get("id")
+
+
+@pytest.mark.django_db
+def test_plan_list_filter_drawing_number():
+    api_client = get_api_client()
+
+    p1 = get_plan(name="Plan 1")
+    p1.drawing_numbers = ["10"]
+    p1.save()
+
+    p2 = get_plan(name="Plan 2")
+    p2.drawing_numbers = ["1010", "123"]
+    p2.save()
+
+    get_plan(name="Plan 3")
+
+    # Search a plan with one drawing number
+    response = api_client.get(reverse("v1:plan-list"), {"drawing_number": "10"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == 1
+    assert response.data.get("results")[0].get("id") == str(p1.id)
+
+    # Search a plan with multiple drawing numbers
+    response = api_client.get(reverse("v1:plan-list"), {"drawing_number": "1010"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == 1
+    assert response.data.get("results")[0].get("id") == str(p2.id)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("valid", "input_drawing_numbers", "db_drawing_numbers"),
+    (
+        (True, [], []),
+        (True, ["123"], ["123"]),
+        (True, ["456", "123"], ["123", "456"]),
+        (False, [""], None),
+        (False, ["123", ""], None),
+        (False, ["123,456"], None),
+        (False, ['"123'], None),
+    ),
+)
+def test_plan_create_validate_drawing_number(valid, input_drawing_numbers, db_drawing_numbers):
+    user = get_user(admin=True)
+    api_client = get_api_client(user=user)
+    location = test_multi_polygon.ewkt
+
+    response = api_client.post(
+        reverse("v1:plan-list"),
+        data={
+            "name": "Test plan",
+            "plan_number": "2020_1",
+            "location": location,
+            "drawing_numbers": input_drawing_numbers,
+        },
+        format="json",
+    )
+
+    if valid:
+        assert response.status_code == status.HTTP_201_CREATED
+        assert Plan.objects.count() == 1
+        assert Plan.objects.first().drawing_numbers == db_drawing_numbers
+    else:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert Plan.objects.count() == 0
 
 
 @pytest.mark.parametrize(

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-29 17:07+0300\n"
+"POT-Creation-Date: 2023-09-01 16:12+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1548,8 +1548,14 @@ msgstr "Vuosi ja päätöspykälä väliviivalla erotettuna"
 msgid "Diary number"
 msgstr "Diaarinumero"
 
-msgid "Drawing number"
-msgstr "Piirustusnumero"
+msgid "A drawing number must not contain special characters"
+msgstr "Piirustusnumero ei saa sisältää erikoismerkkejä"
+
+msgid "Drawing numbers"
+msgstr "Piirustusnumerot"
+
+msgid "Drawing numbers related to the plan separated with a comma"
+msgstr "Suunnitelmaan liittyvien piirustusten numerot pilkulla erotettuna"
 
 msgid "Derive location from devices"
 msgstr "Johda sijainti laitteista"
