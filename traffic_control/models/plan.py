@@ -6,6 +6,8 @@ from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
+from django.contrib.postgres.fields import ArrayField
+from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.mixins.models import SoftDeleteModel, SourceControlModel, UserControlModel
@@ -34,11 +36,22 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         null=True,
         blank=True,
     )
-    drawing_number = models.CharField(
-        verbose_name=_("Drawing number"),
-        max_length=20,
-        null=True,
+    drawing_numbers = ArrayField(
+        models.CharField(
+            max_length=20,
+            validators=[
+                RegexValidator(
+                    r"^[a-zA-Z0-9-_ ]+$",
+                    _("A drawing number must not contain special characters"),
+                ),
+            ],
+        ),
+        verbose_name=_("Drawing numbers"),
+        null=False,
         blank=True,
+        default=list,
+        size=100,
+        help_text=_("Drawing numbers related to the plan separated with a comma"),
     )
     derive_location = models.BooleanField(
         verbose_name=_("Derive location from devices"),
@@ -58,6 +71,11 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
 
     def __str__(self):
         return f"{self.plan_number} {self.name}"
+
+    def save(self, *args, **kwargs):
+        # Make drawing numbers a unique sorted list
+        self.drawing_numbers = sorted(set(self.drawing_numbers or []))
+        return super().save(*args, **kwargs)
 
     def _get_related_locations(self) -> List[Point]:
         """

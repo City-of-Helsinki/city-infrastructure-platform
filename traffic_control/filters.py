@@ -1,6 +1,6 @@
 from django.contrib.gis.db.models import GeometryField
 from django.utils.translation import gettext_lazy as _
-from django_filters import ChoiceFilter, Filter, UUIDFilter
+from django_filters import CharFilter, ChoiceFilter, Filter, UUIDFilter
 from django_filters.rest_framework import FilterSet
 from rest_framework.exceptions import NotFound
 from rest_framework_gis.filters import GeometryFilter
@@ -106,8 +106,19 @@ class OwnerFilterSet(FilterSet):
 
 
 class PlanFilterSet(FilterSet):
+    # Plan is searchable by single drawing number
+    drawing_number = CharFilter(
+        method="filter_by_drawing_number",
+        field_name="drawing_numbers",
+    )
+
+    def filter_by_drawing_number(self, queryset, name, value):
+        lookup = "__".join([name, "contains"])
+        return queryset.filter(**{lookup: [value]})
+
     class Meta(GenericMeta):
         model = Plan
+        exclude = ["drawing_numbers"]
 
 
 class PortalTypeFilterSet(FilterSet):
