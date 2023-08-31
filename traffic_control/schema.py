@@ -68,13 +68,18 @@ def process_enum_values(generator, request, public, result):
     enum parameter choices to be `Enum.value` instead of `Enum`.
     """
 
-    for path, methods in result.get("paths").items():
-        for method_name, method in methods.items():
+    def enum_choice_index(enum_choice, enum_class) -> int:
+        return list(map(lambda x: x[0], enum_class.choices())).index(enum_choice.value)
+
+    for methods in result.get("paths", {}).values():
+        for method in methods.values():
             for parameter in method.get("parameters", []):
-                enum = parameter.get("schema", {}).get("enum", [])
-                for i, enum_value in enumerate(enum):
-                    if isinstance(enum_value, Enum):
-                        enum[i] = enum_value.value
+                enum_values = parameter.get("schema", {}).get("enum", [])
+                # Expect that if the first enum value is an Enum, then all of them are.
+                if enum_values and isinstance(enum_values[0], Enum):
+                    # List values in the same order as they are in the enum class.
+                    enum_values.sort(key=lambda x: enum_choice_index(x, type(x)))
+                    enum_values[:] = [enum_value.value for enum_value in enum_values]
 
     return result
 
