@@ -23,8 +23,8 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
 
     name = models.CharField(verbose_name=_("Name"), max_length=512)
-    plan_number = models.CharField(
-        verbose_name=_("Plan number"),
+    decision_id = models.CharField(
+        verbose_name=_("Decision id"),
         max_length=16,
         help_text=_("Year and verdict section separated with a dash"),
     )
@@ -70,7 +70,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         unique_together = ["source_name", "source_id"]
 
     def __str__(self):
-        return f"{self.plan_number} {self.name}"
+        return f"{self.decision_id} {self.name}"
 
     def save(self, *args, **kwargs):
         # Make drawing numbers a unique sorted list

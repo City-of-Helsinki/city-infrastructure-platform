@@ -31,7 +31,7 @@ class PlanAdmin(
             {
                 "fields": (
                     "name",
-                    "plan_number",
+                    "decision_id",
                     "diary_number",
                     "drawing_numbers",
                     "source_id",
@@ -53,7 +53,7 @@ class PlanAdmin(
             {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
         ),
     )
-    list_display = ("plan_number", "name", "diary_number", "drawing_numbers", "created_at")
+    list_display = ("decision_id", "name", "diary_number", "drawing_numbers", "created_at")
     readonly_fields = (
         "created_at",
         "updated_at",

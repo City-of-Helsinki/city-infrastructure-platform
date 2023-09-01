@@ -71,10 +71,10 @@ class RoadMarkingPlanResource(AbstractRoadMarkingResource):
         column_name="traffic_sign_plan__id",
         widget=ForeignKeyWidget(TrafficSignPlan, "id"),
     )
-    plan__plan_number = Field(
+    plan__decision_id = Field(
         attribute="plan",
-        column_name="plan__plan_number",
-        widget=ForeignKeyWidget(Plan, "plan_number"),
+        column_name="plan__decision_id",
+        widget=ForeignKeyWidget(Plan, "decision_id"),
     )
 
     class Meta(AbstractRoadMarkingResource.Meta):
@@ -82,7 +82,7 @@ class RoadMarkingPlanResource(AbstractRoadMarkingResource):
 
         fields = AbstractRoadMarkingResource.Meta.common_fields + (
             "traffic_sign_plan__id",
-            "plan__plan_number",
+            "plan__decision_id",
         )
         export_order = fields
 

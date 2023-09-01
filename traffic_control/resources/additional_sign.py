@@ -305,10 +305,10 @@ class AdditionalSignPlanResource(AbstractAdditionalSignResource):
         column_name="mount_plan__id",
         widget=ForeignKeyWidget(MountPlan, "id"),
     )
-    plan__plan_number = Field(
+    plan__decision_id = Field(
         attribute="plan",
-        column_name="plan__plan_number",
-        widget=ForeignKeyWidget(Plan, "plan_number"),
+        column_name="plan__decision_id",
+        widget=ForeignKeyWidget(Plan, "decision_id"),
     )
 
     class Meta(AbstractAdditionalSignResource.Meta):
@@ -316,7 +316,7 @@ class AdditionalSignPlanResource(AbstractAdditionalSignResource):
 
         fields = AbstractAdditionalSignResource.Meta.common_fields + (
             "mount_plan__id",
-            "plan__plan_number",
+            "plan__decision_id",
         )
         export_order = fields
         clean_model_instances = True
