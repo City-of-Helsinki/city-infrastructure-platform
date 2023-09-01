@@ -148,7 +148,7 @@ def test__api_operational_area_permission__create(model, location, success):
     if model == "Plan":
         data = {
             "name": "Test plan",
-            "plan_number": "2020_1",
+            "decision_id": "2020_1",
             "location": location,
             "linked_objects": {
                 "barrier_plan_ids": [],
@@ -276,7 +276,7 @@ def test__api_operational_area_permission__update(model, location, success):
     if model == "Plan":
         data = {
             "name": "Test plan",
-            "plan_number": "2020_1",
+            "decision_id": "2020_1",
             "location": location.ewkt,
             "linked_objects": {
                 "barrier_plan_ids": [],

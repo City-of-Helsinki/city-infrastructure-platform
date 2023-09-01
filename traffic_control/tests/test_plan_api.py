@@ -68,7 +68,7 @@ def test_plan_create():
         reverse("v1:plan-list"),
         data={
             "name": "Test plan",
-            "plan_number": "2020_1",
+            "decision_id": "2020_1",
             "location": location,
             "diary_number": "HEL 2023-000001",
             "drawing_numbers": ["1234"],
@@ -83,7 +83,7 @@ def test_plan_create():
     assert Plan.objects.count() == 1
     assert plan.location.ewkt == location
     assert plan.name == "Test plan"
-    assert plan.plan_number == "2020_1"
+    assert plan.decision_id == "2020_1"
     assert plan.created_by == user
     assert plan.updated_by == user
     assert plan.diary_number == "HEL 2023-000001"
@@ -198,7 +198,7 @@ def test_plan_create_validate_drawing_number(valid, input_drawing_numbers, db_dr
         reverse("v1:plan-list"),
         data={
             "name": "Test plan",
-            "plan_number": "2020_1",
+            "decision_id": "2020_1",
             "location": location,
             "drawing_numbers": input_drawing_numbers,
         },
@@ -236,7 +236,7 @@ def test__plan__anonymous_user(method, expected_status, view_type):
     plan = get_plan(name="Plan 1")
     kwargs = {"pk": plan.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:plan-{view_type}", kwargs=kwargs)
-    data = {"name": "Plan 2", "plan_number": "123"}
+    data = {"name": "Plan 2", "decision_id": "123"}
 
     response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
 

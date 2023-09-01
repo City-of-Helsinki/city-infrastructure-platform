@@ -81,7 +81,7 @@ def get_plan(location=test_multi_polygon, name="Test plan", derive_location=Fals
     user = get_user("test_user")
     return Plan.objects.get_or_create(
         name=name,
-        plan_number="2020_1",
+        decision_id="2020_1",
         location=location,
         derive_location=derive_location,
         created_by=user,

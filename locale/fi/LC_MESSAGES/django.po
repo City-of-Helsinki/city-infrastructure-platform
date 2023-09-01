@@ -1539,8 +1539,8 @@ msgstr "Tehtävä"
 msgid "Status"
 msgstr "Tila"
 
-msgid "Plan number"
-msgstr "Suunnitelman numero"
+msgid "Decision id"
+msgstr "Päätösnumero"
 
 msgid "Year and verdict section separated with a dash"
 msgstr "Vuosi ja päätöspykälä väliviivalla erotettuna"

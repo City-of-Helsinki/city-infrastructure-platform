@@ -48,16 +48,16 @@ class AbstractBarrierResource(ResponsibleEntityPermissionImportMixin, GenericDev
 
 
 class BarrierPlanResource(AbstractBarrierResource):
-    plan__plan_number = Field(
+    plan__decision_id = Field(
         attribute="plan",
-        column_name="plan__plan_number",
-        widget=ForeignKeyWidget(Plan, "plan_number"),
+        column_name="plan__decision_id",
+        widget=ForeignKeyWidget(Plan, "decision_id"),
     )
 
     class Meta(AbstractBarrierResource.Meta):
         model = BarrierPlan
 
-        fields = AbstractBarrierResource.Meta.common_fields + ("plan__plan_number",)
+        fields = AbstractBarrierResource.Meta.common_fields + ("plan__decision_id",)
         export_order = fields
 
 

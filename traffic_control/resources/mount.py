@@ -51,16 +51,16 @@ class AbstractMountResource(ResponsibleEntityPermissionImportMixin, GenericDevic
 
 
 class MountPlanResource(AbstractMountResource):
-    plan__plan_number = Field(
+    plan__decision_id = Field(
         attribute="plan",
-        column_name="plan__plan_number",
-        widget=ForeignKeyWidget(Plan, "plan_number"),
+        column_name="plan__decision_id",
+        widget=ForeignKeyWidget(Plan, "decision_id"),
     )
 
     class Meta(AbstractMountResource.Meta):
         model = MountPlan
 
-        fields = AbstractMountResource.Meta.common_fields + ("plan__plan_number",)
+        fields = AbstractMountResource.Meta.common_fields + ("plan__decision_id",)
         export_order = fields
 
 
