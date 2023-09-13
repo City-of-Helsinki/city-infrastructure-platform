@@ -34,6 +34,8 @@ class PlanAdmin(
                     "plan_number",
                     "diary_number",
                     "drawing_number",
+                    "source_id",
+                    "source_name",
                 )
             },
         ),
