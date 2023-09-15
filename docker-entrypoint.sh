@@ -48,6 +48,16 @@ elif [[ "$DEV_SERVER" = "1" ]]; then
     echo "Starting dev-server..."
     python ./manage.py runserver 0.0.0.0:8000
 else
-    echo "Starting uwsgi-server..."
-    uwsgi --ini uwsgi_docker.ini
+    UWSGI_ARGS="--ini uwsgi/docker.ini"
+
+    if [[ "$UWSGI_LOG_HEALTHZ" = "1" ]]
+    then
+        echo "Logging health and readiness check requests."
+    else
+        echo "Suppressing health and readiness checks requests."
+        UWSGI_ARGS="$UWSGI_ARGS --ini uwsgi/donotlog-health.ini"
+    fi
+
+    echo "Starting uwsgi-server at $(date)"
+    uwsgi $UWSGI_ARGS
 fi
