@@ -27,7 +27,7 @@ fi
 
 # Translate messages
 echo "Updating translations..."
-./manage.py compilemessages -l fi
+./compilemessages.sh
 
 echo "Checking for odd ENTRYPOINT line in arguments"
 echo "Arguments are:"
