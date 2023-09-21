@@ -10,7 +10,7 @@ python = "^3.8.1"
 django = "^3.2.21"
 
 django-auditlog = "^2.2.2"
-django-colorfield = "^0.9.0"
+django-colorfield = "^0.10.1"
 django-cors-headers = "^4.2.0"
 django-enumfields2 = "^3.0.2"
 django-environ = "^0.10.0"
