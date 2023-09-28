@@ -3,9 +3,9 @@ services:
   db:
     image: mdillon/postgis:11-alpine
     environment:
-        POSTGRES_USER: city-infrastructure-platform
-        POSTGRES_PASSWORD: city-infrastructure-platform
-        POSTGRES_DB: city-infrastructure-platform
+      POSTGRES_USER: city-infrastructure-platform
+      POSTGRES_PASSWORD: city-infrastructure-platform
+      POSTGRES_DB: city-infrastructure-platform
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
@@ -15,13 +15,13 @@ services:
       target: development
       context: "."
     volumes:
-        - .:/city-infrastructure-platform
+      - .:/city-infrastructure-platform
     environment:
-        # Database location is controlled above by postgres config. Thus we override
-        # any value set in .env
-        - DATABASE_URL=postgis://city-infrastructure-platform:city-infrastructure-platform@db/city-infrastructure-platform
+      # Database location is controlled above by postgres config. Thus we override
+      # any value set in .env
+      - DATABASE_URL=postgis://city-infrastructure-platform:city-infrastructure-platform@db/city-infrastructure-platform
     env_file:
-        - .env
+      - .env
     ports:
       - "127.0.0.1:8000:8000"
     restart: on-failure
@@ -29,5 +29,4 @@ services:
       - db
 
 volumes:
-    db_data:
-
+  db_data:
