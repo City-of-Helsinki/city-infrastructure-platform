@@ -22,6 +22,8 @@
                      class="value" />
                 <col span="1"
                      class="unit" />
+                <col span="1"
+                     class="device_type_id" />
             </colgroup>
 
             <tr>
@@ -30,6 +32,7 @@
                 <th>Icon</th>
                 <th>Value</th>
                 <th>Unit</th>
+                <th>Device type ID</th>
             </tr>
 
             {% for device_type in device_types %}
@@ -48,6 +51,7 @@
                     </td>
                     <td>{{ device_type.value }}</td>
                     <td>{{ device_type.unit }}</td>
+                    <td class="device_type_id">{{ device_type.id }}</td>
                 </tr>
             {% endfor %}
         </table>

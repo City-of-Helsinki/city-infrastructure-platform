@@ -1,6 +1,7 @@
 .description {
     width: 400px;
 }
+
 .icon {
     width: 240px;
 }
@@ -9,6 +10,10 @@ td {
     vertical-align: top;
     border: 1px solid silver;
     padding: 10px;
+}
+
+td.device_type_id {
+    font-family: monospace;
 }
 
 table tr:nth-child(even) td {

@@ -20,6 +20,8 @@
                      class="icon" />
                 <col span="1"
                      class="schema" />
+                <col span="1"
+                     class="device_type_id" />
             </colgroup>
 
             <tr>
@@ -27,6 +29,7 @@
                 <th>Description</th>
                 <th>Icon</th>
                 <th>Content schema</th>
+                <th>Device type ID</th>
             </tr>
 
             {% for device_type in device_types %}
@@ -46,6 +49,7 @@
                     <td>
                         <pre>{{ device_type.content_schema }}</pre>
                     </td>
+                    <td class="device_type_id">{{ device_type.id }}</td>
                 </tr>
             {% endfor %}
         </table>
