@@ -126,9 +126,39 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
         method_name="get_traffic_sign_type",
     )
 
+    icons = serializers.SerializerMethodField(
+        method_name="get_icon_urls",
+        read_only=True,
+        required=False,
+    )
+
     class Meta:
         model = TrafficControlDeviceType
         fields = "__all__"
+
+    @extend_schema_field(
+        {
+            "type": "object",
+            "example": {
+                "svg": "https://example.com/icons/svg/A1.1.svg",
+                "png_32": "https://example.com/icons/png/32/A1.1.png",
+                "png_64": "https://example.com/icons/png/64/A1.1.png",
+                "png_128": "https://example.com/icons/png/128/A1.1.png",
+                "png_256": "https://example.com/icons/png/256/A1.1.png",
+            },
+            "title": "Icons",
+            "help": "URLs for icons of the device.",
+        }
+    )
+    def get_icon_urls(self, obj: TrafficControlDeviceType):
+        icons = obj.get_icons()
+        if not icons:
+            return None
+        request = self.context.get("request")
+        scheme = request.scheme
+        host = request.get_host()
+        icon_urls = {key: f"{scheme}://{host}{value}" for key, value in icons.items()}
+        return icon_urls
 
     @extend_schema_field(field=TrafficSignType)
     def get_traffic_sign_type(self, obj):

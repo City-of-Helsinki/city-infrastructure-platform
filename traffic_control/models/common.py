@@ -3,6 +3,7 @@ from typing import Optional
 
 import jsonschema
 from auditlog.registry import auditlog
+from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -139,6 +140,25 @@ class TrafficControlDeviceType(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.code, self.description)
+
+    def get_icons(self):
+        """
+        Get icon file paths for each type and size. File paths are based on the `icon` field,
+        and it is not guaranteed that the file really exists.
+        """
+        if not self.icon:
+            return None
+
+        svg_name = self.icon
+        png_name = f"{self.icon}.png"
+        png_sizes = [32, 64, 128, 256]
+        static_url = settings.STATIC_URL
+
+        icons = {"svg": f"{static_url}traffic_control/svg/traffic_sign_icons/{svg_name}"}
+        for size in png_sizes:
+            icons[f"png_{size}"] = f"{static_url}traffic_control/png/traffic_sign_icons/{size}/{png_name}"
+
+        return icons
 
     @property
     def traffic_sign_type(self):
