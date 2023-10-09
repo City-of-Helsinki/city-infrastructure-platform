@@ -1,6 +1,7 @@
 import json
 
 import pytest
+from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -308,6 +309,34 @@ def test__device_type__response_code_attribute():
         "the admin traffic sign icon frontend functionality in "
         "AdminTrafficSignIconSelectWidget!"
     )
+
+
+@pytest.mark.parametrize(
+    ("svg_icon", "png_icon"),
+    (
+        ("X1.1.svg", "X1.1.svg.png"),
+        ("", None),
+    ),
+)
+@pytest.mark.django_db
+def test__device_type__icons(svg_icon, png_icon):
+    client = get_api_client()
+    dt = get_traffic_control_device_type(code="X1.1", icon=svg_icon)
+    hostname = "testserver"
+
+    response = client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": dt.pk}))
+    response_data = response.json()
+    icons = response_data["icons"]
+    static = settings.STATIC_URL
+
+    if svg_icon:
+        assert icons["svg"] == f"http://{hostname}{static}traffic_control/svg/traffic_sign_icons/{svg_icon}"
+        assert icons["png_32"] == f"http://{hostname}{static}traffic_control/png/traffic_sign_icons/32/{png_icon}"
+        assert icons["png_64"] == f"http://{hostname}{static}traffic_control/png/traffic_sign_icons/64/{png_icon}"
+        assert icons["png_128"] == f"http://{hostname}{static}traffic_control/png/traffic_sign_icons/128/{png_icon}"
+        assert icons["png_256"] == f"http://{hostname}{static}traffic_control/png/traffic_sign_icons/256/{png_icon}"
+    else:
+        assert icons is None
 
 
 @pytest.mark.parametrize(

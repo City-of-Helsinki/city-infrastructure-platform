@@ -352,6 +352,7 @@ def get_traffic_control_device_type(
     target_model: Optional[DeviceTypeTargetModel] = None,
     value: str = "",
     content_schema: Optional[Any] = None,
+    icon: str = "",
 ) -> TrafficControlDeviceType:
     if content_schema is None:
         # Distinguish between JSON null and SQL NULL
@@ -363,6 +364,7 @@ def get_traffic_control_device_type(
         target_model=target_model,
         value=value,
         content_schema=content_schema,
+        icon=icon,
     )[0]
     dt.refresh_from_db()
     return dt

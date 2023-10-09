@@ -16,6 +16,7 @@ COPY poetry.lock pyproject.toml /city-infrastructure-platform/
 RUN apt-get update && \
     mkdir -p /usr/share/man/man1/ /usr/share/man/man3/ /usr/share/man/man7/ && \
     apt-get install -y --no-install-recommends \
+        libcairo2 \
         libpcre3-dev \
         libpq-dev \
         build-essential \
@@ -73,6 +74,7 @@ ENV COLLECT_STATIC=1
 
 COPY . /city-infrastructure-platform
 COPY --from=build /map-view/build/ /city-infrastructure-platform/map-view/build/
+RUN python svg_icons_to_png.py
 
 # OpenShift runs container in arbitrary user which belongs to group `root` (0)
 RUN chgrp -R 0 /city-infrastructure-platform && \
