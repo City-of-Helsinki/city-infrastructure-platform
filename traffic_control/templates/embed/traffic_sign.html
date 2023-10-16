@@ -1,7 +1,6 @@
 {% load tz %}
 {% load i18n %}
 {% load static %}
-{% get_static_prefix as STATIC_URL %}
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -14,7 +13,7 @@
     <body>
         {% if object.device_type.icon %}
             <img class="traffic-sign-icon"
-                 src="{{ STATIC_URL }}traffic_control/svg/traffic_sign_icons/{{ object.device_type.icon }}"
+                 src="{{ object.device_type.get_icons.svg }}"
                  alt="{{ object.device_type.description }}"
                  width="120"
                  height="120" />
@@ -40,7 +39,7 @@
                     <div>
                         {% if additional_sign.object.device_type.icon %}
                             <img class="additional-sign-icon"
-                                 src="{{ STATIC_URL }}traffic_control/svg/traffic_sign_icons/{{ additional_sign.object.device_type.icon }}"
+                                 src="{{ additional_sign.object.device_type.get_icons.svg }}"
                                  alt="{{ additional_sign.object.device_type.description }}"
                                  width="100"
                                  height="100" />

@@ -1,5 +1,4 @@
 {% load static %}
-{% get_static_prefix as STATIC_URL %}
 
 <!DOCTYPE html>
 <html lang="fi">
@@ -41,7 +40,7 @@
                     <td>{{ device_type.description }}</td>
                     <td>
                         {% if device_type.icon %}
-                            <img src="{{ STATIC_URL }}traffic_control/svg/traffic_sign_icons/{{ device_type.icon }}"
+                            <img src="{{ device_type.get_icons.svg }}"
                                  width="200"
                                  height="200"
                                  alt="{{ device_type.icon }}" />
