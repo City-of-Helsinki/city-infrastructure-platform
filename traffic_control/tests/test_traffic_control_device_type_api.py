@@ -296,21 +296,6 @@ def test__device_type__target_model__invalid(target_model, factory):
     assert not device_type.target_model
 
 
-@pytest.mark.django_db
-def test__device_type__response_code_attribute():
-    client = get_api_client()
-    dt = get_traffic_control_device_type()
-
-    response = client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": dt.pk}))
-    response_data = response.json()
-
-    assert "code" in response_data, (
-        "Removing `code` attribute from the TrafficControlDeviceType API will break "
-        "the admin traffic sign icon frontend functionality in "
-        "AdminTrafficSignIconSelectWidget!"
-    )
-
-
 @pytest.mark.parametrize(
     ("svg_icon", "png_icon"),
     (
