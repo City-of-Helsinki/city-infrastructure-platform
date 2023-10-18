@@ -78,7 +78,7 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel,
         max_length=254,
         blank=True,
         null=True,
-        help_text=_("Name of the road this road name is installed at."),
+        help_text=_("Name of the road this traffic sign is installed at."),
     )
     lane_number = EnumField(
         LaneNumber,
