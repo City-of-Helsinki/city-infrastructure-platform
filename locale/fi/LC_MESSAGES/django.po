@@ -1004,7 +1004,7 @@ msgid "Describes the condition of this device."
 msgstr "Kertoo tämän laitteen kunnon."
 
 msgid "Source id"
-msgstr "Lähteen id"
+msgstr "Lähde-id"
 
 msgid "ID of the device in the source where this device was imported from."
 msgstr "Laitteen tunnus lähteessä, josta tämä laite on tuotu."
@@ -2035,7 +2035,7 @@ msgstr "Toteumadokumentit (liikennevalo)"
 msgid "Outside"
 msgstr "Tie tai katuverkon ulkopuolella"
 
-msgid "Name of the road this road name is installed at."
+msgid "Name of the road this traffic sign is installed at."
 msgstr "Sen tien nimi, jolle tämä liikennemerkki on asennettu."
 
 msgid "Traffic Sign Code value"
