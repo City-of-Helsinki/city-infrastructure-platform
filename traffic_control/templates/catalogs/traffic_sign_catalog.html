@@ -22,6 +22,12 @@
                 <col span="1"
                      class="unit" />
                 <col span="1"
+                     class="size" />
+                <col span="1"
+                     class="legacy_code" />
+                <col span="1"
+                     class="legacy_description" />
+                <col span="1"
                      class="device_type_id" />
             </colgroup>
 
@@ -31,6 +37,9 @@
                 <th>Icon</th>
                 <th>Value</th>
                 <th>Unit</th>
+                <th>Size</th>
+                <th>Legacy code</th>
+                <th>Legacy description</th>
                 <th>Device type ID</th>
             </tr>
 
@@ -50,6 +59,9 @@
                     </td>
                     <td>{{ device_type.value }}</td>
                     <td>{{ device_type.unit }}</td>
+                    <td>{{ device_type.size }}</td>
+                    <td>{{ device_type.legacy_code }}</td>
+                    <td>{{ device_type.legacy_description }}</td>
                     <td class="device_type_id">{{ device_type.id }}</td>
                 </tr>
             {% endfor %}
