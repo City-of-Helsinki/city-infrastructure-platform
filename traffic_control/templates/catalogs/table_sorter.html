@@ -1,0 +1,35 @@
+<script>
+    const table = document.getElementById("signs");
+    const tBody = table.tBodies[0];
+    const rows = Array.from(tBody.rows);
+    const headerCells = table.tHead.rows[0].cells;
+    const sortDirections = {};
+
+    for (const th of headerCells) {
+        const cellIndex = th.cellIndex;
+
+        th.addEventListener("click", () => {
+            const currentDirection = sortDirections[cellIndex] || "asc";
+            const nextDirection = currentDirection === "asc" ? "desc" : "asc";
+
+            for (const headerCell of headerCells) {
+                headerCell.classList.remove("asc", "desc");
+            }
+            headerCells[cellIndex].classList.add(nextDirection);
+
+            rows.sort((tr1, tr2) => {
+                const tr1Text = tr1.cells[cellIndex].textContent;
+                const tr2Text = tr2.cells[cellIndex].textContent;
+
+                if (nextDirection === "asc") {
+                    return tr1Text.localeCompare(tr2Text);
+                } else {
+                    return tr2Text.localeCompare(tr1Text);
+                }
+            });
+
+            tBody.append(...rows);
+            sortDirections[cellIndex] = nextDirection;
+        });
+    }
+</script>
