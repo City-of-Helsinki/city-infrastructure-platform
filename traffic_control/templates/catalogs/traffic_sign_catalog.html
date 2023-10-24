@@ -31,7 +31,7 @@
                      class="device_type_id" />
             </colgroup>
 
-            <tr>
+            <thead>
                 <th>Code</th>
                 <th>Description</th>
                 <th>Icon</th>
@@ -41,7 +41,7 @@
                 <th>Legacy code</th>
                 <th>Legacy description</th>
                 <th>Device type ID</th>
-            </tr>
+            </thead>
 
             {% for device_type in device_types %}
                 <tr>
@@ -66,5 +66,7 @@
                 </tr>
             {% endfor %}
         </table>
+
+        {% include "./table_sorter.html" %}
     </body>
 </html>
