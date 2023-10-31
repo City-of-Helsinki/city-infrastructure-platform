@@ -57,6 +57,11 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         null=True,
         help_text=_("Additional sign content as JSON document"),
     )
+    missing_content = models.BooleanField(
+        _("Missing content"),
+        default=False,
+        help_text=_("Content (content_s) is not available although the device type content schema requires it."),
+    )
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.IntegerField(
         _("Height"),
@@ -167,9 +172,15 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
     def clean(self):
         validation_errors = {}
 
-        content_s_validation_errors = validate_structured_content(self.content_s, self.device_type)
-        if len(content_s_validation_errors) > 0:
-            validation_errors["content_s"] = content_s_validation_errors
+        if self.missing_content and self.content_s:
+            validation_errors["missing_content"] = ValidationError(
+                _("'Missing content' cannot be enabled when the content field (content_s) is not empty.")
+            )
+
+        if not self.missing_content:
+            content_s_validation_errors = validate_structured_content(self.content_s, self.device_type)
+            if len(content_s_validation_errors) > 0:
+                validation_errors["content_s"] = content_s_validation_errors
 
         if len(validation_errors) > 0:
             raise ValidationError(validation_errors)

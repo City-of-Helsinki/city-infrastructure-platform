@@ -10,21 +10,22 @@ const createStructuredContentWidget = async (name, options) => {
   const deviceTypeWidgetId = "id_" + deviceTypeName;
   const deviceTypeWidget = document.getElementById(deviceTypeWidgetId);
 
-  refreshEditor(
-    editorContainer,
-    valueContainer,
-    deviceTypeWidget,
-    deviceTypeEndpoint
-  );
+  const missingContentId = "id_missing_content";
+  const missingContent = document.getElementById(missingContentId);
 
-  deviceTypeWidget.addEventListener("change", () => {
+  const refreshEditorEventHandler = () => {
     refreshEditor(
       editorContainer,
       valueContainer,
       deviceTypeWidget,
-      deviceTypeEndpoint
+      deviceTypeEndpoint,
+      missingContent
     );
-  });
+  };
+
+  deviceTypeWidget.addEventListener("change", refreshEditorEventHandler);
+  missingContent.addEventListener("change", refreshEditorEventHandler);
+  refreshEditorEventHandler();
 };
 
 const getDeviceTypeContentSchema = async (deviceTypeId, deviceTypeEndpoint) => {
@@ -62,7 +63,8 @@ const refreshEditor = async (
   editorContainer,
   valueContainer,
   deviceTypeWidget,
-  deviceTypeEndpoint
+  deviceTypeEndpoint,
+  missingContent
 ) => {
   editorContainer.replaceChildren();
 
@@ -73,7 +75,7 @@ const refreshEditor = async (
     deviceTypeEndpoint
   );
 
-  if (contentSchema) {
+  if (contentSchema && !missingContent.checked) {
     const editorOptions = {
       schema: contentSchema,
       theme: "html",

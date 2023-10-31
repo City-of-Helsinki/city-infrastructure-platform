@@ -269,6 +269,102 @@ def test__additional_sign__import__create_with_content(model, resource, factory,
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
         (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
     ),
+    ids=("plan", "real"),
+)
+@pytest.mark.parametrize("format", file_formats)
+@pytest.mark.django_db
+def test__additional_sign__import__create_with_missing_content(model, resource, factory, format):
+    dt_with_schema_1 = get_traffic_control_device_type(
+        code="type1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema_1,
+    )
+    dt_with_schema_2 = get_traffic_control_device_type(
+        code="type2",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema_2,
+    )
+    dt_no_schema = get_traffic_control_device_type(
+        code="type3",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+    )
+
+    factory(
+        device_type=dt_with_schema_1,
+        content_s=None,
+        missing_content=True,
+    )
+    factory(
+        device_type=dt_with_schema_2,
+        content_s=None,
+        missing_content=True,
+    )
+    factory(
+        device_type=dt_no_schema,
+        missing_content=True,
+    )
+
+    dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
+    model.objects.all().delete()
+
+    result = resource().import_data(dataset, raise_errors=True, collect_failed_rows=True)
+
+    assert not result.has_validation_errors()
+    assert not result.has_errors()
+
+    assert model.objects.all().count() == 3
+    assert model.objects.all()[0].content_s is None
+    assert model.objects.all()[0].missing_content is True
+    assert model.objects.all()[0].device_type == dt_with_schema_1
+
+    assert model.objects.all()[1].content_s is None
+    assert model.objects.all()[1].missing_content is True
+    assert model.objects.all()[1].device_type == dt_with_schema_2
+
+    assert model.objects.all()[2].content_s is None
+    assert model.objects.all()[2].missing_content is True
+    assert model.objects.all()[2].device_type == dt_no_schema
+
+
+@pytest.mark.parametrize(
+    "model, resource, factory",
+    (
+        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+    ),
+    ids=("plan", "real"),
+)
+@pytest.mark.parametrize("format", file_formats)
+@pytest.mark.django_db
+def test__additional_sign__import__create_fails_with_content_and_missing_content(model, resource, factory, format):
+    dt_with_schema_1 = get_traffic_control_device_type(
+        code="type1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema_1,
+    )
+
+    factory(
+        device_type=dt_with_schema_1,
+        content_s=content_1,
+        missing_content=True,
+    )
+
+    dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
+    model.objects.all().delete()
+
+    result = resource().import_data(dataset, raise_errors=False, collect_failed_rows=True)
+
+    assert result.has_validation_errors()
+    assert not result.has_errors()
+    assert model.objects.all().count() == 0
+
+
+@pytest.mark.parametrize(
+    "model, resource, factory",
+    (
+        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+    ),
 )
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
@@ -417,6 +513,51 @@ def test__additional_sign__import__update_with_content(model, resource, factory,
     assert model.objects.all()[0].id == additional_sign.id
     assert str(model.objects.all()[0].id) == dataset.dict[0]["id"]
     assert model.objects.all()[0].content_s == {**content_1, "str": "Other value"}
+
+
+@pytest.mark.parametrize(
+    "model, resource, factory",
+    (
+        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+    ),
+    ids=("plan", "real"),
+)
+@pytest.mark.parametrize("has_device_type_column", (True, False), ids=("with_device_type", "no_device_type"))
+@pytest.mark.parametrize("format", file_formats)
+@pytest.mark.django_db
+def test__additional_sign__import__update_with_missing_content(
+    model, resource, factory, has_device_type_column, format
+):
+    """Test it is possible to add valid content and remove missing_content flag with import"""
+    dt_with_schema_2 = get_traffic_control_device_type(
+        code="type2",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema_2,
+    )
+
+    additional_sign = factory(
+        device_type=dt_with_schema_2,
+        content_s=None,
+        missing_content=True,
+    )
+
+    deleted_columns = [] if has_device_type_column else ["device_type__code"]
+    dataset = get_import_dataset(resource, format=format, delete_columns=deleted_columns)
+    row = dataset.dict[0]
+    row["content_s.int"] = "1"
+    row["content_s.another_int"] = "2"
+    row["missing_content"] = "0"
+    dataset.dict = [row]
+
+    result = resource().import_data(dataset, raise_errors=False, collect_failed_rows=True)
+
+    assert not result.has_validation_errors()
+    assert not result.has_errors()
+    assert model.objects.all().count() == 1
+    assert model.objects.all()[0].id == additional_sign.id
+    assert str(model.objects.all()[0].id) == dataset.dict[0]["id"]
+    assert model.objects.all()[0].content_s == {"int": 1, "another_int": 2}
 
 
 @pytest.mark.parametrize(

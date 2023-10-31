@@ -402,6 +402,76 @@ def test__additional_sign_real__partial_update_device_type_and_content(
 
 @pytest.mark.parametrize("admin_user", (False, True))
 @pytest.mark.django_db
+def test__additional_sign_real__create_with_missing_content(admin_user):
+    """
+    Test that AdditionalSignReal API endpoint POST request allows creating
+    an AdditionalSignReal without content_s when missing_content is set.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    tsp = get_traffic_sign_real()
+    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+
+    data = {
+        "parent": str(tsp.pk),
+        "location": str(tsp.location),
+        "owner": str(get_owner().pk),
+        "device_type": str(dt.pk),
+        "missing_content": True,
+    }
+
+    assert AdditionalSignReal.objects.count() == 0
+
+    response = client.post(reverse("v1:additionalsignreal-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_201_CREATED, response_data
+        assert AdditionalSignReal.objects.count() == 1
+        asp = AdditionalSignReal.objects.first()
+        assert response_data["id"] == str(asp.pk)
+        assert response_data["device_type"] == str(data["device_type"])
+        assert response_data["content_s"] is None
+        assert response_data["missing_content"] is True
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert AdditionalSignReal.objects.count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_real__create_dont_accept_content_when_missing_content_is_enabled(admin_user):
+    """
+    Test that AdditionalSignReal API endpoint POST request doesn't accept content when missing_content is enabled.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    tsp = get_traffic_sign_real()
+    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+
+    data = {
+        "parent": str(tsp.pk),
+        "location": str(tsp.location),
+        "owner": str(get_owner().pk),
+        "device_type": str(dt.pk),
+        "content_s": content_valid_by_simple_schema,
+        "missing_content": True,
+    }
+
+    assert AdditionalSignReal.objects.count() == 0
+
+    response = client.post(reverse("v1:additionalsignreal-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert len(response_data["missing_content"]) == 1
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    assert AdditionalSignReal.objects.count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
 def test__additional_sign_real__delete(admin_user):
     user = get_user(admin=admin_user)
     client = get_api_client(user=user)
