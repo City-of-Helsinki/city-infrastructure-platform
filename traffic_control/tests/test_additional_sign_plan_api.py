@@ -107,7 +107,7 @@ def test__additional_sign_plan__create_without_content(admin_user):
 def test__additional_sign_plan__create_with_content(admin_user):
     """
     Test that AdditionalSignPlan API endpoint POST request creates
-    an AdditionalContentPlan with content_s.
+    an AdditionalSignPlan with content_s.
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_plan()
@@ -152,7 +152,7 @@ def test__additional_sign_plan__create_with_content(admin_user):
 def test__additional_sign_plan__create_with_content_invalid(schema, content, admin_user):
     """
     Test that AdditionalSignPlan API endpoint POST doesn't create
-    an AdditionalContentPlan when content_s is invalid to device type's content_schema.
+    an AdditionalSignPlan when content_s is invalid to device type's content_schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_plan()

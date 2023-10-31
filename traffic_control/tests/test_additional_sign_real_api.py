@@ -117,7 +117,7 @@ def test__additional_sign_real__create_without_content(admin_user):
 def test__additional_sign_real__create_with_content(admin_user):
     """
     Test that AdditionalSignReal API endpoint POST request creates
-    an AdditionalContentReal with content_s.
+    an AdditionalSignReal with content_s.
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_real()
@@ -162,7 +162,7 @@ def test__additional_sign_real__create_with_content(admin_user):
 def test__additional_sign_real__create_with_content_invalid(schema, content, admin_user):
     """
     Test that AdditionalSignReal API endpoint POST doesn't create
-    an AdditionalContentReal when content_s is invalid to device type's content_schema.
+    an AdditionalSignReal when content_s is invalid to device type's content_schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_real()
