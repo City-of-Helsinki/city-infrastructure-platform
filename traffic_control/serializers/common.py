@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, OrderedDict
 
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema_field
 from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
@@ -93,31 +94,47 @@ class StructuredContentValidator:
 
     requires_context = True
 
-    def __call__(self, data, serializer):
+    def __call__(self, data: OrderedDict, serializer: serializers.Serializer):
         method = serializer.context["request"].method
         if method == "POST":
-            content = data.get("content_s")
-            device_type = data.get("device_type")
-
+            content, device_type, missing_content = self.get_post_data(data)
         elif method in ("PUT", "PATCH"):
-            id = serializer.instance.id
+            content, device_type, missing_content = self.get_put_patch_data(data, serializer)
 
-            if "content_s" in data:
-                content = data.get("content_s")
-            else:
-                content = serializer.Meta.model.objects.filter(id=id).first().content_s
+        self.validate_content(content, missing_content, device_type)
 
-            if "device_type" in data:
-                device_type = data.get("device_type")
-            else:
-                device_type = serializer.Meta.model.objects.filter(id=id).first().device_type
+    def get_post_data(self, data: OrderedDict):
+        content = data.get("content_s")
+        device_type = data.get("device_type")
+        missing_content = data.get("missing_content")
+        return content, device_type, missing_content
+
+    def get_put_patch_data(self, data: OrderedDict, serializer: serializers.Serializer):
+        id = serializer.instance.id
+        current_device = serializer.Meta.model.objects.get(id=id)
+        content = data.get("content_s", current_device.content_s)
+        device_type = data.get("device_type", current_device.device_type)
+        missing_content = data.get("missing_content", current_device.missing_content)
+        return content, device_type, missing_content
+
+    def validate_content(self, content, missing_content, device_type):
+        # Ignore missing content if `missing_content` is set.
+        if content is None and missing_content:
+            return
+
+        if content is not None and missing_content:
+            raise serializers.ValidationError(
+                {
+                    "missing_content": _(
+                        "'Missing content' cannot be enabled when the content field (content_s) is not empty."
+                    )
+                }
+            )
 
         validation_errors = validate_structured_content(content, device_type)
 
         if validation_errors:
-            raised_errors = []
-            for e in validation_errors:
-                raised_errors += e.messages
+            raised_errors = [message for e in validation_errors for message in e.messages]
             raise serializers.ValidationError({"content_s": raised_errors})
 
 

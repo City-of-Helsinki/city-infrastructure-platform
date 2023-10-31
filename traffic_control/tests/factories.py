@@ -423,6 +423,7 @@ def get_additional_sign_plan(
     owner=None,
     plan=None,
     content_s=None,
+    missing_content=False,
     order=None,
     responsible_entity=None,
 ) -> AdditionalSignPlan:
@@ -448,6 +449,7 @@ def get_additional_sign_plan(
         created_by=user,
         updated_by=user,
         content_s=content_s,
+        missing_content=missing_content,
         **kwargs,
     )[0]
     asp.refresh_from_db()
@@ -462,6 +464,7 @@ def get_additional_sign_real(
     additional_sign_plan=None,
     owner=None,
     content_s=None,
+    missing_content=False,
     order=None,
     responsible_entity=None,
 ) -> AdditionalSignReal:
@@ -487,6 +490,7 @@ def get_additional_sign_real(
         created_by=user,
         updated_by=user,
         content_s=content_s,
+        missing_content=missing_content,
         **kwargs,
     )[0]
     asr.refresh_from_db()

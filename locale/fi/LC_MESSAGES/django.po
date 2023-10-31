@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-01 16:12+0300\n"
+"POT-Creation-Date: 2023-11-14 12:12+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -918,6 +918,12 @@ msgstr "yksikkö"
 msgid "project"
 msgstr "projekti"
 
+msgid ""
+"'Missing content' cannot be enabled when the content field (content_s) is "
+"not empty."
+msgstr ""
+"Ei voida asettaa 'sisältö puuttuu' kun 'sisältö' (content_s) ei ole tyhjä."
+
 msgid "Location (x,y)"
 msgstr "Sijainti (x,y)"
 
@@ -1029,6 +1035,22 @@ msgstr "Sisältö"
 
 msgid "Additional sign content as JSON document"
 msgstr "Lisäkilven sisältö JSON-dokumenttina"
+
+msgid "Missing content"
+msgstr "Sisältö puuttuu"
+
+msgid ""
+"Content (content_s) is not available although the device type content schema "
+"requires it."
+msgstr ""
+"Sisältö (content_s) ei ole saatavilla, vaikka laitetyypin sisällön skeema "
+"sen vaatii."
+
+msgid "Additional information"
+msgstr "Lisätiedot"
+
+msgid "Additional information related to this device."
+msgstr "Lisätietoa tästä laitteesta."
 
 msgid ""
 "Direction of the sign in degrees. If 'road name' is entered the direction is "

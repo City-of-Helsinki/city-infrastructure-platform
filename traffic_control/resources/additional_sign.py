@@ -1,4 +1,5 @@
 import json
+from typing import Optional, OrderedDict
 from uuid import UUID
 
 from django.utils.translation import gettext as _
@@ -20,6 +21,24 @@ from traffic_control.models import (
 from traffic_control.models.common import TrafficControlDeviceType
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
 from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
+
+
+def _is_false(value) -> bool:
+    if isinstance(value, str):
+        return value.strip().lower() in ["false", "0"]
+    else:
+        return value in [False, 0]
+
+
+def _is_true(value) -> bool:
+    if isinstance(value, str):
+        return value.strip().lower() in ["true", "1"]
+    else:
+        return value in [True, 1]
+
+
+def _is_none(value) -> bool:
+    return value is None or value == ""
 
 
 class StructuredContentWidget(Widget):
@@ -84,6 +103,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             "seasonal_validity_period_start",
             "seasonal_validity_period_end",
             "parent__id",
+            "missing_content",
         )
 
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):
@@ -133,46 +153,41 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             if device_type_column_in_dataset:
                 device_type_code = row.get("device_type__code")
             elif row.get("id"):
-                id = UUID(row["id"])
-                device_type_code = additional_sign_device_types.get(id)
+                device_type_code = additional_sign_device_types.get(UUID(row.get("id")))
             else:
                 device_type_code = None
 
             schema = device_types_schemas.get(device_type_code)
+            missing_content = row.get("missing_content", False)
 
-            content_s_rows.append(self._content_s_from_row(row, schema))
+            content_s = self._content_s_from_row(row, schema, missing_content)
+            content_s_rows.append(content_s)
 
         dataset.append_col(content_s_rows, header="content_s")
 
         for content_column in content_columns:
             del dataset[content_column]
 
-    def _content_s_from_row(self, row, schema):
+    def _content_s_from_row(self, row: OrderedDict, schema: Optional[dict], missing_content: bool) -> Optional[dict]:
         if schema is None:
             return None
-        else:
-            schema_properties = schema.get("properties")
-            required_properties = schema.get("required", [])
 
-            content_s = {}
-            for property_name in schema_properties:
-                property_type = schema_properties[property_name].get("type")
-                column_name = f"content_s.{property_name}"
-                is_required = property_name in required_properties
+        schema_properties = schema.get("properties")
+        required_properties = schema.get("required", [])
 
-                value_from_data = row.get(column_name)
-                value = self._clean_up_value(value_from_data, property_type, is_required)
+        content_s = {}
+        for property_name in schema_properties:
+            property_type = schema_properties[property_name].get("type")
+            column_name = f"content_s.{property_name}"
+            is_required = property_name in required_properties and _is_false(missing_content)
 
-                if value is not None:
-                    content_s[property_name] = value
-                else:
-                    if is_required:
-                        content_s[property_name] = value
+            value_from_data = row.get(column_name)
+            value = self._clean_up_value(value_from_data, property_type, is_required)
 
-            if content_s:
-                return content_s
-            else:
-                return None
+            if value is not None or is_required:
+                content_s[property_name] = value
+
+        return content_s or None
 
     @staticmethod
     def _clean_up_value(value, property_type: str, is_required: bool):
@@ -193,18 +208,17 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
 
     @staticmethod
     def _clean_value_boolean(value, is_required: bool):
-        if value in ["1", 1, True, "true", "TRUE", "True"]:
+        if _is_true(value):
             return True
-        elif value in ["0", 0, False, "false", "FALSE", "False"]:
+        elif _is_false(value):
             return False
-        elif not is_required and value in ["", None]:
+        elif not is_required and _is_none(value):
             return None
-
         return value
 
     @staticmethod
     def _clean_value_integer(value, is_required: bool):
-        if not is_required and value in [None, ""]:
+        if not is_required and _is_none(value):
             return None
         elif isinstance(value, str):
             try:
@@ -216,7 +230,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
 
     @staticmethod
     def _clean_value_number(value, is_required: bool):
-        if not is_required and value in [None, ""]:
+        if not is_required and _is_none(value):
             return None
         elif isinstance(value, str):
             try:
@@ -228,7 +242,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
 
     @staticmethod
     def _clean_value_string(value, is_required: bool):
-        if value in [None, ""]:
+        if _is_none(value):
             if is_required:
                 return ""
             else:
@@ -242,7 +256,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
 
     @staticmethod
     def _clean_value_object(value, is_required: bool):
-        if not is_required and value in [None, ""]:
+        if not is_required and _is_none(value):
             return None
         elif isinstance(value, str):
             try:

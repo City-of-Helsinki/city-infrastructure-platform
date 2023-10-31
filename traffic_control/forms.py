@@ -77,8 +77,8 @@ class AdminTrafficSignIconSelectWidget(Select):
 
 class AdminStructuredContentWidget(forms.Widget):
     """
-    Widget that show a traffic sign icon representing the selected device type
-    next to the select input
+    Widget that presents structured content with JSON Editor instead of plain JSON.
+    JSON Editor provides also validation for the content.
     """
 
     template_name = "admin/traffic_control/widgets/structured_content_widget.html"
@@ -138,10 +138,16 @@ class StructuredContentModelFormMixin:
         if "content_s" in cleaned_data:
             content = cleaned_data.get("content_s")
             device_type = cleaned_data.get("device_type")
+            missing_content = cleaned_data.get("missing_content")
 
-            errors = validate_structured_content(content, device_type)
-            if errors:
-                validation_errors["content_s"] = errors
+            if missing_content and content is not None:
+                validation_errors["missing_content"] = _(
+                    "'Missing content' cannot be enabled when the content field (content_s) is not empty."
+                )
+            if not missing_content:
+                errors = validate_structured_content(content, device_type)
+                if errors:
+                    validation_errors["content_s"] = errors
 
         if len(validation_errors) > 0:
             raise ValidationError(validation_errors)

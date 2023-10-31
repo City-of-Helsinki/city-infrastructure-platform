@@ -7,8 +7,10 @@
 </textarea>
 
 <script>
-    createStructuredContentWidget("{{ name }}", {
-        deviceTypeName: "{{ device_type_name }}",
-        deviceTypeEndpoint: "{{ devices_api_url }}"
+    document.addEventListener("DOMContentLoaded", () => {
+        createStructuredContentWidget("{{ name }}", {
+            deviceTypeName: "{{ device_type_name }}",
+            deviceTypeEndpoint: "{{ devices_api_url }}"
+        });
     });
 </script>
