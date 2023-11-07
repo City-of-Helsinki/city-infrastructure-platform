@@ -103,6 +103,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             "seasonal_validity_period_start",
             "seasonal_validity_period_end",
             "parent__id",
+            "additional_information",
             "missing_content",
         )
 
