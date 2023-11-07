@@ -62,6 +62,13 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         default=False,
         help_text=_("Content (content_s) is not available although the device type content schema requires it."),
     )
+    additional_information = models.TextField(
+        _("Additional information"),
+        blank=True,
+        null=False,
+        default="",
+        help_text=_("Additional information related to this device."),
+    )
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.IntegerField(
         _("Height"),
