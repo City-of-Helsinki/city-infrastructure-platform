@@ -23,6 +23,84 @@ from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
 from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
 
 
+def _clean_up_value(value, property_type: str, is_required: bool):
+    cleaning_functions = {
+        "boolean": _clean_value_boolean,
+        "integer": _clean_value_integer,
+        "number": _clean_value_number,
+        "string": _clean_value_string,
+        "array": _clean_value_array,
+        "object": _clean_value_object,
+    }
+
+    cleaning_function = cleaning_functions.get(property_type)
+    if cleaning_function:
+        return cleaning_function(value, is_required)
+    else:
+        return value
+
+
+def _clean_value_boolean(value, is_required: bool):
+    if _is_true(value):
+        return True
+    elif _is_false(value):
+        return False
+    elif not is_required and _is_none(value):
+        return None
+    return value
+
+
+def _clean_value_integer(value, is_required: bool):
+    if not is_required and _is_none(value):
+        return None
+    elif isinstance(value, str):
+        try:
+            return int(value)
+        except ValueError:
+            # Ignore conversion errors. Invalid values are handled in schema validation.
+            pass
+    return value
+
+
+def _clean_value_number(value, is_required: bool):
+    if not is_required and _is_none(value):
+        return None
+    elif isinstance(value, str):
+        try:
+            return float(value)
+        except ValueError:
+            # Ignore conversion errors. Invalid values are handled in schema validation.
+            pass
+    return value
+
+
+def _clean_value_string(value, is_required: bool):
+    if _is_none(value):
+        if is_required:
+            return ""
+        else:
+            return None
+    return str(value)
+
+
+def _clean_value_array(value, is_required: bool):
+    # JSON arrays are decoded just like objects
+    return _clean_value_object(value, is_required)
+
+
+def _clean_value_object(value, is_required: bool):
+    if not is_required and _is_none(value):
+        return None
+    elif isinstance(value, str):
+        try:
+            return json.loads(value)
+        except json.decoder.JSONDecodeError:
+            # Ignore JSON parsing error. Invalid values are handled in schema validation.
+            return value
+    else:
+        return value
+
+
 def _is_false(value) -> bool:
     if isinstance(value, str):
         return value.strip().lower() in ["false", "0"]
@@ -183,90 +261,12 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             is_required = property_name in required_properties and _is_false(missing_content)
 
             value_from_data = row.get(column_name)
-            value = self._clean_up_value(value_from_data, property_type, is_required)
+            value = _clean_up_value(value_from_data, property_type, is_required)
 
             if value is not None or is_required:
                 content_s[property_name] = value
 
         return content_s or None
-
-    @staticmethod
-    def _clean_up_value(value, property_type: str, is_required: bool):
-        if property_type == "boolean":
-            return AbstractAdditionalSignResource._clean_value_boolean(value, is_required)
-        elif property_type == "integer":
-            return AbstractAdditionalSignResource._clean_value_integer(value, is_required)
-        elif property_type == "number":
-            return AbstractAdditionalSignResource._clean_value_number(value, is_required)
-        elif property_type == "string":
-            return AbstractAdditionalSignResource._clean_value_string(value, is_required)
-        elif property_type == "array":
-            return AbstractAdditionalSignResource._clean_value_array(value, is_required)
-        elif property_type == "object":
-            return AbstractAdditionalSignResource._clean_value_object(value, is_required)
-        else:
-            return value
-
-    @staticmethod
-    def _clean_value_boolean(value, is_required: bool):
-        if _is_true(value):
-            return True
-        elif _is_false(value):
-            return False
-        elif not is_required and _is_none(value):
-            return None
-        return value
-
-    @staticmethod
-    def _clean_value_integer(value, is_required: bool):
-        if not is_required and _is_none(value):
-            return None
-        elif isinstance(value, str):
-            try:
-                return int(value)
-            except ValueError:
-                # Ignore conversion errors. Invalid values are handled in schema validation.
-                pass
-        return value
-
-    @staticmethod
-    def _clean_value_number(value, is_required: bool):
-        if not is_required and _is_none(value):
-            return None
-        elif isinstance(value, str):
-            try:
-                return float(value)
-            except ValueError:
-                # Ignore conversion errors. Invalid values are handled in schema validation.
-                pass
-        return value
-
-    @staticmethod
-    def _clean_value_string(value, is_required: bool):
-        if _is_none(value):
-            if is_required:
-                return ""
-            else:
-                return None
-        return str(value)
-
-    @staticmethod
-    def _clean_value_array(value, is_required: bool):
-        # JSON arrays are decoded just like objects
-        return AbstractAdditionalSignResource._clean_value_object(value, is_required)
-
-    @staticmethod
-    def _clean_value_object(value, is_required: bool):
-        if not is_required and _is_none(value):
-            return None
-        elif isinstance(value, str):
-            try:
-                return json.loads(value)
-            except json.decoder.JSONDecodeError:
-                # Ignore JSON parsing error. Invalid values are handled in schema validation.
-                return value
-        else:
-            return value
 
     def _content_s_to_columns(self, data: Dataset):
         content_rows = data["content_s"]
