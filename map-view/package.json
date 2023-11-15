@@ -11,7 +11,7 @@
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/ol": "^6.3.1",
-    "@types/react": "^16.9.0",
+    "@types/react": "^16.14.50",
     "@types/react-dom": "^16.9.0",
     "i18next": "^19.8.3",
     "i18next-browser-languagedetector": "^6.0.1",
