@@ -19,7 +19,7 @@
     "prettier": "^2.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-i18next": "^11.7.3",
+    "react-i18next": "^11.18.6",
     "react-scripts": "^5.0.1",
     "typescript": "~3.7.2"
   },
