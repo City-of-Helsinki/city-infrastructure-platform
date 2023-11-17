@@ -111,11 +111,11 @@ class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel
     )
     direction = models.IntegerField(
         _("Direction"),
-        default=0,
+        blank=True,
+        null=True,
         help_text=_(
-            "Direction of the device in degrees. "
-            "If 'road name' is entered the direction is in relation to the road. Otherwise cardinal direction is used. "
-            "e.g. 0 = North, 45 = North East, 90 = East, 180 = South."
+            "The direction a person is facing when looking perpendicular to the traffic light. "
+            "The value is in degrees from 0 to 359, where 0 is north, 90 is east, etc."
         ),
     )
     height = models.DecimalField(
