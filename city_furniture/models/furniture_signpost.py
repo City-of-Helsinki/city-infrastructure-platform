@@ -68,10 +68,11 @@ class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControl
     )
     direction = models.IntegerField(
         _("Direction"),
-        default=0,
+        blank=True,
+        null=True,
         help_text=_(
-            "The direction in which the person is standing, when looking directly at the sign. "
-            "e.g. 0 = North, 45 = North East, 90 = East, 180 = South."
+            "The direction a person is facing when looking perpendicular to the sign. "
+            "The value is in degrees from 0 to 359, where 0 is north, 90 is east, etc."
         ),
     )
     location_additional_info = models.CharField(
