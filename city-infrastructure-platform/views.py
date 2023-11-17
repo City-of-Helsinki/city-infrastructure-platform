@@ -15,6 +15,7 @@ class HealthCheckView(MainView):
             "status": status,
             "service": "city-infrastructure-platform",
             "environment": settings.ENVIRONMENT_NAME,
+            "version": settings.VERSION,
         }
 
         return JsonResponse(response, status=status_code)
