@@ -35,7 +35,7 @@ def teardown_module():
 
 
 def _reload_urls():
-    urls = importlib.import_module("city-infrastructure-platform.urls")
+    urls = importlib.import_module("cityinfra.urls")
     importlib.reload(urls)
     django.urls.resolvers._get_cached_resolver.cache_clear()
 
