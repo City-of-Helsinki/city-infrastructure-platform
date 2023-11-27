@@ -65,7 +65,7 @@ Allow user to create test database
 
 ### Django configuration
 
-Environment variables are used to customize configuration in `city-infrastructure-platform/settings.py`. If you wish to override any
+Environment variables are used to customize configuration in `cityinfra/settings.py`. If you wish to override any
 settings, you can place them in a local `.env` file which will automatically be sourced when Django imports
 the settings file.
 

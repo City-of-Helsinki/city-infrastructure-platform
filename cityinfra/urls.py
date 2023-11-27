@@ -13,6 +13,8 @@ from city_furniture.views import (
     city_furniture_target as city_furniture_target_views,
     furniture_signpost as furniture_signpost_views,
 )
+from cityinfra.admin.views import MyAccountView
+from cityinfra.views import HealthCheckView
 from map import views as map_views
 from traffic_control.views import (
     additional_sign as additional_sign_views,
@@ -31,9 +33,6 @@ from traffic_control.views import (
 from traffic_control.views.device_catalog import AdditionalSignCatalog, TrafficSignCatalog
 from traffic_control.views.embed import TrafficSignPlanEmbed, TrafficSignRealEmbed
 from traffic_control.views.wfs.views import CityInfrastructureWFSView
-
-from .admin.views import MyAccountView
-from .views import HealthCheckView
 
 router = routers.DefaultRouter()
 router.register("barrier-plans", barrier_views.BarrierPlanViewSet)

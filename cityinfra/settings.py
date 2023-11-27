@@ -199,12 +199,12 @@ MIDDLEWARE = [
     "auditlog_custom.middleware.AuditlogMiddleware",
 ]
 
-ROOT_URLCONF = "city-infrastructure-platform.urls"
+ROOT_URLCONF = "cityinfra.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [checkout_dir("city-infrastructure-platform/templates"), checkout_dir("map-view/build")],
+        "DIRS": [checkout_dir("cityinfra/templates"), checkout_dir("map-view/build")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -217,7 +217,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "city-infrastructure-platform.wsgi.application"
+WSGI_APPLICATION = "cityinfra.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -300,7 +300,7 @@ SPECTACULAR_SETTINGS = {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT",
     },
-    "DESCRIPTION": checkout_dir.file("city-infrastructure-platform/openapi.md").read(),
+    "DESCRIPTION": checkout_dir.file("cityinfra/openapi.md").read(),
 }
 
 # django-cors
