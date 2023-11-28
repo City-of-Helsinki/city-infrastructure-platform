@@ -4,7 +4,7 @@ from unittest.mock import patch
 from django.core.management import call_command, CommandError
 from django.test import TestCase
 
-from traffic_control.models.common import TrafficControlDeviceType
+from traffic_control.models import TrafficControlDeviceType
 from traffic_control.tests.management.commands.utils import mock_open
 
 

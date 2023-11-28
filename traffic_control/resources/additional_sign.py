@@ -17,9 +17,10 @@ from traffic_control.models import (
     Owner,
     Plan,
     ResponsibleEntity,
+    TrafficControlDeviceType,
+    TrafficSignPlan,
+    TrafficSignReal,
 )
-from traffic_control.models.common import TrafficControlDeviceType
-from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
 from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
 
 

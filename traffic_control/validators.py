@@ -4,7 +4,7 @@ import jsonschema
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from traffic_control.models.common import TrafficControlDeviceType
+from traffic_control.models.traffic_control_device_type import TrafficControlDeviceType
 
 
 def validate_structured_content(content, device_type: Optional[TrafficControlDeviceType]) -> List[ValidationError]:

@@ -17,9 +17,10 @@ from traffic_control.mixins.models import (
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
+from traffic_control.models.common import OperationBase, OperationType
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
+from traffic_control.models.traffic_control_device_type import TrafficControlDeviceType
 
 
 class LocationSpecifier(Enum):

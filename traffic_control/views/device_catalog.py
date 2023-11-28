@@ -3,7 +3,7 @@ import json
 from django.views.generic import TemplateView
 
 from traffic_control.enums import DeviceTypeTargetModel
-from traffic_control.models.common import TrafficControlDeviceType
+from traffic_control.models import TrafficControlDeviceType
 
 
 class DeviceCatalog(TemplateView):

@@ -16,9 +16,10 @@ from traffic_control.mixins.models import (
     UserControlModel,
 )
 from traffic_control.models.affect_area import CoverageArea
-from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
+from traffic_control.models.common import OperationBase, OperationType
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
+from traffic_control.models.traffic_control_device_type import TrafficControlDeviceType
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
 from traffic_control.validators import validate_structured_content
 

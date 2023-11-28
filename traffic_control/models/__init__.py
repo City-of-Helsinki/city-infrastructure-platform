@@ -9,7 +9,7 @@ from traffic_control.models.barrier import (
     ConnectionType,
     Reflective,
 )
-from traffic_control.models.common import OperationType, Owner, TrafficControlDeviceType
+from traffic_control.models.common import OperationType, Owner
 from traffic_control.models.mount import (
     MountPlan,
     MountPlanFile,
@@ -39,6 +39,7 @@ from traffic_control.models.signpost import (
     SignpostRealFile,
     SignpostRealOperation,
 )
+from traffic_control.models.traffic_control_device_type import TrafficControlDeviceType
 from traffic_control.models.traffic_light import (
     TrafficLightPlan,
     TrafficLightPlanFile,
