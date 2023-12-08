@@ -40,6 +40,28 @@ class EnumWidget(widgets.Widget):
         return force_str(value.name)
 
 
+class EnumFieldResourceMixin:
+    """Mixin for ModelResource classes where model has enum fields."""
+
+    @classmethod
+    def field_from_django_field(cls, field_name, django_field, readonly):
+        """
+        In case Django model field is an enum field, set resource widget accordingly.
+        Otherwise do ModelResource default behavior.
+        """
+        if isinstance(django_field, (EnumField, EnumIntegerField)):
+            field = cls.DEFAULT_RESOURCE_FIELD(
+                attribute=field_name,
+                column_name=field_name,
+                widget=EnumWidget(django_field.enum),
+                readonly=readonly,
+                default=django_field.default,
+            )
+            return field
+        else:
+            return super().field_from_django_field(field_name, django_field, readonly)
+
+
 class UUIDWidget(widgets.Widget):
     def clean(self, value, row=None, *args, **kwargs):
         if value in [None, ""]:
@@ -62,26 +84,8 @@ class ResourceUUIDField(fields.Field):
         return value
 
 
-class GenericDeviceBaseResource(ModelResource):
+class GenericDeviceBaseResource(EnumFieldResourceMixin, ModelResource):
     id = ResourceUUIDField(attribute="id", column_name="id", default=None, widget=UUIDWidget())
-
-    @classmethod
-    def field_from_django_field(cls, field_name, django_field, readonly):
-        """
-        In case Django model field is an enum field, set resource widget accordingly.
-        Otherwise do ModelResource default behavior.
-        """
-        if type(django_field) in (EnumField, EnumIntegerField):
-            field = cls.DEFAULT_RESOURCE_FIELD(
-                attribute=field_name,
-                column_name=field_name,
-                widget=EnumWidget(django_field.enum),
-                readonly=readonly,
-                default=django_field.default,
-            )
-            return field
-        else:
-            return super().field_from_django_field(field_name, django_field, readonly)
 
     def get_queryset(self):
         return self._meta.model.objects.active()
