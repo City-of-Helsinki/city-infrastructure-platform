@@ -45,6 +45,7 @@ from traffic_control.models import (
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignRealOperation
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
+from traffic_control.resources.device_type import TrafficControlDeviceTypeResource
 from traffic_control.resources.traffic_sign import (
     TrafficSignPlanResource,
     TrafficSignPlanToRealTemplateResource,
@@ -85,7 +86,12 @@ class TrafficSignTypeListFilter(SimpleListFilter):
 
 
 @admin.register(TrafficControlDeviceType)
-class TrafficControlDeviceTypeAdmin(EnumChoiceValueDisplayAdminMixin, AuditLogHistoryAdmin):
+class TrafficControlDeviceTypeAdmin(
+    EnumChoiceValueDisplayAdminMixin,
+    AuditLogHistoryAdmin,
+    CustomImportExportActionModelAdmin,
+):
+    resource_class = TrafficControlDeviceTypeResource
     list_display = (
         "code",
         "icon",

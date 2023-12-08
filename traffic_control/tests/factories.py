@@ -8,7 +8,7 @@ from django.db.models import Value
 from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
-from traffic_control.enums import DeviceTypeTargetModel, Lifecycle, OrganizationLevel
+from traffic_control.enums import DeviceTypeTargetModel, Lifecycle, OrganizationLevel, TrafficControlDeviceTypeType
 from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignReal,
@@ -348,11 +348,16 @@ def get_traffic_light_real(
 
 def get_traffic_control_device_type(
     code: str = "A11",
-    description: str = "Test",
-    target_model: Optional[DeviceTypeTargetModel] = None,
-    value: str = "",
-    content_schema: Optional[Any] = None,
     icon: str = "",
+    description: str = "Test",
+    value: str = "",
+    unit: str = "",
+    size: str = "",
+    legacy_code: Optional[str] = None,
+    legacy_description: Optional[str] = None,
+    target_model: Optional[DeviceTypeTargetModel] = None,
+    type: Optional[TrafficControlDeviceTypeType] = None,
+    content_schema: Optional[Any] = None,
 ) -> TrafficControlDeviceType:
     if content_schema is None:
         # Distinguish between JSON null and SQL NULL
@@ -360,11 +365,16 @@ def get_traffic_control_device_type(
 
     dt = TrafficControlDeviceType.objects.get_or_create(
         code=code,
-        description=description,
-        target_model=target_model,
-        value=value,
-        content_schema=content_schema,
         icon=icon,
+        description=description,
+        value=value,
+        unit=unit,
+        size=size,
+        legacy_code=legacy_code,
+        legacy_description=legacy_description,
+        target_model=target_model,
+        type=type,
+        content_schema=content_schema,
     )[0]
     dt.refresh_from_db()
     return dt
