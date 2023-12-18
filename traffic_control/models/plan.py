@@ -106,7 +106,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
             self.location = None
         else:
             location_polygons = MultiPolygon(
-                [p.buffer(buffer) for p in self._get_related_locations()],
+                [p.buffer(buffer).convex_hull for p in locations],
                 srid=settings.SRID,
             )
             area = location_polygons.convex_hull

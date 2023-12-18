@@ -76,7 +76,16 @@ def test__plan__derive_location_from_related_plans():
     bp_1 = get_barrier_plan(location=Point(10.0, 10.0, 0.0, srid=settings.SRID), plan=plan)
     bp_2 = get_barrier_plan(location=Point(5.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
     mp_1 = get_mount_plan(location=Point(20.0, 5.0, 0.0, srid=settings.SRID), plan=plan)
-    mp_2 = get_mount_plan(location=Point(100.0, 10.0, 0.0, srid=settings.SRID), plan=plan)
+    mp_2 = get_mount_plan(
+        location=MultiPolygon(
+            [
+                Polygon([(x, y, 0) for x, y in Point(100.0, 0.0).buffer(1).coords[0]]),
+                Polygon([(x, y, 0) for x, y in Point(100.0, 15.0).buffer(1).coords[0]]),
+            ],
+            srid=settings.SRID,
+        ),
+        plan=plan,
+    )
     rmp_1 = get_road_marking_plan(location=Point(0.0, 50.0, 0.0, srid=settings.SRID), plan=plan)
     rmp_2 = get_road_marking_plan(location=Point(100.0, 100.0, 0.0, srid=settings.SRID), plan=plan)
     sp_1 = get_signpost_plan(location=Point(10.0, 100.0, 0.0, srid=settings.SRID), plan=plan)
