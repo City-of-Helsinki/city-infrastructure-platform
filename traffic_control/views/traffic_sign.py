@@ -1,8 +1,14 @@
+from uuid import UUID
+
+from django.core.exceptions import ObjectDoesNotExist
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from traffic_control.filters import (
@@ -37,6 +43,7 @@ from traffic_control.serializers.traffic_sign import (
     TrafficSignRealOperationSerializer,
     TrafficSignRealSerializer,
 )
+from traffic_control.services.device_type import device_type_create, device_type_update
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
@@ -52,12 +59,12 @@ __all__ = (
 
 
 @extend_schema_view(
-    create=extend_schema(summary="Create new TrafficSign Code"),
-    list=extend_schema(summary="Retrieve all TrafficSign Codes"),
-    retrieve=extend_schema(summary="Retrieve single TrafficSign Code"),
-    update=extend_schema(summary="Update single TrafficSign Code"),
-    partial_update=extend_schema(summary="Partially update single TrafficSign Code"),
-    destroy=extend_schema(summary="Delete single TrafficSign Code"),
+    create=extend_schema(summary="Create new traffic control device type"),
+    list=extend_schema(summary="Retrieve all traffic control device types"),
+    retrieve=extend_schema(summary="Retrieve single traffic control device type"),
+    update=extend_schema(summary="Update single traffic control device type"),
+    partial_update=extend_schema(summary="Partially update single traffic control device type"),
+    destroy=extend_schema(summary="Delete single traffic control device type"),
 )
 class TrafficControlDeviceTypeViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -67,6 +74,27 @@ class TrafficControlDeviceTypeViewSet(ModelViewSet):
     serializer_class = TrafficControlDeviceTypeSerializer
     queryset = TrafficControlDeviceType.objects.all()
     filterset_class = TrafficControlDeviceTypeFilterSet
+
+    def create(self, request, *args, **kwargs):
+        input_serializer = self.get_serializer(data=request.data)
+        input_serializer.is_valid(raise_exception=True)
+        created = device_type_create(input_serializer.validated_data)
+
+        output_serializer = self.get_serializer(created)
+        return Response(status=status.HTTP_201_CREATED, data=output_serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        id = UUID(kwargs.pop("pk"))
+        input_serializer = self.get_serializer(data=request.data, partial=partial)
+        input_serializer.is_valid(raise_exception=True)
+        try:
+            updated = device_type_update(id, data=input_serializer.validated_data)
+        except ObjectDoesNotExist as e:
+            raise NotFound(detail=e.message)
+
+        output_serializer = self.get_serializer(updated)
+        return Response(status=status.HTTP_200_OK, data=output_serializer.data)
 
 
 @extend_schema_view(

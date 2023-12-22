@@ -1,6 +1,8 @@
 from django.contrib.admin import SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
+from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
@@ -92,6 +94,36 @@ class TrafficControlDeviceTypeAdmin(
     CustomImportExportActionModelAdmin,
 ):
     resource_class = TrafficControlDeviceTypeResource
+    fieldsets = (
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "id",
+                    "code",
+                    "icon",
+                    "description",
+                    "value",
+                    "unit",
+                    "size",
+                    "legacy_code",
+                    "legacy_description",
+                    "target_model",
+                    "type",
+                    "content_schema",
+                )
+            },
+        ),
+        (
+            _("Validity"),
+            {
+                "fields": (
+                    "validity",
+                    "corresponding_valid_device_type",
+                )
+            },
+        ),
+    )
     list_display = (
         "code",
         "icon",
@@ -102,10 +134,27 @@ class TrafficControlDeviceTypeAdmin(
         "legacy_code",
         "legacy_description",
         "target_model",
+        "validity",
+        "corresponding_valid_device_type_link",
     )
-    list_filter = (TrafficSignTypeListFilter,)
+    list_filter = (
+        ("validity", EnumFieldListFilter),
+        TrafficSignTypeListFilter,
+    )
     ordering = ("code",)
+    readonly_fields = ("id",)
     actions = None
+
+    def corresponding_valid_device_type_link(self, obj):
+        valid_device = obj.corresponding_valid_device_type
+        if valid_device:
+            link = reverse(
+                "admin:traffic_control_trafficcontroldevicetype_change", args=[obj.corresponding_valid_device_type.pk]
+            )
+            return format_html('<a href="{}">{}</a>', link, obj.corresponding_valid_device_type)
+        return None
+
+    corresponding_valid_device_type_link.short_description = "Corresponding Valid Device Type"
 
 
 class TrafficSignPlanFileInline(admin.TabularInline):

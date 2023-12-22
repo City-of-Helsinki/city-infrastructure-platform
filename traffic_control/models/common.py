@@ -10,7 +10,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField
 
-from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_MAP, TrafficControlDeviceTypeType
+from traffic_control.enums import (
+    DeviceTypeTargetModel,
+    TRAFFIC_SIGN_TYPE_MAP,
+    TrafficControlDeviceTypeType,
+    TrafficControlDeviceTypeValidity,
+)
 from traffic_control.mixins.models import UserControlModel
 
 
@@ -69,6 +74,22 @@ class TrafficControlDeviceType(models.Model):
         unique=True,
         max_length=32,
         help_text=_("Standardised code of the device type."),
+    )
+    validity = EnumField(
+        TrafficControlDeviceTypeValidity,
+        verbose_name=_("Validity"),
+        max_length=32,
+        default=TrafficControlDeviceTypeValidity.VALID,
+        help_text=_("Defines if this device type is valid, obsolescent or obsolete."),
+    )
+    corresponding_valid_device_type = models.ForeignKey(
+        "self",
+        verbose_name=_("Corresponding valid device type"),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        limit_choices_to={"validity": TrafficControlDeviceTypeValidity.VALID},
+        help_text=_("The corresponding valid device type if this device type is obsolete or obsolete."),
     )
     icon = models.CharField(
         _("Icon"),
@@ -166,6 +187,7 @@ class TrafficControlDeviceType(models.Model):
 
     def clean(self):
         self.validate_target_model_content_schema()
+        self.validate_corresponding_valid_device_type()
 
     def validate_target_model_content_schema(self):
         target_models_with_content_schema = (DeviceTypeTargetModel.ADDITIONAL_SIGN,)
@@ -178,6 +200,11 @@ class TrafficControlDeviceType(models.Model):
                 _("Target model '%(target_model)s' does not support content schema"),
                 params={"target_model": self.target_model.label},
             )
+
+    def validate_corresponding_valid_device_type(self, **kwargs):
+        if self.validity == TrafficControlDeviceTypeValidity.VALID:
+            if self.corresponding_valid_device_type is not None:
+                raise ValidationError(_("A valid device type cannot have corresponding valid device type."))
 
     def save(self, validate_target_model_change=True, *args, **kwargs):
         if self.pk:

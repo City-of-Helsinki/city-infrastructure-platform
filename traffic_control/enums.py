@@ -168,6 +168,19 @@ class Surface(Enum):
         FLAT = _("Flat")
 
 
+class TrafficControlDeviceTypeValidity(Enum):
+    """Traffic control device type validity"""
+
+    VALID = "valid"
+    OBSOLESCENT = "obsolescent"
+    OBSOLETE = "obsolete"
+
+    class Labels:
+        VALID = _("Valid")
+        OBSOLESCENT = _("Obsolescent")
+        OBSOLETE = _("Obsolete")
+
+
 class TrafficControlDeviceTypeType(Enum):
     # road marking types
     LONGITUDINAL = "longitudinal"
