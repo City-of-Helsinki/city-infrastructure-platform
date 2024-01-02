@@ -43,7 +43,7 @@ jobs:
       - name: Install Poetry
         run: |
           curl --silent --show-error https://install.python-poetry.org --output install-poetry.py
-          python3 install-poetry.py --version 1.6.1
+          python3 install-poetry.py --version 1.7.1
           rm install-poetry.py
           $POETRY_HOME/bin/poetry --version
 

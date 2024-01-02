@@ -26,7 +26,7 @@ RUN apt-get update && \
         mime-support \
         curl && \
     curl -sSL --retry 5 https://install.python-poetry.org --output install-poetry.py && \
-    python install-poetry.py --version=1.6.1 && \
+    python install-poetry.py --version=1.7.1 && \
     rm install-poetry.py && \
     /root/.local/bin/poetry config virtualenvs.create false && \
     /root/.local/bin/poetry install --only main --no-interaction && \
