@@ -277,6 +277,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "EXCEPTION_HANDLER": "city-infrastructure-platform.exceptions.cityinfra_exception_handler",
     "PAGE_SIZE": 20,
     "OIDC_LEEWAY": env("TOKEN_AUTH_MAX_TOKEN_AGE"),
     "GROUP_CLAIM_NAME": "groups",

@@ -234,7 +234,13 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
         db_table = "additional_sign_plan"
         verbose_name = _("Additional Sign Plan")
         verbose_name_plural = _("Additional Sign Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
@@ -345,7 +351,13 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         db_table = "additional_sign_real"
         verbose_name = _("Additional Sign Real")
         verbose_name_plural = _("Additional Sign Reals")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class AdditionalSignRealOperation(OperationBase):

@@ -258,7 +258,13 @@ class RoadMarkingPlan(UpdatePlanLocationMixin, AbstractRoadMarking):
         db_table = "road_marking_plan"
         verbose_name = _("Road Marking Plan")
         verbose_name_plural = _("Road Marking Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class RoadMarkingReal(AbstractRoadMarking, InstalledDeviceModel):
@@ -293,7 +299,13 @@ class RoadMarkingReal(AbstractRoadMarking, InstalledDeviceModel):
         db_table = "road_marking_real"
         verbose_name = _("Road Marking Real")
         verbose_name_plural = _("Road Marking Reals")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class RoadMarkingRealOperation(OperationBase):

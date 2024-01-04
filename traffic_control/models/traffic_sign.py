@@ -232,7 +232,13 @@ class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, 
         db_table = "traffic_sign_plan"
         verbose_name = _("Traffic Sign Plan")
         verbose_name_plural = _("Traffic Sign Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, InstalledDeviceModel):
@@ -329,7 +335,13 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         db_table = "traffic_sign_real"
         verbose_name = _("Traffic Sign Real")
         verbose_name_plural = _("Traffic Sign Reals")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class TrafficSignRealOperation(OperationBase):

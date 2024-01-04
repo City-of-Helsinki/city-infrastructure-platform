@@ -255,7 +255,13 @@ class FurnitureSignpostPlan(UpdatePlanLocationMixin, FurnitureAbstractSignpost):
         db_table = "furniture_signpost_plan"
         verbose_name = _("Furniture Signpost Plan")
         verbose_name_plural = _("Furniture Signpost Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class FurnitureSignpostReal(FurnitureAbstractSignpost, InstalledDeviceModel):
@@ -288,7 +294,13 @@ class FurnitureSignpostReal(FurnitureAbstractSignpost, InstalledDeviceModel):
         db_table = "furniture_signpost_real"
         verbose_name = _("Furniture Signpost Real")
         verbose_name_plural = _("Furniture Signpost Reals")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class FurnitureSignpostRealOperation(OperationBase):

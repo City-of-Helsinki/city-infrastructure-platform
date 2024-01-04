@@ -230,7 +230,13 @@ class SignpostPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, Abs
         db_table = "signpost_plan"
         verbose_name = _("Signpost Plan")
         verbose_name_plural = _("Signpost Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledDeviceModel):
@@ -284,7 +290,13 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledD
         db_table = "signpost_real"
         verbose_name = _("Signpost Real")
         verbose_name_plural = _("Signpost Reals")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class SignpostRealOperation(OperationBase):
