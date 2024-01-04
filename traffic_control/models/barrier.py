@@ -169,7 +169,13 @@ class BarrierPlan(UpdatePlanLocationMixin, AbstractBarrier):
         db_table = "barrier_plan"
         verbose_name = _("Barrier Plan")
         verbose_name_plural = _("Barrier Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class BarrierReal(AbstractBarrier, InstalledDeviceModel):
@@ -186,7 +192,13 @@ class BarrierReal(AbstractBarrier, InstalledDeviceModel):
         db_table = "barrier_real"
         verbose_name = _("Barrier real")
         verbose_name_plural = _("Barrier reals")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class BarrierRealOperation(OperationBase):

@@ -233,7 +233,13 @@ class TrafficLightPlan(UpdatePlanLocationMixin, AbstractTrafficLight):
         db_table = "traffic_light_plan"
         verbose_name = _("Traffic Light Plan")
         verbose_name_plural = _("Traffic Light Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class TrafficLightReal(AbstractTrafficLight, InstalledDeviceModel):
@@ -258,7 +264,13 @@ class TrafficLightReal(AbstractTrafficLight, InstalledDeviceModel):
         db_table = "traffic_light_real"
         verbose_name = _("Traffic Light Real")
         verbose_name_plural = _("Traffic Light Reals")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class TrafficLightRealOperation(OperationBase):

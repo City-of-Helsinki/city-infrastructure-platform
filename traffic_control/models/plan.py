@@ -67,7 +67,13 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         db_table = "plan"
         verbose_name = _("Plan")
         verbose_name_plural = _("Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
     def __str__(self):
         return f"{self.decision_id} {self.name}"

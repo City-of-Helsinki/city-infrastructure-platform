@@ -170,7 +170,13 @@ class MountPlan(UpdatePlanLocationMixin, AbstractMount):
         db_table = "mount_plan"
         verbose_name = _("Mount Plan")
         verbose_name_plural = _("Mount Plans")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
 
 class MountReal(AbstractMount, InstalledDeviceModel):
@@ -201,7 +207,13 @@ class MountReal(AbstractMount, InstalledDeviceModel):
         db_table = "mount_real"
         verbose_name = _("Mount Real")
         verbose_name_plural = _("Mount Reals")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
     @property
     def ordered_traffic_signs(self):
