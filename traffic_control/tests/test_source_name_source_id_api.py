@@ -113,7 +113,7 @@ def get_data_create_furniture_signpost():
     ),
 )
 @pytest.mark.django_db
-def test__traffic_sign__source_name_source_id(client, model, url_name, data_factory):
+def test__traffic_sign__source_name_source_id(model, url_name, data_factory):
     """Test that source_name and source_id are unique in non-deleted objects."""
 
     client = get_api_client(user=get_user(admin=True))
