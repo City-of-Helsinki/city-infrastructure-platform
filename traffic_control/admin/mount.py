@@ -73,6 +73,8 @@ class MountPlanAdmin(
                     "responsible_entity",
                     "electric_accountable",
                     "txt",
+                    "source_id",
+                    "source_name",
                 )
             },
         ),
@@ -175,6 +177,8 @@ class MountRealAdmin(
                     "electric_accountable",
                     "inspected_at",
                     "txt",
+                    "source_id",
+                    "source_name",
                 )
             },
         ),
