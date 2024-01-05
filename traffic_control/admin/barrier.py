@@ -84,6 +84,8 @@ class BarrierPlanAdmin(
                     "connection_type",
                     "count",
                     "txt",
+                    "source_id",
+                    "source_name",
                 )
             },
         ),
@@ -186,6 +188,8 @@ class BarrierRealAdmin(
                     "connection_type",
                     "count",
                     "txt",
+                    "source_id",
+                    "source_name",
                 )
             },
         ),
