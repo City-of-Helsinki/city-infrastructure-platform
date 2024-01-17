@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFCD00;}
+	.st1{fill:#E4002B;}
+	.st2{fill:#101820;}
+	.st3{fill:none;}
+</style>
+<g id="LWPOLYLINE_3_">
+	<rect x="14.17" y="96.85" class="st0" width="396.85" height="231.5"/>
+</g>
+<g id="LWPOLYLINE_1_">
+	<path class="st1" d="M40.63,96.85h343.94c14.61,0,26.45,11.85,26.45,26.46v178.58c0,14.61-11.85,26.46-26.45,26.46H40.63
+		c-14.61,0-26.45-11.84-26.45-26.46V123.31C14.17,108.7,26.02,96.85,40.63,96.85z"/>
+</g>
+<g id="LWPOLYLINE_2_">
+	<path class="st0" d="M40.63,110.08h343.94c7.3,0,13.22,5.92,13.22,13.23v178.58c0,7.31-5.92,13.23-13.22,13.23H40.63
+		c-7.3,0-13.23-5.92-13.23-13.23V123.31C27.4,116,33.32,110.08,40.63,110.08z"/>
+</g>
+<g id="LWPOLYLINE_4_">
+	<polygon class="st2" points="60.47,139.84 139.84,139.84 146.46,205.98 133.23,285.35 67.09,285.35 53.86,205.98 	"/>
+</g>
+<g id="LWPOLYLINE_77_">
+	<path class="st2" d="M180.9,288h4.19c-7.35-23.25-7.35-48.19,0-71.43h-4.19C167.64,238.53,167.64,266.03,180.9,288z"/>
+</g>
+<g id="LWPOLYLINE_78_">
+	<path class="st2" d="M363.35,288h-4.19c7.35-23.24,7.35-48.19,0-71.43h4.19C376.61,238.54,376.61,266.04,363.35,288z"/>
+</g>
+<g id="LWPOLYLINE_79_">
+	<rect x="243.95" y="248.32" class="st2" width="26.46" height="7.94"/>
+</g>
+<g id="LWPOLYLINE_80_">
+	<rect x="243.95" y="168.95" class="st2" width="26.46" height="7.94"/>
+</g>
+<g id="POINT_46_">
+	<line class="st3" x1="60.47" y1="139.84" x2="60.47" y2="139.84"/>
+</g>
+<g id="POINT_47_">
+	<line class="st3" x1="60.47" y1="139.84" x2="60.47" y2="139.84"/>
+</g>
+<g id="LWPOLYLINE_6_">
+	<path class="st0" d="M72.44,153.07h55.43l5.29,52.91H120c0-10.96-8.88-19.84-19.84-19.84c-10.96,0-19.84,8.88-19.84,19.84H67.15
+		L72.44,153.07z"/>
+</g>
+<g id="LWPOLYLINE_5_">
+	<path class="st0" d="M110.08,205.98H90.23c0-5.48,4.45-9.92,9.92-9.92C105.64,196.06,110.08,200.5,110.08,205.98z"/>
+</g>
+</svg>
