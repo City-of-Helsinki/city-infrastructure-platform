@@ -17,6 +17,11 @@
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
    id="defs33" />
+<rect 
+id="white_background"   
+height="280.9361"
+width="395.4881"
+style="fill:#ffffff;fill-opacity:1;stroke:none" />
 <g
    transform="translate(-92.299953,-219.05995)"
    id="g28">
