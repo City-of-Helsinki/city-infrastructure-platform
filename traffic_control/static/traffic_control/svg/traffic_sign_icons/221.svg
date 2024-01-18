@@ -18,6 +18,10 @@
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
    id="defs17" />
+<path
+id="white_background"
+d="M 39.634766 -0.25 C 37.236125 -0.25 34.909142 -0.038685 32.623047 0.25390625 L -0.25 0.25390625 L -0.25 476.02148 L 39.634766 476.02148 L 237.63477 476.02148 L 435.5625 476.02148 L 475.58984 476.02148 L 475.58984 0.25390625 L 442.57422 0.25390625 C 440.28812 -0.038685 437.96114 -0.25 435.5625 -0.25 L 238.13477 -0.25 L 237.13477 -0.25 L 39.634766 -0.25 z "
+style="fill:#ffffff;fill-opacity:1;stroke:none" />
 <g
    transform="translate(-56.766,-148.246)"
    id="g12">

@@ -33,7 +33,7 @@
    id="g22">
 		
 			<polygon
-   style="clip-rule:evenodd;fill:none;fill-rule:evenodd;stroke:#ef3e42;stroke-width:1.00010002;stroke-miterlimit:10"
+   style="clip-rule:evenodd;fill-rule:evenodd;stroke:#ef3e42;stroke-width:1.00010002;stroke-miterlimit:10;fill:#ffffff;fill-opacity:1"
    id="polygon4"
    points="491.392,227.192 571.456,309.344 572.896,419.576 571.96,534.632 495.712,613.616 414.208,694.4 304.912,695.84 190.72,694.904 112.384,618.008 32.32,535.856 30.808,425.624 31.816,310.496 108.064,231.512 189.568,150.8 298.792,149.288 413.056,150.296 "
    stroke-miterlimit="10" />

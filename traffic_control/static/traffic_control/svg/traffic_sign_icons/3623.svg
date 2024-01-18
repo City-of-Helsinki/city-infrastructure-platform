@@ -27,6 +27,11 @@
 	.st4{fill:#FFFFFF;}
 	.st5{fill-rule:evenodd;clip-rule:evenodd;}
 </style>
+<path
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   id="white_background"
+   d="m 243.13137,1.1673727 c 135.79,1.73 233.86,87.6200003 251.93,225.1399973 9.65,125.71 -67.54,230.11 -185.76,261.94 -173.45,39.02 -310.9699987,-89.28 -308.0899987,-245.16 C 9.2013713,105.56737 108.13137,7.9373727 243.13137,1.1673727 Z"
+   class="st3" />
 <polygon
    transform="translate(-36.938629,-144.52263)"
    style="clip-rule:evenodd;fill:#ffffff;fill-rule:evenodd"

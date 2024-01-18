@@ -5,36 +5,43 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xml:space="preserve"
-   viewBox="0 0 540.47076 540.44299"
-   height="540.44299"
-   width="540.47076"
-   y="0px"
-   x="0px"
+   version="1.1"
    id="Layer_1"
-   version="1.1"><metadata
+   x="0px"
+   y="0px"
+   width="540.47076"
+   height="540.44299"
+   viewBox="0 0 540.47076 540.44299"
+   xml:space="preserve"><defs
+   id="defs11">
+	
+	
+	
+	
+</defs><metadata
    id="metadata17"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
-   id="defs15" />
-<g
-   transform="translate(-30.310323,-142.58575)"
-   id="g10">
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><path
+   id="white_background"
+   d="M 270.42188 0.01171875 C 193.12438 0.01260118 126.76967 25.98316 79.117188 72.382812 C 31.463897 118.78325 2.5223931 185.6063 0 267.25977 L 0 267.26758 L 0 267.27539 C 1.1530959 348.67676 28.851022 417.08265 76.224609 465.07812 C 123.5982 513.07362 190.63979 540.64786 270.42578 540.43164 C 436.49006 541.7991 543.15879 416.82658 540.41992 260.85547 L 540.41992 260.85156 L 540.41992 260.84766 C 534.00553 108.4874 430.06693 -1.3558376 270.42578 0.01171875 L 270.42188 0.01171875 z "
+   style="fill:#ffffff;fill-opacity:1;stroke:none" /><g
+   id="g10"
+   transform="translate(-30.310323,-142.58575)">
 	<path
-   id="path2"
+   style="clip-rule:evenodd;fill:none;fill-rule:evenodd;stroke:#0079c1;stroke-width:0.70719999;stroke-miterlimit:10"
    d="m 300.736,142.952 c 159.48,-1.368 263.232,108.288 269.64,260.496 2.736,155.808 -103.752,280.584 -269.64,279.216 C 141.328,683.096 32.968,572.504 30.664,409.856 35.704,246.704 146.296,142.952 300.736,142.952 Z"
-   style="clip-rule:evenodd;fill:none;fill-rule:evenodd;stroke:#0079c1;stroke-width:0.70719999;stroke-miterlimit:10" />
+   id="path2" />
 	<path
-   id="path4"
+   style="clip-rule:evenodd;fill:#0079c1;fill-rule:evenodd"
    d="m 300.736,155.264 c 138.96,0.504 256.392,110.16 257.328,257.328 0,127.872 -100.08,255.888 -257.328,257.256 C 159.616,670.28 44.416,556.016 43.48,412.592 c 0,-142.56 113.832,-257.328 257.256,-257.328 z"
-   style="clip-rule:evenodd;fill:#0079c1;fill-rule:evenodd" />
+   id="path4" />
 	<polygon
-   id="polygon6"
+   style="clip-rule:evenodd;fill:#ffffff;fill-rule:evenodd"
    points="193.384,447.224 240.472,494.312 97.912,494.312 97.912,351.824 145.432,399.776 235,310.208 282.52,357.728 "
-   style="clip-rule:evenodd;fill:#ffffff;fill-rule:evenodd" />
+   id="polygon6" />
 	<polygon
-   id="polygon8"
+   style="clip-rule:evenodd;fill:#ffffff;fill-rule:evenodd"
    points="456.112,399.344 503.2,352.688 503.2,494.816 360.64,494.816 408.592,446.792 319.024,357.728 366.544,309.776 "
-   style="clip-rule:evenodd;fill:#ffffff;fill-rule:evenodd" />
+   id="polygon8" />
 </g>
 </svg>
