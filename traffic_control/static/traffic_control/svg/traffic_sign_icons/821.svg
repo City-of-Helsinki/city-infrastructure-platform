@@ -1,44 +1,111 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
-<style type="text/css">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   height="198.42999"
+   width="396.85001"
+   xml:space="preserve"
+   viewBox="0 0 396.84999 198.42999"
+   y="0px"
+   x="0px"
+   id="Layer_1"
+   version="1.1"><metadata
+   id="metadata36"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs34" />
+<style
+   id="style2"
+   type="text/css">
 	.st0{fill:#FFCD00;}
 	.st1{fill:#E4002B;}
 	.st2{fill:#101820;}
 </style>
-<g id="LWPOLYLINE_10_">
-	<rect x="14.17" y="113.39" class="st0" width="396.85" height="198.42"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_10_">
+	<rect
+   style="fill:#ffcd00"
+   id="rect4"
+   height="198.42"
+   width="396.85001"
+   class="st0"
+   y="113.39"
+   x="14.17" />
 </g>
-<g id="LWPOLYLINE_12_">
-	<path class="st1" d="M40.63,311.81h343.94c14.61,0,26.45-11.84,26.45-26.46V139.84c0-14.61-11.85-26.46-26.45-26.46H40.63
-		c-14.61,0-26.46,11.85-26.46,26.46v145.51C14.17,299.97,26.02,311.81,40.63,311.81z"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_12_">
+	<path
+   style="fill:#e4002b"
+   id="path7"
+   d="m 40.63,311.81 h 343.94 c 14.61,0 26.45,-11.84 26.45,-26.46 V 139.84 c 0,-14.61 -11.85,-26.46 -26.45,-26.46 H 40.63 c -14.61,0 -26.46,11.85 -26.46,26.46 v 145.51 c 0,14.62 11.85,26.46 26.46,26.46 z"
+   class="st1" />
 </g>
-<g id="LWPOLYLINE_11_">
-	<path class="st0" d="M40.63,298.58h343.94c7.3,0,13.23-5.93,13.23-13.23V139.84c0-7.31-5.93-13.23-13.23-13.23H40.63
-		c-7.3,0-13.23,5.92-13.23,13.23v145.51C27.41,292.66,33.33,298.58,40.63,298.58z"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_11_">
+	<path
+   style="fill:#ffcd00"
+   id="path10"
+   d="m 40.63,298.58 h 343.94 c 7.3,0 13.23,-5.93 13.23,-13.23 V 139.84 c 0,-7.31 -5.93,-13.23 -13.23,-13.23 H 40.63 c -7.3,0 -13.23,5.92 -13.23,13.23 v 145.51 c 0.01,7.31 5.93,13.23 13.23,13.23 z"
+   class="st0" />
 </g>
-<g id="LWPOLYLINE_13_">
-	<polygon class="st2" points="83.62,212.6 30.71,159.69 30.71,265.51 	"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_13_">
+	<polygon
+   style="fill:#101820"
+   id="polygon13"
+   points="30.71,265.51 83.62,212.6 30.71,159.69 "
+   class="st2" />
 </g>
-<g id="LWPOLYLINE_14_">
-	<polygon class="st2" points="394.49,265.51 341.57,212.6 394.49,159.69 	"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_14_">
+	<polygon
+   style="fill:#101820"
+   id="polygon16"
+   points="394.49,159.69 394.49,265.51 341.57,212.6 "
+   class="st2" />
 </g>
-<g id="LWPOLYLINE_53_">
-	<path class="st2" d="M309.83,207.76c0-3.07-2.49-5.56-5.56-5.56h-0.79c-5.25,0-9.52,4.26-9.52,9.52v40.48h-11.91v-44.45
-		c0-3.07-2.48-5.56-5.55-5.56h-0.79c-5.26,0-9.52,4.26-9.52,9.52v40.48h-11.91v-59.53h11.91v4.76c3.88-2.42,8.23-4,12.77-4.66
-		c0.56-0.08,1.11-0.1,1.68-0.07c4.44,0.3,8.49,2.65,10.95,6.36c4.45-3.32,9.66-5.49,15.15-6.29c0.56-0.08,1.12-0.1,1.68-0.07
-		c7.5,0.5,13.33,6.73,13.33,14.26v45.24h-11.9V207.76z"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_53_">
+	<path
+   style="fill:#101820"
+   id="path19"
+   d="m 309.83,207.76 c 0,-3.07 -2.49,-5.56 -5.56,-5.56 h -0.79 c -5.25,0 -9.52,4.26 -9.52,9.52 v 40.48 h -11.91 v -44.45 c 0,-3.07 -2.48,-5.56 -5.55,-5.56 h -0.79 c -5.26,0 -9.52,4.26 -9.52,9.52 v 40.48 h -11.91 v -59.53 h 11.91 v 4.76 c 3.88,-2.42 8.23,-4 12.77,-4.66 0.56,-0.08 1.11,-0.1 1.68,-0.07 4.44,0.3 8.49,2.65 10.95,6.36 4.45,-3.32 9.66,-5.49 15.15,-6.29 0.56,-0.08 1.12,-0.1 1.68,-0.07 7.5,0.5 13.33,6.73 13.33,14.26 v 45.24 h -11.9 v -44.43 z"
+   class="st2" />
 </g>
-<g id="LWPOLYLINE_48_">
-	<polygon class="st0" points="116.96,224.43 132.83,196.54 132.83,224.43 	"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_48_">
+	<polygon
+   style="fill:#ffcd00"
+   id="polygon22"
+   points="132.83,224.43 116.96,224.43 132.83,196.54 "
+   class="st0" />
 </g>
-<g id="LWPOLYLINE_49_">
-	<path class="st0" d="M202.58,235.84c0,4.11,3.33,7.44,7.44,7.44s7.44-3.33,7.44-7.44v-4.17c0-4.11-3.33-7.44-7.44-7.44
-		s-7.44,3.33-7.44,7.44V235.84z"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_49_">
+	<path
+   style="fill:#ffcd00"
+   id="path25"
+   d="m 202.58,235.84 c 0,4.11 3.33,7.44 7.44,7.44 4.11,0 7.44,-3.33 7.44,-7.44 v -4.17 c 0,-4.11 -3.33,-7.44 -7.44,-7.44 -4.11,0 -7.44,3.33 -7.44,7.44 z"
+   class="st0" />
 </g>
-<g id="LWPOLYLINE_51_">
-	<path class="st0" d="M204.07,207.56v2.38c0,3.29,2.66,5.95,5.95,5.95c3.29,0,5.95-2.66,5.95-5.95v-2.38c0-3.29-2.66-5.96-5.95-5.96
-		C206.73,201.61,204.07,204.27,204.07,207.56z"/>
+<g
+   transform="translate(-14.17,-113.38)"
+   id="LWPOLYLINE_51_">
+	<path
+   style="fill:#ffcd00"
+   id="path28"
+   d="m 204.07,207.56 v 2.38 c 0,3.29 2.66,5.95 5.95,5.95 3.29,0 5.95,-2.66 5.95,-5.95 v -2.38 c 0,-3.29 -2.66,-5.96 -5.95,-5.96 -3.29,0.01 -5.95,2.67 -5.95,5.96 z"
+   class="st0" />
 </g>
 </svg>

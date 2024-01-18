@@ -1,20 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 28.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 595 842" style="enable-background:new 0 0 595 842;" xml:space="preserve">
-<style type="text/css">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   height="545.33105"
+   width="545.36957"
+   xml:space="preserve"
+   viewBox="0 0 545.36957 545.33105"
+   y="0px"
+   x="0px"
+   id="Layer_1"
+   version="1.1"><metadata
+   id="metadata17"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs15" />
+<style
+   id="style2"
+   type="text/css">
 	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:none;stroke:#007AC2;stroke-width:0.7061;stroke-miterlimit:10;}
 	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#0079C1;}
 	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
 </style>
-<g>
-	<path class="st0" d="M295.46,152.46c-161.35-1.44-266.04,109.3-272.45,262.87C20.21,572.5,127.7,698.43,295.46,697.06
-		c160.99,0.43,270.29-111.17,272.16-275.4C562.94,257.14,451.34,152.46,295.46,152.46z"/>
-	<path class="st1" d="M295.46,164.84C155.35,165.34,36.33,276.01,35.9,424.47c-0.5,129.1,100.51,258.26,259.56,259.63
-		c142.06,0.5,258.26-114.84,259.2-259.63C554.66,280.62,439.82,164.84,295.46,164.84z"/>
-	<polygon class="st2" points="384.96,635.22 317.13,635.22 317.13,559.11 316.2,547.16 313.03,535.64 308.42,524.55 301.44,514.83 
-		288.62,502.88 278.04,496.83 266.95,492.73 255.43,490.42 206.54,490.42 206.54,558.68 105.09,457.23 206.54,355.78 206.54,422.6 
-		250.82,422.6 268.32,424.47 284.95,428.58 301.44,434.12 317.13,441.54 317.13,312.01 248.95,312.01 350.83,210.06 452.28,312.01 
-		384.96,312.01 	"/>
+<g
+   transform="translate(-22.603567,-152.09308)"
+   id="g10">
+	<path
+   style="clip-rule:evenodd;fill:none;fill-rule:evenodd;stroke:#007ac2;stroke-width:0.70609999;stroke-miterlimit:10"
+   id="path4"
+   d="M 295.46,152.46 C 134.11,151.02 29.42,261.76 23.01,415.33 20.21,572.5 127.7,698.43 295.46,697.06 456.45,697.49 565.75,585.89 567.62,421.66 562.94,257.14 451.34,152.46 295.46,152.46 Z"
+   class="st0" />
+	<path
+   style="clip-rule:evenodd;fill:#0079c1;fill-rule:evenodd"
+   id="path6"
+   d="M 295.46,164.84 C 155.35,165.34 36.33,276.01 35.9,424.47 c -0.5,129.1 100.51,258.26 259.56,259.63 142.06,0.5 258.26,-114.84 259.2,-259.63 0,-143.85 -114.84,-259.63 -259.2,-259.63 z"
+   class="st1" />
+	<polygon
+   style="clip-rule:evenodd;fill:#ffffff;fill-rule:evenodd"
+   id="polygon8"
+   points="317.13,559.11 316.2,547.16 313.03,535.64 308.42,524.55 301.44,514.83 288.62,502.88 278.04,496.83 266.95,492.73 255.43,490.42 206.54,490.42 206.54,558.68 105.09,457.23 206.54,355.78 206.54,422.6 250.82,422.6 268.32,424.47 284.95,428.58 301.44,434.12 317.13,441.54 317.13,312.01 248.95,312.01 350.83,210.06 452.28,312.01 384.96,312.01 384.96,635.22 317.13,635.22 "
+   class="st2" />
 </g>
 </svg>
