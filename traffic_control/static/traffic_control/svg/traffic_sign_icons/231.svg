@@ -1,25 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="595px"
-	 height="842px" viewBox="0 0 595 842" enable-background="new 0 0 595 842" xml:space="preserve">
-<g id="Kuvataso_1">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg12"
+   xml:space="preserve"
+   enable-background="new 0 0 595 842"
+   viewBox="0 0 538.12897 473.35211"
+   height="473.35211"
+   width="538.12897"
+   y="0px"
+   x="0px"
+   version="1.0"><metadata
+   id="metadata18"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs16" />
+<g
+   transform="translate(-41.480397,-216.142)"
+   id="Kuvataso_1">
 </g>
-<g id="_x30_">
+<g
+   transform="translate(-41.480397,-216.142)"
+   id="_x30_">
 </g>
-<g id="H2">
+<g
+   transform="translate(-41.480397,-216.142)"
+   id="H2">
 </g>
-<g id="H1">
-	<g>
-		<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFD520" stroke="#FFD520" stroke-width="0.5" stroke-miterlimit="10" d="
-			M58.888,216.392H560.8c11.016,0,21.816,18.072,17.64,25.272l-254.448,442.08c-3.888,6.768-23.616,7.56-27.504,0.864
-			c-86.4-146.736-169.848-293.544-253.872-440.28C39.16,235.256,46.144,216.392,58.888,216.392z"/>
-		<path fill-rule="evenodd" clip-rule="evenodd" fill="#EF3E42" d="M309.52,221.144c83.088,0,166.248,0,249.336,0
-			c6.264,3.096,13.536,6.264,14.04,14.616v2.016c-0.072,1.44-0.36,3.096-0.864,4.896
-			C488.44,387.608,406.216,531.248,321.256,677.408c-2.016,3.384-6.912,5.04-11.736,4.968V565.232l0.432,0.72l159.624-278.28H309.52
-			V221.144z M62.488,221.144c82.368,0,164.736,0,247.032,0v66.528H149.464l160.056,277.56v117.144
-			c-4.68-0.072-9.288-1.728-11.16-4.968C214.12,534.2,130.168,387.68,48.16,244.4c-0.504-1.368-0.864-2.808-0.936-4.32v-2.88
-			C47.8,229.352,53.056,221.144,62.488,221.144z"/>
+<g
+   transform="translate(-41.480397,-216.142)"
+   id="H1">
+	<g
+   id="g9">
+		<path
+   style="clip-rule:evenodd;fill:#ffd520;fill-rule:evenodd;stroke:#ffd520;stroke-width:0.5;stroke-miterlimit:10"
+   id="path5"
+   d="M 58.888,216.392 H 560.8 c 11.016,0 21.816,18.072 17.64,25.272 l -254.448,442.08 c -3.888,6.768 -23.616,7.56 -27.504,0.864 C 210.088,537.872 126.64,391.064 42.616,244.328 39.16,235.256 46.144,216.392 58.888,216.392 Z"
+   stroke-miterlimit="10" />
+		<path
+   style="clip-rule:evenodd;fill:#ef3e42;fill-rule:evenodd"
+   id="path7"
+   d="m 309.52,221.144 c 83.088,0 166.248,0 249.336,0 6.264,3.096 13.536,6.264 14.04,14.616 v 2.016 c -0.072,1.44 -0.36,3.096 -0.864,4.896 -83.592,144.936 -165.816,288.576 -250.776,434.736 -2.016,3.384 -6.912,5.04 -11.736,4.968 V 565.232 l 0.432,0.72 159.624,-278.28 H 309.52 Z m -247.032,0 c 82.368,0 164.736,0 247.032,0 v 66.528 H 149.464 l 160.056,277.56 v 117.144 c -4.68,-0.072 -9.288,-1.728 -11.16,-4.968 C 214.12,534.2 130.168,387.68 48.16,244.4 c -0.504,-1.368 -0.864,-2.808 -0.936,-4.32 v -2.88 c 0.576,-7.848 5.832,-16.056 15.264,-16.056 z" />
 	</g>
 </g>
 </svg>
