@@ -1,6 +1,8 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
 
 from traffic_control.filters import (
     RoadMarkingPlanFilterSet,
@@ -8,7 +10,6 @@ from traffic_control.filters import (
     RoadMarkingRealOperationFilterSet,
 )
 from traffic_control.models import (
-    RoadMarkingPlan,
     RoadMarkingPlanFile,
     RoadMarkingReal,
     RoadMarkingRealFile,
@@ -23,16 +24,24 @@ from traffic_control.schema import (
 )
 from traffic_control.serializers.road_marking import (
     RoadMarkingPlanFileSerializer,
-    RoadMarkingPlanGeoJSONSerializer,
-    RoadMarkingPlanSerializer,
+    RoadMarkingPlanGeoJSONInputSerializer,
+    RoadMarkingPlanGeoJSONOutputSerializer,
+    RoadMarkingPlanInputSerializer,
+    RoadMarkingPlanOutputSerializer,
     RoadMarkingRealFileSerializer,
     RoadMarkingRealGeoJSONSerializer,
     RoadMarkingRealOperationSerializer,
     RoadMarkingRealSerializer,
 )
+from traffic_control.services.road_marking import (
+    road_marking_plan_get_active,
+    road_marking_plan_get_current,
+    road_marking_plan_soft_delete,
+)
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    prefetch_replacements,
     ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
@@ -50,15 +59,26 @@ __all__ = ("RoadMarkingPlanViewSet", "RoadMarkingRealViewSet")
 )
 class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
-        "default": RoadMarkingPlanSerializer,
-        "geojson": RoadMarkingPlanGeoJSONSerializer,
+        "default": RoadMarkingPlanOutputSerializer,
+        "geojson": RoadMarkingPlanGeoJSONOutputSerializer,
+        "input": RoadMarkingPlanInputSerializer,
+        "input_geojson": RoadMarkingPlanGeoJSONInputSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = RoadMarkingPlan.objects.active().prefetch_related("files")
+    queryset = prefetch_replacements(road_marking_plan_get_active().prefetch_related("files"))
+
     filterset_class = RoadMarkingPlanFilterSet
     file_queryset = RoadMarkingPlanFile.objects.all()
     file_serializer = RoadMarkingPlanFileSerializer
     file_relation = "road_marking_plan"
+
+    def get_list_queryset(self):
+        return prefetch_replacements(road_marking_plan_get_current()).prefetch_related("files")
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        road_marking_plan_soft_delete(instance, request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
         methods=("post",),

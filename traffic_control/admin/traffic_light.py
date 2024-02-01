@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.common import ReplacedByInline, ReplacesInline, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
@@ -39,7 +39,7 @@ __all__ = (
     "TrafficLightRealFileInline",
 )
 
-from traffic_control.models.traffic_light import TrafficLightRealOperation
+from traffic_control.models.traffic_light import TrafficLightPlanReplacement, TrafficLightRealOperation
 
 shared_initial_values = {
     "lane_number": LaneNumber.MAIN_1,
@@ -53,6 +53,14 @@ class TrafficLightPlanFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = TrafficLightPlanFile
+
+
+class TrafficLightPlanReplacesInline(ReplacesInline):
+    model = TrafficLightPlanReplacement
+
+
+class TrafficLightPlanReplacedByInline(ReplacedByInline):
+    model = TrafficLightPlanReplacement
 
 
 @admin.register(TrafficLightPlan)
@@ -141,7 +149,11 @@ class TrafficLightPlanAdmin(
     )
     raw_id_fields = ("plan", "mount_plan")
     ordering = ("-created_at",)
-    inlines = (TrafficLightPlanFileInline,)
+    inlines = (
+        TrafficLightPlanFileInline,
+        TrafficLightPlanReplacesInline,
+        TrafficLightPlanReplacedByInline,
+    )
     initial_values = shared_initial_values
 
 

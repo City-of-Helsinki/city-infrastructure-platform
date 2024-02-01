@@ -13,13 +13,22 @@ from traffic_control.mixins.models import (
     DecimalValueFromDeviceTypeMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
+    ReplaceableDevicePlanMixin,
+    REPLACEMENT_TO_NEW,
+    REPLACEMENT_TO_OLD,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
 from traffic_control.models.affect_area import CoverageArea
-from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
+from traffic_control.models.common import (
+    OperationBase,
+    OperationType,
+    TrafficControlDeviceType,
+    VERBOSE_NAME_NEW,
+    VERBOSE_NAME_OLD,
+)
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import SoftDeleteQuerySet
@@ -206,7 +215,12 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel,
         self.additional_signs.soft_delete(user)
 
 
-class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, AbstractTrafficSign):
+class TrafficSignPlan(
+    DecimalValueFromDeviceTypeMixin,
+    UpdatePlanLocationMixin,
+    ReplaceableDevicePlanMixin,
+    AbstractTrafficSign,
+):
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -239,6 +253,29 @@ class TrafficSignPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, 
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
         ]
+
+
+class TrafficSignPlanReplacement(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    new = models.OneToOneField(
+        TrafficSignPlan,
+        verbose_name=VERBOSE_NAME_NEW,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_OLD,
+    )
+    old = models.OneToOneField(
+        TrafficSignPlan,
+        verbose_name=VERBOSE_NAME_OLD,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_NEW,
+    )
+
+    class Meta:
+        db_table = "traffic_sign_plan_replacement"
+        verbose_name = _("Traffic Sign Plan Replacement")
+        verbose_name_plural = _("Traffic Sign Plan Replacements")
 
 
 class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, InstalledDeviceModel):

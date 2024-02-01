@@ -1,8 +1,14 @@
-from traffic_control.models.additional_sign import AdditionalSignPlan, AdditionalSignReal, AdditionalSignRealOperation
+from traffic_control.models.additional_sign import (
+    AdditionalSignPlan,
+    AdditionalSignPlanReplacement,
+    AdditionalSignReal,
+    AdditionalSignRealOperation,
+)
 from traffic_control.models.affect_area import CoverageArea, CoverageAreaCategory
 from traffic_control.models.barrier import (
     BarrierPlan,
     BarrierPlanFile,
+    BarrierPlanReplacement,
     BarrierReal,
     BarrierRealFile,
     BarrierRealOperation,
@@ -13,6 +19,7 @@ from traffic_control.models.common import OperationType, Owner, TrafficControlDe
 from traffic_control.models.mount import (
     MountPlan,
     MountPlanFile,
+    MountPlanReplacement,
     MountReal,
     MountRealFile,
     MountRealOperation,
@@ -28,6 +35,7 @@ from traffic_control.models.road_marking import (
     RoadMarkingColor,
     RoadMarkingPlan,
     RoadMarkingPlanFile,
+    RoadMarkingPlanReplacement,
     RoadMarkingReal,
     RoadMarkingRealFile,
     RoadMarkingRealOperation,
@@ -35,6 +43,7 @@ from traffic_control.models.road_marking import (
 from traffic_control.models.signpost import (
     SignpostPlan,
     SignpostPlanFile,
+    SignpostPlanReplacement,
     SignpostReal,
     SignpostRealFile,
     SignpostRealOperation,
@@ -42,6 +51,7 @@ from traffic_control.models.signpost import (
 from traffic_control.models.traffic_light import (
     TrafficLightPlan,
     TrafficLightPlanFile,
+    TrafficLightPlanReplacement,
     TrafficLightReal,
     TrafficLightRealFile,
     TrafficLightRealOperation,
@@ -51,6 +61,7 @@ from traffic_control.models.traffic_light import (
 from traffic_control.models.traffic_sign import (
     TrafficSignPlan,
     TrafficSignPlanFile,
+    TrafficSignPlanReplacement,
     TrafficSignReal,
     TrafficSignRealFile,
     TrafficSignRealOperation,

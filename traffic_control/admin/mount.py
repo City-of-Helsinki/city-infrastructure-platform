@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.common import ReplacedByInline, ReplacesInline, TrafficControlOperationInlineBase
 from traffic_control.admin.traffic_sign import OrderedTrafficSignRealInline
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
@@ -24,7 +24,15 @@ from traffic_control.mixins import (
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from traffic_control.models import MountPlan, MountPlanFile, MountReal, MountRealFile, MountType, PortalType
+from traffic_control.models import (
+    MountPlan,
+    MountPlanFile,
+    MountPlanReplacement,
+    MountReal,
+    MountRealFile,
+    MountType,
+    PortalType,
+)
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 from traffic_control.resources.mount import MountPlanResource, MountPlanToRealTemplateResource, MountRealResource
 
@@ -44,6 +52,14 @@ class MountPlanFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = MountPlanFile
+
+
+class MountPlanReplacesInline(ReplacesInline):
+    model = MountPlanReplacement
+
+
+class MountPlanReplacedByInline(ReplacedByInline):
+    model = MountPlanReplacement
 
 
 @admin.register(MountPlan)
@@ -130,7 +146,11 @@ class MountPlanAdmin(
     )
     raw_id_fields = ("plan",)
     ordering = ("-created_at",)
-    inlines = (MountPlanFileInline,)
+    inlines = (
+        MountPlanFileInline,
+        MountPlanReplacesInline,
+        MountPlanReplacedByInline,
+    )
     initial_values = {}
 
     def get_queryset(self, request):

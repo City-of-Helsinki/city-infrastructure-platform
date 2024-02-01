@@ -13,13 +13,52 @@ from traffic_control.models import (
 from traffic_control.serializers.common import (
     EwktPointField,
     HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
     StructuredContentValidator,
 )
+from traffic_control.services.additional_sign import additional_sign_plan_create, additional_sign_plan_update
 
 
-class AdditionalSignPlanSerializer(
+class AdditionalSignPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    serializers.ModelSerializer,
+):
+    location = EwktPointField()
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN),
+        allow_null=True,
+        required=False,
+    )
+
+    def create(self, validated_data):
+        return additional_sign_plan_create(validated_data)
+
+    def update(self, instance, validated_data):
+        return additional_sign_plan_update(instance, validated_data)
+
+    class Meta:
+        model = AdditionalSignPlan
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        validators = (StructuredContentValidator(),)
+
+
+class AdditionalSignPlanGeoJSONInputSerializer(AdditionalSignPlanInputSerializer):
+    location = GeometryField(required=False)
+
+
+class AdditionalSignPlanOutputSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -38,10 +77,9 @@ class AdditionalSignPlanSerializer(
             "deleted_at",
         )
         exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
-        validators = (StructuredContentValidator(),)
 
 
-class AdditionalSignPlanGeoJSONSerializer(AdditionalSignPlanSerializer):
+class AdditionalSignPlanGeoJSONOutputSerializer(AdditionalSignPlanOutputSerializer):
     location = GeometryField(required=False)
 
 

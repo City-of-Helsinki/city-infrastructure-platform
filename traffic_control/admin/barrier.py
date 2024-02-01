@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.common import ReplacedByInline, ReplacesInline, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
@@ -38,7 +38,7 @@ __all__ = (
     "BarrierRealFileInline",
 )
 
-from traffic_control.models.barrier import BarrierRealOperation, LocationSpecifier
+from traffic_control.models.barrier import BarrierPlanReplacement, BarrierRealOperation, LocationSpecifier
 
 shared_initial_values = {
     "lane_number": LaneNumber.MAIN_1,
@@ -52,6 +52,14 @@ class BarrierPlanFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = BarrierPlanFile
+
+
+class BarrierPlanReplacesInline(ReplacesInline):
+    model = BarrierPlanReplacement
+
+
+class BarrierPlanReplacedByInline(ReplacedByInline):
+    model = BarrierPlanReplacement
 
 
 @admin.register(BarrierPlan)
@@ -139,7 +147,11 @@ class BarrierPlanAdmin(
     )
     raw_id_fields = ("plan",)
     ordering = ("-created_at",)
-    inlines = (BarrierPlanFileInline,)
+    inlines = (
+        BarrierPlanFileInline,
+        BarrierPlanReplacesInline,
+        BarrierPlanReplacedByInline,
+    )
     initial_values = shared_initial_values
 
     def get_queryset(self, request):

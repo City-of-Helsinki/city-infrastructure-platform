@@ -36,3 +36,18 @@ class OperationalAreaListFilter(SimpleListFilter):
         if self.value():
             operational_area = OperationalArea.objects.get(id=self.value())
             return queryset.filter(location__contained=operational_area.location)
+
+
+class ReplacesInline(admin.StackedInline):
+    fk_name = "new"
+    verbose_name = _("Replaces")
+    raw_id_fields = ("old",)
+    # TODO: Modifying replacements can be allowed when Admin UI uses service layer functions
+    readonly_fields = ("old",)
+
+
+class ReplacedByInline(admin.StackedInline):
+    fk_name = "old"
+    verbose_name = _("Replaced by")
+    raw_id_fields = ("new",)
+    readonly_fields = ("new",)

@@ -9,12 +9,15 @@ from traffic_control.mixins.models import (
     AbstractFileModel,
     InstalledDeviceModel,
     OwnedDeviceModel,
+    ReplaceableDevicePlanMixin,
+    REPLACEMENT_TO_NEW,
+    REPLACEMENT_TO_OLD,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from traffic_control.models.common import OperationBase, OperationType
+from traffic_control.models.common import OperationBase, OperationType, VERBOSE_NAME_NEW, VERBOSE_NAME_OLD
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 
@@ -155,7 +158,7 @@ class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel, Owned
         return f"{self.id} {self.mount_type}"
 
 
-class MountPlan(UpdatePlanLocationMixin, AbstractMount):
+class MountPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractMount):
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -177,6 +180,29 @@ class MountPlan(UpdatePlanLocationMixin, AbstractMount):
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
         ]
+
+
+class MountPlanReplacement(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    new = models.OneToOneField(
+        MountPlan,
+        verbose_name=VERBOSE_NAME_NEW,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_OLD,
+    )
+    old = models.OneToOneField(
+        MountPlan,
+        verbose_name=VERBOSE_NAME_OLD,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_NEW,
+    )
+
+    class Meta:
+        db_table = "mount_plan_replacement"
+        verbose_name = _("Mount Plan Replacement")
+        verbose_name_plural = _("Mount Plan Replacements")
 
 
 class MountReal(AbstractMount, InstalledDeviceModel):
@@ -268,3 +294,4 @@ auditlog.register(MountPlan)
 auditlog.register(MountPlanFile)
 auditlog.register(MountReal)
 auditlog.register(MountRealFile)
+auditlog.register(MountPlanReplacement)

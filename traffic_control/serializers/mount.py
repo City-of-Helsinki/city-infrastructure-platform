@@ -14,7 +14,13 @@ from traffic_control.models import (
     PortalType,
 )
 from traffic_control.models.mount import MountRealOperation
-from traffic_control.serializers.common import EwktGeometryField, HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import (
+    EwktGeometryField,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
+)
+from traffic_control.services.mount import mount_plan_create, mount_plan_update
 
 
 class PortalTypeSerializer(serializers.ModelSerializer):
@@ -35,9 +41,39 @@ class MountPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MountPlanSerializer(
+class MountPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    serializers.ModelSerializer,
+):
+    location = EwktGeometryField()
+
+    def create(self, validated_data):
+        return mount_plan_create(validated_data)
+
+    def update(self, instance, validated_data):
+        return mount_plan_update(instance, validated_data)
+
+    class Meta:
+        model = MountPlan
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
+        exclude = ("is_active", "deleted_at", "deleted_by")
+
+
+class MountPlanGeoJSONInputSerializer(MountPlanInputSerializer):
+    location = GeometryField()
+
+
+class MountPlanOutputSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
@@ -54,7 +90,7 @@ class MountPlanSerializer(
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 
-class MountPlanGeoJSONSerializer(MountPlanSerializer):
+class MountPlanGeoJSONOutputSerializer(MountPlanOutputSerializer):
     location = GeometryField()
 
 

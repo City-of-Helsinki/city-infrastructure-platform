@@ -1,9 +1,11 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
 
 from traffic_control.filters import SignpostPlanFilterSet, SignpostRealFilterSet, SignpostRealOperationFilterSet
-from traffic_control.models import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile, SignpostRealOperation
+from traffic_control.models import SignpostPlanFile, SignpostReal, SignpostRealFile, SignpostRealOperation
 from traffic_control.schema import (
     file_create_serializer,
     file_uuid_parameter,
@@ -13,16 +15,24 @@ from traffic_control.schema import (
 )
 from traffic_control.serializers.signpost import (
     SignpostPlanFileSerializer,
-    SignpostPlanGeoJSONSerializer,
-    SignpostPlanSerializer,
+    SignpostPlanGeoJSONInputSerializer,
+    SignpostPlanGeoJSONOutputSerializer,
+    SignpostPlanInputSerializer,
+    SignpostPlanOutputSerializer,
     SignpostRealFileSerializer,
     SignpostRealGeoJSONSerializer,
     SignpostRealOperationSerializer,
     SignpostRealSerializer,
 )
+from traffic_control.services.signpost import (
+    signpost_plan_get_active,
+    signpost_plan_get_current,
+    signpost_plan_soft_delete,
+)
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    prefetch_replacements,
     ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
@@ -40,15 +50,25 @@ __all__ = ("SignpostPlanViewSet", "SignpostRealViewSet")
 )
 class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
-        "default": SignpostPlanSerializer,
-        "geojson": SignpostPlanGeoJSONSerializer,
+        "default": SignpostPlanOutputSerializer,
+        "geojson": SignpostPlanGeoJSONOutputSerializer,
+        "input": SignpostPlanInputSerializer,
+        "input_geojson": SignpostPlanGeoJSONInputSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = SignpostPlan.objects.active().prefetch_related("files")
+    queryset = prefetch_replacements(signpost_plan_get_active()).prefetch_related("files")
     filterset_class = SignpostPlanFilterSet
     file_queryset = SignpostPlanFile.objects.all()
     file_serializer = SignpostPlanFileSerializer
     file_relation = "signpost_plan"
+
+    def get_list_queryset(self):
+        return prefetch_replacements(signpost_plan_get_current()).prefetch_related("files")
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        signpost_plan_soft_delete(instance, request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
         methods=("post",),

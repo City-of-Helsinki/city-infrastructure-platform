@@ -6,7 +6,12 @@ from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
+from traffic_control.admin.common import (
+    OperationalAreaListFilter,
+    ReplacedByInline,
+    ReplacesInline,
+    TrafficControlOperationInlineBase,
+)
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
@@ -39,6 +44,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
     TrafficSignPlan,
     TrafficSignPlanFile,
+    TrafficSignPlanReplacement,
     TrafficSignReal,
     TrafficSignRealFile,
 )
@@ -113,6 +119,14 @@ class TrafficSignPlanFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = TrafficSignPlanFile
+
+
+class TrafficSignPlanReplacesInline(ReplacesInline):
+    model = TrafficSignPlanReplacement
+
+
+class TrafficSignPlanReplacedByInline(ReplacedByInline):
+    model = TrafficSignPlanReplacement
 
 
 @admin.register(TrafficSignPlan)
@@ -215,7 +229,12 @@ class TrafficSignPlanAdmin(
     )
     raw_id_fields = ("plan", "mount_plan")
     ordering = ("-created_at",)
-    inlines = (TrafficSignPlanFileInline, AdditionalSignPlanInline)
+    inlines = (
+        TrafficSignPlanFileInline,
+        AdditionalSignPlanInline,
+        TrafficSignPlanReplacesInline,
+        TrafficSignPlanReplacedByInline,
+    )
     initial_values = shared_initial_values
 
     def get_queryset(self, request):

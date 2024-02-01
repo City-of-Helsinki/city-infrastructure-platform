@@ -1,9 +1,11 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
 
 from traffic_control.filters import BarrierPlanFilterSet, BarrierRealFilterSet, BarrierRealOperationFilterSet
-from traffic_control.models import BarrierPlan, BarrierPlanFile, BarrierReal, BarrierRealFile, BarrierRealOperation
+from traffic_control.models import BarrierPlanFile, BarrierReal, BarrierRealFile, BarrierRealOperation
 from traffic_control.schema import (
     file_create_serializer,
     file_uuid_parameter,
@@ -13,16 +15,20 @@ from traffic_control.schema import (
 )
 from traffic_control.serializers.barrier import (
     BarrierPlanFileSerializer,
-    BarrierPlanGeoJSONSerializer,
-    BarrierPlanSerializer,
+    BarrierPlanGeoJSONInputSerializer,
+    BarrierPlanGeoJSONOutputSerializer,
+    BarrierPlanInputSerializer,
+    BarrierPlanOutputSerializer,
     BarrierRealFileSerializer,
     BarrierRealGeoJSONSerializer,
     BarrierRealOperationSerializer,
     BarrierRealSerializer,
 )
+from traffic_control.services.barrier import barrier_plan_get_active, barrier_plan_get_current, barrier_plan_soft_delete
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    prefetch_replacements,
     ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
@@ -40,15 +46,25 @@ __all__ = ("BarrierPlanViewSet", "BarrierRealViewSet")
 )
 class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
-        "default": BarrierPlanSerializer,
-        "geojson": BarrierPlanGeoJSONSerializer,
+        "default": BarrierPlanOutputSerializer,
+        "geojson": BarrierPlanGeoJSONOutputSerializer,
+        "input": BarrierPlanInputSerializer,
+        "input_geojson": BarrierPlanGeoJSONInputSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = BarrierPlan.objects.active().prefetch_related("files")
+    queryset = prefetch_replacements(barrier_plan_get_active()).prefetch_related("files")
     filterset_class = BarrierPlanFilterSet
     file_queryset = BarrierPlanFile.objects.all()
     file_serializer = BarrierPlanFileSerializer
     file_relation = "barrier_plan"
+
+    def get_list_queryset(self):
+        return prefetch_replacements(barrier_plan_get_current()).prefetch_related("files")
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        barrier_plan_soft_delete(instance, request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
         methods=("post",),

@@ -11,12 +11,21 @@ from traffic_control.mixins.models import (
     AbstractFileModel,
     InstalledDeviceModel,
     OwnedDeviceModel,
+    ReplaceableDevicePlanMixin,
+    REPLACEMENT_TO_NEW,
+    REPLACEMENT_TO_OLD,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
+from traffic_control.models.common import (
+    OperationBase,
+    OperationType,
+    TrafficControlDeviceType,
+    VERBOSE_NAME_NEW,
+    VERBOSE_NAME_OLD,
+)
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
 
@@ -235,7 +244,7 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
         super().save(*args, **kwargs)
 
 
-class RoadMarkingPlan(UpdatePlanLocationMixin, AbstractRoadMarking):
+class RoadMarkingPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractRoadMarking):
     traffic_sign_plan = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Traffic Sign Plan"),
@@ -265,6 +274,29 @@ class RoadMarkingPlan(UpdatePlanLocationMixin, AbstractRoadMarking):
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
         ]
+
+
+class RoadMarkingPlanReplacement(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    new = models.OneToOneField(
+        RoadMarkingPlan,
+        verbose_name=VERBOSE_NAME_NEW,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_OLD,
+    )
+    old = models.OneToOneField(
+        RoadMarkingPlan,
+        verbose_name=VERBOSE_NAME_OLD,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_NEW,
+    )
+
+    class Meta:
+        db_table = "road_marking_plan_replacement"
+        verbose_name = _("Road Marking Plan Replacement")
+        verbose_name_plural = _("Road Marking Plan Replacements")
 
 
 class RoadMarkingReal(AbstractRoadMarking, InstalledDeviceModel):
@@ -351,3 +383,4 @@ class RoadMarkingRealFile(AbstractFileModel):
 
 auditlog.register(RoadMarkingPlan)
 auditlog.register(RoadMarkingReal)
+auditlog.register(RoadMarkingPlanReplacement)

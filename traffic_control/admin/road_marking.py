@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.common import ReplacedByInline, ReplacesInline, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
@@ -42,6 +42,7 @@ from traffic_control.models.road_marking import (
     LineDirection,
     LocationSpecifier,
     RoadMarkingColor,
+    RoadMarkingPlanReplacement,
     RoadMarkingRealOperation,
 )
 
@@ -59,6 +60,14 @@ class RoadMarkingPlanFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = RoadMarkingPlanFile
+
+
+class RoadMarkingPlanReplacesInline(ReplacesInline):
+    model = RoadMarkingPlanReplacement
+
+
+class RoadMarkingPlanReplacedByInline(ReplacedByInline):
+    model = RoadMarkingPlanReplacement
 
 
 @admin.register(RoadMarkingPlan)
@@ -163,7 +172,11 @@ class RoadMarkingPlanAdmin(
     )
     raw_id_fields = ("plan", "traffic_sign_plan")
     ordering = ("-created_at",)
-    inlines = (RoadMarkingPlanFileInline,)
+    inlines = (
+        RoadMarkingPlanFileInline,
+        RoadMarkingPlanReplacesInline,
+        RoadMarkingPlanReplacedByInline,
+    )
     initial_values = shared_initial_values
 
     def get_queryset(self, request):

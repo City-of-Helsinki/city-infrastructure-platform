@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import TrafficControlOperationInlineBase
+from traffic_control.admin.common import ReplacedByInline, ReplacesInline, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
@@ -38,7 +38,7 @@ __all__ = (
     "SignpostRealFileInline",
 )
 
-from traffic_control.models.signpost import LocationSpecifier, SignpostRealOperation
+from traffic_control.models.signpost import LocationSpecifier, SignpostPlanReplacement, SignpostRealOperation
 
 shared_initial_values = {
     "lane_number": LaneNumber.MAIN_1,
@@ -54,6 +54,14 @@ class SignpostPlanFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = SignpostPlanFile
+
+
+class SignpostPlanReplacesInline(ReplacesInline):
+    model = SignpostPlanReplacement
+
+
+class SignpostPlanReplacedByInline(ReplacedByInline):
+    model = SignpostPlanReplacement
 
 
 @admin.register(SignpostPlan)
@@ -145,7 +153,11 @@ class SignpostPlanAdmin(
     )
     raw_id_fields = ("parent", "plan", "mount_plan")
     ordering = ("-created_at",)
-    inlines = (SignpostPlanFileInline,)
+    inlines = (
+        SignpostPlanFileInline,
+        SignpostPlanReplacesInline,
+        SignpostPlanReplacedByInline,
+    )
     initial_values = shared_initial_values
 
     def get_queryset(self, request):

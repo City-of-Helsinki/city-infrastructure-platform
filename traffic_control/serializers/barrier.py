@@ -12,7 +12,13 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.barrier import BarrierRealOperation
-from traffic_control.serializers.common import EwktGeometryField, HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import (
+    EwktGeometryField,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
+)
+from traffic_control.services.barrier import barrier_plan_create, barrier_plan_update
 
 
 class BarrierPlanFileSerializer(serializers.ModelSerializer):
@@ -21,9 +27,44 @@ class BarrierPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BarrierPlanSerializer(
+class BarrierPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    serializers.ModelSerializer,
+):
+    location = EwktGeometryField()
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER),
+        allow_null=True,
+        required=False,
+    )
+
+    def create(self, validated_data):
+        return barrier_plan_create(validated_data)
+
+    def update(self, instance, validated_data):
+        return barrier_plan_update(instance, validated_data)
+
+    class Meta:
+        model = BarrierPlan
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
+        exclude = ("is_active", "deleted_at", "deleted_by")
+
+
+class BarrierPlanGeoJSONInputSerializer(BarrierPlanInputSerializer):
+    location = GeometryField()
+
+
+class BarrierPlanOutputSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
@@ -45,7 +86,7 @@ class BarrierPlanSerializer(
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 
-class BarrierPlanGeoJSONSerializer(BarrierPlanSerializer):
+class BarrierPlanGeoJSONOutputSerializer(BarrierPlanOutputSerializer):
     location = GeometryField()
 
 

@@ -12,7 +12,13 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.road_marking import RoadMarkingRealOperation
-from traffic_control.serializers.common import EwktGeometryField, HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import (
+    EwktGeometryField,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
+)
+from traffic_control.services.road_marking import road_marking_plan_create, road_marking_plan_update
 
 
 class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
@@ -21,9 +27,44 @@ class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class RoadMarkingPlanSerializer(
+class RoadMarkingPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    serializers.ModelSerializer,
+):
+    location = EwktGeometryField()
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ROAD_MARKING),
+        allow_null=True,
+        required=False,
+    )
+
+    def create(self, validated_data):
+        return road_marking_plan_create(validated_data)
+
+    def update(self, instance, validated_data):
+        return road_marking_plan_update(instance, validated_data)
+
+    class Meta:
+        model = RoadMarkingPlan
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
+        exclude = ("is_active", "deleted_at", "deleted_by")
+
+
+class RoadMarkingPlanGeoJSONInputSerializer(RoadMarkingPlanInputSerializer):
+    location = GeometryField()
+
+
+class RoadMarkingPlanOutputSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
@@ -45,7 +86,7 @@ class RoadMarkingPlanSerializer(
         exclude = ("is_active", "deleted_at", "deleted_by")
 
 
-class RoadMarkingPlanGeoJSONSerializer(RoadMarkingPlanSerializer):
+class RoadMarkingPlanGeoJSONOutputSerializer(RoadMarkingPlanOutputSerializer):
     location = GeometryField()
 
 

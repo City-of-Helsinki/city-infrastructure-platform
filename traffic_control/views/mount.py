@@ -1,8 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from traffic_control.filters import (
@@ -13,7 +15,6 @@ from traffic_control.filters import (
     PortalTypeFilterSet,
 )
 from traffic_control.models import (
-    MountPlan,
     MountPlanFile,
     MountReal,
     MountRealFile,
@@ -31,8 +32,10 @@ from traffic_control.schema import (
 )
 from traffic_control.serializers.mount import (
     MountPlanFileSerializer,
-    MountPlanGeoJSONSerializer,
-    MountPlanSerializer,
+    MountPlanGeoJSONInputSerializer,
+    MountPlanGeoJSONOutputSerializer,
+    MountPlanInputSerializer,
+    MountPlanOutputSerializer,
     MountRealFileSerializer,
     MountRealGeoJSONSerializer,
     MountRealOperationSerializer,
@@ -40,9 +43,11 @@ from traffic_control.serializers.mount import (
     MountTypeSerializer,
     PortalTypeSerializer,
 )
+from traffic_control.services.mount import mount_plan_get_active, mount_plan_get_current, mount_plan_soft_delete
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    prefetch_replacements,
     ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
@@ -60,15 +65,25 @@ __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
 )
 class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
-        "default": MountPlanSerializer,
-        "geojson": MountPlanGeoJSONSerializer,
+        "default": MountPlanOutputSerializer,
+        "geojson": MountPlanGeoJSONOutputSerializer,
+        "input": MountPlanInputSerializer,
+        "input_geojson": MountPlanGeoJSONInputSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = MountPlan.objects.active().prefetch_related("files")
+    queryset = prefetch_replacements(mount_plan_get_active().prefetch_related("files"))
     filterset_class = MountPlanFilterSet
     file_queryset = MountPlanFile.objects.all()
     file_serializer = MountPlanFileSerializer
     file_relation = "mount_plan"
+
+    def get_list_queryset(self):
+        return prefetch_replacements(mount_plan_get_current()).prefetch_related("files")
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        mount_plan_soft_delete(instance, request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
         methods=("post",),

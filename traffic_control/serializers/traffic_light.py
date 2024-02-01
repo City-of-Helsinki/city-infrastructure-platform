@@ -12,7 +12,13 @@ from traffic_control.models import (
     TrafficLightRealFile,
 )
 from traffic_control.models.traffic_light import TrafficLightRealOperation
-from traffic_control.serializers.common import EwktPointField, HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import (
+    EwktPointField,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
+)
+from traffic_control.services.traffic_light import traffic_light_plan_create, traffic_light_plan_update
 
 
 class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
@@ -21,9 +27,44 @@ class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TrafficLightPlanSerializer(
+class TrafficLightPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    serializers.ModelSerializer,
+):
+    location = EwktPointField()
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT),
+        allow_null=True,
+        required=False,
+    )
+
+    def create(self, validated_data):
+        return traffic_light_plan_create(validated_data)
+
+    def update(self, instance, validated_data):
+        return traffic_light_plan_update(instance, validated_data)
+
+    class Meta:
+        model = TrafficLightPlan
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+
+
+class TrafficLightPlanGeoJSONInputSerializer(TrafficLightPlanInputSerializer):
+    location = GeometryField()
+
+
+class TrafficLightPlanOutputSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -45,7 +86,7 @@ class TrafficLightPlanSerializer(
         exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
-class TrafficLightPlanGeoJSONSerializer(TrafficLightPlanSerializer):
+class TrafficLightPlanGeoJSONOutputSerializer(TrafficLightPlanOutputSerializer):
     location = GeometryField()
 
 

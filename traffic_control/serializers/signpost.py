@@ -12,7 +12,13 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.models.signpost import SignpostRealOperation
-from traffic_control.serializers.common import EwktPointField, HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import (
+    EwktPointField,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
+)
+from traffic_control.services.signpost import signpost_plan_create, signpost_plan_update
 
 
 class SignpostPlanFileSerializer(serializers.ModelSerializer):
@@ -21,9 +27,44 @@ class SignpostPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SignpostPlanSerializer(
+class SignpostPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    serializers.ModelSerializer,
+):
+    location = EwktPointField()
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST),
+        allow_null=True,
+        required=False,
+    )
+
+    def create(self, validated_data):
+        return signpost_plan_create(validated_data)
+
+    def update(self, instance, validated_data):
+        return signpost_plan_update(instance, validated_data)
+
+    class Meta:
+        model = SignpostPlan
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+
+
+class SignpostPlanGeoJSONInputSerializer(SignpostPlanInputSerializer):
+    location = GeometryField()
+
+
+class SignpostPlanOutputSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -45,7 +86,7 @@ class SignpostPlanSerializer(
         exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
-class SignpostPlanGeoJSONSerializer(SignpostPlanSerializer):
+class SignpostPlanGeoJSONOutputSerializer(SignpostPlanOutputSerializer):
     location = GeometryField()
 
 

@@ -11,12 +11,21 @@ from traffic_control.mixins.models import (
     AbstractFileModel,
     InstalledDeviceModel,
     OwnedDeviceModel,
+    ReplaceableDevicePlanMixin,
+    REPLACEMENT_TO_NEW,
+    REPLACEMENT_TO_OLD,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
+from traffic_control.models.common import (
+    OperationBase,
+    OperationType,
+    TrafficControlDeviceType,
+    VERBOSE_NAME_NEW,
+    VERBOSE_NAME_OLD,
+)
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 
@@ -210,7 +219,7 @@ class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel
         super().save(*args, **kwargs)
 
 
-class TrafficLightPlan(UpdatePlanLocationMixin, AbstractTrafficLight):
+class TrafficLightPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractTrafficLight):
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -240,6 +249,29 @@ class TrafficLightPlan(UpdatePlanLocationMixin, AbstractTrafficLight):
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
         ]
+
+
+class TrafficLightPlanReplacement(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    new = models.OneToOneField(
+        TrafficLightPlan,
+        verbose_name=VERBOSE_NAME_NEW,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_OLD,
+    )
+    old = models.OneToOneField(
+        TrafficLightPlan,
+        verbose_name=VERBOSE_NAME_OLD,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_NEW,
+    )
+
+    class Meta:
+        db_table = "traffic_light_plan_replacement"
+        verbose_name = _("Traffic Light Plan Replacement")
+        verbose_name_plural = _("Traffic Light Plan Replacements")
 
 
 class TrafficLightReal(AbstractTrafficLight, InstalledDeviceModel):
@@ -319,3 +351,4 @@ class TrafficLightRealFile(AbstractFileModel):
 
 auditlog.register(TrafficLightPlan)
 auditlog.register(TrafficLightReal)
+auditlog.register(TrafficLightPlanReplacement)
