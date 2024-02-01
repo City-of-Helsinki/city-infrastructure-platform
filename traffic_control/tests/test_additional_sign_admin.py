@@ -68,6 +68,10 @@ def test__additional_sign__create_missing_content(client: Client, model, url_nam
         "lifecycle": Lifecycle.ACTIVE.value,
         "operations-TOTAL_FORMS": 0,
         "operations-INITIAL_FORMS": 0,
+        "replacement_to_old-TOTAL_FORMS": 0,
+        "replacement_to_old-INITIAL_FORMS": 0,
+        "replacement_to_new-TOTAL_FORMS": 0,
+        "replacement_to_new-INITIAL_FORMS": 0,
     }
     response = client.post(reverse(f"admin:traffic_control_{url_name}_add"), data=data)
 
@@ -109,6 +113,10 @@ def test__additional_sign__update_device_with_content_to_missing_content(client:
         "lifecycle": Lifecycle.ACTIVE.value,
         "operations-TOTAL_FORMS": 0,
         "operations-INITIAL_FORMS": 0,
+        "replacement_to_old-TOTAL_FORMS": 0,
+        "replacement_to_old-INITIAL_FORMS": 0,
+        "replacement_to_new-TOTAL_FORMS": 0,
+        "replacement_to_new-INITIAL_FORMS": 0,
     }
     response = client.post(
         reverse(f"admin:traffic_control_{url_name}_change", kwargs={"object_id": device.id}),
@@ -153,6 +161,10 @@ def test__additional_sign__update_device_with_missing_content_to_have_content(cl
         "lifecycle": Lifecycle.ACTIVE.value,
         "operations-TOTAL_FORMS": 0,
         "operations-INITIAL_FORMS": 0,
+        "replacement_to_old-TOTAL_FORMS": 0,
+        "replacement_to_old-INITIAL_FORMS": 0,
+        "replacement_to_new-TOTAL_FORMS": 0,
+        "replacement_to_new-INITIAL_FORMS": 0,
     }
     response = client.post(
         reverse(f"admin:traffic_control_{url_name}_change", kwargs={"object_id": device.id}),

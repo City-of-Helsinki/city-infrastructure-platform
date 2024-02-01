@@ -1,4 +1,5 @@
 from typing import Optional, OrderedDict
+from uuid import UUID
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -84,6 +85,34 @@ class HideFromAnonUserSerializerMixin:
             representation.pop("deleted_by", None)
 
         return representation
+
+
+class ReplaceableDeviceInputSerializerMixin(metaclass=serializers.SerializerMetaclass):
+    replaces = serializers.UUIDField(
+        required=False,
+        allow_null=True,
+        help_text="ID to the device plan that this device is replacing",
+    )
+
+
+class ReplaceableDeviceOutputSerializerMixin(metaclass=serializers.SerializerMetaclass):
+    replaces = serializers.SerializerMethodField()
+    replaced_by = serializers.SerializerMethodField()
+    is_replaced = serializers.SerializerMethodField()
+
+    def get_replaces(self, obj) -> Optional[UUID]:
+        """ID of the device plan that this device plan has replaced"""
+        replaces = obj.replaces
+        return replaces.id if replaces else None
+
+    def get_replaced_by(self, obj) -> Optional[UUID]:
+        """ID of the device plan that has replaced this device plan"""
+        replaced_by = obj.replaced_by
+        return replaced_by.id if replaced_by else None
+
+    def get_is_replaced(self, obj) -> bool:
+        """Whether this device plan has been replaced by another device plan"""
+        return obj.is_replaced
 
 
 class StructuredContentValidator:

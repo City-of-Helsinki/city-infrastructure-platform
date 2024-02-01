@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-21 16:55+0200\n"
+"POT-Creation-Date: 2024-02-06 14:08+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -656,6 +656,12 @@ msgstr "Lisäkilpi (toteumat)"
 msgid "Operational area"
 msgstr "Toiminta-alue"
 
+msgid "Replaces"
+msgstr "Korvaa"
+
+msgid "Replaced by"
+msgstr "Korvaaja"
+
 msgid "Operational areas"
 msgstr "Toiminta-alue"
 
@@ -1116,6 +1122,18 @@ msgstr "Kiinnityskohde, johon tämä kilpi on asennettu."
 msgid "Plan which this Additional Sign Plan is a part of."
 msgstr "Suunnitelma, johon tämä lisäkilpisuunnitelma kuuluu."
 
+msgid "New"
+msgstr "Uusi"
+
+msgid "Old"
+msgstr "Vanha"
+
+msgid "Additional Sign Plan Replacement"
+msgstr "Korvaus lisäkilpisuunnitelmalle"
+
+msgid "Additional Sign Plan Replacements"
+msgstr "Korvaukset lisäkilpisuunnitelmille"
+
 msgid "Parent Traffic Sign Real"
 msgstr "Isäntäkilpi (toteuma)"
 
@@ -1314,6 +1332,12 @@ msgstr "Suunnitelma, johon tämä ajoestesuunnitelma kuuluu."
 msgid "Barrier Plan"
 msgstr "Ajoeste (suunnitelma)"
 
+msgid "Barrier Plan Replacement"
+msgstr "Korvaus ajoestesuunnitelmalle"
+
+msgid "Barrier Plan Replacements"
+msgstr "Korvaukset ajoestesuunnitelmille"
+
 msgid "The plan for this barrier."
 msgstr "Tämän ajoesteen suunnitelma."
 
@@ -1481,6 +1505,12 @@ msgstr "Tämän kiinnityskohteen poikkiorren pituus senttimetreinä."
 
 msgid "Plan which this mount plan is a part of."
 msgstr "Suunnitelma, johon tämä kiinnityskohdesuunnitelma kuuluu."
+
+msgid "Mount Plan Replacement"
+msgstr "Korvaus kiinnityskohdesuunnitelmalle"
+
+msgid "Mount Plan Replacements"
+msgstr "Korvaukset kiinnityskohdesuunnitelmille"
 
 msgid "The plan for this mount."
 msgstr "Tämän kiinnityskohteen suunnitelma."
@@ -1754,6 +1784,12 @@ msgstr "Suunnitelma, johon tämä tiemerkintäsuunnitelma kuuluu."
 msgid "Road Marking Plan"
 msgstr "Tiemerkintä (suunnitelma)"
 
+msgid "Road Marking Plan Replacement"
+msgstr "Korvaus tiemerkintäsuunnitelmalle"
+
+msgid "Road Marking Plan Replacements"
+msgstr "Korvaukset tiemerkintäsuunnitelmille"
+
 msgid "The plan for this road marking."
 msgstr "Tämän tiemerkinnän suunnitelma."
 
@@ -1864,6 +1900,12 @@ msgstr "Suunnitelma, johon tämä opastesuunnitelma kuuluu."
 
 msgid "Signpost Plan"
 msgstr "Opaste (suunnitelma)"
+
+msgid "Signpost Plan Replacement"
+msgstr "Korvaus opastesuunnitelmalle"
+
+msgid "Signpost Plan Replacements"
+msgstr "Korvaukset opastesuunnitelmille"
 
 msgid "The plan for this signpost."
 msgstr "Tämän opasteen suunnitelma."
@@ -2014,6 +2056,12 @@ msgstr "Suunnitelma, johon tämä liikennevalosuunnitelma kuuluu."
 msgid "Traffic Light Plan"
 msgstr "Liikennevalo (suunnitelma)"
 
+msgid "Traffic Light Plan Replacement"
+msgstr "Korvaus liikennevalosuunnitelmalle"
+
+msgid "Traffic Light Plan Replacements"
+msgstr "Korvaukset liikennevalosuunnitelmille"
+
 msgid "The plan for this traffic light."
 msgstr "Tämän liikennevalon suunnitelma."
 
@@ -2061,6 +2109,12 @@ msgstr "Vaikutusalue (2D)"
 
 msgid "Plan which this traffic sign plan is a part of."
 msgstr "Suunnitelma, johon tämä liikennemerkkisuunnitelma kuuluu."
+
+msgid "Traffic Sign Plan Replacement"
+msgstr "Korvaus liikennemerkkisuunnitelmalle"
+
+msgid "Traffic Sign Plan Replacements"
+msgstr "Korvaukset liikennemerkkisuunnitelmille"
 
 msgid "The plan for this traffic sign."
 msgstr "Tämän liikennemerkin suunnitelma."

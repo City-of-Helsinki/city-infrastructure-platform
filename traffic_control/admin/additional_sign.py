@@ -3,7 +3,12 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
+from traffic_control.admin.common import (
+    OperationalAreaListFilter,
+    ReplacedByInline,
+    ReplacesInline,
+    TrafficControlOperationInlineBase,
+)
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
@@ -24,7 +29,7 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
-from traffic_control.models.additional_sign import AdditionalSignRealOperation, Color
+from traffic_control.models.additional_sign import AdditionalSignPlanReplacement, AdditionalSignRealOperation, Color
 from traffic_control.models.traffic_sign import LocationSpecifier
 from traffic_control.resources.additional_sign import (
     AdditionalSignPlanResource,
@@ -46,6 +51,14 @@ shared_initial_values = {
 
 class AdditionalSignRealOperationInline(TrafficControlOperationInlineBase):
     model = AdditionalSignRealOperation
+
+
+class AdditionalSignPlanReplacesInline(ReplacesInline):
+    model = AdditionalSignPlanReplacement
+
+
+class AdditionalSignPlanReplacedByInline(ReplacedByInline):
+    model = AdditionalSignPlanReplacement
 
 
 @admin.register(AdditionalSignPlan)
@@ -144,6 +157,10 @@ class AdditionalSignPlanAdmin(
         "owner",
     ]
     ordering = ("-created_at",)
+    inlines = (
+        AdditionalSignPlanReplacesInline,
+        AdditionalSignPlanReplacedByInline,
+    )
     initial_values = shared_initial_values
 
     def get_queryset(self, request):

@@ -45,6 +45,13 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealOperation,
 )
+from traffic_control.services.additional_sign import additional_sign_plan_replace
+from traffic_control.services.barrier import barrier_plan_replace
+from traffic_control.services.mount import mount_plan_replace
+from traffic_control.services.road_marking import road_marking_plan_replace
+from traffic_control.services.signpost import signpost_plan_replace
+from traffic_control.services.traffic_light import traffic_light_plan_replace
+from traffic_control.services.traffic_sign import traffic_sign_plan_replace
 from traffic_control.tests.test_base_api import test_multi_polygon, test_point, test_polygon
 from traffic_control.tests.test_base_api_3d import test_point_3d
 from users.models import User
@@ -94,9 +101,10 @@ def get_barrier_plan(
     plan=None,
     device_type=None,
     responsible_entity=None,
+    replaces=None,
 ) -> BarrierPlan:
     user = get_user("test_user")
-    return BarrierPlan.objects.get_or_create(
+    barrier_plan = BarrierPlan.objects.get_or_create(
         device_type=device_type,
         location=location or test_point,
         lifecycle=Lifecycle.ACTIVE,
@@ -111,17 +119,24 @@ def get_barrier_plan(
         updated_by=user,
     )[0]
 
+    if replaces:
+        barrier_plan_replace(old=replaces, new=barrier_plan)
+
+    return barrier_plan
+
 
 def get_barrier_real(
     location="",
     device_type=None,
     responsible_entity=None,
+    barrier_plan=None,
 ) -> BarrierReal:
     user = get_user("test_user")
+    barrier_plan = barrier_plan or get_barrier_plan()
 
     return BarrierReal.objects.create(
         device_type=device_type,
-        barrier_plan=get_barrier_plan(),
+        barrier_plan=barrier_plan,
         location=location or test_point,
         installation_date=datetime.date(2020, 1, 20),
         lifecycle=Lifecycle.ACTIVE,
@@ -152,10 +167,10 @@ def get_portal_type(
     )[0]
 
 
-def get_mount_plan(location="", plan=None, responsible_entity=None) -> MountPlan:
+def get_mount_plan(location="", plan=None, responsible_entity=None, replaces=None) -> MountPlan:
     user = get_user("test_user")
 
-    return MountPlan.objects.get_or_create(
+    mount_plan = MountPlan.objects.get_or_create(
         mount_type=get_mount_type(code="PORTAL", description="Portal"),
         location=location or test_point,
         lifecycle=Lifecycle.ACTIVE,
@@ -166,12 +181,18 @@ def get_mount_plan(location="", plan=None, responsible_entity=None) -> MountPlan
         updated_by=user,
     )[0]
 
+    if replaces:
+        mount_plan_replace(old=replaces, new=mount_plan)
 
-def get_mount_real(location="", responsible_entity=None) -> MountReal:
+    return mount_plan
+
+
+def get_mount_real(location="", mount_plan=None, responsible_entity=None) -> MountReal:
     user = get_user("test_user")
+    mount_plan = mount_plan or get_mount_plan()
 
     return MountReal.objects.get_or_create(
-        mount_plan=get_mount_plan(),
+        mount_plan=mount_plan,
         mount_type=get_mount_type(code="PORTAL", description="Portal"),
         location=location or test_point,
         installation_date=datetime.date(2020, 1, 1),
@@ -189,10 +210,11 @@ def get_road_marking_plan(
     device_type=None,
     traffic_sign_plan=None,
     responsible_entity=None,
+    replaces=None,
 ) -> RoadMarkingPlan:
     user = get_user("test_user")
 
-    return RoadMarkingPlan.objects.get_or_create(
+    road_marking_plan = RoadMarkingPlan.objects.get_or_create(
         device_type=device_type,
         value="30",
         color=RoadMarkingColor.WHITE,
@@ -209,6 +231,11 @@ def get_road_marking_plan(
         created_by=user,
         updated_by=user,
     )[0]
+
+    if replaces:
+        road_marking_plan_replace(old=replaces, new=road_marking_plan)
+
+    return road_marking_plan
 
 
 def get_road_marking_real(
@@ -248,10 +275,11 @@ def get_signpost_plan(
     mount_plan=None,
     txt=None,
     responsible_entity=None,
+    replaces=None,
 ) -> SignpostPlan:
     user = get_user("test_user")
 
-    return SignpostPlan.objects.get_or_create(
+    signpost_plan = SignpostPlan.objects.get_or_create(
         device_type=device_type,
         location=location or test_point,
         lifecycle=Lifecycle.ACTIVE,
@@ -264,6 +292,11 @@ def get_signpost_plan(
         created_by=user,
         updated_by=user,
     )[0]
+
+    if replaces:
+        signpost_plan_replace(old=replaces, new=signpost_plan)
+
+    return signpost_plan
 
 
 def get_signpost_real(
@@ -299,10 +332,11 @@ def get_traffic_light_plan(
     device_type=None,
     mount_plan=None,
     responsible_entity=None,
+    replaces=None,
 ) -> TrafficLightPlan:
     user = get_user("test_user")
 
-    return TrafficLightPlan.objects.get_or_create(
+    traffic_light_plan = TrafficLightPlan.objects.get_or_create(
         device_type=device_type,
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
@@ -317,6 +351,11 @@ def get_traffic_light_plan(
         created_by=user,
         updated_by=user,
     )[0]
+
+    if replaces:
+        traffic_light_plan_replace(old=replaces, new=traffic_light_plan)
+
+    return traffic_light_plan
 
 
 def get_traffic_light_real(
@@ -386,10 +425,11 @@ def get_traffic_sign_plan(
     device_type=None,
     mount_plan=None,
     responsible_entity=None,
+    replaces=None,
 ) -> TrafficSignPlan:
     user = get_user("test_user")
 
-    return TrafficSignPlan.objects.get_or_create(
+    traffic_sign_plan = TrafficSignPlan.objects.get_or_create(
         device_type=device_type,
         location=location or test_point_3d,
         lifecycle=Lifecycle.ACTIVE,
@@ -400,6 +440,10 @@ def get_traffic_sign_plan(
         created_by=user,
         updated_by=user,
     )[0]
+    if replaces:
+        traffic_sign_plan_replace(old=replaces, new=traffic_sign_plan)
+
+    return traffic_sign_plan
 
 
 def get_traffic_sign_real(
@@ -436,6 +480,7 @@ def get_additional_sign_plan(
     missing_content=False,
     order=None,
     responsible_entity=None,
+    replaces=None,
 ) -> AdditionalSignPlan:
     user = get_user("test_user")
     owner = owner or get_owner()
@@ -463,6 +508,10 @@ def get_additional_sign_plan(
         **kwargs,
     )[0]
     asp.refresh_from_db()
+
+    if replaces:
+        additional_sign_plan_replace(old=replaces, new=asp)
+
     return asp
 
 

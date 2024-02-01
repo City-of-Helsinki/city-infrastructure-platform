@@ -10,13 +10,22 @@ from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, R
 from traffic_control.mixins.models import (
     InstalledDeviceModel,
     OwnedDeviceModel,
+    ReplaceableDevicePlanMixin,
+    REPLACEMENT_TO_NEW,
+    REPLACEMENT_TO_OLD,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
 from traffic_control.models.affect_area import CoverageArea
-from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
+from traffic_control.models.common import (
+    OperationBase,
+    OperationType,
+    TrafficControlDeviceType,
+    VERBOSE_NAME_NEW,
+    VERBOSE_NAME_OLD,
+)
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
@@ -202,7 +211,7 @@ class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlMod
         return f"{self.__class__.__name__} {self.id}"
 
 
-class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
+class AdditionalSignPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractAdditionalSign):
     parent = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Parent Traffic Sign Plan"),
@@ -241,6 +250,29 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, AbstractAdditionalSign):
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
         ]
+
+
+class AdditionalSignPlanReplacement(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    new = models.OneToOneField(
+        AdditionalSignPlan,
+        verbose_name=VERBOSE_NAME_NEW,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_OLD,
+    )
+    old = models.OneToOneField(
+        AdditionalSignPlan,
+        verbose_name=VERBOSE_NAME_OLD,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_NEW,
+    )
+
+    class Meta:
+        db_table = "additional_sign_plan_replacement"
+        verbose_name = _("Additional Sign Plan Replacement")
+        verbose_name_plural = _("Additional Sign Plan Replacements")
 
 
 class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
@@ -383,3 +415,4 @@ class AdditionalSignRealOperation(OperationBase):
 
 auditlog.register(AdditionalSignPlan)
 auditlog.register(AdditionalSignReal)
+auditlog.register(AdditionalSignPlanReplacement)

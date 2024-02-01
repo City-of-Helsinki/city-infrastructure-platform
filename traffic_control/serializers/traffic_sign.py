@@ -12,7 +12,14 @@ from traffic_control.models import (
     TrafficSignRealFile,
 )
 from traffic_control.models.traffic_sign import TrafficSignRealOperation
-from traffic_control.serializers.common import EwktPointField, EwktPolygonField, HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import (
+    EwktPointField,
+    EwktPolygonField,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
+)
+from traffic_control.services.traffic_sign import traffic_sign_plan_create, traffic_sign_plan_update
 
 
 class TrafficSignPlanFileSerializer(serializers.ModelSerializer):
@@ -21,9 +28,45 @@ class TrafficSignPlanFileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TrafficSignPlanSerializer(
+class TrafficSignPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceInputSerializerMixin,
+    serializers.ModelSerializer,
+):
+    location = EwktPointField()
+    affect_area = EwktPolygonField(required=False)
+    device_type = serializers.PrimaryKeyRelatedField(
+        queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN),
+        allow_null=True,
+        required=False,
+    )
+
+    def create(self, validated_data):
+        return traffic_sign_plan_create(validated_data)
+
+    def update(self, instance, validated_data):
+        return traffic_sign_plan_update(instance, validated_data)
+
+    class Meta:
+        model = TrafficSignPlan
+        read_only_fields = (
+            "created_by",
+            "updated_by",
+            "deleted_by",
+            "deleted_at",
+        )
+        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+
+
+class TrafficSignPlanGeoJSONInputSerializer(TrafficSignPlanInputSerializer):
+    location = GeometryField()
+
+
+class TrafficSignPlanOutputSerializer(
+    EnumSupportSerializerMixin,
+    HideFromAnonUserSerializerMixin,
+    ReplaceableDeviceOutputSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -46,7 +89,7 @@ class TrafficSignPlanSerializer(
         exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
 
 
-class TrafficSignPlanGeoJSONSerializer(TrafficSignPlanSerializer):
+class TrafficSignPlanGeoJSONOutputSerializer(TrafficSignPlanInputSerializer):
     location = GeometryField()
 
 

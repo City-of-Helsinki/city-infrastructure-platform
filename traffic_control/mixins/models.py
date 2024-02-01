@@ -1,6 +1,7 @@
 import logging
 import uuid
 from decimal import Decimal, InvalidOperation
+from typing import Optional
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -12,6 +13,9 @@ from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.models.utils import SoftDeleteQuerySet
 
 logger = logging.getLogger("traffic_control")
+
+REPLACEMENT_TO_NEW = "replacement_to_new"
+REPLACEMENT_TO_OLD = "replacement_to_old"
 
 
 class SoftDeleteModel(models.Model):
@@ -89,6 +93,27 @@ class OwnedDeviceModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class ReplaceableDevicePlanMixin:
+    @property
+    def replaced_by(self) -> Optional[models.Model]:
+        """Return the device plan that replaces this device plan"""
+        if hasattr(self, REPLACEMENT_TO_NEW):
+            return getattr(self, REPLACEMENT_TO_NEW).new
+        return None
+
+    @property
+    def replaces(self) -> Optional[models.Model]:
+        """Return the device plan that this device plan replaces"""
+        if hasattr(self, REPLACEMENT_TO_OLD):
+            return getattr(self, REPLACEMENT_TO_OLD).old
+        return None
+
+    @property
+    def is_replaced(self):
+        """Return `True` if this device plan has been replaced by another device plan"""
+        return hasattr(self, REPLACEMENT_TO_NEW)
 
 
 class InstalledDeviceModel(models.Model):

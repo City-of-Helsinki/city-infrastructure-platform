@@ -15,7 +15,11 @@ from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateM
 from traffic_control.permissions import ObjectInsideOperationalAreaOrAnonReadOnly
 from traffic_control.schema import geo_format_parameter
 
-__all__ = ("FileUploadViews", "TrafficControlViewSet", "OperationViewSet")
+__all__ = ("prefetch_replacements", "FileUploadViews", "TrafficControlViewSet", "OperationViewSet")
+
+
+def prefetch_replacements(queryset):
+    return queryset.prefetch_related("replacement_to_new", "replacement_to_old")
 
 
 @extend_schema(methods=("get",), parameters=[geo_format_parameter])
@@ -29,11 +33,35 @@ class TrafficControlViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, Soft
     ]
     serializer_classes = {}
 
+    def get_queryset(self):
+        if self.action == "list":
+            return self.get_list_queryset()
+        return self.get_default_queryset()
+
+    def get_default_queryset(self):
+        return self.queryset
+
+    def get_list_queryset(self):
+        return self.get_default_queryset()
+
     def get_serializer_class(self):
         geo_format = self.request.query_params.get("geo_format")
-        if geo_format == "geojson":
-            return self.serializer_classes.get("geojson")
-        return self.serializer_classes.get("default")
+        serializer_class = None
+
+        if self.request.method == "GET":
+            if geo_format == "geojson":
+                serializer_class = self.serializer_classes.get("geojson")
+            else:
+                serializer_class = self.serializer_classes.get("default")
+        else:
+            if geo_format == "geojson":
+                serializer_class = self.serializer_classes.get("geojson_input") or self.serializer_classes.get(
+                    "geojson"
+                )
+            else:
+                serializer_class = self.serializer_classes.get("input") or self.serializer_classes.get("default")
+
+        return serializer_class
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -48,7 +76,25 @@ class TrafficControlViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, Soft
 
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        output_serializer = self.serializer_classes.get("default")
+        output_data = output_serializer(serializer.instance, context=serializer.context).data
+        return Response(output_data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, "_prefetched_objects_cache", None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        output_serializer = self.serializer_classes.get("default")
+        output_data = output_serializer(serializer.instance, context=serializer.context).data
+        return Response(output_data)
 
 
 class FileUploadViews(GenericViewSet):

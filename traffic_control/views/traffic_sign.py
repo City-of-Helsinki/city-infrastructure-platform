@@ -1,8 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from traffic_control.filters import (
@@ -13,7 +15,6 @@ from traffic_control.filters import (
 )
 from traffic_control.models import (
     TrafficControlDeviceType,
-    TrafficSignPlan,
     TrafficSignPlanFile,
     TrafficSignReal,
     TrafficSignRealFile,
@@ -30,16 +31,24 @@ from traffic_control.schema import (
 from traffic_control.serializers.common import TrafficControlDeviceTypeSerializer
 from traffic_control.serializers.traffic_sign import (
     TrafficSignPlanFileSerializer,
-    TrafficSignPlanGeoJSONSerializer,
-    TrafficSignPlanSerializer,
+    TrafficSignPlanGeoJSONInputSerializer,
+    TrafficSignPlanGeoJSONOutputSerializer,
+    TrafficSignPlanInputSerializer,
+    TrafficSignPlanOutputSerializer,
     TrafficSignRealFileSerializer,
     TrafficSignRealGeoJSONSerializer,
     TrafficSignRealOperationSerializer,
     TrafficSignRealSerializer,
 )
+from traffic_control.services.traffic_sign import (
+    traffic_sign_plan_get_active,
+    traffic_sign_plan_get_current,
+    traffic_sign_plan_soft_delete,
+)
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    prefetch_replacements,
     ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
@@ -79,15 +88,25 @@ class TrafficControlDeviceTypeViewSet(ModelViewSet):
 )
 class TrafficSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
-        "default": TrafficSignPlanSerializer,
-        "geojson": TrafficSignPlanGeoJSONSerializer,
+        "default": TrafficSignPlanOutputSerializer,
+        "geojson": TrafficSignPlanGeoJSONOutputSerializer,
+        "input": TrafficSignPlanInputSerializer,
+        "input_geojson": TrafficSignPlanGeoJSONInputSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = TrafficSignPlan.objects.active().prefetch_related("files")
+    queryset = prefetch_replacements(traffic_sign_plan_get_active()).prefetch_related("files")
     filterset_class = TrafficSignPlanFilterSet
     file_queryset = TrafficSignPlanFile.objects.all()
     file_serializer = TrafficSignPlanFileSerializer
     file_relation = "traffic_sign_plan"
+
+    def get_list_queryset(self):
+        return prefetch_replacements(traffic_sign_plan_get_current()).prefetch_related("files")
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        traffic_sign_plan_soft_delete(instance, request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
         methods=("post",),

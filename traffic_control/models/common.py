@@ -13,6 +13,9 @@ from enumfields import EnumField
 from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_MAP, TrafficControlDeviceTypeType
 from traffic_control.mixins.models import UserControlModel
 
+VERBOSE_NAME_NEW = _("New")
+VERBOSE_NAME_OLD = _("Old")
+
 
 class JSONSchemaField(models.JSONField):
     """

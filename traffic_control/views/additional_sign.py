@@ -1,20 +1,34 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import status
+from rest_framework.response import Response
 
 from traffic_control.filters import (
     AdditionalSignPlanFilterSet,
     AdditionalSignRealFilterSet,
     AdditionalSignRealOperationFilterSet,
 )
-from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, AdditionalSignRealOperation
+from traffic_control.models import AdditionalSignReal, AdditionalSignRealOperation
 from traffic_control.schema import location_search_parameter
 from traffic_control.serializers.additional_sign import (
-    AdditionalSignPlanGeoJSONSerializer,
-    AdditionalSignPlanSerializer,
+    AdditionalSignPlanGeoJSONInputSerializer,
+    AdditionalSignPlanGeoJSONOutputSerializer,
+    AdditionalSignPlanInputSerializer,
+    AdditionalSignPlanOutputSerializer,
     AdditionalSignRealGeoJSONSerializer,
     AdditionalSignRealOperationSerializer,
     AdditionalSignRealSerializer,
 )
-from traffic_control.views._common import OperationViewSet, ResponsibleEntityPermission, TrafficControlViewSet
+from traffic_control.services.additional_sign import (
+    additional_sign_plan_get_active,
+    additional_sign_plan_get_current,
+    additional_sign_plan_soft_delete,
+)
+from traffic_control.views._common import (
+    OperationViewSet,
+    prefetch_replacements,
+    ResponsibleEntityPermission,
+    TrafficControlViewSet,
+)
 
 
 @extend_schema_view(
@@ -27,12 +41,22 @@ from traffic_control.views._common import OperationViewSet, ResponsibleEntityPer
 )
 class AdditionalSignPlanViewSet(TrafficControlViewSet):
     serializer_classes = {
-        "default": AdditionalSignPlanSerializer,
-        "geojson": AdditionalSignPlanGeoJSONSerializer,
+        "default": AdditionalSignPlanOutputSerializer,
+        "geojson": AdditionalSignPlanGeoJSONOutputSerializer,
+        "input": AdditionalSignPlanInputSerializer,
+        "input_geojson": AdditionalSignPlanGeoJSONInputSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = AdditionalSignPlan.objects.active()
+    queryset = prefetch_replacements(additional_sign_plan_get_active())
     filterset_class = AdditionalSignPlanFilterSet
+
+    def get_list_queryset(self):
+        return prefetch_replacements(additional_sign_plan_get_current())
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        additional_sign_plan_soft_delete(instance, request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @extend_schema_view(

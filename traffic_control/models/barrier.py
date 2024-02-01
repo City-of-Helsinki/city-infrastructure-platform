@@ -11,12 +11,21 @@ from traffic_control.mixins.models import (
     AbstractFileModel,
     InstalledDeviceModel,
     OwnedDeviceModel,
+    ReplaceableDevicePlanMixin,
+    REPLACEMENT_TO_NEW,
+    REPLACEMENT_TO_OLD,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
+from traffic_control.models.common import (
+    OperationBase,
+    OperationType,
+    TrafficControlDeviceType,
+    VERBOSE_NAME_NEW,
+    VERBOSE_NAME_OLD,
+)
 from traffic_control.models.plan import Plan
 
 
@@ -154,7 +163,7 @@ class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, Own
         super().save(*args, **kwargs)
 
 
-class BarrierPlan(UpdatePlanLocationMixin, AbstractBarrier):
+class BarrierPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractBarrier):
     plan = models.ForeignKey(
         Plan,
         verbose_name=_("Plan"),
@@ -176,6 +185,29 @@ class BarrierPlan(UpdatePlanLocationMixin, AbstractBarrier):
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
         ]
+
+
+class BarrierPlanReplacement(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    new = models.OneToOneField(
+        BarrierPlan,
+        verbose_name=VERBOSE_NAME_NEW,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_OLD,
+    )
+    old = models.OneToOneField(
+        BarrierPlan,
+        verbose_name=VERBOSE_NAME_OLD,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_NEW,
+    )
+
+    class Meta:
+        db_table = "barrier_plan_replacement"
+        verbose_name = _("Barrier Plan Replacement")
+        verbose_name_plural = _("Barrier Plan Replacements")
 
 
 class BarrierReal(AbstractBarrier, InstalledDeviceModel):
@@ -244,3 +276,4 @@ class BarrierRealFile(AbstractFileModel):
 
 auditlog.register(BarrierPlan)
 auditlog.register(BarrierReal)
+auditlog.register(BarrierPlanReplacement)

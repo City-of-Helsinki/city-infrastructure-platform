@@ -12,12 +12,21 @@ from traffic_control.mixins.models import (
     DecimalValueFromDeviceTypeMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
+    ReplaceableDevicePlanMixin,
+    REPLACEMENT_TO_NEW,
+    REPLACEMENT_TO_OLD,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
 )
-from traffic_control.models.common import OperationBase, OperationType, TrafficControlDeviceType
+from traffic_control.models.common import (
+    OperationBase,
+    OperationType,
+    TrafficControlDeviceType,
+    VERBOSE_NAME_NEW,
+    VERBOSE_NAME_OLD,
+)
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 
@@ -199,7 +208,12 @@ class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, Ow
         super().save(*args, **kwargs)
 
 
-class SignpostPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, AbstractSignpost):
+class SignpostPlan(
+    DecimalValueFromDeviceTypeMixin,
+    UpdatePlanLocationMixin,
+    ReplaceableDevicePlanMixin,
+    AbstractSignpost,
+):
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -237,6 +251,29 @@ class SignpostPlan(DecimalValueFromDeviceTypeMixin, UpdatePlanLocationMixin, Abs
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
         ]
+
+
+class SignpostPlanReplacement(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    new = models.OneToOneField(
+        SignpostPlan,
+        verbose_name=VERBOSE_NAME_NEW,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_OLD,
+    )
+    old = models.OneToOneField(
+        SignpostPlan,
+        verbose_name=VERBOSE_NAME_OLD,
+        unique=True,
+        on_delete=models.CASCADE,
+        related_name=REPLACEMENT_TO_NEW,
+    )
+
+    class Meta:
+        db_table = "signpost_plan_replacement"
+        verbose_name = _("Signpost Plan Replacement")
+        verbose_name_plural = _("Signpost Plan Replacements")
 
 
 class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledDeviceModel):
@@ -342,3 +379,4 @@ class SignpostRealFile(AbstractFileModel):
 
 auditlog.register(SignpostPlan)
 auditlog.register(SignpostReal)
+auditlog.register(SignpostPlanReplacement)
