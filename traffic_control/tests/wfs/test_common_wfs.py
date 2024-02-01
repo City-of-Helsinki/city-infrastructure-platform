@@ -66,3 +66,39 @@ def test__wfs__get_feature_bounding_box(model, model_name: str, factory, bbox_ha
         feature_id = geojson_feature_id(feature)
 
     assert feature_id == f"{model_name}.{device_in.id}"
+
+
+@pytest.mark.parametrize(
+    "model, model_name, factory",
+    (
+        (TrafficSignPlan, "trafficsignplan", get_traffic_sign_plan),
+        (AdditionalSignPlan, "additionalsignplan", get_additional_sign_plan),
+    ),
+)
+@pytest.mark.parametrize("output_format", ("gml", "geojson"))
+@pytest.mark.django_db
+def test__wfs__replaced_device_plans_are_not_listed(model, model_name: str, factory, output_format):
+    """
+    Replaced device plans are not listed in WFS response by default
+    """
+
+    replaced_device = factory(location=Point(1, 1, 1, srid=3879))
+    replacing_device = factory(location=Point(2, 2, 2, srid=3879), replaces=replaced_device)
+
+    if output_format == "gml":
+        response = wfs_get_features_gml(model_name)
+        features = gml_get_features(response, model_name)
+    elif output_format == "geojson":
+        response = wfs_get_features_geojson(model_name)
+        features = geojson_get_features(response)
+
+    assert model.objects.all().count() == 2
+    assert len(features) == 1
+    feature = features[0]
+
+    if output_format == "gml":
+        feature_id = gml_feature_id(feature)
+    elif output_format == "geojson":
+        feature_id = geojson_feature_id(feature)
+
+    assert feature_id == f"{model_name}.{replacing_device.id}"
