@@ -5,7 +5,8 @@ from django.utils import timezone
 from gisserver.features import FeatureField, FeatureType
 
 from traffic_control.enums import Lifecycle
-from traffic_control.models import TrafficSignPlan, TrafficSignReal
+from traffic_control.models import TrafficSignReal
+from traffic_control.services.traffic_sign import traffic_sign_plan_get_current
 from traffic_control.views.wfs.common import DEFAULT_CRS, OTHER_CRS
 
 _base_fields = [
@@ -86,7 +87,7 @@ TrafficSignRealFeatureType = FeatureType(
 TrafficSignPlanFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=TrafficSignPlan.objects.active()
+    queryset=traffic_sign_plan_get_current()
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
     .filter(
         Q(validity_period_start__isnull=True)
