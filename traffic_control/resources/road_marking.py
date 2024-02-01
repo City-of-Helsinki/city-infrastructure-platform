@@ -7,12 +7,19 @@ from traffic_control.models import (
     Plan,
     ResponsibleEntity,
     RoadMarkingPlan,
+    RoadMarkingPlanReplacement,
     RoadMarkingReal,
     TrafficControlDeviceType,
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
+from traffic_control.resources.common import (
+    GenericDeviceBaseResource,
+    ReplacementField,
+    ReplacementWidget,
+    ResponsibleEntityPermissionImportMixin,
+)
+from traffic_control.services.road_marking import road_marking_plan_replace, road_marking_plan_unreplace
 
 
 class AbstractRoadMarkingResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
@@ -75,6 +82,19 @@ class RoadMarkingPlanResource(AbstractRoadMarkingResource):
         attribute="plan",
         column_name="plan__decision_id",
         widget=ForeignKeyWidget(Plan, "decision_id"),
+    )
+    replaces = ReplacementField(
+        attribute="replacement_to_old",
+        column_name="replaces",
+        widget=ReplacementWidget(RoadMarkingPlanReplacement, "old__id"),
+        replace_method=road_marking_plan_replace,
+        unreplace_method=road_marking_plan_unreplace,
+    )
+    replaced_by = ReplacementField(
+        attribute="replacement_to_new",
+        column_name="replaced_by",
+        widget=ReplacementWidget(RoadMarkingPlanReplacement, "new__id"),
+        readonly=True,
     )
 
     class Meta(AbstractRoadMarkingResource.Meta):

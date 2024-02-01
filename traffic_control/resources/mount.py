@@ -2,8 +2,23 @@ from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
-from traffic_control.models import MountPlan, MountReal, MountType, Owner, Plan, PortalType, ResponsibleEntity
-from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
+from traffic_control.models import (
+    MountPlan,
+    MountPlanReplacement,
+    MountReal,
+    MountType,
+    Owner,
+    Plan,
+    PortalType,
+    ResponsibleEntity,
+)
+from traffic_control.resources.common import (
+    GenericDeviceBaseResource,
+    ReplacementField,
+    ReplacementWidget,
+    ResponsibleEntityPermissionImportMixin,
+)
+from traffic_control.services.mount import mount_plan_replace, mount_plan_unreplace
 
 
 class AbstractMountResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
@@ -55,6 +70,19 @@ class MountPlanResource(AbstractMountResource):
         attribute="plan",
         column_name="plan__decision_id",
         widget=ForeignKeyWidget(Plan, "decision_id"),
+    )
+    replaces = ReplacementField(
+        attribute="replacement_to_old",
+        column_name="replaces",
+        widget=ReplacementWidget(MountPlanReplacement, "old__id"),
+        replace_method=mount_plan_replace,
+        unreplace_method=mount_plan_unreplace,
+    )
+    replaced_by = ReplacementField(
+        attribute="replacement_to_new",
+        column_name="replaced_by",
+        widget=ReplacementWidget(MountPlanReplacement, "new__id"),
+        readonly=True,
     )
 
     class Meta(AbstractMountResource.Meta):

@@ -84,6 +84,39 @@ class ResourceUUIDField(fields.Field):
         return value
 
 
+class ReplacementWidget(widgets.ForeignKeyWidget):
+    def render(self, value, obj=None):
+        val = super().render(value, obj)
+        if val:
+            return str(val)
+        else:
+            return ""
+
+
+class ReplacementField(fields.Field):
+    def __init__(
+        self,
+        replace_method: Optional[callable] = None,
+        unreplace_method: Optional[callable] = None,
+        **kwargs,
+    ):
+        self.replace_method = replace_method
+        self.unreplace_method = unreplace_method
+        super().__init__(**kwargs)
+
+    def save(self, obj, data, is_m2m=False, **kwargs):
+        if not self.readonly:
+            replaces_id = data.get("replaces")
+            newer_replaced = obj._meta.model.objects.get(pk=replaces_id) if replaces_id else None
+            if obj.replaces == newer_replaced:
+                # No change
+                return
+            if newer_replaced:
+                self.replace_method(old=newer_replaced, new=obj)
+            else:
+                self.unreplace_method(obj)
+
+
 class GenericDeviceBaseResource(EnumFieldResourceMixin, ModelResource):
     id = ResourceUUIDField(attribute="id", column_name="id", default=None, widget=UUIDWidget())
 
