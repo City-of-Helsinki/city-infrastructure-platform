@@ -2,8 +2,22 @@ from django.utils.translation import gettext as _
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
-from traffic_control.models import BarrierPlan, BarrierReal, Owner, Plan, ResponsibleEntity, TrafficControlDeviceType
-from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
+from traffic_control.models import (
+    BarrierPlan,
+    BarrierPlanReplacement,
+    BarrierReal,
+    Owner,
+    Plan,
+    ResponsibleEntity,
+    TrafficControlDeviceType,
+)
+from traffic_control.resources.common import (
+    GenericDeviceBaseResource,
+    ReplacementField,
+    ReplacementWidget,
+    ResponsibleEntityPermissionImportMixin,
+)
+from traffic_control.services.barrier import barrier_plan_replace, barrier_plan_unreplace
 
 
 class AbstractBarrierResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
@@ -52,6 +66,19 @@ class BarrierPlanResource(AbstractBarrierResource):
         attribute="plan",
         column_name="plan__decision_id",
         widget=ForeignKeyWidget(Plan, "decision_id"),
+    )
+    replaces = ReplacementField(
+        attribute="replacement_to_old",
+        column_name="replaces",
+        widget=ReplacementWidget(BarrierPlanReplacement, "old__id"),
+        replace_method=barrier_plan_replace,
+        unreplace_method=barrier_plan_unreplace,
+    )
+    replaced_by = ReplacementField(
+        attribute="replacement_to_new",
+        column_name="replaced_by",
+        widget=ReplacementWidget(BarrierPlanReplacement, "new__id"),
+        readonly=True,
     )
 
     class Meta(AbstractBarrierResource.Meta):

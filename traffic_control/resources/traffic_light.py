@@ -11,9 +11,16 @@ from traffic_control.models import (
     ResponsibleEntity,
     TrafficControlDeviceType,
     TrafficLightPlan,
+    TrafficLightPlanReplacement,
     TrafficLightReal,
 )
-from traffic_control.resources.common import GenericDeviceBaseResource, ResponsibleEntityPermissionImportMixin
+from traffic_control.resources.common import (
+    GenericDeviceBaseResource,
+    ReplacementField,
+    ReplacementWidget,
+    ResponsibleEntityPermissionImportMixin,
+)
+from traffic_control.services.traffic_light import traffic_light_plan_replace, traffic_light_plan_unreplace
 
 
 class AbstractTrafficLightResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
@@ -73,6 +80,19 @@ class TrafficLightPlanResource(AbstractTrafficLightResource):
         attribute="plan",
         column_name="plan__decision_id",
         widget=ForeignKeyWidget(Plan, "decision_id"),
+    )
+    replaces = ReplacementField(
+        attribute="replacement_to_old",
+        column_name="replaces",
+        widget=ReplacementWidget(TrafficLightPlanReplacement, "old__id"),
+        replace_method=traffic_light_plan_replace,
+        unreplace_method=traffic_light_plan_unreplace,
+    )
+    replaced_by = ReplacementField(
+        attribute="replacement_to_new",
+        column_name="replaced_by",
+        widget=ReplacementWidget(TrafficLightPlanReplacement, "new__id"),
+        readonly=True,
     )
 
     class Meta(AbstractTrafficLightResource.Meta):

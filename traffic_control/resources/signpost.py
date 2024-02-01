@@ -10,6 +10,7 @@ from traffic_control.models import (
     Plan,
     ResponsibleEntity,
     SignpostPlan,
+    SignpostPlanReplacement,
     SignpostReal,
     TrafficControlDeviceType,
 )
@@ -17,8 +18,11 @@ from traffic_control.resources.common import (
     GenericDeviceBaseResource,
     ParentChildReplacementImportMixin,
     ParentChildReplacementPlanToRealExportMixin,
+    ReplacementField,
+    ReplacementWidget,
     ResponsibleEntityPermissionImportMixin,
 )
+from traffic_control.services.signpost import signpost_plan_replace, signpost_plan_unreplace
 
 
 class AbstractSignpostResource(
@@ -95,6 +99,19 @@ class SignpostPlanResource(AbstractSignpostResource):
         attribute="plan",
         column_name="plan__decision_id",
         widget=ForeignKeyWidget(Plan, "decision_id"),
+    )
+    replaces = ReplacementField(
+        attribute="replacement_to_old",
+        column_name="replaces",
+        widget=ReplacementWidget(SignpostPlanReplacement, "old__id"),
+        replace_method=signpost_plan_replace,
+        unreplace_method=signpost_plan_unreplace,
+    )
+    replaced_by = ReplacementField(
+        attribute="replacement_to_new",
+        column_name="replaced_by",
+        widget=ReplacementWidget(SignpostPlanReplacement, "new__id"),
+        readonly=True,
     )
 
     class Meta(AbstractSignpostResource.Meta):
