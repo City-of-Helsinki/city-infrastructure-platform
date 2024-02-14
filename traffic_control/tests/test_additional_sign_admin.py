@@ -1,8 +1,6 @@
-import importlib
 import json
 from http import HTTPStatus
 
-import django.urls.resolvers
 import pytest
 from django.test import Client, override_settings
 from django.urls import reverse
@@ -26,18 +24,10 @@ settings_overrides = override_settings(
 
 def setup_module():
     settings_overrides.enable()
-    _reload_urls()
 
 
 def teardown_module():
     settings_overrides.disable()
-    _reload_urls()
-
-
-def _reload_urls():
-    urls = importlib.import_module("cityinfra.urls")
-    importlib.reload(urls)
-    django.urls.resolvers._get_cached_resolver.cache_clear()
 
 
 @pytest.mark.parametrize(
