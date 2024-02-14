@@ -308,9 +308,8 @@ class DeviceComparisonAdminMixin:
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         """Add a dict containing Reals and Plans differences to context"""
-
         real_object = self.get_object(request, unquote(object_id), "id")
-        plan_object = getattr(real_object, self.plan_model_field_name)
+        plan_object = getattr(real_object, self.plan_model_field_name) if real_object else None
 
         if plan_object is not None:
             extra_context = extra_context or {}
