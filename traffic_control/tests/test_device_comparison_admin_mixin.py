@@ -6,7 +6,9 @@ from django.urls import reverse
 
 from traffic_control.tests.factories import get_user
 
-settings_overrides = override_settings(STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage", LANGUAGE_CODE="en")
+settings_overrides = override_settings(
+    STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage", LANGUAGE_CODE="en"
+)
 
 
 def setup_module():
@@ -40,4 +42,4 @@ def test_device_comparison_admin_mixin_object_does_not_exit(client, url_name):
     assert response.context["LANGUAGE_CODE"] == "en"
     messages = list(response.context["messages"])
     assert len(messages) == 1
-    assert 'with ID “doesnotexist” doesn’t exist. Perhaps it was deleted?' in messages[0].message
+    assert "with ID “doesnotexist” doesn’t exist. Perhaps it was deleted?" in messages[0].message
