@@ -35,7 +35,7 @@ class TrafficSignRealAdminTestCase(TestCase):
         request = MockRequest()
         request.user = self.admin
         form = ma.get_form(request, self.traffic_sign_real)
-        self.assertEqual(type(form.base_fields["location"].widget).__name__, "OLMap")
+        self.assertEqual(type(form.base_fields["location"].widget).__name__, "CityInfra3DOSMWidget")
 
     def test_traffic_sign_admin_has_a_z_coord_field(self):
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)

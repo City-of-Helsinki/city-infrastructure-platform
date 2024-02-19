@@ -79,7 +79,7 @@ class RoadMarkingPlanAdmin(
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
@@ -204,7 +204,7 @@ class RoadMarkingRealAdmin(
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
     AdminFieldInitialValuesMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):

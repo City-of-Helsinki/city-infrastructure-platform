@@ -72,7 +72,7 @@ class AdditionalSignPlanAdmin(
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
@@ -178,7 +178,7 @@ class AdditionalSignRealAdmin(
     UserStampedInlineAdminMixin,
     Point3DFieldAdminMixin,
     AdminFieldInitialValuesMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):

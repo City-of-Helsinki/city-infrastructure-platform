@@ -71,7 +71,7 @@ class BarrierPlanAdmin(
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
@@ -179,7 +179,7 @@ class BarrierRealAdmin(
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
     AdminFieldInitialValuesMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
