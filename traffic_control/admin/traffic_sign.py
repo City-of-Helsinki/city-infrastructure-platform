@@ -139,7 +139,7 @@ class TrafficSignPlanAdmin(
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
@@ -268,7 +268,7 @@ class TrafficSignRealAdmin(
     UserStampedInlineAdminMixin,
     Point3DFieldAdminMixin,
     AdminFieldInitialValuesMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):

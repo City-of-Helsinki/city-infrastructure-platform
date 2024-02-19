@@ -10,7 +10,7 @@ class CoverageAreaCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(CoverageArea)
-class CoverageAreaAdmin(admin.OSMGeoAdmin):
+class CoverageAreaAdmin(admin.GISModelAdmin):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

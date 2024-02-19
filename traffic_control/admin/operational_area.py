@@ -12,7 +12,7 @@ class GroupOperationalAreaInline(admin.StackedInline):
     filter_horizontal = ("areas",)
 
 
-class OperationalAreaAdmin(admin.OSMGeoAdmin):
+class OperationalAreaAdmin(admin.GISModelAdmin):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12

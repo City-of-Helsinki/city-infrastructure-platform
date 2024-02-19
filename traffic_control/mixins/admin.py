@@ -1,7 +1,12 @@
 from django.contrib.admin import SimpleListFilter
+from django.contrib.gis.forms import OSMWidget
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.models.plan import Plan
+
+
+class CityInfra3DOSMWidget(OSMWidget):
+    supports_3d = True
 
 
 class Point3DFieldAdminMixin:
@@ -12,12 +17,7 @@ class Point3DFieldAdminMixin:
     in order to save 3d geometry to model instances
     """
 
-    def formfield_for_dbfield(self, db_field, request, **kwargs):
-        if db_field.name == "location":
-            kwargs["widget"] = self.get_map_widget(db_field)
-            return db_field.formfield(**kwargs)
-
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
+    gis_widget = CityInfra3DOSMWidget
 
 
 class UserStampedAdminMixin:

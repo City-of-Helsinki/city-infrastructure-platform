@@ -72,7 +72,7 @@ class TrafficLightPlanAdmin(
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
@@ -177,7 +177,7 @@ class TrafficLightRealAdmin(
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
     AdminFieldInitialValuesMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):

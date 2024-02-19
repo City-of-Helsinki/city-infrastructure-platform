@@ -18,7 +18,7 @@ class PlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
 ):
     default_lon = HELSINKI_LONGITUDE

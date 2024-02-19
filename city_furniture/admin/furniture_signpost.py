@@ -69,7 +69,7 @@ class AbstractFurnitureSignpostAdmin(
     UserStampedAdminMixin,
     Point3DFieldAdminMixin,
     AdminFieldInitialValuesMixin,
-    admin.OSMGeoAdmin,
+    admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
