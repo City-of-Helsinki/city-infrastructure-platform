@@ -7,7 +7,7 @@ authors = []
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-django = "4.0"
+django = "4.1.13"
 
 cairosvg = "^2.7.1"
 django-auditlog = "^2.2.2"
