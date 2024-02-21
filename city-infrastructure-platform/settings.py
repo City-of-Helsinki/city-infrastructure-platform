@@ -185,7 +185,6 @@ LOGOUT_REDIRECT_URL = "/admin/login/"
 SOCIAL_AUTH_TUNNISTAMO_AUTH_EXTRA_ARGUMENTS = {"ui_locales": "fi"}
 WAGTAIL_SITE_NAME = _("City Infrastructure Platform")
 
-SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
