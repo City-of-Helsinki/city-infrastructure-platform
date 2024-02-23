@@ -49,7 +49,7 @@ class MountRealTestCase(TestCase):
             updated_by=self.user,
             owner=get_owner(),
         )
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             self.mount_real.ordered_traffic_signs,
             [traffic_sign_2, traffic_sign_1, traffic_sign_3],
         )
