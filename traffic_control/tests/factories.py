@@ -45,6 +45,7 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealOperation,
 )
+from traffic_control.models.common import JSONSchemaField
 from traffic_control.services.additional_sign import additional_sign_plan_replace
 from traffic_control.services.barrier import barrier_plan_replace
 from traffic_control.services.mount import mount_plan_replace
@@ -400,7 +401,7 @@ def get_traffic_control_device_type(
 ) -> TrafficControlDeviceType:
     if content_schema is None:
         # Distinguish between JSON null and SQL NULL
-        content_schema = Value("null")
+        content_schema = Value(None, output_field=JSONSchemaField())
 
     dt = TrafficControlDeviceType.objects.get_or_create(
         code=code,
@@ -487,7 +488,7 @@ def get_additional_sign_plan(
 
     if content_s is None:
         # Distinguish between JSON null and SQL NULL
-        content_s = Value("null")
+        content_s = Value(None, JSONSchemaField())
 
     kwargs = {}
     if order is not None:
@@ -532,7 +533,7 @@ def get_additional_sign_real(
 
     if content_s is None:
         # Distinguish between JSON null and SQL NULL
-        content_s = Value("null")
+        content_s = Value(None, JSONSchemaField())
 
     kwargs = {}
     if order is not None:
