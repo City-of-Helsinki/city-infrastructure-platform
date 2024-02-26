@@ -26,7 +26,9 @@ from traffic_control.tests.factories import (
 from traffic_control.tests.test_base_api import test_point, test_point_2, test_polygon, test_polygon_2
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
 
-settings_overrides = override_settings(STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage")
+settings_overrides = override_settings(
+    STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
+)
 
 
 def setup_module():

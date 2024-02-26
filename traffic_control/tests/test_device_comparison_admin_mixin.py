@@ -7,7 +7,7 @@ from django.urls import reverse
 from traffic_control.tests.factories import get_user
 
 settings_overrides = override_settings(
-    STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage", LANGUAGE_CODE="en"
+    STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}, LANGUAGE_CODE="en"
 )
 
 

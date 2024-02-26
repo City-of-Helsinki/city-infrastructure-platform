@@ -256,7 +256,12 @@ STATIC_ROOT = var_root("static")
 MEDIA_ROOT = var_root("media")
 STATIC_URL = env("STATIC_URL")
 MEDIA_URL = env("MEDIA_URL")
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
+}
 STATICFILES_DIRS = [checkout_dir("map-view/build/static")]
 
 # Whether to trust X-Forwarded-Host headers for all purposes
@@ -307,7 +312,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = env("CORS_ALLOWED_ORIGIN_REGEXES")
 OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
 if OPENSHIFT_DEPLOYMENT:
     # Use Azure Storage Container as file storage in OpenShift deployment
-    DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
+    STORAGES["default"]["BACKEND"] = "storages.backends.azure_storage.AzureStorage"
     AZURE_ACCOUNT_NAME = env.str("AZURE_ACCOUNT_NAME")
     AZURE_CONTAINER = env.str("AZURE_CONTAINER")
     AZURE_ACCOUNT_KEY = env.str("AZURE_ACCOUNT_KEY")
