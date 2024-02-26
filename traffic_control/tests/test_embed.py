@@ -1,6 +1,7 @@
 import uuid
 
 import pytest
+from django.test import override_settings
 from django.urls import reverse
 
 from traffic_control.enums import DeviceTypeTargetModel
@@ -13,6 +14,18 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
 )
+
+settings_overrides = override_settings(
+    STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}, LANGUAGE_CODE="en"
+)
+
+
+def setup_module():
+    settings_overrides.enable()
+
+
+def teardown_module():
+    settings_overrides.disable()
 
 
 @pytest.mark.parametrize(
@@ -41,8 +54,6 @@ def test__embed__traffic_sign__context(
     has_mount,
 ):
     """Test that the embedded view can be built and its context has the objects that it should."""
-
-    settings.STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
     if has_mount:
         mount = mount_factory()
