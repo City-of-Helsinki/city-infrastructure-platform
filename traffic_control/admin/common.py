@@ -2,6 +2,7 @@ from django.contrib.admin import SimpleListFilter
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
+from traffic_control.admin.utils import PermissionInlineMixin
 from traffic_control.models import OperationalArea, OperationType
 
 
@@ -38,7 +39,7 @@ class OperationalAreaListFilter(SimpleListFilter):
             return queryset.filter(location__contained=operational_area.location)
 
 
-class ReplacesInline(admin.StackedInline):
+class ReplacesInline(PermissionInlineMixin, admin.StackedInline):
     fk_name = "new"
     verbose_name = _("Replaces")
     raw_id_fields = ("old",)
@@ -46,7 +47,7 @@ class ReplacesInline(admin.StackedInline):
     readonly_fields = ("old",)
 
 
-class ReplacedByInline(admin.StackedInline):
+class ReplacedByInline(PermissionInlineMixin, admin.StackedInline):
     fk_name = "old"
     verbose_name = _("Replaced by")
     raw_id_fields = ("new",)
