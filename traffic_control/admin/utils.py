@@ -324,3 +324,19 @@ class AdminFieldInitialValuesMixin:
 
     def get_changeform_initial_data(self, request):
         return self.initial_values
+
+
+class PermissionInlineMixin:
+    permissions = {"add": False, "change": False, "delete": False, "view": True}
+
+    def has_add_permission(self, _request, _obj):
+        return self.permissions.get("add")
+
+    def has_change_permission(self, _request, _obj):
+        return self.permissions.get("change")
+
+    def has_delete_permission(self, _request, _obj):
+        return self.permissions.get("delete")
+
+    def has_view_permission(self, _request, _obj):
+        return self.permissions.get("view")
