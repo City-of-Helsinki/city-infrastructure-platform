@@ -29,7 +29,7 @@ from users.models import User
 class TrafficControlDeviceTypeTests(APITestCase):
     def setUp(self):
         self.admin_user = User.objects.create_superuser(
-            username="testadmin", password="testpw", email="testadmin@anders.fi"
+            username="testadmin", password="testpw", email="testadmin@hel.fi"
         )
         self.user = User.objects.create_user(username="testuser", password="testpw")
 
