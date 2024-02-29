@@ -3,7 +3,7 @@ ARG VERSION=""
 # ==============================
 FROM python:3.8-slim AS base
 # ==============================
-LABEL vendor="Anders Innovations Oy"
+LABEL vendor="City of Helsinki"
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /city-infrastructure-platform && \
