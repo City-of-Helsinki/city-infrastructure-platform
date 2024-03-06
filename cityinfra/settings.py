@@ -335,6 +335,9 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 # WFS
 GISSERVER_USE_DB_RENDERING = False
 
+# Virus scan
+CLAMAV_BASE_URL = env.str("CLAMAV_BASE_URL", "http://localhost:3030")
+
 
 DEBUG_TOOLBAR = False
 if DEBUG:

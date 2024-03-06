@@ -15,7 +15,7 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size
-from traffic_control.forms import AdminFileWidget
+from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
@@ -54,6 +54,7 @@ class SignpostPlanFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = SignpostPlanFile
+    formset = CityInfraFileUploadFormset
 
 
 class SignpostPlanReplacesInline(ReplacesInline):
@@ -170,6 +171,7 @@ class SignpostRealFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = SignpostRealFile
+    formset = CityInfraFileUploadFormset
 
 
 class SignpostRealOperationInline(TrafficControlOperationInlineBase):

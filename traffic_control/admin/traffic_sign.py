@@ -31,7 +31,12 @@ from traffic_control.enums import (
     Surface,
     TRAFFIC_SIGN_TYPE_CHOICES,
 )
-from traffic_control.forms import AdminFileWidget, TrafficSignPlanModelForm, TrafficSignRealModelForm
+from traffic_control.forms import (
+    AdminFileWidget,
+    CityInfraFileUploadFormset,
+    TrafficSignPlanModelForm,
+    TrafficSignRealModelForm,
+)
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
@@ -119,6 +124,7 @@ class TrafficSignPlanFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = TrafficSignPlanFile
+    formset = CityInfraFileUploadFormset
 
 
 class TrafficSignPlanReplacesInline(ReplacesInline):
@@ -252,6 +258,7 @@ class TrafficSignRealFileInline(admin.TabularInline):
         models.FileField: {"widget": AdminFileWidget},
     }
     model = TrafficSignRealFile
+    formset = CityInfraFileUploadFormset
 
 
 class TrafficSignRealOperationInline(TrafficControlOperationInlineBase):

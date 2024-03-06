@@ -4,7 +4,7 @@ from django.contrib.gis import forms
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.forms.models import ModelChoiceIteratorValue
+from django.forms.models import BaseInlineFormSet, ModelChoiceIteratorValue
 from django.forms.widgets import Select
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -25,6 +25,7 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
+from traffic_control.services.virus_scan import clam_av_scan
 from traffic_control.validators import validate_structured_content
 
 
@@ -275,3 +276,17 @@ class PlanRelationsForm(forms.Form):
                 field.queryset = field.queryset.select_related("device_type")
             elif hasattr(field.queryset.model, "mount_type"):
                 field.queryset = field.queryset.select_related("mount_type")
+
+
+class CityInfraFileUploadFormset(BaseInlineFormSet):
+    def clean(self):
+        if self.files:
+            scan_response = clam_av_scan([("FILES", v) for _, v in self.files.items()])
+            errors = scan_response["errors"]
+            if errors:
+                raise ValidationError(f"Virus scan failure: {self._get_error_details_message(errors)}")
+        super().clean()
+
+    @staticmethod
+    def _get_error_details_message(errors):
+        return ", ".join(map(lambda x: x["detail"], errors))
