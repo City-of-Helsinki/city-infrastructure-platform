@@ -57,6 +57,7 @@ pytest-django = "^4.5.2"
 pytest-watch = "^4.2.0"
 rope = "^1.7.0"
 ruff = "^0.1.9"
+requests-mock = "^1.11.0"
 
 
 [tool.ruff]

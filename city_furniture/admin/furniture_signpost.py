@@ -29,7 +29,7 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus
-from traffic_control.forms import AdminFileWidget
+from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
@@ -51,11 +51,13 @@ __all__ = (
 class FurnitureSignpostPlanFileInline(admin.TabularInline):
     formfield_overrides = {models.FileField: {"widget": AdminFileWidget}}
     model = FurnitureSignpostPlanFile
+    formset = CityInfraFileUploadFormset
 
 
 class FurnitureSignpostRealFileInline(admin.TabularInline):
     formfield_overrides = {models.FileField: {"widget": AdminFileWidget}}
     model = FurnitureSignpostRealFile
+    formset = CityInfraFileUploadFormset
 
 
 class FurnitureSignpostRealOperationInline(TrafficControlOperationInlineBase):
