@@ -97,6 +97,13 @@ To set any of the settings below, use the `-e <ENV_VAR>=<VALUE>` flag when runni
 
 Run the application `docker-compose up`
 
+#### To run just database
+`docker-compose up db`
+
+#### To run local ClamAV instances
+first do `docker-compose up clamd`
+after it is started `docker-compose up clamv-api`
+
 ### Translations (fi)
 
 Run script `./makemessages.sh`
