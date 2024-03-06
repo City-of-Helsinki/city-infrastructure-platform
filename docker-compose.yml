@@ -27,6 +27,32 @@ services:
     restart: on-failure
     depends_on:
       - db
+  # From https://github.com/benzino77/clamav-rest-api/blob/6ab5d6b283faab9726763e5fee70aabb82fec51e/examples/docker-compose.yml
+  clamd:
+    image: clamav/clamav:stable
+    container_name: clamav
+    restart: unless-stopped
+    networks:
+      - clam-net
+  clamav-api:
+    image: benzino77/clamav-rest-api
+    container_name: clamav-rest
+    restart: unless-stopped
+    depends_on:
+      - clamd
+    environment:
+      - NODE_ENV=production
+      - CLAMD_IP=clamd
+      - APP_FORM_KEY=FILES
+      - APP_PORT=3030
+      - APP_MAX_FILE_SIZE=105906176
+    ports:
+      - '3030:3030'
+    networks:
+      - clam-net
+
+networks:
+  clam-net:
 
 volumes:
   db_data:
