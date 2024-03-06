@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional, OrderedDict, Set
 from uuid import UUID, uuid4
 
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.urls import path
@@ -15,6 +16,7 @@ from tablib import Dataset
 
 from traffic_control.models import ResponsibleEntity
 from traffic_control.models.utils import SoftDeleteQuerySet
+from traffic_control.services.virus_scan import clam_av_scan
 from users.models import User
 from users.utils import get_system_user
 
@@ -411,3 +413,13 @@ class CustomImportExportActionModelAdmin(ImportExportActionModelAdmin):
             path("export_empty/", self.get_empty_csv_template, name="%s_%s_export_empty" % self.get_model_info()),
         ]
         return my_urls + urls
+
+    def import_action(self, request, *args, **kwargs):
+        """Add virus scan to before actual import"""
+        if request.FILES:
+            scan_response = clam_av_scan([("FILES", v) for _, v in request.FILES.items()])
+            errors = scan_response["errors"]
+            if errors:
+                self.message_user(request, errors, messages.ERROR)
+                del request.FILES["import_file"]
+        return super().import_action(request, *args, **kwargs)
