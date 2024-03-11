@@ -1,7 +1,9 @@
 from typing import List, TypedDict
 
 import requests
+from auditlog.models import LogEntry
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 
 class VirusScanError(TypedDict):
@@ -21,6 +23,18 @@ def clam_av_scan(files, api_version="v1") -> VirusScanResponse:
 
 def get_clam_av_scan_url(api_version: str) -> str:
     return f"{settings.CLAMAV_BASE_URL}/api/{api_version}/scan"
+
+
+def add_virus_scan_errors_to_auditlog(errors, user, model, object_id):
+    for error_d in errors:
+        LogEntry.objects.create(
+            actor=user,
+            content_type=ContentType.objects.get_for_model(model),
+            object_id=object_id,
+            changes="virusscan",
+            action=LogEntry.Action.ACCESS,
+            additional_data=error_d,
+        )
 
 
 def _handle_clam_av_response(response) -> VirusScanResponse:

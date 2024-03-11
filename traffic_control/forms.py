@@ -25,7 +25,7 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.services.virus_scan import clam_av_scan
+from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, clam_av_scan
 from traffic_control.validators import validate_structured_content
 
 
@@ -284,6 +284,7 @@ class CityInfraFileUploadFormset(BaseInlineFormSet):
             scan_response = clam_av_scan([("FILES", v) for _, v in self.files.items()])
             errors = scan_response["errors"]
             if errors:
+                add_virus_scan_errors_to_auditlog(errors, None, self.model, None)
                 raise ValidationError(f"Virus scan failure: {self._get_error_details_message(errors)}")
         super().clean()
 
