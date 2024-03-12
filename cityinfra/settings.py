@@ -71,6 +71,8 @@ env = environ.Env(
 if os.path.exists(env_file):
     env.read_env(env_file)
 
+SESSION_SERIALIZER = "helusers.sessions.TunnistamoOIDCSerializer"
+
 SOCIAL_AUTH_TUNNISTAMO_KEY = env("SOCIAL_AUTH_TUNNISTAMO_KEY")
 SOCIAL_AUTH_TUNNISTAMO_SECRET = env("SOCIAL_AUTH_TUNNISTAMO_SECRET")
 HELUSERS_ADGROUPS_CLAIM = env("HELUSERS_ADGROUPS_CLAIM")
@@ -103,7 +105,6 @@ if OIDC_AUTHENTICATION_ENABLED and (
     or not OIDC_API_TOKEN_AUTH["ISSUER"]
 ):
     raise ImproperlyConfigured("Authentication not configured properly")
-
 
 CACHES = {"default": env.cache()}
 vars().update(env.email_url())  # EMAIL_BACKEND etc.
@@ -184,7 +185,6 @@ LOGIN_REDIRECT_URL = "/admin/"
 LOGOUT_REDIRECT_URL = "/admin/login/"
 SOCIAL_AUTH_TUNNISTAMO_AUTH_EXTRA_ARGUMENTS = {"ui_locales": "fi"}
 WAGTAIL_SITE_NAME = _("City Infrastructure Platform")
-
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -337,7 +337,6 @@ GISSERVER_USE_DB_RENDERING = False
 
 # Virus scan
 CLAMAV_BASE_URL = env.str("CLAMAV_BASE_URL", "http://localhost:3030")
-
 
 DEBUG_TOOLBAR = False
 if DEBUG:
