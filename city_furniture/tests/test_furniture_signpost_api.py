@@ -11,6 +11,7 @@ from rest_framework_gis.fields import GeoJsonDict
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.tests.factories import (
     add_furniture_signpost_real_operation,
+    DEFAULT_DEVICE_TYPE_DESCRIPTION,
     get_city_furniture_device_type,
     get_furniture_signpost_plan,
     get_furniture_signpost_real,
@@ -61,6 +62,7 @@ def test__furniture_signpost_real__list(geo_format):
     assert response_data["count"] == 3
     for result in response_data["results"]:
         obj = FurnitureSignpostReal.objects.get(pk=result["id"])
+        assert result["device_type_description"] == DEFAULT_DEVICE_TYPE_DESCRIPTION
         if geo_format == "geojson":
             assert result["location"] == GeoJsonDict(obj.location.json)
         else:
@@ -106,6 +108,7 @@ def test__furniture_signpost_real__detail(geo_format):
     assert response_data["id"] == str(obj.pk)
     # verify operations are ordered by operation_date
     operation_ids = [operation["id"] for operation in response_data["operations"]]
+    assert response_data["device_type_description"] == DEFAULT_DEVICE_TYPE_DESCRIPTION
     assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]
     if geo_format == "geojson":
         assert response_data["location"] == GeoJsonDict(obj.location.json)

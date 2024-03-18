@@ -95,7 +95,7 @@ class FurnitureSignpostRealSerializer(
     )
     operations = FurnitureSignpostRealOperationSerializer(many=True, required=False, read_only=True)
     target_name = serializers.CharField(read_only=True, source="target.name_fi")
-    device_type_description = serializers.CharField(read_only=True, source="device_type.description")
+    device_type_description = serializers.CharField(read_only=True, source="device_type.description_fi")
 
     class Meta:
         model = FurnitureSignpostReal
