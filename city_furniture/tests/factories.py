@@ -14,6 +14,8 @@ from city_furniture.models import (
 from traffic_control.tests.factories import get_mount_type, get_operation_type, get_owner, get_user
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
+DEFAULT_DEVICE_TYPE_DESCRIPTION = "DESCRIPTION_FI"
+
 
 def get_city_furniture_color(name="Color", rgb="#FFFFFF") -> CityFurnitureColor:
     return CityFurnitureColor.objects.get_or_create(name=name, defaults=dict(rgb=rgb))[0]
@@ -47,13 +49,12 @@ def get_city_furniture_device_type(
     class_type: str = "1030",
     function_type: str = "1090",
     target_model: Optional[CityFurnitureDeviceTypeTargetModel] = None,
+    description_fi=DEFAULT_DEVICE_TYPE_DESCRIPTION,
 ) -> CityFurnitureDeviceType:
     return CityFurnitureDeviceType.objects.get_or_create(
         code=code,
         defaults=dict(
-            class_type=class_type,
-            function_type=function_type,
-            target_model=target_model,
+            class_type=class_type, function_type=function_type, target_model=target_model, description_fi=description_fi
         ),
     )[0]
 
