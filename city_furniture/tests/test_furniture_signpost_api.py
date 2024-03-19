@@ -42,6 +42,7 @@ def test__furniture_signpost_plan__list(geo_format):
     assert response_data["count"] == 3
     for result in response_data["results"]:
         obj = FurnitureSignpostPlan.objects.get(pk=result["id"])
+        assert result["device_type_description"] == DEFAULT_DEVICE_TYPE_DESCRIPTION
         if geo_format == "geojson":
             assert result["location"] == GeoJsonDict(obj.location.json)
         else:
@@ -83,6 +84,7 @@ def test__furniture_signpost_plan__detail(geo_format):
 
     assert response.status_code == status.HTTP_200_OK
     assert response_data["id"] == str(obj.pk)
+    assert response_data["device_type_description"] == DEFAULT_DEVICE_TYPE_DESCRIPTION
     if geo_format == "geojson":
         assert response_data["location"] == GeoJsonDict(obj.location.json)
     else:
