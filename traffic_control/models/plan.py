@@ -31,7 +31,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     diary_number = models.CharField(
         verbose_name=_("Diary number"),
         max_length=20,
-        unique=True,
+        unique=False,
         # Diary number will be required field in the future
         null=True,
         blank=True,
@@ -72,6 +72,11 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
                 fields=["source_name", "source_id"],
                 condition=models.Q(is_active=True),
                 name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+            models.UniqueConstraint(
+                fields=["diary_number"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_diary_number_id",
             ),
         ]
 
