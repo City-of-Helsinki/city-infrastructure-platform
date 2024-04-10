@@ -4,13 +4,16 @@ from datetime import datetime
 import pytest
 from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon
+from django.db.utils import IntegrityError
 from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import Plan
-from traffic_control.tests.factories import get_api_client, get_plan, get_user
+from traffic_control.tests.factories import get_api_client, get_plan, get_user, PlanFactory
 from traffic_control.tests.test_base_api import test_multi_polygon, test_polygon, test_polygon_2, test_polygon_3
+
+PLAN_DIARY_NUMBER = "HEL 2023-000001"
 
 
 @pytest.mark.django_db
@@ -60,17 +63,41 @@ def test_plan_detail_geojson():
 
 @pytest.mark.django_db
 def test_plan_create():
+    """Test basic plan create with new diary number"""
     user = get_user(admin=True)
-    api_client = get_api_client(user=user)
-    location = test_multi_polygon.ewkt
+    response = _post_plan_create(test_multi_polygon.ewkt, user)
+    _assert_created_plan(response, user)
 
-    response = api_client.post(
+
+@pytest.mark.django_db
+def test_plan_create_with_existing_diary_number():
+    """Test plan create with existing diary number"""
+    user = get_user(admin=True)
+    _ = PlanFactory(diary_number=PLAN_DIARY_NUMBER)
+    with pytest.raises(IntegrityError):
+        _post_plan_create(test_multi_polygon.ewkt, user)
+
+
+@pytest.mark.django_db
+def test_plan_create_with_soft_deleted_plan_diary_number():
+    """Test plan create with existing diary number that is in soft deleted plan"""
+    user = get_user(admin=True)
+    _ = PlanFactory(diary_number=PLAN_DIARY_NUMBER, is_active=False)
+    response = _post_plan_create(test_multi_polygon.ewkt, user)
+    _assert_created_plan(response, user)
+
+
+def _post_plan_create(location_ewkt, user):
+    api_client = get_api_client(user=user)
+    location = location_ewkt
+
+    return api_client.post(
         reverse("v1:plan-list"),
         data={
             "name": "Test plan",
             "decision_id": "2020_1",
             "location": location,
-            "diary_number": "HEL 2023-000001",
+            "diary_number": PLAN_DIARY_NUMBER,
             "drawing_numbers": ["1234"],
             "created_by": user.pk,
             "updated_by": user.pk,
@@ -78,25 +105,42 @@ def test_plan_create():
         format="json",
     )
 
-    plan = Plan.objects.first()
+
+def _assert_created_plan(response, user):
+    plan = Plan.objects.filter(is_active=True).first()
     assert response.status_code == status.HTTP_201_CREATED
-    assert Plan.objects.count() == 1
-    assert plan.location.ewkt == location
+    assert Plan.objects.filter(is_active=True).count() == 1
+    assert plan.location.ewkt == test_multi_polygon.ewkt
     assert plan.name == "Test plan"
     assert plan.decision_id == "2020_1"
     assert plan.created_by == user
     assert plan.updated_by == user
-    assert plan.diary_number == "HEL 2023-000001"
+    assert plan.diary_number == PLAN_DIARY_NUMBER
     assert plan.drawing_numbers == ["1234"]
     assert response.data.get("derive_location") is False
 
 
 @pytest.mark.django_db
 def test_plan_delete():
+    plan = PlanFactory(diary_number=PLAN_DIARY_NUMBER)
+    _delete_and_assert_plan(plan)
+
+
+@pytest.mark.django_db
+def test_plan_delete_same_deleted_diary_number_exists():
+    soft_deleted = PlanFactory(diary_number=PLAN_DIARY_NUMBER, is_active=False)
+    plan = PlanFactory(
+        diary_number=PLAN_DIARY_NUMBER,
+        is_active=True,
+        source_id=soft_deleted.source_id,
+        source_name=soft_deleted.source_name,
+    )
+    _delete_and_assert_plan(plan)
+
+
+def _delete_and_assert_plan(plan):
     user = get_user(admin=True)
     api_client = get_api_client(user=user)
-    plan = get_plan()
-
     response = api_client.delete(reverse("v1:plan-detail", kwargs={"pk": plan.pk}))
 
     plan.refresh_from_db()
@@ -105,6 +149,7 @@ def test_plan_delete():
     assert not plan.is_active
     assert plan.deleted_by == user
     assert plan.deleted_at
+    assert plan.diary_number == PLAN_DIARY_NUMBER
     assert isinstance(plan.deleted_at, datetime)
 
 

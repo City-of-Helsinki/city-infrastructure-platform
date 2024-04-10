@@ -1,11 +1,11 @@
 import datetime
 from typing import Any, Optional
 
+import factory
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.geos import MultiPolygon
 from django.db.models import Value
-from django.utils.crypto import get_random_string
 from rest_framework.test import APIClient
 
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle, OrganizationLevel, TrafficControlDeviceTypeType
@@ -58,20 +58,30 @@ from traffic_control.tests.test_base_api_3d import test_point_3d
 from users.models import User
 
 
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = get_user_model()
+        django_get_or_create = ("username",)
+
+    username = factory.Sequence(lambda n: f"User{n}")
+    password = "x"
+    first_name = "John"
+    last_name = "Doe"
+    email = "test@example.com"
+    is_staff = False
+    is_superuser = False
+    bypass_responsible_entity = False
+    bypass_operational_area = False
+
+
 def get_user(username=None, admin=False, bypass_operational_area=False, bypass_responsible_entity=False) -> User:
-    if not username:
-        username = get_random_string(length=12)  # pragma: no cover
-    return get_user_model().objects.get_or_create(
+    return UserFactory(
         username=username,
-        password="x",
-        first_name="John",
-        last_name="Doe",
-        email="test@example.com",
         is_staff=admin,
         is_superuser=admin,
-        bypass_responsible_entity=bypass_responsible_entity,
         bypass_operational_area=bypass_operational_area,
-    )[0]
+        bypass_responsible_entity=bypass_responsible_entity,
+    )
 
 
 def get_operational_area(area=None, name=None) -> OperationalArea:
@@ -85,16 +95,23 @@ def get_owner(name_fi="Omistaja", name_en="Owner") -> Owner:
     return Owner.objects.get_or_create(name_fi=name_fi, name_en=name_en)[0]
 
 
+class PlanFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Plan
+
+    created_by = factory.SubFactory(UserFactory)
+    updated_by = factory.SubFactory(UserFactory)
+    name = "Test plan"
+    decision_id = "2020_1"
+    location = test_multi_polygon
+    derive_location = False
+    is_active = True
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+
+
 def get_plan(location=test_multi_polygon, name="Test plan", derive_location=False) -> Plan:
-    user = get_user("test_user")
-    return Plan.objects.get_or_create(
-        name=name,
-        decision_id="2020_1",
-        location=location,
-        derive_location=derive_location,
-        created_by=user,
-        updated_by=user,
-    )[0]
+    return PlanFactory(location=location, name=name, derive_location=derive_location)
 
 
 def get_barrier_plan(
