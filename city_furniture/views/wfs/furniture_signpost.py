@@ -2,11 +2,12 @@ from copy import deepcopy
 
 from django.db.models import Q
 from django.utils import timezone
-from gisserver.features import FeatureField, FeatureType
+from gisserver.features import FeatureField
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from traffic_control.enums import Lifecycle
 from traffic_control.views.wfs.common import DEFAULT_CRS, OTHER_CRS
+from traffic_control.views.wfs.utils import BoundingBoxCapableFeatureType
 
 _base_fields = [
     FeatureField("id", abstract="ID of the Furniture Signpost."),
@@ -86,7 +87,8 @@ _base_fields = [
     FeatureField("additional_material_url", abstract="URL for additional material bout the signpost."),
 ]
 
-FurnitureSignpostRealFeatureType = FeatureType(
+
+FurnitureSignpostRealFeatureType = BoundingBoxCapableFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=FurnitureSignpostReal.objects.active()
@@ -107,7 +109,7 @@ FurnitureSignpostRealFeatureType = FeatureType(
     ],
 )
 
-FurnitureSignpostPlanFeatureType = FeatureType(
+FurnitureSignpostPlanFeatureType = BoundingBoxCapableFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=FurnitureSignpostPlan.objects.active()
