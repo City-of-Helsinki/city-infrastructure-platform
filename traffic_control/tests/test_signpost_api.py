@@ -18,6 +18,7 @@ from traffic_control.tests.factories import (
     get_signpost_real,
     get_traffic_control_device_type,
     get_user,
+    PlanFactory,
 )
 from traffic_control.tests.test_base_api import (
     point_location_error_test_data,
@@ -354,9 +355,12 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         """
         Ensure we can get all sign post real objects.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        spp = get_signpost_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_signpost_real()
+            self.__create_test_signpost_real(signpost_plan=spp)
         response = self.client.get(reverse("v1:signpostreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -365,14 +369,18 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         for result in results:
             signpost_real = SignpostReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), signpost_real.location.ewkt)
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_all_signpost_reals__geojson(self):
         """
         Ensure we can get all sign post real objects with GeoJSON location.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        spp = get_signpost_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_signpost_real()
+            self.__create_test_signpost_real(signpost_plan=spp)
         response = self.client.get(reverse("v1:signpostreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -381,12 +389,15 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         for result in results:
             signpost_real = SignpostReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), GeoJsonDict(signpost_real.location.json))
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_signpost_real_detail(self):
         """
         Ensure we can get one signpost real object.
         """
-        signpost_real = self.__create_test_signpost_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        spp = get_signpost_plan(plan=plan)
+        signpost_real = self.__create_test_signpost_real(signpost_plan=spp)
         operation_1 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 5))
         operation_2 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 15))
         operation_3 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 10))
@@ -394,6 +405,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(signpost_real.id))
         self.assertEqual(signpost_real.location.ewkt, response.data.get("location"))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
         self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
@@ -402,7 +414,9 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         """
         Ensure we can get one signpost real object with GeoJSON location.
         """
-        signpost_real = self.__create_test_signpost_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        spp = get_signpost_plan(plan=plan)
+        signpost_real = self.__create_test_signpost_real(signpost_plan=spp)
         response = self.client.get(
             reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
             data={"geo_format": "geojson"},
@@ -411,6 +425,7 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.data.get("id"), str(signpost_real.id))
         signpost_real_geojson = GeoJsonDict(signpost_real.location.json)
         self.assertEqual(signpost_real_geojson, response.data.get("location"))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_create_signpost_real(self):
         """
@@ -522,14 +537,18 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(signpost_real.operations.all().count(), 1)
         self.assertEqual(signpost_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
-    def __create_test_signpost_real(self):
-        signpost_plan = SignpostPlan.objects.create(
-            device_type=self.test_device_type,
-            location=self.test_point,
-            lifecycle=self.test_lifecycle,
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
+    def __create_test_signpost_real(self, signpost_plan=None):
+        signpost_plan = (
+            SignpostPlan.objects.create(
+                device_type=self.test_device_type,
+                location=self.test_point,
+                lifecycle=self.test_lifecycle,
+                owner=self.test_owner,
+                created_by=self.user,
+                updated_by=self.user,
+            )
+            if not signpost_plan
+            else signpost_plan
         )
         return SignpostReal.objects.create(
             signpost_plan=signpost_plan,

@@ -119,6 +119,7 @@ class AdditionalSignRealSerializer(
         required=False,
     )
     operations = AdditionalSignRealOperationSerializer(many=True, required=False, read_only=True)
+    plan_decision_id = serializers.ReadOnlyField(source="additional_sign_plan.plan.decision_id", allow_null=True)
 
     class Meta:
         model = AdditionalSignReal

@@ -133,6 +133,7 @@ class RoadMarkingRealSerializer(
         required=False,
     )
     operations = RoadMarkingRealOperationSerializer(many=True, required=False, read_only=True)
+    plan_decision_id = serializers.ReadOnlyField(source="road_marking_plan.plan.decision_id", allow_null=True)
 
     class Meta:
         model = RoadMarkingReal

@@ -125,6 +125,7 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
+        .select_related("furniture_signpost_plan__plan")
     )
     filterset_class = FurnitureSignpostRealFilterSet
     file_queryset = FurnitureSignpostRealFile.objects.all()

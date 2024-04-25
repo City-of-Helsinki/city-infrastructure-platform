@@ -18,6 +18,7 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    PlanFactory,
 )
 from traffic_control.tests.test_base_api_3d import (
     point_location_error_test_data_3d,
@@ -352,9 +353,12 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         """
         Ensure we can get all traffic sign real objects.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        tsp = get_traffic_sign_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_traffic_sign_real()
+            self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
         response = self.client.get(reverse("v1:trafficsignreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -363,14 +367,18 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         for result in results:
             traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), traffic_sign_real.location.ewkt)
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_all_traffic_sign_reals__geojson(self):
         """
         Ensure we can get all traffic sign real objects with GeoJSON location.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        tsp = get_traffic_sign_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_traffic_sign_real()
+            self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
         response = self.client.get(reverse("v1:trafficsignreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -379,12 +387,16 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         for result in results:
             traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), GeoJsonDict(traffic_sign_real.location.json))
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_traffic_sign_real_detail(self):
         """
         Ensure we can get one traffic sign real object.
         """
-        traffic_sign_real = self.__create_test_traffic_sign_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        tsp = get_traffic_sign_plan(plan=plan)
+
+        traffic_sign_real = self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
         operation_1 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 5))
         operation_2 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 15))
         operation_3 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 10))
@@ -392,6 +404,7 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
         self.assertEqual(traffic_sign_real.location.ewkt, response.data.get("location"))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
         self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
@@ -400,13 +413,17 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         """
         Ensure we can get one traffic sign real object with GeoJSON location.
         """
-        traffic_sign_real = self.__create_test_traffic_sign_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        tsp = get_traffic_sign_plan(plan=plan)
+
+        traffic_sign_real = self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
         response = self.client.get(
             reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
         traffic_sign_real_geojson = GeoJsonDict(traffic_sign_real.location.json)
         self.assertEqual(traffic_sign_real_geojson, response.data.get("location"))
 
@@ -524,14 +541,18 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(traffic_sign_real.operations.all().count(), 1)
         self.assertEqual(traffic_sign_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
-    def __create_test_traffic_sign_real(self):
-        traffic_sign_plan = TrafficSignPlan.objects.create(
-            device_type=self.test_device_type,
-            location=self.test_point,
-            lifecycle=self.test_lifecycle,
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
+    def __create_test_traffic_sign_real(self, traffic_sign_plan=None):
+        traffic_sign_plan = (
+            TrafficSignPlan.objects.create(
+                device_type=self.test_device_type,
+                location=self.test_point,
+                lifecycle=self.test_lifecycle,
+                owner=self.test_owner,
+                created_by=self.user,
+                updated_by=self.user,
+            )
+            if not traffic_sign_plan
+            else traffic_sign_plan
         )
         return TrafficSignReal.objects.create(
             traffic_sign_plan=traffic_sign_plan,

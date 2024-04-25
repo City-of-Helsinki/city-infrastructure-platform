@@ -10,6 +10,7 @@ from rest_framework_gis.fields import GeoJsonDict
 from traffic_control.models import AdditionalSignReal
 from traffic_control.tests.factories import (
     add_additional_sign_real_operation,
+    get_additional_sign_plan,
     get_additional_sign_real,
     get_api_client,
     get_operation_type,
@@ -17,6 +18,7 @@ from traffic_control.tests.factories import (
     get_traffic_control_device_type,
     get_traffic_sign_real,
     get_user,
+    PlanFactory,
 )
 from traffic_control.tests.models.test_traffic_control_device_type import (
     another_content_valid_by_simple_schema,
@@ -33,11 +35,15 @@ from traffic_control.tests.models.test_traffic_control_device_type import (
 
 
 @pytest.mark.parametrize("geo_format", ("", "geojson"))
+@pytest.mark.parametrize("plan_decision_id", (None, "TEST-DECISION-ID"))
 @pytest.mark.django_db
-def test__additional_sign_real__list(geo_format):
+def test__additional_sign_real__list(geo_format, plan_decision_id):
     client = get_api_client()
+    plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
+    ads_plan = get_additional_sign_plan(plan=plan) if plan else None
+
     for owner_name in ["foo", "bar", "baz"]:
-        get_additional_sign_real(owner=get_owner(name_fi=owner_name))
+        get_additional_sign_real(owner=get_owner(name_fi=owner_name), additional_sign_plan=ads_plan)
 
     response = client.get(reverse("v1:additionalsignreal-list"), data={"geo_format": geo_format})
     response_data = response.json()
@@ -47,6 +53,7 @@ def test__additional_sign_real__list(geo_format):
     for result in response_data["results"]:
         obj = AdditionalSignReal.objects.get(pk=result["id"])
 
+        assert result["plan_decision_id"] == plan_decision_id
         if geo_format == "geojson":
             assert result["location"] == GeoJsonDict(obj.location.json)
         else:
@@ -54,10 +61,13 @@ def test__additional_sign_real__list(geo_format):
 
 
 @pytest.mark.parametrize("geo_format", ("", "geojson"))
+@pytest.mark.parametrize("plan_decision_id", (None, "TEST-DECISION-ID"))
 @pytest.mark.django_db
-def test__additional_sign_real__detail(geo_format):
+def test__additional_sign_real__detail(geo_format, plan_decision_id):
     client = get_api_client()
-    asr = get_additional_sign_real(parent=get_traffic_sign_real())
+    plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
+    ads_plan = get_additional_sign_plan(plan=plan) if plan else None
+    asr = get_additional_sign_real(parent=get_traffic_sign_real(), additional_sign_plan=ads_plan)
     operation_1 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 5))
     operation_2 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 15))
     operation_3 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 10))
@@ -74,6 +84,7 @@ def test__additional_sign_real__detail(geo_format):
     # verify operations are ordered by operation_date
     operation_ids = [operation["id"] for operation in response_data["operations"]]
     assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]
+    assert response_data["plan_decision_id"] == plan_decision_id
 
     if geo_format == "geojson":
         assert response_data["location"] == GeoJsonDict(asr.location.json)

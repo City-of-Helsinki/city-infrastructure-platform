@@ -77,6 +77,7 @@ class AdditionalSignRealViewSet(TrafficControlViewSet):
         AdditionalSignReal.objects.active()
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
+        .select_related("additional_sign_plan__plan")
     )
     filterset_class = AdditionalSignRealFilterSet
 

@@ -13,6 +13,7 @@ from traffic_control.tests.factories import (
     get_mount_plan,
     get_mount_real,
     get_operation_type,
+    PlanFactory,
 )
 from traffic_control.tests.test_base_api import (
     line_location_error_test_data,
@@ -245,9 +246,12 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         """
         Ensure we can get all mount real objects.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        mp = get_mount_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_mount_real()
+            self.__create_test_mount_real(mount_plan=mp)
         response = self.client.get(reverse("v1:mountreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -256,14 +260,18 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         for result in results:
             mount_real = MountReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), mount_real.location.ewkt)
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_all_mount_reals__geojson(self):
         """
         Ensure we can get all mount real objects with GeoJSON location.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        mp = get_mount_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_mount_real()
+            self.__create_test_mount_real(mount_plan=mp)
         response = self.client.get(reverse("v1:mountreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -272,18 +280,23 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         for result in results:
             mount_real = MountReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), GeoJsonDict(mount_real.location.json))
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_mount_real_detail(self):
         """
         Ensure we can get one mount real object.
         """
-        mount_real = self.__create_test_mount_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        mp = get_mount_plan(plan=plan)
+
+        mount_real = self.__create_test_mount_real(mount_plan=mp)
         operation_1 = add_mount_real_operation(mount_real, operation_date=datetime.date(2020, 11, 5))
         operation_2 = add_mount_real_operation(mount_real, operation_date=datetime.date(2020, 11, 15))
         operation_3 = add_mount_real_operation(mount_real, operation_date=datetime.date(2020, 11, 10))
         response = self.client.get(reverse("v1:mountreal-detail", kwargs={"pk": mount_real.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_real.id))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
         self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
@@ -292,13 +305,17 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         """
         Ensure we can get one mount real object.
         """
-        mount_real = self.__create_test_mount_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        mp = get_mount_plan(plan=plan)
+
+        mount_real = self.__create_test_mount_real(mount_plan=mp)
         response = self.client.get(
             reverse("v1:mountreal-detail", kwargs={"pk": mount_real.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(mount_real.id))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
         mount_real_geojson = GeoJsonDict(mount_real.location.json)
         self.assertEqual(mount_real_geojson, response.data.get("location"))
 
@@ -412,14 +429,18 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(mount_real.operations.all().count(), 1)
         self.assertEqual(mount_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
-    def __create_test_mount_real(self):
-        mount_plan = MountPlan.objects.create(
-            mount_type=self.test_mount_type,
-            location=self.test_point,
-            lifecycle=self.test_lifecycle,
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
+    def __create_test_mount_real(self, mount_plan=None):
+        mount_plan = (
+            MountPlan.objects.create(
+                mount_type=self.test_mount_type,
+                location=self.test_point,
+                lifecycle=self.test_lifecycle,
+                owner=self.test_owner,
+                created_by=self.user,
+                updated_by=self.user,
+            )
+            if not mount_plan
+            else mount_plan
         )
         return MountReal.objects.create(
             mount_plan=mount_plan,

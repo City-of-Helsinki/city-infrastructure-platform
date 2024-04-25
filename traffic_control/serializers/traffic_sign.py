@@ -136,6 +136,7 @@ class TrafficSignRealSerializer(
         required=False,
     )
     operations = TrafficSignRealOperationSerializer(many=True, required=False, read_only=True)
+    plan_decision_id = serializers.ReadOnlyField(source="traffic_sign_plan.plan.decision_id", allow_null=True)
 
     class Meta:
         model = TrafficSignReal

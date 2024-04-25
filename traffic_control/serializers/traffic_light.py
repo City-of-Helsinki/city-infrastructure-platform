@@ -133,6 +133,7 @@ class TrafficLightRealSerializer(
         required=False,
     )
     operations = TrafficLightRealOperationSerializer(many=True, required=False, read_only=True)
+    plan_decision_id = serializers.ReadOnlyField(source="traffic_light_plan.plan.decision_id", allow_null=True)
 
     class Meta:
         model = TrafficLightReal

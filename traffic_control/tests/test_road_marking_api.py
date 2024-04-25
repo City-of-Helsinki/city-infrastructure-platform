@@ -17,6 +17,7 @@ from traffic_control.tests.factories import (
     get_road_marking_real,
     get_traffic_control_device_type,
     get_user,
+    PlanFactory,
 )
 from traffic_control.tests.test_base_api import (
     line_location_error_test_data,
@@ -363,9 +364,12 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         """
         Ensure we can get all real road marking objects.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        rmp = get_road_marking_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_road_marking_real()
+            self.__create_test_road_marking_real(road_marking_plan=rmp)
         response = self.client.get(reverse("v1:roadmarkingreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -374,14 +378,18 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         for result in results:
             road_marking_plan = RoadMarkingReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), road_marking_plan.location.ewkt)
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_all_road_marking_reals__geojson(self):
         """
         Ensure we can get all real road marking objects with GeoJSON location.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        rmp = get_road_marking_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_road_marking_real()
+            self.__create_test_road_marking_real(road_marking_plan=rmp)
         response = self.client.get(reverse("v1:roadmarkingreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -390,12 +398,15 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         for result in results:
             road_marking_plan = RoadMarkingReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), GeoJsonDict(road_marking_plan.location.json))
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_road_marking_real_detail(self):
         """
         Ensure we can get one real road marking object.
         """
-        road_marking_real = self.__create_test_road_marking_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        rmp = get_road_marking_plan(plan=plan)
+        road_marking_real = self.__create_test_road_marking_real(road_marking_plan=rmp)
         operation_1 = add_road_marking_real_operation(road_marking_real, operation_date=datetime.date(2020, 11, 5))
         operation_2 = add_road_marking_real_operation(road_marking_real, operation_date=datetime.date(2020, 11, 15))
         operation_3 = add_road_marking_real_operation(road_marking_real, operation_date=datetime.date(2020, 11, 10))
@@ -403,6 +414,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(road_marking_real.id))
         self.assertEqual(road_marking_real.location.ewkt, response.data.get("location"))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
         self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
@@ -411,7 +423,9 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         """
         Ensure we can get one real road marking object with GeoJSON location.
         """
-        road_marking_real = self.__create_test_road_marking_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        rmp = get_road_marking_plan(plan=plan)
+        road_marking_real = self.__create_test_road_marking_real(road_marking_plan=rmp)
         response = self.client.get(
             reverse("v1:roadmarkingreal-detail", kwargs={"pk": road_marking_real.id}),
             data={"geo_format": "geojson"},
@@ -420,6 +434,7 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.data.get("id"), str(road_marking_real.id))
         road_marking_real_geojson = GeoJsonDict(road_marking_real.location.json)
         self.assertEqual(road_marking_real_geojson, response.data.get("location"))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_create_road_marking_real(self):
         """
@@ -535,20 +550,24 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(road_marking_real.operations.all().count(), 1)
         self.assertEqual(road_marking_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
-    def __create_test_road_marking_real(self):
-        road_marking_plan = RoadMarkingPlan.objects.create(
-            device_type=self.test_device_type,
-            value="30",
-            color=RoadMarkingColor.WHITE,
-            location=self.test_point,
-            lifecycle=self.test_lifecycle,
-            material="Maali",
-            is_grinded=True,
-            is_raised=False,
-            road_name="Testingroad",
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
+    def __create_test_road_marking_real(self, road_marking_plan=None):
+        road_marking_plan = (
+            RoadMarkingPlan.objects.create(
+                device_type=self.test_device_type,
+                value="30",
+                color=RoadMarkingColor.WHITE,
+                location=self.test_point,
+                lifecycle=self.test_lifecycle,
+                material="Maali",
+                is_grinded=True,
+                is_raised=False,
+                road_name="Testingroad",
+                owner=self.test_owner,
+                created_by=self.user,
+                updated_by=self.user,
+            )
+            if not road_marking_plan
+            else road_marking_plan
         )
 
         return RoadMarkingReal.objects.create(

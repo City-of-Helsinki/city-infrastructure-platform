@@ -169,6 +169,7 @@ class TrafficSignRealViewSet(TrafficControlViewSet, FileUploadViews):
         .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
+        .select_related("traffic_sign_plan__plan")
     )
     filterset_class = TrafficSignRealFilterSet
     file_queryset = TrafficSignRealFile.objects.all()
