@@ -18,6 +18,7 @@ from traffic_control.tests.factories import (
     get_traffic_light_plan,
     get_traffic_light_real,
     get_user,
+    PlanFactory,
 )
 from traffic_control.tests.test_base_api import (
     point_location_error_test_data,
@@ -360,9 +361,12 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         """
         Ensure we can get all real traffic light objects.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        tlp = get_traffic_light_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_traffic_light_real()
+            self.__create_test_traffic_light_real(traffic_light_plan=tlp)
         response = self.client.get(reverse("v1:trafficlightreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -371,14 +375,18 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         for result in results:
             traffic_light_real = TrafficLightReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), traffic_light_real.location.ewkt)
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_all_traffic_light_reals__geojson(self):
         """
         Ensure we can get all real traffic light objects with GeoJSON location.
         """
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        tlp = get_traffic_light_plan(plan=plan)
+
         count = 3
         for i in range(count):
-            self.__create_test_traffic_light_real()
+            self.__create_test_traffic_light_real(traffic_light_plan=tlp)
         response = self.client.get(reverse("v1:trafficlightreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("count"), count)
@@ -387,12 +395,15 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         for result in results:
             traffic_light_real = TrafficLightReal.objects.get(id=result.get("id"))
             self.assertEqual(result.get("location"), GeoJsonDict(traffic_light_real.location.json))
+            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
 
     def test_get_traffic_light_real_detail(self):
         """
         Ensure we can get one real traffic light object.
         """
-        traffic_light_real = self.__create_test_traffic_light_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        tlp = get_traffic_light_plan(plan=plan)
+        traffic_light_real = self.__create_test_traffic_light_real(traffic_light_plan=tlp)
         operation_1 = add_traffic_light_real_operation(traffic_light_real, operation_date=datetime.date(2020, 11, 5))
         operation_2 = add_traffic_light_real_operation(traffic_light_real, operation_date=datetime.date(2020, 11, 15))
         operation_3 = add_traffic_light_real_operation(traffic_light_real, operation_date=datetime.date(2020, 11, 10))
@@ -400,6 +411,7 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_light_real.id))
         self.assertEqual(traffic_light_real.location.ewkt, response.data.get("location"))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
         # verify operations are ordered by operation_date
         operation_ids = [operation["id"] for operation in response.data["operations"]]
         self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
@@ -408,13 +420,16 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         """
         Ensure we can get one real traffic light object with GeoJSON location.
         """
-        traffic_light_real = self.__create_test_traffic_light_real()
+        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+        tlp = get_traffic_light_plan(plan=plan)
+        traffic_light_real = self.__create_test_traffic_light_real(traffic_light_plan=tlp)
         response = self.client.get(
             reverse("v1:trafficlightreal-detail", kwargs={"pk": traffic_light_real.id}),
             data={"geo_format": "geojson"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), str(traffic_light_real.id))
+        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
         traffic_light_real_geojson = GeoJsonDict(traffic_light_real.location.json)
         self.assertEqual(traffic_light_real_geojson, response.data.get("location"))
 
@@ -534,18 +549,22 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(traffic_light_real.operations.all().count(), 1)
         self.assertEqual(traffic_light_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
-    def __create_test_traffic_light_real(self):
-        traffic_light_plan = TrafficLightPlan.objects.create(
-            device_type=self.test_device_type,
-            location=self.test_point,
-            type=TrafficLightType.SIGNAL,
-            lifecycle=self.test_lifecycle,
-            mount_type=get_mount_type(),
-            road_name="Testingroad",
-            sound_beacon=TrafficLightSoundBeaconValue.YES,
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
+    def __create_test_traffic_light_real(self, traffic_light_plan=None):
+        traffic_light_plan = (
+            TrafficLightPlan.objects.create(
+                device_type=self.test_device_type,
+                location=self.test_point,
+                type=TrafficLightType.SIGNAL,
+                lifecycle=self.test_lifecycle,
+                mount_type=get_mount_type(),
+                road_name="Testingroad",
+                sound_beacon=TrafficLightSoundBeaconValue.YES,
+                owner=self.test_owner,
+                created_by=self.user,
+                updated_by=self.user,
+            )
+            if not traffic_light_plan
+            else traffic_light_plan
         )
 
         return TrafficLightReal.objects.create(

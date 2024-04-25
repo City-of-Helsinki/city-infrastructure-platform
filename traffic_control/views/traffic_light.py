@@ -140,6 +140,7 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
         .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
+        .select_related("traffic_light_plan__plan")
     )
     filterset_class = TrafficLightRealFilterSet
     file_queryset = TrafficLightRealFile.objects.all()

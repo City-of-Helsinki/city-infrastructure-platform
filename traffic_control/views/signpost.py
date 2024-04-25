@@ -131,6 +131,7 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
+        .select_related("signpost_plan__plan")
     )
     filterset_class = SignpostRealFilterSet
     file_queryset = SignpostRealFile.objects.all()

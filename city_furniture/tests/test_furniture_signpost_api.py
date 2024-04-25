@@ -23,6 +23,7 @@ from traffic_control.tests.factories import (
     get_owner,
     get_responsible_entity_project,
     get_user,
+    PlanFactory,
 )
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
 
@@ -50,11 +51,15 @@ def test__furniture_signpost_plan__list(geo_format):
 
 
 @pytest.mark.parametrize("geo_format", ("", "geojson"))
+@pytest.mark.parametrize("plan_decision_id", (None, "TEST-DECISION-ID"))
 @pytest.mark.django_db
-def test__furniture_signpost_real__list(geo_format):
+def test__furniture_signpost_real__list(geo_format, plan_decision_id):
     client = get_api_client()
+    plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
+    fsp = get_furniture_signpost_plan(plan=plan)
+
     for owner_name in ["foo", "bar", "baz"]:
-        get_furniture_signpost_real(owner=get_owner(name_fi=owner_name))
+        get_furniture_signpost_real(owner=get_owner(name_fi=owner_name), furniture_signpost_plan=fsp)
 
     response = client.get(reverse("v1:furnituresignpostreal-list"), data={"geo_format": geo_format})
     response_data = response.json()
@@ -64,6 +69,7 @@ def test__furniture_signpost_real__list(geo_format):
     for result in response_data["results"]:
         obj = FurnitureSignpostReal.objects.get(pk=result["id"])
         assert result["device_type_description"] == DEFAULT_DEVICE_TYPE_DESCRIPTION
+        assert result["plan_decision_id"] == plan_decision_id
         if geo_format == "geojson":
             assert result["location"] == GeoJsonDict(obj.location.json)
         else:
@@ -93,9 +99,12 @@ def test__furniture_signpost_plan__detail(geo_format):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("geo_format", ("", "geojson"))
-def test__furniture_signpost_real__detail(geo_format):
+@pytest.mark.parametrize("plan_decision_id", (None, "TEST-DECISION-ID"))
+def test__furniture_signpost_real__detail(geo_format, plan_decision_id):
     client = get_api_client()
-    obj = get_furniture_signpost_real()
+    plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
+    fsp = get_furniture_signpost_plan(plan=plan)
+    obj = get_furniture_signpost_real(furniture_signpost_plan=fsp)
     operation_1 = add_furniture_signpost_real_operation(obj, operation_date=datetime.date(2020, 11, 5))
     operation_2 = add_furniture_signpost_real_operation(obj, operation_date=datetime.date(2020, 11, 15))
     operation_3 = add_furniture_signpost_real_operation(obj, operation_date=datetime.date(2020, 11, 10))
@@ -112,6 +121,7 @@ def test__furniture_signpost_real__detail(geo_format):
     operation_ids = [operation["id"] for operation in response_data["operations"]]
     assert response_data["device_type_description"] == DEFAULT_DEVICE_TYPE_DESCRIPTION
     assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]
+    assert response_data["plan_decision_id"] == plan_decision_id
     if geo_format == "geojson":
         assert response_data["location"] == GeoJsonDict(obj.location.json)
     else:
