@@ -331,6 +331,9 @@ BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 
 # Import / Export
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+# Require add permission even to export template
+IMPORT_EXPORT_EXPORT_PERMISSION_CODE = "add"
+
 
 # WFS
 GISSERVER_USE_DB_RENDERING = False
