@@ -12,7 +12,18 @@ class SoftDeleteQuerySet(models.QuerySet):
         return self.filter(is_active=False)
 
     def soft_delete(self, user):
-        self.update(is_active=False, deleted_at=timezone.now(), deleted_by=user)
+        """Django does not emit any signals when doing update or any bulk operation.
+        LogEntries need to be manually created, instead call save on each object separately.
+        As this kinda of operation is kinda rare on multititudes, this is now done by saving each object separately.
+        if performance becomes an issue, calculating differeces and bulk create auditlog entries needs to be
+        done manually.
+        """
+        deleted_at = timezone.now()
+        for obj in self:
+            obj.is_active = False
+            obj.deleted_at = deleted_at
+            obj.deleted_by = user
+            obj.save(update_fields=["is_active", "deleted_at", "deleted_by"])
 
 
 def order_queryset_by_z_coord_desc(queryset, geometry_field="location"):

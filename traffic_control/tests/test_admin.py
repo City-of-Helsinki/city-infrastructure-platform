@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from auditlog.models import LogEntry
 from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.gis.geos import Point
@@ -80,7 +81,6 @@ class SoftDeleteAdminTestCase(TestCase):
     request_factory = RequestFactory()
 
     def setUp(self):
-        self.user = get_user()
         self.admin_user = get_user(admin=True)
         self.barrier_real = get_barrier_real()
         self.site = AdminSite()
@@ -114,6 +114,17 @@ class SoftDeleteAdminTestCase(TestCase):
         self.assertFalse(self.barrier_real.is_active)
         self.assertIsInstance(self.barrier_real.deleted_at, datetime)
         self.assertEqual(self.barrier_real.deleted_by, self.admin_user)
+
+        # LogEntries appear to be done by system user as no login is actually performed
+        # -> actor == None. A separate ticket for writing better test cases for soft deletes is created
+        create_entries = LogEntry.objects.get_for_object(self.barrier_real).filter(action=LogEntry.Action.CREATE)
+        self.assertEqual(create_entries.count(), 1)
+        create_entry = create_entries[0]
+        self.assertEqual(create_entry.actor, None)
+        update_entries = LogEntry.objects.get_for_object(self.barrier_real).filter(action=LogEntry.Action.UPDATE)
+        self.assertEqual(update_entries.count(), 1)
+        update_entry = create_entries[0]
+        self.assertEqual(update_entry.actor, None)
 
     def test_action_undo_soft_delete(self):
         request = self.request_factory.post("/")
