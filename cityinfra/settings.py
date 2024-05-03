@@ -285,6 +285,9 @@ REST_FRAMEWORK = {
     "OIDC_LEEWAY": env("TOKEN_AUTH_MAX_TOKEN_AGE"),
     "GROUP_CLAIM_NAME": "groups",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
@@ -333,7 +336,6 @@ BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 # Require add permission even to export template
 IMPORT_EXPORT_EXPORT_PERMISSION_CODE = "add"
-
 
 # WFS
 GISSERVER_USE_DB_RENDERING = False
