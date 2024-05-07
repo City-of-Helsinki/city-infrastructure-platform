@@ -350,5 +350,7 @@ class TrafficLightRealFile(AbstractFileModel):
 
 
 auditlog.register(TrafficLightPlan)
+auditlog.register(TrafficLightPlanFile)
 auditlog.register(TrafficLightReal)
+auditlog.register(TrafficLightRealFile)
 auditlog.register(TrafficLightPlanReplacement)

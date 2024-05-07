@@ -275,5 +275,7 @@ class BarrierRealFile(AbstractFileModel):
 
 
 auditlog.register(BarrierPlan)
+auditlog.register(BarrierPlanFile)
 auditlog.register(BarrierReal)
+auditlog.register(BarrierRealFile)
 auditlog.register(BarrierPlanReplacement)

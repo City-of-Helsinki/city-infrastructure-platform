@@ -423,4 +423,6 @@ class TrafficSignRealFile(AbstractFileModel):
 
 
 auditlog.register(TrafficSignPlan)
+auditlog.register(TrafficSignPlanFile)
 auditlog.register(TrafficSignReal)
+auditlog.register(TrafficSignRealFile)

@@ -345,4 +345,6 @@ class FurnitureSignpostRealFile(AbstractFileModel):
 
 
 auditlog.register(FurnitureSignpostPlan)
+auditlog.register(FurnitureSignpostPlanFile)
 auditlog.register(FurnitureSignpostReal)
+auditlog.register(FurnitureSignpostRealFile)
