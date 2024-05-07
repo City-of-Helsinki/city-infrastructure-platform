@@ -378,5 +378,7 @@ class SignpostRealFile(AbstractFileModel):
 
 
 auditlog.register(SignpostPlan)
+auditlog.register(SignpostPlanFile)
 auditlog.register(SignpostReal)
+auditlog.register(SignpostRealFile)
 auditlog.register(SignpostPlanReplacement)

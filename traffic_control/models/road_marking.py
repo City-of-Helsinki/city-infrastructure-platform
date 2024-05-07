@@ -382,5 +382,7 @@ class RoadMarkingRealFile(AbstractFileModel):
 
 
 auditlog.register(RoadMarkingPlan)
+auditlog.register(RoadMarkingPlanFile)
 auditlog.register(RoadMarkingReal)
+auditlog.register(RoadMarkingRealFile)
 auditlog.register(RoadMarkingPlanReplacement)
