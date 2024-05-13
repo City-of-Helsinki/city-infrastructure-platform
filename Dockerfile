@@ -1,7 +1,7 @@
 ARG VERSION=""
 
 # ==============================
-FROM python:3.8-slim AS base
+FROM python:3.11-slim AS base
 # ==============================
 LABEL vendor="City of Helsinki"
 ENV PYTHONUNBUFFERED 1
