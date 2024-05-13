@@ -1,3 +1,5 @@
+from enum import member
+
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -32,6 +34,7 @@ class ArrowDirection(Enum):
     TOP_LEFT = 7
     BOTTOM_LEFT = 8
 
+    @member
     class Labels:
         UP = _("Up")
         DOWN = _("Down")

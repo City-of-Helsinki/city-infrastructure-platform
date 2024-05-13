@@ -1,3 +1,5 @@
+from enum import member
+
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -34,6 +36,7 @@ class LineDirection(Enum):
     FORWARD = "FORWARD"
     BACKWARD = "BACKWARD"
 
+    @member
     class Labels:
         FORWARD = _("Forward")
         BACKWARD = _("Backward")
@@ -49,6 +52,7 @@ class ArrowDirection(Enum):
     RIGHT_AND_LEFT = 7
     STRAIGHT_RIGHT_AND_LEFT = 8
 
+    @member
     class Labels:
         STRAIGHT = _("Straight")
         RIGHT = _("Right")
@@ -64,6 +68,7 @@ class RoadMarkingColor(Enum):
     WHITE = 1
     YELLOW = 2
 
+    @member
     class Labels:
         WHITE = _("White")
         YELLOW = _("Yellow")
@@ -77,6 +82,7 @@ class LocationSpecifier(Enum):
     MIDDLE_OF_LANE = 5
     LEFT_SIDE_OF_LANE_OR_ROAD = 6
 
+    @member
     class Labels:
         BOTH_SIDES_OF_ROAD = _("Both sides of road")
         RIGHT_SIDE_OF_LANE = _("Right side of lane")

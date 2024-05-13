@@ -1,3 +1,5 @@
+from enum import member
+
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -33,6 +35,7 @@ class ConnectionType(Enum):
     CLOSED = 1
     OPEN_OUT = 2
 
+    @member
     class Labels:
         CLOSED = _("Closed")
         OPEN_OUT = _("Open out")
@@ -43,6 +46,7 @@ class Reflective(Enum):
     NO = "NO"
     RED_YELLOW = "RED_YELLOW"
 
+    @member
     class Labels:
         YES = _("Yes")
         NO = _("No")
@@ -54,6 +58,7 @@ class LocationSpecifier(Enum):
     RIGHT = 2
     LEFT = 3
 
+    @member
     class Labels:
         MIDDLE = _("Middle of road or lane")
         RIGHT = _("Right of road or lane")

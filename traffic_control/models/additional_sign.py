@@ -1,3 +1,5 @@
+from enum import member
+
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -36,6 +38,7 @@ class Color(Enum):
     BLUE = 1
     YELLOW = 2
 
+    @member
     class Labels:
         BLUE = _("Blue")
         YELLOW = _("Yellow")

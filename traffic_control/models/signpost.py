@@ -1,3 +1,5 @@
+from enum import member
+
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -38,6 +40,7 @@ class LocationSpecifier(Enum):
     MIDDLE = 4
     VERTICAL = 5
 
+    @member
     class Labels:
         RIGHT = _("Right side")
         LEFT = _("Left side")
