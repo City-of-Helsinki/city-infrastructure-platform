@@ -1,3 +1,5 @@
+from enum import member
+
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.forms import forms
@@ -15,6 +17,7 @@ class _TestEnum(Enum):
     GREEN = 2
     BLUE = 3
 
+    @member
     class Labels:
         RED = "Red"
         GREEN = "Green"

@@ -1,3 +1,5 @@
+from enum import member
+
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum
 
@@ -22,6 +24,7 @@ class Condition(Enum):
     GOOD = 4
     VERY_GOOD = 5
 
+    @member
     class Labels:
         VERY_BAD = _("Very bad")
         BAD = _("Bad")
@@ -39,6 +42,7 @@ class DeviceTypeTargetModel(Enum):
     ADDITIONAL_SIGN = "additional_sign"
     OTHER = "other"
 
+    @member
     class Labels:
         BARRIER = _("Barrier")
         ROAD_MARKING = _("Road marking")
@@ -56,6 +60,7 @@ class InstallationStatus(Enum):
     MISSING = "MISSING"
     OTHER = "OTHER"
 
+    @member
     class Labels:
         IN_USE = _("In use")
         COVERED = _("Covered")
@@ -77,6 +82,7 @@ class LaneNumber(Enum):
     ADDITIONAL_LEFT_4 = "X8"
     ADDITIONAL_RIGHT_4 = "X9"
 
+    @member
     class Labels:
         MAIN_1 = _("Main lane")
         MAIN_2 = _("Main lane")
@@ -107,6 +113,7 @@ class LaneType(Enum):
     PEDESTRIAN = 21
     BIKE = 22
 
+    @member
     class Labels:
         MAIN = _("Main lane")
         FAST = _("Fast lane")
@@ -130,6 +137,7 @@ class Lifecycle(Enum):
     TEMPORARILY_INACTIVE = 5
     INACTIVE = 6
 
+    @member
     class Labels:
         ACTIVE = _("Active")
         TEMPORARILY_ACTIVE = _("Temporarily active")
@@ -142,6 +150,7 @@ class Reflection(Enum):
     R2 = "R2"
     R3 = "R3"
 
+    @member
     class Labels:
         R1 = _("r1")
         R2 = _("r2")
@@ -153,6 +162,7 @@ class Size(Enum):
     MEDIUM = "M"
     LARGE = "L"
 
+    @member
     class Labels:
         SMALL = _("Small")
         MEDIUM = _("Medium")
@@ -163,6 +173,7 @@ class Surface(Enum):
     CONVEX = "CONVEX"
     FLAT = "FLAT"
 
+    @member
     class Labels:
         CONVEX = _("Convex")
         FLAT = _("Flat")
@@ -174,6 +185,7 @@ class TrafficControlDeviceTypeType(Enum):
     TRANSVERSE = "transverse"
     OTHER = "other"
 
+    @member
     class Labels:
         LONGITUDINAL = _("Longitudinal")
         TRANSVERSE = _("Transverse")
@@ -188,6 +200,7 @@ class OrganizationLevel(Enum):
     UNIT = 30
     PROJECT = 50
 
+    @member
     class Labels:
         DIVISION = _("division")
         SERVICE = _("service")

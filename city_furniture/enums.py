@@ -1,3 +1,5 @@
+from enum import member
+
 from django.utils.translation import gettext_lazy as _
 from enumfields import Enum
 
@@ -5,6 +7,7 @@ from enumfields import Enum
 class CityFurnitureDeviceTypeTargetModel(Enum):
     FURNITURE_SIGNPOST = "furniture_signpost"
 
+    @member
     class Labels:
         FURNITURE_SIGNPOST = _("Furniture signpost")
 
@@ -17,6 +20,7 @@ class CityFurnitureClassType(Enum):
     SECURITY = 1020
     OTHERS = 1030
 
+    @member
     class Labels:
         TRAFFIC = _("Traffic")
         COMMUNICATION = _("Communication")
@@ -82,6 +86,7 @@ class CityFurnitureFunctionType(Enum):
     BENCH = 1530
     OTHERS = 1540
 
+    @member
     class Labels:
         COMMUNICATION_FIXTURE = _("Communication fixture")
         TELEPHONE_BOX = _("Telephone box")

@@ -1,3 +1,5 @@
+from enum import member
+
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -34,6 +36,7 @@ class TrafficLightSoundBeaconValue(Enum):
     NO = 1
     YES = 2
 
+    @member
     class Labels:
         NO = _("No")
         YES = _("Yes")
@@ -44,6 +47,7 @@ class LocationSpecifier(Enum):
     ABOVE = 2
     ISLAND = 3
 
+    @member
     class Labels:
         RIGHT = _("Right side of the road (relative to traffic direction)")
         ABOVE = _("Above the lanes")
@@ -61,6 +65,7 @@ class TrafficLightType(Enum):
     PEDESTRIAN = "10"
     LANE = "11"
 
+    @member
     class Labels:
         SIGNAL = _("Traffic signal")
         ARROW_RIGHT = _("Right-turn arrow signal")
@@ -79,6 +84,7 @@ class VehicleRecognition(Enum):
     RADAR = 3
     OTHER = 4
 
+    @member
     class Labels:
         LOOP = _("Loop sensor")
         INFRARED = _("Infrared sensor")
@@ -90,6 +96,7 @@ class PushButton(Enum):
     NO = 1
     YES = 2
 
+    @member
     class Labels:
         NO = _("No")
         YES = _("Yes")
