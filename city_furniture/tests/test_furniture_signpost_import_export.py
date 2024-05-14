@@ -14,8 +14,8 @@ from city_furniture.tests.factories import get_furniture_signpost_plan, get_furn
 from traffic_control.enums import OrganizationLevel
 from traffic_control.models import GroupResponsibleEntity, ResponsibleEntity
 from traffic_control.tests.factories import get_mount_plan, get_mount_real, get_responsible_entity_project, get_user
-from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
 from traffic_control.tests.test_base_api import test_point_2
+from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
 
 @pytest.mark.django_db

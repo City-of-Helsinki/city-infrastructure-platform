@@ -18,8 +18,8 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
 )
-from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
 from traffic_control.tests.test_base_api import test_point
+from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
 
 @pytest.mark.django_db

@@ -54,7 +54,7 @@ from traffic_control.tests.factories import (
     get_traffic_sign_real,
     get_user,
 )
-from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
+from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
 _models_resources_factories = (
     (FurnitureSignpostPlan, FurnitureSignpostPlanResource, get_furniture_signpost_plan),
