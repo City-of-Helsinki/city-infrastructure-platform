@@ -34,8 +34,8 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
 )
-from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3_3d, test_point_3d, test_point_5_3d
+from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
 model_factory_resource = (
     (TrafficSignPlan, get_traffic_sign_plan, TrafficSignPlanResource),

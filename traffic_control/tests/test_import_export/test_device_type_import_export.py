@@ -6,7 +6,7 @@ from traffic_control.enums import DeviceTypeTargetModel, TrafficControlDeviceTyp
 from traffic_control.models import TrafficControlDeviceType
 from traffic_control.resources.device_type import TrafficControlDeviceTypeResource
 from traffic_control.tests.factories import get_traffic_control_device_type
-from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
+from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
 
 @pytest.mark.parametrize(

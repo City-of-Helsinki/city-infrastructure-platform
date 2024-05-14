@@ -3,7 +3,7 @@ import pytest
 from traffic_control.models import MountPlan, MountReal
 from traffic_control.resources import MountPlanResource, MountPlanToRealTemplateResource, MountRealResource
 from traffic_control.tests.factories import get_mount_plan, get_mount_real
-from traffic_control.tests.import_export.utils import file_formats, get_import_dataset
+from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
 
 @pytest.mark.django_db
