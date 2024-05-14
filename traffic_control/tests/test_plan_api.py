@@ -4,6 +4,7 @@ from datetime import datetime
 import pytest
 from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon
+from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
@@ -69,6 +70,7 @@ def test_plan_create():
 
 
 @pytest.mark.django_db
+@override_settings(LANGUAGE_CODE="en")
 def test_plan_create_with_existing_diary_number():
     """Test plan create with existing diary number"""
     user = get_user(admin=True)
@@ -77,7 +79,7 @@ def test_plan_create_with_existing_diary_number():
 
     response = _post_plan_create(test_multi_polygon.ewkt, user)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert str(response.data.get("diary_number")[0]) == "Plan jolla on tämä Diary number, on jo olemassa."
+    assert str(response.data.get("diary_number")[0]) == "Plan with this Diary number already exists."
     assert Plan.objects.count() == 1
 
 
