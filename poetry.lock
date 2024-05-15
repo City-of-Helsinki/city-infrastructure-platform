@@ -590,13 +590,13 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 name = "django-auditlog"
-version = "2.3.0"
+version = "3.0.0"
 description = "Audit log app for Django"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "django-auditlog-2.3.0.tar.gz", hash = "sha256:b9d3acebb64f3f2785157efe3f2f802e0929aafc579d85bbfb9827db4adab532"},
-    {file = "django_auditlog-2.3.0-py3-none-any.whl", hash = "sha256:7bc2c87e4aff62dec9785d1b2359a2b27148f8c286f8a52b9114fc7876c5a9f7"},
+    {file = "django-auditlog-3.0.0.tar.gz", hash = "sha256:9de49f80a4911135d136017123cd73461f869b4947eec14d5e76db4b88182f3f"},
+    {file = "django_auditlog-3.0.0-py3-none-any.whl", hash = "sha256:92db1cf4a51ceca5c26b3ff46997d9e3305a02da1bd435e2efb5b8b6d300ce1f"},
 ]
 
 [package.dependencies]
@@ -2711,4 +2711,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11.9"
-content-hash = "4909111fad39bcaa7092c061d5ab491208cd0ca2466a280949727c0fbbf552d5"
+content-hash = "53128690be0f84f9b544a568b4e2b7dc349c6ebd4eab06650e1652fe03be9d03"

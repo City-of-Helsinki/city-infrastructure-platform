@@ -5,7 +5,6 @@ import factory
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.geos import MultiPolygon
-from django.db.models import Value
 from rest_framework.test import APIClient
 
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle, OrganizationLevel, TrafficControlDeviceTypeType
@@ -45,7 +44,6 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealOperation,
 )
-from traffic_control.models.common import JSONSchemaField
 from traffic_control.services.additional_sign import additional_sign_plan_replace
 from traffic_control.services.barrier import barrier_plan_replace
 from traffic_control.services.mount import mount_plan_replace
@@ -416,10 +414,6 @@ def get_traffic_control_device_type(
     type: Optional[TrafficControlDeviceTypeType] = None,
     content_schema: Optional[Any] = None,
 ) -> TrafficControlDeviceType:
-    if content_schema is None:
-        # Distinguish between JSON null and SQL NULL
-        content_schema = Value(None, output_field=JSONSchemaField())
-
     dt = TrafficControlDeviceType.objects.get_or_create(
         code=code,
         icon=icon,
@@ -503,10 +497,6 @@ def get_additional_sign_plan(
     user = get_user("test_user")
     owner = owner or get_owner()
 
-    if content_s is None:
-        # Distinguish between JSON null and SQL NULL
-        content_s = Value(None, JSONSchemaField())
-
     kwargs = {}
     if order is not None:
         kwargs["order"] = order
@@ -547,10 +537,6 @@ def get_additional_sign_real(
 ) -> AdditionalSignReal:
     user = get_user("test_user")
     owner = owner or get_owner()
-
-    if content_s is None:
-        # Distinguish between JSON null and SQL NULL
-        content_s = Value(None, JSONSchemaField())
 
     kwargs = {}
     if order is not None:
