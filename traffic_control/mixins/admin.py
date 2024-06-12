@@ -107,7 +107,7 @@ class SoftDeleteAdminMixin:
     """
 
     exclude = ("is_active", "deleted_at", "deleted_by")
-    actions = ["action_soft_delete", "action_undo_soft_delete"]
+    actions = ["action_soft_delete"]
     list_filter = [
         SoftDeleteFilter,
     ]
@@ -117,12 +117,6 @@ class SoftDeleteAdminMixin:
 
     action_soft_delete.short_description = _("Mark selected objects as deleted")
     action_soft_delete.allowed_permissions = ("change", "delete")
-
-    def action_undo_soft_delete(self, request, queryset):
-        queryset.update(is_active=True, deleted_by=None, deleted_at=None)
-
-    action_undo_soft_delete.short_description = _("Mark selected objects as not deleted")
-    action_undo_soft_delete.allowed_permissions = ("change",)
 
 
 class UpdatePlanLocationAdminMixin:
