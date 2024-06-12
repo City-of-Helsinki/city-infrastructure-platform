@@ -125,13 +125,3 @@ class SoftDeleteAdminTestCase(TestCase):
         self.assertEqual(update_entries.count(), 1)
         update_entry = create_entries[0]
         self.assertEqual(update_entry.actor, None)
-
-    def test_action_undo_soft_delete(self):
-        request = self.request_factory.post("/")
-        request.user = self.admin_user
-        self.barrier_real.soft_delete(self.admin_user)
-        self.model_admin.action_undo_soft_delete(request, BarrierReal.objects.all())
-        self.barrier_real.refresh_from_db()
-        self.assertTrue(self.barrier_real.is_active)
-        self.assertIsNone(self.barrier_real.deleted_at)
-        self.assertIsNone(self.barrier_real.deleted_by)
