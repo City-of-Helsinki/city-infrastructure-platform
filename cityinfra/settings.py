@@ -196,6 +196,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "drf_custom_auth.middleware.DRFCustomAuthMiddleware",
     "auditlog_custom.middleware.AuditlogMiddleware",
 ]
 

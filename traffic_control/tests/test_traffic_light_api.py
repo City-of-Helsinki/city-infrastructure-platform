@@ -2,6 +2,7 @@ import datetime
 import json
 
 import pytest
+from auditlog.models import LogEntry
 from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
@@ -73,7 +74,8 @@ def test__traffic_light_plan__valid_device_type(target_model):
     """
     Ensure that device types with supported target_model value are allowed.
     """
-    client = get_api_client(user=get_user(admin=True))
+    user = get_user(admin=True)
+    client = get_api_client(user=user, use_token_auth=True)
     traffic_light_plan = get_traffic_light_plan()
     device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
@@ -87,6 +89,18 @@ def test__traffic_light_plan__valid_device_type(target_model):
     traffic_light_plan.refresh_from_db()
     assert response.status_code == status.HTTP_200_OK
     assert traffic_light_plan.device_type == device_type
+
+    # Just a quick one test modified for checking auditlog actor setting
+    # There is a separate ticket for testing auditlog writing
+    log_entries = LogEntry.objects.get_for_object(traffic_light_plan)
+    # one create and one update entry
+    assert log_entries.count() == 2
+    create_entry = log_entries.get(action=LogEntry.Action.CREATE)
+    # created directly to database -> no actor
+    assert create_entry.actor is None
+    update_entry = log_entries.get(action=LogEntry.Action.UPDATE)
+    # created via API -> actor should be set
+    assert update_entry.actor == user
 
 
 @pytest.mark.django_db

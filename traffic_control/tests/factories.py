@@ -5,6 +5,7 @@ import factory
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.geos import MultiPolygon
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle, OrganizationLevel, TrafficControlDeviceTypeType
@@ -560,11 +561,14 @@ def get_additional_sign_real(
     return asr
 
 
-def get_api_client(user=None):
+def get_api_client(user=None, use_token_auth=False):
     api_client = APIClient()
     api_client.default_format = "json"
-    if user:
+    if user and not use_token_auth:
         api_client.force_authenticate(user=user)
+    if user and use_token_auth:
+        token = Token.objects.create(user=user)
+        api_client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
     return api_client
 
 
