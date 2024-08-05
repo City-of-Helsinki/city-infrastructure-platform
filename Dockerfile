@@ -1,7 +1,7 @@
 ARG VERSION=""
 
 # ==============================
-FROM python:3.11-slim AS base
+FROM public.ecr.aws/docker/library/python:3.11-slim AS base
 # ==============================
 LABEL vendor="City of Helsinki"
 ENV PYTHONUNBUFFERED 1
@@ -56,7 +56,7 @@ USER appuser
 EXPOSE 8000
 
 # ===================================
-FROM node:16-slim AS build
+FROM public.ecr.aws/docker/library/node:16-slim AS build
 # ===================================
 WORKDIR /map-view
 COPY map-view/ .
