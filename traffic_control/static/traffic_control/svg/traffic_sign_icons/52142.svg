@@ -1,97 +1,42 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   height="397.35001"
-   width="397.35001"
-   xml:space="preserve"
-   viewBox="0 0 397.34999 397.34999"
-   y="0px"
-   x="0px"
-   id="Layer_1"
-   version="1.1"><metadata
-   id="metadata27"><rdf:RDF><cc:Work
-       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
-   id="defs25" />
-<style
-   id="style2"
-   type="text/css">
-	.st0{fill:#005EB8;stroke:#005EB8;stroke-width:0.5;stroke-miterlimit:10;}
-	.st1{fill:#FFFFFF;}
-	.st2{fill:#005EB8;}
-</style>
-<g
-   transform="translate(-13.92,-13.92)"
-   id="LWPOLYLINE_47_">
-	<rect
-   style="fill:#005eb8;stroke:#005eb8;stroke-width:0.5;stroke-miterlimit:10"
-   id="rect4"
-   height="396.85001"
-   width="396.85001"
-   class="st0"
-   y="14.17"
-   x="14.17" />
-</g>
-<g
-   transform="translate(-13.92,-13.92)"
-   id="LWPOLYLINE_51_">
-	<path
-   style="fill:#ffffff"
-   id="path7"
-   d="M 14.17,384.57 V 40.63 c 0,-14.61 11.85,-26.46 26.45,-26.46 h 343.94 c 14.61,0 26.45,11.84 26.45,26.46 v 343.94 c 0,14.61 -11.84,26.46 -26.45,26.46 H 40.62 C 26.02,411.02 14.17,399.18 14.17,384.57 Z"
-   class="st1" />
-</g>
-<g
-   transform="translate(-13.92,-13.92)"
-   id="LWPOLYLINE_52_">
-	<path
-   style="fill:#005eb8"
-   id="path10"
-   d="M 27.4,384.57 V 40.63 c 0,-7.3 5.92,-13.23 13.22,-13.23 h 343.94 c 7.3,0 13.22,5.93 13.22,13.23 v 343.94 c 0,7.31 -5.92,13.23 -13.22,13.23 H 40.62 c -7.3,0 -13.22,-5.93 -13.22,-13.23 z"
-   class="st2" />
-</g>
-<g
-   transform="translate(-13.92,-13.92)"
-   id="LWPOLYLINE_50_">
-	<rect
-   style="fill:#ffffff"
-   id="rect13"
-   height="317.48001"
-   width="26.450001"
-   class="st1"
-   y="53.860001"
-   x="272.13" />
-</g>
-<g
-   transform="translate(-13.92,-13.92)"
-   id="LWPOLYLINE_53_">
-	
-		<rect
-   style="fill:#ffffff"
-   id="rect16"
-   height="66.139999"
-   width="119.06"
-   class="st1"
-   transform="matrix(0.866,-0.5,0.5,0.866,-57.8386,110.6626)"
-   y="130.19"
-   x="118.05" />
-</g>
-<g
-   transform="translate(-13.92,-13.92)"
-   id="LWPOLYLINE_55_">
-	
-		<rect
-   style="fill:#ffffff"
-   id="rect19"
-   height="66.139999"
-   width="119.06"
-   class="st1"
-   transform="matrix(0.866,-0.5,0.5,0.866,-107.5506,123.9827)"
-   y="229.62"
-   x="118.05" />
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 425.2 425.2">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #007ac2;
+      }
+
+      .cls-1, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-2" width="425.2" height="425.2"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M0,396.9V28.3C0,12.7,12.7,0,28.3,0h368.5C412.5,0,425.2,12.7,425.2,28.3v368.5c0,15.7-12.7,28.3-28.3,28.3H28.3C12.7,425.2,0,412.5,0,396.9Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-1" d="M14.2,396.9V28.3c0-7.8,6.3-14.2,14.2-14.2h368.5c7.8,0,14.2,6.4,14.2,14.2v368.5c0,7.8-6.3,14.2-14.2,14.2H28.3c-7.8,0-14.2-6.4-14.2-14.2Z"/>
+  </g>
+  <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="276.4" y="42.5" width="28.3" height="340.2"/>
+  </g>
+  <g id="LWPOLYLINE-5" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="111.3" y="124.3" width="127.6" height="70.9" transform="translate(-56.4 108.9) rotate(-30)"/>
+  </g>
+  <g id="LWPOLYLINE-6" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="111.3" y="230.8" width="127.6" height="70.9" transform="translate(-109.7 123.2) rotate(-30)"/>
+  </g>
 </svg>

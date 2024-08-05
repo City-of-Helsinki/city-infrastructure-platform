@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 300">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #e4002b;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2, .cls-4 {
+        fill: #005eb8;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        stroke: #005eb8;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-4" width="400" height="300"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M400,273.3c0,14.7-11.9,26.7-26.7,26.7H26.7C11.9,300,0,288.1,0,273.3V26.7C0,11.9,12,0,26.7,0h346.7c14.7,0,26.7,11.9,26.7,26.7v246.7h0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-2" d="M386.7,273.3c0,7.4-6,13.3-13.3,13.3H26.7c-7.4,0-13.3-6-13.3-13.3V26.7c0-7.4,6-13.3,13.3-13.3h346.7c7.4,0,13.3,6,13.3,13.3v246.7Z"/>
+  </g>
+  <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="231.4" y="223.8" width="31.1" height="12.4"/>
+  </g>
+  <g id="LWPOLYLINE-5" data-name="LWPOLYLINE">
+    <polygon class="cls-3" points="46.7 76.7 126.7 76.7 133.3 143.3 120 223.3 53.3 223.3 40 143.3 46.7 76.7"/>
+  </g>
+  <g id="LWPOLYLINE-6" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="233.6" y="146" width="26.7" height="8"/>
+  </g>
+  <g id="LWPOLYLINE-7" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M173.4,186h4.2c-7.4-23.4-7.4-48.6,0-72h-4.2c-13.4,22.1-13.4,49.9,0,72Z"/>
+  </g>
+  <g id="LWPOLYLINE-8" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M350.6,186h-4.2c7.4-23.4,7.4-48.6,0-72h4.2c13.4,22.1,13.4,49.9,0,72Z"/>
+  </g>
+  <g id="LWPOLYLINE-9" data-name="LWPOLYLINE">
+    <path class="cls-2" d="M58.7,90h55.9l5.3,53.3h-13.3c0-11-9-20-20-20s-20,9-20,20h-13.3l5.3-53.3Z"/>
+  </g>
+  <g id="LWPOLYLINE-10" data-name="LWPOLYLINE">
+    <path class="cls-2" d="M96.7,143.3h-20c0-5.5,4.5-10,10-10s10,4.5,10,10Z"/>
+  </g>
+  <g id="LWPOLYLINE-11" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="233.6" y="66" width="26.7" height="8"/>
+  </g>
+  <g id="LWPOLYLINE-12" data-name="LWPOLYLINE">
+    <rect class="cls-1" x="233.6" y="226" width="26.7" height="8"/>
+  </g>
+</svg>

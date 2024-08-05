@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 300">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #005eb8;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-1" x=".8" width="399.2" height="300"/>
+  </g>
+  <g id="LWPOLYLINE-2">
+    <path class="cls-2" d="M400,273.3c0,14.7-11.9,26.7-26.6,26.7H27.4c-14.7,0-26.6-11.9-26.6-26.7V26.7c0-14.8,11.9-26.7,26.6-26.7h346c14.7,0,26.6,11.9,26.6,26.7v246.7h0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3">
+    <path class="cls-1" d="M386.7,273.3c0,7.4-6,13.3-13.3,13.3H27.4c-7.3,0-13.3-6-13.3-13.3V26.7c0-7.4,6-13.3,13.3-13.3h346c7.3,0,13.3,6,13.3,13.3v246.7h0Z"/>
+  </g>
+</svg>

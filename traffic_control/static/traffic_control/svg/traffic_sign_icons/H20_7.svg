@@ -1,206 +1,101 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 14.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 43363)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="841.89px" height="595.276px" viewBox="0 0 841.89 595.276" enable-background="new 0 0 841.89 595.276"
-	 xml:space="preserve">
-<g>
-	<defs>
-		<polyline id="SVGID_1_" points="59.217,595.276 782.672,595.276 782.672,-0.12 59.217,-0.12 59.217,595.276 		"/>
-	</defs>
-	<clipPath id="SVGID_2_">
-		<use xlink:href="#SVGID_1_"  overflow="visible"/>
-	</clipPath>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FF0000" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="67.8" y1="48.276" x2="67.8" y2="440.576"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="760" y1="590.576" x2="760" y2="13.676"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FF0000" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M760,48.276c0-4.5-0.899-9-2.6-13.2c-1.8-4.2-4.3-8-7.5-11.2c-3.2-3.3-7.1-5.8-11.3-7.6c-4.2-1.7-8.7-2.6-13.2-2.6"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FF0000" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="725.4" y1="13.676" x2="102.4" y2="13.676"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FF0000" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M102.4,13.676c-4.5,0-9,0.9-13.2,2.6c-4.2,1.8-8,4.3-11.3,7.6c-3.2,3.2-5.7,7-7.5,11.2c-1.7,4.2-2.6,8.7-2.6,13.2"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M725.4,573.176c4.6,0,9-1.801,12.2-5c3.3-3.301,5.1-7.7,5.1-12.301"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="742.7" y1="555.875" x2="742.7" y2="48.276"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M742.7,48.276c0-4.6-1.8-9-5.1-12.2c-3.2-3.3-7.601-5.1-12.2-5.1"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="725.4" y1="30.976" x2="102.4" y2="30.976"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M102.4,30.976c-4.6,0-9,1.8-12.2,5.1c-3.3,3.2-5.1,7.6-5.1,12.2"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="85.1" y1="48.276" x2="85.1" y2="555.875"/>
-	<polyline clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" points="287,117.476 148.6,117.476 
-		137,232.876 160.1,371.375 275.5,371.375 298.5,232.876 287,117.476 	"/>
-	<path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFF00" d="M200.5,232.876h34.6
-		c0-2-0.4-4.2-1.3-6.3c-0.8-2.2-2.1-4.2-3.8-5.9c-1.7-1.7-3.7-3-5.9-3.8c-2.1-0.8-4.3-1.2-6.3-1.2c-4.6,0-9,1.8-12.2,5
-		C202.3,223.976,200.5,228.276,200.5,232.876"/>
-	<path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFF00" d="M266.1,140.576h-96.7l-9.3,92.3h23.1
-		c0-2,0.1-4.1,0.5-6.3c0.4-2.1,1-4.3,1.9-6.4c1.7-4.3,4.3-8.4,7.7-11.8c3.4-3.4,7.4-6,11.7-7.7c2.2-0.8,4.3-1.4,6.5-1.8
-		c2.1-0.4,4.2-0.6,6.3-0.6c2,0,4.1,0.2,6.3,0.6c2.1,0.4,4.3,1,6.4,1.8c4.3,1.7,8.3,4.3,11.8,7.7c3.4,3.4,6,7.5,7.7,11.8
-		c0.8,2.1,1.4,4.3,1.8,6.4c0.4,2.2,0.6,4.3,0.6,6.3h23.1L266.1,140.576"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="760" y1="13.676" x2="67.8" y2="13.676"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="67.8" y1="13.676" x2="67.8" y2="590.576"/>
-	<path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFF00" d="M67.8,48.276c0-2.1,0.2-4.2,0.6-6.3
-		c0.4-2.2,1-4.3,1.8-6.5c1.7-4.2,4.3-8.3,7.8-11.7c3.4-3.4,7.4-6,11.7-7.7c2.1-0.8,4.3-1.4,6.4-1.8s4.3-0.6,6.3-0.6H67.8V48.276"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="102.4" y1="573.176" x2="725.4" y2="573.176"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M85.1,555.875c0,4.601,1.8,9,5.1,12.301c3.2,3.199,7.6,5,12.2,5"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="67.8" y1="590.576" x2="760" y2="590.576"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M67.8,555.875c0,4.601,0.9,9.101,2.6,13.301c1.8,4.199,4.3,8,7.5,11.199c3.3,3.2,7.1,5.801,11.3,7.5c4.2,1.801,8.7,2.7,13.2,2.7"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M725.4,590.576c4.5,0,9-0.899,13.2-2.7c4.2-1.699,8.1-4.3,11.3-7.5c3.2-3.199,5.7-7,7.5-11.199c1.7-4.2,2.6-8.7,2.6-13.301"/>
-	<path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFF00" d="M760,48.276v-34.6h-34.6
-		c2,0,4.1,0.2,6.3,0.6c2.101,0.4,4.3,1,6.4,1.8c4.3,1.7,8.3,4.3,11.7,7.7c3.5,3.4,6,7.4,7.8,11.7c0.8,2.2,1.399,4.3,1.8,6.5
-		C759.8,44.076,760,46.176,760,48.276"/>
-	<path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFF00" d="M102.4,590.576c-2,0-4.1-0.2-6.3-0.6
-		c-2.1-0.4-4.3-1-6.4-1.9c-4.3-1.7-8.3-4.2-11.7-7.7c-3.4-3.399-6-7.399-7.7-11.699c-0.9-2.101-1.5-4.2-1.9-6.4
-		c-0.4-2.1-0.6-4.2-0.6-6.3v34.6h0.1H102.4"/>
-	<path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFF00" d="M760,555.875
-		c0,2.101-0.199,4.2-0.6,6.301c-0.4,2.199-1,4.3-1.8,6.5c-1.7,4.3-4.3,8.3-7.7,11.699c-3.4,3.4-7.4,6-11.7,7.7
-		c-2.1,0.8-4.3,1.5-6.399,1.9c-2.2,0.399-4.301,0.5-6.301,0.6H760v-0.1V555.875"/>
-	<path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFF00" d="M298.5,232.876l-23,138.5H160.1
-		l-23.1-138.5l11.6-115.4H287L298.5,232.876 M102.4,573.176h623c2,0,4.2-0.301,6.4-1.2c2.1-0.8,4.1-2.101,5.8-3.8
-		c1.7-1.7,3-3.7,3.899-5.9c0.801-2.1,1.2-4.3,1.2-6.4v-507.6c0-2-0.399-4.2-1.2-6.3c-0.899-2.2-2.199-4.2-3.899-5.9
-		c-1.7-1.7-3.7-3-5.8-3.9c-2.2-0.8-4.4-1.2-6.4-1.2h-623c-2,0-4.2,0.4-6.4,1.2c-2.1,0.9-4.1,2.2-5.8,3.9c-1.7,1.7-3,3.7-3.9,5.9
-		c-0.8,2.1-1.2,4.3-1.2,6.3v507.6c0,2.101,0.4,4.301,1.2,6.4c0.9,2.2,2.2,4.2,3.9,5.9c1.7,1.699,3.7,3,5.8,3.8
-		C98.2,572.875,100.4,573.176,102.4,573.176"/>
-	<path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FF0000" d="M85.1,555.875v-507.6
-		c0-2,0.4-4.2,1.2-6.3c0.9-2.2,2.2-4.2,3.9-5.9c1.7-1.7,3.7-3,5.8-3.9c2.2-0.8,4.4-1.2,6.4-1.2h623c2,0,4.2,0.4,6.4,1.2
-		c2.1,0.9,4.1,2.2,5.8,3.9c1.7,1.7,3,3.7,3.899,5.9c0.801,2.1,1.2,4.3,1.2,6.3v507.6c0,2.101-0.399,4.301-1.2,6.4
-		c-0.899,2.2-2.199,4.2-3.899,5.9c-1.7,1.699-3.7,3-5.8,3.8c-2.2,0.899-4.4,1.2-6.4,1.2h-623c-4.6,0-9-1.801-12.2-5
-		C86.9,564.875,85.1,560.476,85.1,555.875 M760,555.875v-507.6c0-4.6-0.899-9.1-2.6-13.2c-1.8-4.2-4.3-8.1-7.5-11.3
-		c-3.3-3.2-7.1-5.7-11.3-7.5c-4.2-1.7-8.7-2.6-13.2-2.6h-623c-4.6,0-9,0.9-13.2,2.7c-4.2,1.7-8.1,4.2-11.3,7.5
-		c-3.2,3.2-5.7,7-7.5,11.2c-1.7,4.2-2.6,8.7-2.6,13.2v103.8v288.5v115.3v0.101c0,4.5,0.9,9,2.7,13.2c1.7,4.199,4.2,8,7.5,11.199
-		c3.2,3.2,7,5.801,11.2,7.5c4.2,1.801,8.7,2.7,13.2,2.7h623c2.1-0.1,4.2-0.2,6.3-0.6c2.2-0.4,4.3-1,6.5-1.9
-		c4.3-1.7,8.3-4.3,11.7-7.7c3.4-3.399,6-7.399,7.7-11.699c0.8-2.2,1.399-4.301,1.8-6.5C759.8,560.076,760,557.976,760,555.875"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="760" y1="555.875" x2="760" y2="48.276"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M760,48.276c0-4.6-0.899-9.1-2.6-13.2c-1.8-4.2-4.3-8.1-7.5-11.3c-3.3-3.2-7.1-5.7-11.3-7.5c-4.2-1.7-8.7-2.6-13.2-2.6"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="725.394" y1="13.69" x2="725.394" y2="13.69"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="102.411" y1="13.69" x2="102.411" y2="13.69"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="725.4" y1="13.676" x2="102.4" y2="13.676"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="102.411" y1="13.69" x2="102.393" y2="13.69"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M102.4,13.676c-4.6,0-9,0.9-13.2,2.7c-4.2,1.7-8.1,4.2-11.3,7.5c-3.2,3.2-5.7,7-7.5,11.2c-1.7,4.2-2.6,8.7-2.6,13.2"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="67.8" y1="48.276" x2="67.8" y2="152.076"/>
-	
-		<polyline clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" points="
-		67.8,152.076 67.8,440.576 67.8,555.875 67.8,555.976 	"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M67.8,555.976c0,4.5,0.9,9,2.7,13.2c1.7,4.199,4.2,8,7.5,11.199c3.2,3.2,7,5.801,11.2,7.5c4.2,1.801,8.7,2.7,13.2,2.7"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="102.4" y1="590.576" x2="725.4" y2="590.576"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M725.4,590.576c4.6-0.1,9.1-1,13.3-2.7c4.2-1.699,8-4.3,11.2-7.5c3.2-3.199,5.7-7,7.5-11.199c1.7-4.2,2.6-8.7,2.6-13.301"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="85.1" y1="555.875" x2="85.1" y2="48.276"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M85.1,48.276c0-4.6,1.8-9,5.1-12.2c3.2-3.3,7.6-5.1,12.2-5.1"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="102.4" y1="30.976" x2="725.4" y2="30.976"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M725.4,30.976c4.6,0,9,1.8,12.2,5.1c3.3,3.2,5.1,7.6,5.1,12.2"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="742.7" y1="48.276" x2="742.7" y2="555.875"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M742.7,555.875c0,4.601-1.8,9-5.1,12.301c-3.2,3.199-7.601,5-12.2,5"/>
-	
-		<line clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" x1="725.4" y1="573.176" x2="102.4" y2="573.176"/>
-	
-		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF00" stroke-width="0.12" stroke-linejoin="bevel" stroke-miterlimit="1.414" d="
-		M102.4,573.176c-4.6,0-9-1.801-12.2-5c-3.3-3.301-5.1-7.7-5.1-12.301"/>
-</g>
-<g>
-	<defs>
-		<polyline id="SVGID_3_" points="59.217,595.276 782.672,595.276 782.672,-0.12 59.217,-0.12 59.217,595.276 		"/>
-	</defs>
-	<clipPath id="SVGID_4_">
-		<use xlink:href="#SVGID_3_"  overflow="visible"/>
-	</clipPath>
-	<path clip-path="url(#SVGID_4_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FF0000" d="M445.7,544.276l-23.399-33.2
-		L444,481.676H431.3l-15.4,21.6c-0.8-1.5-5.5-8.7-14-21.6h-13.2l21.1,29.899l-22.9,32.7h12.9l16.5-24.8l16.3,24.8H445.7"/>
-	<polyline clip-path="url(#SVGID_4_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FF0000" points="516.5,518.276 
-		516.5,507.576 484,507.576 484,518.276 516.5,518.276 	"/>
-	<path clip-path="url(#SVGID_4_)" fill-rule="evenodd" clip-rule="evenodd" fill="#FF0000" d="M613.6,544.276l-23.4-33.2
-		l21.7-29.399h-12.7l-15.399,21.6c-0.801-1.5-5.4-8.7-14-21.6h-13.2l21.1,29.899l-22.899,32.7H567.7l16.5-24.8l16.3,24.8H613.6"/>
-</g>
-<g>
-	<defs>
-		<polyline id="SVGID_5_" points="59.217,595.276 782.672,595.276 782.672,-0.12 59.217,-0.12 59.217,595.276 		"/>
-	</defs>
-	<clipPath id="SVGID_6_">
-		<use xlink:href="#SVGID_5_"  overflow="visible"/>
-	</clipPath>
-	<path clip-path="url(#SVGID_6_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" d="M384.9,442.476
-		c-11.7-18.9-17.6-37.8-17.6-56.9c0-8.899,1.2-17.7,3.5-26.3c2.4-8.7,7.1-18.8,14.1-30.3h-7.6c-6.1,8.1-11.1,16.8-15,26.2
-		c-4,9.399-6,19.6-6,30.6c0,9.7,1.9,19.4,5.6,29.3c3.7,9.9,8.9,19,15.4,27.4H384.9"/>
-	<path clip-path="url(#SVGID_6_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" d="M448.9,417.076l-23.4-33.3l21.7-29.4
-		h-12.7l-15.299,21.7c-0.8-1.5-5.5-8.7-14.1-21.7h-13.2l21.2,30l-23,32.7H403l16.5-24.8l16.3,24.8H448.9"/>
-	<polyline clip-path="url(#SVGID_6_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" points="519.7,391.076 
-		519.7,380.375 487.2,380.375 487.2,391.076 519.7,391.076 	"/>
-	<path clip-path="url(#SVGID_6_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" d="M616.8,417.076l-23.4-33.3l21.7-29.4
-		h-12.7l-15.3,21.7c-0.8-1.5-5.5-8.7-14.101-21.7h-13.1l21.1,30l-23,32.7h13l16.4-24.8l16.3,24.8H616.8"/>
-	<path clip-path="url(#SVGID_6_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" d="M629.6,328.976H622
-		c11.801,18.899,17.601,37.8,17.601,56.899c0,8.9-1.101,17.7-3.5,26.4c-2.4,8.6-7.101,18.7-14.101,30.2h7.601
-		c6.1-8.101,11.1-16.8,15.1-26.2c3.9-9.4,5.9-19.6,5.9-30.5c0-9.8-1.8-19.6-5.601-29.4C641.3,346.476,636.1,337.375,629.6,328.976"
-		/>
-</g>
-<g>
-	<defs>
-		<polyline id="SVGID_7_" points="59.217,595.276 782.672,595.276 782.672,-0.12 59.217,-0.12 59.217,595.276 		"/>
-	</defs>
-	<clipPath id="SVGID_8_">
-		<use xlink:href="#SVGID_7_"  overflow="visible"/>
-	</clipPath>
-	<path clip-path="url(#SVGID_8_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" d="M445.7,269.976l-23.399-33.3
-		l21.699-29.4H431.3l-15.4,21.7c-0.8-1.5-5.5-8.7-14-21.7h-13.2l21.1,30l-22.9,32.7h12.9l16.5-24.8l16.3,24.8H445.7"/>
-	<polyline clip-path="url(#SVGID_8_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" points="516.5,243.976 
-		516.5,233.276 484,233.276 484,243.976 516.5,243.976 	"/>
-	<path clip-path="url(#SVGID_8_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" d="M613.6,269.976l-23.4-33.3l21.7-29.4
-		h-12.7l-15.399,21.7c-0.801-1.5-5.4-8.7-14-21.7h-13.2l21.1,30l-22.899,32.7H567.7l16.5-24.8l16.3,24.8H613.6"/>
-</g>
-<g>
-	<defs>
-		<polyline id="SVGID_9_" points="59.217,595.276 782.672,595.276 782.672,-0.12 59.217,-0.12 59.217,595.276 		"/>
-	</defs>
-	<clipPath id="SVGID_10_">
-		<use xlink:href="#SVGID_9_"  overflow="visible"/>
-	</clipPath>
-	<path clip-path="url(#SVGID_10_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" d="M445.7,122.876l-23.399-33.3
-		L444,60.176H431.3l-15.4,21.7c-0.8-1.5-5.5-8.7-14-21.7h-13.2l21.1,30l-22.9,32.7h12.9l16.5-24.8l16.3,24.8H445.7"/>
-	<polyline clip-path="url(#SVGID_10_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" points="516.5,96.876 516.5,86.176 
-		484,86.176 484,96.876 516.5,96.876 	"/>
-	<path clip-path="url(#SVGID_10_)" fill-rule="evenodd" clip-rule="evenodd" fill="#404040" d="M613.6,122.876l-23.4-33.3l21.7-29.4
-		h-12.7l-15.399,21.7c-0.801-1.5-5.4-8.7-14-21.7h-13.2l21.1,30l-22.899,32.7H567.7l16.5-24.8l16.3,24.8H613.6"/>
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 692.2 576.9">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ed2224;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill-rule: evenodd;
+        stroke-width: 0px;
+      }
+
+      .cls-4 {
+        stroke: #f6eb16;
+      }
+
+      .cls-4, .cls-5 {
+        fill: none;
+        stroke-linejoin: bevel;
+        stroke-width: .1px;
+      }
+
+      .cls-5 {
+        stroke: #ed2224;
+      }
+
+      .cls-2 {
+        fill: #414141;
+      }
+
+      .cls-3 {
+        fill: #ffce04;
+      }
+    </style>
+  </defs>
+  <g>
+    <line class="cls-5" x1="-.4" y1="34.9" x2="-.4" y2="427.2"/>
+    <line class="cls-4" x1="691.8" y1="577.2" x2="691.8" y2=".3"/>
+    <path class="cls-5" d="M691.8,34.9c0-4.5-.9-9-2.6-13.2-1.8-4.2-4.3-8-7.5-11.2-3.2-3.3-7.1-5.8-11.3-7.6-4.2-1.7-8.7-2.6-13.2-2.6"/>
+    <line class="cls-5" x1="657.2" y1=".3" x2="34.2" y2=".3"/>
+    <path class="cls-5" d="M34.2.3c-4.5,0-9,.9-13.2,2.6-4.2,1.8-8,4.3-11.3,7.6-3.2,3.2-5.7,7-7.5,11.2C.5,25.9-.4,30.4-.4,34.9"/>
+    <path class="cls-4" d="M657.2,559.8c4.6,0,9-1.8,12.2-5,3.3-3.3,5.1-7.7,5.1-12.3"/>
+    <line class="cls-4" x1="674.5" y1="542.5" x2="674.5" y2="34.9"/>
+    <path class="cls-4" d="M674.5,34.9c0-4.6-1.8-9-5.1-12.2-3.2-3.3-7.6-5.1-12.2-5.1"/>
+    <line class="cls-4" x1="657.2" y1="17.6" x2="34.2" y2="17.6"/>
+    <path class="cls-4" d="M34.2,17.6c-4.6,0-9,1.8-12.2,5.1-3.3,3.2-5.1,7.6-5.1,12.2"/>
+    <line class="cls-4" x1="16.9" y1="34.9" x2="16.9" y2="542.5"/>
+    <polyline class="cls-2" points="218.8 104.1 80.4 104.1 68.8 219.5 91.9 358 207.3 358 230.3 219.5 218.8 104.1"/>
+    <path class="cls-3" d="M132.3,219.5h34.6c0-2-.4-4.2-1.3-6.3-.8-2.2-2.1-4.2-3.8-5.9s-3.7-3-5.9-3.8c-2.1-.8-4.3-1.2-6.3-1.2-4.6,0-9,1.8-12.2,5-3.3,3.3-5.1,7.6-5.1,12.2"/>
+    <path class="cls-3" d="M197.9,127.2h-96.7l-9.3,92.3h23.1c0-2,.1-4.1.5-6.3.4-2.1,1-4.3,1.9-6.4,1.7-4.3,4.3-8.4,7.7-11.8,3.4-3.4,7.4-6,11.7-7.7,2.2-.8,4.3-1.4,6.5-1.8,2.1-.4,4.2-.6,6.3-.6s4.1.2,6.3.6c2.1.4,4.3,1,6.4,1.8,4.3,1.7,8.3,4.3,11.8,7.7,3.4,3.4,6,7.5,7.7,11.8.8,2.1,1.4,4.3,1.8,6.4.4,2.2.6,4.3.6,6.3h23.1l-9.4-92.3"/>
+    <path class="cls-3" d="M691.8,34.9V.3h-34.6c2,0,4.1.2,6.3.6,2.1.4,4.3,1,6.4,1.8,4.3,1.7,8.3,4.3,11.7,7.7,3.5,3.4,6,7.4,7.8,11.7.8,2.2,1.4,4.3,1.8,6.5.4,2.1.6,4.2.6,6.3"/>
+    <path class="cls-3" d="M34.2,577.2c-2,0-4.1-.2-6.3-.6-2.1-.4-4.3-1-6.4-1.9-4.3-1.7-8.3-4.2-11.7-7.7-3.4-3.4-6-7.4-7.7-11.7-.9-2.1-1.5-4.2-1.9-6.4-.4-2.1-.6-4.2-.6-6.3v34.6h34.6"/>
+    <path class="cls-3" d="M691.8,542.5c0,2.1-.2,4.2-.6,6.3-.4,2.2-1,4.3-1.8,6.5-1.7,4.3-4.3,8.3-7.7,11.7-3.4,3.4-7.4,6-11.7,7.7-2.1.8-4.3,1.5-6.4,1.9-2.2.4-4.3.5-6.3.6h34.5v-34.7"/>
+    <path class="cls-3" d="M230.3,219.5l-23,138.5h-115.4l-23.1-138.5,11.6-115.4h138.4l11.5,115.4M34.2,559.8h623c2,0,4.2-.3,6.4-1.2,2.1-.8,4.1-2.1,5.8-3.8,1.7-1.7,3-3.7,3.9-5.9.8-2.1,1.2-4.3,1.2-6.4V34.9c0-2-.4-4.2-1.2-6.3-.9-2.2-2.2-4.2-3.9-5.9s-3.7-3-5.8-3.9c-2.2-.8-4.4-1.2-6.4-1.2H34.2c-2,0-4.2.4-6.4,1.2-2.1.9-4.1,2.2-5.8,3.9-1.7,1.7-3,3.7-3.9,5.9-.8,2.1-1.2,4.3-1.2,6.3v507.6c0,2.1.4,4.3,1.2,6.4.9,2.2,2.2,4.2,3.9,5.9,1.7,1.7,3.7,3,5.8,3.8,2.2.9,4.4,1.2,6.4,1.2"/>
+    <path class="cls-1" d="M16.9,542.5V34.9c0-2,.4-4.2,1.2-6.3.9-2.2,2.2-4.2,3.9-5.9,1.7-1.7,3.7-3,5.8-3.9,2.2-.8,4.4-1.2,6.4-1.2h623c2,0,4.2.4,6.4,1.2,2.1.9,4.1,2.2,5.8,3.9s3,3.7,3.9,5.9c.8,2.1,1.2,4.3,1.2,6.3v507.6c0,2.1-.4,4.3-1.2,6.4-.9,2.2-2.2,4.2-3.9,5.9-1.7,1.7-3.7,3-5.8,3.8-2.2.9-4.4,1.2-6.4,1.2H34.2c-4.6,0-9-1.8-12.2-5-3.3-3.3-5.1-7.7-5.1-12.3M691.8,542.5V34.9c0-4.6-.9-9.1-2.6-13.2-1.8-4.2-4.3-8.1-7.5-11.3-3.3-3.2-7.1-5.7-11.3-7.5-4.2-1.7-8.7-2.6-13.2-2.6H34.2c-4.6,0-9,.9-13.2,2.7-4.2,1.7-8.1,4.2-11.3,7.5-3.2,3.2-5.7,7-7.5,11.2C.5,25.9-.4,30.4-.4,34.9v507.6H-.4c0,4.6.9,9.1,2.7,13.3,1.7,4.2,4.2,8,7.5,11.2,3.2,3.2,7,5.8,11.2,7.5,4.2,1.8,8.7,2.7,13.2,2.7h623c2.1,0,4.2-.2,6.3-.6,2.2-.4,4.3-1,6.5-1.9,4.3-1.7,8.3-4.3,11.7-7.7,3.4-3.4,6-7.4,7.7-11.7.8-2.2,1.4-4.3,1.8-6.5.4-2.1.6-4.2.6-6.3"/>
+    <line class="cls-4" x1="691.8" y1="542.5" x2="691.8" y2="34.9"/>
+    <path class="cls-4" d="M691.8,34.9c0-4.6-.9-9.1-2.6-13.2-1.8-4.2-4.3-8.1-7.5-11.3-3.3-3.2-7.1-5.7-11.3-7.5-4.2-1.7-8.7-2.6-13.2-2.6"/>
+    <line class="cls-4" x1="657.2" y1=".3" x2="657.2" y2=".3"/>
+    <line class="cls-4" x1="34.2" y1=".3" x2="34.2" y2=".3"/>
+    <line class="cls-4" x1="657.2" y1=".3" x2="34.2" y2=".3"/>
+    <line class="cls-4" x1="34.2" y1=".3" x2="34.2" y2=".3"/>
+    <path class="cls-4" d="M34.2.3c-4.6,0-9,.9-13.2,2.7-4.2,1.7-8.1,4.2-11.3,7.5-3.2,3.2-5.7,7-7.5,11.2C.5,25.9-.4,30.4-.4,34.9"/>
+    <line class="cls-4" x1="-.4" y1="34.9" x2="-.4" y2="138.7"/>
+    <polyline class="cls-4" points="-.4 138.7 -.4 427.2 -.4 542.5 -.4 542.6"/>
+    <path class="cls-4" d="M-.4,542.6c0,4.5.9,9,2.7,13.2,1.7,4.2,4.2,8,7.5,11.2,3.2,3.2,7,5.8,11.2,7.5,4.2,1.8,8.7,2.7,13.2,2.7"/>
+    <line class="cls-4" x1="34.2" y1="577.2" x2="657.2" y2="577.2"/>
+    <path class="cls-4" d="M657.2,577.2c4.6,0,9.1-1,13.3-2.7,4.2-1.7,8-4.3,11.2-7.5,3.2-3.2,5.7-7,7.5-11.2,1.7-4.2,2.6-8.7,2.6-13.3"/>
+    <line class="cls-4" x1="16.9" y1="542.5" x2="16.9" y2="34.9"/>
+    <path class="cls-4" d="M16.9,34.9c0-4.6,1.8-9,5.1-12.2,3.2-3.3,7.6-5.1,12.2-5.1"/>
+    <line class="cls-4" x1="34.2" y1="17.6" x2="657.2" y2="17.6"/>
+    <path class="cls-4" d="M657.2,17.6c4.6,0,9,1.8,12.2,5.1,3.3,3.2,5.1,7.6,5.1,12.2"/>
+    <line class="cls-4" x1="674.5" y1="34.9" x2="674.5" y2="542.5"/>
+    <path class="cls-4" d="M674.5,542.5c0,4.6-1.8,9-5.1,12.3-3.2,3.2-7.6,5-12.2,5"/>
+    <line class="cls-4" x1="657.2" y1="559.8" x2="34.2" y2="559.8"/>
+    <path class="cls-4" d="M34.2,559.8c-4.6,0-9-1.8-12.2-5-3.3-3.3-5.1-7.7-5.1-12.3"/>
+  </g>
+  <g>
+    <path class="cls-1" d="M377.5,530.9l-23.4-33.2,21.7-29.4h-12.7l-15.4,21.6c-.8-1.5-5.5-8.7-14-21.6h-13.2l21.1,29.9-22.9,32.7h12.9l16.5-24.8,16.3,24.8h13.1"/>
+    <polyline class="cls-1" points="448.3 504.9 448.3 494.2 415.8 494.2 415.8 504.9 448.3 504.9"/>
+    <path class="cls-1" d="M545.4,530.9l-23.4-33.2,21.7-29.4h-12.7l-15.4,21.6c-.8-1.5-5.4-8.7-14-21.6h-13.2l21.1,29.9-22.9,32.7h12.9l16.5-24.8,16.3,24.8h13.1"/>
+  </g>
+  <g>
+    <path class="cls-2" d="M316.7,429.1c-11.7-18.9-17.6-37.8-17.6-56.9s1.2-17.7,3.5-26.3c2.4-8.7,7.1-18.8,14.1-30.3h-7.6c-6.1,8.1-11.1,16.8-15,26.2-4,9.4-6,19.6-6,30.6s1.9,19.4,5.6,29.3,8.9,19,15.4,27.4h7.6"/>
+    <path class="cls-2" d="M380.7,403.7l-23.4-33.3,21.7-29.4h-12.7l-15.3,21.7c-.8-1.5-5.5-8.7-14.1-21.7h-13.2l21.2,30-23,32.7h12.9l16.5-24.8,16.3,24.8h13.1"/>
+    <polyline class="cls-2" points="451.5 377.7 451.5 367 419 367 419 377.7 451.5 377.7"/>
+    <path class="cls-2" d="M548.6,403.7l-23.4-33.3,21.7-29.4h-12.7l-15.3,21.7c-.8-1.5-5.5-8.7-14.1-21.7h-13.1l21.1,30-23,32.7h13l16.4-24.8,16.3,24.8h13.1"/>
+    <path class="cls-2" d="M561.4,315.6h-7.6c11.8,18.9,17.6,37.8,17.6,56.9s-1.1,17.7-3.5,26.4c-2.4,8.6-7.1,18.7-14.1,30.2h7.6c6.1-8.1,11.1-16.8,15.1-26.2,3.9-9.4,5.9-19.6,5.9-30.5s-1.8-19.6-5.6-29.4c-3.7-9.9-8.9-19-15.4-27.4"/>
+  </g>
+  <g>
+    <path class="cls-2" d="M377.5,256.6l-23.4-33.3,21.7-29.4h-12.7l-15.4,21.7c-.8-1.5-5.5-8.7-14-21.7h-13.2l21.1,30-22.9,32.7h12.9l16.5-24.8,16.3,24.8h13.1"/>
+    <polyline class="cls-2" points="448.3 230.6 448.3 219.9 415.8 219.9 415.8 230.6 448.3 230.6"/>
+    <path class="cls-2" d="M545.4,256.6l-23.4-33.3,21.7-29.4h-12.7l-15.4,21.7c-.8-1.5-5.4-8.7-14-21.7h-13.2l21.1,30-22.9,32.7h12.9l16.5-24.8,16.3,24.8h13.1"/>
+  </g>
+  <g>
+    <path class="cls-2" d="M377.5,109.5l-23.4-33.3,21.7-29.4h-12.7l-15.4,21.7c-.8-1.5-5.5-8.7-14-21.7h-13.2l21.1,30-22.9,32.7h12.9l16.5-24.8,16.3,24.8h13.1"/>
+    <polyline class="cls-2" points="448.3 83.5 448.3 72.8 415.8 72.8 415.8 83.5 448.3 83.5"/>
+    <path class="cls-2" d="M545.4,109.5l-23.4-33.3,21.7-29.4h-12.7l-15.4,21.7c-.8-1.5-5.4-8.7-14-21.7h-13.2l21.1,30-22.9,32.7h12.9l16.5-24.8,16.3,24.8h13.1"/>
+  </g>
+  <path class="cls-3" d="M-.4,34.9c0-2.1.2-4.2.6-6.3.4-2.2,1-4.3,1.8-6.5,1.8-4.3,4.3-8.3,7.8-11.7,3.4-3.4,7.4-6,11.7-7.7,2.1-.8,4.3-1.4,6.4-1.8,2.2-.4,4.3-.6,6.3-.6H-.4s0,34.6,0,34.6"/>
 </svg>

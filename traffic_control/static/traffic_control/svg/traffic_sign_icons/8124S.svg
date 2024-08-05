@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg17" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 362.4 151.4">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #0079c1;
+      }
+    </style>
+  </defs>
+  <g id="HATPUN">
+    <g id="g14">
+      <rect id="rect6" class="cls-3" x="0" y=".4" width="362.4" height="151.1"/>
+      <path id="path8" class="cls-1" d="M362.4,19.5v112.4c0,10.7-8.2,19.5-18.2,19.5H18.2C8.1,151.4,0,142.6,0,131.9V19.5C0,8.8,8.1,0,18.2,0h325.9c10,0,18.2,8.8,18.2,19.5Z"/>
+      <path id="path10" class="cls-2" d="M353.5,19.3v112.9c0,5.7-4.7,10.4-10.4,10.4H19.6c-5.7,0-10.4-4.7-10.4-10.4V19.3c0-5.7,4.7-10.4,10.4-10.4h323.6c5.7,0,10.4,4.7,10.4,10.4Z"/>
+      <polygon id="polygon12" class="cls-1" points="223.7 63.6 90.8 63.6 90.8 87.6 223.7 87.6 223.7 124 271.8 75.6 223.7 27.1 223.7 63.6"/>
+    </g>
+  </g>
+</svg>

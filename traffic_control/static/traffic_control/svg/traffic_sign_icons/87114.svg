@@ -1,97 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   height="217.52"
-   width="397.35001"
-   xml:space="preserve"
-   viewBox="0 0 397.34999 217.52"
-   y="0px"
-   x="0px"
-   id="Layer_1"
-   version="1.1"><metadata
-   id="metadata30"><rdf:RDF><cc:Work
-       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
-   id="defs28" />
-<style
-   id="style2"
-   type="text/css">
-	.st0{fill:#005EB8;stroke:#005EB8;stroke-width:0.5;stroke-miterlimit:10;}
-	.st1{fill:#FFFFFF;}
-	.st2{fill:#005EB8;}
-	.st3{fill:none;}
-</style>
-<g
-   transform="translate(-13.92,-103.84)"
-   id="LWPOLYLINE_2_">
-	<rect
-   style="fill:#005eb8;stroke:#005eb8;stroke-width:0.5;stroke-miterlimit:10"
-   id="rect4"
-   height="217.02"
-   width="396.85001"
-   class="st0"
-   y="104.09"
-   x="14.17" />
-</g>
-<g
-   transform="translate(-13.92,-103.84)"
-   id="LWPOLYLINE_95_">
-	<path
-   style="fill:#ffffff"
-   id="path7"
-   d="m 38.98,104.09 h 347.24 c 13.7,0 24.81,11.1 24.81,24.8 v 167.42 c 0,13.7 -11.11,24.8 -24.81,24.8 H 38.98 c -13.7,0 -24.8,-11.1 -24.8,-24.8 V 128.89 c -0.01,-13.7 11.1,-24.8 24.8,-24.8 z"
-   class="st1" />
-</g>
-<g
-   transform="translate(-13.92,-103.84)"
-   id="LWPOLYLINE_96_">
-	<path
-   style="fill:#005eb8"
-   id="path10"
-   d="m 38.98,116.49 h 347.24 c 6.85,0 12.41,5.55 12.41,12.4 v 167.42 c 0,6.85 -5.56,12.4 -12.41,12.4 H 38.98 c -6.85,0 -12.4,-5.55 -12.4,-12.4 V 128.89 c -0.01,-6.85 5.54,-12.4 12.4,-12.4 z"
-   class="st2" />
-</g>
-<g
-   transform="translate(-13.92,-103.84)"
-   id="LWPOLYLINE">
-	<rect
-   style="fill:none"
-   id="rect13"
-   height="217.02"
-   width="396.85001"
-   class="st3"
-   y="104.09"
-   x="14.17" />
-</g>
-<g
-   transform="translate(-13.92,-103.84)"
-   id="LWPOLYLINE_109_">
-	<path
-   style="fill:#005eb8"
-   id="path16"
-   d="m 217.11,220.41 h 7.45 v -0.37 c 0,-2.05 -1.67,-3.72 -3.72,-3.72 -2.06,0 -3.73,1.67 -3.73,3.72 z"
-   class="st2" />
-</g>
-<g
-   transform="translate(-13.92,-103.84)"
-   id="LWPOLYLINE_122_">
-	<path
-   style="fill:#005eb8"
-   id="path19"
-   d="m 218.5,272.5 h 7.44 v -0.37 c 0,-2.06 -1.67,-3.72 -3.72,-3.72 -2.05,0 -3.72,1.66 -3.72,3.72 z"
-   class="st2" />
-</g>
-<g
-   transform="translate(-13.92,-103.84)"
-   id="LWPOLYLINE_148_">
-	<path
-   style="fill:#005eb8"
-   id="path22"
-   d="m 364.44,153.44 h 7.44 v -0.37 c 0,-2.06 -1.67,-3.72 -3.72,-3.72 -2.05,0 -3.72,1.67 -3.72,3.72 z"
-   class="st2" />
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 395 230">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ffce04;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #e31e2e;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-1" width="395" height="230"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-2" d="M395,203.7c0,14.5-11.8,26.3-26.3,26.3H26.3C11.8,230,0,218.2,0,203.7V26.3C0,11.8,11.8,0,26.3,0h342.3c14.5,0,26.3,11.8,26.3,26.3v177.4h0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-1" d="M381.8,203.7c0,7.3-5.9,13.1-13.2,13.1H26.3c-7.3,0-13.2-5.9-13.2-13.1V26.3c0-7.3,5.9-13.1,13.2-13.1h342.3c7.3,0,13.2,5.9,13.2,13.1v177.4Z"/>
+  </g>
 </svg>

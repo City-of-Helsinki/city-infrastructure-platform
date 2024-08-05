@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 425.2 425.2">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #007ac2;
+      }
+
+      .cls-1, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-2" x="0" y="0" width="425.2" height="425.2"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M396.9,0H28.3C12.7,0,0,12.7,0,28.3v368.5c0,15.7,12.7,28.3,28.3,28.3h368.5c15.7,0,28.3-12.7,28.3-28.3V28.3c0-15.7-12.7-28.3-28.3-28.3Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-1" d="M396.9,14.2H28.3c-7.8,0-14.2,6.3-14.2,14.2v368.5c0,7.8,6.3,14.2,14.2,14.2h368.5c7.8,0,14.2-6.3,14.2-14.2V28.3c0-7.8-6.3-14.2-14.2-14.2Z"/>
+  </g>
+  <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="120.5" y="230.3" width="127.6" height="70.9"/>
+  </g>
+  <g id="LWPOLYLINE-5" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="276.4" y="42.5" width="28.3" height="340.2"/>
+  </g>
+  <g id="LWPOLYLINE-6" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="120.5" y="124" width="127.6" height="70.9"/>
+  </g>
+</svg>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 170">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 74px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        isolation: isolate;
+      }
+
+      .cls-1, .cls-3, .cls-4 {
+        fill: #fffef2;
+        font-family: MyriadPro-Semibold, 'Myriad Pro';
+        font-weight: 600;
+      }
+
+      .cls-5 {
+        stroke: #005eb8;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-5, .cls-6 {
+        fill: #005eb8;
+      }
+
+      .cls-6, .cls-7 {
+        stroke-width: 0px;
+      }
+
+      .cls-3 {
+        font-size: 21.6px;
+      }
+
+      .cls-7 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        font-size: 24.7px;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-5" y="1" width="400" height="169"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-7" d="M26.7,0h346.7c14.7,0,26.7,12.2,26.7,27.3v115.9c0,15.1-11.9,27.3-26.7,27.3H26.7C11.9,170.5,0,158.3,0,143.2V27.3C0,12.2,11.9,0,26.7,0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-6" d="M26.7,13.6h346.7c7.4,0,13.3,6.1,13.3,13.6v115.6c0,7.5-6,13.6-13.3,13.6H26.7c-7.4,0-13.3-6.1-13.3-13.6V27.2c0-7.5,6-13.6,13.3-13.6Z"/>
+  </g>
+  <g class="cls-2">
+    <text class="cls-3" transform="translate(151.3 41.6) scale(1 1)"><tspan x="0" y="0">Vyöhyke</tspan></text>
+    <text class="cls-4" transform="translate(168.1 71.2) scale(1 1)"><tspan x="0" y="0">Zon </tspan></text>
+  </g>
+  <text class="cls-1" transform="translate(169.3 137.5) scale(1 1)"><tspan x="0" y="0">2</tspan></text>
+</svg>
