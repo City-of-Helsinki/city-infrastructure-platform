@@ -39,6 +39,7 @@ def convert_svg_to_png():
         if filename.endswith(".svg"):
             svg_path = os.path.join(svg_folder, filename)
 
+            print(f"Converting....{filename}")
             for size in sizes:
                 png_path = os.path.join(png_folder, str(size), f"{filename}.png")
                 with open(svg_path, "rb") as svg_file:
