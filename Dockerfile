@@ -56,7 +56,7 @@ USER appuser
 EXPOSE 8000
 
 # ===================================
-FROM node:16-slim AS build
+FROM public.ecr.aws/docker/library/node:16-slim AS build
 # ===================================
 WORKDIR /map-view
 COPY map-view/ .
