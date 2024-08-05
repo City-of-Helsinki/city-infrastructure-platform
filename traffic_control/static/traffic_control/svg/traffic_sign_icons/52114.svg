@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 342 342.3">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-1, .cls-3 {
+        fill: #007ac2;
+      }
+
+      .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2, .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-5 {
+        fill: none;
+        stroke: #0079c1;
+        stroke-miterlimit: 10;
+        stroke-width: 1px;
+      }
+    </style>
+  </defs>
+  <g id="g18">
+    <rect id="rect2" class="cls-1" x=".2" y=".8" width="341.3" height="341"/>
+    <polygon id="polygon4" class="cls-2" points="11.2 .8 14 .5 328.2 .8 330.5 1.4 332.6 1.9 335.2 3.4 337.2 5.4 338.9 7.7 340.3 10.3 341.2 13.2 341.5 16.1 341.5 327.3 341.2 329.9 340.6 332.9 339.5 335.2 337.7 337.5 335.7 339.2 333.4 340.6 330.5 341.5 327.9 341.8 14.3 341.8 11.4 341.8 8.9 340.9 6.5 339.8 4.2 338 2.5 336 1.1 333.4 .5 330.8 .2 328.2 .2 14.3 .5 11.7 1.1 9.1 2.5 6.5 4.2 4.5 6.3 2.8 8.9 1.7 11.2 .8"/>
+    <polygon id="polygon6" class="cls-3" points="12.6 8.3 14.6 8 325.9 8 327.9 8.3 329.6 8.9 331.4 10 332.9 11.7 333.4 13.5 333.7 15.8 333.7 326.4 333.4 328.5 332.6 330.2 331.4 332 329.6 333.1 327.6 333.7 325.9 334 14.6 334 12.9 333.7 11.2 332.9 9.7 331.7 8.6 330.2 8 328.2 7.7 326.4 7.7 13.7 8.3 11.7 9.4 10.3 10.9 9.1 12.6 8.3"/>
+    <rect id="rect8" class="cls-5" x=".2" y=".8" width="341.3" height="341"/>
+    <rect id="rect10" class="cls-4" x="57.7" y="96.8" width="57" height="102.5"/>
+    <rect id="rect12" class="cls-4" x="143.3" y="96.8" width="56.9" height="102.5"/>
+    <rect id="rect14" class="cls-4" x="230.2" y="96.8" width="57" height="102.5"/>
+    <rect id="rect16" class="cls-4" x="34.8" y="221.8" width="273.1" height="22.8"/>
+  </g>
+</svg>

@@ -1,26 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#FFCD00;}
-	.st1{fill:#E4002B;}
-	.st2{fill:#101820;}
-</style>
-<g id="CIRCLE_3_">
-	<path class="st0" d="M411.02,212.6c0-109.59-88.84-198.43-198.43-198.43c-109.58,0-198.42,88.84-198.42,198.43
-		c0,109.58,88.84,198.42,198.42,198.42C322.19,411.02,411.02,322.18,411.02,212.6L411.02,212.6z"/>
-</g>
-<g id="CIRCLE_4_">
-	<path class="st1" d="M404.82,212.6c0-106.16-86.06-192.23-192.22-192.23c-106.16,0-192.22,86.06-192.22,192.23
-		c0,106.16,86.06,192.22,192.22,192.22C318.76,404.82,404.82,318.76,404.82,212.6L404.82,212.6z"/>
-</g>
-<g id="CIRCLE_5_">
-	<path class="st0" d="M364.52,212.6c0-83.91-68.02-151.92-151.92-151.92c-83.9,0-151.92,68.01-151.92,151.92
-		c0,83.9,68.02,151.92,151.92,151.92C296.5,364.52,364.52,296.5,364.52,212.6L364.52,212.6z"/>
-</g>
-<g id="LWPOLYLINE_45_">
-	<path class="st2" d="M320.72,198.04h10.54v18.6h-10.54v45.27c0,5.82,4.72,10.54,10.54,10.54v18.6c-16.1,0-29.14-13.04-29.14-29.14
-		v-45.27h-10.54v-18.6h10.54v-31.01h18.6V198.04z"/>
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 396.9 396.9">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ffcd00;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #e4002b;
+      }
+
+      .cls-3 {
+        fill: #101820;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1" data-name="Layer 1" inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+    <sodipodi:namedview id="namedview2273" bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" inkscape:current-layer="Layer_1" inkscape:cx="198.4265" inkscape:cy="198.42599" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="480" inkscape:window-maximized="0" inkscape:window-width="640" inkscape:window-x="0" inkscape:window-y="0" inkscape:zoom="0.55503813" objecttolerance="10" pagecolor="#ffffff" showgrid="false"/>
+    <g id="CIRCLE">
+      <path id="path2251" class="cls-1" d="M396.9,198.4C396.9,88.8,308,0,198.4,0S0,88.8,0,198.4s88.8,198.4,198.4,198.4,198.4-88.8,198.4-198.4h0Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="CIRCLE-2" data-name="CIRCLE">
+      <path id="path2254" class="cls-2" d="M390.6,198.4c0-106.2-86.1-192.2-192.2-192.2S6.2,92.3,6.2,198.4s86.1,192.2,192.2,192.2c106.2,0,192.2-86.1,192.2-192.2Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="CIRCLE-3" data-name="CIRCLE">
+      <path id="path2257" class="cls-1" d="M350.3,198.4c0-83.9-68-151.9-151.9-151.9S46.5,114.5,46.5,198.4s68,151.9,151.9,151.9,151.9-68,151.9-151.9Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="LWPOLYLINE">
+      <path id="path2260" class="cls-3" d="M309.2,179.6h10.9v19.3h-10.9v46.9c0,6,4.9,10.9,10.9,10.9v19.3c-16.7,0-30.2-13.5-30.2-30.2v-46.9h-10.9v-19.3h10.9v-32.1h19.3v32.1Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+      <path id="path2266" class="cls-3" d="M171,162.6h25.2v-8.4c0-2.7.5-5.4,1.6-7.9,4.4-10.7,16.6-15.9,27.4-11.5s15.9,16.6,11.5,27.4l-65.6,88.6v25.2h92.3v-25.2h-63.8l61-80.9c8.7-24-3.8-50.5-27.7-59.1-24-8.7-50.4,3.8-59.1,27.7-2.3,6.5-3.2,13.5-2.5,20.3l-.2,3.7Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+      <polygon id="polygon2269" class="cls-1" points="122.3 221.6 91.3 221.6 122.3 167.1 122.3 221.6"/>
+    </g>
+    <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+      <path id="path2394" class="cls-3" d="M91.3,137.8c11.1-5,19.4-13.5,23.1-23.8h28.4v161.9h-28.1v-124.7l-20.6,3.2-2.8-16.7Z" inkscape:connector-curvature="0"/>
+    </g>
+  </g>
 </svg>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 396.8 165.2">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 24px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        isolation: isolate;
+      }
+
+      .cls-1, .cls-5, .cls-4 {
+        fill: #fffef4;
+      }
+
+      .cls-1, .cls-4 {
+        font-family: MyriadPro-Semibold, 'Myriad Pro';
+        font-weight: 600;
+      }
+
+      .cls-6 {
+        fill: #2361ad;
+      }
+
+      .cls-6, .cls-5 {
+        stroke-width: 0px;
+      }
+
+      .cls-3 {
+        fill: #010101;
+        font-family: MyriadPro-Bold, 'Myriad Pro';
+        font-weight: 700;
+      }
+
+      .cls-3, .cls-4 {
+        font-size: 21px;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-6" x="0" y="0" width="396.9" height="165.4"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-5" d="M26.4,0h343.9c14.6,0,26.5,11.9,26.5,26.5v112.4c0,14.6-11.9,26.5-26.5,26.5H26.4C11.8,165.3,0,153.5,0,138.8V26.4C0,11.8,11.8,0,26.4,0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-6" d="M26.4,13.2h343.9c7.3,0,13.2,5.9,13.2,13.2v112.4c0,7.3-5.9,13.2-13.2,13.2H26.4c-7.3,0-13.2-5.9-13.2-13.2V26.4c0-7.3,5.9-13.2,13.2-13.2Z"/>
+  </g>
+  <g class="cls-2">
+    <text class="cls-4" transform="translate(19.4 73)"><tspan x="0" y="0">Maksu ei koske</tspan></text>
+    <text class="cls-4" transform="translate(19.4 101.8)"><tspan x="0" y="0">P-tunnuksella:</tspan></text>
+    <text class="cls-1" transform="translate(149.7 101.8)"><tspan x="0" y="0"> </tspan></text>
+  </g>
+  <text class="cls-3" transform="translate(19.4 73)"><tspan x="0" y="0"> </tspan></text>
+  <g class="cls-2">
+    <text class="cls-4" transform="translate(222.3 73.2)"><tspan x="0" y="0">Avgiften gäller ej</tspan></text>
+    <text class="cls-4" transform="translate(222.3 98.4)"><tspan x="0" y="0">med P-tecknet: </tspan></text>
+  </g>
+</svg>

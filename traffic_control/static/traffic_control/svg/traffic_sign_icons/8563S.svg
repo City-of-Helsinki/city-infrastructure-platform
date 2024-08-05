@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 270">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #2361ad;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #2261ad;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-2" width="400" height="270"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M400,243c0,14.9-11.9,27-26.7,27H26.7C11.9,270,0,257.9,0,243V27C0,12.1,12,0,26.7,0h346.7c14.7,0,26.7,12.1,26.7,27v216h0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-2" d="M386.7,243c0,7.5-6,13.5-13.3,13.5H26.7c-7.4,0-13.3-6-13.3-13.5V27c0-7.4,6-13.5,13.3-13.5h346.7c7.4,0,13.3,6.1,13.3,13.5v216Z"/>
+  </g>
+  <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="189.2" y="133.6" width="26.7" height="8.1"/>
+  </g>
+  <g id="LWPOLYLINE-5" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="188.6" y="202.4" width="26.7" height="8.1"/>
+  </g>
+  <g id="LWPOLYLINE-6" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M282.3,244c7.2-22,7.2-45.6,0-67.6h4.1c13,20.8,13,46.8,0,67.6h-4.1Z"/>
+  </g>
+  <g id="LWPOLYLINE-7" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M117.8,244.6c-7.2-22-7.2-45.6,0-67.6h-4.1c-13,20.8-13,46.8,0,67.6h4.1Z"/>
+  </g>
+  <g id="LWPOLYLINE-8" data-name="LWPOLYLINE">
+    <polygon class="cls-3" points="337.8 22.2 321.8 82.8 331 82.8 347.1 22.2 337.8 22.2"/>
+  </g>
+  <g id="LWPOLYLINE-9" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="276.3" y="39.9" width="7.2" height="36.3"/>
+  </g>
+  <g id="LWPOLYLINE-10" data-name="LWPOLYLINE">
+    <rect class="cls-3" x="276.3" y="27.8" width="7.2" height="7.3"/>
+  </g>
+  <g id="LWPOLYLINE-11" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M260.6,49.1c0-1.9-1.5-3.4-3.3-3.4h-.5c-3.2,0-5.7,2.6-5.7,5.8v24.7h-7.2v-27.1c0-1.9-1.5-3.4-3.3-3.4h-.5c-3.2,0-5.7,2.6-5.7,5.8v24.7h-7.2v-36.3h7.2v2.9c2.3-1.5,5-2.4,7.7-2.8.3,0,.7,0,1,0,2.7.2,5.1,1.6,6.6,3.9,2.7-2,5.8-3.3,9.1-3.8.3,0,.7,0,1,0,4.5.3,8,4.1,8,8.7v27.6h-7.2v-27.1Z"/>
+  </g>
+  <g id="LWPOLYLINE-12" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M300.3,76.3h-7.2v-36.3h7.2v2.9c2.3-1.5,5-2.4,7.7-2.8.3,0,.7,0,1,0,4.5.3,8,4.1,8,8.7v27.6h-7.2v-27.1c0-1.9-1.5-3.4-3.3-3.4h-.5c-3.2,0-5.7,2.6-5.7,5.8v24.7Z"/>
+  </g>
+  <g id="LWPOLYLINE-13" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M375.7,49.4v-.2c0-4.8-3.9-8.7-8.6-8.7-2.9.4-5.7,1.3-8.1,2.9v-15h-7.2v48.4h7.2v-25.7c0-2.7,2.1-4.8,4.8-4.8s4.8,2.2,4.8,4.8v25.7h7.2v-27.4h0Z"/>
+  </g>
+  <g id="LWPOLYLINE-4">
+    <path class="cls-3" d="M31.1,126.5V39.1c0-4,3.2-7.3,7.1-7.3h59.3c4,0,7.1,3.3,7.1,7.3v87.4c0,4-3.2,7.3-7.1,7.3h-59.3c-3.9,0-7.1-3.3-7.1-7.3Z"/>
+  </g>
+  <g id="LWPOLYLINE-5">
+    <path class="cls-1" d="M34.7,126.5V39.1c0-2,1.6-3.6,3.6-3.6h59.3c2,0,3.6,1.6,3.6,3.6v87.4c0,2-1.6,3.6-3.6,3.6h-59.3c-2,0-3.6-1.6-3.6-3.6Z"/>
+  </g>
+  <g id="LWPOLYLINE-6">
+    <polygon class="cls-3" points="67.9 68.6 75.1 39.1 60.8 39.1 67.9 68.6"/>
+  </g>
+  <g id="LWPOLYLINE-7">
+    <path class="cls-3" d="M41.9,77l17.4-12.9c3.5,4.9,10.2,6,15,2.4.9-.7,1.7-1.5,2.4-2.4l17.4,12.9c-2,2.8-4.4,5.3-7.1,7.3-14.4,10.7-34.6,7.4-45-7.3h-.1Z"/>
+  </g>
+  <g id="LWPOLYLINE-8">
+    <path class="cls-3" d="M51.9,123.2v-26.2c0-1.8,1.4-3.3,3.2-3.3h25.7c1.8,0,3.2,1.5,3.2,3.3v26.2c0,1.8-1.4,3.3-3.2,3.3h-25.7c-1.8,0-3.2-1.5-3.2-3.3Z"/>
+  </g>
+  <g id="LWPOLYLINE-9">
+    <path class="cls-1" d="M53.5,123.2v-26.2c0-.9.7-1.6,1.6-1.6h25.7c.9,0,1.6.7,1.6,1.6v26.2c0,.9-.7,1.6-1.6,1.6h-25.7c-.9,0-1.6-.7-1.6-1.6Z"/>
+  </g>
+  <g id="LWPOLYLINE-10">
+    <path class="cls-3" d="M59.3,123.3h4.8v-10.9h7c4.1,0,7.5-3.4,7.5-7.6s-3.4-7.6-7.5-7.6h-11.8v26.2h0Z"/>
+  </g>
+  <g id="LWPOLYLINE-11">
+    <path class="cls-1" d="M64.2,102v5.5h7.2c1.5,0,2.6-1.4,2.5-2.9,0-1.4-1.3-2.5-2.7-2.5h-7Z"/>
+  </g>
+</svg>

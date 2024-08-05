@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 170">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        isolation: isolate;
+      }
+
+      .cls-1, .cls-3 {
+        font-family: MyriadPro-Bold, 'Myriad Pro';
+        font-weight: 700;
+      }
+
+      .cls-1, .cls-3, .cls-4 {
+        fill: #000;
+      }
+
+      .cls-1, .cls-4 {
+        font-size: 21.6px;
+      }
+
+      .cls-3 {
+        font-size: 24.7px;
+      }
+
+      .cls-5 {
+        fill: #ffcd00;
+      }
+
+      .cls-5, .cls-6 {
+        stroke-width: 0px;
+      }
+
+      .cls-6 {
+        fill: #e4002b;
+      }
+
+      .cls-4 {
+        font-family: MyriadPro-Regular, 'Myriad Pro';
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-5" width="400" height="170"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-6" d="M26.7,0h346.7c14.7,0,26.7,12.2,26.7,27.2v115.6c0,15-11.9,27.2-26.7,27.2H26.7C11.9,170,0,157.8,0,142.8V27.2C0,12.2,11.9,0,26.7,0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-5" d="M26.7,13.6h346.7c7.4,0,13.3,6.1,13.3,13.6v115.6c0,7.5-6,13.6-13.3,13.6H26.7c-7.4,0-13.3-6.1-13.3-13.6V27.2c0-7.5,6-13.6,13.3-13.6Z"/>
+  </g>
+  <g class="cls-2">
+    <text class="cls-3" transform="translate(19.6 75.1) scale(1 1)"><tspan x="0" y="0">Ei koske</tspan></text>
+    <text class="cls-3" transform="translate(19.6 104.7) scale(1 1)"><tspan x="0" y="0">P-tunnuksella: </tspan></text>
+  </g>
+  <text class="cls-1" transform="translate(19.6 75.1) scale(1 1)"><tspan x="0" y="0"> </tspan></text>
+  <g class="cls-2">
+    <text class="cls-3" transform="translate(240.3 75.4) scale(1 1)"><tspan x="0" y="0">Gäller ej med</tspan></text>
+    <text class="cls-3" transform="translate(240.3 105) scale(1 1)"><tspan x="0" y="0">P-tecknet:</tspan></text>
+    <text class="cls-4" transform="translate(349.9 105) scale(1 1)"><tspan x="0" y="0"> </tspan></text>
+  </g>
+</svg>

@@ -1,55 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#FFCD00;}
-	.st1{fill:#E4002B;}
-	.st2{fill:#101820;}
-</style>
-<g id="CIRCLE_3_">
-	<path class="st0" d="M411.02,212.6c0-109.59-88.84-198.43-198.43-198.43c-109.58,0-198.42,88.84-198.42,198.43
-		c0,109.58,88.84,198.42,198.42,198.42C322.19,411.02,411.02,322.18,411.02,212.6L411.02,212.6z"/>
-</g>
-<g id="CIRCLE_4_">
-	<path class="st1" d="M404.82,212.6c0-106.16-86.06-192.23-192.22-192.23c-106.16,0-192.22,86.07-192.22,192.23
-		c0,106.16,86.06,192.22,192.22,192.22C318.76,404.82,404.82,318.76,404.82,212.6L404.82,212.6z"/>
-</g>
-<g id="CIRCLE_5_">
-	<path class="st0" d="M364.48,212.6c0-83.89-68-151.89-151.89-151.89c-83.89,0-151.89,68-151.89,151.89
-		c0,83.88,68,151.89,151.89,151.89C296.49,364.49,364.48,296.48,364.48,212.6L364.48,212.6z"/>
-</g>
-<g id="LWPOLYLINE_44_">
-	<polygon class="st2" points="112.46,305.51 75.25,268.36 112.45,231.1 	"/>
-</g>
-<g id="LWPOLYLINE_47_">
-	<polygon class="st2" points="312.73,305.51 349.94,268.36 312.74,231.1 	"/>
-</g>
-<g id="ELLIPSE_2_">
-	<path class="st2" d="M129.96,209.36c0-8.69-7.04-15.74-15.74-15.74c-8.69,0-15.74,7.05-15.74,15.74c0,8.69,7.04,15.74,15.74,15.74
-		C122.92,225.1,129.96,218.05,129.96,209.36"/>
-</g>
-<g id="ELLIPSE_3_">
-	<path class="st2" d="M287.24,209.42c0-8.69-7.04-15.74-15.74-15.74c-8.69,0-15.74,7.05-15.74,15.74c0,8.69,7.04,15.74,15.74,15.74
-		C280.19,225.16,287.24,218.11,287.24,209.42"/>
-</g>
-<g id="LWPOLYLINE_53_">
-	<path class="st2" d="M148.21,192.79h17.67v-5.89h-17.67v-54.78h185.93v56.63h-24.3v5.89h17.68v14.77l-36.97,0.03
-		c0.16-10.52-8.23-19.18-18.75-19.34c-10.52-0.16-19.18,8.23-19.34,18.75c-0.01,0.18-0.01,0.36-0.01,0.54H133.27
-		c0.16-10.52-8.23-19.18-18.75-19.34c-10.52-0.16-19.18,8.23-19.34,18.75c0,0.2,0,0.39,0,0.59H86.1l0-32.75l13.77-30.07h42.47v46.23
-		H148.21z"/>
-</g>
-<g id="LWPOLYLINE_56_">
-	<path class="st2" d="M287.94,263.78c0-2.88-2.33-5.21-5.21-5.21h-0.74c-4.93,0-8.93,4-8.93,8.93v37.95H261.9v-41.67
-		c0-2.88-2.33-5.21-5.21-5.21h-0.74c-4.93,0-8.92,4-8.92,8.93v37.95h-11.16v-55.81h11.16v4.46c3.65-2.27,7.72-3.75,11.97-4.37
-		c0.52-0.08,1.05-0.1,1.57-0.06c4.16,0.28,7.96,2.48,10.27,5.96c4.17-3.12,9.05-5.15,14.21-5.89c0.52-0.08,1.04-0.1,1.56-0.06
-		c7.04,0.47,12.51,6.31,12.51,13.37v42.41h-11.17V263.78z"/>
-</g>
-<g id="LWPOLYLINE_46_">
-	<path class="st0" d="M190.59,284.99c0,5.13,4.16,9.3,9.3,9.3s9.3-4.17,9.3-9.3V251.5c0-5.13-4.16-9.3-9.3-9.3s-9.3,4.17-9.3,9.3
-		V284.99z"/>
-</g>
-<g id="LWPOLYLINE_52_">
-	<polygon class="st0" points="131.53,152.51 104.39,152.51 93.92,175.36 131.53,175.36 	"/>
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 396.9 396.9">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ffcd00;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #e4002b;
+      }
+
+      .cls-3 {
+        fill: #101820;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1" data-name="Layer 1" inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+    <sodipodi:namedview id="namedview1850" bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" inkscape:current-layer="Layer_1" inkscape:cx="198.4265" inkscape:cy="198.42599" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="480" inkscape:window-maximized="0" inkscape:window-width="640" inkscape:window-x="0" inkscape:window-y="0" inkscape:zoom="0.55503813" objecttolerance="10" pagecolor="#ffffff" showgrid="false"/>
+    <g id="CIRCLE">
+      <path id="path1810" class="cls-1" d="M396.9,198.4C396.9,88.8,308,0,198.4,0S0,88.8,0,198.4s88.8,198.4,198.4,198.4,198.4-88.8,198.4-198.4h0Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="CIRCLE-2" data-name="CIRCLE">
+      <path id="path1813" class="cls-2" d="M390.6,198.4c0-106.2-86.1-192.2-192.2-192.2S6.2,92.3,6.2,198.4s86.1,192.2,192.2,192.2c106.2,0,192.2-86.1,192.2-192.2Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="CIRCLE-3" data-name="CIRCLE">
+      <path id="path1816" class="cls-1" d="M350.3,198.4c0-83.9-68-151.9-151.9-151.9S46.5,114.5,46.5,198.4s68,151.9,151.9,151.9,151.9-68,151.9-151.9h0Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="LWPOLYLINE">
+      <polygon id="polygon1819" class="cls-3" points="98.3 216.9 98.3 291.3 61.1 254.2 98.3 216.9"/>
+    </g>
+    <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+      <polygon id="polygon1822" class="cls-3" points="298.6 216.9 298.6 291.3 335.8 254.2 298.6 216.9"/>
+    </g>
+    <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+      <path id="path1825" class="cls-3" d="M156.6,270.8c0,11.3,9.2,20.5,20.5,20.5s20.5-9.2,20.5-20.5v-33.5c0-11.3-9.2-20.5-20.5-20.5s-20.5,9.2-20.5,20.5v33.5Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+      <path id="path1828" class="cls-3" d="M245.5,238.6c-2.4-2-5.5-3.2-8.6-3.2-4.5.6-8.8,2.1-12.7,4.5v-4.5h-11.2v55.8h11.2v-39.4c0-4.1,3.3-7.4,7.4-7.4s7.4,3.3,7.4,7.4v39.4h11.2v-39.4c0-4.1,3.3-7.4,7.4-7.4s7.4,3.3,7.4,7.4v39.4h11.2v-42.5c-.5-7.2-6.2-12.8-13.4-13.3-6-.8-12.1.3-17.4,3.2h0Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="LWPOLYLINE-5" data-name="LWPOLYLINE">
+      <path id="path1834" class="cls-1" d="M167.7,270.8c0,5.1,4.2,9.3,9.3,9.3s9.3-4.2,9.3-9.3v-33.5c0-5.1-4.2-9.3-9.3-9.3s-9.3,4.2-9.3,9.3v33.5Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="ELLIPSE">
+      <path id="path1837" class="cls-3" d="M115.8,195.2c0-8.7-7-15.7-15.7-15.7s-15.7,7-15.7,15.7,7,15.7,15.7,15.7,15.7-7,15.7-15.7" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="ELLIPSE-2" data-name="ELLIPSE">
+      <path id="path1840" class="cls-3" d="M273.1,195.2c0-8.7-7-15.7-15.7-15.7s-15.7,7-15.7,15.7,7,15.7,15.7,15.7,15.7-7,15.7-15.7" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="LWPOLYLINE-6" data-name="LWPOLYLINE">
+      <path id="path1843" class="cls-3" d="M134,178.6h17.7v-5.9h-17.7v-54.8h185.9v56.6h-24.3v5.9h17.7v14.8h-37c.2-10.5-8.2-19.2-18.8-19.3-10.5-.2-19.2,8.2-19.3,18.8,0,.2,0,.4,0,.5h-119.2c.2-10.5-8.2-19.2-18.8-19.3-10.5-.2-19.2,8.2-19.3,18.8v.6h-9.1v-32.8s13.8-30.1,13.8-30.1h42.5v46.2h5.9Z" inkscape:connector-curvature="0"/>
+    </g>
+    <g id="LWPOLYLINE-7" data-name="LWPOLYLINE">
+      <polygon id="polygon1846" class="cls-1" points="79.7 161.2 117.4 161.2 117.4 138.3 90.2 138.3 79.7 161.2"/>
+    </g>
+    <g id="LWPOLYLINE-8" data-name="LWPOLYLINE">
+      <path id="path1877" class="cls-3" d="M107,241.1h11.2v-3.7c0-1.2.2-2.4.7-3.5,1.9-4.8,7.4-7,12.1-5.1,4.8,1.9,7,7.4,5.1,12.1l-29.1,39.3v11.2h40.9v-11.2h-28.3l27.1-35.8c3.8-10.6-1.7-22.4-12.3-26.2-10.6-3.8-22.4,1.7-26.2,12.3-1,2.9-1.4,6-1.1,9v1.7Z" inkscape:connector-curvature="0"/>
+    </g>
+  </g>
 </svg>

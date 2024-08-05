@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 361.1 121.4">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ffcd00;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #e4002b;
+      }
+
+      .cls-3 {
+        fill: #101820;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-1" x="0" width="361.1" height="121.4"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-2" d="M24.1,0h312.9c13.3,0,24.1,10.9,24.1,24.3v72.8c0,13.4-10.8,24.3-24.1,24.3H24.1c-13.3,0-24.1-10.9-24.1-24.3V24.3C0,10.9,10.8,0,24.1,0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-1" d="M24.1,12.1h312.9c6.7,0,12,5.4,12,12.1v72.8c0,6.7-5.4,12.1-12,12.1H24.1c-6.6,0-12-5.4-12-12.1V24.3c0-6.7,5.4-12.1,12-12.1Z"/>
+  </g>
+  <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+    <polygon class="cls-3" points="75.2 91 84.3 91 68.3 30.3 58.1 30.3 42.1 91 51.2 91 54.1 80.7 72.3 80.7 75.2 91"/>
+  </g>
+  <g id="LWPOLYLINE-5" data-name="LWPOLYLINE">
+    <polygon class="cls-3" points="205.6 80.7 223.8 80.7 226.7 91 235.8 91 219.8 30.3 209.6 30.3 193.6 91 202.7 91 205.6 80.7"/>
+  </g>
+  <g id="LWPOLYLINE-6" data-name="LWPOLYLINE">
+    <polygon class="cls-3" points="277.3 30.3 288.1 30.3 270.9 56.4 288.1 91 278 91 265.2 65.1 258 75.9 258 91 249 91 249 30.3 258 30.3 258 59.5 277.3 30.3"/>
+  </g>
+  <g id="LWPOLYLINE-7" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M307.7,19.7h-4.8c8.4,26.7,8.4,55.3,0,81.9h4.8c15.1-25.2,15.1-56.7,0-81.9Z"/>
+  </g>
+  <g id="LWPOLYLINE-8" data-name="LWPOLYLINE">
+    <path class="cls-3" d="M130.4,101.7c-8.4-26.7-8.4-55.3,0-81.9h-4.8c-15.1,25.2-15.1,56.7,0,81.9h4.8Z"/>
+  </g>
+  <g id="LWPOLYLINE-9" data-name="LWPOLYLINE">
+    <polygon class="cls-3" points="178 30.3 166.3 73.3 154.6 30.3 145.2 30.3 161.7 91 170.8 91 187.3 30.3 178 30.3"/>
+  </g>
+  <g id="LWPOLYLINE-10" data-name="LWPOLYLINE">
+    <polygon class="cls-1" points="63.2 48.5 56.6 71.6 69.7 71.6 63.2 48.5"/>
+  </g>
+  <g id="LWPOLYLINE-11" data-name="LWPOLYLINE">
+    <polygon class="cls-1" points="214.7 48.5 208.2 71.6 221.2 71.6 214.7 48.5"/>
+  </g>
+</svg>

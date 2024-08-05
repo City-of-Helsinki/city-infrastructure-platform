@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 397.4 232">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2, .cls-4 {
+        fill: #005eb8;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        stroke: #005eb8;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect id="rect4" class="cls-4" x="0" y=".7" width="396.9" height="231.5"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path id="path7" class="cls-3" d="M26.5.7h343.9c14.6,0,26.5,11.8,26.5,26.5v178.6c0,14.6-11.9,26.5-26.5,26.5H26.5C11.9,232.3,0,220.4,0,205.8V27.2C0,12.6,11.9.7,26.5.7Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path id="path10" class="cls-2" d="M26.5,14h343.9c7.3,0,13.2,5.9,13.2,13.2v178.6c0,7.3-5.9,13.2-13.2,13.2H26.5c-7.3,0-13.2-5.9-13.2-13.2V27.2c0-7.3,5.9-13.2,13.2-13.2Z"/>
+  </g>
+  <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+    <polygon id="polygon13" class="cls-3" points="132.4 109.9 119.1 189.3 53 189.3 39.8 109.9 46.4 43.7 125.7 43.7 132.4 109.9"/>
+  </g>
+  <g id="LWPOLYLINE-5" data-name="LWPOLYLINE">
+    <path id="path16" class="cls-3" d="M166.8,191.9h4.2c-7.4-23.2-7.4-48.2,0-71.4h-4.2c-13.3,22-13.3,49.5,0,71.4Z"/>
+  </g>
+  <g id="LWPOLYLINE-6" data-name="LWPOLYLINE">
+    <path id="path19" class="cls-3" d="M349.3,191.9h-4.2c7.4-23.2,7.4-48.2,0-71.4h4.2c13.3,22,13.3,49.5,0,71.4Z"/>
+  </g>
+  <g id="LWPOLYLINE-7" data-name="LWPOLYLINE">
+    <rect id="rect22" class="cls-3" x="229.9" y="152.2" width="26.5" height="7.9"/>
+  </g>
+  <g id="LWPOLYLINE-8" data-name="LWPOLYLINE">
+    <rect id="rect25" class="cls-3" x="229.9" y="72.8" width="26.5" height="7.9"/>
+  </g>
+  <g id="POINT">
+    <line id="line28" class="cls-1" x1="46.4" y1="43.7" x2="46.4" y2="43.7"/>
+  </g>
+  <g id="POINT-2" data-name="POINT">
+    <line id="line31" class="cls-1" x1="46.4" y1="43.7" x2="46.4" y2="43.7"/>
+  </g>
+  <g id="LWPOLYLINE-9" data-name="LWPOLYLINE">
+    <path id="path34" class="cls-2" d="M58.3,57h55.4l5.3,52.9h-13.2c0-11-8.9-19.8-19.8-19.8s-19.8,8.9-19.8,19.8h-13.2l5.3-52.9Z"/>
+  </g>
+  <g id="LWPOLYLINE-10" data-name="LWPOLYLINE">
+    <path id="path37" class="cls-2" d="M96,109.9h-19.8c0-5.5,4.4-9.9,9.9-9.9s9.9,4.4,9.9,9.9Z"/>
+  </g>
+</svg>

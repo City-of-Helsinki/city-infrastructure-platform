@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 170">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 24px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        isolation: isolate;
+      }
+
+      .cls-1, .cls-3, .cls-4 {
+        fill: #fffef4;
+        font-family: MyriadPro-Semibold, 'Myriad Pro';
+        font-weight: 600;
+      }
+
+      .cls-5 {
+        fill: none;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: 14px;
+      }
+
+      .cls-3 {
+        font-size: 21.6px;
+      }
+
+      .cls-4 {
+        font-size: 21px;
+      }
+
+      .cls-6 {
+        fill: #fff;
+      }
+
+      .cls-6, .cls-7 {
+        stroke-width: 0px;
+      }
+
+      .cls-7 {
+        fill: #2160ad;
+      }
+    </style>
+  </defs>
+  <g id="LWPOLYLINE">
+    <rect class="cls-7" width="400" height="170"/>
+  </g>
+  <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+    <path class="cls-6" d="M26.7,0h346.7c14.7,0,26.7,12.2,26.7,27.2v115.6c0,15-11.9,27.2-26.7,27.2H26.7C11.9,170,0,157.8,0,142.8V27.2C0,12.2,11.9,0,26.7,0Z"/>
+  </g>
+  <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+    <path class="cls-7" d="M26.7,13.6h346.7c7.4,0,13.3,6.1,13.3,13.6v115.6c0,7.5-6,13.6-13.3,13.6H26.7c-7.4,0-13.3-6.1-13.3-13.6V27.2c0-7.5,6-13.6,13.3-13.6Z"/>
+  </g>
+  <line class="cls-5" x1="126.2" y1="2.2" x2="126.2" y2="165.6"/>
+  <g class="cls-2">
+    <text class="cls-4" transform="translate(21.8 34)"><tspan x="0" y="0">Vyöhyke</tspan></text>
+    <text class="cls-1" transform="translate(38.4 62.8)"><tspan x="0" y="0">Zon </tspan></text>
+  </g>
+  <g class="cls-2">
+    <text class="cls-4" transform="translate(143.2 34)"><tspan x="0" y="0">Maksu ei koske</tspan></text>
+    <text class="cls-4" transform="translate(143.2 62.8)"><tspan x="0" y="0">P-tunnuksella:</tspan></text>
+    <text class="cls-1" transform="translate(273.5 62.8)"><tspan x="0" y="0"> </tspan></text>
+  </g>
+  <g class="cls-2">
+    <text class="cls-3" transform="translate(149.7 112.9) scale(1 1)"><tspan x="0" y="0">Avgiften gäller ej</tspan></text>
+    <text class="cls-3" transform="translate(149.7 138.8) scale(1 1)"><tspan x="0" y="0">med P-tecknet: </tspan></text>
+  </g>
+</svg>

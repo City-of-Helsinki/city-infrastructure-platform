@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg17"
+   xml:space="preserve"
+   viewBox="0 0 359.13599 193.10399"
+   height="193.10399"
+   width="359.13599"
+   y="0px"
+   x="0px"
+   version="1.1"><metadata
+   id="metadata23"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs21" />
+<g
+   transform="translate(-120.736,-265.20801)"
+   id="Kuvataso_1">
+</g>
+<g
+   transform="translate(-120.736,-265.20801)"
+   id="_x30_">
+</g>
+<g
+   transform="translate(-120.736,-265.20801)"
+   id="HAT">
+</g>
+<g
+   transform="translate(-120.736,-265.20801)"
+   id="HATKEL">
+</g>
+<g
+   transform="translate(-120.736,-265.20801)"
+   id="HATPUN">
+	<g
+   id="g14">
+		<rect
+   id="rect6"
+   height="192.96001"
+   width="358.272"
+   style="clip-rule:evenodd;fill:#ffd200;fill-rule:evenodd"
+   y="265.20801"
+   x="120.952" />
+		<path
+   id="path8"
+   d="M 461.656,273.848 H 136.864 v 0 c -2.592,0 -4.968,0.936 -6.696,2.448 -1.728,1.512 -2.808,3.6 -2.808,5.904 v 0 86.112 0 c 0,2.232 1.08,4.32 2.808,5.832 1.728,1.512 4.104,2.52 6.696,2.52 v 0 h 324.792 v 0 c 2.592,0 4.968,-1.008 6.696,-2.52 1.728,-1.512 2.736,-3.6 2.736,-5.832 v 0 -86.112 0 c 0,-2.304 -1.008,-4.392 -2.736,-5.904 -1.728,-1.512 -4.104,-2.448 -6.696,-2.448 z"
+   style="fill:#ffd200" />
+		<path
+   id="path10"
+   d="m 300.232,265.568 h 157.824 c 11.952,0 21.816,9.864 21.816,21.816 v 149.112 c 0,11.952 -9.864,21.816 -21.816,21.816 H 300.232 v -9.216 h 157.824 c 6.912,0 12.6,-5.472 12.6,-12.096 V 285.728 c 0,-6.624 -5.688,-12.096 -12.6,-12.096 H 300.232 Z m -157.68,0 h 157.68 v 8.064 h -157.68 c -6.912,0 -12.6,5.472 -12.6,12.096 V 437 c 0,6.624 5.688,12.096 12.6,12.096 h 157.68 v 9.216 h -157.68 c -11.952,0 -21.816,-9.864 -21.816,-21.816 V 287.384 c 0,-11.952 9.864,-21.816 21.816,-21.816 z"
+   style="clip-rule:evenodd;fill:#ef3e42;fill-rule:evenodd" />
+		<polygon
+   id="polygon12"
+   points="240.4,337.784 315.28,337.784 315.424,302.072 363.016,349.52 315.28,397.544 315.136,361.616 264.16,361.544 264.16,418.496 240.4,418.496 "
+   style="clip-rule:evenodd;fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:10" />
+	</g>
+</g>
+</svg>
