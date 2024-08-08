@@ -115,6 +115,8 @@ class TrafficControlDeviceTypeAdmin(
         "target_model",
     )
     list_filter = (TrafficSignTypeListFilter,)
+    search_fields = ("code", "legacy_code")
+    search_help_text = "Searches from code and legacy_code fields"
     ordering = ("code",)
     actions = None
 
