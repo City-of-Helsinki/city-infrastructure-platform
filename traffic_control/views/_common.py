@@ -145,7 +145,9 @@ class FileUploadViews(GenericViewSet):
     def change_file(self, request, file_pk, *args, **kwargs):
         if request.method == "DELETE":
             try:
-                instance = self.file_queryset.get(id=file_pk)
+                obj = self.get_object()
+                params = {"id": file_pk, self.get_file_relation(): obj.id}
+                instance = self.file_queryset.get(**params)
             except exceptions.ObjectDoesNotExist:
                 return Response({"detail": _("File not found.")}, status=status.HTTP_404_NOT_FOUND)
 
