@@ -1,12 +1,14 @@
 import io
 import shutil
 import tempfile
+import uuid
 
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
 
 from traffic_control.models import (
     BarrierPlan,
@@ -54,6 +56,70 @@ from traffic_control.tests.factories import (
 MEDIA_ROOT = tempfile.mkdtemp()
 
 settings_overrides = override_settings(MEDIA_ROOT=MEDIA_ROOT)
+
+
+DELETE_TEST_PARAMS = (
+    (get_barrier_plan, BarrierPlan, BarrierPlanFile, "barrier_plan", "barrierplan"),
+    (get_barrier_real, BarrierReal, BarrierRealFile, "barrier_real", "barrierreal"),
+    (get_mount_plan, MountPlan, MountPlanFile, "mount_plan", "mountplan"),
+    (get_mount_real, MountReal, MountRealFile, "mount_real", "mountreal"),
+    (
+        get_road_marking_plan,
+        RoadMarkingPlan,
+        RoadMarkingPlanFile,
+        "road_marking_plan",
+        "roadmarkingplan",
+    ),
+    (
+        get_road_marking_real,
+        RoadMarkingReal,
+        RoadMarkingRealFile,
+        "road_marking_real",
+        "roadmarkingreal",
+    ),
+    (
+        get_signpost_plan,
+        SignpostPlan,
+        SignpostPlanFile,
+        "signpost_plan",
+        "signpostplan",
+    ),
+    (
+        get_signpost_real,
+        SignpostReal,
+        SignpostRealFile,
+        "signpost_real",
+        "signpostreal",
+    ),
+    (
+        get_traffic_light_plan,
+        TrafficLightPlan,
+        TrafficLightPlanFile,
+        "traffic_light_plan",
+        "trafficlightplan",
+    ),
+    (
+        get_traffic_light_real,
+        TrafficLightReal,
+        TrafficLightRealFile,
+        "traffic_light_real",
+        "trafficlightreal",
+    ),
+    (
+        get_traffic_sign_plan,
+        TrafficSignPlan,
+        TrafficSignPlanFile,
+        "traffic_sign_plan",
+        "trafficsignplan",
+    ),
+    (
+        get_traffic_sign_real,
+        TrafficSignReal,
+        TrafficSignRealFile,
+        "traffic_sign_real",
+        "trafficsignreal",
+    ),
+)
 
 
 def setup_module():
@@ -238,71 +304,7 @@ def test_file_rewrite(factory, model_class, file_model_class, related_name, url_
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "factory,model_class,file_model_class,related_name,url_name",
-    (
-        (get_barrier_plan, BarrierPlan, BarrierPlanFile, "barrier_plan", "barrierplan"),
-        (get_barrier_real, BarrierReal, BarrierRealFile, "barrier_real", "barrierreal"),
-        (get_mount_plan, MountPlan, MountPlanFile, "mount_plan", "mountplan"),
-        (get_mount_real, MountReal, MountRealFile, "mount_real", "mountreal"),
-        (
-            get_road_marking_plan,
-            RoadMarkingPlan,
-            RoadMarkingPlanFile,
-            "road_marking_plan",
-            "roadmarkingplan",
-        ),
-        (
-            get_road_marking_real,
-            RoadMarkingReal,
-            RoadMarkingRealFile,
-            "road_marking_real",
-            "roadmarkingreal",
-        ),
-        (
-            get_signpost_plan,
-            SignpostPlan,
-            SignpostPlanFile,
-            "signpost_plan",
-            "signpostplan",
-        ),
-        (
-            get_signpost_real,
-            SignpostReal,
-            SignpostRealFile,
-            "signpost_real",
-            "signpostreal",
-        ),
-        (
-            get_traffic_light_plan,
-            TrafficLightPlan,
-            TrafficLightPlanFile,
-            "traffic_light_plan",
-            "trafficlightplan",
-        ),
-        (
-            get_traffic_light_real,
-            TrafficLightReal,
-            TrafficLightRealFile,
-            "traffic_light_real",
-            "trafficlightreal",
-        ),
-        (
-            get_traffic_sign_plan,
-            TrafficSignPlan,
-            TrafficSignPlanFile,
-            "traffic_sign_plan",
-            "trafficsignplan",
-        ),
-        (
-            get_traffic_sign_real,
-            TrafficSignReal,
-            TrafficSignRealFile,
-            "traffic_sign_real",
-            "trafficsignreal",
-        ),
-    ),
-)
+@pytest.mark.parametrize("factory,model_class,file_model_class,related_name,url_name", DELETE_TEST_PARAMS)
 def test_file_delete(factory, model_class, file_model_class, related_name, url_name):
     user = get_user("test_superuser", admin=True)
     api_client = get_api_client(user)
@@ -326,6 +328,38 @@ def test_file_delete(factory, model_class, file_model_class, related_name, url_n
     assert model_class.objects.count() == 1
     assert obj.files.count() == 0
     assert not file_model_class.objects.filter(pk=file_obj.pk).exists()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("factory,model_class,file_model_class,related_name,url_name", DELETE_TEST_PARAMS)
+def test_file_delete_with_non_existing_base_object(factory, model_class, file_model_class, related_name, url_name):
+    user = get_user("test_superuser", admin=True)
+    api_client = get_api_client(user)
+    obj = factory()
+    non_existing_uuid = uuid.uuid4()
+    file_obj = file_model_class.objects.create(
+        **{
+            related_name: obj,
+            "file": SimpleUploadedFile("temp.txt", b"File contents"),
+        },
+    )
+
+    delete_response = api_client.delete(
+        reverse(
+            f"v1:{url_name}-change-file",
+            kwargs={"pk": non_existing_uuid, "file_pk": file_obj.id},
+        ),
+    )
+
+    obj.refresh_from_db()
+    expected_error_detail = ErrorDetail(
+        string=f"No {model_class._meta.object_name} matches the given query.", code="not_found"
+    )
+    assert delete_response.status_code == status.HTTP_404_NOT_FOUND
+    assert delete_response.data.get("detail") == expected_error_detail
+    assert model_class.objects.count() == 1
+    assert obj.files.count() == 1
+    assert file_model_class.objects.filter(pk=file_obj.pk).exists()
 
 
 @pytest.mark.parametrize(
