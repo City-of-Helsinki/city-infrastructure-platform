@@ -1,7 +1,9 @@
 from traffic_control.models.additional_sign import (
     AdditionalSignPlan,
+    AdditionalSignPlanFile,
     AdditionalSignPlanReplacement,
     AdditionalSignReal,
+    AdditionalSignRealFile,
     AdditionalSignRealOperation,
 )
 from traffic_control.models.affect_area import CoverageArea, CoverageAreaCategory

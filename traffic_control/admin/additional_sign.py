@@ -1,4 +1,5 @@
 from django.contrib.gis import admin
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
@@ -19,7 +20,12 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size, Surface
-from traffic_control.forms import AdditionalSignPlanModelForm, AdditionalSignRealModelForm
+from traffic_control.forms import (
+    AdditionalSignPlanModelForm,
+    AdditionalSignRealModelForm,
+    AdminFileWidget,
+    CityInfraFileUploadFormset,
+)
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
@@ -28,8 +34,17 @@ from traffic_control.mixins import (
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
-from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
-from traffic_control.models.additional_sign import AdditionalSignPlanReplacement, AdditionalSignRealOperation, Color
+from traffic_control.models import (
+    AdditionalSignPlan,
+    AdditionalSignPlanFile,
+    AdditionalSignReal,
+    AdditionalSignRealFile,
+)
+from traffic_control.models.additional_sign import (
+    AdditionalSignPlanReplacement,
+    AdditionalSignRealOperation,
+    Color,
+)
 from traffic_control.models.traffic_sign import LocationSpecifier
 from traffic_control.resources.additional_sign import (
     AdditionalSignPlanResource,
@@ -47,6 +62,22 @@ shared_initial_values = {
     "lane_type": LaneType.MAIN,
     "location_specifier": LocationSpecifier.RIGHT,
 }
+
+
+class AdditionalSignPlanFileInline(admin.TabularInline):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidget},
+    }
+    model = AdditionalSignPlanFile
+    formset = CityInfraFileUploadFormset
+
+
+class AdditionalSignRealFileInline(admin.TabularInline):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidget},
+    }
+    model = AdditionalSignRealFile
+    formset = CityInfraFileUploadFormset
 
 
 class AdditionalSignRealOperationInline(TrafficControlOperationInlineBase):
@@ -158,6 +189,7 @@ class AdditionalSignPlanAdmin(
     ]
     ordering = ("-created_at",)
     inlines = (
+        AdditionalSignPlanFileInline,
         AdditionalSignPlanReplacesInline,
         AdditionalSignPlanReplacedByInline,
     )
@@ -346,7 +378,10 @@ class AdditionalSignRealAdmin(
         "source_id",
         "source_name",
     )
-    inlines = (AdditionalSignRealOperationInline,)
+    inlines = (
+        AdditionalSignRealFileInline,
+        AdditionalSignRealOperationInline,
+    )
     initial_values = {
         **shared_initial_values,
         "condition": Condition.VERY_GOOD,

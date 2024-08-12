@@ -10,6 +10,7 @@ from enumfields import Enum, EnumField, EnumIntegerField
 
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
+    AbstractFileModel,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -416,6 +417,28 @@ class AdditionalSignRealOperation(OperationBase):
         verbose_name_plural = _("Additional sign real operations")
 
 
+class AdditionalSignPlanFile(AbstractFileModel):
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="planfiles/additional_sign/")
+    additional_sign_plan = models.ForeignKey(AdditionalSignPlan, on_delete=models.CASCADE, related_name="files")
+
+    class Meta:
+        db_table = "additional_sign_plan_file"
+        verbose_name = _("Additional Sign Plan File")
+        verbose_name_plural = _("Additional Sign Plan Files")
+
+
+class AdditionalSignRealFile(AbstractFileModel):
+    file = models.FileField(_("File"), blank=False, null=False, upload_to="realfiles/additional_sign/")
+    additional_sign_real = models.ForeignKey(AdditionalSignReal, on_delete=models.CASCADE, related_name="files")
+
+    class Meta:
+        db_table = "additional_sign_real_file"
+        verbose_name = _("Additional Sign Real File")
+        verbose_name_plural = _("Additional Sign Real Files")
+
+
 auditlog.register(AdditionalSignPlan)
+auditlog.register(AdditionalSignPlanFile)
 auditlog.register(AdditionalSignReal)
+auditlog.register(AdditionalSignRealFile)
 auditlog.register(AdditionalSignPlanReplacement)

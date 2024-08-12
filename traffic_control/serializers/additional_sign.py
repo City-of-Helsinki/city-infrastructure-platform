@@ -5,7 +5,9 @@ from rest_framework_gis.fields import GeometryField
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import (
     AdditionalSignPlan,
+    AdditionalSignPlanFile,
     AdditionalSignReal,
+    AdditionalSignRealFile,
     AdditionalSignRealOperation,
     OperationType,
     TrafficControlDeviceType,
@@ -18,6 +20,12 @@ from traffic_control.serializers.common import (
     StructuredContentValidator,
 )
 from traffic_control.services.additional_sign import additional_sign_plan_create, additional_sign_plan_update
+
+
+class AdditionalSignPlanFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdditionalSignPlanFile
+        fields = "__all__"
 
 
 class AdditionalSignPlanInputSerializer(
@@ -81,6 +89,12 @@ class AdditionalSignPlanOutputSerializer(
 
 class AdditionalSignPlanGeoJSONOutputSerializer(AdditionalSignPlanOutputSerializer):
     location = GeometryField(required=False)
+
+
+class AdditionalSignRealFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdditionalSignRealFile
+        fields = "__all__"
 
 
 class AdditionalSignRealOperationSerializer(serializers.ModelSerializer):
