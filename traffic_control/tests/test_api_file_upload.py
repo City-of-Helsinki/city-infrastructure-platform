@@ -11,6 +11,10 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 
 from traffic_control.models import (
+    AdditionalSignPlan,
+    AdditionalSignPlanFile,
+    AdditionalSignReal,
+    AdditionalSignRealFile,
     BarrierPlan,
     BarrierPlanFile,
     BarrierReal,
@@ -37,6 +41,8 @@ from traffic_control.models import (
     TrafficSignRealFile,
 )
 from traffic_control.tests.factories import (
+    get_additional_sign_plan,
+    get_additional_sign_real,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -59,6 +65,20 @@ settings_overrides = override_settings(MEDIA_ROOT=MEDIA_ROOT)
 
 
 DELETE_TEST_PARAMS = (
+    (
+        get_additional_sign_plan,
+        AdditionalSignPlan,
+        AdditionalSignPlanFile,
+        "additional_sign_plan",
+        "additionalsignplan",
+    ),
+    (
+        get_additional_sign_real,
+        AdditionalSignReal,
+        AdditionalSignRealFile,
+        "additional_sign_real",
+        "additionalsignreal",
+    ),
     (get_barrier_plan, BarrierPlan, BarrierPlanFile, "barrier_plan", "barrierplan"),
     (get_barrier_real, BarrierReal, BarrierRealFile, "barrier_real", "barrierreal"),
     (get_mount_plan, MountPlan, MountPlanFile, "mount_plan", "mountplan"),
@@ -135,6 +155,8 @@ def teardown_module():
 @pytest.mark.parametrize(
     "factory,model_class,url_name",
     (
+        (get_additional_sign_plan, AdditionalSignPlan, "additionalsignplan"),
+        (get_additional_sign_real, AdditionalSignReal, "additionalsignreal"),
         (get_barrier_plan, BarrierPlan, "barrierplan"),
         (get_barrier_real, BarrierReal, "barrierreal"),
         (get_mount_plan, MountPlan, "mountplan"),
@@ -177,6 +199,8 @@ def test_file_upload(factory, model_class, url_name):
 @pytest.mark.parametrize(
     "factory,model_class,url_name",
     (
+        (get_additional_sign_plan, AdditionalSignPlan, "additionalsignplan"),
+        (get_additional_sign_real, AdditionalSignReal, "additionalsignreal"),
         (get_barrier_plan, BarrierPlan, "barrierplan"),
         (get_barrier_real, BarrierReal, "barrierreal"),
         (get_mount_plan, MountPlan, "mountplan"),
@@ -212,6 +236,20 @@ def test_invalid_file_upload(factory, model_class, url_name):
 @pytest.mark.parametrize(
     "factory,model_class,file_model_class,related_name,url_name",
     (
+        (
+            get_additional_sign_plan,
+            AdditionalSignPlan,
+            AdditionalSignPlanFile,
+            "additional_sign_plan",
+            "additionalsignplan",
+        ),
+        (
+            get_additional_sign_real,
+            AdditionalSignReal,
+            AdditionalSignRealFile,
+            "additional_sign_real",
+            "additionalsignreal",
+        ),
         (get_barrier_plan, BarrierPlan, BarrierPlanFile, "barrier_plan", "barrierplan"),
         (get_barrier_real, BarrierReal, BarrierRealFile, "barrier_real", "barrierreal"),
         (get_mount_plan, MountPlan, MountPlanFile, "mount_plan", "mountplan"),
@@ -365,6 +403,20 @@ def test_file_delete_with_non_existing_base_object(factory, model_class, file_mo
 @pytest.mark.parametrize(
     "factory, model_class, file_model_class, related_name, url_name",
     (
+        (
+            get_additional_sign_plan,
+            AdditionalSignPlan,
+            AdditionalSignPlanFile,
+            "additional_sign_plan",
+            "additionalsignplan",
+        ),
+        (
+            get_additional_sign_real,
+            AdditionalSignReal,
+            AdditionalSignRealFile,
+            "additional_sign_real",
+            "additionalsignreal",
+        ),
         (
             get_barrier_plan,
             BarrierPlan,

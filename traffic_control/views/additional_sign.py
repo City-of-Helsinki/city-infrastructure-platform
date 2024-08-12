@@ -7,13 +7,20 @@ from traffic_control.filters import (
     AdditionalSignRealFilterSet,
     AdditionalSignRealOperationFilterSet,
 )
-from traffic_control.models import AdditionalSignReal, AdditionalSignRealOperation
+from traffic_control.models import (
+    AdditionalSignPlanFile,
+    AdditionalSignReal,
+    AdditionalSignRealFile,
+    AdditionalSignRealOperation,
+)
 from traffic_control.schema import location_search_parameter
 from traffic_control.serializers.additional_sign import (
+    AdditionalSignPlanFileSerializer,
     AdditionalSignPlanGeoJSONInputSerializer,
     AdditionalSignPlanGeoJSONOutputSerializer,
     AdditionalSignPlanInputSerializer,
     AdditionalSignPlanOutputSerializer,
+    AdditionalSignRealFileSerializer,
     AdditionalSignRealGeoJSONSerializer,
     AdditionalSignRealOperationSerializer,
     AdditionalSignRealSerializer,
@@ -24,6 +31,7 @@ from traffic_control.services.additional_sign import (
     additional_sign_plan_soft_delete,
 )
 from traffic_control.views._common import (
+    FileUploadViews,
     OperationViewSet,
     prefetch_replacements,
     ResponsibleEntityPermission,
@@ -39,7 +47,7 @@ from traffic_control.views._common import (
     partial_update=extend_schema(summary="Partially update single AdditionalSign Plan"),
     destroy=extend_schema(summary="Soft-delete single AdditionalSign Plan"),
 )
-class AdditionalSignPlanViewSet(TrafficControlViewSet):
+class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": AdditionalSignPlanOutputSerializer,
         "geojson": AdditionalSignPlanGeoJSONOutputSerializer,
@@ -49,6 +57,9 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet):
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = prefetch_replacements(additional_sign_plan_get_active())
     filterset_class = AdditionalSignPlanFilterSet
+    file_queryset = AdditionalSignPlanFile.objects.all()
+    file_serializer = AdditionalSignPlanFileSerializer
+    file_relation = "additional_sign_plan"
 
     def get_list_queryset(self):
         return prefetch_replacements(additional_sign_plan_get_current())
@@ -67,7 +78,7 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet):
     partial_update=extend_schema(summary="Partially update single AdditionalSign Real"),
     destroy=extend_schema(summary="Soft-delete single AdditionalSign Real"),
 )
-class AdditionalSignRealViewSet(TrafficControlViewSet):
+class AdditionalSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": AdditionalSignRealSerializer,
         "geojson": AdditionalSignRealGeoJSONSerializer,
@@ -80,6 +91,9 @@ class AdditionalSignRealViewSet(TrafficControlViewSet):
         .select_related("additional_sign_plan__plan")
     )
     filterset_class = AdditionalSignRealFilterSet
+    file_queryset = AdditionalSignRealFile.objects.all()
+    file_serializer = AdditionalSignRealFileSerializer
+    file_relation = "additional_sign_real"
 
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)

@@ -54,7 +54,7 @@ def test__additional_sign__create_missing_content(client: Client, model, url_nam
         "location": test_point.ewkt,
         "owner": str(get_owner().pk),
         "device_type": str(device_type.pk),
-        "z_coord": 0,
+        "z_coord": 5,
         "direction": 0,
         "order": 0,
         "lifecycle": Lifecycle.ACTIVE.value,
@@ -64,6 +64,8 @@ def test__additional_sign__create_missing_content(client: Client, model, url_nam
         "replacement_to_old-INITIAL_FORMS": 0,
         "replacement_to_new-TOTAL_FORMS": 0,
         "replacement_to_new-INITIAL_FORMS": 0,
+        "files-TOTAL_FORMS": 0,
+        "files-INITIAL_FORMS": 0,
     }
     response = client.post(reverse(f"admin:traffic_control_{url_name}_add"), data=data)
 
@@ -109,6 +111,8 @@ def test__additional_sign__update_device_with_content_to_missing_content(client:
         "replacement_to_old-INITIAL_FORMS": 0,
         "replacement_to_new-TOTAL_FORMS": 0,
         "replacement_to_new-INITIAL_FORMS": 0,
+        "files-TOTAL_FORMS": 0,
+        "files-INITIAL_FORMS": 0,
     }
     response = client.post(
         reverse(f"admin:traffic_control_{url_name}_change", kwargs={"object_id": device.id}),
@@ -157,6 +161,8 @@ def test__additional_sign__update_device_with_missing_content_to_have_content(cl
         "replacement_to_old-INITIAL_FORMS": 0,
         "replacement_to_new-TOTAL_FORMS": 0,
         "replacement_to_new-INITIAL_FORMS": 0,
+        "files-TOTAL_FORMS": 0,
+        "files-INITIAL_FORMS": 0,
     }
     response = client.post(
         reverse(f"admin:traffic_control_{url_name}_change", kwargs={"object_id": device.id}),
@@ -230,7 +236,6 @@ def test__additional_sign__update_dont_accept_content_when_missing_content_is_en
         reverse(f"admin:traffic_control_{url_name}_change", kwargs={"object_id": device.id}),
         data=data,
     )
-
     assert response.status_code == HTTPStatus.OK
     assert model.objects.count() == 1
     assert model.objects.get(id=device.id).content_s == device.content_s
