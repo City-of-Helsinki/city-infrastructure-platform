@@ -1,5 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 from traffic_control.filters import (
@@ -13,7 +15,13 @@ from traffic_control.models import (
     AdditionalSignRealFile,
     AdditionalSignRealOperation,
 )
-from traffic_control.schema import location_search_parameter
+from traffic_control.schema import (
+    file_create_serializer,
+    file_uuid_parameter,
+    FileUploadSchema,
+    location_search_parameter,
+    MultiFileUploadSchema,
+)
 from traffic_control.serializers.additional_sign import (
     AdditionalSignPlanFileSerializer,
     AdditionalSignPlanGeoJSONInputSerializer,
@@ -69,6 +77,47 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
         additional_sign_plan_soft_delete(instance, request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(
+        methods=("post",),
+        summary="Add one or more files to AdditionalSign Plan",
+        request=MultiFileUploadSchema,
+        responses={200: file_create_serializer(AdditionalSignPlanFileSerializer)},
+    )
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_files(self, request, *args, **kwargs):
+        return super().post_files(request, *args, **kwargs)
+
+    @extend_schema(
+        methods=("delete",),
+        summary="Delete single file from AdditionalSign Plan",
+        parameters=[file_uuid_parameter],
+        request=None,
+        responses={204: ""},
+    )
+    @extend_schema(
+        methods=("patch",),
+        summary="Update single file from AdditionalSign Plan",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
+        responses={200: AdditionalSignPlanFileSerializer},
+    )
+    @action(
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
+
 
 @extend_schema_view(
     create=extend_schema(summary="Create new AdditionalSign Real"),
@@ -97,6 +146,47 @@ class AdditionalSignRealViewSet(TrafficControlViewSet, FileUploadViews):
 
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
+
+    @extend_schema(
+        methods=("post",),
+        summary="Add one or more files to AdditionalSign Real",
+        request=MultiFileUploadSchema,
+        responses={200: file_create_serializer(AdditionalSignRealFileSerializer)},
+    )
+    @action(
+        methods=("POST",),
+        detail=True,
+        url_path="files",
+        parser_classes=(MultiPartParser,),
+    )
+    def post_files(self, request, *args, **kwargs):
+        return super().post_files(request, *args, **kwargs)
+
+    @extend_schema(
+        methods=("delete",),
+        summary="Delete single file from AdditionalSign Real",
+        parameters=[file_uuid_parameter],
+        request=None,
+        responses={204: ""},
+    )
+    @extend_schema(
+        methods=("patch",),
+        summary="Update single file from AdditionalSign Real",
+        parameters=[file_uuid_parameter],
+        request=FileUploadSchema,
+        responses={200: AdditionalSignRealFileSerializer},
+    )
+    @action(
+        methods=(
+            "PATCH",
+            "DELETE",
+        ),
+        detail=True,
+        url_path="files/(?P<file_pk>[^/.]+)",
+        parser_classes=(MultiPartParser,),
+    )
+    def change_file(self, request, file_pk, *args, **kwargs):
+        return super().change_file(request, file_pk, *args, **kwargs)
 
 
 @extend_schema_view(

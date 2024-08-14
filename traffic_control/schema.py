@@ -106,6 +106,19 @@ class TrafficSignType(serializers.Serializer):
     text = serializers.CharField(read_only=True)
 
 
+class IconsType(serializers.Serializer):
+    """
+    Serializer that is used to generate OpenAPI documentation for
+    TrafficControlDeviceType model's icons attribute.
+    """
+
+    svg = serializers.CharField(read_only=True, help_text="URL to SVG icon")
+    png_32 = serializers.CharField(read_only=True, help_text="URL to png 32 icon")
+    png_64 = serializers.CharField(read_only=True, help_text="URL to png 64 icon")
+    png_128 = serializers.CharField(read_only=True, help_text="URL png 128 icon")
+    png_256 = serializers.CharField(read_only=True, help_text="URL png 256 icon")
+
+
 class FileUploadSchema(serializers.Serializer):
     """
     Serializer that is used to generate OpenAPI documentation for single file
