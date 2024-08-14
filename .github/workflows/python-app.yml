@@ -64,6 +64,10 @@ jobs:
         run: |
           pytest -ra -vvv --cov=. --cov-report=xml --junitxml=test-results.xml
 
+      - name: Run openapi schema validations
+        run: |
+          ./check-open-api-schema.sh
+
       - name: Install NodeJS dependencies
         run: |
           yarn --cwd map-view install --frozen-lockfile

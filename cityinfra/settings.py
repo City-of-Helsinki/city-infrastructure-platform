@@ -307,6 +307,9 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": checkout_dir.file("cityinfra/openapi.md").read(),
 }
 
+if not DEBUG:
+    SPECTACULAR_SETTINGS.update({"SWAGGER_UI_SETTINGS": {"url": "/static/traffic_control/openapi/openapi.yaml"}})
+
 # django-cors
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True

@@ -10,7 +10,7 @@ from rest_framework_gis.fields import GeometryField
 
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceType
-from traffic_control.schema import TrafficSignType
+from traffic_control.schema import IconsType, TrafficSignType
 from traffic_control.validators import validate_structured_content
 
 
@@ -182,20 +182,7 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
         model = TrafficControlDeviceType
         fields = "__all__"
 
-    @extend_schema_field(
-        {
-            "type": "object",
-            "example": {
-                "svg": "https://example.com/icons/svg/A1.1.svg",
-                "png_32": "https://example.com/icons/png/32/A1.1.png",
-                "png_64": "https://example.com/icons/png/64/A1.1.png",
-                "png_128": "https://example.com/icons/png/128/A1.1.png",
-                "png_256": "https://example.com/icons/png/256/A1.1.png",
-            },
-            "title": "Icons",
-            "help": "URLs for icons of the device.",
-        }
-    )
+    @extend_schema_field(field=IconsType)
     def get_icon_urls(self, obj: TrafficControlDeviceType):
         icons = obj.get_icons()
         if not icons:
