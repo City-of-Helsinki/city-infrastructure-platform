@@ -1,0 +1,2248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-19 12:51+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+msgid "General information"
+msgstr "Allmän information"
+
+msgid "Location information"
+msgstr "Platsinformation"
+
+msgid "Content and physical properties"
+msgstr "Innehåll och fysiska egenskaper"
+
+msgid "Validity"
+msgstr "Giltighet"
+
+msgid "Metadata"
+msgstr "Metadata"
+
+msgid "Related models"
+msgstr "Relaterade modeller"
+
+msgid "Installation information"
+msgstr "Information om installation"
+
+msgid "City furniture"
+msgstr "Markdetaljer"
+
+msgid "Furniture signpost"
+msgstr "Lokaliseringsmärke"
+
+msgid "Traffic"
+msgstr "Trafik"
+
+msgid "Communication"
+msgstr "Kommunikation"
+
+msgid "Security"
+msgstr "Säkerhet"
+
+msgid "Others"
+msgstr "Övrigt"
+
+msgid "Communication fixture"
+msgstr "Kommunikationsanordning"
+
+msgid "Telephone box"
+msgstr "Telefonkiosk"
+
+msgid "Postbox"
+msgstr "Brevlåda"
+
+msgid "Emergency call fixture"
+msgstr "Nödsamtalsanordning"
+
+msgid "Fire detector"
+msgstr "Branddetektor"
+
+msgid "Police call post"
+msgstr "Offentlig polistelefon"
+
+msgid "Switching unit"
+msgstr "Växlingsenhet"
+
+msgid "Road sign"
+msgstr "Vägmärke"
+
+msgid "Traffic light"
+msgstr "Trafiksignal"
+
+msgid "Free-standing sign"
+msgstr "Fristående märke"
+
+msgid "Free-standing warning sign"
+msgstr "Fristående varningsmärke"
+
+msgid "Bus stop"
+msgstr "Busshållplats"
+
+msgid "Milestone"
+msgstr "Milsten"
+
+msgid "Rail level crossing"
+msgstr "Spårvägsplankorsning"
+
+msgid "Gate"
+msgstr "Grind"
+
+msgid "Streetlamp, latern or candelabra"
+msgstr "Gatubelysning, gatlykta"
+
+msgid "Column"
+msgstr "Pelare"
+
+msgid "Lamp post"
+msgstr "Belysningsstolpe"
+
+msgid "Flagpole"
+msgstr "Flaggstång"
+
+msgid "Street sink box"
+msgstr "Gatubrunn"
+
+msgid "Rubbish bin"
+msgstr "Papperskorg"
+
+msgid "Clock"
+msgstr "Ur"
+
+msgid "Directional spot light"
+msgstr "Riktad strålkastare"
+
+msgid "Floodlight mast"
+msgstr "Belysningsmast"
+
+msgid "Windmill"
+msgstr "Väderkvarn"
+
+msgid "Solar cell"
+msgstr "Solpanel"
+
+msgid "Water wheel"
+msgstr "Vattenhjul"
+
+msgid "Pole"
+msgstr "Stolpe"
+
+msgid "Radio mast"
+msgstr "Radiomast"
+
+msgid "Aerial"
+msgstr "Antenn"
+
+msgid "Radio telescope"
+msgstr "Radioteleskop"
+
+msgid "Chimney"
+msgstr "Skorsten"
+
+msgid "Marker"
+msgstr "Märke"
+
+msgid "Hydrant"
+msgstr "Brandpost"
+
+msgid "Upper corridor fire-hydrant"
+msgstr "Väggbrandpost"
+
+msgid "Lower floor panel fire-hydrant"
+msgstr "Golvpanelbrandpost"
+
+msgid "Slidegate valve cap"
+msgstr "Lock till skjutspjällventil"
+
+msgid "Entrance shaft"
+msgstr "Ingångsschakt"
+
+msgid "Converter"
+msgstr "Transformator"
+
+msgid "Stair"
+msgstr "Trappa"
+
+msgid "Outside staircase"
+msgstr "Utomhustrappa"
+
+msgid "Escalator"
+msgstr "Hiss"
+
+msgid "Ramp"
+msgstr "Ramp"
+
+msgid "Patio"
+msgstr "Terrass"
+
+msgid "Fence"
+msgstr "Staket"
+
+msgid "Memorial/monument"
+msgstr "Minnessten/staty"
+
+msgid "Wayside shrine"
+msgstr "Helgedom vid vägkant"
+
+msgid "Crossroads"
+msgstr "Korsning"
+
+msgid "Cross on the summit of a mountain"
+msgstr "Kors på bergstopp"
+
+msgid "Fountain"
+msgstr "Fontän"
+
+msgid "Block mark"
+msgstr "Spärrmärke"
+
+msgid "Boundary post"
+msgstr "Gränsstolpe"
+
+msgid "Bench"
+msgstr "Bänk"
+
+msgid "Code"
+msgstr "Kod"
+
+msgid "Code of the Device Type in the Helsinki Design Manual."
+msgstr ""
+
+msgid "City Furniture Class type"
+msgstr "Markdetaljer - klasstyp"
+
+msgid "OGC CityGML City Furniture Class"
+msgstr ""
+
+msgid "City Furniture Function or Usage type"
+msgstr "Markdetaljer - funktion eller användningstyp"
+
+msgid "OGC CityGML City Furniture Function or Usage type"
+msgstr ""
+
+msgid "Icon"
+msgstr "Symbol"
+
+msgid "Icon of the actual device"
+msgstr ""
+
+msgid "Finnish Description"
+msgstr "Finsk beskrivning"
+
+msgid "Description of the Device Type in Finnish."
+msgstr ""
+
+msgid "Swedish Description"
+msgstr "Svensk beskrivning"
+
+msgid "Description of the Device Type in Swedish."
+msgstr ""
+
+msgid "English Description"
+msgstr "Engelsk beskrivning"
+
+msgid "Description of the Device Type in English."
+msgstr ""
+
+msgid "Size"
+msgstr "Storlek"
+
+msgid "Standard size of the Device Type."
+msgstr ""
+
+msgid "Target data model"
+msgstr "Måldatamodell"
+
+msgid "City Furniture model that this Device Type is usable for."
+msgstr ""
+
+msgid "City Furniture Device Type"
+msgstr "Markdetaljer - anordningstyp"
+
+msgid "City Furniture Device Types"
+msgstr "Markdetaljer- anordningstyper"
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "Name of the color in Helsinki Design System or Manual."
+msgstr ""
+
+msgid "RGB Hex value of the color"
+msgstr ""
+
+msgid "City Furniture Color"
+msgstr "Markdetaljer - färg"
+
+msgid "City Furniture Colors"
+msgstr "Markdetaljer - färger"
+
+msgid "Finnish name"
+msgstr "Finskt namn"
+
+msgid "Name of the target in Finnish."
+msgstr ""
+
+msgid "Swedish name"
+msgstr "Svenskt namn"
+
+msgid "Name of the target in Swedish."
+msgstr ""
+
+msgid "English name"
+msgstr "Engelskt namn"
+
+msgid "Name of the target in English."
+msgstr ""
+
+msgid "Description"
+msgstr "Beskrivning"
+
+msgid "Description of the target."
+msgstr ""
+
+msgid "City Furniture Target"
+msgstr "Markdetaljer - mål"
+
+msgid "City Furniture Targets"
+msgstr "Markdetaljer - mål"
+
+msgid "Up"
+msgstr "Upp"
+
+msgid "Down"
+msgstr "Ned"
+
+msgid "Left"
+msgstr "Vänster"
+
+msgid "Right"
+msgstr "Höger"
+
+msgid "Top right"
+msgstr "Övre högra"
+
+msgid "Bottom right"
+msgstr "Nedre högra"
+
+msgid "Top left"
+msgstr "Övre vänstra"
+
+msgid "Bottom left"
+msgstr "Nedre vänstra"
+
+msgid "Location (3D)"
+msgstr "Plats (3D)"
+
+msgid "Finnish location name"
+msgstr "Finskt platsnamn"
+
+msgid ""
+"Verbose name for the furniture signposts location in Finnish, e.g. street, "
+"park or island."
+msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
+
+
+msgid "Swedish location name"
+msgstr "Svenskt platsnamn"
+
+msgid ""
+"Verbose name for the furniture signposts location in Swedish, e.g. street, "
+"park or island."
+msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
+
+msgid "English location name"
+msgstr "Engelskt platsnamn"
+
+msgid ""
+"Verbose name for the furniture signposts location in English, e.g. street, "
+"park or island."
+msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
+
+msgid "Direction"
+msgstr "Riktning"
+
+msgid ""
+"The direction a person is facing when looking perpendicular to the sign. The "
+"value is in degrees from 0 to 359, where 0 is north, 90 is east, etc."
+msgstr "Riktningen i vilken en person vänder sig när hen tittar direkt på "
+"skylten."
+
+msgid "Additional location info"
+msgstr "Ytterligare platsinfo"
+
+msgid "Additional information about the install location."
+msgstr "Ytterligare information om installationsplatsen."
+
+msgid "City Furniture Device type"
+msgstr "Markdetaljer - anordningstyp"
+
+msgid "Type of the device from Helsinki Design Manual."
+msgstr ""
+
+msgid "Size of the signpost. Enter only if device has a non-standard size."
+msgstr ""
+
+msgid "Height"
+msgstr "Höjd"
+
+msgid ""
+"The height of the sign from the ground, measured from the top in centimeters."
+msgstr ""
+
+msgid "Order"
+msgstr "Ordning"
+
+msgid ""
+"The order of the sign in relation to the signs at the same point. Order from "
+"top to bottom, from left to right starting at 1."
+msgstr ""
+
+msgid "Mount type"
+msgstr "Monteringstyp"
+
+msgid "Type of the mount this device is attached to."
+msgstr ""
+
+msgid "Arrow direction"
+msgstr "Pilens riktning"
+
+msgid "Direction of the arrow on this device in relation to the sign."
+msgstr ""
+
+msgid "Color"
+msgstr "Färg"
+
+msgid "Color of the device from Helsinki Design Manual."
+msgstr ""
+
+msgid "Pictogram"
+msgstr "Piktogram"
+
+msgid "Description of the pictogram on the sign."
+msgstr ""
+
+msgid "Furniture signpost value"
+msgstr "Lokaliseringsmärkets värde"
+
+msgid "Numeric value on the sign."
+msgstr ""
+
+msgid "Finnish text content"
+msgstr "Finskt textinnehåll"
+
+msgid "Content of the sign in Finnish."
+msgstr ""
+
+msgid "Swedish text content"
+msgstr "Svenskt textinnehåll"
+
+msgid "Content of the sign in Swedish."
+msgstr ""
+
+msgid "English text content"
+msgstr "Engelskt textinnehåll"
+
+msgid "Content of the sign in English."
+msgstr ""
+
+msgid "Content's responsible entity"
+msgstr "Ansvarig enhet för innehållet"
+
+msgid "Entity responsible for the device's content."
+msgstr ""
+
+msgid "Target"
+msgstr "Mål"
+
+msgid "Target subject, which this device relates to."
+msgstr ""
+
+msgid "Validity period start"
+msgstr "Giltighetsperiodens start"
+
+msgid "Date on which this device becomes active."
+msgstr ""
+
+msgid "Validity period end"
+msgstr "Giltighetsperiodens slut"
+
+msgid "Date after which this device becomes inactive."
+msgstr ""
+
+msgid "Additional material URL"
+msgstr "URL för ytterligare material"
+
+msgid ""
+"Additional material about the device. This should be publicly available."
+msgstr ""
+"Ytterligare material om anordningen. Detta bör vara allmänt "
+"tillgängligt."
+
+msgid "Mount Plan"
+msgstr "Montering (plan)"
+
+msgid "Mount that this device is mounted on."
+msgstr ""
+
+msgid "Parent Furniture Signpost Plan"
+msgstr "Överordnat lokaliseringsmärke (plan)"
+
+msgid "Furniture Signpost inside which this device is located."
+msgstr ""
+
+msgid "Plan"
+msgstr "Plan"
+
+msgid "Plan which this Device Plan is a part of."
+msgstr ""
+
+msgid "Furniture Signpost Plan"
+msgstr "Lokaliseringsmärke (plan)"
+
+msgid "Furniture Signpost Plans"
+msgstr "Lokaliseringsmärke (planer)"
+
+msgid "The plan for this device."
+msgstr ""
+
+msgid "Parent Furniture Signpost Real"
+msgstr "Överordnat lokaliseringsmärke (implementering)"
+
+msgid "Mount Real"
+msgstr "Montering (implementering)"
+
+msgid "Furniture Signpost Real"
+msgstr "Lokaliseringsmärke (implementering)"
+
+msgid "Furniture Signpost Reals"
+msgstr "Lokaliseringsmärke (implementeringar)"
+
+msgid "operation type"
+msgstr "typ av åtgärd"
+
+msgid "Furniture Signpost Real operation"
+msgstr "Lokaliseringsmärke (implementeringsåtgärd)"
+
+msgid "Furniture Signpost Real operations"
+msgstr "Lokaliseringsmärke (implementeringsåtgärder)"
+
+msgid "File"
+msgstr "Fil"
+
+msgid "Furniture Signpost Plan File"
+msgstr "Lokaliseringsmärke (planfil)"
+
+msgid "Furniture Signpost Plan Files"
+msgstr "Lokaliseringsmärke (planfiler)"
+
+msgid "Furniture Signpost Real File"
+msgstr "Lokaliseringsmärke (implementeringsfil)"
+
+msgid "Furniture Signpost Real Files"
+msgstr "Lokaliseringsmärke (implementeringsfiler)"
+
+msgid "Template for Real Import"
+msgstr ""
+
+msgid "This field is required."
+msgstr "Fältet är obligatoriskt."
+
+msgid "My account"
+msgstr ""
+
+msgid "City Infrastructure Platform"
+msgstr "Stadsinfrastrukturplattform"
+
+msgid "Finnish"
+msgstr "Finska"
+
+msgid "English"
+msgstr "Engelska"
+
+msgid "Swedish"
+msgstr ""
+
+msgid "View map"
+msgstr "Visa karta"
+
+msgid "Documentation"
+msgstr ""
+
+msgid "View API"
+msgstr "Visa API"
+
+msgid "View API documentation"
+msgstr "Visa API-dokumentation"
+
+msgid "Log out"
+msgstr "Logga ut"
+
+msgid "Home"
+msgstr "Hem"
+
+msgid "Personal info"
+msgstr ""
+
+msgid "username"
+msgstr ""
+
+msgid "first name"
+msgstr ""
+
+msgid "last name"
+msgstr ""
+
+msgid "email address"
+msgstr ""
+
+msgid "actions"
+msgstr ""
+
+msgid "Change password"
+msgstr "Byt lösenord"
+
+msgid "Map"
+msgstr "Karta"
+
+msgid "Identifier"
+msgstr "Identifier"
+
+msgid "App Name"
+msgstr "Appnamn"
+
+msgid "Is basemap"
+msgstr "Grundkarta"
+
+msgid "Filter fields"
+msgstr "Filtrera fält"
+
+msgid "Use Traffic Sign Icons"
+msgstr "Använd trafikskyltsymboler"
+
+msgid "Layer"
+msgstr "Skikt"
+
+msgid "Layers"
+msgstr "Skikt"
+
+msgid "Basemaps"
+msgstr "Grundkartor"
+
+msgid "Overlays"
+msgstr "Överlägg"
+
+msgid "Physical properties"
+msgstr "Fysiska egenskaper"
+
+msgid "Additional Sign Plan"
+msgstr "Tilläggsskylt (plan)"
+
+msgid "Additional Sign Plans"
+msgstr "Tilläggsskylt (planer)"
+
+msgid "Additional Sign Real"
+msgstr "Tilläggsskylt (implementering)"
+
+msgid "Additional Sign Reals"
+msgstr "Tilläggsskylt (implementeringar)"
+
+msgid "Operational area"
+msgstr "Åtgärdsområde"
+
+msgid "Replaces"
+msgstr ""
+
+msgid "Replaced by"
+msgstr ""
+
+msgid "Operational areas"
+msgstr "Åtgärdsområden"
+
+#, python-format
+msgid "Set related plans for plan %s"
+msgstr "Ange relaterade planer för planen %s"
+
+msgid "Responsible entities"
+msgstr "Ansvariga enheter"
+
+msgid "Traffic sign type"
+msgstr "Typ av trafikskylt"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "has additional signs"
+msgstr "har tilläggsskyltar"
+
+msgid "Ordered traffic sign"
+msgstr "Ordnad trafikskylt"
+
+msgid "Ordered traffic signs"
+msgstr "Ordnade trafikskyltar"
+
+msgid "Location (z)"
+msgstr "Plats (z)"
+
+msgid "Any date"
+msgstr "Valfritt datum"
+
+msgid "Today"
+msgstr "Idag"
+
+msgid "Last 7 days"
+msgstr "Senaste 7 dagarna"
+
+msgid "Last month"
+msgstr "Förra månaden"
+
+msgid "Last 6 months"
+msgstr "Senaste 6 månaderna"
+
+msgid "Last year"
+msgstr "Förra året"
+
+msgid "No date"
+msgstr "Inget datum"
+
+msgid "Has date"
+msgstr "Har datum"
+
+msgid "Responsible Entity Permission"
+msgstr "Tillstånd från ansvarig enhet"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Export type"
+msgstr ""
+
+msgid "Traffic control"
+msgstr "Trafikstyrning"
+
+msgid "Warning sign"
+msgstr "Varningsmärke"
+
+msgid "Priority or give-way sign"
+msgstr "Väjningspliktskylt"
+
+msgid "Prohibitory or restrictive sign"
+msgstr "Förbuds- eller restriktiv skylt"
+
+msgid "Mandatory sign"
+msgstr "Påbudsskylt"
+
+msgid "Regulatory sign"
+msgstr "Reglerande skylt"
+
+msgid "Information sign"
+msgstr "Upplysningsskylt"
+
+msgid "Service sign"
+msgstr "Serviceskylt"
+
+msgid "Additional sign"
+msgstr "Tilläggsskylt"
+
+msgid "Other road sign"
+msgstr "Annat vägmärke"
+
+msgid "Very bad"
+msgstr "Mycket dåligt"
+
+msgid "Bad"
+msgstr "Dåligt"
+
+msgid "Average"
+msgstr "Medelgott"
+
+msgid "Good"
+msgstr "Gott"
+
+msgid "Very good"
+msgstr "Mycket gott"
+
+msgid "Barrier"
+msgstr "Bom"
+
+msgid "Road marking"
+msgstr "Vägmarkering"
+
+msgid "Signpost"
+msgstr "Vägvisare"
+
+msgid "Traffic sign"
+msgstr "Trafikskylt"
+
+msgid "Other"
+msgstr "Annat"
+
+msgid "In use"
+msgstr "I bruk"
+
+msgid "Covered"
+msgstr "Övertäckt"
+
+msgid "Fallen"
+msgstr "Nedfallen"
+
+msgid "Missing"
+msgstr "Saknas"
+
+msgid "Main lane"
+msgstr "Huvudled"
+
+msgid "Lane allowing traffic to both directions"
+msgstr "Led med trafik i båda riktningarna"
+
+msgid "First left additional lane"
+msgstr "Första extra körfält vänster"
+
+msgid "First right additional lane"
+msgstr "Första extra körfält höger"
+
+msgid "Second left additional lane"
+msgstr "Andra extra körfält vänster"
+
+msgid "Second right additional lane"
+msgstr "Andra extra körfält höger"
+
+msgid "Third left additional lane"
+msgstr "Tredje extra körfält vänster"
+
+msgid "Third right additional lane"
+msgstr "Tredje extra körfält höger"
+
+msgid "Fourth left additional lane"
+msgstr "Fjärde extra körfält vänster"
+
+msgid "Fourth right additional lane"
+msgstr "Fjärde extra körfält höger"
+
+msgid "Fast lane"
+msgstr "Omkörningsfil"
+
+msgid "Turn right lane"
+msgstr "Påbjuden högersväng"
+
+msgid "Turn left lane"
+msgstr "Påbjuden vänstersväng"
+
+msgid "Auxiliary straight lane"
+msgstr "Påbjuden körriktning rakt fram"
+
+msgid "Merge lane"
+msgstr "Väganslutning"
+
+msgid "Exit lane"
+msgstr "Avfartskörfält"
+
+msgid "Weaving lane"
+msgstr "Sammanvävning"
+
+msgid "Public transport lane / taxi lane"
+msgstr "Körfält för kollektivtrafik/taxi"
+
+msgid "Heavy vehicle lane"
+msgstr "Körfält för tung trafik"
+
+msgid "Reversible lane"
+msgstr "Reversibelt körfält"
+
+msgid "Pedestrian and bike lane"
+msgstr "Gång- och cykelbana"
+
+msgid "Pedestrian lane"
+msgstr "Gångbana"
+
+msgid "Bike lane"
+msgstr "Cykelbana"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Temporarily active"
+msgstr "Temporärt aktiv"
+
+msgid "Temporarily inactive"
+msgstr "Temporärt inaktiv"
+
+msgid "Inactive"
+msgstr "Inaktiv"
+
+msgid "r1"
+msgstr "r1"
+
+msgid "r2"
+msgstr "r2"
+
+msgid "r3"
+msgstr "r3"
+
+msgid "Small"
+msgstr "Liten"
+
+msgid "Medium"
+msgstr "Medelstor"
+
+msgid "Large"
+msgstr "Stor"
+
+msgid "Convex"
+msgstr "Konvex"
+
+msgid "Flat"
+msgstr "Platt"
+
+msgid "Longitudinal"
+msgstr "Längsgående"
+
+msgid "Transverse"
+msgstr "Tvärgående"
+
+msgid "Other road marking"
+msgstr "Annan vägmarkering"
+
+msgid "division"
+msgstr "separering"
+
+msgid "service"
+msgstr "service"
+
+msgid "unit"
+msgstr "enhet"
+
+msgid "project"
+msgstr "projekt"
+
+msgid ""
+"'Missing content' cannot be enabled when the content field (content_s) is "
+"not empty."
+msgstr ""
+
+msgid "Location (x,y)"
+msgstr "Plats (x, y)"
+
+msgid "Barrier Plans"
+msgstr "Bom (planer)"
+
+msgid "Mount Plans"
+msgstr "Montering (planer)"
+
+msgid "Road Marking Plans"
+msgstr "Vägmarkering (planer)"
+
+msgid "Signpost Plans"
+msgstr "Skylt (planer)"
+
+msgid "Traffic Light Plans"
+msgstr "Trafiksignal (planer)"
+
+msgid "Traffic Sign Plans"
+msgstr "Trafikskylt (planer)"
+
+msgid "Marked as deleted (hidden from API)"
+msgstr "Markerad som borttagen (dold från API)"
+
+msgid "Mark selected objects as deleted"
+msgstr "Markera valda objekt som borttagna"
+
+msgid "Deleted at"
+msgstr "Togs bort den"
+
+msgid "Deleted by"
+msgstr "Togs bort av"
+
+msgid "Created at"
+msgstr "Skapades den"
+
+msgid "Updated at"
+msgstr "Uppdaterades den"
+
+msgid "Created by"
+msgstr "Skapades av"
+
+msgid "Updated by"
+msgstr "Uppdaterades av"
+
+msgid "Owner"
+msgstr "Ägare"
+
+msgid "Owner who orders and is responsible for the maintenance of the device."
+msgstr "Ägare som beställer och ansvarar för underhåll av anordningen."
+
+msgid "Responsible entity"
+msgstr "Ansvarig enhet"
+
+msgid "Organization or project that this device is assigned to."
+msgstr "Organisation eller projekt som denna anordning är tilldelad."
+
+msgid "Lifecycle"
+msgstr "Livscykel"
+
+msgid ""
+"Lifecycle of the device, which describes the activity status of the device."
+msgstr "Anordningens livscykel som beskriver anordningens aktivitetsstatus."
+
+msgid "Installation date"
+msgstr "Installationsdatum"
+
+msgid "Date on which this device was installed on."
+msgstr "Datum då denna anordning installerades."
+
+msgid "Installation status"
+msgstr "Installationsstatus"
+
+msgid "Describes this devices installation status."
+msgstr "Beskriver anordningens installationsstatus."
+
+msgid "Condition"
+msgstr "Skick"
+
+msgid "Describes the condition of this device."
+msgstr "Beskriver anordningens skick."
+
+msgid "Source id"
+msgstr "Käll-id"
+
+msgid "ID of the device in the source where this device was imported from."
+msgstr "Id för anordningen i källan som denna anordning importerats från."
+
+msgid "Source name"
+msgstr "Källnamn"
+
+msgid "Name of the source for where this device was imported from."
+msgstr "Namn på källan varifrån denna anordning importerades."
+
+msgid "Blue"
+msgstr "Blå"
+
+msgid "Yellow"
+msgstr "Gul"
+
+msgid "Device type"
+msgstr "Anordningstyp"
+
+msgid "Content"
+msgstr ""
+
+msgid "Additional sign content as JSON document"
+msgstr ""
+
+msgid "Missing content"
+msgstr ""
+
+msgid ""
+"Content (content_s) is not available although the device type content schema "
+"requires it."
+msgstr ""
+
+msgid "Additional information"
+msgstr ""
+
+msgid "Additional information related to this device."
+msgstr ""
+
+msgid "Reflection"
+msgstr "Reflex"
+
+msgid "Surface"
+msgstr "Yta"
+
+msgid "Type of the mount this sign is attached to."
+msgstr ""
+
+msgid "Road name"
+msgstr "Vägnamn"
+
+msgid "Name of the road this sign is installed at."
+msgstr ""
+
+msgid "Lane number"
+msgstr "Körfält nummer"
+
+msgid "Describes which lane of the road this sign affects."
+msgstr ""
+
+msgid "Lane type"
+msgstr "Typ av körfält"
+
+msgid "The type of lane which this sign affects."
+msgstr ""
+
+msgid "Location specifier"
+msgstr "Platsspecifikation"
+
+msgid "Specifies where the sign is in relation to the road."
+msgstr ""
+
+msgid "Date on which this sign becomes active."
+msgstr ""
+
+msgid "Date after which this sign becomes inactive."
+msgstr ""
+
+msgid "Seasonal validity period start"
+msgstr "Säsongsmässig giltighetsperiod, start"
+
+msgid "Date on which this sign becomes seasonally active."
+msgstr ""
+
+msgid "Seasonal validity period end"
+msgstr "Säsongsmässig giltighetsperiod, slut"
+
+msgid "Date after which this sign becomes seasonally inactive."
+msgstr ""
+
+msgid "Parent Traffic Sign Plan"
+msgstr "Överordnad trafikskylt (plan)"
+
+msgid "The traffic sign to which this additional sign is associated."
+msgstr ""
+
+msgid "Mount that this sign is mounted on."
+msgstr ""
+
+msgid "Plan which this Additional Sign Plan is a part of."
+msgstr ""
+
+msgid "Additional Sign Plan Replacement"
+msgstr ""
+
+msgid "Additional Sign Plan Replacements"
+msgstr ""
+
+msgid "Parent Traffic Sign Real"
+msgstr "Överordnad trafikskylt (implementering)"
+
+msgid "The plan for this Additional Sign."
+msgstr ""
+
+msgid "Installation id"
+msgstr "Installations-id"
+
+msgid "The id number of the installation record."
+msgstr "Id-nummer för installationsregistreringen."
+
+msgid "Installation details"
+msgstr "Installationsdetaljer"
+
+msgid "Additional details about the installation."
+msgstr "Ytterligare detaljer om installationen."
+
+msgid "Installed by"
+msgstr "Installerades av"
+
+msgid "Name of the organization who installed this sign."
+msgstr ""
+
+msgid "Manufacturer"
+msgstr "Tillverkare"
+
+msgid "Name of the organization that manufactured this sign."
+msgstr ""
+
+msgid "RFID"
+msgstr "RFID"
+
+msgid "RFID tag of the sign (if any)."
+msgstr "RFID-tagg på skylten (i förekommande fall)."
+
+msgid "Legacy Traffic Sign Code"
+msgstr "Äldre trafikskyltkod"
+
+msgid "The sign type code of the sign in the old Finnish road traffic law."
+msgstr ""
+
+msgid "Permit decision id"
+msgstr "Tillståndsbeslut-id"
+
+msgid "The id number of the installation permit."
+msgstr "Id-nummer för installationstillståndet."
+
+msgid "Operation"
+msgstr "Åtgärd"
+
+msgid ""
+"Maintenance operations done to the sign, e.g. washing, straightening or "
+"painting."
+msgstr ""
+"Underhållsåtgärder som utförts på skylten, t.ex. rengöring, uträtning "
+"eller målning."
+
+msgid "Scanned at"
+msgstr "Skannades den"
+
+msgid "Date and time on which this sign was last scanned at."
+msgstr ""
+
+msgid "Attachment url"
+msgstr "Bilagas URL"
+
+msgid "URL to a file attachment related to this sign."
+msgstr ""
+
+msgid "Coverage area"
+msgstr "Täckningsområde"
+
+msgid "Coverage area that this sign belongs to."
+msgstr ""
+
+msgid "additional sign real"
+msgstr "Tilläggsskylt (implementering)"
+
+msgid "Additional sign real operation"
+msgstr "Tilläggsskylt (implementeringsåtgärd)"
+
+msgid "Additional sign real operations"
+msgstr "Tilläggsskylt (implementeringsåtgärder)"
+
+msgid "Additional Sign Plan File"
+msgstr ""
+
+msgid "Additional Sign Plan Files"
+msgstr ""
+
+msgid "Additional Sign Real File"
+msgstr ""
+
+msgid "Additional Sign Real Files"
+msgstr ""
+
+msgid "Coverage area category"
+msgstr "Kategori av täckningsområde"
+
+msgid "Coverage area categories"
+msgstr "Kategorier av täckningsområden"
+
+msgid "Category"
+msgstr "Kategori"
+
+msgid "Area type"
+msgstr "Områdestyp"
+
+msgid "Season"
+msgstr "Säsong"
+
+msgid "Resident parking id"
+msgstr "Boendeparkerings-id"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Duration"
+msgstr "Varaktighet"
+
+msgid "Surface area"
+msgstr "Ytarea"
+
+msgid "Parking slots"
+msgstr "Parkeringsplatser"
+
+msgid "Additional info"
+msgstr "Ytterligare info"
+
+msgid "Stopping prohibited"
+msgstr "Förbud mot att stanna"
+
+msgid "Coverage areas"
+msgstr "Täckningsområden"
+
+msgid "Closed"
+msgstr "Stängd"
+
+msgid "Open out"
+msgstr "Öppnas utåt"
+
+msgid "Red-yellow"
+msgstr "Röd-gul"
+
+msgid "Middle of road or lane"
+msgstr "I mitten av väg eller körfält"
+
+msgid "Right of road or lane"
+msgstr "Till höger om väg eller körfält"
+
+msgid "Left of road or lane"
+msgstr "Till vänster om väg eller körfält"
+
+msgid "Name of the road this barrier is installed at."
+msgstr ""
+
+msgid "Describes which lane of the road this barrier affects."
+msgstr ""
+
+msgid "The type of lane which this barrier affects."
+msgstr ""
+
+msgid "Specifies where the barrier is in relation to the road."
+msgstr ""
+
+msgid "Connection type"
+msgstr "Anslutningstyp"
+
+msgid "Describes if the barrier is open or closed."
+msgstr "Anger om bommen är öppen eller stängd."
+
+msgid "Material"
+msgstr "Material"
+
+msgid "Describes the material that the barrier is made of."
+msgstr ""
+
+msgid "Is electric"
+msgstr "Elektrisk"
+
+msgid "Reflective"
+msgstr "Reflekterande"
+
+msgid "Date on which this barrier becomes active."
+msgstr ""
+
+msgid "Date after which this barrier becomes inactive."
+msgstr ""
+
+msgid "Length"
+msgstr "Längd"
+
+msgid "Length of the barrier in centimeters."
+msgstr "Bommens längd i centimeter."
+
+msgid "Count"
+msgstr "Antal"
+
+msgid "Txt"
+msgstr "Txt"
+
+msgid "Text written on the barrier."
+msgstr ""
+
+msgid "Plan which this Barrier Plan is a part of."
+msgstr ""
+
+msgid "Barrier Plan"
+msgstr "Bom (plan)"
+
+msgid "Barrier Plan Replacement"
+msgstr ""
+
+msgid "Barrier Plan Replacements"
+msgstr ""
+
+msgid "The plan for this barrier."
+msgstr ""
+
+msgid "Barrier real"
+msgstr "Bom (implementering)"
+
+msgid "Barrier reals"
+msgstr "Bom (implementeringar)"
+
+msgid "barrier real"
+msgstr "bom (implementering)"
+
+msgid "Barrier real operation"
+msgstr "Bom (implementeringsåtgärd)"
+
+msgid "Barrier real operations"
+msgstr "Bom (implementeringsåtgärder)"
+
+msgid "Barrier Plan File"
+msgstr "Bom (planfil)"
+
+msgid "Barrier Plan Files"
+msgstr "Bom (planfiler)"
+
+msgid "Barrier Real File"
+msgstr "Bom (implementeringsfil)"
+
+msgid "Barrier Real Files"
+msgstr "Bom (implementeringsfiler)"
+
+msgid "New"
+msgstr ""
+
+msgid "Old"
+msgstr ""
+
+msgid "Schema must be type of JSON object"
+msgstr ""
+
+msgid "Name (fi)"
+msgstr "Namn (fi)"
+
+msgid "Name (en)"
+msgstr "Namn (en)"
+
+msgid "Owners"
+msgstr "Ägare"
+
+msgid "Standardised code of the device type."
+msgstr "Standardiserad kod för anordningstypen."
+
+msgid "Value"
+msgstr "Värde"
+
+msgid "Unit"
+msgstr "Enhet"
+
+msgid "Unit, in which the numeric value is in."
+msgstr "Enhet för det numeriska värdet."
+
+msgid "Legacy code"
+msgstr "Äldre kod"
+
+msgid "Legacy description"
+msgstr "Äldre beskrivning"
+
+msgid "Defines which model this device type describes."
+msgstr "Definierar vilken modell denna anordningstyp beskriver."
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Content schema"
+msgstr ""
+
+msgid "Traffic Control Device Type"
+msgstr "Typ av trafikstyrningsanordning"
+
+msgid "Traffic Control Device Types"
+msgstr "Typer av trafikstyrningsanordning"
+
+#, python-format
+msgid "Target model '%(target_model)s' does not support content schema"
+msgstr ""
+
+msgid "Name of the operation."
+msgstr "Namn på åtgärden."
+
+msgid "Mount"
+msgstr "Montering"
+
+msgid "Operation type"
+msgstr "typ av åtgärd"
+
+msgid "Operation types"
+msgstr "Åtgärdstyper"
+
+msgid "Operation date"
+msgstr "Åtgärdsdatum"
+
+msgid "Straightness value"
+msgstr "Rakhetsvärde"
+
+msgid "Quality requirements fulfilled"
+msgstr "Kvalitetskrav uppfyllda"
+
+msgid "Description (fi)"
+msgstr "Beskrivning (fi)"
+
+msgid "Digiroad code"
+msgstr "Digiroad-kod"
+
+msgid "Digiroad description"
+msgstr "Digiroad-beskrivning"
+
+msgid "Mount types"
+msgstr "Monteringstyper"
+
+msgid "Portal structure"
+msgstr "Portalstruktur"
+
+msgid "Portal build type"
+msgstr "Portalbyggnadstyp"
+
+msgid "Portal model"
+msgstr "Portalmodell"
+
+msgid "Portal type"
+msgstr "Portaltyp"
+
+msgid "Portal types"
+msgstr "Portaltyper"
+
+msgid ""
+"The height of the mount from the ground, measured from the top in "
+"centimeters."
+msgstr ""
+
+msgid "Base"
+msgstr "Bas"
+
+msgid "Id number of the portal type in the portal_type table."
+msgstr "Id-nummer för portaltypen i portaltyptabellen."
+
+msgid "Describes the material that the mount is made of."
+msgstr ""
+
+msgid "Date on which this mount becomes active."
+msgstr ""
+
+msgid "Date after which this mount becomes inactive."
+msgstr ""
+
+msgid "Text written on the mount."
+msgstr ""
+
+msgid "Electric accountable"
+msgstr "Elektriskt ansvarig"
+
+msgid "The entity responsible for the mount (if electric)."
+msgstr "Den enhet som ansvarar för monteringen (om elektrisk)."
+
+msgid "Is foldable"
+msgstr "Fällbar/vikbar"
+
+msgid "Cross bar length"
+msgstr "Tvärbalkens längd"
+
+msgid "Length of the cross bar for this mount in centimeters."
+msgstr ""
+
+msgid "Plan which this mount plan is a part of."
+msgstr ""
+
+msgid "Mount Plan Replacement"
+msgstr ""
+
+msgid "Mount Plan Replacements"
+msgstr ""
+
+msgid "The plan for this mount."
+msgstr ""
+
+msgid "Inspected at"
+msgstr "Inspekterades den"
+
+msgid "Date and time on which this mount was last inspected at."
+msgstr ""
+
+msgid "Diameter"
+msgstr "Diameter"
+
+msgid "Diameter of the mount in centimeters."
+msgstr "Monteringens diameter i centimeter."
+
+msgid "Mount Reals"
+msgstr "Montering (implementeringar)"
+
+msgid "mount real"
+msgstr "montering (implementering)"
+
+msgid "Mount real operation"
+msgstr "Montering (implementeringsåtgärd)"
+
+msgid "Mount real operations"
+msgstr "Montering (implementeringsåtgärder)"
+
+msgid "Mount Plan File"
+msgstr "Montering (planfil)"
+
+msgid "Mount Plan Files"
+msgstr "Montering (planfiler)"
+
+msgid "Mount Real File"
+msgstr "Montering (implementeringsfil)"
+
+msgid "Mount Real Files"
+msgstr "Montering (implementeringsfiler)"
+
+msgid "Group"
+msgstr "Grupp"
+
+msgid "Group operational area"
+msgstr "Grupp (åtgärdsområde)"
+
+msgid "Group operational areas"
+msgstr "Grupp (åtgärdsområden)"
+
+msgid "Name short"
+msgstr "Namn (kort)"
+
+msgid "Contractor"
+msgstr "Entreprenör"
+
+msgid "Start date"
+msgstr "Startdatum"
+
+msgid "End date"
+msgstr "Slutdatum"
+
+msgid "Updated date"
+msgstr "Uppdateringsdatum"
+
+msgid "Task"
+msgstr "Arbetsuppgift"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Decision id"
+msgstr ""
+
+msgid "Year and verdict section separated with a dash"
+msgstr "År och beslutsektion åtskilda av snedstreck"
+
+msgid "Diary number"
+msgstr ""
+
+msgid "A drawing number must not contain special characters"
+msgstr ""
+
+msgid "Drawing numbers"
+msgstr ""
+
+msgid "Drawing numbers related to the plan separated with a comma"
+msgstr ""
+
+msgid "Derive location from devices"
+msgstr ""
+
+msgid ""
+"Derive the plan location (geometry area) from the locations of related "
+"devices. Enable this if the plan does not have a predefined location."
+msgstr ""
+
+msgid "Plans"
+msgstr "Planer"
+
+msgid "External ID"
+msgstr "Externt id"
+
+msgid ""
+"Use Projectwise ID for projects, can also be an abbreviation if entity has "
+"no ID"
+msgstr ""
+"Använd ProjectWise-id för projekt, kan även vara en förkortning om enheten "
+"saknar id"
+
+msgid "Organization level"
+msgstr "Organisationsnivå"
+
+msgid "Describes the level of organization this is."
+msgstr "Beskriver vilken nivå av organisationen detta är."
+
+msgid "Parent Responsible Entity"
+msgstr "Överordnad ansvarig enhet"
+
+msgid ""
+"Organization under which this object belongs to. This objects organizational "
+"level must be lower than its parents."
+msgstr ""
+"Organisation som detta objekt tillhör. Detta objekts organisationsnivå måste "
+ "vara lägre än de överordnade."
+
+msgid "Responsible Entity"
+msgstr "Ansvarig enhet"
+
+msgid "Responsible Entities"
+msgstr "Ansvariga enheter"
+
+msgid "Group responsible entity"
+msgstr "Gruppansvarig enhet"
+
+msgid "Group responsible entities"
+msgstr "Gruppansvariga enheter"
+
+msgid "Forward"
+msgstr "Framåt"
+
+msgid "Backward"
+msgstr "Bakåt"
+
+msgid "Straight"
+msgstr "Rakt fram"
+
+msgid "Right and straight"
+msgstr "Till höger och rakt fram"
+
+msgid "Left and straight"
+msgstr "Till vänster och rakt fram"
+
+msgid "Lane ends"
+msgstr "Körfält upphör"
+
+msgid "Right and left"
+msgstr "Höger och vänster"
+
+msgid "Straight, right and left"
+msgstr "Rakt fram, höger och vänster"
+
+msgid "White"
+msgstr "Vitt"
+
+msgid "Both sides of road"
+msgstr "Båda sidor av vägen"
+
+msgid "Right side of lane"
+msgstr "Höger sida av körfält"
+
+msgid "Left side of lane"
+msgstr "Vänster sida av körfält"
+
+msgid "Both sides of lane "
+msgstr "Båda sidor av körfält "
+
+msgid "Middle of lane"
+msgstr "Mitten av körfält"
+
+msgid "Left side of lane or road"
+msgstr "Vänster sida av körfält eller väg"
+
+msgid "Name of the road this road marking is installed at."
+msgstr ""
+
+msgid "Describes which lane of the road this road marking affects."
+msgstr ""
+
+msgid "The type of lane which this road marking affects."
+msgstr ""
+
+msgid "Specifies where the road marking is in relation to the lane."
+msgstr ""
+
+msgid "Line direction"
+msgstr "Linjeriktning"
+
+msgid "Direction of the arrow on the road."
+msgstr "Pilens riktning på vägen."
+
+msgid "Road Marking value"
+msgstr "Vägmarkeringsvärde"
+
+msgid "Numeric value on the marking."
+msgstr "Numeriskt värde på märket."
+
+msgid "Describes the material that the device is made of."
+msgstr "Beskriver av vilket material anordningen är tillverkad."
+
+msgid "Type specifier"
+msgstr "Typspecifikation"
+
+msgid "Additional device type codes specific to the local public authorities."
+msgstr "Ytterligare anordningstypkoder specifika för de lokala myndigheterna."
+
+msgid "Date on which this road marking becomes active."
+msgstr ""
+
+msgid "Date after which this road marking becomes inactive."
+msgstr ""
+
+msgid "Date on which this road marking becomes seasonally active."
+msgstr ""
+
+msgid "Date after which this road marking becomes seasonally inactive."
+msgstr ""
+
+msgid "Symbol"
+msgstr "Symbol"
+
+msgid "Symbol on the road marking."
+msgstr "Symbol på vägmarkeringen."
+
+msgid "Size of the road marking."
+msgstr "Vägmarkeringens storlek."
+
+msgid "Length of the road marking in centimeters."
+msgstr "Vägmarkeringens längd i centimeter."
+
+msgid "Width"
+msgstr "Bredd"
+
+msgid "Width of the road marking in centimeters."
+msgstr "Vägmarkeringens bredd i centimeter."
+
+msgid "Is raised"
+msgstr "Upphöjd"
+
+msgid "Is grinded"
+msgstr "Urtag"
+
+msgid "Amount"
+msgstr "Mängd"
+
+msgid "Traffic Sign Plan"
+msgstr "Trafikskylt (plan)"
+
+msgid "Traffic Sign related to this road marking."
+msgstr "Trafikskylt relaterad till denna vägmarkering."
+
+msgid "Plan which this road marking plan is a part of."
+msgstr ""
+
+msgid "Road Marking Plan"
+msgstr "Vägmarkering (plan)"
+
+msgid "Road Marking Plan Replacement"
+msgstr ""
+
+msgid "Road Marking Plan Replacements"
+msgstr ""
+
+msgid "The plan for this road marking."
+msgstr ""
+
+msgid "Traffic Sign Real"
+msgstr "Trafikskylt (implementering)"
+
+msgid "Missing Traffic Sign Real txt"
+msgstr "Trafikskylt saknas (implementering-txt)"
+
+msgid ""
+"Free-form text description of the traffic sign the road marking is connected "
+"to, if the road marking doesn't have a traffic sign real id."
+msgstr ""
+"Fritextbeskrivning av trafikskylten som vägmarkeringen hör till om "
+"trafikskylten inte har något id för trafikskyltimplementering."
+
+msgid "Road Marking Real"
+msgstr "Vägmarkering (implementering)"
+
+msgid "Road Marking Reals"
+msgstr "Vägmarkering (implementeringar)"
+
+msgid "road marking real"
+msgstr "vägmarkering (implementering)"
+
+msgid "Road marking real operation"
+msgstr "Vägmarkering (implementeringsåtgärd)"
+
+msgid "Road marking real operations"
+msgstr "Vägmarkering (implementeringsåtgärder)"
+
+msgid "RoadMarking Plan File"
+msgstr "Vägmarkering (planfil)"
+
+msgid "RoadMarking Plan Files"
+msgstr "Vägmarkering (planfiler)"
+
+msgid "RoadMarking Real File"
+msgstr "Vägmarkering (implementeringsfil)"
+
+msgid "RoadMarking Real Files"
+msgstr "Vägmarkering (implementeringsfiler)"
+
+msgid "Right side"
+msgstr "Höger sida"
+
+msgid "Left side"
+msgstr "Vänster sida"
+
+msgid "Above"
+msgstr "Ovanför"
+
+msgid "Middle"
+msgstr "I mitten"
+
+msgid "Vertical"
+msgstr "Vertikal"
+
+msgid "Signpost value"
+msgstr "Vägvisarens värde"
+
+msgid "Signpost txt"
+msgstr "Vägvisar-txt"
+
+msgid "Text written on the device."
+msgstr "Text skriven på anordningen."
+
+msgid "Attachment class"
+msgstr "Klass för skyltens fäste enligt standarden SFS-EN 12899-1. De möjliga värdena är P1, P2 och P3."
+
+msgid ""
+"The attachment class of the sign according to the standard SFS-EN 12899-1."
+"The possible values are P1, P2 and P3."
+msgstr "Klass för skyltens fäste enligt standarden SFS-EN 12899-1."
+"De möjliga värdena är P1, P2 och P3."
+
+msgid "Target ID"
+msgstr "Mål-id"
+
+msgid "The id number of the target the sign is guiding to (if available)."
+msgstr ""
+
+msgid "Target txt"
+msgstr "Mål-txt"
+
+msgid ""
+"Free-form text description of the target the sign is guiding to, if the "
+"target has no id number."
+msgstr ""
+
+msgid "Electric maintainer"
+msgstr "Elektriskt underhåll"
+
+msgid "Organization in charge of electric maintenance of the device."
+msgstr "Organisation som ansvarar för elektriskt underhåll av anordningen."
+
+msgid "Parent Signpost Plan"
+msgstr "Överordnad vägvisare (plan)"
+
+msgid "Signpost inside which this device is located."
+msgstr "Skylt i vilken denna anordning finns."
+
+msgid "Plan which this signpost plan is a part of."
+msgstr ""
+
+msgid "Signpost Plan"
+msgstr "Vägvisare (plan)"
+
+msgid "Signpost Plan Replacement"
+msgstr ""
+
+msgid "Signpost Plan Replacements"
+msgstr ""
+
+msgid "The plan for this signpost."
+msgstr ""
+
+msgid "Parent Signpost Real"
+msgstr "Överordnad vägvisare (implementering)"
+
+msgid "Organization"
+msgstr "Organisation"
+
+msgid "The organization that installed the signpost."
+msgstr ""
+
+msgid "Name of the organization that manufactured this device."
+msgstr "Namn på organisationen som tillverkade denna anordning."
+
+msgid "Signpost Real"
+msgstr "Vägvisare (implementering)"
+
+msgid "Signpost Reals"
+msgstr "Vägvisare (implementeringar)"
+
+msgid "signpost real"
+msgstr "vägvisare (implementering)"
+
+msgid "Signpost real operation"
+msgstr "Vägvisare (implementeringsåtgärd)"
+
+msgid "Signpost real operations"
+msgstr "Vägvisare (implementeringsåtgärder)"
+
+msgid "Signpost Plan File"
+msgstr "Vägvisare (planfil)"
+
+msgid "Signpost Plan Files"
+msgstr "Vägvisare (planfiler)"
+
+msgid "Signpost Real File"
+msgstr "Vägvisare (implementeringsfil)"
+
+msgid "Signpost Real Files"
+msgstr "Vägvisare (implementeringsfiler)"
+
+msgid "Right side of the road (relative to traffic direction)"
+msgstr "Höger sida av vägen (i trafikriktningen)"
+
+msgid "Above the lanes"
+msgstr "Ovanför körfälten"
+
+msgid "Island"
+msgstr "Refug"
+
+msgid "Traffic signal"
+msgstr "Trafiksignal"
+
+msgid "Right-turn arrow signal"
+msgstr "Pilsignal högersväng"
+
+msgid "Left-turn arrow signal"
+msgstr "Pilsignal vänstersväng"
+
+msgid "Triangle signal"
+msgstr "Triangelsignal"
+
+msgid "Public transport signal"
+msgstr "Kollektivtrafiksignal"
+
+msgid "Bicycle signal"
+msgstr "Cykelsignal"
+
+msgid "Bicycle turn arrow signal"
+msgstr "Pilsignal cykelsväng"
+
+msgid "Pedestrian signal"
+msgstr "Fotgängarsignal"
+
+msgid "Lane signal"
+msgstr "Körfältsignal"
+
+msgid "Loop sensor"
+msgstr "Loop-detektor"
+
+msgid "Infrared sensor"
+msgstr "Infraröd detektor"
+
+msgid "Radar i.e. microwave sensor"
+msgstr "Radar d.v.s. mikrovågdetektor"
+
+msgid "Name of the road this traffic light is installed at."
+msgstr ""
+
+msgid "Describes which lane of the road this traffic light affects."
+msgstr ""
+
+msgid "The type of lane which this traffic light affects."
+msgstr ""
+
+msgid ""
+"The direction a person is facing when looking perpendicular to the traffic "
+"light. The value is in degrees from 0 to 359, where 0 is north, 90 is east, "
+"etc."
+msgstr ""
+
+msgid "Type of the mount this traffic light is attached to."
+msgstr ""
+
+msgid "Describes the type of traffic light this device is."
+msgstr "Beskriver vilken typ av trafiksignal anordningen är."
+
+msgid "Text on the traffic light."
+msgstr ""
+
+msgid "Push button"
+msgstr "Tryckknapp"
+
+msgid "Describes if this traffic light has a push button attached."
+msgstr "Anger om denna trafiksignal har en tryckknapp ansluten."
+
+msgid "Sound beacon"
+msgstr "Ljudsignal"
+
+msgid "Describes if this traffic light has a sound beacon attached."
+msgstr "Anger om denna trafiksignal har en ljudsignal ansluten."
+
+msgid "Vehicle recognition"
+msgstr "Fordonsidentifiering"
+
+msgid "Describes the type of vehicle recognition this traffic light has."
+msgstr "Beskriver typen av fordonsidentifiering denna trafiksignal har."
+
+msgid "Date on which this traffic light becomes active."
+msgstr ""
+
+msgid "Date after which this traffic light becomes inactive."
+msgstr ""
+
+msgid "Specifies where the traffic light is in relation to the road."
+msgstr ""
+
+msgid "Mount that this traffic light is mounted on."
+msgstr ""
+
+msgid "Plan which this traffic light plan is a part of."
+msgstr ""
+
+msgid "Traffic Light Plan"
+msgstr "Trafiksignal (plan)"
+
+msgid "Traffic Light Plan Replacement"
+msgstr ""
+
+msgid "Traffic Light Plan Replacements"
+msgstr ""
+
+msgid "The plan for this traffic light."
+msgstr ""
+
+msgid "Traffic Light Real"
+msgstr "Trafiksignal (implementering)"
+
+msgid "Traffic Light Reals"
+msgstr "Trafiksignal (implementeringar)"
+
+msgid "traffic light real"
+msgstr "trafiksignal (implementering)"
+
+msgid "Traffic light real operation"
+msgstr "Trafiksignal (implementeringsåtgärd)"
+
+msgid "Traffic light real operations"
+msgstr "Trafiksignal (implementeringsåtgärder)"
+
+msgid "Traffic Light Plan File"
+msgstr "Trafiksignal (planfil)"
+
+msgid "Traffic Light Plan Files"
+msgstr "Trafiksignal (planfiler)"
+
+msgid "Traffic Light Real File"
+msgstr "Trafiksignal (implementeringsfil)"
+
+msgid "Traffic Light Real Files"
+msgstr "Trafiksignal (implementeringsfiler)"
+
+msgid "Outside"
+msgstr "Utomhus"
+
+msgid "Name of the road this traffic sign is installed at."
+msgstr ""
+
+msgid "Traffic Sign Code value"
+msgstr "Kodvärde för trafikskylt"
+
+msgid "Text written on the sign."
+msgstr ""
+
+msgid "Affect area (2D)"
+msgstr "Påverkansområde (2D)"
+
+msgid "Plan which this traffic sign plan is a part of."
+msgstr ""
+
+msgid "Traffic Sign Plan Replacement"
+msgstr ""
+
+msgid "Traffic Sign Plan Replacements"
+msgstr ""
+
+msgid "The plan for this traffic sign."
+msgstr ""
+
+msgid "The device type code of the sign in the old Finnish road traffic law."
+msgstr "Anordningstypkoden för skylten i den äldre finska väglagstiftningen."
+
+msgid "Coverage area that this traffic sign belongs to."
+msgstr ""
+
+msgid "Traffic Sign Reals"
+msgstr "Trafikskylt (implementeringar)"
+
+msgid "traffic sign real"
+msgstr "trafikskylt (implementering)"
+
+msgid "Traffic sign real operation"
+msgstr "Trafikskylt (implementeringsåtgärd)"
+
+msgid "Traffic sign real operations"
+msgstr "Trafikskylt (implementeringsåtgärder)"
+
+msgid "Traffic Sign Plan File"
+msgstr "Trafikskylt (planfil)"
+
+msgid "Traffic Sign Plan Files"
+msgstr "Trafikskylt (planfiler)"
+
+msgid "Traffic Sign Real File"
+msgstr "Trafikskylt (implementeringsfil)"
+
+msgid "Traffic Sign Real Files"
+msgstr "Trafikskylt (implementeringsfiler)"
+
+#, python-format
+msgid ""
+"Value '%(value)s' is invalid. Valid values are %(enum_values)s (%(enum)s)."
+msgstr ""
+
+msgid ""
+"You do not have a permission to modify devices without a responsible entity."
+msgstr ""
+
+#, python-format
+msgid ""
+"You do not have a permission to modify devices of responsible entity "
+"'%(responsible_entity)s'."
+msgstr ""
+
+msgid ""
+"You do not have a permission to create devices without a responsible entity "
+"or to remove responsible entity from existing devices."
+msgstr ""
+
+#, python-format
+msgid ""
+"You do not have a permission to create or modify devices with given "
+"responsible entity (%(responsible_entity)s)."
+msgstr ""
+
+msgid "Export template"
+msgstr "Exportmall"
+
+msgid "Set related plans"
+msgstr "Ange relaterade planer"
+
+msgid "Save"
+msgstr "Spara"
+
+msgid "Save and continue editing"
+msgstr "Spara och fortsätt redigera"
+
+msgid "Additional signs"
+msgstr ""
+
+msgid "No mount"
+msgstr ""
+
+msgid "This field may not be null."
+msgstr "Fältet får inte vara tomt."
+
+#, python-format
+msgid "Device type '%(device_type)s' accepts no structured content"
+msgstr ""
+
+msgid "File not found."
+msgstr "Fil hittades inte."
+
+#, python-format
+msgid "Error: Could not find %(model_name)s with id %(id)s."
+msgstr ""
+
+msgid "last login"
+msgstr ""
+
+#, python-format
+msgid "User is active, but last login was %(days)d days ago"
+msgstr ""
+
+msgid "Users"
+msgstr "Användare"
+
+msgid "Bypass operational area"
+msgstr "Förbigå åtgärdsområde"
+
+msgid "Disable operational area permission checks for this user."
+msgstr "Inaktivera tillståndskontroller för åtgärdsområde för denna användare."
+
+msgid ""
+"Operational areas, on which this user has permission to modify devices in."
+msgstr "Åtgärdsområden för vilka denna användare har tillstånd att modifiera "
+"anordningar."
+
+msgid "Bypass responsible entity"
+msgstr "Förbigå ansvarig enhet"
+
+msgid "Disable responsible entity permission checks for this user."
+msgstr "Inaktivera tillståndskontroller för ansvarig enhet för denna användare."
+
+msgid ""
+"Responsible entities that this user is belongs to. This gives the users "
+"write permission to devices that belong to the Responsible Entities or any "
+"Responsible Entity that's hierarchically under the selected ones."
+msgstr ""
+"Ansvariga enheter som denna användare hör till. Detta ger användarna "
+"skrivåtkomst till anordningar som tillhör ansvarsenheterna eller till "
+"en ansvarsenhet som är hierarkiskt underordnad de som valts."
+
+msgid "User"
+msgstr "Användare"
