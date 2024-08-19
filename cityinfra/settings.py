@@ -239,9 +239,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
 LANGUAGE_CODE = "fi"
-LANGUAGES = [("fi", _("Finnish")), ("en", _("English"))]
+LANGUAGES = [("fi", _("Finnish")), ("en", _("English")), ("sv", _("Swedish"))]
 TIME_ZONE = "Europe/Helsinki"
 USE_I18N = True
 USE_TZ = True

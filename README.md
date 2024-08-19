@@ -108,6 +108,9 @@ after it is started `docker-compose up clamv-api`
 
 Run script `./makemessages.sh`
 
+Running this script locally needs gettext to be installed:
+`apt-get install gettext`
+
 ### Traffic sign icons
 
 Traffic sign icons are from Finnish Transport Infrastructure Agency which has released these icons in public

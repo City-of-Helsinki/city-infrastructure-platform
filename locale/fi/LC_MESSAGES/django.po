@@ -5,63 +5,12 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 14:08+0200\n"
+"POT-Creation-Date: 2024-08-19 12:46+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgid "My account"
-msgstr "Omat tiedot"
-
-msgid "City Infrastructure Platform"
-msgstr ""
-
-msgid "Finnish"
-msgstr "Suomi"
-
-msgid "English"
-msgstr "Englanti"
-
-msgid "View map"
-msgstr "Näytä kartta"
-
-msgid "Documentation"
-msgstr "Dokumentaatio"
-
-msgid "View API"
-msgstr "Rajapinta"
-
-msgid "View API documentation"
-msgstr "Rajapinnan dokumentaatio"
-
-msgid "Log out"
-msgstr "Kirjaudu ulos"
-
-msgid "Home"
-msgstr "Etusivu"
-
-msgid "Personal info"
-msgstr "Henkilökohtaiset tiedot"
-
-msgid "username"
-msgstr "käyttäjätunnus"
-
-msgid "first name"
-msgstr "etunimi"
-
-msgid "last name"
-msgstr "sukunimi"
-
-msgid "email address"
-msgstr "sähköposti"
-
-msgid "actions"
-msgstr "toiminnot"
-
-msgid "Change password"
-msgstr "Vaihda salasana"
 
 msgid "General information"
 msgstr "Yleiset tiedot"
@@ -608,6 +557,60 @@ msgstr "Mallitiedosto toteumien tuontiin"
 msgid "This field is required."
 msgstr "Tämä kenttä vaaditaan"
 
+msgid "My account"
+msgstr "Omat tiedot"
+
+msgid "City Infrastructure Platform"
+msgstr "Infraomaisuuden hallinta-alusta"
+
+msgid "Finnish"
+msgstr "Suomi"
+
+msgid "English"
+msgstr "Englanti"
+
+msgid "Swedish"
+msgstr "Ruotsi"
+
+msgid "View map"
+msgstr "Näytä kartta"
+
+msgid "Documentation"
+msgstr "Dokumentaatio"
+
+msgid "View API"
+msgstr "Rajapinta"
+
+msgid "View API documentation"
+msgstr "Rajapinnan dokumentaatio"
+
+msgid "Log out"
+msgstr "Kirjaudu ulos"
+
+msgid "Home"
+msgstr "Etusivu"
+
+msgid "Personal info"
+msgstr "Henkilökohtaiset tiedot"
+
+msgid "username"
+msgstr "käyttäjätunnus"
+
+msgid "first name"
+msgstr "etunimi"
+
+msgid "last name"
+msgstr "sukunimi"
+
+msgid "email address"
+msgstr "sähköposti"
+
+msgid "actions"
+msgstr "toiminnot"
+
+msgid "Change password"
+msgstr "Vaihda salasana"
+
 msgid "Map"
 msgstr "Kartta"
 
@@ -957,9 +960,6 @@ msgstr "Merkitty poistetuksi (piilotettu rajapinnasta)"
 msgid "Mark selected objects as deleted"
 msgstr "Merkitse valitut kohteet poistetuksi"
 
-msgid "Mark selected objects as not deleted"
-msgstr "Kumoa valittujen kohteiden poistettu merkintä"
-
 msgid "Deleted at"
 msgstr "Poistettu-aikaleima"
 
@@ -1122,12 +1122,6 @@ msgstr "Kiinnityskohde, johon tämä kilpi on asennettu."
 msgid "Plan which this Additional Sign Plan is a part of."
 msgstr "Suunnitelma, johon tämä lisäkilpisuunnitelma kuuluu."
 
-msgid "New"
-msgstr "Uusi"
-
-msgid "Old"
-msgstr "Vanha"
-
 msgid "Additional Sign Plan Replacement"
 msgstr "Korvaus lisäkilpisuunnitelmalle"
 
@@ -1217,6 +1211,18 @@ msgstr "Lisäkilven toimenpide"
 
 msgid "Additional sign real operations"
 msgstr "Lisäkilven toimenpiteet"
+
+msgid "Additional Sign Plan File"
+msgstr "Lisäkilpi suunnitelman tiedosto"
+
+msgid "Additional Sign Plan Files"
+msgstr "Lisäkilpi suunnitelman tiedostot"
+
+msgid "Additional Sign Real File"
+msgstr "Lisäkilpi toteuman tiedosto"
+
+msgid "Additional Sign Real Files"
+msgstr "Lisäkilpi toteuman tiedostot"
 
 msgid "Coverage area category"
 msgstr "Vaikutusalueen luokka"
@@ -1367,6 +1373,12 @@ msgstr "Toteumadokumentti (ajoeste)"
 
 msgid "Barrier Real Files"
 msgstr "Toteumadokumentit (ajoeste)"
+
+msgid "New"
+msgstr "Uusi"
+
+msgid "Old"
+msgstr "Vanha"
 
 msgid "Schema must be type of JSON object"
 msgstr "Skeeman täytyy olla JSON-objekti"
@@ -2254,3 +2266,6 @@ msgstr ""
 
 msgid "User"
 msgstr "Käyttäjä"
+
+#~ msgid "Mark selected objects as not deleted"
+#~ msgstr "Kumoa valittujen kohteiden poistettu merkintä"
