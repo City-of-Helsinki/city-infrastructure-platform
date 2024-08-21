@@ -3,6 +3,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path
 from django.views.decorators.cache import cache_page
+from django.views.i18n import set_language
 from drf_spectacular.views import SpectacularRedocView, SpectacularSwaggerView, SpectacularYAMLAPIView
 from rest_framework import routers
 from rest_framework_nested.routers import NestedSimpleRouter
@@ -123,6 +124,7 @@ urlpatterns = [
     path("v1/", include(furniture_signpost_operations_router.urls)),
     path("auth/", include("social_django.urls", namespace="social")),
     path("wfs/", CityInfrastructureWFSView.as_view(), name="wfs-city-infrastructure"),
+    path("i18n/", set_language, name="set_language"),
 ]
 
 schema_yaml_view = SpectacularYAMLAPIView.as_view()

@@ -5,11 +5,59 @@
     {# Removed welcome message #}
 {% endblock welcome-msg %}
 
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        .language-select-form {
+          display: inline-block;
+          margin-left: 10px;
+        }
+        .language-select-label {
+          display: inline-block;
+          margin-right: 5px;
+        }
+        .language-select {
+          display: inline-block;
+        }
+    </style>
+{% endblock %}
+
 {% block userlinks %}
     <a href="{% url "map-view" %}">{% trans "View map" %}</a> /
     <a href="{% url "django-admindocs-docroot" %}">{% trans "Documentation" %}</a> /
     <a href="{% url "v1:api-root" %}">{% trans "View API" %}</a> /
     <a href="{% url "schema-swagger-ui" %}">{% trans "View API documentation" %}</a> /
     <a href="{% url "my-account" %}">{% trans "My account" %}</a> /
-    <a href="{% url "admin:logout" %}">{% trans "Log out" %}</a>
+    <a href="{% url "admin:logout" %}">{% trans "Log out" %}</a> /
+
+    <form class="language-select-form"
+          id="languageSelectForm"
+          method="post"
+          action="{% url 'set_language' %}">
+        {% csrf_token %}
+        <label class="language-select-label"
+               for="language-select">{% trans "Language" %}:</label>
+        <select class="language-select"
+                name="language"
+                id="language"
+                onchange="changeLanguage(this.value)">
+            {% for lang_code, lang_name in LANGUAGES %}
+                {% if lang_code == LANGUAGE_CODE %}
+                    <option value="{{ lang_code }}"
+                            selected>{{ lang_name }}</option>
+                {% else %}
+                    <option value="{{ lang_code }}">{{ lang_name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </form>
+
+    <script>
+    function changeLanguage(languageCode) {
+      const form = document.getElementById('languageSelectForm');
+      form.elements.language.value = languageCode;
+      form.submit();
+    }
+    </script>
+
 {% endblock %}
