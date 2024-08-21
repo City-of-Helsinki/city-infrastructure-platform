@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-19 12:46+0300\n"
+"POT-Creation-Date: 2024-08-21 13:57+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -586,6 +586,9 @@ msgstr "Rajapinnan dokumentaatio"
 
 msgid "Log out"
 msgstr "Kirjaudu ulos"
+
+msgid "Language"
+msgstr "Kieli"
 
 msgid "Home"
 msgstr "Etusivu"
