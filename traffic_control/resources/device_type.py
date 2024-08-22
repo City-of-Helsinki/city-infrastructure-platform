@@ -1,18 +1,15 @@
 from import_export.resources import ModelResource
 
 from traffic_control.models import TrafficControlDeviceType
-from traffic_control.resources.common import EnumFieldResourceMixin, ResourceUUIDField, UUIDWidget
+from traffic_control.resources.common import EnumFieldResourceMixin
 
 
 class TrafficControlDeviceTypeResource(EnumFieldResourceMixin, ModelResource):
     """Traffic control device type resource for import/export."""
 
-    id = ResourceUUIDField(attribute="id", column_name="id", default=None, widget=UUIDWidget())
-
     class Meta:
         model = TrafficControlDeviceType
         fields = (
-            "id",
             "code",
             "icon",
             "description",
@@ -37,3 +34,4 @@ class TrafficControlDeviceTypeResource(EnumFieldResourceMixin, ModelResource):
             "legacy_code": {"allow_blank": True, "coerce_to_string": True},
             "legacy_description": {"allow_blank": True, "coerce_to_string": True},
         }
+        import_id_fields = ["code"]
