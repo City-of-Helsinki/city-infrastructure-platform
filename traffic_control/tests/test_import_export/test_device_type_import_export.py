@@ -54,7 +54,7 @@ def test__traffic_control_device_type__export(  # noqa: C901
 ):
     """Test simple export of a single traffic control device type with multiple variations"""
 
-    kwargs = {}
+    kwargs = {"code": "123"}
     if icon:
         kwargs["icon"] = icon
     if value:
@@ -79,7 +79,6 @@ def test__traffic_control_device_type__export(  # noqa: C901
     dataset = TrafficControlDeviceTypeResource().export()
 
     assert len(dataset) == 1
-    assert dataset.dict[0]["id"] == str(dt.id)
     assert dataset.dict[0]["code"] == dt.code
     assert dataset.dict[0]["icon"] == dt.icon
     assert dataset.dict[0]["description"] == dt.description
@@ -160,7 +159,7 @@ def test__traffic_control_device_type__import(
     format,
 ):
     """Test simple import of a single traffic control device type with multiple variations"""
-    kwargs = {}
+    kwargs = {"code": "123"}
     if icon:
         kwargs["icon"] = icon
     if value:
@@ -182,7 +181,7 @@ def test__traffic_control_device_type__import(
 
     get_traffic_control_device_type(**kwargs)
 
-    dataset = get_import_dataset(TrafficControlDeviceTypeResource, format=format, delete_columns=["id"])
+    dataset = get_import_dataset(TrafficControlDeviceTypeResource, format=format)
     TrafficControlDeviceType.objects.all().delete()
     assert TrafficControlDeviceType.objects.count() == 0
     result = TrafficControlDeviceTypeResource().import_data(dataset, raise_errors=False, collect_failed_rows=True)
@@ -193,6 +192,7 @@ def test__traffic_control_device_type__import(
     assert TrafficControlDeviceType.objects.count() == 1
     imported_dt = TrafficControlDeviceType.objects.first()
 
+    assert imported_dt.code == "123"
     assert imported_dt.icon == icon
     assert imported_dt.content_schema == content_schema
     assert imported_dt.value == value
@@ -211,7 +211,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
     dataset = get_import_dataset(
         TrafficControlDeviceTypeResource,
         format=format,
-        delete_columns=["id", "content_schema"],
+        delete_columns=["content_schema"],
     )
     dataset.append_col(['{"invalid", "json}'], header="content_schema")
     TrafficControlDeviceType.objects.all().delete()
@@ -227,7 +227,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
     "to_values",
     (
         {
-            "code": "VALUES-2",
+            "code": "VALUE",
             "icon": "A2.svg",
             "description": "Description 2",
             "value": "value2",
@@ -240,7 +240,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
             "content_schema": {"string2": "value2", "int2": 2},
         },
         {
-            "code": "EMPTY-2",
+            "code": "VALUE",
             "icon": "",
             "description": "",
             "value": "",
@@ -259,7 +259,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
     "from_values",
     (
         {
-            "code": "VALUES-1",
+            "code": "VALUE",
             "icon": "A1.svg",
             "description": "Description 1",
             "value": "value1",
@@ -272,7 +272,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
             "content_schema": {"string": "value", "int": 1},
         },
         {
-            "code": "EMPTY",
+            "code": "VALUE",
             "icon": "",
             "description": "",
             "value": "",
@@ -296,6 +296,7 @@ def test__traffic_control_device_type__import__update(
 ):
     device_type = get_traffic_control_device_type(**to_values)
     dataset = get_import_dataset(TrafficControlDeviceTypeResource, format=format)
+    assert len(dataset) == 1
 
     device_type.code = from_values["code"]
     device_type.icon = from_values["icon"]
