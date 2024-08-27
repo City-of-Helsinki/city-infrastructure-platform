@@ -27,6 +27,7 @@ from traffic_control.forms import (
     CityInfraFileUploadFormset,
 )
 from traffic_control.mixins import (
+    DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
     SoftDeleteAdminMixin,
@@ -94,6 +95,7 @@ class AdditionalSignPlanReplacedByInline(ReplacedByInline):
 
 @admin.register(AdditionalSignPlan)
 class AdditionalSignPlanAdmin(
+    DeviceTypeSearchAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,

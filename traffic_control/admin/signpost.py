@@ -17,6 +17,7 @@ from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size
 from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
 from traffic_control.mixins import (
+    DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
@@ -67,6 +68,7 @@ class SignpostPlanReplacedByInline(ReplacedByInline):
 
 @admin.register(SignpostPlan)
 class SignpostPlanAdmin(
+    DeviceTypeSearchAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
