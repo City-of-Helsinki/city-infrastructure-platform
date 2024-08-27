@@ -17,6 +17,7 @@ from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
 from traffic_control.mixins import (
+    DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
@@ -65,6 +66,7 @@ class BarrierPlanReplacedByInline(ReplacedByInline):
 
 @admin.register(BarrierPlan)
 class BarrierPlanAdmin(
+    DeviceTypeSearchAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,

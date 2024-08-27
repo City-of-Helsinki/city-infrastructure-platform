@@ -130,3 +130,11 @@ class UpdatePlanLocationAdminMixin:
         related_plans = Plan.objects.filter(id__in=related_plan_ids, derive_location=True)
         for plan in related_plans:
             plan.derive_location_from_related_plans()
+
+
+class DeviceTypeSearchAdminMixin:
+    search_fields = (
+        "device_type__code",
+        "device_type__legacy_code",
+    )
+    search_help_text = "Searches from code and legacy_code fields"

@@ -38,6 +38,7 @@ from traffic_control.forms import (
     TrafficSignRealModelForm,
 )
 from traffic_control.mixins import (
+    DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     Point3DFieldAdminMixin,
     SoftDeleteAdminMixin,
@@ -139,6 +140,7 @@ class TrafficSignPlanReplacedByInline(ReplacedByInline):
 
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(
+    DeviceTypeSearchAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
