@@ -5129,6 +5129,24 @@ paths:
               25497733 6672927))
             summary: 2D polygon area (Katajanokka)
       - in: query
+        name: location_specifier
+        schema:
+          nullable: true
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+        description: |-
+          Specifies where the mount is in relation to the road.
+
+          * `Right side` - Right side
+          * `Left side` - Left side
+          * `Above` - Above
+          * `Middle` - Middle
+          * `Outside` - Outside
+      - in: query
         name: material
         schema:
           type: string
@@ -5169,6 +5187,10 @@ paths:
         schema:
           type: string
           format: uuid
+      - in: query
+        name: road_name
+        schema:
+          type: string
       - in: query
         name: source_id
         schema:
@@ -5618,6 +5640,24 @@ paths:
               25497733 6672927))
             summary: 2D polygon area (Katajanokka)
       - in: query
+        name: location_specifier
+        schema:
+          nullable: true
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+        description: |-
+          Specifies where the mount is in relation to the road.
+
+          * `Right side` - Right side
+          * `Left side` - Left side
+          * `Above` - Above
+          * `Middle` - Middle
+          * `Outside` - Outside
+      - in: query
         name: material
         schema:
           type: string
@@ -5658,6 +5698,15 @@ paths:
         schema:
           type: string
           format: uuid
+      - in: query
+        name: road_name
+        schema:
+          type: string
+      - in: query
+        name: scanned_at
+        schema:
+          type: string
+          format: date-time
       - in: query
         name: source_id
         schema:
@@ -9469,6 +9518,7 @@ paths:
           - 3
           - 4
           - 5
+          - 6
         description: |-
           Specifies where the sign is in relation to the road.
 
@@ -9477,6 +9527,7 @@ paths:
           * `Above` - Above
           * `Middle` - Middle
           * `Vertical` - Vertical
+          * `Outside` - Outside
       - in: query
         name: mount_plan
         schema:
@@ -10099,6 +10150,7 @@ paths:
           - 3
           - 4
           - 5
+          - 6
         description: |-
           Specifies where the sign is in relation to the road.
 
@@ -10107,6 +10159,7 @@ paths:
           * `Above` - Above
           * `Middle` - Middle
           * `Vertical` - Vertical
+          * `Outside` - Outside
       - in: query
         name: manufacturer
         schema:
@@ -10173,6 +10226,11 @@ paths:
         name: road_name
         schema:
           type: string
+      - in: query
+        name: scanned_at
+        schema:
+          type: string
+          format: date-time
       - in: query
         name: seasonal_validity_period_end
         schema:
@@ -18756,6 +18814,29 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Length of the cross bar for this mount in centimeters.
+        road_name:
+          type: string
+          nullable: true
+          description: Name of the road this mount is installed at.
+          maxLength: 254
+        location_specifier:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+          - null
+          type: integer
+          nullable: true
+          description: |-
+            Specifies where the mount is in relation to the road.
+
+            * `1` - Right side
+            * `2` - Left side
+            * `3` - Above
+            * `4` - Middle
+            * `6` - Outside
         created_by:
           type: string
           format: uuid
@@ -18883,6 +18964,29 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Length of the cross bar for this mount in centimeters.
+        road_name:
+          type: string
+          nullable: true
+          description: Name of the road this mount is installed at.
+          maxLength: 254
+        location_specifier:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+          - null
+          type: integer
+          nullable: true
+          description: |-
+            Specifies where the mount is in relation to the road.
+
+            * `1` - Right side
+            * `2` - Left side
+            * `3` - Above
+            * `4` - Middle
+            * `6` - Outside
         owner:
           type: string
           format: uuid
@@ -19023,6 +19127,29 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Length of the cross bar for this mount in centimeters.
+        road_name:
+          type: string
+          nullable: true
+          description: Name of the road this mount is installed at.
+          maxLength: 254
+        location_specifier:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+          - null
+          type: integer
+          nullable: true
+          description: |-
+            Specifies where the mount is in relation to the road.
+
+            * `1` - Right side
+            * `2` - Left side
+            * `3` - Above
+            * `4` - Middle
+            * `6` - Outside
         created_by:
           type: string
           format: uuid
@@ -19223,6 +19350,29 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Length of the cross bar for this mount in centimeters.
+        road_name:
+          type: string
+          nullable: true
+          description: Name of the road this mount is installed at.
+          maxLength: 254
+        location_specifier:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+          - null
+          type: integer
+          nullable: true
+          description: |-
+            Specifies where the mount is in relation to the road.
+
+            * `1` - Right side
+            * `2` - Left side
+            * `3` - Above
+            * `4` - Middle
+            * `6` - Outside
         inspected_at:
           type: string
           format: date-time
@@ -19234,6 +19384,11 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Diameter of the mount in centimeters.
+        scanned_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time on which this mount was last scanned at.
         created_by:
           type: string
           format: uuid
@@ -19470,6 +19625,29 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Length of the cross bar for this mount in centimeters.
+        road_name:
+          type: string
+          nullable: true
+          description: Name of the road this mount is installed at.
+          maxLength: 254
+        location_specifier:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+          - null
+          type: integer
+          nullable: true
+          description: |-
+            Specifies where the mount is in relation to the road.
+
+            * `1` - Right side
+            * `2` - Left side
+            * `3` - Above
+            * `4` - Middle
+            * `6` - Outside
         inspected_at:
           type: string
           format: date-time
@@ -19481,6 +19659,11 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Diameter of the mount in centimeters.
+        scanned_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time on which this mount was last scanned at.
         owner:
           type: string
           format: uuid
@@ -22493,6 +22676,29 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Length of the cross bar for this mount in centimeters.
+        road_name:
+          type: string
+          nullable: true
+          description: Name of the road this mount is installed at.
+          maxLength: 254
+        location_specifier:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+          - null
+          type: integer
+          nullable: true
+          description: |-
+            Specifies where the mount is in relation to the road.
+
+            * `1` - Right side
+            * `2` - Left side
+            * `3` - Above
+            * `4` - Middle
+            * `6` - Outside
         owner:
           type: string
           format: uuid
@@ -22647,6 +22853,29 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Length of the cross bar for this mount in centimeters.
+        road_name:
+          type: string
+          nullable: true
+          description: Name of the road this mount is installed at.
+          maxLength: 254
+        location_specifier:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 6
+          - null
+          type: integer
+          nullable: true
+          description: |-
+            Specifies where the mount is in relation to the road.
+
+            * `1` - Right side
+            * `2` - Left side
+            * `3` - Above
+            * `4` - Middle
+            * `6` - Outside
         inspected_at:
           type: string
           format: date-time
@@ -22658,6 +22887,11 @@ components:
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
           description: Diameter of the mount in centimeters.
+        scanned_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time on which this mount was last scanned at.
         owner:
           type: string
           format: uuid
@@ -23714,6 +23948,7 @@ components:
           - 3
           - 4
           - 5
+          - 6
           - null
           type: integer
           nullable: true
@@ -23725,6 +23960,7 @@ components:
             * `3` - Above
             * `4` - Middle
             * `5` - Vertical
+            * `6` - Outside
         validity_period_start:
           type: string
           format: date
@@ -24015,6 +24251,7 @@ components:
           - 3
           - 4
           - 5
+          - 6
           - null
           type: integer
           nullable: true
@@ -24026,6 +24263,7 @@ components:
             * `3` - Above
             * `4` - Middle
             * `5` - Vertical
+            * `6` - Outside
         validity_period_start:
           type: string
           format: date
@@ -24061,6 +24299,11 @@ components:
           nullable: true
           description: Name of the organization that manufactured this device.
           maxLength: 254
+        scanned_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time on which this signpost was last scanned at.
         owner:
           type: string
           format: uuid
@@ -27486,6 +27729,7 @@ components:
           - 3
           - 4
           - 5
+          - 6
           - null
           type: integer
           nullable: true
@@ -27497,6 +27741,7 @@ components:
             * `3` - Above
             * `4` - Middle
             * `5` - Vertical
+            * `6` - Outside
         validity_period_start:
           type: string
           format: date
@@ -27760,6 +28005,7 @@ components:
           - 3
           - 4
           - 5
+          - 6
           - null
           type: integer
           nullable: true
@@ -27771,6 +28017,7 @@ components:
             * `3` - Above
             * `4` - Middle
             * `5` - Vertical
+            * `6` - Outside
         validity_period_start:
           type: string
           format: date
@@ -28047,6 +28294,7 @@ components:
           - 3
           - 4
           - 5
+          - 6
           - null
           type: integer
           nullable: true
@@ -28058,6 +28306,7 @@ components:
             * `3` - Above
             * `4` - Middle
             * `5` - Vertical
+            * `6` - Outside
         validity_period_start:
           type: string
           format: date
@@ -28388,6 +28637,7 @@ components:
           - 3
           - 4
           - 5
+          - 6
           - null
           type: integer
           nullable: true
@@ -28399,6 +28649,7 @@ components:
             * `3` - Above
             * `4` - Middle
             * `5` - Vertical
+            * `6` - Outside
         validity_period_start:
           type: string
           format: date
@@ -28434,6 +28685,11 @@ components:
           nullable: true
           description: Name of the organization that manufactured this device.
           maxLength: 254
+        scanned_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time on which this signpost was last scanned at.
         created_by:
           type: string
           format: uuid
@@ -28785,6 +29041,7 @@ components:
           - 3
           - 4
           - 5
+          - 6
           - null
           type: integer
           nullable: true
@@ -28796,6 +29053,7 @@ components:
             * `3` - Above
             * `4` - Middle
             * `5` - Vertical
+            * `6` - Outside
         validity_period_start:
           type: string
           format: date
@@ -28831,6 +29089,11 @@ components:
           nullable: true
           description: Name of the organization that manufactured this device.
           maxLength: 254
+        scanned_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time on which this signpost was last scanned at.
         owner:
           type: string
           format: uuid

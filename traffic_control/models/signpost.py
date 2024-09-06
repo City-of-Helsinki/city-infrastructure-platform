@@ -1,12 +1,10 @@
-from enum import member
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumField, EnumIntegerField
+from enumfields import EnumField, EnumIntegerField
 
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size
 from traffic_control.mixins.models import (
@@ -31,22 +29,7 @@ from traffic_control.models.common import (
 )
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
-
-
-class LocationSpecifier(Enum):
-    RIGHT = 1
-    LEFT = 2
-    ABOVE = 3
-    MIDDLE = 4
-    VERTICAL = 5
-
-    @member
-    class Labels:
-        RIGHT = _("Right side")
-        LEFT = _("Left side")
-        ABOVE = _("Above")
-        MIDDLE = _("Middle")
-        VERTICAL = _("Vertical")
+from traffic_control.models.traffic_sign import LocationSpecifier
 
 
 class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
@@ -324,6 +307,13 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledD
         blank=True,
         null=True,
         help_text=_("Name of the organization that manufactured this device."),
+    )
+
+    scanned_at = models.DateTimeField(
+        _("Scanned at"),
+        blank=True,
+        null=True,
+        help_text=_("Date and time on which this signpost was last scanned at."),
     )
 
     class Meta:

@@ -95,7 +95,7 @@ class MountPlanAdmin(
                 )
             },
         ),
-        (_("Location information"), {"fields": ("location",)}),
+        (_("Location information"), {"fields": ("location", "road_name", "location_specifier")}),
         (
             _("Physical properties"),
             {
