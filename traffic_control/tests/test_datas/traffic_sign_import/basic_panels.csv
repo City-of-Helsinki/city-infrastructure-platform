@@ -1,0 +1,4 @@
+fid;OBJECTID;id;x;y;z;stdx;stdy;stdz;kiinnityskohta_id;merkkikoodi;teksti;teksti_suomeksi;teksti_ruotsiksi;kiinnitys;numerokoodi;merkin_ehto;taustaväri;atsimuutti;lisäkilven_päämerkin_id;tallennusajankohta;korkeus;ssurl;Sijaintitarkenne;Muokattu_info
+"1657";"1657";"signpost_no_import";25497188.8384;6673461.8389;8.28;0.014;0.009;0.022;"mount_pylväs1";"645";Hakaniemi Hannäs; ; ;Pylväs; ;"2";"1";"359";;2023/08/15 12:28:00+00;3.01;"https://dummy";"6";
+"1665";"1665";"basic_sign";25497188.8384;6673461.8389;7.64;0.014;0.009;0.022;"mount_pylväs1";C39;"TestiTeksti"; ; ;Pylväs;"30" ;"2";"2";"91";;2023/08/15 12:28:00+00;2.36;"https://dummy";"6";
+"44";"44";"basic_additional_sign";25498102.0919;6672508.0929;4.31;0.032;0.035;0.04;"mount_pylväs1";H24S;Yksityisalue;Yksityisalue; ;Pylväs; ;"4";"1";"297";"basic_sign";2023/08/14 10:14:36+00;1.62;"https://dummy";"3";
