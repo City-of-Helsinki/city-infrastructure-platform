@@ -90,6 +90,15 @@ def get_operational_area(area=None, name=None) -> OperationalArea:
     )[0]
 
 
+class OwnerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Owner
+        django_get_or_create = ("name_fi",)
+
+    name_fi = factory.sequence(lambda n: f"Omistaja{n}")
+    name_en = factory.sequence(lambda n: f"Owner{n}")
+
+
 def get_owner(name_fi="Omistaja", name_en="Owner") -> Owner:
     return Owner.objects.get_or_create(name_fi=name_fi, name_en=name_en)[0]
 
@@ -168,8 +177,30 @@ def get_barrier_real(
     )
 
 
+class MountTypeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = MountType
+        django_get_or_create = ["code"]
+
+    code = factory.Sequence(lambda n: f"MOUNT_TYPE_{n}")
+    description = "Test mount type"
+    description_fi = "Testi Kiinnityskohde tyyppi"
+    digiroad_code = 1
+    digiroad_description = "digiroad_desc"
+
+
 def get_mount_type(code="POST", description="Post") -> MountType:
     return MountType.objects.get_or_create(code=code, description=description)[0]
+
+
+class PortalTypeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = PortalType
+        django_get_or_create = ["structure", "build_type", "model"]
+
+    structure = "Structure"
+    build_type = "BuildType"
+    model = "Model"
 
 
 def get_portal_type(
@@ -202,6 +233,34 @@ def get_mount_plan(location="", plan=None, responsible_entity=None, replaces=Non
         mount_plan_replace(old=replaces, new=mount_plan)
 
     return mount_plan
+
+
+class MountRealFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = MountReal
+        django_get_or_create = ("source_id", "source_name")
+
+    location = test_point
+    height = 1
+    base = ""
+    portal_type = factory.SubFactory(PortalTypeFactory)
+    mount_type = factory.SubFactory(MountTypeFactory)
+    material = "test material"
+    validity_period_start = None
+    validity_period_end = None
+    txt = None
+    electric_accountable = None
+    is_foldable = None
+    cross_bar_length = None
+    road_name = None
+    location_specifier = None
+    mount_plan = None
+    inspected_at = None
+    diameter = None
+    scanned_at = None
+    source_id = factory.sequence(lambda n: f"MOUNT_REAL_source_id_{n}")
+    source_name = "source_name"
+    owner = factory.SubFactory(OwnerFactory)
 
 
 def get_mount_real(location="", mount_plan=None, responsible_entity=None) -> MountReal:
@@ -402,6 +461,24 @@ def get_traffic_light_real(
     )[0]
 
 
+class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TrafficControlDeviceType
+        django_get_or_create = ["code"]
+
+    code = factory.sequence(lambda n: str(n))
+    icon = factory.sequence(lambda n: f"icon_{n}")
+    description = factory.sequence(lambda n: f"description_{n}")
+    value = factory.sequence(lambda n: f"value_{n}")
+    unit = ""
+    size = ""
+    legacy_code = factory.sequence(lambda n: str(n))
+    legacy_description = factory.sequence(lambda n: f"legacy_description_{n}")
+    target_model = None
+    type = None
+    content_schema = None
+
+
 def get_traffic_control_device_type(
     code: str = "A11",
     icon: str = "",
@@ -457,6 +534,46 @@ def get_traffic_sign_plan(
         traffic_sign_plan_replace(old=replaces, new=traffic_sign_plan)
 
     return traffic_sign_plan
+
+
+class TrafficSignRealFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TrafficSignReal
+        django_get_or_create = ["source_id", "source_name"]
+
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    location = test_point
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
+    road_name = None
+    lane_number = None
+    lane_type = None
+    direction = None
+    height = 1
+    mount_type = factory.SubFactory(MountTypeFactory)
+    value = None
+    size = None
+    reflection_class = None
+    surface_class = None
+    txt = None
+    location_specifier = None
+    validity_period_start = None
+    validity_period_end = None
+    seasonal_validity_period_start = None
+    seasonal_validity_period_end = None
+    owner = factory.SubFactory(OwnerFactory)
+    traffic_sign_plan = None
+    legacy_code = "TestLegacyCode"
+    mount_real = factory.SubFactory(MountRealFactory)
+    installation_id = factory.sequence(lambda n: f"installation_id{n}")
+    installation_details = "Installaation details"
+    permit_decision_id = factory.sequence(lambda n: f"permit_decision{n}")
+    coverage_area = None
+    scanned_at = None
+    manufacturer = factory.sequence(lambda n: f"Manufacturer{n}")
+    rfid = factory.sequence(lambda n: f"rfid{n}")
+    operation = factory.sequence(lambda n: f"operation{n}")
+    attachment_url = factory.sequence(lambda n: f"attachment_url{n}")
 
 
 def get_traffic_sign_real(
@@ -522,6 +639,52 @@ def get_additional_sign_plan(
         additional_sign_plan_replace(old=replaces, new=asp)
 
     return asp
+
+
+class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = AdditionalSignReal
+        django_get_or_create = ["source_id", "source_name"]
+
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
+    order = factory.sequence(lambda n: n)
+    content_s = None
+    missing_content = True
+    additional_information = ""
+    location = test_point
+    height = 1
+    size = None
+    direction = None
+    reflection_class = None
+    surface_class = None
+    color = None
+    mount_type = factory.SubFactory(MountTypeFactory)
+    road_name = None
+    lane_number = None
+    lane_type = None
+    location_specifier = None
+    validity_period_start = None
+    validity_period_end = None
+    seasonal_validity_period_start = None
+    seasonal_validity_period_end = None
+    owner = factory.SubFactory(OwnerFactory)
+    responsible_entity = None
+    parent = factory.SubFactory(TrafficSignRealFactory)
+    additional_sign_plan = None
+    mount_real = factory.SubFactory(MountRealFactory)
+    installation_id = factory.sequence(lambda n: f"installation_id{n}")
+    installation_details = "Installaation details"
+    installed_by = None
+    manufacturer = factory.sequence(lambda n: f"Manufacturer{n}")
+    rfid = factory.sequence(lambda n: f"rfid{n}")
+    legacy_code = "TestLegacyCode"
+    permit_decision_id = factory.sequence(lambda n: f"permit_decision{n}")
+    operation = None
+    scanned_at = None
+    attachment_url = factory.sequence(lambda n: f"attachment_url{n}")
+    coverage_area = None
 
 
 def get_additional_sign_real(
