@@ -1,9 +1,11 @@
 import uuid
+from enum import member
 
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
+from enumfields import Enum, EnumIntegerField
 
 from traffic_control.mixins.models import (
     AbstractFileModel,
@@ -20,6 +22,24 @@ from traffic_control.mixins.models import (
 from traffic_control.models.common import OperationBase, OperationType, VERBOSE_NAME_NEW, VERBOSE_NAME_OLD
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
+
+
+class LocationSpecifier(Enum):
+    RIGHT = 1
+    LEFT = 2
+    ABOVE = 3
+    MIDDLE = 4
+    # number 5 is intentionally skipped
+    # so the actual numeric values match to additional and traffic signs
+    OUTSIDE = 6
+
+    @member
+    class Labels:
+        RIGHT = _("Right side")
+        LEFT = _("Left side")
+        ABOVE = _("Above")
+        MIDDLE = _("Middle")
+        OUTSIDE = _("Outside")
 
 
 class MountType(models.Model):
@@ -151,6 +171,22 @@ class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel, Owned
         help_text=_("Length of the cross bar for this mount in centimeters."),
     )
 
+    road_name = models.CharField(
+        _("Road name"),
+        max_length=254,
+        blank=True,
+        null=True,
+        help_text=_("Name of the road this mount is installed at."),
+    )
+
+    location_specifier = EnumIntegerField(
+        LocationSpecifier,
+        verbose_name=_("Location specifier"),
+        blank=True,
+        null=True,
+        help_text=_("Specifies where the mount is in relation to the road."),
+    )
+
     class Meta:
         abstract = True
 
@@ -227,6 +263,13 @@ class MountReal(AbstractMount, InstalledDeviceModel):
         blank=True,
         null=True,
         help_text=_("Diameter of the mount in centimeters."),
+    )
+
+    scanned_at = models.DateTimeField(
+        _("Scanned at"),
+        blank=True,
+        null=True,
+        help_text=_("Date and time on which this mount was last scanned at."),
     )
 
     class Meta:
