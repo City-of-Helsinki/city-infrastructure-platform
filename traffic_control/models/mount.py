@@ -272,6 +272,14 @@ class MountReal(AbstractMount, InstalledDeviceModel):
         help_text=_("Date and time on which this mount was last scanned at."),
     )
 
+    attachment_url = models.URLField(
+        _("Attachment url"),
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text=_("URL to a file attachment related to this mount."),
+    )
+
     class Meta:
         db_table = "mount_real"
         verbose_name = _("Mount Real")

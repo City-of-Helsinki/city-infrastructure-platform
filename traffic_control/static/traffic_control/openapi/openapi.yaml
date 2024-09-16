@@ -5498,6 +5498,10 @@ paths:
       summary: Retrieve all Mount Reals
       parameters:
       - in: query
+        name: attachment_url
+        schema:
+          type: string
+      - in: query
         name: base
         schema:
           type: string
@@ -19389,6 +19393,12 @@ components:
           format: date-time
           nullable: true
           description: Date and time on which this mount was last scanned at.
+        attachment_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to a file attachment related to this mount.
+          maxLength: 500
         created_by:
           type: string
           format: uuid
@@ -19664,6 +19674,12 @@ components:
           format: date-time
           nullable: true
           description: Date and time on which this mount was last scanned at.
+        attachment_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to a file attachment related to this mount.
+          maxLength: 500
         owner:
           type: string
           format: uuid
@@ -22892,6 +22908,12 @@ components:
           format: date-time
           nullable: true
           description: Date and time on which this mount was last scanned at.
+        attachment_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to a file attachment related to this mount.
+          maxLength: 500
         owner:
           type: string
           format: uuid

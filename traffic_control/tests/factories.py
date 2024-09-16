@@ -261,6 +261,7 @@ class MountRealFactory(factory.django.DjangoModelFactory):
     source_id = factory.sequence(lambda n: f"MOUNT_REAL_source_id_{n}")
     source_name = "source_name"
     owner = factory.SubFactory(OwnerFactory)
+    attachment_url = ""
 
 
 def get_mount_real(location="", mount_plan=None, responsible_entity=None) -> MountReal:

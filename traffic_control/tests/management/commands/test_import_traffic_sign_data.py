@@ -69,6 +69,7 @@ def _assert_mount_data(importer):
     assert mount.installation_status == get_default_installation_status()
     assert mount.scanned_at == datetime.datetime(2023, 8, 15, 12, 28, 0, tzinfo=datetime.timezone.utc)
     assert mount.location_specifier == MountLocationSpecifier.OUTSIDE
+    assert mount.attachment_url == "https://dummy"
 
 
 def _assert_traffic_sign_data(importer):
@@ -93,6 +94,7 @@ def _assert_traffic_sign_data(importer):
     assert sign.txt == "TestiTeksti"
     assert sign.installation_status == get_default_installation_status()
     assert sign.location_specifier == SignLocationSpecifier.OUTSIDE
+    assert mount.attachment_url == "https://dummy"
 
 
 def _assert_additional_sign_data(importer):
@@ -120,6 +122,7 @@ def _assert_additional_sign_data(importer):
     assert additional.color == Color.BLUE
     assert additional.additional_information == "text:Yksityisalue; numbercode:"
     assert additional.missing_content is True
+    assert mount.attachment_url == "https://dummy"
 
 
 def _assert_signpost_data():
@@ -291,7 +294,7 @@ def test__mount_update():
         source_name=TrafficSignImporter.SOURCE_NAME,
     )
     _create_db_entries([])
-    mount_data = _get_mount_dict({})
+    mount_data = _get_mount_dict({"ssurl": "updated_url"})
     importer = TrafficSignImporter(mount_data, {}, {}, update=True)
     importer.import_data()
 
@@ -300,6 +303,7 @@ def test__mount_update():
     assert existing_mount.scanned_at == datetime.datetime(2023, 8, 15, 12, 28, 0, tzinfo=datetime.timezone.utc)
     assert existing_mount.location_specifier == MountLocationSpecifier.OUTSIDE
     assert existing_mount.mount_type == MountType.objects.get(code="POLE")
+    assert existing_mount.attachment_url == "updated_url"
 
 
 @pytest.mark.django_db
@@ -313,7 +317,7 @@ def test__sign_update():
 
     _create_db_entries(["C39"])
     mount_data = _get_mount_dict({})
-    sign_data = _get_sign_dict({"kiinnityskohta_id": "mount_pylväs1"})
+    sign_data = _get_sign_dict({"kiinnityskohta_id": "mount_pylväs1", "ssurl": "updated_url"})
     importer = TrafficSignImporter(mount_data, sign_data, {}, update=True)
     importer.import_data()
 
@@ -332,6 +336,7 @@ def test__sign_update():
     assert existing_sign.mount_type == MountType.objects.get(code="POLE")
     assert existing_sign.txt == "TestiTeksti"
     assert existing_sign.location_specifier == SignLocationSpecifier.OUTSIDE
+    assert existing_sign.attachment_url == "updated_url"
 
 
 @pytest.mark.django_db
@@ -347,7 +352,12 @@ def test__additional_sign_update():
     mount_data = _get_mount_dict({})
     sign_data = _get_sign_dict({"kiinnityskohta_id": "mount_pylväs1", "id": "dummyid"})
     additional_sign_data = _get_sign_dict(
-        {"merkkikoodi": "H24S", "lisäkilven_päämerkin_id": "dummyid", "kiinnityskohta_id": "mount_pylväs1"}
+        {
+            "merkkikoodi": "H24S",
+            "lisäkilven_päämerkin_id": "dummyid",
+            "kiinnityskohta_id": "mount_pylväs1",
+            "ssurl": "updated_url",
+        },
     )
     importer = TrafficSignImporter(mount_data, sign_data, additional_sign_data, update=True)
     importer.import_data()
@@ -369,6 +379,7 @@ def test__additional_sign_update():
     assert existing_sign.color == Color.BLUE
     assert existing_sign.additional_information == "text:TestiTeksti; numbercode:30 m"
     assert existing_sign.missing_content
+    assert existing_sign.attachment_url == "updated_url"
 
 
 def _get_sign_dict(update_params):
@@ -398,6 +409,7 @@ def _get_sign_dict(update_params):
         "ssurl": "https://dummy",
         "Sijaintitarkenne": "6",
         "Muokattu_info": "",
+        "attachment_url": "",
     }
     base_dict.update(update_params)
     return {base_dict["id"]: base_dict}
@@ -418,6 +430,7 @@ def _get_mount_dict(update_params):
         "tallennusajankohta": "2023/08/15 12:28:00+00",
         "ssurl": "https://dummy",
         "Sijaintitarkenne": "6",
+        "attachment_url": "",
     }
     base_dict.update(update_params)
     return {base_dict["id"]: base_dict}
