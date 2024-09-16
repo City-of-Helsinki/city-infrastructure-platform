@@ -27,6 +27,7 @@ class ImportResult(TypedDict):
 
 class CSVHeaders:
     id = "id"
+    attachment_url = "ssurl"
     code = "merkkikoodi"
     color = "taustaväri"
     condition = "merkin_ehto"
@@ -374,6 +375,7 @@ class TrafficSignImporter:
                     installation_status=get_default_installation_status(),
                     location_specifier=MountLocationSpecifier(int(location_specifier)) if location_specifier else None,
                     scanned_at=self._get_sign_scanned_at(mount_data.get(CSVHeaders.scanned_at)),
+                    attachment_url=mount_data.get(CSVHeaders.attachment_url),
                 )
 
     def _import_sign_data(self):
@@ -447,6 +449,7 @@ class TrafficSignImporter:
                         txt=sign_data[CSVHeaders.txt],
                         installation_status=get_default_installation_status(),
                         location_specifier=get_sign_location_specifier(sign_data),
+                        attachment_url=sign_data.get(CSVHeaders.attachment_url),
                     )
                 else:
                     self.results.append(
@@ -605,6 +608,7 @@ class TrafficSignImporter:
                     color=get_additional_sign_color(sign_data),
                     additional_information=get_additional_information(sign_data),
                     missing_content=True,
+                    attachment_url=sign_data.get(CSVHeaders.attachment_url),
                 )
             else:
                 self.results.append(
@@ -752,6 +756,10 @@ class TrafficSignImporter:
             srid=settings.SRID,
         )
         update_data.update(self._get_update_for_value(object_real, "location", csv_point))
+
+        update_data.update(
+            self._get_update_for_value(object_real, "attachment_url", csv_data.get(CSVHeaders.attachment_url))
+        )
 
         return update_data
 

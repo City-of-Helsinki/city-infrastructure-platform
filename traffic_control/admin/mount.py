@@ -201,6 +201,7 @@ class MountRealAdmin(
                     "txt",
                     "source_id",
                     "source_name",
+                    "attachment_url",
                 )
             },
         ),
@@ -245,6 +246,7 @@ class MountRealAdmin(
         "mount_type",
         "lifecycle",
         "location",
+        "attachment_url",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
