@@ -208,10 +208,13 @@ def test__traffic_sign_import_height(csv_height, expected_db_height):
 )
 @pytest.mark.django_db
 def test__additional_sign_import_color(csv_color, expected_db_color):
-    _create_db_entries(["H24S"])
+    _create_db_entries(["H24S", "C39"])
     mount_data = _get_mount_dict({})
-    sign_data = _get_sign_dict({"taustaväri": csv_color, "merkkikoodi": "H24S", "lisäkilven_päämerkin_id": "dummyid"})
-    importer = TrafficSignImporter(mount_data, {}, sign_data)
+    sign_data = _get_sign_dict({"id": "dummyid"})
+    add_sign_data = _get_sign_dict(
+        {"taustaväri": csv_color, "merkkikoodi": "H24S", "lisäkilven_päämerkin_id": "dummyid"}
+    )
+    importer = TrafficSignImporter(mount_data, sign_data, add_sign_data)
     importer.import_data()
 
     assert AdditionalSignReal.objects.count() == 1
@@ -230,12 +233,13 @@ def test__additional_sign_import_color(csv_color, expected_db_color):
 )
 @pytest.mark.django_db
 def test__additional_sign_import_additional_information(csv_text, csv_numbercode, expected_db_additional_information):
-    _create_db_entries(["H24S"])
+    _create_db_entries(["H24S", "C39"])
     mount_data = _get_mount_dict({})
-    sign_data = _get_sign_dict(
+    sign_data = _get_sign_dict({"id": "dummyid"})
+    add_sign_data = _get_sign_dict(
         {"teksti": csv_text, "numerokoodi": csv_numbercode, "merkkikoodi": "H24S", "lisäkilven_päämerkin_id": "dummyid"}
     )
-    importer = TrafficSignImporter(mount_data, {}, sign_data)
+    importer = TrafficSignImporter(mount_data, sign_data, add_sign_data)
     importer.import_data()
 
     assert AdditionalSignReal.objects.count() == 1
@@ -249,11 +253,24 @@ def test__ticket_machines_to_signs(code):
     _create_db_entries([code])
     mount_data = _get_mount_dict({})
     sign_data = _get_sign_dict({"merkkikoodi": code})
-    importer = TrafficSignImporter(mount_data, sign_data, sign_data)
+    importer = TrafficSignImporter(mount_data, sign_data, {})
     importer.import_data()
 
     assert TrafficSignReal.objects.count() == 1
     assert TrafficSignReal.objects.first().device_type.code == code
+    assert AdditionalSignReal.objects.count() == 0
+
+
+@pytest.mark.parametrize(("code"), ("H", "8"))
+@pytest.mark.django_db
+def test__parentless_additional_signs(code):
+    _create_db_entries([code])
+    mount_data = _get_mount_dict({})
+    sign_data = _get_sign_dict({"merkkikoodi": code})
+    importer = TrafficSignImporter(mount_data, {}, sign_data)
+    importer.import_data()
+
+    assert TrafficSignReal.objects.count() == 0
     assert AdditionalSignReal.objects.count() == 0
 
 
