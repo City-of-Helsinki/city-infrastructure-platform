@@ -1,6 +1,7 @@
 import datetime
 import os
 from decimal import Decimal
+from tempfile import TemporaryDirectory
 
 import pytest
 from django.core.management import call_command
@@ -42,12 +43,14 @@ def _create_db_entries(device_type_codes):
 @pytest.mark.django_db
 def test__import_traffic_scan_data():
     _create_db_entries(["C39", "H24S", "645"])
-    importer = TrafficSignImporter(None, None, None)
-    call_command(
-        "import_traffic_sign_data",
-        sign_file=os.path.join(TEST_FILES_DIR, "basic_panels.csv"),
-        mount_file=os.path.join(TEST_FILES_DIR, "basic_mounts.csv"),
-    )
+    with TemporaryDirectory() as tempdir:
+        importer = TrafficSignImporter(None, None, None)
+        call_command(
+            "import_traffic_sign_data",
+            sign_file=os.path.join(TEST_FILES_DIR, "basic_panels.csv"),
+            mount_file=os.path.join(TEST_FILES_DIR, "basic_mounts.csv"),
+            output_dir=tempdir,
+        )
 
     _assert_mount_data(importer)
     _assert_traffic_sign_data(importer)

@@ -1,4 +1,5 @@
-import pprint
+import csv
+import os
 
 from django.core.management.base import BaseCommand
 
@@ -20,6 +21,13 @@ class Command(BaseCommand):
             "--sign-file",
             type=str,
             help="Path to the sign file in csv format",
+        )
+        parser.add_argument(
+            "-o",
+            "--output-dir",
+            type=str,
+            default="streetdata_import_results",
+            help="Path to the output directory where summary of results are dumped to",
         )
         parser.add_argument(
             "-u",
@@ -45,4 +53,62 @@ class Command(BaseCommand):
             analyzer.mounts_by_id, analyzer.signs_by_id, analyzer.additional_signs_by_id, options["update"]
         )
         results = importer.import_data()
-        pprint.pprint(results)
+        skipped_additional_signs = _get_skipped_additional_sign_results(results)
+        skipped_signs = _get_skipped_sign_results(results)
+        skipped_signposts = _get_skipped_signpost_results(results)
+        _write_additional_sign_skip_results(list(skipped_additional_signs), options["output_dir"])
+        _write_sign_skip_results(list(skipped_signs), options["output_dir"])
+        _write_signpost_skip_results(list(skipped_signposts), options["output_dir"])
+        _write_all_results(results, options["output_dir"])
+
+
+def _write_additional_sign_skip_results(results, output_dir):
+    _write_results(results, output_dir, "additional_sign_skips.csv")
+
+
+def _write_sign_skip_results(results, output_dir):
+    _write_results(results, output_dir, "sign_skips.csv")
+
+
+def _write_signpost_skip_results(results, output_dir):
+    _write_results(results, output_dir, "signpost_skips.csv")
+
+
+def _write_all_results(results, output_dir):
+    _write_results(results, output_dir, "all_results.csv")
+
+
+def _write_results(results, output_dir, filename):
+    if len(results):
+        headers = results[0].keys()
+        with open(os.path.join(output_dir, filename), "w") as f:
+            writer = csv.DictWriter(f, headers)
+            writer.writerows(results)
+
+
+def _is_additional_sign_skip(result):
+    return _include_result(result, "skip", "additionalsign")
+
+
+def _is_sign_skip(result):
+    return _include_result(result, "skip", "sign")
+
+
+def _is_signpost_skip(result):
+    return _include_result(result, "skip", "signpost")
+
+
+def _include_result(result, result_type, object_type):
+    return result["result_type"] == result_type and result["object_type"] == object_type
+
+
+def _get_skipped_additional_sign_results(results):
+    return filter(_is_additional_sign_skip, results)
+
+
+def _get_skipped_sign_results(results):
+    return filter(_is_sign_skip, results)
+
+
+def _get_skipped_signpost_results(results):
+    return filter(_is_signpost_skip, results)
