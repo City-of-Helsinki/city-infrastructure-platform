@@ -310,7 +310,7 @@ class TrafficSignImporter:
         self.mount_reals_by_source_id = None
         self.sign_reals_by_source_id = None
 
-        self.results = [ImportResult]
+        self.results = []
 
     def import_data(self):
         self._import_mount_reals()
@@ -428,29 +428,42 @@ class TrafficSignImporter:
                 and sign_source_id not in update_source_ids
             ):
                 if not should_be_ignored_totally(sign_data):
-                    yield TrafficSignReal(
-                        owner=self.default_owner,
-                        device_type=self._get_sign_device_type(sign_data[CSVHeaders.code]),
-                        scanned_at=self._get_sign_scanned_at(sign_data.get(CSVHeaders.scanned_at)),
-                        value=self._get_sign_value(sign_data.get(CSVHeaders.number_code)),
-                        source_id=sign_source_id,
-                        source_name=self.SOURCE_NAME,
-                        location=Point(
-                            float(sign_data[CSVHeaders.coord_x]),
-                            float(sign_data[CSVHeaders.coord_y]),
-                            float(sign_data[CSVHeaders.coord_z]),
-                            srid=settings.SRID,
-                        ),
-                        direction=get_sign_direction(sign_data),
-                        height=self._get_sign_height(sign_data.get(CSVHeaders.height)),
-                        condition=get_sign_condition(sign_data),
-                        mount_real_id=self._get_mount_real_id(sign_data[CSVHeaders.mount_id], sign_source_id, "sign"),
-                        mount_type=self.mount_types_by_name[sign_data[CSVHeaders.sign_mount_type]],
-                        txt=sign_data[CSVHeaders.txt],
-                        installation_status=get_default_installation_status(),
-                        location_specifier=get_sign_location_specifier(sign_data),
-                        attachment_url=sign_data.get(CSVHeaders.attachment_url),
-                    )
+                    device_type_obj = self._get_sign_device_type(sign_data[CSVHeaders.code])
+                    if not device_type_obj:
+                        self.results.append(
+                            ImportResult(
+                                result_type="skip",
+                                object_type="sign",
+                                object_id=sign_source_id,
+                                reason=f"Device type not found: {sign_data[CSVHeaders.code]}",
+                            )
+                        )
+                    else:
+                        yield TrafficSignReal(
+                            owner=self.default_owner,
+                            device_type=self._get_sign_device_type(sign_data[CSVHeaders.code]),
+                            scanned_at=self._get_sign_scanned_at(sign_data.get(CSVHeaders.scanned_at)),
+                            value=self._get_sign_value(sign_data.get(CSVHeaders.number_code)),
+                            source_id=sign_source_id,
+                            source_name=self.SOURCE_NAME,
+                            location=Point(
+                                float(sign_data[CSVHeaders.coord_x]),
+                                float(sign_data[CSVHeaders.coord_y]),
+                                float(sign_data[CSVHeaders.coord_z]),
+                                srid=settings.SRID,
+                            ),
+                            direction=get_sign_direction(sign_data),
+                            height=self._get_sign_height(sign_data.get(CSVHeaders.height)),
+                            condition=get_sign_condition(sign_data),
+                            mount_real_id=self._get_mount_real_id(
+                                sign_data[CSVHeaders.mount_id], sign_source_id, "sign"
+                            ),
+                            mount_type=self.mount_types_by_name[sign_data[CSVHeaders.sign_mount_type]],
+                            txt=sign_data[CSVHeaders.txt],
+                            installation_status=get_default_installation_status(),
+                            location_specifier=get_sign_location_specifier(sign_data),
+                            attachment_url=sign_data.get(CSVHeaders.attachment_url),
+                        )
                 else:
                     self.results.append(
                         ImportResult(
@@ -576,7 +589,7 @@ class TrafficSignImporter:
     def _get_additional_sign_objects(self, skip_source_ids, update_source_ids):
         for sign_source_id, sign_data in self.additional_sign_data.items():
             if (
-                additional_sign_should_be_imported(sign_data)
+                self.additional_sign_should_be_imported(sign_data)
                 and is_additional_sign(sign_data)
                 and sign_source_id not in skip_source_ids
                 and sign_source_id not in update_source_ids
@@ -619,6 +632,72 @@ class TrafficSignImporter:
                         reason=sign_data[CSVHeaders.code],
                     )
                 )
+
+    def additional_sign_should_be_imported(self, row):
+        """
+        Do not import additional sign if:
+            1. 'teksti' is unreadable (case does not matter, whitespaces stripped)
+            2. if devicetype code is not found
+            3. only ticket machines without parent sign are in imported and these are counted as trafficsigns
+            4. Additional signs with signpost as parent are not imported if the signpost is not imported
+            5. if parent is not found
+            6. parent is found but it's device type code is not found
+        """
+        if row[CSVHeaders.txt].strip().lower() == "unreadable":
+            self.results.append(
+                ImportResult(
+                    result_type="skip",
+                    object_type="additionalsign",
+                    object_id=row[CSVHeaders.id],
+                    reason="text value is unreadable",
+                )
+            )
+            return False
+        if not self._get_sign_device_type(row[CSVHeaders.code]):
+            self.results.append(
+                ImportResult(
+                    result_type="skip",
+                    object_type="additionalsign",
+                    object_id=row[CSVHeaders.id],
+                    reason=f"device type code not found: {row[CSVHeaders.code]}",
+                )
+            )
+            return False
+        if not row[CSVHeaders.parent_sign_id].strip():
+            # these are "lippuautomaatit"
+            return row[CSVHeaders.code] in TICKET_MACHINE_CODES
+
+        parent_sign_row = self.sign_data.get(row[CSVHeaders.parent_sign_id], None)
+        if parent_sign_row and is_signpost(parent_sign_row) and not sign_post_should_be_imported(parent_sign_row):
+            self.results.append(
+                ImportResult(
+                    result_type="skip",
+                    object_type="additionalsign",
+                    object_id=row[CSVHeaders.id],
+                    reason=f"parent sign is signpost that should not be imported {row[CSVHeaders.parent_sign_id]}",
+                )
+            )
+            return False
+
+        parent_device_type_obj = (
+            self._get_sign_device_type(parent_sign_row[CSVHeaders.code]) if parent_sign_row else None
+        )
+        if parent_sign_row is None or parent_device_type_obj is None:
+            if parent_sign_row is None:
+                skip_reason = f"parent not found from csv with id: {row[CSVHeaders.parent_sign_id]}"
+            else:
+                skip_reason = f"parent device type code not found: {parent_sign_row[CSVHeaders.code]}"
+            self.results.append(
+                ImportResult(
+                    result_type="skip",
+                    object_type="additionalsign",
+                    object_id=row[CSVHeaders.id],
+                    reason=skip_reason,
+                )
+            )
+            return False
+
+        return True
 
     def _get_mount_real_id(self, source_id, related_id, object_type):
         db_id = self.mount_reals_by_source_id.get(source_id, None)
@@ -693,6 +772,7 @@ class TrafficSignImporter:
                     result_type="error", object_type="device_type", object_id=code, reason="dtype code not found"
                 )
             )
+            return None
         return dcode
 
     @staticmethod
@@ -812,15 +892,6 @@ def sign_post_should_be_imported(row):
 
 def should_be_ignored_totally(row):
     return row[CSVHeaders.code] in ["x", "not classified"]
-
-
-def additional_sign_should_be_imported(row):
-    if row[CSVHeaders.txt] == "unreadable":
-        return False
-    if not row[CSVHeaders.parent_sign_id].strip():
-        # these are "lippuautomaatit"
-        return row[CSVHeaders.code] in TICKET_MACHINE_CODES
-    return True
 
 
 def get_default_installation_status():
