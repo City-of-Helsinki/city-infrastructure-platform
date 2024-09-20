@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 13:57+0300\n"
+"POT-Creation-Date: 2024-09-20 15:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -400,7 +400,8 @@ msgid "Height"
 msgstr "Höjd"
 
 msgid ""
-"The height of the sign from the ground, measured from the top in centimeters."
+"The height of the sign from the ground, measured from the bottom in "
+"centimeters."
 msgstr ""
 
 msgid "Order"
@@ -1453,6 +1454,21 @@ msgstr "Rakhetsvärde"
 msgid "Quality requirements fulfilled"
 msgstr "Kvalitetskrav uppfyllda"
 
+msgid "Right side"
+msgstr "Höger sida"
+
+msgid "Left side"
+msgstr "Vänster sida"
+
+msgid "Above"
+msgstr "Ovanför"
+
+msgid "Middle"
+msgstr "I mitten"
+
+msgid "Outside"
+msgstr "Utomhus"
+
 msgid "Description (fi)"
 msgstr "Beskrivning (fi)"
 
@@ -1518,6 +1534,12 @@ msgstr "Tvärbalkens längd"
 msgid "Length of the cross bar for this mount in centimeters."
 msgstr ""
 
+msgid "Name of the road this mount is installed at."
+msgstr ""
+
+msgid "Specifies where the mount is in relation to the road."
+msgstr ""
+
 msgid "Plan which this mount plan is a part of."
 msgstr ""
 
@@ -1541,6 +1563,14 @@ msgstr "Diameter"
 
 msgid "Diameter of the mount in centimeters."
 msgstr "Monteringens diameter i centimeter."
+
+#, fuzzy
+#| msgid "Date on which this device was installed on."
+msgid "Date and time on which this mount was last scanned at."
+msgstr "Datum då denna anordning installerades."
+
+msgid "URL to a file attachment related to this mount."
+msgstr ""
 
 msgid "Mount Reals"
 msgstr "Montering (implementeringar)"
@@ -1841,21 +1871,6 @@ msgstr "Vägmarkering (implementeringsfil)"
 msgid "RoadMarking Real Files"
 msgstr "Vägmarkering (implementeringsfiler)"
 
-msgid "Right side"
-msgstr "Höger sida"
-
-msgid "Left side"
-msgstr "Vänster sida"
-
-msgid "Above"
-msgstr "Ovanför"
-
-msgid "Middle"
-msgstr "I mitten"
-
-msgid "Vertical"
-msgstr "Vertikal"
-
 msgid "Signpost value"
 msgstr "Vägvisarens värde"
 
@@ -1929,6 +1944,11 @@ msgstr ""
 
 msgid "Name of the organization that manufactured this device."
 msgstr "Namn på organisationen som tillverkade denna anordning."
+
+#, fuzzy
+#| msgid "Date on which this device was installed on."
+msgid "Date and time on which this signpost was last scanned at."
+msgstr "Datum då denna anordning installerades."
 
 msgid "Signpost Real"
 msgstr "Vägvisare (implementering)"
@@ -2098,8 +2118,8 @@ msgstr "Trafiksignal (implementeringsfil)"
 msgid "Traffic Light Real Files"
 msgstr "Trafiksignal (implementeringsfiler)"
 
-msgid "Outside"
-msgstr "Utomhus"
+msgid "Vertical"
+msgstr "Vertikal"
 
 msgid "Name of the road this traffic sign is installed at."
 msgstr ""
