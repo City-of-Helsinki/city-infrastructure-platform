@@ -108,7 +108,7 @@ class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControl
         decimal_places=2,
         blank=True,
         null=True,
-        help_text=_("The height of the sign from the ground, measured from the top in centimeters."),
+        help_text=_("The height of the sign from the ground, measured from the bottom in centimeters."),
     )
     order = models.SmallIntegerField(
         verbose_name=_("Order"),

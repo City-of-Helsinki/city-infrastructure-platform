@@ -14180,7 +14180,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         size:
           enum:
@@ -14462,7 +14462,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         size:
           enum:
@@ -14752,7 +14752,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         size:
           enum:
@@ -15095,7 +15095,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         size:
           enum:
@@ -15524,7 +15524,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         size:
           enum:
@@ -17674,7 +17674,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         order:
           type: integer
@@ -17933,7 +17933,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         order:
           type: integer
@@ -18210,7 +18210,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         order:
           type: integer
@@ -18543,7 +18543,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         order:
           type: integer
@@ -20914,7 +20914,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         size:
           enum:
@@ -21223,7 +21223,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         size:
           enum:
@@ -22241,7 +22241,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         order:
           type: integer
@@ -22490,7 +22490,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         order:
           type: integer
@@ -23899,7 +23899,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -24202,7 +24202,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -24555,7 +24555,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         type:
           enum:
@@ -24846,7 +24846,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         type:
           enum:
@@ -25100,7 +25100,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -25386,7 +25386,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -27680,7 +27680,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -27956,7 +27956,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -28245,7 +28245,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -28588,7 +28588,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -28992,7 +28992,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -29478,7 +29478,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         type:
           enum:
@@ -29742,7 +29742,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         type:
           enum:
@@ -30019,7 +30019,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         type:
           enum:
@@ -30350,7 +30350,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         type:
           enum:
@@ -30722,7 +30722,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         type:
           enum:
@@ -31015,7 +31015,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -31282,7 +31282,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -31561,7 +31561,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -31887,7 +31887,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string
@@ -32301,7 +32301,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The height of the sign from the ground, measured from the top
+          description: The height of the sign from the ground, measured from the bottom
             in centimeters.
         value:
           type: string

@@ -119,7 +119,7 @@ class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel,
         _("Height"),
         blank=True,
         null=True,
-        help_text=_("The height of the sign from the ground, measured from the top in centimeters."),
+        help_text=_("The height of the sign from the ground, measured from the bottom in centimeters."),
     )
     mount_type = models.ForeignKey(
         "MountType",
