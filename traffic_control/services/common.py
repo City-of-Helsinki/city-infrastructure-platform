@@ -190,3 +190,11 @@ def device_plan_soft_delete(
     else:
         real_model.objects.filter(**{plan_relation_name: instance}).update(**{plan_relation_name: None})
     instance.soft_delete(user)
+
+
+def get_all_replaced_plans(plan_model):
+    return plan_model.objects.exclude(replacement_to_new__isnull=True)
+
+
+def get_all_not_replaced_plans(plan_model):
+    return plan_model.objects.filter(replacement_to_new__isnull=True)

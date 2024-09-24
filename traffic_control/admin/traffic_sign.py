@@ -8,6 +8,7 @@ from traffic_control.admin.additional_sign import AdditionalSignPlanInline, Addi
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     OperationalAreaListFilter,
+    PlanReplacementListFilterMixin,
     ReplacedByInline,
     ReplacesInline,
     TrafficControlOperationInlineBase,
@@ -138,6 +139,10 @@ class TrafficSignPlanReplacedByInline(ReplacedByInline):
     model = TrafficSignPlanReplacement
 
 
+class TrafficSignPlanReplacementListFilter(PlanReplacementListFilterMixin, SimpleListFilter):
+    plan_model = TrafficSignPlan
+
+
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(
     DeviceTypeSearchAdminMixin,
@@ -222,12 +227,14 @@ class TrafficSignPlanAdmin(
         "lifecycle",
         "location",
         "has_additional_signs",
+        "is_replaced",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
         ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         "owner",
+        TrafficSignPlanReplacementListFilter,
     ]
     readonly_fields = (
         "created_at",
