@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.utils import PermissionInlineMixin
 from traffic_control.models import OperationalArea, OperationType
+from traffic_control.services.common import get_all_not_replaced_plans, get_all_replaced_plans
 
 
 @admin.register(OperationType)
@@ -52,3 +53,21 @@ class ReplacedByInline(PermissionInlineMixin, admin.StackedInline):
     verbose_name = _("Replaced by")
     raw_id_fields = ("new",)
     readonly_fields = ("new",)
+
+
+class PlanReplacementListFilterMixin:
+    title = _("Replaced")
+    parameter_name = "plan_replacement"
+
+    def lookups(self, request, model_admin):
+        return (
+            (False, _("No")),
+            (True, _("Yes")),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value() or None
+        if value == "True":
+            return queryset.filter(id__in=get_all_replaced_plans(self.plan_model))
+        if value == "False":
+            return queryset.filter(id__in=get_all_not_replaced_plans(self.plan_model))

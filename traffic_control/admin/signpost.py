@@ -1,10 +1,16 @@
+from django.contrib.admin import SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.admin.common import ReplacedByInline, ReplacesInline, TrafficControlOperationInlineBase
+from traffic_control.admin.common import (
+    PlanReplacementListFilterMixin,
+    ReplacedByInline,
+    ReplacesInline,
+    TrafficControlOperationInlineBase,
+)
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
@@ -64,6 +70,10 @@ class SignpostPlanReplacesInline(ReplacesInline):
 
 class SignpostPlanReplacedByInline(ReplacedByInline):
     model = SignpostPlanReplacement
+
+
+class SignpostPlanReplacementListFilter(PlanReplacementListFilterMixin, SimpleListFilter):
+    plan_model = SignpostPlan
 
 
 @admin.register(SignpostPlan)
@@ -139,12 +149,14 @@ class SignpostPlanAdmin(
         "txt",
         "lifecycle",
         "location",
+        "is_replaced",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
         ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         "owner",
+        SignpostPlanReplacementListFilter,
     ]
     readonly_fields = (
         "created_at",
