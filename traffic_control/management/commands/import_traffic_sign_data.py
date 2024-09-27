@@ -37,6 +37,14 @@ class Command(BaseCommand):
             default=False,
             help="Try to update existing signs",
         )
+        parser.add_argument(
+            "-do",
+            "--delete-orphan_mounts",
+            action="store_true",
+            dest="delete_orphan_mounts",
+            default=False,
+            help="Delete orphan mounts",
+        )
 
     def handle(self, *args, **options):
         mount_file = options["mount_file"]
@@ -60,6 +68,12 @@ class Command(BaseCommand):
         _write_sign_skip_results(list(skipped_signs), options["output_dir"])
         _write_signpost_skip_results(list(skipped_signposts), options["output_dir"])
         _write_all_results(results, options["output_dir"])
+        self.stdout.write(self.style.SUCCESS("Successfully imported sign data"))
+
+        if options["delete_orphan_mounts"]:
+            self.stdout.write(self.style.SUCCESS("Cleaning orphan mounts..."))
+            importer.clean_orphan_mounts()
+            self.stdout.write(self.style.SUCCESS("Orphan mounts cleaned"))
 
 
 def _write_additional_sign_skip_results(results, output_dir):

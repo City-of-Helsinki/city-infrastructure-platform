@@ -50,6 +50,7 @@ def test__import_traffic_scan_data():
             sign_file=os.path.join(TEST_FILES_DIR, "basic_panels.csv"),
             mount_file=os.path.join(TEST_FILES_DIR, "basic_mounts.csv"),
             output_dir=tempdir,
+            delete_orphan_mounts=True,
         )
 
     _assert_mount_data(importer)

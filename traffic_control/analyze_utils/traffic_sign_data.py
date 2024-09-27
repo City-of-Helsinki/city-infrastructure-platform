@@ -869,6 +869,13 @@ class TrafficSignImporter:
 
         return update_data
 
+    @staticmethod
+    def clean_orphan_mounts():
+        traffic_sign_mount_ids = set(list(TrafficSignReal.objects.values_list("mount_real__id", flat=True)))
+        additional_sign_mount_ids = set(list(AdditionalSignReal.objects.values_list("mount_real__id", flat=True)))
+        exclude_ids = traffic_sign_mount_ids.union(additional_sign_mount_ids)
+        MountReal.objects.exclude(id__in=exclude_ids).delete()
+
 
 def is_additional_sign(row):
     code = row[CSVHeaders.code]
