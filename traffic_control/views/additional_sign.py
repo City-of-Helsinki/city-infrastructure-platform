@@ -9,6 +9,7 @@ from traffic_control.filters import (
     AdditionalSignRealFilterSet,
     AdditionalSignRealOperationFilterSet,
 )
+from traffic_control.mixins import ReplaceableModelMixin
 from traffic_control.models import (
     AdditionalSignPlanFile,
     AdditionalSignReal,
@@ -35,7 +36,6 @@ from traffic_control.serializers.additional_sign import (
 )
 from traffic_control.services.additional_sign import (
     additional_sign_plan_get_active,
-    additional_sign_plan_get_current,
     additional_sign_plan_soft_delete,
 )
 from traffic_control.views._common import (
@@ -55,7 +55,7 @@ from traffic_control.views._common import (
     partial_update=extend_schema(summary="Partially update single AdditionalSign Plan"),
     destroy=extend_schema(summary="Soft-delete single AdditionalSign Plan"),
 )
-class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
+class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
     serializer_classes = {
         "default": AdditionalSignPlanOutputSerializer,
         "geojson": AdditionalSignPlanGeoJSONOutputSerializer,
@@ -70,7 +70,7 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_relation = "additional_sign_plan"
 
     def get_list_queryset(self):
-        return prefetch_replacements(additional_sign_plan_get_current())
+        return prefetch_replacements(additional_sign_plan_get_active())
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

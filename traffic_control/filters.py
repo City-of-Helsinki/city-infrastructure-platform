@@ -37,6 +37,7 @@ from traffic_control.models import (
     TrafficSignRealOperation,
 )
 from traffic_control.models.common import OperationType
+from traffic_control.services.common import get_all_not_replaced_plans, get_all_replaced_plans
 
 
 class OperationalAreaFilter(UUIDFilter):
@@ -63,7 +64,30 @@ class GenericMeta:
     }
 
 
-class AdditionalSignPlanFilterSet(FilterSet):
+class PlanReplacementFilterSet(FilterSet):
+    is_replaced = ChoiceFilter(
+        label=_("Plan replacement"),
+        choices=(("All", "ALL"), ("true", "true"), ("false", "false")),
+        method="filter_by_replacement",
+        field_name="is_replaced",
+    )
+
+    def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
+        new_data = data.copy()
+        if not data.get("is_replaced"):
+            new_data.update({"is_replaced": "false"})
+        super().__init__(data=new_data, queryset=queryset, request=request, prefix=prefix)
+
+    def filter_by_replacement(self, queryset, name, value):
+        if value == "true":
+            return queryset.filter(id__in=get_all_replaced_plans(self.Meta.model))
+        elif value == "false":
+            return queryset.filter(id__in=get_all_not_replaced_plans(self.Meta.model))
+        else:
+            return queryset
+
+
+class AdditionalSignPlanFilterSet(PlanReplacementFilterSet):
     class Meta(GenericMeta):
         model = AdditionalSignPlan
         exclude = ["content_s"]
@@ -75,7 +99,7 @@ class AdditionalSignRealFilterSet(FilterSet):
         exclude = ["content_s"]
 
 
-class BarrierPlanFilterSet(FilterSet):
+class BarrierPlanFilterSet(PlanReplacementFilterSet):
     class Meta(GenericMeta):
         model = BarrierPlan
 
@@ -85,7 +109,7 @@ class BarrierRealFilterSet(FilterSet):
         model = BarrierReal
 
 
-class MountPlanFilterSet(FilterSet):
+class MountPlanFilterSet(PlanReplacementFilterSet):
     class Meta(GenericMeta):
         model = MountPlan
 
@@ -126,7 +150,7 @@ class PortalTypeFilterSet(FilterSet):
         model = PortalType
 
 
-class RoadMarkingPlanFilterSet(FilterSet):
+class RoadMarkingPlanFilterSet(PlanReplacementFilterSet):
     class Meta(GenericMeta):
         model = RoadMarkingPlan
 
@@ -136,7 +160,7 @@ class RoadMarkingRealFilterSet(FilterSet):
         model = RoadMarkingReal
 
 
-class SignpostPlanFilterSet(FilterSet):
+class SignpostPlanFilterSet(PlanReplacementFilterSet):
     class Meta(GenericMeta):
         model = SignpostPlan
 
@@ -146,7 +170,7 @@ class SignpostRealFilterSet(FilterSet):
         model = SignpostReal
 
 
-class TrafficLightPlanFilterSet(FilterSet):
+class TrafficLightPlanFilterSet(PlanReplacementFilterSet):
     class Meta(GenericMeta):
         model = TrafficLightPlan
 
@@ -178,7 +202,7 @@ class TrafficControlDeviceTypeFilterSet(FilterSet):
         return queryset
 
 
-class TrafficSignPlanFilterSet(FilterSet):
+class TrafficSignPlanFilterSet(PlanReplacementFilterSet):
     operational_area = OperationalAreaFilter()
 
     class Meta(GenericMeta):

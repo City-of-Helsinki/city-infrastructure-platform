@@ -9,6 +9,7 @@ from traffic_control.filters import (
     RoadMarkingRealFilterSet,
     RoadMarkingRealOperationFilterSet,
 )
+from traffic_control.mixins import ReplaceableModelMixin
 from traffic_control.models import (
     RoadMarkingPlanFile,
     RoadMarkingReal,
@@ -35,7 +36,6 @@ from traffic_control.serializers.road_marking import (
 )
 from traffic_control.services.road_marking import (
     road_marking_plan_get_active,
-    road_marking_plan_get_current,
     road_marking_plan_soft_delete,
 )
 from traffic_control.views._common import (
@@ -57,7 +57,7 @@ __all__ = ("RoadMarkingPlanViewSet", "RoadMarkingRealViewSet")
     partial_update=extend_schema(summary="Partially update single RoadMarking Plan"),
     destroy=extend_schema(summary="Soft-delete single RoadMarking Plan"),
 )
-class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
+class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
     serializer_classes = {
         "default": RoadMarkingPlanOutputSerializer,
         "geojson": RoadMarkingPlanGeoJSONOutputSerializer,
@@ -73,7 +73,7 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_relation = "road_marking_plan"
 
     def get_list_queryset(self):
-        return prefetch_replacements(road_marking_plan_get_current()).prefetch_related("files")
+        return prefetch_replacements(road_marking_plan_get_active()).prefetch_related("files")
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

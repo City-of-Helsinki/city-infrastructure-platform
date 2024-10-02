@@ -87,6 +87,20 @@ paths:
         schema:
           type: boolean
       - in: query
+        name: is_replaced
+        schema:
+          type: string
+          enum:
+          - All
+          - 'false'
+          - 'true'
+        description: |-
+          Plan replacement
+
+          * `All` - ALL
+          * `true` - true
+          * `false` - false
+      - in: query
         name: lane_number
         schema:
           nullable: true
@@ -1610,6 +1624,20 @@ paths:
         name: is_electric
         schema:
           type: boolean
+      - in: query
+        name: is_replaced
+        schema:
+          type: string
+          enum:
+          - All
+          - 'false'
+          - 'true'
+        description: |-
+          Plan replacement
+
+          * `All` - ALL
+          * `true` - true
+          * `false` - false
       - in: query
         name: lane_number
         schema:
@@ -5095,6 +5123,20 @@ paths:
         schema:
           type: boolean
       - in: query
+        name: is_replaced
+        schema:
+          type: string
+          enum:
+          - All
+          - 'false'
+          - 'true'
+        description: |-
+          Plan replacement
+
+          * `All` - ALL
+          * `true` - true
+          * `false` - false
+      - in: query
         name: lifecycle
         schema:
           enum:
@@ -7959,6 +8001,20 @@ paths:
         schema:
           type: boolean
       - in: query
+        name: is_replaced
+        schema:
+          type: string
+          enum:
+          - All
+          - 'false'
+          - 'true'
+        description: |-
+          Plan replacement
+
+          * `All` - ALL
+          * `true` - true
+          * `false` - false
+      - in: query
         name: lane_number
         schema:
           nullable: true
@@ -9421,6 +9477,20 @@ paths:
         name: is_active
         schema:
           type: boolean
+      - in: query
+        name: is_replaced
+        schema:
+          type: string
+          enum:
+          - All
+          - 'false'
+          - 'true'
+        description: |-
+          Plan replacement
+
+          * `All` - ALL
+          * `true` - true
+          * `false` - false
       - in: query
         name: lane_number
         schema:
@@ -11178,6 +11248,20 @@ paths:
         schema:
           type: boolean
       - in: query
+        name: is_replaced
+        schema:
+          type: string
+          enum:
+          - All
+          - 'false'
+          - 'true'
+        description: |-
+          Plan replacement
+
+          * `All` - ALL
+          * `true` - true
+          * `false` - false
+      - in: query
         name: lane_number
         schema:
           nullable: true
@@ -12640,6 +12724,20 @@ paths:
         name: is_active
         schema:
           type: boolean
+      - in: query
+        name: is_replaced
+        schema:
+          type: string
+          enum:
+          - All
+          - 'false'
+          - 'true'
+        description: |-
+          Plan replacement
+
+          * `All` - ALL
+          * `true` - true
+          * `false` - false
       - in: query
         name: lane_number
         schema:

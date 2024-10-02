@@ -5,6 +5,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 from traffic_control.filters import SignpostPlanFilterSet, SignpostRealFilterSet, SignpostRealOperationFilterSet
+from traffic_control.mixins import ReplaceableModelMixin
 from traffic_control.models import SignpostPlanFile, SignpostReal, SignpostRealFile, SignpostRealOperation
 from traffic_control.schema import (
     file_create_serializer,
@@ -26,7 +27,6 @@ from traffic_control.serializers.signpost import (
 )
 from traffic_control.services.signpost import (
     signpost_plan_get_active,
-    signpost_plan_get_current,
     signpost_plan_soft_delete,
 )
 from traffic_control.views._common import (
@@ -48,7 +48,7 @@ __all__ = ("SignpostPlanViewSet", "SignpostRealViewSet")
     partial_update=extend_schema(summary="Partially update single Signpost Plan"),
     destroy=extend_schema(summary="Soft-delete single Signpost Plan"),
 )
-class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
+class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
     serializer_classes = {
         "default": SignpostPlanOutputSerializer,
         "geojson": SignpostPlanGeoJSONOutputSerializer,
@@ -63,7 +63,7 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_relation = "signpost_plan"
 
     def get_list_queryset(self):
-        return prefetch_replacements(signpost_plan_get_current()).prefetch_related("files")
+        return prefetch_replacements(signpost_plan_get_active()).prefetch_related("files")
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

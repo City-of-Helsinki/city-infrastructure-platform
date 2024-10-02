@@ -14,6 +14,7 @@ from traffic_control.filters import (
     MountTypeFilterSet,
     PortalTypeFilterSet,
 )
+from traffic_control.mixins import ReplaceableModelMixin
 from traffic_control.models import (
     MountPlanFile,
     MountReal,
@@ -43,7 +44,7 @@ from traffic_control.serializers.mount import (
     MountTypeSerializer,
     PortalTypeSerializer,
 )
-from traffic_control.services.mount import mount_plan_get_active, mount_plan_get_current, mount_plan_soft_delete
+from traffic_control.services.mount import mount_plan_get_active, mount_plan_soft_delete
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
@@ -63,7 +64,7 @@ __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
     partial_update=extend_schema(summary="Partially update single Mount Plan"),
     destroy=extend_schema(summary="Soft-delete single Mount Plan"),
 )
-class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
+class MountPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
     serializer_classes = {
         "default": MountPlanOutputSerializer,
         "geojson": MountPlanGeoJSONOutputSerializer,
@@ -78,7 +79,7 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_relation = "mount_plan"
 
     def get_list_queryset(self):
-        return prefetch_replacements(mount_plan_get_current()).prefetch_related("files")
+        return prefetch_replacements(mount_plan_get_active()).prefetch_related("files")
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

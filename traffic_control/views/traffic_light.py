@@ -9,6 +9,7 @@ from traffic_control.filters import (
     TrafficLightRealFilterSet,
     TrafficLightRealOperationFilterSet,
 )
+from traffic_control.mixins import ReplaceableModelMixin
 from traffic_control.models import (
     TrafficLightPlanFile,
     TrafficLightReal,
@@ -35,7 +36,6 @@ from traffic_control.serializers.traffic_light import (
 )
 from traffic_control.services.traffic_light import (
     traffic_light_plan_get_active,
-    traffic_light_plan_get_current,
     traffic_light_plan_soft_delete,
 )
 from traffic_control.views._common import (
@@ -57,7 +57,7 @@ __all__ = ("TrafficLightPlanViewSet", "TrafficLightRealViewSet")
     partial_update=extend_schema(summary="Partially update single TrafficLight Plan"),
     destroy=extend_schema(summary="Soft-delete single TrafficLight Plan"),
 )
-class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
+class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
     serializer_classes = {
         "default": TrafficLightPlanOutputSerializer,
         "geojson": TrafficLightPlanGeoJSONOutputSerializer,
@@ -72,7 +72,7 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_relation = "traffic_light_plan"
 
     def get_list_queryset(self):
-        return prefetch_replacements(traffic_light_plan_get_current()).prefetch_related("files")
+        return prefetch_replacements(traffic_light_plan_get_active()).prefetch_related("files")
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

@@ -78,15 +78,54 @@ def test__device_plan_replace__default_list_only_unreplaced_devices(model, facto
 
 @pytest.mark.parametrize(("model", "factory", "url_name"), model_factory_url_name)
 @pytest.mark.django_db
+def test__device_plan_replace__list_only_replaced_devices(model, factory, url_name):
+    client = get_api_client(user=get_user(admin=True))
+    replaced_device_1 = factory(location=test_point_3d)
+    replaced_device_2 = factory(location=test_point_2_3d, replaces=replaced_device_1)
+    _ = factory(location=test_point_3_3d, replaces=replaced_device_2)
+    _ = factory(location=test_point_5_3d)
+
+    response = client.get(reverse(f"v1:{url_name}-list"), {"is_replaced": "true"}, format="json")
+
+    assert model.objects.count() == 4
+    assert response.status_code == status.HTTP_200_OK, response.json()
+    response_json = response.json()
+    assert response_json.get("count") == 2
+    result_device_ids = [UUID(result.get("id")) for result in response_json.get("results")]
+    assert replaced_device_1.id in result_device_ids
+    assert replaced_device_2.id in result_device_ids
+
+
+@pytest.mark.parametrize(("model", "factory", "url_name"), model_factory_url_name)
+@pytest.mark.django_db
+def test__device_plan_replace__list_all_devices(model, factory, url_name):
+    client = get_api_client(user=get_user(admin=True))
+    replaced_device_1 = factory(location=test_point_3d)
+    replaced_device_2 = factory(location=test_point_2_3d, replaces=replaced_device_1)
+    unreplaced_device_1 = factory(location=test_point_3_3d, replaces=replaced_device_2)
+    unreplaced_device_2 = factory(location=test_point_5_3d)
+
+    response = client.get(reverse(f"v1:{url_name}-list"), {"is_replaced": "All"}, format="json")
+
+    assert model.objects.count() == 4
+    assert response.status_code == status.HTTP_200_OK, response.json()
+    response_json = response.json()
+    assert response_json.get("count") == 4
+    result_device_ids = [UUID(result.get("id")) for result in response_json.get("results")]
+    assert replaced_device_1.id in result_device_ids
+    assert unreplaced_device_1.id in result_device_ids
+    assert unreplaced_device_2.id in result_device_ids
+
+
+@pytest.mark.parametrize(("model", "factory", "url_name"), model_factory_url_name)
+@pytest.mark.django_db
 def test__device_plan_replace__detail_replaced_device(model, factory, url_name):
     """It should be possible to fetch detailed view of replaced device"""
 
     client = get_api_client(user=get_user(admin=True))
     replaced_device = factory(location=test_point_3d)
     unreplaced_device = factory(location=test_point_2_3d, replaces=replaced_device)
-
     response = client.get(reverse(f"v1:{url_name}-detail", kwargs={"pk": replaced_device.id}), format="json")
-
     assert response.status_code == status.HTTP_200_OK, response.json()
     response_json = response.json()
     assert response_json.get("id") == str(replaced_device.id)
