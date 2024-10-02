@@ -5,6 +5,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 from traffic_control.filters import BarrierPlanFilterSet, BarrierRealFilterSet, BarrierRealOperationFilterSet
+from traffic_control.mixins import ReplaceableModelMixin
 from traffic_control.models import BarrierPlanFile, BarrierReal, BarrierRealFile, BarrierRealOperation
 from traffic_control.schema import (
     file_create_serializer,
@@ -24,7 +25,7 @@ from traffic_control.serializers.barrier import (
     BarrierRealOperationSerializer,
     BarrierRealSerializer,
 )
-from traffic_control.services.barrier import barrier_plan_get_active, barrier_plan_get_current, barrier_plan_soft_delete
+from traffic_control.services.barrier import barrier_plan_get_active, barrier_plan_soft_delete
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
@@ -44,7 +45,7 @@ __all__ = ("BarrierPlanViewSet", "BarrierRealViewSet")
     partial_update=extend_schema(summary="Partially update single Barrier Plan"),
     destroy=extend_schema(summary="Soft-delete single Barrier Plan"),
 )
-class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
+class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
     serializer_classes = {
         "default": BarrierPlanOutputSerializer,
         "geojson": BarrierPlanGeoJSONOutputSerializer,
@@ -59,7 +60,7 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews):
     file_relation = "barrier_plan"
 
     def get_list_queryset(self):
-        return prefetch_replacements(barrier_plan_get_current()).prefetch_related("files")
+        return prefetch_replacements(barrier_plan_get_active()).prefetch_related("files")
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
