@@ -2,6 +2,8 @@ import datetime
 import uuid
 from typing import Optional
 
+import factory
+
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models import (
     CityFurnitureColor,
@@ -11,7 +13,17 @@ from city_furniture.models import (
     FurnitureSignpostReal,
     FurnitureSignpostRealOperation,
 )
-from traffic_control.tests.factories import get_mount_type, get_operation_type, get_owner, get_user
+from traffic_control.tests.factories import (
+    get_mount_type,
+    get_operation_type,
+    get_owner,
+    get_user,
+    MountPlanFactory,
+    MountTypeFactory,
+    OwnerFactory,
+    PlanFactory,
+    UserFactory,
+)
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 DEFAULT_DEVICE_TYPE_DESCRIPTION = "DESCRIPTION_FI"
@@ -44,6 +56,18 @@ def get_city_furniture_target(
     )[0]
 
 
+class CityFurnitureDeviceTypeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = CityFurnitureDeviceType
+        django_get_or_create = ("code",)
+
+    code = factory.sequence(lambda n: f"Code{n}")
+    class_type = "1030"
+    function_type = "1090"
+    description_fi = factory.sequence(lambda n: "DescFI_{n}")
+    target_model = None
+
+
 def get_city_furniture_device_type(
     code: str = "CODE",
     class_type: str = "1030",
@@ -57,6 +81,29 @@ def get_city_furniture_device_type(
             class_type=class_type, function_type=function_type, target_model=target_model, description_fi=description_fi
         ),
     )[0]
+
+
+class FurnitureSignpostPlanFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = FurnitureSignpostPlan
+        django_get_or_create = (
+            "source_id",
+            "source_name",
+        )
+
+    location = test_point_3d
+    location_name_en = factory.sequence(lambda n: f"Location {n}")
+    owner = factory.SubFactory(OwnerFactory)
+    device_type = factory.SubFactory(CityFurnitureDeviceTypeFactory)
+    direction = 90
+    mount_type = factory.SubFactory(MountTypeFactory)
+    mount_plan = factory.SubFactory(MountPlanFactory)
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    responsible_entity = None
+    created_by = factory.SubFactory(UserFactory)
+    updated_by = factory.SubFactory(UserFactory)
+    plan = factory.SubFactory(PlanFactory)
 
 
 def get_furniture_signpost_plan(

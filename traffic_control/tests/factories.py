@@ -2,6 +2,7 @@ import datetime
 from typing import Any, Optional
 
 import factory
+import factory.django
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.geos import MultiPolygon
@@ -122,6 +123,24 @@ def get_plan(location=test_multi_polygon, name="Test plan", derive_location=Fals
     return PlanFactory(location=location, name=name, derive_location=derive_location)
 
 
+class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TrafficControlDeviceType
+        django_get_or_create = ["code"]
+
+    code = factory.sequence(lambda n: str(n))
+    icon = factory.sequence(lambda n: f"icon_{n}")
+    description = factory.sequence(lambda n: f"description_{n}")
+    value = factory.sequence(lambda n: f"value_{n}")
+    unit = ""
+    size = ""
+    legacy_code = factory.sequence(lambda n: str(n))
+    legacy_description = factory.sequence(lambda n: f"legacy_description_{n}")
+    target_model = None
+    type = None
+    content_schema = None
+
+
 class BarrierPlanFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = BarrierPlan
@@ -131,6 +150,7 @@ class BarrierPlanFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    plan = factory.SubFactory(PlanFactory)
 
 
 def get_barrier_plan(
@@ -160,6 +180,17 @@ def get_barrier_plan(
         barrier_plan_replace(old=replaces, new=barrier_plan)
 
     return barrier_plan
+
+
+class BarrierRealFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = BarrierReal
+        django_get_or_create = ["source_id", "source_name"]
+
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    location = test_point
+    owner = factory.SubFactory(OwnerFactory)
 
 
 def get_barrier_real(
@@ -235,6 +266,7 @@ class MountPlanFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    plan = factory.SubFactory(PlanFactory)
 
 
 def get_mount_plan(location="", plan=None, responsible_entity=None, replaces=None) -> MountPlan:
@@ -312,6 +344,7 @@ class RoadMarkingPlanFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    plan = factory.SubFactory(PlanFactory)
 
 
 def get_road_marking_plan(
@@ -346,6 +379,17 @@ def get_road_marking_plan(
         road_marking_plan_replace(old=replaces, new=road_marking_plan)
 
     return road_marking_plan
+
+
+class RoadMarkingRealFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = RoadMarkingReal
+        django_get_or_create = ["source_id", "source_name"]
+
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    location = test_point
+    owner = factory.SubFactory(OwnerFactory)
 
 
 def get_road_marking_real(
@@ -386,6 +430,7 @@ class SignpostPlanFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    plan = factory.SubFactory(PlanFactory)
 
 
 def get_signpost_plan(
@@ -418,6 +463,20 @@ def get_signpost_plan(
         signpost_plan_replace(old=replaces, new=signpost_plan)
 
     return signpost_plan
+
+
+class SignpostRealFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = SignpostReal
+        django_get_or_create = ["source_id", "source_name"]
+
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
+    signpost_plan = factory.SubFactory(SignpostPlanFactory)
+    location = test_point
+    owner = factory.SubFactory(OwnerFactory)
+    mount_real = factory.SubFactory(MountRealFactory)
 
 
 def get_signpost_real(
@@ -456,6 +515,7 @@ class TrafficLightPlanFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    plan = factory.SubFactory(PlanFactory)
 
 
 def get_traffic_light_plan(
@@ -490,6 +550,17 @@ def get_traffic_light_plan(
     return traffic_light_plan
 
 
+class TrafficLightRealFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TrafficLightReal
+        django_get_or_create = ["source_id", "source_name"]
+
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    location = test_point
+    owner = factory.SubFactory(OwnerFactory)
+
+
 def get_traffic_light_real(
     location="",
     device_type=None,
@@ -515,24 +586,6 @@ def get_traffic_light_real(
         created_by=user,
         updated_by=user,
     )[0]
-
-
-class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = TrafficControlDeviceType
-        django_get_or_create = ["code"]
-
-    code = factory.sequence(lambda n: str(n))
-    icon = factory.sequence(lambda n: f"icon_{n}")
-    description = factory.sequence(lambda n: f"description_{n}")
-    value = factory.sequence(lambda n: f"value_{n}")
-    unit = ""
-    size = ""
-    legacy_code = factory.sequence(lambda n: str(n))
-    legacy_description = factory.sequence(lambda n: f"legacy_description_{n}")
-    target_model = None
-    type = None
-    content_schema = None
 
 
 def get_traffic_control_device_type(
@@ -574,6 +627,7 @@ class TrafficSignPlanFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    plan = factory.SubFactory(PlanFactory)
 
 
 def get_traffic_sign_plan(
@@ -675,6 +729,7 @@ class AdditionalSignPlanFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    plan = factory.SubFactory(PlanFactory)
 
 
 def get_additional_sign_plan(

@@ -19,6 +19,8 @@ from traffic_control.tests.factories import (
     get_traffic_control_device_type,
     get_user,
     PlanFactory,
+    SignpostPlanFactory,
+    SignpostRealFactory,
 )
 from traffic_control.tests.test_base_api import (
     point_location_error_test_data,
@@ -356,10 +358,10 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all sign post real objects.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        spp = get_signpost_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            spp = SignpostPlanFactory(plan=plan)
             self.__create_test_signpost_real(signpost_plan=spp)
         response = self.client.get(reverse("v1:signpostreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -376,10 +378,10 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all sign post real objects with GeoJSON location.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        spp = get_signpost_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            spp = SignpostPlanFactory(plan=plan)
             self.__create_test_signpost_real(signpost_plan=spp)
         response = self.client.get(reverse("v1:signpostreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -450,6 +452,24 @@ class SignPostRealTests(TrafficControlAPIBaseTestCase):
             data["installation_date"],
         )
         self.assertEqual(signpost_real.lifecycle.value, data["lifecycle"])
+
+    def test_create_signpost_real_with_existing_plan(self):
+        spr_plan = SignpostPlanFactory()
+        SignpostRealFactory(signpost_plan=spr_plan)
+        data = {
+            "device_type": self.test_device_type.id,
+            "location": self.test_point.ewkt,
+            "installation_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner.pk,
+            "signpost_plan": spr_plan.id,
+        }
+        response = self.client.post(reverse("v1:signpostreal-list"), data, format="json")
+        response_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(SignpostReal.objects.count(), 1)
+        assert "duplicate key value violates unique constraint" in response_data["detail"]
+        assert "traffic_control_signpostreal_unique_signpost_plan_id" in response_data["detail"]
 
     def test_update_signpost_real(self):
         """

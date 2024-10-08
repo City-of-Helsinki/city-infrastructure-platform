@@ -8,7 +8,13 @@ from traffic_control.resources.signpost import (
     SignpostPlanToRealTemplateResource,
     SignpostRealResource,
 )
-from traffic_control.tests.factories import get_mount_plan, get_mount_real, get_signpost_plan, get_signpost_real
+from traffic_control.tests.factories import (
+    get_mount_plan,
+    get_mount_real,
+    get_signpost_plan,
+    get_signpost_real,
+    SignpostRealFactory,
+)
 from traffic_control.tests.test_base_api import test_point_2
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
@@ -198,7 +204,7 @@ def test__signpost_plan_export_real_parent_and_child(parent_real_preexists, chil
 @pytest.mark.parametrize(
     ("model", "resource", "factory"),
     (
-        (SignpostReal, SignpostRealResource, get_signpost_real),
+        (SignpostReal, SignpostRealResource, SignpostRealFactory),
         (SignpostPlan, SignpostPlanResource, get_signpost_plan),
     ),
 )
