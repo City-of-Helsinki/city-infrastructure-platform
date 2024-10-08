@@ -10,6 +10,8 @@ from rest_framework_gis.fields import GeoJsonDict
 from traffic_control.models import AdditionalSignReal
 from traffic_control.tests.factories import (
     add_additional_sign_real_operation,
+    AdditionalSignPlanFactory,
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
     get_additional_sign_real,
     get_api_client,
@@ -40,9 +42,9 @@ from traffic_control.tests.models.test_traffic_control_device_type import (
 def test__additional_sign_real__list(geo_format, plan_decision_id):
     client = get_api_client()
     plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
-    ads_plan = get_additional_sign_plan(plan=plan) if plan else None
 
     for owner_name in ["foo", "bar", "baz"]:
+        ads_plan = AdditionalSignPlanFactory(plan=plan) if plan else None
         get_additional_sign_real(owner=get_owner(name_fi=owner_name), additional_sign_plan=ads_plan)
 
     response = client.get(reverse("v1:additionalsignreal-list"), data={"geo_format": geo_format})
@@ -121,6 +123,34 @@ def test__additional_sign_real__create_without_content(admin_user):
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert AdditionalSignReal.objects.count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_real__create_with_existing_plan(admin_user):
+    """
+    Test that AdditionalSignReal API does not create a new db row when
+    additional sign with the same plan already exists
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    ads_plan = AdditionalSignPlanFactory()
+    existing_ads = AdditionalSignRealFactory(additional_sign_plan=ads_plan)
+    data = {
+        "location": str(existing_ads.location),
+        "owner": str(get_owner().pk),
+        "additional_sign_plan": str(ads_plan.pk),
+    }
+
+    response = client.post(reverse("v1:additionalsignreal-list"), data=data)
+    response_data = response.json()
+    # just the parent_ads should be in the database
+    assert AdditionalSignReal.objects.count() == 1
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "duplicate key value violates unique constraint" in response_data["detail"]
+        assert "traffic_control_additionalsignreal_unique_additional_sign_plan" in response_data["detail"]
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.parametrize("admin_user", (False, True))

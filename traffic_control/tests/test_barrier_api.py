@@ -10,6 +10,8 @@ from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import BarrierPlan, BarrierReal, ConnectionType, Reflective
 from traffic_control.tests.factories import (
     add_barrier_real_operation,
+    BarrierPlanFactory,
+    BarrierRealFactory,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -359,10 +361,10 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all real barrier objects.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        bp = get_barrier_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            bp = BarrierPlanFactory(plan=plan)
             self.__create_test_barrier_real(barrier_plan=bp)
         response = self.client.get(reverse("v1:barrierreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -379,10 +381,10 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all barrier real objects with GeoJSON location.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        bp = get_barrier_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            bp = BarrierPlanFactory(plan=plan)
             self.__create_test_barrier_real(barrier_plan=bp)
         response = self.client.get(reverse("v1:barrierreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -456,6 +458,29 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             data["installation_date"],
         )
         self.assertEqual(barrier_real.lifecycle.value, data["lifecycle"])
+
+    def test_create_barrier_real_existing_with_plan(self):
+        """
+        Test that BarrierReal API does not create a new db row when
+        barrier with the same plan already exists
+        """
+        barrier_plan = BarrierPlanFactory()
+        BarrierRealFactory(barrier_plan=barrier_plan)
+        data = {
+            "device_type": self.test_device_type.id,
+            "location": self.test_point.ewkt,
+            "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner.pk,
+            "road_name": "Test street 1",
+            "barrier_plan": str(barrier_plan.pk),
+        }
+        response = self.client.post(reverse("v1:barrierreal-list"), data, format="json")
+        response_data = response.json()
+
+        self.assertEqual(BarrierReal.objects.count(), 1)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        assert "duplicate key value violates unique constraint" in response_data["detail"]
+        assert "traffic_control_barrierreal_unique_barrier_plan" in response_data["detail"]
 
     def test_update_barrier_real(self):
         """

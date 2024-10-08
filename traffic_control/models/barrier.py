@@ -235,6 +235,11 @@ class BarrierReal(AbstractBarrier, InstalledDeviceModel):
                 condition=models.Q(is_active=True),
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
+            models.UniqueConstraint(
+                fields=["barrier_plan"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_barrier_plan_id",
+            ),
         ]
 
 

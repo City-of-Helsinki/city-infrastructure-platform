@@ -343,6 +343,11 @@ class RoadMarkingReal(AbstractRoadMarking, InstalledDeviceModel):
                 condition=models.Q(is_active=True),
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
+            models.UniqueConstraint(
+                fields=["road_marking_plan"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_road_marking_plan_id",
+            ),
         ]
 
 

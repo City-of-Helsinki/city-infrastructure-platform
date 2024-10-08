@@ -326,6 +326,11 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledD
                 condition=models.Q(is_active=True),
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
+            models.UniqueConstraint(
+                fields=["signpost_plan"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_signpost_plan_id",
+            ),
         ]
 
 

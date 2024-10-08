@@ -309,6 +309,11 @@ class TrafficLightReal(AbstractTrafficLight, InstalledDeviceModel):
                 condition=models.Q(is_active=True),
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
+            models.UniqueConstraint(
+                fields=["traffic_light_plan"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_traffic_light_plan",
+            ),
         ]
 
 

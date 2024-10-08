@@ -20,6 +20,8 @@ from traffic_control.tests.factories import (
     get_traffic_light_real,
     get_user,
     PlanFactory,
+    TrafficLightPlanFactory,
+    TrafficLightRealFactory,
 )
 from traffic_control.tests.test_base_api import (
     point_location_error_test_data,
@@ -376,10 +378,10 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all real traffic light objects.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        tlp = get_traffic_light_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            tlp = TrafficLightPlanFactory(plan=plan)
             self.__create_test_traffic_light_real(traffic_light_plan=tlp)
         response = self.client.get(reverse("v1:trafficlightreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -396,10 +398,10 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all real traffic light objects with GeoJSON location.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        tlp = get_traffic_light_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            tlp = TrafficLightPlanFactory(plan=plan)
             self.__create_test_traffic_light_real(traffic_light_plan=tlp)
         response = self.client.get(reverse("v1:trafficlightreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -472,6 +474,25 @@ class TrafficLightRealTests(TrafficControlAPIBaseTestCase):
             data["installation_date"],
         )
         self.assertEqual(traffic_light_real.lifecycle.value, data["lifecycle"])
+
+    def test_create_traffic_light_real_with_existing_plan(self):
+        tl_plan = TrafficLightPlanFactory()
+        TrafficLightRealFactory(traffic_light_plan=tl_plan)
+        data = {
+            "device_type": self.test_device_type.id,
+            "type": TrafficLightType.SIGNAL.value,
+            "location": self.test_point.ewkt,
+            "installation_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner.pk,
+            "traffic_light_plan": tl_plan.id,
+        }
+        response = self.client.post(reverse("v1:trafficlightreal-list"), data, format="json")
+        response_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(TrafficLightReal.objects.count(), 1)
+        assert "duplicate key value violates unique constraint" in response_data["detail"]
+        assert "traffic_control_trafficlightreal_unique_traffic_light_plan" in response_data["detail"]
 
     def test_update_traffic_light_real(self):
         """

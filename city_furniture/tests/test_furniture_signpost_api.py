@@ -12,6 +12,7 @@ from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.tests.factories import (
     add_furniture_signpost_real_operation,
     DEFAULT_DEVICE_TYPE_DESCRIPTION,
+    FurnitureSignpostPlanFactory,
     get_city_furniture_device_type,
     get_furniture_signpost_plan,
     get_furniture_signpost_real,
@@ -56,9 +57,9 @@ def test__furniture_signpost_plan__list(geo_format):
 def test__furniture_signpost_real__list(geo_format, plan_decision_id):
     client = get_api_client()
     plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
-    fsp = get_furniture_signpost_plan(plan=plan)
 
     for owner_name in ["foo", "bar", "baz"]:
+        fsp = FurnitureSignpostPlanFactory(plan=plan, parent=None)
         get_furniture_signpost_real(owner=get_owner(name_fi=owner_name), furniture_signpost_plan=fsp)
 
     response = client.get(reverse("v1:furnituresignpostreal-list"), data={"geo_format": geo_format})
@@ -167,6 +168,35 @@ def test__furniture_signpost_real__create(admin_user):
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert FurnitureSignpostReal.objects.count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__furniture_signpost_real__create_with_existing_plan(admin_user):
+    """
+    Test that FurnitureSignpostReal API does not create a new db row when
+    signpost with the same plan already exists
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    fsp_plan = FurnitureSignpostPlanFactory(parent=None)
+    existing_fsp = get_furniture_signpost_real(furniture_signpost_plan=fsp_plan)
+    data = {
+        "location": str(existing_fsp.location),
+        "owner": get_owner().pk,
+        "furniture_signpost_plan": fsp_plan.pk,
+        "device_type": fsp_plan.device_type.pk,
+    }
+
+    response = client.post(reverse("v1:furnituresignpostreal-list"), data=data)
+    response_data = response.json()
+    # just the parent_ads should be in the database
+    assert FurnitureSignpostReal.objects.count() == 1
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "duplicate key value violates unique constraint" in response_data["detail"]
+        assert "city_furniture_furnituresignpostreal_unique_furniture_signpost" in response_data["detail"]
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.parametrize("admin_user", (False, True))

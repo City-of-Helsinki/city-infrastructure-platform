@@ -19,6 +19,8 @@ from traffic_control.tests.factories import (
     get_traffic_sign_real,
     get_user,
     PlanFactory,
+    TrafficSignPlanFactory,
+    TrafficSignRealFactory,
 )
 from traffic_control.tests.test_base_api_3d import (
     point_location_error_test_data_3d,
@@ -195,6 +197,23 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(traffic_sign_plan.location.ewkt, data["location"])
         self.assertEqual(traffic_sign_plan.lifecycle.value, data["lifecycle"])
 
+    def test_create_traffic_sign_real_with_existing_plan(self):
+        ts_plan = TrafficSignPlanFactory()
+        TrafficSignRealFactory(traffic_sign_plan=ts_plan)
+        data = {
+            "device_type": self.test_device_type.id,
+            "location": self.test_point.ewkt,
+            "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner.pk,
+            "traffic_sign_plan": ts_plan.id,
+        }
+        response = self.client.post(reverse("v1:trafficsignreal-list"), data, format="json")
+        response_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(TrafficSignReal.objects.count(), 1)
+        assert "duplicate key value violates unique constraint" in response_data["detail"]
+        assert "traffic_control_trafficsignreal_unique_traffic_sign_plan" in response_data["detail"]
+
     def test_update_traffic_sign_plan(self):
         """
         Ensure we can update existing traffic sign plan object.
@@ -354,10 +373,10 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         Ensure we can get all traffic sign real objects.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        tsp = get_traffic_sign_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            tsp = TrafficSignPlanFactory(plan=plan)
             self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
         response = self.client.get(reverse("v1:trafficsignreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -374,10 +393,10 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
         Ensure we can get all traffic sign real objects with GeoJSON location.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        tsp = get_traffic_sign_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            tsp = TrafficSignPlanFactory(plan=plan)
             self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
         response = self.client.get(reverse("v1:trafficsignreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)

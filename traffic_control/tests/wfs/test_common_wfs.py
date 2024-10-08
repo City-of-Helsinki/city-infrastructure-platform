@@ -5,10 +5,10 @@ from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, TrafficSignPlan, TrafficSignReal
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_traffic_sign_plan,
-    get_traffic_sign_real,
+    TrafficSignRealFactory,
 )
 from traffic_control.tests.wfs.wfs_utils import (
     EPSG_3879_URN,
@@ -25,9 +25,9 @@ from traffic_control.tests.wfs.wfs_utils import (
     "model, model_name, factory",
     (
         (TrafficSignPlan, "trafficsignplan", get_traffic_sign_plan),
-        (TrafficSignReal, "trafficsignreal", get_traffic_sign_real),
+        (TrafficSignReal, "trafficsignreal", TrafficSignRealFactory),
         (AdditionalSignPlan, "additionalsignplan", get_additional_sign_plan),
-        (AdditionalSignReal, "additionalsignreal", get_additional_sign_real),
+        (AdditionalSignReal, "additionalsignreal", AdditionalSignRealFactory),
         (FurnitureSignpostPlan, "furnituresignpostplan", get_furniture_signpost_plan),
         (FurnitureSignpostReal, "furnituresignpostreal", get_furniture_signpost_real),
     ),

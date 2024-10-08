@@ -290,6 +290,11 @@ class MountReal(AbstractMount, InstalledDeviceModel):
                 condition=models.Q(is_active=True),
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
+            models.UniqueConstraint(
+                fields=["mount_plan"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_mount_plan_id",
+            ),
         ]
 
     @property

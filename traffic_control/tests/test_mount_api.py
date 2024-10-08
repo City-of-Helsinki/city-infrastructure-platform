@@ -13,6 +13,8 @@ from traffic_control.tests.factories import (
     get_mount_plan,
     get_mount_real,
     get_operation_type,
+    MountPlanFactory,
+    MountRealFactory,
     PlanFactory,
 )
 from traffic_control.tests.test_base_api import (
@@ -247,10 +249,10 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all mount real objects.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        mp = get_mount_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            mp = MountPlanFactory(plan=plan)
             self.__create_test_mount_real(mount_plan=mp)
         response = self.client.get(reverse("v1:mountreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -267,10 +269,10 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all mount real objects with GeoJSON location.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        mp = get_mount_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            mp = MountPlanFactory(plan=plan)
             self.__create_test_mount_real(mount_plan=mp)
         response = self.client.get(reverse("v1:mountreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -342,6 +344,24 @@ class MountRealTests(TrafficControlAPIBaseTestCase):
             data["installation_date"],
         )
         self.assertEqual(mount_real.lifecycle.value, data["lifecycle"])
+
+    def test_create_mount_real_with_existing_plan(self):
+        mount_plan = MountPlanFactory()
+        MountRealFactory(mount_plan=mount_plan)
+        data = {
+            "mount_type": self.test_mount_type.pk,
+            "location": self.test_point.ewkt,
+            "installation_date": "2020-01-02",
+            "lifecycle": self.test_lifecycle.value,
+            "owner": self.test_owner.pk,
+            "mount_plan": mount_plan.pk,
+        }
+        response = self.client.post(reverse("v1:mountreal-list"), data, format="json")
+        response_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(MountReal.objects.count(), 1)
+        assert "duplicate key value violates unique constraint" in response_data["detail"]
+        assert "traffic_control_mountreal_unique_mount_plan" in response_data["detail"]
 
     def test_update_mount_real(self):
         """

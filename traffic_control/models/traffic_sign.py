@@ -381,6 +381,11 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
                 condition=models.Q(is_active=True),
                 name="%(app_label)s_%(class)s_unique_source_name_id",
             ),
+            models.UniqueConstraint(
+                fields=["traffic_sign_plan"],
+                condition=models.Q(is_active=True),
+                name="%(app_label)s_%(class)s_unique_traffic_sign_plan_id",
+            ),
         ]
 
 

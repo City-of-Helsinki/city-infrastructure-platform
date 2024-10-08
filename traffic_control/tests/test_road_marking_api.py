@@ -18,6 +18,8 @@ from traffic_control.tests.factories import (
     get_traffic_control_device_type,
     get_user,
     PlanFactory,
+    RoadMarkingPlanFactory,
+    RoadMarkingRealFactory,
 )
 from traffic_control.tests.test_base_api import (
     line_location_error_test_data,
@@ -365,10 +367,10 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all real road marking objects.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        rmp = get_road_marking_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            rmp = RoadMarkingPlanFactory(plan=plan)
             self.__create_test_road_marking_real(road_marking_plan=rmp)
         response = self.client.get(reverse("v1:roadmarkingreal-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -385,10 +387,10 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can get all real road marking objects with GeoJSON location.
         """
         plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        rmp = get_road_marking_plan(plan=plan)
 
         count = 3
         for i in range(count):
+            rmp = RoadMarkingPlanFactory(plan=plan)
             self.__create_test_road_marking_real(road_marking_plan=rmp)
         response = self.client.get(reverse("v1:roadmarkingreal-list"), data={"geo_format": "geojson"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -461,6 +463,26 @@ class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
             data["installation_date"],
         )
         self.assertEqual(road_marking_real.lifecycle.value, data["lifecycle"])
+
+    def test_create_road_marking_real_with_existing_plan(self):
+        rm_plan = RoadMarkingPlanFactory()
+        RoadMarkingRealFactory(road_marking_plan=rm_plan)
+        data = {
+            "device_type": self.test_device_type_2.id,
+            "location": self.test_point.ewkt,
+            "installation_date": "2020-01-21",
+            "lifecycle": self.test_lifecycle_2.value,
+            "owner": self.test_owner.pk,
+            "source_name": "test-source",
+            "source_id": 1,
+            "road_marking_plan": rm_plan.id,
+        }
+        response = self.client.post(reverse("v1:roadmarkingreal-list"), data, format="json")
+        response_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(RoadMarkingReal.objects.count(), 1)
+        assert "duplicate key value violates unique constraint" in response_data["detail"]
+        assert "traffic_control_roadmarkingreal_unique_road_marking_plan_id" in response_data["detail"]
 
     def test_update_road_marking_real(self):
         """
