@@ -28,13 +28,14 @@ paths:
       - in: query
         name: color
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
           - 2
         description: |-
-          * `Blue` - Blue
-          * `Yellow` - Yellow
+          * `1` - Blue
+          * `2` - Yellow
       - in: query
         name: created_at
         schema:
@@ -103,6 +104,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -119,56 +121,58 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this sign affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -177,10 +181,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -203,6 +207,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -214,12 +219,12 @@ paths:
         description: |-
           Specifies where the sign is in relation to the road.
 
-          * `Right side` - Right side
-          * `Left side` - Left side
-          * `Above` - Above
-          * `Middle` - Middle
-          * `Vertical` - Vertical
-          * `Outside` - Outside
+          * `1` - Right side
+          * `2` - Left side
+          * `3` - Above
+          * `4` - Middle
+          * `5` - Vertical
+          * `6` - Outside
       - in: query
         name: missing_content
         schema:
@@ -268,6 +273,7 @@ paths:
       - in: query
         name: reflection_class
         schema:
+          type: string
           nullable: true
           title: Reflection
           enum:
@@ -275,9 +281,9 @@ paths:
           - R2
           - R3
         description: |-
-          * `r1` - r1
-          * `r2` - r2
-          * `r3` - r3
+          * `R1` - r1
+          * `R2` - r2
+          * `R3` - r3
       - in: query
         name: responsible_entity
         schema:
@@ -300,15 +306,16 @@ paths:
       - in: query
         name: size
         schema:
+          type: string
           nullable: true
           enum:
-          - S
-          - M
           - L
+          - M
+          - S
         description: |-
-          * `Small` - Small
-          * `Medium` - Medium
-          * `Large` - Large
+          * `S` - Small
+          * `M` - Medium
+          * `L` - Large
       - in: query
         name: source_id
         schema:
@@ -320,14 +327,15 @@ paths:
       - in: query
         name: surface_class
         schema:
+          type: string
           nullable: true
           title: Surface
           enum:
           - CONVEX
           - FLAT
         description: |-
-          * `Convex` - Convex
-          * `Flat` - Flat
+          * `CONVEX` - Convex
+          * `FLAT` - Flat
       - in: query
         name: updated_at
         schema:
@@ -638,16 +646,18 @@ paths:
       - in: query
         name: color
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
           - 2
         description: |-
-          * `Blue` - Blue
-          * `Yellow` - Yellow
+          * `1` - Blue
+          * `2` - Yellow
       - in: query
         name: condition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -658,11 +668,11 @@ paths:
         description: |-
           Describes the condition of this device.
 
-          * `Very bad` - Very bad
-          * `Bad` - Bad
-          * `Average` - Average
-          * `Good` - Good
-          * `Very good` - Very good
+          * `1` - Very bad
+          * `2` - Bad
+          * `3` - Average
+          * `4` - Good
+          * `5` - Very good
       - in: query
         name: coverage_area
         schema:
@@ -731,21 +741,22 @@ paths:
       - in: query
         name: installation_status
         schema:
+          type: string
           nullable: true
           enum:
-          - IN_USE
           - COVERED
           - FALLEN
+          - IN_USE
           - MISSING
           - OTHER
         description: |-
           Describes this devices installation status.
 
-          * `In use` - In use
-          * `Covered` - Covered
-          * `Fallen` - Fallen
-          * `Missing` - Missing
-          * `Other` - Other
+          * `IN_USE` - In use
+          * `COVERED` - Covered
+          * `FALLEN` - Fallen
+          * `MISSING` - Missing
+          * `OTHER` - Other
       - in: query
         name: installed_by
         schema:
@@ -757,6 +768,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -773,53 +785,54 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this sign affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: legacy_code
         schema:
@@ -827,6 +840,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -835,10 +849,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -861,6 +875,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -872,12 +887,12 @@ paths:
         description: |-
           Specifies where the sign is in relation to the road.
 
-          * `Right side` - Right side
-          * `Left side` - Left side
-          * `Above` - Above
-          * `Middle` - Middle
-          * `Vertical` - Vertical
-          * `Outside` - Outside
+          * `1` - Right side
+          * `2` - Left side
+          * `3` - Above
+          * `4` - Middle
+          * `5` - Vertical
+          * `6` - Outside
       - in: query
         name: manufacturer
         schema:
@@ -933,6 +948,7 @@ paths:
       - in: query
         name: reflection_class
         schema:
+          type: string
           nullable: true
           title: Reflection
           enum:
@@ -940,9 +956,9 @@ paths:
           - R2
           - R3
         description: |-
-          * `r1` - r1
-          * `r2` - r2
-          * `r3` - r3
+          * `R1` - r1
+          * `R2` - r2
+          * `R3` - r3
       - in: query
         name: responsible_entity
         schema:
@@ -974,15 +990,16 @@ paths:
       - in: query
         name: size
         schema:
+          type: string
           nullable: true
           enum:
-          - S
-          - M
           - L
+          - M
+          - S
         description: |-
-          * `Small` - Small
-          * `Medium` - Medium
-          * `Large` - Large
+          * `S` - Small
+          * `M` - Medium
+          * `L` - Large
       - in: query
         name: source_id
         schema:
@@ -994,14 +1011,15 @@ paths:
       - in: query
         name: surface_class
         schema:
+          type: string
           nullable: true
           title: Surface
           enum:
           - CONVEX
           - FLAT
         description: |-
-          * `Convex` - Convex
-          * `Flat` - Flat
+          * `CONVEX` - Convex
+          * `FLAT` - Flat
       - in: query
         name: updated_at
         schema:
@@ -1565,14 +1583,15 @@ paths:
       - in: query
         name: connection_type
         schema:
+          type: integer
           enum:
           - 1
           - 2
         description: |-
           Describes if the barrier is open or closed.
 
-          * `Closed` - Closed
-          * `Open out` - Open out
+          * `1` - Closed
+          * `2` - Open Out
       - in: query
         name: count
         schema:
@@ -1641,6 +1660,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -1657,53 +1677,54 @@ paths:
         description: |-
           Describes which lane of the road this barrier affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this barrier affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: length
         schema:
@@ -1711,6 +1732,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -1719,10 +1741,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -1745,6 +1767,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -1753,9 +1776,9 @@ paths:
         description: |-
           Specifies where the barrier is in relation to the road.
 
-          * `Middle of road or lane` - Middle of road or lane
-          * `Right of road or lane` - Right of road or lane
-          * `Left of road or lane` - Left of road or lane
+          * `1` - Middle of road or lane
+          * `2` - Right of road or lane
+          * `3` - Left of road or lane
       - in: query
         name: material
         schema:
@@ -1785,15 +1808,16 @@ paths:
       - in: query
         name: reflective
         schema:
+          type: string
           nullable: true
           enum:
-          - 'YES'
           - 'NO'
           - RED_YELLOW
+          - 'YES'
         description: |-
-          * `Yes` - Yes
-          * `No` - No
-          * `Red-yellow` - Red-yellow
+          * `YES` - Yes
+          * `NO` - No
+          * `RED_YELLOW` - Red-yellow
       - in: query
         name: responsible_entity
         schema:
@@ -2117,6 +2141,7 @@ paths:
       - in: query
         name: condition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -2127,22 +2152,23 @@ paths:
         description: |-
           Describes the condition of this device.
 
-          * `Very bad` - Very bad
-          * `Bad` - Bad
-          * `Average` - Average
-          * `Good` - Good
-          * `Very good` - Very good
+          * `1` - Very bad
+          * `2` - Bad
+          * `3` - Average
+          * `4` - Good
+          * `5` - Very good
       - in: query
         name: connection_type
         schema:
+          type: integer
           enum:
           - 1
           - 2
         description: |-
           Describes if the barrier is open or closed.
 
-          * `Closed` - Closed
-          * `Open out` - Open out
+          * `1` - Closed
+          * `2` - Open Out
       - in: query
         name: count
         schema:
@@ -2194,21 +2220,22 @@ paths:
       - in: query
         name: installation_status
         schema:
+          type: string
           nullable: true
           enum:
-          - IN_USE
           - COVERED
           - FALLEN
+          - IN_USE
           - MISSING
           - OTHER
         description: |-
           Describes this devices installation status.
 
-          * `In use` - In use
-          * `Covered` - Covered
-          * `Fallen` - Fallen
-          * `Missing` - Missing
-          * `Other` - Other
+          * `IN_USE` - In use
+          * `COVERED` - Covered
+          * `FALLEN` - Fallen
+          * `MISSING` - Missing
+          * `OTHER` - Other
       - in: query
         name: is_active
         schema:
@@ -2220,6 +2247,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -2236,53 +2264,54 @@ paths:
         description: |-
           Describes which lane of the road this barrier affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this barrier affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: length
         schema:
@@ -2290,6 +2319,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -2298,10 +2328,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -2324,6 +2354,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -2332,9 +2363,9 @@ paths:
         description: |-
           Specifies where the barrier is in relation to the road.
 
-          * `Middle of road or lane` - Middle of road or lane
-          * `Right of road or lane` - Right of road or lane
-          * `Left of road or lane` - Left of road or lane
+          * `1` - Middle of road or lane
+          * `2` - Right of road or lane
+          * `3` - Left of road or lane
       - in: query
         name: material
         schema:
@@ -2359,15 +2390,16 @@ paths:
       - in: query
         name: reflective
         schema:
+          type: string
           nullable: true
           enum:
-          - 'YES'
           - 'NO'
           - RED_YELLOW
+          - 'YES'
         description: |-
-          * `Yes` - Yes
-          * `No` - No
-          * `Red-yellow` - Red-yellow
+          * `YES` - Yes
+          * `NO` - No
+          * `RED_YELLOW` - Red-yellow
       - in: query
         name: responsible_entity
         schema:
@@ -3147,6 +3179,7 @@ paths:
       - in: query
         name: class_type
         schema:
+          type: integer
           title: City Furniture Class type
           enum:
           - 1000
@@ -3156,10 +3189,10 @@ paths:
         description: |-
           OGC CityGML City Furniture Class
 
-          * `Traffic` - Traffic
-          * `Communication` - Communication
-          * `Security` - Security
-          * `Others` - Others
+          * `1000` - Traffic
+          * `1010` - Communication
+          * `1020` - Security
+          * `1030` - Others
       - in: query
         name: code
         schema:
@@ -3179,6 +3212,7 @@ paths:
       - in: query
         name: function_type
         schema:
+          type: integer
           title: City Furniture Function or Usage type
           enum:
           - 1000
@@ -3238,60 +3272,60 @@ paths:
         description: |-
           OGC CityGML City Furniture Function or Usage type
 
-          * `Communication fixture` - Communication fixture
-          * `Telephone box` - Telephone box
-          * `Postbox` - Postbox
-          * `Emergency call fixture` - Emergency call fixture
-          * `Fire detector` - Fire detector
-          * `Police call post` - Police call post
-          * `Switching unit` - Switching unit
-          * `Road sign` - Road sign
-          * `Traffic light` - Traffic light
-          * `Free-standing sign` - Free-standing sign
-          * `Free-standing warning sign` - Free-standing warning sign
-          * `Bus stop` - Bus stop
-          * `Milestone` - Milestone
-          * `Rail level crossing` - Rail level crossing
-          * `Gate` - Gate
-          * `Streetlamp, latern or candelabra` - Streetlamp, latern or candelabra
-          * `Column` - Column
-          * `Lamp post` - Lamp post
-          * `Flagpole` - Flagpole
-          * `Street sink box` - Street sink box
-          * `Rubbish bin` - Rubbish bin
-          * `Clock` - Clock
-          * `Directional spot light` - Directional spot light
-          * `Floodlight mast` - Floodlight mast
-          * `Windmill` - Windmill
-          * `Solar cell` - Solar cell
-          * `Water wheel` - Water wheel
-          * `Pole` - Pole
-          * `Radio mast` - Radio mast
-          * `Aerial` - Aerial
-          * `Radio telescope` - Radio telescope
-          * `Chimney` - Chimney
-          * `Marker` - Marker
-          * `Hydrant` - Hydrant
-          * `Upper corridor fire-hydrant` - Upper corridor fire-hydrant
-          * `Lower floor panel fire-hydrant` - Lower floor panel fire-hydrant
-          * `Slidegate valve cap` - Slidegate valve cap
-          * `Entrance shaft` - Entrance shaft
-          * `Converter` - Converter
-          * `Stair` - Stair
-          * `Outside staircase` - Outside staircase
-          * `Escalator` - Escalator
-          * `Ramp` - Ramp
-          * `Patio` - Patio
-          * `Fence` - Fence
-          * `Memorial/monument` - Memorial/monument
-          * `Wayside shrine` - Wayside shrine
-          * `Crossroads` - Crossroads
-          * `Cross on the summit of a mountain` - Cross on the summit of a mountain
-          * `Fountain` - Fountain
-          * `Block mark` - Block mark
-          * `Boundary post` - Boundary post
-          * `Bench` - Bench
-          * `Others` - Others
+          * `1000` - Communication fixture
+          * `1010` - Telephone box
+          * `1020` - Postbox
+          * `1030` - Emergency call fixture
+          * `1040` - Fire detector
+          * `1050` - Police call post
+          * `1060` - Switching unit
+          * `1070` - Road sign
+          * `1080` - Traffic light
+          * `1090` - Free-standing sign
+          * `1100` - Free-standing warning sign
+          * `1110` - Bus stop
+          * `1120` - Milestone
+          * `1130` - Rail level crossing
+          * `1140` - Gate
+          * `1150` - Streetlamp, latern or candelabra
+          * `1160` - Column
+          * `1170` - Lamp post
+          * `1180` - Flagpole
+          * `1190` - Street sink box
+          * `1200` - Rubbish bin
+          * `1210` - Clock
+          * `1220` - Directional spot light
+          * `1230` - Floodlight
+          * `1240` - Windmill
+          * `1250` - Solar cell
+          * `1260` - Water wheel
+          * `1270` - Pole
+          * `1280` - Radio master
+          * `1290` - Aerial
+          * `1300` - Radio telescope
+          * `1310` - Chimney
+          * `1320` - Marker
+          * `1330` - Hydrant
+          * `1340` - Upper corridor fire-hydrant
+          * `1350` - Lower floor panel fire-hydrant
+          * `1360` - Slidegate valve cap
+          * `1370` - Entrance shaft
+          * `1380` - Converter
+          * `1390` - Stair
+          * `1400` - Outside staircase
+          * `1410` - Escalator
+          * `1420` - Ramp
+          * `1430` - Patio
+          * `1440` - Fence
+          * `1450` - Memorial/monument
+          * `1470` - Wayside shrine
+          * `1480` - Crossroads
+          * `1490` - Cross on the summit of a mountain
+          * `1500` - Fountain
+          * `1510` - Block mark
+          * `1520` - Boundary post
+          * `1530` - Bench
+          * `1540` - Others
       - in: query
         name: icon
         schema:
@@ -3326,6 +3360,7 @@ paths:
       - in: query
         name: target_model
         schema:
+          type: string
           nullable: true
           title: Target data model
           enum:
@@ -3333,7 +3368,7 @@ paths:
         description: |-
           City Furniture model that this Device Type is usable for.
 
-          * `Furniture signpost` - Furniture signpost
+          * `furniture_signpost` - Furniture signpost
       tags:
       - city-furniture-device-types
       security:
@@ -3724,6 +3759,7 @@ paths:
       - in: query
         name: arrow_direction
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -3737,14 +3773,14 @@ paths:
         description: |-
           Direction of the arrow on this device in relation to the sign.
 
-          * `Up` - Up
-          * `Down` - Down
-          * `Left` - Left
-          * `Right` - Right
-          * `Top right` - Top right
-          * `Bottom right` - Bottom right
-          * `Top left` - Top left
-          * `Bottom left` - Bottom left
+          * `1` - Up
+          * `2` - Down
+          * `3` - Left
+          * `4` - Right
+          * `5` - Top Right
+          * `6` - Bottom Right
+          * `7` - Top Left
+          * `8` - Bottom Left
       - in: query
         name: color
         schema:
@@ -3808,6 +3844,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -3816,10 +3853,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -4244,6 +4281,7 @@ paths:
       - in: query
         name: arrow_direction
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -4257,14 +4295,14 @@ paths:
         description: |-
           Direction of the arrow on this device in relation to the sign.
 
-          * `Up` - Up
-          * `Down` - Down
-          * `Left` - Left
-          * `Right` - Right
-          * `Top right` - Top right
-          * `Bottom right` - Bottom right
-          * `Top left` - Top left
-          * `Bottom left` - Bottom left
+          * `1` - Up
+          * `2` - Down
+          * `3` - Left
+          * `4` - Right
+          * `5` - Top Right
+          * `6` - Bottom Right
+          * `7` - Top Left
+          * `8` - Bottom Left
       - in: query
         name: color
         schema:
@@ -4273,6 +4311,7 @@ paths:
       - in: query
         name: condition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -4283,11 +4322,11 @@ paths:
         description: |-
           Describes the condition of this device.
 
-          * `Very bad` - Very bad
-          * `Bad` - Bad
-          * `Average` - Average
-          * `Good` - Good
-          * `Very good` - Very good
+          * `1` - Very bad
+          * `2` - Bad
+          * `3` - Average
+          * `4` - Good
+          * `5` - Very good
       - in: query
         name: content_responsible_entity
         schema:
@@ -4352,21 +4391,22 @@ paths:
       - in: query
         name: installation_status
         schema:
+          type: string
           nullable: true
           enum:
-          - IN_USE
           - COVERED
           - FALLEN
+          - IN_USE
           - MISSING
           - OTHER
         description: |-
           Describes this devices installation status.
 
-          * `In use` - In use
-          * `Covered` - Covered
-          * `Fallen` - Fallen
-          * `Missing` - Missing
-          * `Other` - Other
+          * `IN_USE` - In use
+          * `COVERED` - Covered
+          * `FALLEN` - Fallen
+          * `MISSING` - Missing
+          * `OTHER` - Other
       - in: query
         name: is_active
         schema:
@@ -4374,6 +4414,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -4382,10 +4423,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -5139,6 +5180,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -5147,10 +5189,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -5173,6 +5215,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -5183,11 +5226,11 @@ paths:
         description: |-
           Specifies where the mount is in relation to the road.
 
-          * `Right side` - Right side
-          * `Left side` - Left side
-          * `Above` - Above
-          * `Middle` - Middle
-          * `Outside` - Outside
+          * `1` - Right side
+          * `2` - Left side
+          * `3` - Above
+          * `4` - Middle
+          * `6` - Outside
       - in: query
         name: material
         schema:
@@ -5550,6 +5593,7 @@ paths:
       - in: query
         name: condition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -5560,11 +5604,11 @@ paths:
         description: |-
           Describes the condition of this device.
 
-          * `Very bad` - Very bad
-          * `Bad` - Bad
-          * `Average` - Average
-          * `Good` - Good
-          * `Very good` - Very good
+          * `1` - Very bad
+          * `2` - Bad
+          * `3` - Average
+          * `4` - Good
+          * `5` - Very good
       - in: query
         name: created_at
         schema:
@@ -5628,21 +5672,22 @@ paths:
       - in: query
         name: installation_status
         schema:
+          type: string
           nullable: true
           enum:
-          - IN_USE
           - COVERED
           - FALLEN
+          - IN_USE
           - MISSING
           - OTHER
         description: |-
           Describes this devices installation status.
 
-          * `In use` - In use
-          * `Covered` - Covered
-          * `Fallen` - Fallen
-          * `Missing` - Missing
-          * `Other` - Other
+          * `IN_USE` - In use
+          * `COVERED` - Covered
+          * `FALLEN` - Fallen
+          * `MISSING` - Missing
+          * `OTHER` - Other
       - in: query
         name: is_active
         schema:
@@ -5654,6 +5699,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -5662,10 +5708,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -5688,6 +5734,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -5698,11 +5745,11 @@ paths:
         description: |-
           Specifies where the mount is in relation to the road.
 
-          * `Right side` - Right side
-          * `Left side` - Left side
-          * `Above` - Above
-          * `Middle` - Middle
-          * `Outside` - Outside
+          * `1` - Right side
+          * `2` - Left side
+          * `3` - Above
+          * `4` - Middle
+          * `6` - Outside
       - in: query
         name: material
         schema:
@@ -7714,6 +7761,7 @@ paths:
       - in: query
         name: organization_level
         schema:
+          type: integer
           enum:
           - 10
           - 20
@@ -7722,10 +7770,10 @@ paths:
         description: |-
           Describes the level of organization this is.
 
-          * `division` - division
-          * `service` - service
-          * `unit` - unit
-          * `project` - project
+          * `10` - division
+          * `20` - service
+          * `30` - unit
+          * `50` - project
       - in: query
         name: parent
         schema:
@@ -7918,6 +7966,7 @@ paths:
       - in: query
         name: arrow_direction
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -7931,24 +7980,25 @@ paths:
         description: |-
           Direction of the arrow on the road.
 
-          * `Straight` - Straight
-          * `Right` - Right
-          * `Right and straight` - Right and straight
-          * `Left` - Left
-          * `Left and straight` - Left and straight
-          * `Lane ends` - Lane ends
-          * `Right and left` - Right and left
-          * `Straight, right and left` - Straight, right and left
+          * `1` - Straight
+          * `2` - Right
+          * `3` - Right and straight
+          * `4` - Left
+          * `5` - Left and straight
+          * `6` - Lane ends
+          * `7` - Right and left
+          * `8` - Straight, left and right
       - in: query
         name: color
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
           - 2
         description: |-
-          * `White` - White
-          * `Yellow` - Yellow
+          * `1` - White
+          * `2` - Yellow
       - in: query
         name: created_at
         schema:
@@ -8017,6 +8067,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -8033,53 +8084,54 @@ paths:
         description: |-
           Describes which lane of the road this road marking affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this road marking affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: length
         schema:
@@ -8087,6 +8139,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -8095,10 +8148,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -8108,13 +8161,14 @@ paths:
       - in: query
         name: line_direction
         schema:
+          type: string
           nullable: true
           enum:
-          - FORWARD
           - BACKWARD
+          - FORWARD
         description: |-
-          * `Forward` - Forward
-          * `Backward` - Backward
+          * `FORWARD` - Forward
+          * `BACKWARD` - Backward
       - in: query
         name: location
         schema:
@@ -8131,6 +8185,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -8139,11 +8194,15 @@ paths:
           - 4
           - 5
           - 6
-        description: "Specifies where the road marking is in relation to the lane.\n\
-          \n* `Both sides of road` - Both sides of road\n* `Right side of lane` -\
-          \ Right side of lane\n* `Left side of lane` - Left side of lane\n* `Both\
-          \ sides of lane ` - Both sides of lane \n* `Middle of lane` - Middle of\
-          \ lane\n* `Left side of lane or road` - Left side of lane or road"
+        description: |-
+          Specifies where the road marking is in relation to the lane.
+
+          * `1` - Both sides of road
+          * `2` - Right side of lane
+          * `3` - Left side of lane
+          * `4` - Both sides of lane
+          * `5` - Middle side of lane
+          * `6` - Left side of lane or road
       - in: query
         name: material
         schema:
@@ -8527,6 +8586,7 @@ paths:
       - in: query
         name: arrow_direction
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -8540,27 +8600,29 @@ paths:
         description: |-
           Direction of the arrow on the road.
 
-          * `Straight` - Straight
-          * `Right` - Right
-          * `Right and straight` - Right and straight
-          * `Left` - Left
-          * `Left and straight` - Left and straight
-          * `Lane ends` - Lane ends
-          * `Right and left` - Right and left
-          * `Straight, right and left` - Straight, right and left
+          * `1` - Straight
+          * `2` - Right
+          * `3` - Right and straight
+          * `4` - Left
+          * `5` - Left and straight
+          * `6` - Lane ends
+          * `7` - Right and left
+          * `8` - Straight, left and right
       - in: query
         name: color
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
           - 2
         description: |-
-          * `White` - White
-          * `Yellow` - Yellow
+          * `1` - White
+          * `2` - Yellow
       - in: query
         name: condition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -8571,11 +8633,11 @@ paths:
         description: |-
           Describes the condition of this device.
 
-          * `Very bad` - Very bad
-          * `Bad` - Bad
-          * `Average` - Average
-          * `Good` - Good
-          * `Very good` - Very good
+          * `1` - Very bad
+          * `2` - Bad
+          * `3` - Average
+          * `4` - Good
+          * `5` - Very good
       - in: query
         name: created_at
         schema:
@@ -8623,21 +8685,22 @@ paths:
       - in: query
         name: installation_status
         schema:
+          type: string
           nullable: true
           enum:
-          - IN_USE
           - COVERED
           - FALLEN
+          - IN_USE
           - MISSING
           - OTHER
         description: |-
           Describes this devices installation status.
 
-          * `In use` - In use
-          * `Covered` - Covered
-          * `Fallen` - Fallen
-          * `Missing` - Missing
-          * `Other` - Other
+          * `IN_USE` - In use
+          * `COVERED` - Covered
+          * `FALLEN` - Fallen
+          * `MISSING` - Missing
+          * `OTHER` - Other
       - in: query
         name: is_active
         schema:
@@ -8653,6 +8716,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -8669,53 +8733,54 @@ paths:
         description: |-
           Describes which lane of the road this road marking affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this road marking affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: length
         schema:
@@ -8723,6 +8788,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -8731,10 +8797,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -8744,13 +8810,14 @@ paths:
       - in: query
         name: line_direction
         schema:
+          type: string
           nullable: true
           enum:
-          - FORWARD
           - BACKWARD
+          - FORWARD
         description: |-
-          * `Forward` - Forward
-          * `Backward` - Backward
+          * `FORWARD` - Forward
+          * `BACKWARD` - Backward
       - in: query
         name: location
         schema:
@@ -8767,6 +8834,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -8775,11 +8843,15 @@ paths:
           - 4
           - 5
           - 6
-        description: "Specifies where the road marking is in relation to the lane.\n\
-          \n* `Both sides of road` - Both sides of road\n* `Right side of lane` -\
-          \ Right side of lane\n* `Left side of lane` - Left side of lane\n* `Both\
-          \ sides of lane ` - Both sides of lane \n* `Middle of lane` - Middle of\
-          \ lane\n* `Left side of lane or road` - Left side of lane or road"
+        description: |-
+          Specifies where the road marking is in relation to the lane.
+
+          * `1` - Both sides of road
+          * `2` - Right side of lane
+          * `3` - Left side of lane
+          * `4` - Both sides of lane
+          * `5` - Middle side of lane
+          * `6` - Left side of lane or road
       - in: query
         name: material
         schema:
@@ -9494,6 +9566,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -9510,56 +9583,58 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this sign affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -9568,10 +9643,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -9585,6 +9660,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -9596,12 +9672,12 @@ paths:
         description: |-
           Specifies where the sign is in relation to the road.
 
-          * `Right side` - Right side
-          * `Left side` - Left side
-          * `Above` - Above
-          * `Middle` - Middle
-          * `Vertical` - Vertical
-          * `Outside` - Outside
+          * `1` - Right side
+          * `2` - Left side
+          * `3` - Above
+          * `4` - Middle
+          * `5` - Vertical
+          * `6` - Outside
       - in: query
         name: mount_plan
         schema:
@@ -9642,6 +9718,7 @@ paths:
       - in: query
         name: reflection_class
         schema:
+          type: string
           nullable: true
           title: Reflection
           enum:
@@ -9649,9 +9726,9 @@ paths:
           - R2
           - R3
         description: |-
-          * `r1` - r1
-          * `r2` - r2
-          * `r3` - r3
+          * `R1` - r1
+          * `R2` - r2
+          * `R3` - r3
       - in: query
         name: responsible_entity
         schema:
@@ -9674,15 +9751,16 @@ paths:
       - in: query
         name: size
         schema:
+          type: string
           nullable: true
           enum:
-          - S
-          - M
           - L
+          - M
+          - S
         description: |-
-          * `Small` - Small
-          * `Medium` - Medium
-          * `Large` - Large
+          * `S` - Small
+          * `M` - Medium
+          * `L` - Large
       - in: query
         name: source_id
         schema:
@@ -10021,6 +10099,7 @@ paths:
       - in: query
         name: condition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -10031,11 +10110,11 @@ paths:
         description: |-
           Describes the condition of this device.
 
-          * `Very bad` - Very bad
-          * `Bad` - Bad
-          * `Average` - Average
-          * `Good` - Good
-          * `Very good` - Very good
+          * `1` - Very bad
+          * `2` - Bad
+          * `3` - Average
+          * `4` - Good
+          * `5` - Very good
       - in: query
         name: created_at
         schema:
@@ -10095,21 +10174,22 @@ paths:
       - in: query
         name: installation_status
         schema:
+          type: string
           nullable: true
           enum:
-          - IN_USE
           - COVERED
           - FALLEN
+          - IN_USE
           - MISSING
           - OTHER
         description: |-
           Describes this devices installation status.
 
-          * `In use` - In use
-          * `Covered` - Covered
-          * `Fallen` - Fallen
-          * `Missing` - Missing
-          * `Other` - Other
+          * `IN_USE` - In use
+          * `COVERED` - Covered
+          * `FALLEN` - Fallen
+          * `MISSING` - Missing
+          * `OTHER` - Other
       - in: query
         name: is_active
         schema:
@@ -10117,6 +10197,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -10133,56 +10214,58 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this sign affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -10191,10 +10274,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -10217,6 +10300,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -10228,12 +10312,12 @@ paths:
         description: |-
           Specifies where the sign is in relation to the road.
 
-          * `Right side` - Right side
-          * `Left side` - Left side
-          * `Above` - Above
-          * `Middle` - Middle
-          * `Vertical` - Vertical
-          * `Outside` - Outside
+          * `1` - Right side
+          * `2` - Left side
+          * `3` - Above
+          * `4` - Middle
+          * `5` - Vertical
+          * `6` - Outside
       - in: query
         name: manufacturer
         schema:
@@ -10281,6 +10365,7 @@ paths:
       - in: query
         name: reflection_class
         schema:
+          type: string
           nullable: true
           title: Reflection
           enum:
@@ -10288,9 +10373,9 @@ paths:
           - R2
           - R3
         description: |-
-          * `r1` - r1
-          * `r2` - r2
-          * `r3` - r3
+          * `R1` - r1
+          * `R2` - r2
+          * `R3` - r3
       - in: query
         name: responsible_entity
         schema:
@@ -10323,15 +10408,16 @@ paths:
       - in: query
         name: size
         schema:
+          type: string
           nullable: true
           enum:
-          - S
-          - M
           - L
+          - M
+          - S
         description: |-
-          * `Small` - Small
-          * `Medium` - Medium
-          * `Large` - Large
+          * `S` - Small
+          * `M` - Medium
+          * `L` - Large
       - in: query
         name: source_id
         schema:
@@ -10962,6 +11048,7 @@ paths:
       - in: query
         name: target_model
         schema:
+          type: string
           nullable: true
           title: Target data model
           enum:
@@ -11011,15 +11098,16 @@ paths:
       - in: query
         name: type
         schema:
+          type: string
           nullable: true
           enum:
           - longitudinal
-          - transverse
           - other
+          - transverse
         description: |-
-          * `Longitudinal` - Longitudinal
-          * `Transverse` - Transverse
-          * `Other road marking` - Other road marking
+          * `longitudinal` - Longitudinal
+          * `transverse` - Transverse
+          * `other` - Other road marking
       - in: query
         name: unit
         schema:
@@ -11264,6 +11352,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -11280,56 +11369,58 @@ paths:
         description: |-
           Describes which lane of the road this traffic light affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this traffic light affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -11338,10 +11429,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -11364,6 +11455,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -11372,9 +11464,9 @@ paths:
         description: |-
           Specifies where the traffic light is in relation to the road.
 
-          * `Right side of the road (relative to traffic direction)` - Right side of the road (relative to traffic direction)
-          * `Above the lanes` - Above the lanes
-          * `Island` - Island
+          * `1` - Right side of the road (relative to traffic direction)
+          * `2` - Above the lanes
+          * `3` - Island
       - in: query
         name: mount_plan
         schema:
@@ -11410,6 +11502,7 @@ paths:
       - in: query
         name: push_button
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -11417,8 +11510,8 @@ paths:
         description: |-
           Describes if this traffic light has a push button attached.
 
-          * `No` - No
-          * `Yes` - Yes
+          * `1` - No
+          * `2` - Yes
       - in: query
         name: responsible_entity
         schema:
@@ -11431,6 +11524,7 @@ paths:
       - in: query
         name: sound_beacon
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -11438,8 +11532,8 @@ paths:
         description: |-
           Describes if this traffic light has a sound beacon attached.
 
-          * `No` - No
-          * `Yes` - Yes
+          * `1` - No
+          * `2` - Yes
       - in: query
         name: source_id
         schema:
@@ -11455,29 +11549,30 @@ paths:
       - in: query
         name: type
         schema:
+          type: string
           nullable: true
           enum:
           - '1'
+          - '10'
+          - '11'
           - '4.1'
           - '4.2'
           - '5'
           - '8'
           - '9.1'
           - '9.2'
-          - '10'
-          - '11'
         description: |-
           Describes the type of traffic light this device is.
 
-          * `Traffic signal` - Traffic signal
-          * `Right-turn arrow signal` - Right-turn arrow signal
-          * `Left-turn arrow signal` - Left-turn arrow signal
-          * `Triangle signal` - Triangle signal
-          * `Public transport signal` - Public transport signal
-          * `Bicycle signal` - Bicycle signal
-          * `Bicycle turn arrow signal` - Bicycle turn arrow signal
-          * `Pedestrian signal` - Pedestrian signal
-          * `Lane signal` - Lane signal
+          * `1` - Traffic signal
+          * `4.1` - Right-turn arrow signal
+          * `4.2` - Left-turn arrow signal
+          * `5` - Triangle signal
+          * `8` - Public transport signal
+          * `9.1` - Bicycle signal
+          * `9.2` - Bicycle turn arrow signal
+          * `10` - Pedestrian signal
+          * `11` - Lane signal
       - in: query
         name: updated_at
         schema:
@@ -11501,6 +11596,7 @@ paths:
       - in: query
         name: vehicle_recognition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -11510,10 +11606,10 @@ paths:
         description: |-
           Describes the type of vehicle recognition this traffic light has.
 
-          * `Loop sensor` - Loop sensor
-          * `Infrared sensor` - Infrared sensor
-          * `Radar i.e. microwave sensor` - Radar i.e. microwave sensor
-          * `Other` - Other
+          * `1` - Loop sensor
+          * `2` - Infrared sensor
+          * `3` - Radar i.e. microwave sensor
+          * `4` - Other
       tags:
       - traffic-light-plans
       security:
@@ -11791,6 +11887,7 @@ paths:
       - in: query
         name: condition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -11801,11 +11898,11 @@ paths:
         description: |-
           Describes the condition of this device.
 
-          * `Very bad` - Very bad
-          * `Bad` - Bad
-          * `Average` - Average
-          * `Good` - Good
-          * `Very good` - Very good
+          * `1` - Very bad
+          * `2` - Bad
+          * `3` - Average
+          * `4` - Good
+          * `5` - Very good
       - in: query
         name: created_at
         schema:
@@ -11861,21 +11958,22 @@ paths:
       - in: query
         name: installation_status
         schema:
+          type: string
           nullable: true
           enum:
-          - IN_USE
           - COVERED
           - FALLEN
+          - IN_USE
           - MISSING
           - OTHER
         description: |-
           Describes this devices installation status.
 
-          * `In use` - In use
-          * `Covered` - Covered
-          * `Fallen` - Fallen
-          * `Missing` - Missing
-          * `Other` - Other
+          * `IN_USE` - In use
+          * `COVERED` - Covered
+          * `FALLEN` - Fallen
+          * `MISSING` - Missing
+          * `OTHER` - Other
       - in: query
         name: is_active
         schema:
@@ -11883,6 +11981,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -11899,56 +11998,58 @@ paths:
         description: |-
           Describes which lane of the road this traffic light affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this traffic light affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -11957,10 +12058,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -11983,6 +12084,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -11991,9 +12093,9 @@ paths:
         description: |-
           Specifies where the traffic light is in relation to the road.
 
-          * `Right side of the road (relative to traffic direction)` - Right side of the road (relative to traffic direction)
-          * `Above the lanes` - Above the lanes
-          * `Island` - Island
+          * `1` - Right side of the road (relative to traffic direction)
+          * `2` - Above the lanes
+          * `3` - Island
       - in: query
         name: mount_real
         schema:
@@ -12024,6 +12126,7 @@ paths:
       - in: query
         name: push_button
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -12031,8 +12134,8 @@ paths:
         description: |-
           Describes if this traffic light has a push button attached.
 
-          * `No` - No
-          * `Yes` - Yes
+          * `1` - No
+          * `2` - Yes
       - in: query
         name: responsible_entity
         schema:
@@ -12045,6 +12148,7 @@ paths:
       - in: query
         name: sound_beacon
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -12052,8 +12156,8 @@ paths:
         description: |-
           Describes if this traffic light has a sound beacon attached.
 
-          * `No` - No
-          * `Yes` - Yes
+          * `1` - No
+          * `2` - Yes
       - in: query
         name: source_id
         schema:
@@ -12074,29 +12178,30 @@ paths:
       - in: query
         name: type
         schema:
+          type: string
           nullable: true
           enum:
           - '1'
+          - '10'
+          - '11'
           - '4.1'
           - '4.2'
           - '5'
           - '8'
           - '9.1'
           - '9.2'
-          - '10'
-          - '11'
         description: |-
           Describes the type of traffic light this device is.
 
-          * `Traffic signal` - Traffic signal
-          * `Right-turn arrow signal` - Right-turn arrow signal
-          * `Left-turn arrow signal` - Left-turn arrow signal
-          * `Triangle signal` - Triangle signal
-          * `Public transport signal` - Public transport signal
-          * `Bicycle signal` - Bicycle signal
-          * `Bicycle turn arrow signal` - Bicycle turn arrow signal
-          * `Pedestrian signal` - Pedestrian signal
-          * `Lane signal` - Lane signal
+          * `1` - Traffic signal
+          * `4.1` - Right-turn arrow signal
+          * `4.2` - Left-turn arrow signal
+          * `5` - Triangle signal
+          * `8` - Public transport signal
+          * `9.1` - Bicycle signal
+          * `9.2` - Bicycle turn arrow signal
+          * `10` - Pedestrian signal
+          * `11` - Lane signal
       - in: query
         name: updated_at
         schema:
@@ -12120,6 +12225,7 @@ paths:
       - in: query
         name: vehicle_recognition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -12129,10 +12235,10 @@ paths:
         description: |-
           Describes the type of vehicle recognition this traffic light has.
 
-          * `Loop sensor` - Loop sensor
-          * `Infrared sensor` - Infrared sensor
-          * `Radar i.e. microwave sensor` - Radar i.e. microwave sensor
-          * `Other` - Other
+          * `1` - Loop sensor
+          * `2` - Infrared sensor
+          * `3` - Radar i.e. microwave sensor
+          * `4` - Other
       tags:
       - traffic-light-reals
       security:
@@ -12741,6 +12847,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -12757,56 +12864,58 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this sign affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -12815,10 +12924,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -12841,6 +12950,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -12852,12 +12962,12 @@ paths:
         description: |-
           Specifies where the sign is in relation to the road.
 
-          * `Right side` - Right side
-          * `Left side` - Left side
-          * `Above` - Above
-          * `Middle` - Middle
-          * `Vertical` - Vertical
-          * `Outside` - Outside
+          * `1` - Right side
+          * `2` - Left side
+          * `3` - Above
+          * `4` - Middle
+          * `5` - Vertical
+          * `6` - Outside
       - in: query
         name: mount_plan
         schema:
@@ -12898,6 +13008,7 @@ paths:
       - in: query
         name: reflection_class
         schema:
+          type: string
           nullable: true
           title: Reflection
           enum:
@@ -12905,9 +13016,9 @@ paths:
           - R2
           - R3
         description: |-
-          * `r1` - r1
-          * `r2` - r2
-          * `r3` - r3
+          * `R1` - r1
+          * `R2` - r2
+          * `R3` - r3
       - in: query
         name: responsible_entity
         schema:
@@ -12930,15 +13041,16 @@ paths:
       - in: query
         name: size
         schema:
+          type: string
           nullable: true
           enum:
-          - S
-          - M
           - L
+          - M
+          - S
         description: |-
-          * `Small` - Small
-          * `Medium` - Medium
-          * `Large` - Large
+          * `S` - Small
+          * `M` - Medium
+          * `L` - Large
       - in: query
         name: source_id
         schema:
@@ -12950,14 +13062,15 @@ paths:
       - in: query
         name: surface_class
         schema:
+          type: string
           nullable: true
           title: Surface
           enum:
           - CONVEX
           - FLAT
         description: |-
-          * `Convex` - Convex
-          * `Flat` - Flat
+          * `CONVEX` - Convex
+          * `FLAT` - Flat
       - in: query
         name: txt
         schema:
@@ -13267,6 +13380,7 @@ paths:
       - in: query
         name: condition
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -13277,11 +13391,11 @@ paths:
         description: |-
           Describes the condition of this device.
 
-          * `Very bad` - Very bad
-          * `Bad` - Bad
-          * `Average` - Average
-          * `Good` - Good
-          * `Very good` - Very good
+          * `1` - Very bad
+          * `2` - Bad
+          * `3` - Average
+          * `4` - Good
+          * `5` - Very good
       - in: query
         name: coverage_area
         schema:
@@ -13350,21 +13464,22 @@ paths:
       - in: query
         name: installation_status
         schema:
+          type: string
           nullable: true
           enum:
-          - IN_USE
           - COVERED
           - FALLEN
+          - IN_USE
           - MISSING
           - OTHER
         description: |-
           Describes this devices installation status.
 
-          * `In use` - In use
-          * `Covered` - Covered
-          * `Fallen` - Fallen
-          * `Missing` - Missing
-          * `Other` - Other
+          * `IN_USE` - In use
+          * `COVERED` - Covered
+          * `FALLEN` - Fallen
+          * `MISSING` - Missing
+          * `OTHER` - Other
       - in: query
         name: is_active
         schema:
@@ -13372,6 +13487,7 @@ paths:
       - in: query
         name: lane_number
         schema:
+          type: string
           nullable: true
           enum:
           - '11'
@@ -13388,53 +13504,54 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `Main lane` - Main lane
-          * `Main lane` - Main lane
-          * `Lane allowing traffic to both directions` - Lane allowing traffic to both directions
-          * `First left additional lane` - First left additional lane
-          * `First right additional lane` - First right additional lane
-          * `Second left additional lane` - Second left additional lane
-          * `Second right additional lane` - Second right additional lane
-          * `Third left additional lane` - Third left additional lane
-          * `Third right additional lane` - Third right additional lane
-          * `Fourth left additional lane` - Fourth left additional lane
-          * `Fourth right additional lane` - Fourth right additional lane
+          * `11` - Main Lane
+          * `21` - Main Lane
+          * `31` - Lane allowing traffic to both directions
+          * `X2` - First left additional lane
+          * `X3` - First right additional lane
+          * `X4` - Second left additional lane
+          * `X5` - Second right additional lane
+          * `X6` - Third left additional lane
+          * `X7` - Third right additional lane
+          * `X8` - Fourth left additional lane
+          * `X9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
+          type: string
           nullable: true
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '10'
+          - '11'
+          - '2'
+          - '20'
+          - '21'
+          - '22'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           The type of lane which this sign affects.
 
-          * `Main lane` - Main lane
-          * `Fast lane` - Fast lane
-          * `Turn right lane` - Turn right lane
-          * `Turn left lane` - Turn left lane
-          * `Auxiliary straight lane` - Auxiliary straight lane
-          * `Merge lane` - Merge lane
-          * `Exit lane` - Exit lane
-          * `Weaving lane` - Weaving lane
-          * `Public transport lane / taxi lane` - Public transport lane / taxi lane
-          * `Heavy vehicle lane` - Heavy vehicle lane
-          * `Reversible lane` - Reversible lane
-          * `Pedestrian and bike lane` - Pedestrian and bike lane
-          * `Pedestrian lane` - Pedestrian lane
-          * `Bike lane` - Bike lane
+          * `1` - Main lane
+          * `2` - Fast lane
+          * `3` - Turn right lane
+          * `4` - Turn left lane
+          * `5` - Auxiliary straight lane
+          * `6` - Merge lane
+          * `7` - Exit lane
+          * `8` - Weaving lane
+          * `9` - Public transport lane / taxi lane
+          * `10` - Heavy vehicle lane
+          * `11` - Reversible lane
+          * `20` - Pedestrian and bike lane
+          * `21` - Pedestrian lane
+          * `22` - Bike lane
       - in: query
         name: legacy_code
         schema:
@@ -13442,6 +13559,7 @@ paths:
       - in: query
         name: lifecycle
         schema:
+          type: integer
           enum:
           - 3
           - 4
@@ -13450,10 +13568,10 @@ paths:
         description: |-
           Lifecycle of the device, which describes the activity status of the device.
 
-          * `Active` - Active
-          * `Temporarily active` - Temporarily active
-          * `Temporarily inactive` - Temporarily inactive
-          * `Inactive` - Inactive
+          * `3` - Active
+          * `4` - Temporary active
+          * `5` - Temporary inactive
+          * `6` - Inactive
       - name: limit
         required: false
         in: query
@@ -13476,6 +13594,7 @@ paths:
       - in: query
         name: location_specifier
         schema:
+          type: integer
           nullable: true
           enum:
           - 1
@@ -13487,12 +13606,12 @@ paths:
         description: |-
           Specifies where the sign is in relation to the road.
 
-          * `Right side` - Right side
-          * `Left side` - Left side
-          * `Above` - Above
-          * `Middle` - Middle
-          * `Vertical` - Vertical
-          * `Outside` - Outside
+          * `1` - Right side
+          * `2` - Left side
+          * `3` - Above
+          * `4` - Middle
+          * `5` - Vertical
+          * `6` - Outside
       - in: query
         name: manufacturer
         schema:
@@ -13540,6 +13659,7 @@ paths:
       - in: query
         name: reflection_class
         schema:
+          type: string
           nullable: true
           title: Reflection
           enum:
@@ -13547,9 +13667,9 @@ paths:
           - R2
           - R3
         description: |-
-          * `r1` - r1
-          * `r2` - r2
-          * `r3` - r3
+          * `R1` - r1
+          * `R2` - r2
+          * `R3` - r3
       - in: query
         name: responsible_entity
         schema:
@@ -13581,15 +13701,16 @@ paths:
       - in: query
         name: size
         schema:
+          type: string
           nullable: true
           enum:
-          - S
-          - M
           - L
+          - M
+          - S
         description: |-
-          * `Small` - Small
-          * `Medium` - Medium
-          * `Large` - Large
+          * `S` - Small
+          * `M` - Medium
+          * `L` - Large
       - in: query
         name: source_id
         schema:
@@ -13601,14 +13722,15 @@ paths:
       - in: query
         name: surface_class
         schema:
+          type: string
           nullable: true
           title: Surface
           enum:
           - CONVEX
           - FLAT
         description: |-
-          * `Convex` - Convex
-          * `Flat` - Flat
+          * `CONVEX` - Convex
+          * `FLAT` - Flat
       - in: query
         name: traffic_sign_plan
         schema:
@@ -14240,8 +14362,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -14362,8 +14484,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -14375,23 +14497,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -14522,8 +14644,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -14644,8 +14766,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -14657,23 +14779,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -14812,8 +14934,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -14934,8 +15056,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -14947,23 +15069,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -15113,8 +15235,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -15277,8 +15399,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -15290,23 +15412,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -15542,8 +15664,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -15706,8 +15828,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -15719,23 +15841,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -15943,8 +16065,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -15981,8 +16103,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -15994,23 +16116,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this barrier affects.
@@ -16052,7 +16174,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open out
+            * `2` - Open Out
         material:
           type: string
           nullable: true
@@ -16163,8 +16285,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -16202,8 +16324,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -16215,23 +16337,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this barrier affects.
@@ -16273,7 +16395,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open out
+            * `2` - Open Out
         material:
           type: string
           nullable: true
@@ -16397,8 +16519,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -16435,8 +16557,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -16448,23 +16570,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this barrier affects.
@@ -16506,7 +16628,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open out
+            * `2` - Open Out
         material:
           type: string
           nullable: true
@@ -16642,8 +16764,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -16722,8 +16844,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -16735,23 +16857,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this barrier affects.
@@ -16793,7 +16915,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open out
+            * `2` - Open Out
         material:
           type: string
           nullable: true
@@ -16970,8 +17092,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -17051,8 +17173,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -17064,23 +17186,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this barrier affects.
@@ -17122,7 +17244,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open out
+            * `2` - Open Out
         material:
           type: string
           nullable: true
@@ -17332,12 +17454,12 @@ components:
             * `1200` - Rubbish bin
             * `1210` - Clock
             * `1220` - Directional spot light
-            * `1230` - Floodlight mast
+            * `1230` - Floodlight
             * `1240` - Windmill
             * `1250` - Solar cell
             * `1260` - Water wheel
             * `1270` - Pole
-            * `1280` - Radio mast
+            * `1280` - Radio master
             * `1290` - Aerial
             * `1300` - Radio telescope
             * `1310` - Chimney
@@ -17513,12 +17635,12 @@ components:
             * `1200` - Rubbish bin
             * `1210` - Clock
             * `1220` - Directional spot light
-            * `1230` - Floodlight mast
+            * `1230` - Floodlight
             * `1240` - Windmill
             * `1250` - Solar cell
             * `1260` - Water wheel
             * `1270` - Pole
-            * `1280` - Radio mast
+            * `1280` - Radio master
             * `1290` - Aerial
             * `1300` - Radio telescope
             * `1310` - Chimney
@@ -17712,8 +17834,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -17800,10 +17922,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top right
-            * `6` - Bottom right
-            * `7` - Top left
-            * `8` - Bottom left
+            * `5` - Top Right
+            * `6` - Bottom Right
+            * `7` - Top Left
+            * `8` - Bottom Left
         pictogram:
           type: string
           nullable: true
@@ -17971,8 +18093,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -18059,10 +18181,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top right
-            * `6` - Bottom right
-            * `7` - Top left
-            * `8` - Bottom left
+            * `5` - Top Right
+            * `6` - Bottom Right
+            * `7` - Top Left
+            * `8` - Bottom Left
         pictogram:
           type: string
           nullable: true
@@ -18206,8 +18328,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -18336,10 +18458,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top right
-            * `6` - Bottom right
-            * `7` - Top left
-            * `8` - Bottom left
+            * `5` - Top Right
+            * `6` - Bottom Right
+            * `7` - Top Left
+            * `8` - Bottom Left
         pictogram:
           type: string
           nullable: true
@@ -18539,8 +18661,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -18669,10 +18791,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top right
-            * `6` - Bottom right
-            * `7` - Top left
-            * `8` - Bottom left
+            * `5` - Top Right
+            * `6` - Bottom Right
+            * `7` - Top Left
+            * `8` - Bottom Left
         pictogram:
           type: string
           nullable: true
@@ -18858,8 +18980,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -19008,8 +19130,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -19171,8 +19293,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -19352,8 +19474,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -19633,8 +19755,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -20974,8 +21096,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -21096,8 +21218,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -21109,23 +21231,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -21241,8 +21363,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -21405,8 +21527,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -21418,23 +21540,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -21602,8 +21724,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -21641,8 +21763,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -21654,23 +21776,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this barrier affects.
@@ -21712,7 +21834,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open out
+            * `2` - Open Out
         material:
           type: string
           nullable: true
@@ -21807,8 +21929,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -21888,8 +22010,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -21901,23 +22023,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this barrier affects.
@@ -21959,7 +22081,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open out
+            * `2` - Open Out
         material:
           type: string
           nullable: true
@@ -22141,12 +22263,12 @@ components:
             * `1200` - Rubbish bin
             * `1210` - Clock
             * `1220` - Directional spot light
-            * `1230` - Floodlight mast
+            * `1230` - Floodlight
             * `1240` - Windmill
             * `1250` - Solar cell
             * `1260` - Water wheel
             * `1270` - Pole
-            * `1280` - Radio mast
+            * `1280` - Radio master
             * `1290` - Aerial
             * `1300` - Radio telescope
             * `1310` - Chimney
@@ -22279,8 +22401,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -22367,10 +22489,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top right
-            * `6` - Bottom right
-            * `7` - Top left
-            * `8` - Bottom left
+            * `5` - Top Right
+            * `6` - Bottom Right
+            * `7` - Top Left
+            * `8` - Bottom Left
         pictogram:
           type: string
           nullable: true
@@ -22486,8 +22608,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -22616,10 +22738,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top right
-            * `6` - Bottom right
-            * `7` - Top left
-            * `8` - Bottom left
+            * `5` - Top Right
+            * `6` - Bottom Right
+            * `7` - Top Left
+            * `8` - Bottom Left
         pictogram:
           type: string
           nullable: true
@@ -22732,8 +22854,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -22867,8 +22989,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -23308,8 +23430,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -23347,8 +23469,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -23360,23 +23482,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this road marking affects.
@@ -23406,10 +23528,15 @@ components:
           - null
           type: integer
           nullable: true
-          description: "Specifies where the road marking is in relation to the lane.\n\
-            \n* `1` - Both sides of road\n* `2` - Right side of lane\n* `3` - Left\
-            \ side of lane\n* `4` - Both sides of lane \n* `5` - Middle of lane\n\
-            * `6` - Left side of lane or road"
+          description: |-
+            Specifies where the road marking is in relation to the lane.
+
+            * `1` - Both sides of road
+            * `2` - Right side of lane
+            * `3` - Left side of lane
+            * `4` - Both sides of lane
+            * `5` - Middle side of lane
+            * `6` - Left side of lane or road
         line_direction:
           enum:
           - FORWARD
@@ -23431,7 +23558,6 @@ components:
           - 6
           - 7
           - 8
-          - ''
           - null
           type: integer
           nullable: true
@@ -23445,7 +23571,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, right and left
+            * `8` - Straight, left and right
         value:
           type: string
           nullable: true
@@ -23581,8 +23707,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -23662,8 +23788,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -23675,23 +23801,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this road marking affects.
@@ -23721,10 +23847,15 @@ components:
           - null
           type: integer
           nullable: true
-          description: "Specifies where the road marking is in relation to the lane.\n\
-            \n* `1` - Both sides of road\n* `2` - Right side of lane\n* `3` - Left\
-            \ side of lane\n* `4` - Both sides of lane \n* `5` - Middle of lane\n\
-            * `6` - Left side of lane or road"
+          description: |-
+            Specifies where the road marking is in relation to the lane.
+
+            * `1` - Both sides of road
+            * `2` - Right side of lane
+            * `3` - Left side of lane
+            * `4` - Both sides of lane
+            * `5` - Middle side of lane
+            * `6` - Left side of lane or road
         line_direction:
           enum:
           - FORWARD
@@ -23746,7 +23877,6 @@ components:
           - 6
           - 7
           - 8
-          - ''
           - null
           type: integer
           nullable: true
@@ -23760,7 +23890,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, right and left
+            * `8` - Straight, left and right
         value:
           type: string
           nullable: true
@@ -23897,8 +24027,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -23936,8 +24066,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -23949,23 +24079,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -24158,8 +24288,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -24239,8 +24369,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -24252,23 +24382,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -24553,8 +24683,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -24592,8 +24722,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -24605,23 +24735,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this traffic light affects.
@@ -24802,8 +24932,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -24883,8 +25013,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -24896,23 +25026,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this traffic light affects.
@@ -25098,8 +25228,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -25137,8 +25267,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -25150,23 +25280,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -25342,8 +25472,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -25423,8 +25553,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -25436,23 +25566,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -26017,8 +26147,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -26056,8 +26186,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -26069,23 +26199,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this road marking affects.
@@ -26115,10 +26245,15 @@ components:
           - null
           type: integer
           nullable: true
-          description: "Specifies where the road marking is in relation to the lane.\n\
-            \n* `1` - Both sides of road\n* `2` - Right side of lane\n* `3` - Left\
-            \ side of lane\n* `4` - Both sides of lane \n* `5` - Middle of lane\n\
-            * `6` - Left side of lane or road"
+          description: |-
+            Specifies where the road marking is in relation to the lane.
+
+            * `1` - Both sides of road
+            * `2` - Right side of lane
+            * `3` - Left side of lane
+            * `4` - Both sides of lane
+            * `5` - Middle side of lane
+            * `6` - Left side of lane or road
         line_direction:
           enum:
           - FORWARD
@@ -26140,7 +26275,6 @@ components:
           - 6
           - 7
           - 8
-          - ''
           - null
           type: integer
           nullable: true
@@ -26154,7 +26288,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, right and left
+            * `8` - Straight, left and right
         value:
           type: string
           nullable: true
@@ -26305,8 +26439,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -26344,8 +26478,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -26357,23 +26491,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this road marking affects.
@@ -26403,10 +26537,15 @@ components:
           - null
           type: integer
           nullable: true
-          description: "Specifies where the road marking is in relation to the lane.\n\
-            \n* `1` - Both sides of road\n* `2` - Right side of lane\n* `3` - Left\
-            \ side of lane\n* `4` - Both sides of lane \n* `5` - Middle of lane\n\
-            * `6` - Left side of lane or road"
+          description: |-
+            Specifies where the road marking is in relation to the lane.
+
+            * `1` - Both sides of road
+            * `2` - Right side of lane
+            * `3` - Left side of lane
+            * `4` - Both sides of lane
+            * `5` - Middle side of lane
+            * `6` - Left side of lane or road
         line_direction:
           enum:
           - FORWARD
@@ -26428,7 +26567,6 @@ components:
           - 6
           - 7
           - 8
-          - ''
           - null
           type: integer
           nullable: true
@@ -26442,7 +26580,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, right and left
+            * `8` - Straight, left and right
         value:
           type: string
           nullable: true
@@ -26606,8 +26744,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -26645,8 +26783,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -26658,23 +26796,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this road marking affects.
@@ -26704,10 +26842,15 @@ components:
           - null
           type: integer
           nullable: true
-          description: "Specifies where the road marking is in relation to the lane.\n\
-            \n* `1` - Both sides of road\n* `2` - Right side of lane\n* `3` - Left\
-            \ side of lane\n* `4` - Both sides of lane \n* `5` - Middle of lane\n\
-            * `6` - Left side of lane or road"
+          description: |-
+            Specifies where the road marking is in relation to the lane.
+
+            * `1` - Both sides of road
+            * `2` - Right side of lane
+            * `3` - Left side of lane
+            * `4` - Both sides of lane
+            * `5` - Middle side of lane
+            * `6` - Left side of lane or road
         line_direction:
           enum:
           - FORWARD
@@ -26729,7 +26872,6 @@ components:
           - 6
           - 7
           - 8
-          - ''
           - null
           type: integer
           nullable: true
@@ -26743,7 +26885,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, right and left
+            * `8` - Straight, left and right
         value:
           type: string
           nullable: true
@@ -26919,8 +27061,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -27000,8 +27142,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -27013,23 +27155,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this road marking affects.
@@ -27059,10 +27201,15 @@ components:
           - null
           type: integer
           nullable: true
-          description: "Specifies where the road marking is in relation to the lane.\n\
-            \n* `1` - Both sides of road\n* `2` - Right side of lane\n* `3` - Left\
-            \ side of lane\n* `4` - Both sides of lane \n* `5` - Middle of lane\n\
-            * `6` - Left side of lane or road"
+          description: |-
+            Specifies where the road marking is in relation to the lane.
+
+            * `1` - Both sides of road
+            * `2` - Right side of lane
+            * `3` - Left side of lane
+            * `4` - Both sides of lane
+            * `5` - Middle side of lane
+            * `6` - Left side of lane or road
         line_direction:
           enum:
           - FORWARD
@@ -27084,7 +27231,6 @@ components:
           - 6
           - 7
           - 8
-          - ''
           - null
           type: integer
           nullable: true
@@ -27098,7 +27244,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, right and left
+            * `8` - Straight, left and right
         value:
           type: string
           nullable: true
@@ -27322,8 +27468,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -27403,8 +27549,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -27416,23 +27562,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this road marking affects.
@@ -27462,10 +27608,15 @@ components:
           - null
           type: integer
           nullable: true
-          description: "Specifies where the road marking is in relation to the lane.\n\
-            \n* `1` - Both sides of road\n* `2` - Right side of lane\n* `3` - Left\
-            \ side of lane\n* `4` - Both sides of lane \n* `5` - Middle of lane\n\
-            * `6` - Left side of lane or road"
+          description: |-
+            Specifies where the road marking is in relation to the lane.
+
+            * `1` - Both sides of road
+            * `2` - Right side of lane
+            * `3` - Left side of lane
+            * `4` - Both sides of lane
+            * `5` - Middle side of lane
+            * `6` - Left side of lane or road
         line_direction:
           enum:
           - FORWARD
@@ -27487,7 +27638,6 @@ components:
           - 6
           - 7
           - 8
-          - ''
           - null
           type: integer
           nullable: true
@@ -27501,7 +27651,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, right and left
+            * `8` - Straight, left and right
         value:
           type: string
           nullable: true
@@ -27678,8 +27828,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -27717,8 +27867,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -27730,23 +27880,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -27954,8 +28104,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -27993,8 +28143,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -28006,23 +28156,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -28243,8 +28393,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -28282,8 +28432,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -28295,23 +28445,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -28544,8 +28694,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -28625,8 +28775,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -28638,23 +28788,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -28948,8 +29098,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -29029,8 +29179,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -29042,23 +29192,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -29476,8 +29626,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -29515,8 +29665,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -29528,23 +29678,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this traffic light affects.
@@ -29740,8 +29890,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -29779,8 +29929,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -29792,23 +29942,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this traffic light affects.
@@ -30017,8 +30167,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -30056,8 +30206,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -30069,23 +30219,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this traffic light affects.
@@ -30306,8 +30456,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -30387,8 +30537,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -30400,23 +30550,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this traffic light affects.
@@ -30678,8 +30828,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -30759,8 +30909,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -30772,23 +30922,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this traffic light affects.
@@ -31013,8 +31163,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -31052,8 +31202,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -31065,23 +31215,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -31280,8 +31430,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -31319,8 +31469,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -31332,23 +31482,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -31559,8 +31709,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -31598,8 +31748,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -31611,23 +31761,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -31843,8 +31993,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -31924,8 +32074,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -31937,23 +32087,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.
@@ -32257,8 +32407,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporarily active
-            * `5` - Temporarily inactive
+            * `4` - Temporary active
+            * `5` - Temporary inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -32338,8 +32488,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
+            * `11` - Main Lane
+            * `21` - Main Lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -32351,23 +32501,23 @@ components:
             * `X9` - Fourth right additional lane
         lane_type:
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 20
-          - 21
-          - 22
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '20'
+          - '21'
+          - '22'
           - ''
           - null
-          type: integer
+          type: string
           nullable: true
           description: |-
             The type of lane which this sign affects.

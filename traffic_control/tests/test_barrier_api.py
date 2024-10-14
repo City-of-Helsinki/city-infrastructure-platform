@@ -6,8 +6,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
-from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType, Lifecycle
 from traffic_control.models import BarrierPlan, BarrierReal, ConnectionType, Reflective
+from traffic_control.models.barrier import LocationSpecifier
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     add_barrier_real_operation,
     BarrierPlanFactory,
@@ -66,6 +68,28 @@ def test_filter_error_barrier_plans_location(location, location_query, expected)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("connection_type", ConnectionType.OPEN_OUT, ConnectionType.CLOSED),
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.BIKE, LaneType.HEAVY),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.RIGHT, LocationSpecifier.MIDDLE),
+        ("reflective", Reflective.YES, Reflective.RED_YELLOW),
+    ),
+)
+@pytest.mark.django_db
+def test__barrier_plan_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        BarrierPlanFactory,
+        "v1:barrierplan-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db
@@ -301,6 +325,30 @@ def test_filter_error_barrier_reals_location(location, location_query, expected)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("condition", Condition.VERY_GOOD, Condition.AVERAGE),
+        ("installation_status", InstallationStatus.IN_USE, InstallationStatus.COVERED),
+        ("connection_type", ConnectionType.OPEN_OUT, ConnectionType.CLOSED),
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.BIKE, LaneType.HEAVY),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.RIGHT, LocationSpecifier.MIDDLE),
+        ("reflective", Reflective.YES, Reflective.RED_YELLOW),
+    ),
+)
+@pytest.mark.django_db
+def test__barrier_real_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        BarrierRealFactory,
+        "v1:barrierreal-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db

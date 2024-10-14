@@ -1,5 +1,3 @@
-from enum import member
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -7,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumField, EnumIntegerField
+from enumfields import EnumField, EnumIntegerField
 
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
@@ -36,22 +34,13 @@ from traffic_control.models.plan import Plan
 from traffic_control.models.utils import SoftDeleteQuerySet
 
 
-class LocationSpecifier(Enum):
-    RIGHT = 1
-    LEFT = 2
-    ABOVE = 3
-    MIDDLE = 4
-    VERTICAL = 5
-    OUTSIDE = 6
-
-    @member
-    class Labels:
-        RIGHT = _("Right side")
-        LEFT = _("Left side")
-        ABOVE = _("Above")
-        MIDDLE = _("Middle")
-        VERTICAL = _("Vertical")
-        OUTSIDE = _("Outside")
+class LocationSpecifier(models.IntegerChoices):
+    RIGHT = 1, _("Right side")
+    LEFT = 2, _("Left side")
+    ABOVE = 3, _("Above")
+    MIDDLE = 4, _("Middle")
+    VERTICAL = 5, _("Vertical")
+    OUTSIDE = 6, _("Outside")
 
 
 class TrafficSignPlanQuerySet(SoftDeleteQuerySet):

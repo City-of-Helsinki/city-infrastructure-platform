@@ -1,12 +1,10 @@
-from enum import member
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumField, EnumIntegerField
+from enumfields import EnumField, EnumIntegerField
 
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
@@ -35,14 +33,9 @@ from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPl
 from traffic_control.validators import validate_structured_content
 
 
-class Color(Enum):
-    BLUE = 1
-    YELLOW = 2
-
-    @member
-    class Labels:
-        BLUE = _("Blue")
-        YELLOW = _("Yellow")
+class Color(models.IntegerChoices):
+    BLUE = 1, _("Blue")
+    YELLOW = 2, _("Yellow")
 
 
 class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):

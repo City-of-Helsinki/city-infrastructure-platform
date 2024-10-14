@@ -6,8 +6,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
-from traffic_control.enums import DeviceTypeTargetModel
-from traffic_control.models import RoadMarkingColor, RoadMarkingPlan, RoadMarkingReal
+from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType, Lifecycle
+from traffic_control.models import ArrowDirection, LineDirection, RoadMarkingColor, RoadMarkingPlan, RoadMarkingReal
+from traffic_control.models.road_marking import LocationSpecifier
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     add_road_marking_real_operation,
     get_api_client,
@@ -68,6 +70,29 @@ def test_filter_error_road_markings_plans_location(location, location_query, exp
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("arrow_direction", ArrowDirection.RIGHT, ArrowDirection.RIGHT_AND_LEFT),
+        ("color", RoadMarkingColor.WHITE, RoadMarkingColor.YELLOW),
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.HEAVY, LaneType.BIKE),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("line_direction", LineDirection.FORWARD, LineDirection.BACKWARD),
+        ("location_specifier", LocationSpecifier.BOTH_SIDES_OF_ROAD, LocationSpecifier.BOTH_SIDES_OF_LANE),
+    ),
+)
+@pytest.mark.django_db
+def test__road_marking_plan_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        RoadMarkingPlanFactory,
+        "v1:roadmarkingplan-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db
@@ -307,6 +332,31 @@ def test_filter_error_road_markings_reals_location(location, location_query, exp
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("arrow_direction", ArrowDirection.RIGHT, ArrowDirection.RIGHT_AND_LEFT),
+        ("color", RoadMarkingColor.WHITE, RoadMarkingColor.YELLOW),
+        ("condition", Condition.VERY_GOOD, Condition.AVERAGE),
+        ("installation_status", InstallationStatus.IN_USE, InstallationStatus.COVERED),
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.HEAVY, LaneType.BIKE),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("line_direction", LineDirection.FORWARD, LineDirection.BACKWARD),
+        ("location_specifier", LocationSpecifier.BOTH_SIDES_OF_ROAD, LocationSpecifier.BOTH_SIDES_OF_LANE),
+    ),
+)
+@pytest.mark.django_db
+def test__road_marking_reals_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        RoadMarkingRealFactory,
+        "v1:roadmarkingreal-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db

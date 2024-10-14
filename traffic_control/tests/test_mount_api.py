@@ -6,7 +6,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
+from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.models import MountPlan, MountReal
+from traffic_control.models.mount import LocationSpecifier
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     add_mount_real_operation,
     get_api_client,
@@ -203,6 +206,24 @@ class MountPlanTests(TrafficControlAPIBaseTestCase):
         )
 
 
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.RIGHT, LocationSpecifier.MIDDLE),
+    ),
+)
+@pytest.mark.django_db
+def test__mount_plan_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        MountPlanFactory,
+        "v1:mountplan-list",
+        field_name,
+        value,
+        second_value,
+    )
+
+
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "location,location_query,expected",
@@ -241,6 +262,26 @@ def test_filter_error_mount_reals_location(location, location_query, expected):
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("condition", Condition.VERY_GOOD, Condition.AVERAGE),
+        ("installation_status", InstallationStatus.IN_USE, InstallationStatus.COVERED),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.RIGHT, LocationSpecifier.MIDDLE),
+    ),
+)
+@pytest.mark.django_db
+def test__mount_real_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        MountRealFactory,
+        "v1:mountreal-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 class MountRealTests(TrafficControlAPIBaseTestCase):

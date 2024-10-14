@@ -7,8 +7,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
-from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType, Lifecycle
 from traffic_control.models import TrafficLightPlan, TrafficLightReal, TrafficLightSoundBeaconValue, TrafficLightType
+from traffic_control.models.traffic_light import LocationSpecifier, PushButton, VehicleRecognition
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     add_traffic_light_real_operation,
     get_api_client,
@@ -68,6 +70,30 @@ def test_filter_error_traffic_light_plans_location(location, location_query, exp
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.HEAVY, LaneType.BIKE),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.ABOVE, LocationSpecifier.RIGHT),
+        ("push_button", PushButton.YES, PushButton.NO),
+        ("sound_beacon", TrafficLightSoundBeaconValue.YES, TrafficLightSoundBeaconValue.NO),
+        ("type", TrafficLightType.SIGNAL, TrafficLightType.PEDESTRIAN),
+        ("vehicle_recognition", VehicleRecognition.OTHER, VehicleRecognition.RADAR),
+    ),
+)
+@pytest.mark.django_db
+def test__traffic_light_plans_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        TrafficLightPlanFactory,
+        "v1:trafficlightplan-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db
@@ -318,6 +344,32 @@ def test_filter_error_traffic_light_reals_location(location, location_query, exp
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("condition", Condition.VERY_GOOD, Condition.GOOD),
+        ("installation_status", InstallationStatus.IN_USE, InstallationStatus.MISSING),
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.HEAVY, LaneType.BIKE),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.ABOVE, LocationSpecifier.RIGHT),
+        ("push_button", PushButton.YES, PushButton.NO),
+        ("sound_beacon", TrafficLightSoundBeaconValue.YES, TrafficLightSoundBeaconValue.NO),
+        ("type", TrafficLightType.SIGNAL, TrafficLightType.PEDESTRIAN),
+        ("vehicle_recognition", VehicleRecognition.OTHER, VehicleRecognition.RADAR),
+    ),
+)
+@pytest.mark.django_db
+def test__traffic_light_reals_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        TrafficLightRealFactory,
+        "v1:trafficlightreal-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db

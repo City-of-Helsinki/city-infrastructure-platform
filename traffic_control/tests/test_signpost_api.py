@@ -7,8 +7,19 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
-from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.enums import (
+    Condition,
+    DeviceTypeTargetModel,
+    InstallationStatus,
+    LaneNumber,
+    LaneType,
+    Lifecycle,
+    Reflection,
+    Size,
+)
 from traffic_control.models import SignpostPlan, SignpostReal
+from traffic_control.models.traffic_sign import LocationSpecifier
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     add_signpost_real_operation,
     get_api_client,
@@ -67,6 +78,26 @@ def test_filter_error_signpost_plans_location(location, location_query, expected
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.HEAVY, LaneType.BIKE),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.ABOVE, LocationSpecifier.VERTICAL),
+    ),
+)
+@pytest.mark.django_db
+def test__signpost_plans_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        SignpostPlanFactory,
+        "v1:signpostplan-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db
@@ -297,6 +328,30 @@ def test_filter_error_signpost_reals_location(location, location_query, expected
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("condition", Condition.VERY_GOOD, Condition.AVERAGE),
+        ("installation_status", InstallationStatus.IN_USE, InstallationStatus.COVERED),
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.HEAVY, LaneType.BIKE),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.ABOVE, LocationSpecifier.VERTICAL),
+        ("reflection_class", Reflection.R3, Reflection.R1),
+        ("size", Size.LARGE, Size.SMALL),
+    ),
+)
+@pytest.mark.django_db
+def test__signpost_reals_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        SignpostRealFactory,
+        "v1:signpostreal-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db

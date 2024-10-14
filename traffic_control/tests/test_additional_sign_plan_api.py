@@ -6,8 +6,12 @@ from django.utils.crypto import get_random_string
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
+from traffic_control.enums import LaneNumber, LaneType, Lifecycle, Reflection, Size, Surface
 from traffic_control.models import AdditionalSignPlan
+from traffic_control.models.additional_sign import Color, LocationSpecifier
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
+    AdditionalSignPlanFactory,
     get_additional_sign_plan,
     get_api_client,
     get_owner,
@@ -47,6 +51,30 @@ def test__additional_sign_plan__list(geo_format):
             assert result["location"] == GeoJsonDict(obj.location.json)
         else:
             assert result["location"] == obj.location.ewkt
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("color", Color.BLUE, Color.YELLOW),
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.BIKE, LaneType.HEAVY),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.ABOVE, LocationSpecifier.MIDDLE),
+        ("reflection_class", Reflection.R1, Reflection.R2),
+        ("size", Size.LARGE, Size.MEDIUM),
+        ("surface_class", Surface.FLAT, Surface.CONVEX),
+    ),
+)
+@pytest.mark.django_db
+def test__additional_sign_plan_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        AdditionalSignPlanFactory,
+        "v1:additionalsignplan-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.parametrize("geo_format", ("", "geojson"))

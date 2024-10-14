@@ -7,8 +7,20 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
-from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.enums import (
+    Condition,
+    DeviceTypeTargetModel,
+    InstallationStatus,
+    LaneNumber,
+    LaneType,
+    Lifecycle,
+    Reflection,
+    Size,
+    Surface,
+)
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
+from traffic_control.models.traffic_sign import LocationSpecifier
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     add_traffic_sign_real_operation,
     get_api_client,
@@ -64,6 +76,29 @@ def test_filter_error_traffic_sign_plans_location(location, location_query, expe
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.HEAVY, LaneType.BIKE),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.ABOVE, LocationSpecifier.RIGHT),
+        ("reflection_class", Reflection.R1, Reflection.R3),
+        ("size", Size.LARGE, Size.SMALL),
+        ("surface_class", Surface.FLAT, Surface.CONVEX),
+    ),
+)
+@pytest.mark.django_db
+def test__traffic_sign_plans_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        TrafficSignPlanFactory,
+        "v1:trafficsignplan-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db
@@ -310,6 +345,31 @@ def test_filter_error_traffic_sign_reals_location(location, location_query, expe
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("condition", Condition.VERY_GOOD, Condition.GOOD),
+        ("installation_status", InstallationStatus.IN_USE, InstallationStatus.MISSING),
+        ("lane_number", LaneNumber.ADDITIONAL_LEFT_1, LaneNumber.ADDITIONAL_LEFT_2),
+        ("lane_type", LaneType.HEAVY, LaneType.BIKE),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+        ("location_specifier", LocationSpecifier.ABOVE, LocationSpecifier.RIGHT),
+        ("reflection_class", Reflection.R1, Reflection.R3),
+        ("size", Size.LARGE, Size.SMALL),
+        ("surface_class", Surface.FLAT, Surface.CONVEX),
+    ),
+)
+@pytest.mark.django_db
+def test__traffic_sign_reals_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        TrafficSignRealFactory,
+        "v1:trafficsignreal-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db
