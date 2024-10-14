@@ -1,12 +1,7 @@
-from typing import Optional
-
 from django.conf import settings
 from django.contrib.gis import geos
-from django.contrib.gis.db.models import Extent
 from gisserver import queries
-from gisserver.db import conditional_transform
-from gisserver.features import FeatureType
-from gisserver.geometries import BoundingBox, WGS84
+from gisserver.geometries import BoundingBox
 from gisserver.output import GML32Renderer
 
 # Non-exhausting list of CRSs with axis order of (latitude longitude)
@@ -85,20 +80,3 @@ class YXGML32Renderer(GML32Renderer):
                     <gml:lowerCorner>{lower}</gml:lowerCorner>
                     <gml:upperCorner>{upper}</gml:upperCorner>
                 </gml:Envelope></gml:boundedBy>\n"""
-
-
-class BoundingBoxCapableFeatureType(FeatureType):
-    def get_bounding_box(self) -> Optional[BoundingBox]:
-        """Returns a WGS84 BoundingBox for the complete feature.
-
-        This is used by the GetCapabilities request. It may return ``None``
-        when the database table is empty, or the custom queryset doesn't
-        return any results.
-        """
-        if not self.geometry_fields:
-            return None
-
-        geo_expression = conditional_transform(self.geometry_field.name, self.geometry_field.srid, WGS84.srid)
-
-        bbox = self.queryset.only(self.geometry_field.name).aggregate(a=Extent(geo_expression))["a"]
-        return BoundingBox(*bbox, crs=WGS84) if bbox else None

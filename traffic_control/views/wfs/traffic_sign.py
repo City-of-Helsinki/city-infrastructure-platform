@@ -2,13 +2,12 @@ from copy import deepcopy
 
 from django.db.models import Q
 from django.utils import timezone
-from gisserver.features import FeatureField
+from gisserver.features import FeatureField, FeatureType
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import TrafficSignReal
 from traffic_control.services.traffic_sign import traffic_sign_plan_get_current
 from traffic_control.views.wfs.common import DEFAULT_CRS, OTHER_CRS
-from traffic_control.views.wfs.utils import BoundingBoxCapableFeatureType
 
 _base_fields = [
     FeatureField("id", abstract="ID of the Traffic Sign."),
@@ -57,7 +56,7 @@ _base_fields = [
     ),
 ]
 
-TrafficSignRealFeatureType = BoundingBoxCapableFeatureType(
+TrafficSignRealFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=TrafficSignReal.objects.active()
@@ -85,7 +84,7 @@ TrafficSignRealFeatureType = BoundingBoxCapableFeatureType(
     ],
 )
 
-TrafficSignPlanFeatureType = BoundingBoxCapableFeatureType(
+TrafficSignPlanFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=traffic_sign_plan_get_current()
