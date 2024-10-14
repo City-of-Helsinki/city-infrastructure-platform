@@ -7,7 +7,13 @@ from rest_framework import status
 
 from traffic_control.enums import OrganizationLevel
 from traffic_control.models import ResponsibleEntity
-from traffic_control.tests.factories import get_api_client, get_responsible_entity_project, get_user
+from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.factories import (
+    get_api_client,
+    get_responsible_entity_project,
+    get_user,
+    ResponsibleEntityFactory,
+)
 
 
 # Read
@@ -25,6 +31,21 @@ def test__responsible_entity__list():
     for result in response_data["results"]:
         obj = ResponsibleEntity.objects.get(pk=result["id"])
         assert result["name"] == obj.name
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (("organization_level", OrganizationLevel.SERVICE, OrganizationLevel.DIVISION),),
+)
+@pytest.mark.django_db
+def test__responsible_entity_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        ResponsibleEntityFactory,
+        "v1:responsibleentity-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db

@@ -5,8 +5,10 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
+from city_furniture.enums import CityFurnitureClassType, CityFurnitureFunctionType
 from city_furniture.models.common import CityFurnitureDeviceType
-from city_furniture.tests.factories import get_city_furniture_device_type
+from city_furniture.tests.factories import CityFurnitureDeviceTypeFactory, get_city_furniture_device_type
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import get_api_client, get_user
 
 
@@ -25,6 +27,24 @@ def test__city_furniture_device_type__list():
     for result in response_data["results"]:
         obj = CityFurnitureDeviceType.objects.get(pk=result["id"])
         assert result["code"] == obj.code
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("class_type", CityFurnitureClassType.TRAFFIC, CityFurnitureClassType.SECURITY),
+        ("function_type", CityFurnitureFunctionType.TRAFFIC_LIGHT, CityFurnitureFunctionType.ROAD_SIGN),
+    ),
+)
+@pytest.mark.django_db
+def test__city_furniture_device_type_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        CityFurnitureDeviceTypeFactory,
+        "v1:cityfurnituredevicetype-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.django_db

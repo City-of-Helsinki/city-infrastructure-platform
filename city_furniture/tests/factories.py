@@ -139,6 +139,21 @@ def get_furniture_signpost_plan(
     )[0]
 
 
+class FurnitureSignpostRealFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = FurnitureSignpostReal
+        django_get_or_create = (
+            "source_id",
+            "source_name",
+        )
+
+    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    device_type = factory.SubFactory(CityFurnitureDeviceTypeFactory)
+    location = test_point_3d
+    owner = factory.SubFactory(OwnerFactory)
+
+
 def get_furniture_signpost_real(
     location=None,
     responsible_entity=None,

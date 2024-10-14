@@ -1,12 +1,10 @@
-from enum import member
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumField, EnumIntegerField
+from enumfields import EnumField, EnumIntegerField
 
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType
 from traffic_control.mixins.models import (
@@ -31,38 +29,21 @@ from traffic_control.models.common import (
 from traffic_control.models.plan import Plan
 
 
-class ConnectionType(Enum):
-    CLOSED = 1
-    OPEN_OUT = 2
-
-    @member
-    class Labels:
-        CLOSED = _("Closed")
-        OPEN_OUT = _("Open out")
+class ConnectionType(models.IntegerChoices):
+    CLOSED = 1, _("Closed")
+    OPEN_OUT = 2, _("Open Out")
 
 
-class Reflective(Enum):
-    YES = "YES"
-    NO = "NO"
-    RED_YELLOW = "RED_YELLOW"
-
-    @member
-    class Labels:
-        YES = _("Yes")
-        NO = _("No")
-        RED_YELLOW = _("Red-yellow")
+class Reflective(models.TextChoices):
+    YES = "YES", _("Yes")
+    NO = "NO", _("No")
+    RED_YELLOW = "RED_YELLOW", _("Red-yellow")
 
 
-class LocationSpecifier(Enum):
-    MIDDLE = 1
-    RIGHT = 2
-    LEFT = 3
-
-    @member
-    class Labels:
-        MIDDLE = _("Middle of road or lane")
-        RIGHT = _("Right of road or lane")
-        LEFT = _("Left of road or lane")
+class LocationSpecifier(models.IntegerChoices):
+    MIDDLE = 1, _("Middle of road or lane")
+    RIGHT = 2, _("Right of road or lane")
+    LEFT = 3, _("Left of road or lane")
 
 
 class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):

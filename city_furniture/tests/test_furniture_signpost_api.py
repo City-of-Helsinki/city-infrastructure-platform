@@ -9,15 +9,19 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
+from city_furniture.models.furniture_signpost import ArrowDirection
 from city_furniture.tests.factories import (
     add_furniture_signpost_real_operation,
     DEFAULT_DEVICE_TYPE_DESCRIPTION,
     FurnitureSignpostPlanFactory,
+    FurnitureSignpostRealFactory,
     get_city_furniture_device_type,
     get_furniture_signpost_plan,
     get_furniture_signpost_real,
 )
+from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.models import GroupResponsibleEntity
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     get_api_client,
     get_operation_type,
@@ -51,6 +55,24 @@ def test__furniture_signpost_plan__list(geo_format):
             assert result["location"] == obj.location.ewkt
 
 
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("arrow_direction", ArrowDirection.RIGHT, ArrowDirection.TOP_RIGHT),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+    ),
+)
+@pytest.mark.django_db
+def test__furniture_signpost_plans_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        FurnitureSignpostPlanFactory,
+        "v1:furnituresignpostplan-list",
+        field_name,
+        value,
+        second_value,
+    )
+
+
 @pytest.mark.parametrize("geo_format", ("", "geojson"))
 @pytest.mark.parametrize("plan_decision_id", (None, "TEST-DECISION-ID"))
 @pytest.mark.django_db
@@ -75,6 +97,26 @@ def test__furniture_signpost_real__list(geo_format, plan_decision_id):
             assert result["location"] == GeoJsonDict(obj.location.json)
         else:
             assert result["location"] == obj.location.ewkt
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("arrow_direction", ArrowDirection.RIGHT, ArrowDirection.TOP_RIGHT),
+        ("condition", Condition.GOOD, Condition.VERY_GOOD),
+        ("installation_status", InstallationStatus.IN_USE, InstallationStatus.OTHER),
+        ("lifecycle", Lifecycle.ACTIVE, Lifecycle.TEMPORARILY_ACTIVE),
+    ),
+)
+@pytest.mark.django_db
+def test__furniture_signpost_reals_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        FurnitureSignpostRealFactory,
+        "v1:furnituresignpostreal-list",
+        field_name,
+        value,
+        second_value,
+    )
 
 
 @pytest.mark.parametrize("geo_format", ("", "geojson"))

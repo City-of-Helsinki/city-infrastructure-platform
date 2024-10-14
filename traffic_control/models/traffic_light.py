@@ -1,12 +1,10 @@
-from enum import member
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumField, EnumIntegerField
+from enumfields import EnumField, EnumIntegerField
 
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType
 from traffic_control.mixins.models import (
@@ -32,74 +30,39 @@ from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 
 
-class TrafficLightSoundBeaconValue(Enum):
-    NO = 1
-    YES = 2
-
-    @member
-    class Labels:
-        NO = _("No")
-        YES = _("Yes")
+class TrafficLightSoundBeaconValue(models.IntegerChoices):
+    NO = 1, _("No")
+    YES = 2, _("Yes")
 
 
-class LocationSpecifier(Enum):
-    RIGHT = 1
-    ABOVE = 2
-    ISLAND = 3
-
-    @member
-    class Labels:
-        RIGHT = _("Right side of the road (relative to traffic direction)")
-        ABOVE = _("Above the lanes")
-        ISLAND = _("Island")
+class LocationSpecifier(models.IntegerChoices):
+    RIGHT = 1, _("Right side of the road (relative to traffic direction)")
+    ABOVE = 2, _("Above the lanes")
+    ISLAND = 3, _("Island")
 
 
-class TrafficLightType(Enum):
-    SIGNAL = "1"
-    ARROW_RIGHT = "4.1"
-    ARROW_LEFT = "4.2"
-    TRIANGLE = "5"
-    PUBLIC_TRANSPORT = "8"
-    BICYCLE = "9.1"
-    BICYCLE_ARROW = "9.2"
-    PEDESTRIAN = "10"
-    LANE = "11"
-
-    @member
-    class Labels:
-        SIGNAL = _("Traffic signal")
-        ARROW_RIGHT = _("Right-turn arrow signal")
-        ARROW_LEFT = _("Left-turn arrow signal")
-        TRIANGLE = _("Triangle signal")
-        PUBLIC_TRANSPORT = _("Public transport signal")
-        BICYCLE = _("Bicycle signal")
-        BICYCLE_ARROW = _("Bicycle turn arrow signal")
-        PEDESTRIAN = _("Pedestrian signal")
-        LANE = _("Lane signal")
+class TrafficLightType(models.TextChoices):
+    SIGNAL = "1", _("Traffic signal")
+    ARROW_RIGHT = "4.1", _("Right-turn arrow signal")
+    ARROW_LEFT = "4.2", _("Left-turn arrow signal")
+    TRIANGLE = "5", _("Triangle signal")
+    PUBLIC_TRANSPORT = "8", _("Public transport signal")
+    BICYCLE = "9.1", _("Bicycle signal")
+    BICYCLE_ARROW = "9.2", _("Bicycle turn arrow signal")
+    PEDESTRIAN = "10", _("Pedestrian signal")
+    LANE = "11", _("Lane signal")
 
 
-class VehicleRecognition(Enum):
-    LOOP = 1
-    INFRARED = 2
-    RADAR = 3
-    OTHER = 4
-
-    @member
-    class Labels:
-        LOOP = _("Loop sensor")
-        INFRARED = _("Infrared sensor")
-        RADAR = _("Radar i.e. microwave sensor")
-        OTHER = _("Other")
+class VehicleRecognition(models.IntegerChoices):
+    LOOP = 1, _("Loop sensor")
+    INFRARED = 2, _("Infrared sensor")
+    RADAR = 3, _("Radar i.e. microwave sensor")
+    OTHER = 4, _("Other")
 
 
-class PushButton(Enum):
-    NO = 1
-    YES = 2
-
-    @member
-    class Labels:
-        NO = _("No")
-        YES = _("Yes")
+class PushButton(models.IntegerChoices):
+    NO = 1, _("No")
+    YES = 2, _("Yes")
 
 
 class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):

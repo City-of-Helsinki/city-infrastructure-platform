@@ -1,12 +1,10 @@
-from enum import member
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumField, EnumIntegerField
+from enumfields import EnumField, EnumIntegerField
 
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, TrafficControlDeviceTypeType
 from traffic_control.mixins.models import (
@@ -32,64 +30,34 @@ from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
 
 
-class LineDirection(Enum):
-    FORWARD = "FORWARD"
-    BACKWARD = "BACKWARD"
-
-    @member
-    class Labels:
-        FORWARD = _("Forward")
-        BACKWARD = _("Backward")
+class LineDirection(models.TextChoices):
+    FORWARD = "FORWARD", _("Forward")
+    BACKWARD = "BACKWARD", _("Backward")
 
 
-class ArrowDirection(Enum):
-    STRAIGHT = 1
-    RIGHT = 2
-    RIGHT_AND_STRAIGHT = 3
-    LEFT = 4
-    LEFT_AND_STRAIGHT = 5
-    LANE_ENDS = 6
-    RIGHT_AND_LEFT = 7
-    STRAIGHT_RIGHT_AND_LEFT = 8
-
-    @member
-    class Labels:
-        STRAIGHT = _("Straight")
-        RIGHT = _("Right")
-        RIGHT_AND_STRAIGHT = _("Right and straight")
-        LEFT = _("Left")
-        LEFT_AND_STRAIGHT = _("Left and straight")
-        LANE_ENDS = _("Lane ends")
-        RIGHT_AND_LEFT = _("Right and left")
-        STRAIGHT_RIGHT_AND_LEFT = _("Straight, right and left")
+class ArrowDirection(models.IntegerChoices):
+    STRAIGHT = 1, _("Straight")
+    RIGHT = 2, _("Right")
+    RIGHT_AND_STRAIGHT = 3, _("Right and straight")
+    LEFT = 4, _("Left")
+    LEFT_AND_STRAIGHT = 5, _("Left and straight")
+    LANE_ENDS = 6, _("Lane ends")
+    RIGHT_AND_LEFT = 7, _("Right and left")
+    STRAIGHT_RIGHT_AND_LEFT = 8, _("Straight, left and right")
 
 
-class RoadMarkingColor(Enum):
-    WHITE = 1
-    YELLOW = 2
-
-    @member
-    class Labels:
-        WHITE = _("White")
-        YELLOW = _("Yellow")
+class RoadMarkingColor(models.IntegerChoices):
+    WHITE = 1, _("White")
+    YELLOW = 2, _("Yellow")
 
 
-class LocationSpecifier(Enum):
-    BOTH_SIDES_OF_ROAD = 1
-    RIGHT_SIDE_OF_LANE = 2
-    LEFT_SIDE_OF_LANE = 3
-    BOTH_SIDES_OF_LANE = 4
-    MIDDLE_OF_LANE = 5
-    LEFT_SIDE_OF_LANE_OR_ROAD = 6
-
-    @member
-    class Labels:
-        BOTH_SIDES_OF_ROAD = _("Both sides of road")
-        RIGHT_SIDE_OF_LANE = _("Right side of lane")
-        LEFT_SIDE_OF_LANE = _("Left side of lane")
-        BOTH_SIDES_OF_LANE = _("Both sides of lane ")
-        MIDDLE_OF_LANE = _("Middle of lane")
-        LEFT_SIDE_OF_LANE_OR_ROAD = _("Left side of lane or road")
+class LocationSpecifier(models.IntegerChoices):
+    BOTH_SIDES_OF_ROAD = 1, _("Both sides of road")
+    RIGHT_SIDE_OF_LANE = 2, _("Right side of lane")
+    LEFT_SIDE_OF_LANE = 3, _("Left side of lane")
+    BOTH_SIDES_OF_LANE = 4, _("Both sides of lane")
+    MIDDLE_OF_LANE = 5, _("Middle side of lane")
+    LEFT_SIDE_OF_LANE_OR_ROAD = 6, _("Left side of lane or road")
 
 
 class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
@@ -138,10 +106,9 @@ class AbstractRoadMarking(SourceControlModel, SoftDeleteModel, UserControlModel,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ROAD_MARKING)),
         help_text=_("Type of the device from Helsinki Design Manual."),
     )
-    arrow_direction = EnumField(
+    arrow_direction = EnumIntegerField(
         ArrowDirection,
         verbose_name=_("Arrow direction"),
-        max_length=10,
         blank=True,
         null=True,
         help_text=_("Direction of the arrow on the road."),

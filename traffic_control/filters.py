@@ -189,7 +189,7 @@ class TrafficControlDeviceTypeFilterSet(FilterSet):
 
     target_model = ChoiceFilter(
         label=_("Target data model"),
-        choices=DeviceTypeTargetModel.choices(),
+        choices=DeviceTypeTargetModel.choices,
     )
 
     class Meta(GenericMeta):

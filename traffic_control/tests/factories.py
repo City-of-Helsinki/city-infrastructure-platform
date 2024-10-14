@@ -1017,6 +1017,14 @@ def add_traffic_light_real_operation(
     )
 
 
+class ResponsibleEntityFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ResponsibleEntity
+        django_get_or_create = ("name",)
+
+    name = factory.sequence(lambda n: f"Responsible {n}")
+
+
 def get_responsible_entity_division(name="DIVISION") -> ResponsibleEntity:
     return ResponsibleEntity.objects.get_or_create(
         name=name,

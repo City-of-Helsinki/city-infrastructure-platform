@@ -1,12 +1,10 @@
-from enum import member
-
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumIntegerField
+from enumfields import EnumIntegerField
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
@@ -24,26 +22,15 @@ from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
 
 
-class ArrowDirection(Enum):
-    UP = 1
-    DOWN = 2
-    LEFT = 3
-    RIGHT = 4
-    TOP_RIGHT = 5
-    BOTTOM_RIGHT = 6
-    TOP_LEFT = 7
-    BOTTOM_LEFT = 8
-
-    @member
-    class Labels:
-        UP = _("Up")
-        DOWN = _("Down")
-        LEFT = _("Left")
-        RIGHT = _("Right")
-        TOP_RIGHT = _("Top right")
-        BOTTOM_RIGHT = _("Bottom right")
-        TOP_LEFT = _("Top left")
-        BOTTOM_LEFT = _("Bottom left")
+class ArrowDirection(models.IntegerChoices):
+    UP = 1, _("Up")
+    DOWN = 2, _("Down")
+    LEFT = 3, _("Left")
+    RIGHT = 4, _("Right")
+    TOP_RIGHT = 5, _("Top Right")
+    BOTTOM_RIGHT = 6, _("Bottom Right")
+    TOP_LEFT = 7, _("Top Left")
+    BOTTOM_LEFT = 8, _("Bottom Left")
 
 
 class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):

@@ -6,8 +6,9 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.enums import DeviceTypeTargetModel, TrafficControlDeviceTypeType
 from traffic_control.models import TrafficControlDeviceType
+from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     get_api_client,
     get_barrier_plan,
@@ -22,6 +23,7 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    TrafficControlDeviceTypeFactory,
 )
 from users.models import User
 
@@ -353,3 +355,21 @@ def test__device_type__anonymous_user(method, expected_status, view_type):
     assert TrafficControlDeviceType.objects.count() == 1
     assert TrafficControlDeviceType.objects.first().code == "TYPE-1"
     assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize(
+    "field_name,value,second_value",
+    (
+        ("target_model", DeviceTypeTargetModel.TRAFFIC_LIGHT, DeviceTypeTargetModel.TRAFFIC_SIGN),
+        ("type", TrafficControlDeviceTypeType.LONGITUDINAL, TrafficControlDeviceTypeType.TRANSVERSE),
+    ),
+)
+@pytest.mark.django_db
+def test__device_type_filtering__list(field_name, value, second_value):
+    do_filtering_test(
+        TrafficControlDeviceTypeFactory,
+        "v1:trafficcontroldevicetype-list",
+        field_name,
+        value,
+        second_value,
+    )

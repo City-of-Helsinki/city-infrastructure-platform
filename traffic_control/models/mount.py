@@ -1,11 +1,10 @@
 import uuid
-from enum import member
 
 from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
-from enumfields import Enum, EnumIntegerField
+from enumfields import EnumIntegerField
 
 from traffic_control.mixins.models import (
     AbstractFileModel,
@@ -24,22 +23,14 @@ from traffic_control.models.plan import Plan
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 
 
-class LocationSpecifier(Enum):
-    RIGHT = 1
-    LEFT = 2
-    ABOVE = 3
-    MIDDLE = 4
+class LocationSpecifier(models.IntegerChoices):
+    RIGHT = 1, _("Right side")
+    LEFT = 2, _("Left side")
+    ABOVE = 3, _("Above")
+    MIDDLE = 4, _("Middle")
     # number 5 is intentionally skipped
     # so the actual numeric values match to additional and traffic signs
-    OUTSIDE = 6
-
-    @member
-    class Labels:
-        RIGHT = _("Right side")
-        LEFT = _("Left side")
-        ABOVE = _("Above")
-        MIDDLE = _("Middle")
-        OUTSIDE = _("Outside")
+    OUTSIDE = 6, _("Outside")
 
 
 class MountType(models.Model):
