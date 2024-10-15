@@ -1,25 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#005EB8;stroke:#005EB8;stroke-width:0.5;stroke-miterlimit:10;}
-	.st1{fill:#FFFFFF;}
-	.st2{fill:#005EB8;}
-</style>
-<g id="LWPOLYLINE_45_">
-	<rect x="14.17" y="113.39" class="st0" width="396.85" height="198.42"/>
-</g>
-<g id="LWPOLYLINE_47_">
-	<path class="st1" d="M40.63,113.39h343.94c14.61,0,26.46,11.85,26.46,26.46v145.51c0,14.61-11.85,26.46-26.46,26.46H40.63
-		c-14.61,0-26.45-11.84-26.45-26.46V139.84C14.17,125.23,26.02,113.39,40.63,113.39z"/>
-</g>
-<g id="LWPOLYLINE_46_">
-	<path class="st2" d="M40.63,126.61h343.94c7.3,0,13.22,5.92,13.22,13.23v145.51c0,7.3-5.92,13.23-13.22,13.23H40.63
-		c-7.3,0-13.23-5.93-13.23-13.23V139.84C27.4,132.54,33.32,126.61,40.63,126.61z"/>
-</g>
-<g id="LWPOLYLINE_60_">
-	<polygon class="st1" points="196.06,227.48 98.96,227.48 136.98,265.51 100.16,265.51 47.24,212.6 100.16,159.69 136.98,159.69 
-		98.96,197.72 196.06,197.72 	"/>
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 425.2 425.2">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        stroke: #005eb8;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #005eb8;
+      }
+    </style>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.1, SVG Export Plug-In . SVG Version: 1.2.0 Build 142)  -->
+  <g>
+    <g id="Layer_1">
+      <g id="LWPOLYLINE">
+        <rect class="cls-2" x="14.2" y="113.4" width="396.8" height="198.4"/>
+      </g>
+      <g id="LWPOLYLINE-2" data-name="LWPOLYLINE">
+        <path class="cls-1" d="M40.6,113.4h343.9c14.6,0,26.5,11.9,26.5,26.5v145.5c0,14.6-11.9,26.5-26.5,26.5H40.6c-14.6,0-26.5-11.9-26.5-26.5v-145.5c0-14.6,11.9-26.5,26.5-26.5Z"/>
+      </g>
+      <g id="LWPOLYLINE-3" data-name="LWPOLYLINE">
+        <path class="cls-3" d="M40.6,126.6h343.9c7.3,0,13.2,5.9,13.2,13.2v145.5c0,7.3-5.9,13.2-13.2,13.2H40.6c-7.3,0-13.2-5.9-13.2-13.2v-145.5c0-7.3,5.9-13.2,13.2-13.2Z"/>
+      </g>
+      <g id="LWPOLYLINE-4" data-name="LWPOLYLINE">
+        <polygon class="cls-1" points="323.8 228.3 315.9 228.3 315.9 175.5 323.8 175.5 323.8 204.7 334.4 188.7 342.3 188.7 333.2 202.3 342.3 228.3 334.4 228.3 328 210.1 323.8 216.4 323.8 228.3"/>
+      </g>
+      <g id="LWPOLYLINE-5" data-name="LWPOLYLINE">
+        <path class="cls-1" d="M386,198.7c0-2-1.7-3.7-3.7-3.7h-.5c-3.5,0-6.3,2.8-6.3,6.3v26.9h-7.9v-29.5c0-2-1.7-3.7-3.7-3.7h-.5c-3.5,0-6.3,2.8-6.3,6.3v26.9h-7.9v-39.6h7.9v3.2c2.6-1.6,5.5-2.7,8.5-3.1.4,0,.7,0,1.1,0,3,.2,5.6,1.8,7.3,4.2,3-2.2,6.4-3.7,10.1-4.2.4,0,.7,0,1.1,0,5,.3,8.9,4.5,8.9,9.5v30.1h-7.9v-29.5Z"/>
+      </g>
+      <g id="LWPOLYLINE-6" data-name="LWPOLYLINE">
+        <polygon class="cls-1" points="196.1 227.5 99 227.5 137 265.5 100.2 265.5 47.2 212.6 100.2 159.7 137 159.7 99 197.7 196.1 197.7 196.1 227.5"/>
+      </g>
+      <g id="LWPOLYLINE-7" data-name="LWPOLYLINE">
+        <path class="cls-1" d="M273.2,199c0-2-1.7-3.7-3.7-3.7h-.5c-3.5,0-6.3,2.8-6.3,6.3v26.9h-7.9v-29.5c0-2-1.7-3.7-3.7-3.7h-.5c-3.5,0-6.3,2.8-6.3,6.3v26.9h-7.9v-39.6h7.9v3.2c2.6-1.6,5.5-2.7,8.5-3.1.4,0,.7,0,1.1,0,3,.2,5.6,1.8,7.3,4.2,3-2.2,6.4-3.7,10.1-4.2.4,0,.7,0,1.1,0,5,.3,8.9,4.5,8.9,9.5v30.1h-7.9v-29.5Z"/>
+      </g>
+      <g id="LWPOLYLINE-12">
+        <polygon class="cls-1" points="303.1 171.9 286.6 234.5 296.1 234.5 312.6 171.9 303.1 171.9"/>
+      </g>
+    </g>
+  </g>
 </svg>

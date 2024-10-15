@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 396.7 397">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #231f20;
+        stroke-width: 0px;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+        stroke-width: 2.3px;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M194,0c108.9,1.4,187.5,70.4,202,180.9,7.7,101-54.2,184.9-149,210.4C108,422.7-2.3,319.6,0,194.4,6.4,83.9,85.8,5.4,194,0Z"/>
+  <polygon class="cls-1" points="78 356.7 83.1 360.7 88.1 364.1 363.4 88.3 360.1 83.2 356 78.1 78 356.7"/>
+  <polygon class="cls-1" points="33.3 309.2 308.6 33.4 313.7 37.1 318.7 40.8 40.7 319.6 37 314.2 33.3 309.2"/>
+  <polygon class="cls-1" points="46.5 326.7 50.5 331.4 54.9 336.1 335.5 55 330.8 50.6 326.1 46.5 46.5 326.7"/>
+  <polygon class="cls-1" points="61.2 342.5 66 346.9 70.6 350.9 350.3 70.7 346.3 66.1 341.9 61.3 61.2 342.5"/>
+</svg>
