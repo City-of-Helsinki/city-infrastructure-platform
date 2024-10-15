@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 15:33+0300\n"
+"POT-Creation-Date: 2024-10-15 13:27+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -669,6 +669,15 @@ msgstr "Korvaa"
 msgid "Replaced by"
 msgstr "Korvaaja"
 
+msgid "Replaced"
+msgstr "Korvattu"
+
+msgid "No"
+msgstr "Ei"
+
+msgid "Yes"
+msgstr "Kyllä"
+
 msgid "Operational areas"
 msgstr "Toiminta-alue"
 
@@ -681,12 +690,6 @@ msgstr "Vastuutahot"
 
 msgid "Traffic sign type"
 msgstr "Liikennemerkkityyppi"
-
-msgid "No"
-msgstr "Ei"
-
-msgid "Yes"
-msgstr "Kyllä"
 
 msgid "has additional signs"
 msgstr "Sisältää lisämerkkejä"
@@ -930,6 +933,9 @@ msgstr "yksikkö"
 
 msgid "project"
 msgstr "projekti"
+
+msgid "Plan replacement"
+msgstr "Korvaus suunnitelmalle"
 
 msgid ""
 "'Missing content' cannot be enabled when the content field (content_s) is "
@@ -1739,7 +1745,7 @@ msgstr "Kaistan oikeassa reunassa ajosuuntaan nähden"
 msgid "Left side of lane"
 msgstr "Kaistan vasemmassa reunassa ajosuuntaan nähden"
 
-msgid "Both sides of lane "
+msgid "Both sides of lane"
 msgstr "Kaistan molemmin puolin"
 
 msgid "Middle of lane"
