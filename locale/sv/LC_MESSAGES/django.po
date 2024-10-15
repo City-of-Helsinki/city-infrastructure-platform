@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 15:33+0300\n"
+"POT-Creation-Date: 2024-10-15 13:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -672,6 +672,15 @@ msgstr ""
 msgid "Replaced by"
 msgstr ""
 
+msgid "Replaced"
+msgstr ""
+
+msgid "No"
+msgstr "Nej"
+
+msgid "Yes"
+msgstr "Ja"
+
 msgid "Operational areas"
 msgstr "Åtgärdsområden"
 
@@ -684,12 +693,6 @@ msgstr "Ansvariga enheter"
 
 msgid "Traffic sign type"
 msgstr "Typ av trafikskylt"
-
-msgid "No"
-msgstr "Nej"
-
-msgid "Yes"
-msgstr "Ja"
 
 msgid "has additional signs"
 msgstr "har tilläggsskyltar"
@@ -933,6 +936,9 @@ msgstr "enhet"
 
 msgid "project"
 msgstr "projekt"
+
+msgid "Plan replacement"
+msgstr ""
 
 msgid ""
 "'Missing content' cannot be enabled when the content field (content_s) is "
@@ -1729,7 +1735,7 @@ msgstr "Höger sida av körfält"
 msgid "Left side of lane"
 msgstr "Vänster sida av körfält"
 
-msgid "Both sides of lane "
+msgid "Both sides of lane"
 msgstr "Båda sidor av körfält "
 
 msgid "Middle of lane"
