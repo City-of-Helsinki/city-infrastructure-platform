@@ -31,7 +31,7 @@ from traffic_control.models.plan import Plan
 
 class ConnectionType(models.IntegerChoices):
     CLOSED = 1, _("Closed")
-    OPEN_OUT = 2, _("Open Out")
+    OPEN_OUT = 2, _("Open out")
 
 
 class Reflective(models.TextChoices):

@@ -121,8 +121,8 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -182,8 +182,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -785,8 +785,8 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -850,8 +850,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -1591,7 +1591,7 @@ paths:
           Describes if the barrier is open or closed.
 
           * `1` - Closed
-          * `2` - Open Out
+          * `2` - Open out
       - in: query
         name: count
         schema:
@@ -1677,8 +1677,8 @@ paths:
         description: |-
           Describes which lane of the road this barrier affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -1742,8 +1742,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -2168,7 +2168,7 @@ paths:
           Describes if the barrier is open or closed.
 
           * `1` - Closed
-          * `2` - Open Out
+          * `2` - Open out
       - in: query
         name: count
         schema:
@@ -2264,8 +2264,8 @@ paths:
         description: |-
           Describes which lane of the road this barrier affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -2329,8 +2329,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -3295,12 +3295,12 @@ paths:
           * `1200` - Rubbish bin
           * `1210` - Clock
           * `1220` - Directional spot light
-          * `1230` - Floodlight
+          * `1230` - Floodlight mast
           * `1240` - Windmill
           * `1250` - Solar cell
           * `1260` - Water wheel
           * `1270` - Pole
-          * `1280` - Radio master
+          * `1280` - Radio mast
           * `1290` - Aerial
           * `1300` - Radio telescope
           * `1310` - Chimney
@@ -3777,10 +3777,10 @@ paths:
           * `2` - Down
           * `3` - Left
           * `4` - Right
-          * `5` - Top Right
-          * `6` - Bottom Right
-          * `7` - Top Left
-          * `8` - Bottom Left
+          * `5` - Top right
+          * `6` - Bottom right
+          * `7` - Top left
+          * `8` - Bottom left
       - in: query
         name: color
         schema:
@@ -3854,8 +3854,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -4299,10 +4299,10 @@ paths:
           * `2` - Down
           * `3` - Left
           * `4` - Right
-          * `5` - Top Right
-          * `6` - Bottom Right
-          * `7` - Top Left
-          * `8` - Bottom Left
+          * `5` - Top right
+          * `6` - Bottom right
+          * `7` - Top left
+          * `8` - Bottom left
       - in: query
         name: color
         schema:
@@ -4424,8 +4424,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -5190,8 +5190,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -5709,8 +5709,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -7987,7 +7987,7 @@ paths:
           * `5` - Left and straight
           * `6` - Lane ends
           * `7` - Right and left
-          * `8` - Straight, left and right
+          * `8` - Straight, right and left
       - in: query
         name: color
         schema:
@@ -8084,8 +8084,8 @@ paths:
         description: |-
           Describes which lane of the road this road marking affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -8149,8 +8149,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -8201,7 +8201,7 @@ paths:
           * `2` - Right side of lane
           * `3` - Left side of lane
           * `4` - Both sides of lane
-          * `5` - Middle side of lane
+          * `5` - Middle of lane
           * `6` - Left side of lane or road
       - in: query
         name: material
@@ -8607,7 +8607,7 @@ paths:
           * `5` - Left and straight
           * `6` - Lane ends
           * `7` - Right and left
-          * `8` - Straight, left and right
+          * `8` - Straight, right and left
       - in: query
         name: color
         schema:
@@ -8733,8 +8733,8 @@ paths:
         description: |-
           Describes which lane of the road this road marking affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -8798,8 +8798,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -8850,7 +8850,7 @@ paths:
           * `2` - Right side of lane
           * `3` - Left side of lane
           * `4` - Both sides of lane
-          * `5` - Middle side of lane
+          * `5` - Middle of lane
           * `6` - Left side of lane or road
       - in: query
         name: material
@@ -9583,8 +9583,8 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -9644,8 +9644,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -10214,8 +10214,8 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -10275,8 +10275,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -11369,8 +11369,8 @@ paths:
         description: |-
           Describes which lane of the road this traffic light affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -11430,8 +11430,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -11998,8 +11998,8 @@ paths:
         description: |-
           Describes which lane of the road this traffic light affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -12059,8 +12059,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -12864,8 +12864,8 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -12925,8 +12925,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -13504,8 +13504,8 @@ paths:
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main Lane
-          * `21` - Main Lane
+          * `11` - Main lane
+          * `21` - Main lane
           * `31` - Lane allowing traffic to both directions
           * `X2` - First left additional lane
           * `X3` - First right additional lane
@@ -13569,8 +13569,8 @@ paths:
           Lifecycle of the device, which describes the activity status of the device.
 
           * `3` - Active
-          * `4` - Temporary active
-          * `5` - Temporary inactive
+          * `4` - Temporarily active
+          * `5` - Temporarily inactive
           * `6` - Inactive
       - name: limit
         required: false
@@ -14362,8 +14362,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -14484,8 +14484,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -14644,8 +14644,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -14766,8 +14766,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -14934,8 +14934,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -15056,8 +15056,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -15235,8 +15235,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -15399,8 +15399,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -15664,8 +15664,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -15828,8 +15828,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -16065,8 +16065,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -16103,8 +16103,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -16174,7 +16174,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open Out
+            * `2` - Open out
         material:
           type: string
           nullable: true
@@ -16285,8 +16285,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -16324,8 +16324,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -16395,7 +16395,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open Out
+            * `2` - Open out
         material:
           type: string
           nullable: true
@@ -16519,8 +16519,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -16557,8 +16557,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -16628,7 +16628,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open Out
+            * `2` - Open out
         material:
           type: string
           nullable: true
@@ -16764,8 +16764,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -16844,8 +16844,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -16915,7 +16915,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open Out
+            * `2` - Open out
         material:
           type: string
           nullable: true
@@ -17092,8 +17092,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -17173,8 +17173,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -17244,7 +17244,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open Out
+            * `2` - Open out
         material:
           type: string
           nullable: true
@@ -17454,12 +17454,12 @@ components:
             * `1200` - Rubbish bin
             * `1210` - Clock
             * `1220` - Directional spot light
-            * `1230` - Floodlight
+            * `1230` - Floodlight mast
             * `1240` - Windmill
             * `1250` - Solar cell
             * `1260` - Water wheel
             * `1270` - Pole
-            * `1280` - Radio master
+            * `1280` - Radio mast
             * `1290` - Aerial
             * `1300` - Radio telescope
             * `1310` - Chimney
@@ -17635,12 +17635,12 @@ components:
             * `1200` - Rubbish bin
             * `1210` - Clock
             * `1220` - Directional spot light
-            * `1230` - Floodlight
+            * `1230` - Floodlight mast
             * `1240` - Windmill
             * `1250` - Solar cell
             * `1260` - Water wheel
             * `1270` - Pole
-            * `1280` - Radio master
+            * `1280` - Radio mast
             * `1290` - Aerial
             * `1300` - Radio telescope
             * `1310` - Chimney
@@ -17834,8 +17834,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -17922,10 +17922,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top Right
-            * `6` - Bottom Right
-            * `7` - Top Left
-            * `8` - Bottom Left
+            * `5` - Top right
+            * `6` - Bottom right
+            * `7` - Top left
+            * `8` - Bottom left
         pictogram:
           type: string
           nullable: true
@@ -18093,8 +18093,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -18181,10 +18181,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top Right
-            * `6` - Bottom Right
-            * `7` - Top Left
-            * `8` - Bottom Left
+            * `5` - Top right
+            * `6` - Bottom right
+            * `7` - Top left
+            * `8` - Bottom left
         pictogram:
           type: string
           nullable: true
@@ -18328,8 +18328,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -18458,10 +18458,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top Right
-            * `6` - Bottom Right
-            * `7` - Top Left
-            * `8` - Bottom Left
+            * `5` - Top right
+            * `6` - Bottom right
+            * `7` - Top left
+            * `8` - Bottom left
         pictogram:
           type: string
           nullable: true
@@ -18661,8 +18661,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -18791,10 +18791,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top Right
-            * `6` - Bottom Right
-            * `7` - Top Left
-            * `8` - Bottom Left
+            * `5` - Top right
+            * `6` - Bottom right
+            * `7` - Top left
+            * `8` - Bottom left
         pictogram:
           type: string
           nullable: true
@@ -18980,8 +18980,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -19130,8 +19130,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -19293,8 +19293,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -19474,8 +19474,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -19755,8 +19755,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -21096,8 +21096,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -21218,8 +21218,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -21363,8 +21363,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -21527,8 +21527,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -21724,8 +21724,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -21763,8 +21763,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -21834,7 +21834,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open Out
+            * `2` - Open out
         material:
           type: string
           nullable: true
@@ -21929,8 +21929,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -22010,8 +22010,8 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -22081,7 +22081,7 @@ components:
             Describes if the barrier is open or closed.
 
             * `1` - Closed
-            * `2` - Open Out
+            * `2` - Open out
         material:
           type: string
           nullable: true
@@ -22263,12 +22263,12 @@ components:
             * `1200` - Rubbish bin
             * `1210` - Clock
             * `1220` - Directional spot light
-            * `1230` - Floodlight
+            * `1230` - Floodlight mast
             * `1240` - Windmill
             * `1250` - Solar cell
             * `1260` - Water wheel
             * `1270` - Pole
-            * `1280` - Radio master
+            * `1280` - Radio mast
             * `1290` - Aerial
             * `1300` - Radio telescope
             * `1310` - Chimney
@@ -22401,8 +22401,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -22489,10 +22489,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top Right
-            * `6` - Bottom Right
-            * `7` - Top Left
-            * `8` - Bottom Left
+            * `5` - Top right
+            * `6` - Bottom right
+            * `7` - Top left
+            * `8` - Bottom left
         pictogram:
           type: string
           nullable: true
@@ -22608,8 +22608,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -22738,10 +22738,10 @@ components:
             * `2` - Down
             * `3` - Left
             * `4` - Right
-            * `5` - Top Right
-            * `6` - Bottom Right
-            * `7` - Top Left
-            * `8` - Bottom Left
+            * `5` - Top right
+            * `6` - Bottom right
+            * `7` - Top left
+            * `8` - Bottom left
         pictogram:
           type: string
           nullable: true
@@ -22854,8 +22854,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -22989,8 +22989,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -23430,8 +23430,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -23469,8 +23469,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -23535,7 +23535,7 @@ components:
             * `2` - Right side of lane
             * `3` - Left side of lane
             * `4` - Both sides of lane
-            * `5` - Middle side of lane
+            * `5` - Middle of lane
             * `6` - Left side of lane or road
         line_direction:
           enum:
@@ -23571,7 +23571,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, left and right
+            * `8` - Straight, right and left
         value:
           type: string
           nullable: true
@@ -23707,8 +23707,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -23788,8 +23788,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -23854,7 +23854,7 @@ components:
             * `2` - Right side of lane
             * `3` - Left side of lane
             * `4` - Both sides of lane
-            * `5` - Middle side of lane
+            * `5` - Middle of lane
             * `6` - Left side of lane or road
         line_direction:
           enum:
@@ -23890,7 +23890,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, left and right
+            * `8` - Straight, right and left
         value:
           type: string
           nullable: true
@@ -24027,8 +24027,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -24066,8 +24066,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -24288,8 +24288,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -24369,8 +24369,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -24683,8 +24683,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -24722,8 +24722,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -24932,8 +24932,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -25013,8 +25013,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -25228,8 +25228,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -25267,8 +25267,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -25472,8 +25472,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -25553,8 +25553,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -26147,8 +26147,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -26186,8 +26186,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -26252,7 +26252,7 @@ components:
             * `2` - Right side of lane
             * `3` - Left side of lane
             * `4` - Both sides of lane
-            * `5` - Middle side of lane
+            * `5` - Middle of lane
             * `6` - Left side of lane or road
         line_direction:
           enum:
@@ -26288,7 +26288,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, left and right
+            * `8` - Straight, right and left
         value:
           type: string
           nullable: true
@@ -26439,8 +26439,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -26478,8 +26478,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -26544,7 +26544,7 @@ components:
             * `2` - Right side of lane
             * `3` - Left side of lane
             * `4` - Both sides of lane
-            * `5` - Middle side of lane
+            * `5` - Middle of lane
             * `6` - Left side of lane or road
         line_direction:
           enum:
@@ -26580,7 +26580,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, left and right
+            * `8` - Straight, right and left
         value:
           type: string
           nullable: true
@@ -26744,8 +26744,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -26783,8 +26783,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -26849,7 +26849,7 @@ components:
             * `2` - Right side of lane
             * `3` - Left side of lane
             * `4` - Both sides of lane
-            * `5` - Middle side of lane
+            * `5` - Middle of lane
             * `6` - Left side of lane or road
         line_direction:
           enum:
@@ -26885,7 +26885,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, left and right
+            * `8` - Straight, right and left
         value:
           type: string
           nullable: true
@@ -27061,8 +27061,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -27142,8 +27142,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -27208,7 +27208,7 @@ components:
             * `2` - Right side of lane
             * `3` - Left side of lane
             * `4` - Both sides of lane
-            * `5` - Middle side of lane
+            * `5` - Middle of lane
             * `6` - Left side of lane or road
         line_direction:
           enum:
@@ -27244,7 +27244,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, left and right
+            * `8` - Straight, right and left
         value:
           type: string
           nullable: true
@@ -27468,8 +27468,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -27549,8 +27549,8 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -27615,7 +27615,7 @@ components:
             * `2` - Right side of lane
             * `3` - Left side of lane
             * `4` - Both sides of lane
-            * `5` - Middle side of lane
+            * `5` - Middle of lane
             * `6` - Left side of lane or road
         line_direction:
           enum:
@@ -27651,7 +27651,7 @@ components:
             * `5` - Left and straight
             * `6` - Lane ends
             * `7` - Right and left
-            * `8` - Straight, left and right
+            * `8` - Straight, right and left
         value:
           type: string
           nullable: true
@@ -27828,8 +27828,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -27867,8 +27867,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -28104,8 +28104,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -28143,8 +28143,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -28393,8 +28393,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -28432,8 +28432,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -28694,8 +28694,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -28775,8 +28775,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -29098,8 +29098,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -29179,8 +29179,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -29626,8 +29626,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -29665,8 +29665,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -29890,8 +29890,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -29929,8 +29929,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -30167,8 +30167,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -30206,8 +30206,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -30456,8 +30456,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -30537,8 +30537,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -30828,8 +30828,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -30909,8 +30909,8 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -31163,8 +31163,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -31202,8 +31202,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -31430,8 +31430,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -31469,8 +31469,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -31709,8 +31709,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         source_id:
           type: string
@@ -31748,8 +31748,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -31993,8 +31993,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -32074,8 +32074,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane
@@ -32407,8 +32407,8 @@ components:
             Lifecycle of the device, which describes the activity status of the device.
 
             * `3` - Active
-            * `4` - Temporary active
-            * `5` - Temporary inactive
+            * `4` - Temporarily active
+            * `5` - Temporarily inactive
             * `6` - Inactive
         installation_date:
           type: string
@@ -32488,8 +32488,8 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main Lane
-            * `21` - Main Lane
+            * `11` - Main lane
+            * `21` - Main lane
             * `31` - Lane allowing traffic to both directions
             * `X2` - First left additional lane
             * `X3` - First right additional lane

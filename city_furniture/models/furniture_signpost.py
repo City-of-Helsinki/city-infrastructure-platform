@@ -27,10 +27,10 @@ class ArrowDirection(models.IntegerChoices):
     DOWN = 2, _("Down")
     LEFT = 3, _("Left")
     RIGHT = 4, _("Right")
-    TOP_RIGHT = 5, _("Top Right")
-    BOTTOM_RIGHT = 6, _("Bottom Right")
-    TOP_LEFT = 7, _("Top Left")
-    BOTTOM_LEFT = 8, _("Bottom Left")
+    TOP_RIGHT = 5, _("Top right")
+    BOTTOM_RIGHT = 6, _("Bottom right")
+    TOP_LEFT = 7, _("Top left")
+    BOTTOM_LEFT = 8, _("Bottom left")
 
 
 class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
