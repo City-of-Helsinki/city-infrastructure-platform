@@ -227,7 +227,7 @@ class TrafficSignPlanAdmin(
         "lifecycle",
         "location",
         "has_additional_signs",
-        "is_replaced",
+        "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,

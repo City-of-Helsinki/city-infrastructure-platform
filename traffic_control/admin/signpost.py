@@ -149,7 +149,7 @@ class SignpostPlanAdmin(
         "txt",
         "lifecycle",
         "location",
-        "is_replaced",
+        "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,

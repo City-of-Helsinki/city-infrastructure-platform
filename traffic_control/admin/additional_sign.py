@@ -178,7 +178,7 @@ class AdditionalSignPlanAdmin(
         "device_type",
         "lifecycle",
         "location",
-        "is_replaced",
+        "is_replaced_as_str",
     )
     readonly_fields = (
         "created_at",
