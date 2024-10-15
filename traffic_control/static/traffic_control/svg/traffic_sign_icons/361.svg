@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 396.7 397">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ffd200;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #e4002b;
+      }
+    </style>
+  </defs>
+  <g id="CIRCLE">
+    <path class="cls-1" d="M396.7,198.5C396.7,88.9,307.9,0,198.3,0S0,88.9,0,198.5s88.9,198.5,198.3,198.5c109.6,0,198.4-88.9,198.4-198.5h0Z"/>
+  </g>
+  <g id="CIRCLE-2" data-name="CIRCLE">
+    <path class="cls-2" d="M390.5,198.5c0-106.2-85.9-192.3-192.1-192.3S6.2,92.3,6.2,198.5s86,192.3,192.1,192.3,192.1-86.1,192.1-192.3h0Z"/>
+  </g>
+  <g id="CIRCLE-3" data-name="CIRCLE">
+    <path class="cls-1" d="M350.2,198.5c0-84-67.9-152-151.9-152S46.5,114.6,46.5,198.5s68,152,151.8,152,151.9-68.1,151.9-152h0Z"/>
+  </g>
+</svg>
