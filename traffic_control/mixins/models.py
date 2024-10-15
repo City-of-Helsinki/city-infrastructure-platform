@@ -3,6 +3,7 @@ import uuid
 from decimal import Decimal, InvalidOperation
 from typing import Optional
 
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
@@ -114,6 +115,11 @@ class ReplaceableDevicePlanMixin:
     def is_replaced(self):
         """Return `True` if this device plan has been replaced by another device plan"""
         return hasattr(self, REPLACEMENT_TO_NEW)
+
+    @property
+    @admin.display(description=_("Replaced"))
+    def is_replaced_as_str(self):
+        return _("Yes") if self.is_replaced else _("No")
 
 
 class InstalledDeviceModel(models.Model):
