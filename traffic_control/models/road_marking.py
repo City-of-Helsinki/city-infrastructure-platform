@@ -43,7 +43,7 @@ class ArrowDirection(models.IntegerChoices):
     LEFT_AND_STRAIGHT = 5, _("Left and straight")
     LANE_ENDS = 6, _("Lane ends")
     RIGHT_AND_LEFT = 7, _("Right and left")
-    STRAIGHT_RIGHT_AND_LEFT = 8, _("Straight, left and right")
+    STRAIGHT_RIGHT_AND_LEFT = 8, _("Straight, right and left")
 
 
 class RoadMarkingColor(models.IntegerChoices):
@@ -56,7 +56,7 @@ class LocationSpecifier(models.IntegerChoices):
     RIGHT_SIDE_OF_LANE = 2, _("Right side of lane")
     LEFT_SIDE_OF_LANE = 3, _("Left side of lane")
     BOTH_SIDES_OF_LANE = 4, _("Both sides of lane")
-    MIDDLE_OF_LANE = 5, _("Middle side of lane")
+    MIDDLE_OF_LANE = 5, _("Middle of lane")
     LEFT_SIDE_OF_LANE_OR_ROAD = 6, _("Left side of lane or road")
 
 

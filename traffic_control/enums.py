@@ -42,8 +42,8 @@ class InstallationStatus(models.TextChoices):
 
 
 class LaneNumber(models.TextChoices):
-    MAIN_1 = "11", _("Main Lane")
-    MAIN_2 = "21", _("Main Lane")
+    MAIN_1 = "11", _("Main lane")
+    MAIN_2 = "21", _("Main lane")
     REVERSIBLE = "31", _("Lane allowing traffic to both directions")
     ADDITIONAL_LEFT_1 = "X2", _("First left additional lane")
     ADDITIONAL_RIGHT_1 = "X3", _("First right additional lane")
@@ -74,8 +74,8 @@ class LaneType(models.TextChoices):
 
 class Lifecycle(models.IntegerChoices):
     ACTIVE = 3, _("Active")
-    TEMPORARILY_ACTIVE = 4, _("Temporary active")
-    TEMPORARILY_INACTIVE = 5, _("Temporary inactive")
+    TEMPORARILY_ACTIVE = 4, _("Temporarily active")
+    TEMPORARILY_INACTIVE = 5, _("Temporarily inactive")
     INACTIVE = 6, _("Inactive")
 
 
