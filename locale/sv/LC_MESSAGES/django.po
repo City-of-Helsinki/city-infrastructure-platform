@@ -220,55 +220,55 @@ msgid "Code"
 msgstr "Kod"
 
 msgid "Code of the Device Type in the Helsinki Design Manual."
-msgstr ""
+msgstr "Kod för anordningstypen i Helsingfors designmanual."
 
 msgid "City Furniture Class type"
 msgstr "Markdetaljer - klasstyp"
 
 msgid "OGC CityGML City Furniture Class"
-msgstr ""
+msgstr "OGC CityGML-kategori för stadsmöbel"
 
 msgid "City Furniture Function or Usage type"
 msgstr "Markdetaljer - funktion eller användningstyp"
 
 msgid "OGC CityGML City Furniture Function or Usage type"
-msgstr ""
+msgstr "Markdetaljer - funktion eller användningstyp"
 
 msgid "Icon"
 msgstr "Symbol"
 
 msgid "Icon of the actual device"
-msgstr ""
+msgstr "Ikon för egentlig anordning"
 
 msgid "Finnish Description"
 msgstr "Finsk beskrivning"
 
 msgid "Description of the Device Type in Finnish."
-msgstr ""
+msgstr "Beskrivning av anordningstypen på finska."
 
 msgid "Swedish Description"
 msgstr "Svensk beskrivning"
 
 msgid "Description of the Device Type in Swedish."
-msgstr ""
+msgstr "Beskrivning av anordningstypen på svenska."
 
 msgid "English Description"
 msgstr "Engelsk beskrivning"
 
 msgid "Description of the Device Type in English."
-msgstr ""
+msgstr "Beskrivning av anordningstypen på engelska."
 
 msgid "Size"
 msgstr "Storlek"
 
 msgid "Standard size of the Device Type."
-msgstr ""
+msgstr "Anordningstypens standardstorlek."
 
 msgid "Target data model"
 msgstr "Måldatamodell"
 
 msgid "City Furniture model that this Device Type is usable for."
-msgstr ""
+msgstr "Stadsmöbelmodell som denna anordningstyp kan användas för."
 
 msgid "City Furniture Device Type"
 msgstr "Markdetaljer - anordningstyp"
@@ -280,10 +280,10 @@ msgid "Name"
 msgstr "Namn"
 
 msgid "Name of the color in Helsinki Design System or Manual."
-msgstr ""
+msgstr "Färgens namn i Helsinki Design System eller i Helsingfors designmanual."
 
 msgid "RGB Hex value of the color"
-msgstr ""
+msgstr "Färgens RGB Hex-värde"
 
 msgid "City Furniture Color"
 msgstr "Markdetaljer - färg"
@@ -295,25 +295,25 @@ msgid "Finnish name"
 msgstr "Finskt namn"
 
 msgid "Name of the target in Finnish."
-msgstr ""
+msgstr "Objektets namn på finska."
 
 msgid "Swedish name"
 msgstr "Svenskt namn"
 
 msgid "Name of the target in Swedish."
-msgstr ""
+msgstr "Objektets namn på svenska."
 
 msgid "English name"
 msgstr "Engelskt namn"
 
 msgid "Name of the target in English."
-msgstr ""
+msgstr "Objektets namn på engelska."
 
 msgid "Description"
 msgstr "Beskrivning"
 
 msgid "Description of the target."
-msgstr ""
+msgstr "Beskrivning av objektet."
 
 msgid "City Furniture Target"
 msgstr "Markdetaljer - mål"
@@ -391,10 +391,10 @@ msgid "City Furniture Device type"
 msgstr "Markdetaljer - anordningstyp"
 
 msgid "Type of the device from Helsinki Design Manual."
-msgstr ""
+msgstr "Anordningstyp i Helsingfors designmanual."
 
 msgid "Size of the signpost. Enter only if device has a non-standard size."
-msgstr ""
+msgstr "Skyltens storlek. Ange enbart om anordningen inte är av standardstorlek."
 
 msgid "Height"
 msgstr "Höjd"
@@ -402,7 +402,7 @@ msgstr "Höjd"
 msgid ""
 "The height of the sign from the ground, measured from the bottom in "
 "centimeters."
-msgstr ""
+msgstr "Skyltens höjd över marken i centimeter, mätt från den övre kanten."
 
 msgid "Order"
 msgstr "Ordning"
@@ -411,78 +411,80 @@ msgid ""
 "The order of the sign in relation to the signs at the same point. Order from "
 "top to bottom, from left to right starting at 1."
 msgstr ""
+"Skyltens läge i förhållande till de övriga skyltar som ligger på samma punkt."
+"Ordning uppifrån och ner, från vänster till höger, med början nummer 1."
 
 msgid "Mount type"
 msgstr "Monteringstyp"
 
 msgid "Type of the mount this device is attached to."
-msgstr ""
+msgstr "Typen av den fästpunkt som anordningen är kopplad till."
 
 msgid "Arrow direction"
 msgstr "Pilens riktning"
 
 msgid "Direction of the arrow on this device in relation to the sign."
-msgstr ""
+msgstr "Riktning av den pil som finns i anordningen i förhållande till skylten."
 
 msgid "Color"
 msgstr "Färg"
 
 msgid "Color of the device from Helsinki Design Manual."
-msgstr ""
+msgstr "Anordningens färg i Helsingfors designmanual."
 
 msgid "Pictogram"
 msgstr "Piktogram"
 
 msgid "Description of the pictogram on the sign."
-msgstr ""
+msgstr "Beskrivning av den bildsymbol som finns i skylten."
 
 msgid "Furniture signpost value"
 msgstr "Lokaliseringsmärkets värde"
 
 msgid "Numeric value on the sign."
-msgstr ""
+msgstr "Nummervärde i skylten."
 
 msgid "Finnish text content"
 msgstr "Finskt textinnehåll"
 
 msgid "Content of the sign in Finnish."
-msgstr ""
+msgstr "Innehållet i skylten på finska."
 
 msgid "Swedish text content"
 msgstr "Svenskt textinnehåll"
 
 msgid "Content of the sign in Swedish."
-msgstr ""
+msgstr "Innehållet i skylten på svenska."
 
 msgid "English text content"
 msgstr "Engelskt textinnehåll"
 
 msgid "Content of the sign in English."
-msgstr ""
+msgstr "Innehållet i skylten på engelska."
 
 msgid "Content's responsible entity"
 msgstr "Ansvarig enhet för innehållet"
 
 msgid "Entity responsible for the device's content."
-msgstr ""
+msgstr "Ansvarig för innehållet i anordningen."
 
 msgid "Target"
 msgstr "Mål"
 
 msgid "Target subject, which this device relates to."
-msgstr ""
+msgstr "Objekt som anordningen gäller."
 
 msgid "Validity period start"
 msgstr "Giltighetsperiodens start"
 
 msgid "Date on which this device becomes active."
-msgstr ""
+msgstr "Datum då anordningen tas i bruk."
 
 msgid "Validity period end"
 msgstr "Giltighetsperiodens slut"
 
 msgid "Date after which this device becomes inactive."
-msgstr ""
+msgstr "Datum då anordningen tas ur bruk."
 
 msgid "Additional material URL"
 msgstr "URL för ytterligare material"
@@ -496,19 +498,19 @@ msgid "Mount Plan"
 msgstr "Montering (plan)"
 
 msgid "Mount that this device is mounted on."
-msgstr ""
+msgstr "Fästpunkt som anordningen är installerad i."
 
 msgid "Parent Furniture Signpost Plan"
 msgstr "Överordnat lokaliseringsmärke (plan)"
 
 msgid "Furniture Signpost inside which this device is located."
-msgstr ""
+msgstr "Skylttavla inom vilken anordningen finns."
 
 msgid "Plan"
 msgstr "Plan"
 
 msgid "Plan which this Device Plan is a part of."
-msgstr ""
+msgstr "Plan som denna anordningsplan ingår i."
 
 msgid "Furniture Signpost Plan"
 msgstr "Lokaliseringsmärke (plan)"
@@ -517,7 +519,7 @@ msgid "Furniture Signpost Plans"
 msgstr "Lokaliseringsmärke (planer)"
 
 msgid "The plan for this device."
-msgstr ""
+msgstr "Plan för denna anordning."
 
 msgid "Parent Furniture Signpost Real"
 msgstr "Överordnat lokaliseringsmärke (implementering)"
@@ -556,13 +558,13 @@ msgid "Furniture Signpost Real Files"
 msgstr "Lokaliseringsmärke (implementeringsfiler)"
 
 msgid "Template for Real Import"
-msgstr ""
+msgstr "Modellfil för införsel av utfall"
 
 msgid "This field is required."
 msgstr "Fältet är obligatoriskt."
 
 msgid "My account"
-msgstr ""
+msgstr "Egna uppgifter"
 
 msgid "City Infrastructure Platform"
 msgstr "Stadsinfrastrukturplattform"
@@ -574,13 +576,13 @@ msgid "English"
 msgstr "Engelska"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Svenska"
 
 msgid "View map"
 msgstr "Visa karta"
 
 msgid "Documentation"
-msgstr ""
+msgstr "Dokumentation"
 
 msgid "View API"
 msgstr "Visa API"
@@ -592,28 +594,28 @@ msgid "Log out"
 msgstr "Logga ut"
 
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 msgid "Home"
 msgstr "Hem"
 
 msgid "Personal info"
-msgstr ""
+msgstr "Personliga uppgifter"
 
 msgid "username"
-msgstr ""
+msgstr "användarnamn"
 
 msgid "first name"
-msgstr ""
+msgstr "förnamn"
 
 msgid "last name"
-msgstr ""
+msgstr "efternamn"
 
 msgid "email address"
-msgstr ""
+msgstr "e-post"
 
 msgid "actions"
-msgstr ""
+msgstr "funktioner"
 
 msgid "Change password"
 msgstr "Byt lösenord"
@@ -667,13 +669,13 @@ msgid "Operational area"
 msgstr "Åtgärdsområde"
 
 msgid "Replaces"
-msgstr ""
+msgstr "Ersätter"
 
 msgid "Replaced by"
-msgstr ""
+msgstr "Ersättare"
 
 msgid "Replaced"
-msgstr ""
+msgstr "Ersatt"
 
 msgid "No"
 msgstr "Nej"
@@ -737,7 +739,7 @@ msgid "Format"
 msgstr "Format"
 
 msgid "Export type"
-msgstr ""
+msgstr "Utförseltyp"
 
 msgid "Traffic control"
 msgstr "Trafikstyrning"
@@ -944,6 +946,8 @@ msgid ""
 "'Missing content' cannot be enabled when the content field (content_s) is "
 "not empty."
 msgstr ""
+"Kan inte vara 'innehåll saknas' när 'innehållet' (content_s) inte "
+"är tomt."
 
 msgid "Location (x,y)"
 msgstr "Plats (x, y)"
@@ -1049,24 +1053,26 @@ msgid "Device type"
 msgstr "Anordningstyp"
 
 msgid "Content"
-msgstr ""
+msgstr "Innehåll"
 
 msgid "Additional sign content as JSON document"
-msgstr ""
+msgstr "Innehållet i tilläggsskylten i form av JSON-dokument"
 
 msgid "Missing content"
-msgstr ""
+msgstr "Innehåll saknas"
 
 msgid ""
 "Content (content_s) is not available although the device type content schema "
 "requires it."
 msgstr ""
+"Innehållet (content_s) är inte tillgängligt, trots att schemat för "
+"anordningstypens innehåll kräver det."
 
 msgid "Additional information"
-msgstr ""
+msgstr "Tilläggsuppgifter"
 
 msgid "Additional information related to this device."
-msgstr ""
+msgstr "Tilläggsuppgifter om denna anordning."
 
 msgid "Reflection"
 msgstr "Reflex"
@@ -1075,73 +1081,73 @@ msgid "Surface"
 msgstr "Yta"
 
 msgid "Type of the mount this sign is attached to."
-msgstr ""
+msgstr "Typen av den fästpunkt som denna skylt är kopplad till."
 
 msgid "Road name"
 msgstr "Vägnamn"
 
 msgid "Name of the road this sign is installed at."
-msgstr ""
+msgstr "Namn på den väg där skylten är installerad."
 
 msgid "Lane number"
 msgstr "Körfält nummer"
 
 msgid "Describes which lane of the road this sign affects."
-msgstr ""
+msgstr "Anger vilken fil på vägen skylten inverkar på."
 
 msgid "Lane type"
 msgstr "Typ av körfält"
 
 msgid "The type of lane which this sign affects."
-msgstr ""
+msgstr "Typ av körfält"
 
 msgid "Location specifier"
 msgstr "Platsspecifikation"
 
 msgid "Specifies where the sign is in relation to the road."
-msgstr ""
+msgstr "Fastställer skyltens läge i förhållande till vägen."
 
 msgid "Date on which this sign becomes active."
-msgstr ""
+msgstr "Datum då skylten tas i bruk."
 
 msgid "Date after which this sign becomes inactive."
-msgstr ""
+msgstr "Datum efter vilket skylten inte är i bruk."
 
 msgid "Seasonal validity period start"
 msgstr "Säsongsmässig giltighetsperiod, start"
 
 msgid "Date on which this sign becomes seasonally active."
-msgstr ""
+msgstr "Datum då skylten tas i bruk för en säsong."
 
 msgid "Seasonal validity period end"
 msgstr "Säsongsmässig giltighetsperiod, slut"
 
 msgid "Date after which this sign becomes seasonally inactive."
-msgstr ""
+msgstr "Säsongsmässig giltighetsperiod, slut"
 
 msgid "Parent Traffic Sign Plan"
 msgstr "Överordnad trafikskylt (plan)"
 
 msgid "The traffic sign to which this additional sign is associated."
-msgstr ""
+msgstr "Vägmärke som denna tilläggsskylt gäller."
 
 msgid "Mount that this sign is mounted on."
-msgstr ""
+msgstr "Fästpunkt som denna skylt är installerad i."
 
 msgid "Plan which this Additional Sign Plan is a part of."
-msgstr ""
+msgstr "Plan som denna tilläggsskyltplan ingår i."
 
 msgid "Additional Sign Plan Replacement"
-msgstr ""
+msgstr "Ersättning för tilläggsskyltplan"
 
 msgid "Additional Sign Plan Replacements"
-msgstr ""
+msgstr "Ersättningar för tilläggsskyltplaner"
 
 msgid "Parent Traffic Sign Real"
 msgstr "Överordnad trafikskylt (implementering)"
 
 msgid "The plan for this Additional Sign."
-msgstr ""
+msgstr "Plan för denna tilläggsskyltplan."
 
 msgid "Installation id"
 msgstr "Installations-id"
@@ -1159,13 +1165,13 @@ msgid "Installed by"
 msgstr "Installerades av"
 
 msgid "Name of the organization who installed this sign."
-msgstr ""
+msgstr "Namn på den organisation som har installerat denna skylt."
 
 msgid "Manufacturer"
 msgstr "Tillverkare"
 
 msgid "Name of the organization that manufactured this sign."
-msgstr ""
+msgstr "Namn på den organisation som har tillverkat denna anordning."
 
 msgid "RFID"
 msgstr "RFID"
@@ -1177,7 +1183,7 @@ msgid "Legacy Traffic Sign Code"
 msgstr "Äldre trafikskyltkod"
 
 msgid "The sign type code of the sign in the old Finnish road traffic law."
-msgstr ""
+msgstr "Anordningstypkod för skylten i Finlands gamla vägtrafiklag."
 
 msgid "Permit decision id"
 msgstr "Tillståndsbeslut-id"
@@ -1199,19 +1205,19 @@ msgid "Scanned at"
 msgstr "Skannades den"
 
 msgid "Date and time on which this sign was last scanned at."
-msgstr ""
+msgstr "Datum och klockslag för föregående skanning av denna anordning."
 
 msgid "Attachment url"
 msgstr "Bilagas URL"
 
 msgid "URL to a file attachment related to this sign."
-msgstr ""
+msgstr "URL för filbilagan om denna skylt."
 
 msgid "Coverage area"
 msgstr "Täckningsområde"
 
 msgid "Coverage area that this sign belongs to."
-msgstr ""
+msgstr "Verkningsområde som skylten ingår i."
 
 msgid "additional sign real"
 msgstr "Tilläggsskylt (implementering)"
@@ -1223,16 +1229,16 @@ msgid "Additional sign real operations"
 msgstr "Tilläggsskylt (implementeringsåtgärder)"
 
 msgid "Additional Sign Plan File"
-msgstr ""
+msgstr "Tilläggsskylt planfil"
 
 msgid "Additional Sign Plan Files"
-msgstr ""
+msgstr "Tilläggsskylt planfiler"
 
 msgid "Additional Sign Real File"
-msgstr ""
+msgstr "Tilläggsskylt utfallsfil"
 
 msgid "Additional Sign Real Files"
-msgstr ""
+msgstr "Tilläggsskylt utfallsfiler"
 
 msgid "Coverage area category"
 msgstr "Kategori av täckningsområde"
@@ -1292,16 +1298,16 @@ msgid "Left of road or lane"
 msgstr "Till vänster om väg eller körfält"
 
 msgid "Name of the road this barrier is installed at."
-msgstr ""
+msgstr "Namn på den väg där detta körhinder är installerat."
 
 msgid "Describes which lane of the road this barrier affects."
-msgstr ""
+msgstr "Anger vilken fil på vägen körhindret inverkar på."
 
 msgid "The type of lane which this barrier affects."
-msgstr ""
+msgstr "Typ av den fil som körhindret inverkar på."
 
 msgid "Specifies where the barrier is in relation to the road."
-msgstr ""
+msgstr "Fastställer körhindrets läge i förhållande till vägen."
 
 msgid "Connection type"
 msgstr "Anslutningstyp"
@@ -1313,7 +1319,7 @@ msgid "Material"
 msgstr "Material"
 
 msgid "Describes the material that the barrier is made of."
-msgstr ""
+msgstr "Anger om bommen är öppen eller stängd."
 
 msgid "Is electric"
 msgstr "Elektrisk"
@@ -1322,10 +1328,10 @@ msgid "Reflective"
 msgstr "Reflekterande"
 
 msgid "Date on which this barrier becomes active."
-msgstr ""
+msgstr "Datum då körhindret tas i bruk."
 
 msgid "Date after which this barrier becomes inactive."
-msgstr ""
+msgstr "Datum efter vilket körhindret inte är i bruk."
 
 msgid "Length"
 msgstr "Längd"
@@ -1340,22 +1346,22 @@ msgid "Txt"
 msgstr "Txt"
 
 msgid "Text written on the barrier."
-msgstr ""
+msgstr "Text som är skriven på körhindret."
 
 msgid "Plan which this Barrier Plan is a part of."
-msgstr ""
+msgstr "Plan som denna körhinderplan ingår i."
 
 msgid "Barrier Plan"
 msgstr "Bom (plan)"
 
 msgid "Barrier Plan Replacement"
-msgstr ""
+msgstr "Ersättning för körhinderplan"
 
 msgid "Barrier Plan Replacements"
-msgstr ""
+msgstr "Ersättningar för körhinderplaner"
 
 msgid "The plan for this barrier."
-msgstr ""
+msgstr "Plan för detta körhinder."
 
 msgid "Barrier real"
 msgstr "Bom (implementering)"
@@ -1385,13 +1391,13 @@ msgid "Barrier Real Files"
 msgstr "Bom (implementeringsfiler)"
 
 msgid "New"
-msgstr ""
+msgstr "Nytt"
 
 msgid "Old"
-msgstr ""
+msgstr "Gammalt"
 
 msgid "Schema must be type of JSON object"
-msgstr ""
+msgstr "Schemat ska vara ett JSON-objekt"
 
 msgid "Name (fi)"
 msgstr "Namn (fi)"
@@ -1427,7 +1433,7 @@ msgid "Type"
 msgstr "Typ"
 
 msgid "Content schema"
-msgstr ""
+msgstr "Schema för innehållet"
 
 msgid "Traffic Control Device Type"
 msgstr "Typ av trafikstyrningsanordning"
@@ -1438,6 +1444,8 @@ msgstr "Typer av trafikstyrningsanordning"
 #, python-format
 msgid "Target model '%(target_model)s' does not support content schema"
 msgstr ""
+"Datamodellen för objektet '%(target_model)s' stöder inte schemat för "
+"innehållet"
 
 msgid "Name of the operation."
 msgstr "Namn på åtgärden."
@@ -1505,7 +1513,7 @@ msgstr "Portaltyper"
 msgid ""
 "The height of the mount from the ground, measured from the top in "
 "centimeters."
-msgstr ""
+msgstr "Fästpunktens höjd över marken i centimeter, mätt från den övre kanten."
 
 msgid "Base"
 msgstr "Bas"
@@ -1514,16 +1522,16 @@ msgid "Id number of the portal type in the portal_type table."
 msgstr "Id-nummer för portaltypen i portaltyptabellen."
 
 msgid "Describes the material that the mount is made of."
-msgstr ""
+msgstr "Anger det material av vilket fästpunkten är tillverkad."
 
 msgid "Date on which this mount becomes active."
-msgstr ""
+msgstr "Datum då fästpunkten tas i bruk."
 
 msgid "Date after which this mount becomes inactive."
-msgstr ""
+msgstr "Datum efter vilket fästpunkten inte är i bruk."
 
 msgid "Text written on the mount."
-msgstr ""
+msgstr "Text som är skriven på fästpunkten."
 
 msgid "Electric accountable"
 msgstr "Elektriskt ansvarig"
@@ -1538,7 +1546,7 @@ msgid "Cross bar length"
 msgstr "Tvärbalkens längd"
 
 msgid "Length of the cross bar for this mount in centimeters."
-msgstr ""
+msgstr "Längd på fästpunktens tvärslå i centimeter."
 
 msgid "Name of the road this mount is installed at."
 msgstr ""
@@ -1547,22 +1555,22 @@ msgid "Specifies where the mount is in relation to the road."
 msgstr ""
 
 msgid "Plan which this mount plan is a part of."
-msgstr ""
+msgstr "Plan som denna fästpunktplan ingår i."
 
 msgid "Mount Plan Replacement"
-msgstr ""
+msgstr "Ersättning för fästpunktplan"
 
 msgid "Mount Plan Replacements"
-msgstr ""
+msgstr "Ersättningar för fästpunktplaner"
 
 msgid "The plan for this mount."
-msgstr ""
+msgstr "Plan för denna fästpunkt."
 
 msgid "Inspected at"
 msgstr "Inspekterades den"
 
 msgid "Date and time on which this mount was last inspected at."
-msgstr ""
+msgstr "Datum och klockslag för föregående kontroll av fästpunkten."
 
 msgid "Diameter"
 msgstr "Diameter"
@@ -1633,30 +1641,32 @@ msgid "Status"
 msgstr "Status"
 
 msgid "Decision id"
-msgstr ""
+msgstr "Beslutsnummer"
 
 msgid "Year and verdict section separated with a dash"
 msgstr "År och beslutsektion åtskilda av snedstreck"
 
 msgid "Diary number"
-msgstr ""
+msgstr "Diarienummer"
 
 msgid "A drawing number must not contain special characters"
-msgstr ""
+msgstr "Ritningsnumret får inte innehålla specialtecken"
 
 msgid "Drawing numbers"
-msgstr ""
+msgstr "Ritningsnummer"
 
 msgid "Drawing numbers related to the plan separated with a comma"
-msgstr ""
+msgstr "Nummer på de ritningar som omfattas av planen, separerade med komma"
 
 msgid "Derive location from devices"
-msgstr ""
+msgstr "Härled läge från anordningar"
 
 msgid ""
 "Derive the plan location (geometry area) from the locations of related "
 "devices. Enable this if the plan does not have a predefined location."
-msgstr ""
+msgstr""
+"Härled planens läge (geometriområde) från de relaterade anordningarnas "
+"lägen. Ta i bruk detta, om planen saknar ett på förhand fastställt läge."
 
 msgid "Plans"
 msgstr "Planer"
@@ -1745,16 +1755,16 @@ msgid "Left side of lane or road"
 msgstr "Vänster sida av körfält eller väg"
 
 msgid "Name of the road this road marking is installed at."
-msgstr ""
+msgstr "Namn på den väg där denna vägmarkering är installerad."
 
 msgid "Describes which lane of the road this road marking affects."
-msgstr ""
+msgstr "Anger vilken fil på vägen vägmarkeringen inverkar på."
 
 msgid "The type of lane which this road marking affects."
-msgstr ""
+msgstr "Typ av den fil som vägmarkeringen inverkar på."
 
 msgid "Specifies where the road marking is in relation to the lane."
-msgstr ""
+msgstr "Fastställer vägmarkeringens läge i förhållande till filen."
 
 msgid "Line direction"
 msgstr "Linjeriktning"
@@ -1778,16 +1788,16 @@ msgid "Additional device type codes specific to the local public authorities."
 msgstr "Ytterligare anordningstypkoder specifika för de lokala myndigheterna."
 
 msgid "Date on which this road marking becomes active."
-msgstr ""
+msgstr "Datum då vägmarkeringen tas i bruk."
 
 msgid "Date after which this road marking becomes inactive."
-msgstr ""
+msgstr "Datum efter vilken vägmarkeringen inte är i bruk."
 
 msgid "Date on which this road marking becomes seasonally active."
-msgstr ""
+msgstr "Datum då vägmarkeringen tas i bruk för en säsong."
 
 msgid "Date after which this road marking becomes seasonally inactive."
-msgstr ""
+msgstr "Datum efter vilket vägmarkeringen inte är i bruk för en säsong."
 
 msgid "Symbol"
 msgstr "Symbol"
@@ -1823,19 +1833,19 @@ msgid "Traffic Sign related to this road marking."
 msgstr "Trafikskylt relaterad till denna vägmarkering."
 
 msgid "Plan which this road marking plan is a part of."
-msgstr ""
+msgstr "Plan som denna vägmarkeringsplan ingår i."
 
 msgid "Road Marking Plan"
 msgstr "Vägmarkering (plan)"
 
 msgid "Road Marking Plan Replacement"
-msgstr ""
+msgstr "Ersättning för vägmarkeringsplan"
 
 msgid "Road Marking Plan Replacements"
-msgstr ""
+msgstr "Ersättningar för vägmarkeringsplaner"
 
 msgid "The plan for this road marking."
-msgstr ""
+msgstr "Plan för denna vägmarkering."
 
 msgid "Traffic Sign Real"
 msgstr "Trafikskylt (implementering)"
@@ -1902,7 +1912,7 @@ msgid "Target ID"
 msgstr "Mål-id"
 
 msgid "The id number of the target the sign is guiding to (if available)."
-msgstr ""
+msgstr "Kodnummer på det objekt som skylten dirigerar till (om ett kodnummer används)."
 
 msgid "Target txt"
 msgstr "Mål-txt"
@@ -1911,6 +1921,8 @@ msgid ""
 "Free-form text description of the target the sign is guiding to, if the "
 "target has no id number."
 msgstr ""
+"Fritt formulerad textbeskrivning av det objekt som skylten dirigerar till. "
+"Används, om objektet saknar kodnummer."
 
 msgid "Electric maintainer"
 msgstr "Elektriskt underhåll"
@@ -1925,19 +1937,19 @@ msgid "Signpost inside which this device is located."
 msgstr "Skylt i vilken denna anordning finns."
 
 msgid "Plan which this signpost plan is a part of."
-msgstr ""
+msgstr "Plan som denna skyltplan ingår i."
 
 msgid "Signpost Plan"
 msgstr "Vägvisare (plan)"
 
 msgid "Signpost Plan Replacement"
-msgstr ""
+msgstr "Ersättning för skyltplan"
 
 msgid "Signpost Plan Replacements"
-msgstr ""
+msgstr "Ersättningar för skyltplaner"
 
 msgid "The plan for this signpost."
-msgstr ""
+msgstr "Plan för denna skylt."
 
 msgid "Parent Signpost Real"
 msgstr "Överordnad vägvisare (implementering)"
@@ -1946,7 +1958,7 @@ msgid "Organization"
 msgstr "Organisation"
 
 msgid "The organization that installed the signpost."
-msgstr ""
+msgstr "Namn på den organisation som har installerat skylten."
 
 msgid "Name of the organization that manufactured this device."
 msgstr "Namn på organisationen som tillverkade denna anordning."
@@ -2029,28 +2041,30 @@ msgid "Radar i.e. microwave sensor"
 msgstr "Radar d.v.s. mikrovågdetektor"
 
 msgid "Name of the road this traffic light is installed at."
-msgstr ""
+msgstr "Namn på den väg där detta trafikljus är installerat."
 
 msgid "Describes which lane of the road this traffic light affects."
-msgstr ""
+msgstr "Anger vilken fil på vägen trafikljuset inverkar på."
 
 msgid "The type of lane which this traffic light affects."
-msgstr ""
+msgstr "Typ av den fil som trafikljuset inverkar på."
 
 msgid ""
 "The direction a person is facing when looking perpendicular to the traffic "
 "light. The value is in degrees from 0 to 359, where 0 is north, 90 is east, "
 "etc."
 msgstr ""
+"Riktning i vilken en person tittar när hen tittar rakt på trafikljuset. "
+"I grader är värdet 0-359, där 0 är norr, 90 öster osv."
 
 msgid "Type of the mount this traffic light is attached to."
-msgstr ""
+msgstr "Typen av den fästpunkt som trafikljuset är kopplat till."
 
 msgid "Describes the type of traffic light this device is."
 msgstr "Beskriver vilken typ av trafiksignal anordningen är."
 
 msgid "Text on the traffic light."
-msgstr ""
+msgstr "Text som är skriven på trafikljuset."
 
 msgid "Push button"
 msgstr "Tryckknapp"
@@ -2071,31 +2085,31 @@ msgid "Describes the type of vehicle recognition this traffic light has."
 msgstr "Beskriver typen av fordonsidentifiering denna trafiksignal har."
 
 msgid "Date on which this traffic light becomes active."
-msgstr ""
+msgstr "Datum då trafikljuset tas i bruk."
 
 msgid "Date after which this traffic light becomes inactive."
-msgstr ""
+msgstr "Datum efter vilket trafikljuset inte är i bruk."
 
 msgid "Specifies where the traffic light is in relation to the road."
-msgstr ""
+msgstr "Fastställer trafikljusets läge i förhållande till vägen."
 
 msgid "Mount that this traffic light is mounted on."
-msgstr ""
+msgstr "Fästpunkt som trafikljuset är installerat i."
 
 msgid "Plan which this traffic light plan is a part of."
-msgstr ""
+msgstr "Plan som denna trafikljusplan ingår i."
 
 msgid "Traffic Light Plan"
 msgstr "Trafiksignal (plan)"
 
 msgid "Traffic Light Plan Replacement"
-msgstr ""
+msgstr "Ersättning för trafikljusplan"
 
 msgid "Traffic Light Plan Replacements"
-msgstr ""
+msgstr "Ersättningar för trafikljusplaner"
 
 msgid "The plan for this traffic light."
-msgstr ""
+msgstr "Plan för detta trafikljus."
 
 msgid "Traffic Light Real"
 msgstr "Trafiksignal (implementering)"
@@ -2128,34 +2142,34 @@ msgid "Vertical"
 msgstr "Vertikal"
 
 msgid "Name of the road this traffic sign is installed at."
-msgstr ""
+msgstr "Namn på den väg där detta vägmärke är installerat."
 
 msgid "Traffic Sign Code value"
 msgstr "Kodvärde för trafikskylt"
 
 msgid "Text written on the sign."
-msgstr ""
+msgstr "Text som är skriven på skylten."
 
 msgid "Affect area (2D)"
 msgstr "Påverkansområde (2D)"
 
 msgid "Plan which this traffic sign plan is a part of."
-msgstr ""
+msgstr "Plan som denna vägmärkesplan ingår i."
 
 msgid "Traffic Sign Plan Replacement"
-msgstr ""
+msgstr "Ersättning för vägmärkesplan"
 
 msgid "Traffic Sign Plan Replacements"
-msgstr ""
+msgstr "Ersättningar för vägmärkesplaner"
 
 msgid "The plan for this traffic sign."
-msgstr ""
+msgstr "Plan för detta vägmärke."
 
 msgid "The device type code of the sign in the old Finnish road traffic law."
 msgstr "Anordningstypkoden för skylten i den äldre finska väglagstiftningen."
 
 msgid "Coverage area that this traffic sign belongs to."
-msgstr ""
+msgstr "Verkningsområde som vägmärket ingår i."
 
 msgid "Traffic Sign Reals"
 msgstr "Trafikskylt (implementeringar)"
@@ -2185,27 +2199,35 @@ msgstr "Trafikskylt (implementeringsfiler)"
 msgid ""
 "Value '%(value)s' is invalid. Valid values are %(enum_values)s (%(enum)s)."
 msgstr ""
+"Värdet '%(value)s' är inte godtagbart. Godtagbara värden är %(enum_values)s "
+"(%(enum)s)."
 
 msgid ""
 "You do not have a permission to modify devices without a responsible entity."
-msgstr ""
+msgstr "Du har inte rätt att redigera anordningar utan den ansvariga parten."
 
 #, python-format
 msgid ""
 "You do not have a permission to modify devices of responsible entity "
 "'%(responsible_entity)s'."
 msgstr ""
+"Du har inte rätt att redigera den ansvariga partens '%(responsible_entity)s' "
+"anordningar."
 
 msgid ""
 "You do not have a permission to create devices without a responsible entity "
 "or to remove responsible entity from existing devices."
 msgstr ""
+"Du har inte rätt att skapa anordningar utan den ansvariga parten eller att "
+"ta bort den ansvariga parten från befintliga anordningar."
 
 #, python-format
 msgid ""
 "You do not have a permission to create or modify devices with given "
 "responsible entity (%(responsible_entity)s)."
 msgstr ""
+"Du har inte rätt att skapa och redigera anordningar med den angivna "
+"ansvariga parten (%(responsible_entity)s)."
 
 msgid "Export template"
 msgstr "Exportmall"
@@ -2220,31 +2242,33 @@ msgid "Save and continue editing"
 msgstr "Spara och fortsätt redigera"
 
 msgid "Additional signs"
-msgstr ""
+msgstr "Tilläggsskyltar"
 
 msgid "No mount"
-msgstr ""
+msgstr "Ej fästpunkt"
 
 msgid "This field may not be null."
 msgstr "Fältet får inte vara tomt."
 
 #, python-format
 msgid "Device type '%(device_type)s' accepts no structured content"
-msgstr ""
+msgstr "Anordningstypen '%(device_type)s' använder inte strukturerat innehåll"
 
 msgid "File not found."
 msgstr "Fil hittades inte."
 
 #, python-format
 msgid "Error: Could not find %(model_name)s with id %(id)s."
-msgstr ""
+msgstr "Fel: Kunde inte hittas med koden %(model_name)s %(id)s."
 
 msgid "last login"
-msgstr ""
+msgstr "senast inloggad"
 
 #, python-format
 msgid "User is active, but last login was %(days)d days ago"
 msgstr ""
+"Användarnamnet är gällande, men den senaste inloggningen skedde för %(days)d "
+"dagar sedan"
 
 msgid "Users"
 msgstr "Användare"
