@@ -66,7 +66,7 @@ class GenericMeta:
 
 class PlanReplacementFilterSet(FilterSet):
     is_replaced = ChoiceFilter(
-        label=_("Plan replacement"),
+        label=_("If set to true, returns only plans that have been superseded by a new plan."),
         choices=(("All", "ALL"), ("true", "true"), ("false", "false")),
         method="filter_by_replacement",
         field_name="is_replaced",

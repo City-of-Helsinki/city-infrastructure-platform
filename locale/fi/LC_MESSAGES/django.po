@@ -934,8 +934,8 @@ msgstr "yksikkö"
 msgid "project"
 msgstr "projekti"
 
-msgid "Plan replacement"
-msgstr "Korvaus suunnitelmalle"
+msgid "If set to true, returns only plans that have been superseded by a new plan."
+msgstr "Jos tosi, palauttaa vain suunnitelmat, jotka on kumottu uusilla."
 
 msgid ""
 "'Missing content' cannot be enabled when the content field (content_s) is "
@@ -1199,7 +1199,7 @@ msgid "Scanned at"
 msgstr "Kuvattu-aikaleima"
 
 msgid "Date and time on which this sign was last scanned at."
-msgstr "Tämän laitteen edellisen skannauksen päivämäärä ja kellonaika."
+msgstr "Tämän kyltin edellisen skannauksen päivämäärä ja kellonaika."
 
 msgid "Attachment url"
 msgstr "Liite (url)"
@@ -1540,15 +1540,11 @@ msgstr "Poikkiorren pituus"
 msgid "Length of the cross bar for this mount in centimeters."
 msgstr "Tämän kiinnityskohteen poikkiorren pituus senttimetreinä."
 
-#, fuzzy
-#| msgid "Name of the road this sign is installed at."
 msgid "Name of the road this mount is installed at."
-msgstr "Sen tien nimi, jolle tämä kilpi on asennettu."
+msgstr "Sen tien nimi, jolle tämä kiinnityskohde on asennettu."
 
-#, fuzzy
-#| msgid "Specifies where the sign is in relation to the road."
 msgid "Specifies where the mount is in relation to the road."
-msgstr "Määrittää kilven sijainnin suhteessa tiehen."
+msgstr "Specifies where the mount is in relation to the road."
 
 msgid "Plan which this mount plan is a part of."
 msgstr "Suunnitelma, johon tämä kiinnityskohdesuunnitelma kuuluu."
@@ -1575,13 +1571,9 @@ msgstr "Kantavuus / jalustan halkaisija"
 msgid "Diameter of the mount in centimeters."
 msgstr "Kiinnityskohteen halkaisija senttimetreinä."
 
-#, fuzzy
-#| msgid "Date and time on which this sign was last scanned at."
 msgid "Date and time on which this mount was last scanned at."
-msgstr "Tämän laitteen edellisen skannauksen päivämäärä ja kellonaika."
+msgstr "Tämän kiinnityskohteen edellisen skannauksen päivämäärä ja kellonaika."
 
-#, fuzzy
-#| msgid "URL to a file attachment related to this sign."
 msgid "URL to a file attachment related to this mount."
 msgstr "Tähän kilpeen liittyvän tiedostoliitteen URL-osoite."
 
@@ -1671,7 +1663,7 @@ msgstr ""
 msgid "Decision date"
 msgstr "Päätöspäivämäärä"
 
-msgid "Decision date for this plan."
+msgid "Date on which a decision was made on the plan."
 msgstr "Päivämäärä, jona suunnitelmasta tehtiin päätös."
 
 msgid "Plans"
@@ -1970,10 +1962,8 @@ msgstr "Tämän opasteen asentaneen organisaation nimi."
 msgid "Name of the organization that manufactured this device."
 msgstr "Tämän laitteen valmistaneen organisaation nimi."
 
-#, fuzzy
-#| msgid "Date and time on which this sign was last scanned at."
 msgid "Date and time on which this signpost was last scanned at."
-msgstr "Tämän laitteen edellisen skannauksen päivämäärä ja kellonaika."
+msgstr "Tämän opasteen edellisen skannauksen päivämäärä ja kellonaika."
 
 msgid "Signpost Real"
 msgstr "Opaste (toteuma)"

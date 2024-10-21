@@ -942,8 +942,8 @@ msgstr "enhet"
 msgid "project"
 msgstr "projekt"
 
-msgid "Plan replacement"
-msgstr ""
+msgid "If set to true, returns only plans that have been superseded by a new plan."
+msgstr "Om sant, återställ endast planer, som är upphävda."
 
 msgid ""
 "'Missing content' cannot be enabled when the content field (content_s) is "
@@ -1207,7 +1207,7 @@ msgid "Scanned at"
 msgstr "Skannades den"
 
 msgid "Date and time on which this sign was last scanned at."
-msgstr "Datum och klockslag för föregående skanning av denna anordning."
+msgstr "Datum och klockslag för föregående skanning av denna skylt."
 
 msgid "Attachment url"
 msgstr "Bilagas URL"
@@ -1551,10 +1551,10 @@ msgid "Length of the cross bar for this mount in centimeters."
 msgstr "Längd på fästpunktens tvärslå i centimeter."
 
 msgid "Name of the road this mount is installed at."
-msgstr ""
+msgstr "Namn på den väg där fästpunkten är installerad."
 
 msgid "Specifies where the mount is in relation to the road."
-msgstr ""
+msgstr "Fastställer fästpunktens läge i förhållande till vägen."
 
 msgid "Plan which this mount plan is a part of."
 msgstr "Plan som denna fästpunktplan ingår i."
@@ -1580,13 +1580,11 @@ msgstr "Diameter"
 msgid "Diameter of the mount in centimeters."
 msgstr "Monteringens diameter i centimeter."
 
-#, fuzzy
-#| msgid "Date on which this device was installed on."
 msgid "Date and time on which this mount was last scanned at."
-msgstr "Datum då denna anordning installerades."
+msgstr "Datum och klockslag för föregående skanning av denna fästpunkt."
 
 msgid "URL to a file attachment related to this mount."
-msgstr ""
+msgstr "URL för filbilagan om denna fästpunkt."
 
 msgid "Mount Reals"
 msgstr "Montering (implementeringar)"
@@ -1673,7 +1671,7 @@ msgstr ""
 msgid "Decision date"
 msgstr "Beslutsdatum"
 
-msgid "Decision date for this plan."
+msgid "Date on which a decision was made on the plan."
 msgstr "Datum då ett beslut fattades om planen."
 
 msgid "Plans"
@@ -1973,10 +1971,8 @@ msgstr "Namn på den organisation som har installerat skylten."
 msgid "Name of the organization that manufactured this device."
 msgstr "Namn på organisationen som tillverkade denna anordning."
 
-#, fuzzy
-#| msgid "Date on which this device was installed on."
 msgid "Date and time on which this signpost was last scanned at."
-msgstr "Datum då denna anordning installerades."
+msgstr "Datum och klockslag för föregående skanning av denna skyltplan."
 
 msgid "Signpost Real"
 msgstr "Vägvisare (implementering)"
