@@ -7243,6 +7243,11 @@ paths:
           type: string
           format: uuid
       - in: query
+        name: decision_date
+        schema:
+          type: string
+          format: date
+      - in: query
         name: decision_id
         schema:
           type: string
@@ -23353,6 +23358,11 @@ components:
           description: Derive the plan location (geometry area) from the locations
             of related devices. Enable this if the plan does not have a predefined
             location.
+        decision_date:
+          type: string
+          format: date
+          nullable: true
+          description: Decision date for this plan.
     PatchedPortalTypeRequest:
       type: object
       properties:
@@ -25837,6 +25847,11 @@ components:
           description: Derive the plan location (geometry area) from the locations
             of related devices. Enable this if the plan does not have a predefined
             location.
+        decision_date:
+          type: string
+          format: date
+          nullable: true
+          description: Decision date for this plan.
         created_by:
           type: string
           format: uuid
@@ -25966,6 +25981,11 @@ components:
           description: Derive the plan location (geometry area) from the locations
             of related devices. Enable this if the plan does not have a predefined
             location.
+        decision_date:
+          type: string
+          format: date
+          nullable: true
+          description: Decision date for this plan.
       required:
       - decision_id
       - name

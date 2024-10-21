@@ -63,6 +63,13 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
     )
     location = models.MultiPolygonField(_("Location (3D)"), dim=3, srid=settings.SRID, null=True, blank=True)
 
+    decision_date = models.DateField(
+        _("Decision date"),
+        blank=True,
+        null=True,
+        help_text=_("Decision date for this plan."),
+    )
+
     class Meta:
         db_table = "plan"
         verbose_name = _("Plan")
