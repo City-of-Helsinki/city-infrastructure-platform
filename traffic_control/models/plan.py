@@ -67,7 +67,7 @@ class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
         _("Decision date"),
         blank=True,
         null=True,
-        help_text=_("Decision date for this plan."),
+        help_text=_("Date on which a decision was made on the plan."),
     )
 
     class Meta:

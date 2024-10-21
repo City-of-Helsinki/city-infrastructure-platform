@@ -96,7 +96,7 @@ paths:
           - 'false'
           - 'true'
         description: |-
-          Plan replacement
+          If set to true, returns only plans that have been superseded by a new plan.
 
           * `All` - ALL
           * `true` - true
@@ -1652,7 +1652,7 @@ paths:
           - 'false'
           - 'true'
         description: |-
-          Plan replacement
+          If set to true, returns only plans that have been superseded by a new plan.
 
           * `All` - ALL
           * `true` - true
@@ -5172,7 +5172,7 @@ paths:
           - 'false'
           - 'true'
         description: |-
-          Plan replacement
+          If set to true, returns only plans that have been superseded by a new plan.
 
           * `All` - ALL
           * `true` - true
@@ -8064,7 +8064,7 @@ paths:
           - 'false'
           - 'true'
         description: |-
-          Plan replacement
+          If set to true, returns only plans that have been superseded by a new plan.
 
           * `All` - ALL
           * `true` - true
@@ -9563,7 +9563,7 @@ paths:
           - 'false'
           - 'true'
         description: |-
-          Plan replacement
+          If set to true, returns only plans that have been superseded by a new plan.
 
           * `All` - ALL
           * `true` - true
@@ -11349,7 +11349,7 @@ paths:
           - 'false'
           - 'true'
         description: |-
-          Plan replacement
+          If set to true, returns only plans that have been superseded by a new plan.
 
           * `All` - ALL
           * `true` - true
@@ -12844,7 +12844,7 @@ paths:
           - 'false'
           - 'true'
         description: |-
-          Plan replacement
+          If set to true, returns only plans that have been superseded by a new plan.
 
           * `All` - ALL
           * `true` - true
@@ -23362,7 +23362,7 @@ components:
           type: string
           format: date
           nullable: true
-          description: Decision date for this plan.
+          description: Date on which a decision was made on the plan.
     PatchedPortalTypeRequest:
       type: object
       properties:
@@ -25851,7 +25851,7 @@ components:
           type: string
           format: date
           nullable: true
-          description: Decision date for this plan.
+          description: Date on which a decision was made on the plan.
         created_by:
           type: string
           format: uuid
@@ -25985,7 +25985,7 @@ components:
           type: string
           format: date
           nullable: true
-          description: Decision date for this plan.
+          description: Date on which a decision was made on the plan.
       required:
       - decision_id
       - name
