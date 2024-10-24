@@ -51,7 +51,7 @@ class PlanAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "decision_date")},
         ),
     )
     list_display = ("id", "decision_id", "name", "diary_number", "drawing_numbers", "created_at")
