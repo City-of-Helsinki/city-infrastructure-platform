@@ -1,0 +1,38 @@
+# .github/workflows/release-please.yml
+name: release-please
+on:
+  push:
+    branches:
+      - main
+  # manual triggered
+  workflow_dispatch:
+    inputs:
+      label:
+        description: 'PR label, force update for release-please PRs. Do not use spaces!'
+        required: false
+        type: string
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install release-please client
+        run: npm i release-please -g
+      # extra label will be set on open release-please PR's to ensure PR re-generation (manifest -file merge issue)
+      # extra label includes the released component tag or manual triggered label name
+      - name: Create release pr
+        run: |
+          if [ -n "${{ github.event.release.tag_name }}" ]; then
+            LABEL="--label ${{ github.event.release.tag_name }}"
+          elif [ -n "${{ inputs.label }}" ]; then
+            LABEL="--label ${{ inputs.label }}"
+          fi
+          echo $LABEL
+
+          release-please release-pr --token=${{ secrets.GITHUB_TOKEN }} --repo-url=$GITHUB_REPOSITORY $LABEL
+      # create release
+      # rerun release-pr after release creation to fix manifest -file merge issue
+      - name: Create github release
+        run: |
+          release-please github-release --token=${{ secrets.GITHUB_TOKEN }} --repo-url=$GITHUB_REPOSITORY
+          release-please release-pr --token=${{ secrets.GITHUB_TOKEN }} --repo-url=$GITHUB_REPOSITORY
