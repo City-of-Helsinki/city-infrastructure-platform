@@ -66,6 +66,11 @@ env = environ.Env(
     BASEMAP_SOURCE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/wms"),
     STATIC_URL=(str, "/static/"),
     MEDIA_URL=(str, "/media/"),
+    CSRF_COOKIE_SECURE=(bool, True),
+    SESSION_COOKIE_SECURE=(bool, True),
+    CSRF_COOKIE_HTTPONLY=(bool, True),
+    CSRF_COOKIE_SAMESITE=(str, "Strict"),
+    SESSION_COOKIE_SAMESITE=(str, "Strict"),
 )
 
 if os.path.exists(env_file):
@@ -254,6 +259,13 @@ AUTH_PASSWORD_VALIDATORS = [
         "OPTIONS": {"min_characters": 1},
     },
 ]
+
+# Cookie security settings
+CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE")
+SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE")
+CSRF_COOKIE_HTTPONLY = env.bool("CSRF_COOKIE_HTTPONLY")
+CSRF_COOKIE_SAMESITE = env.str("CSRF_COOKIE_SAMESITE")
+SESSION_COOKIE_SAMESITE = env.str("SESSION_COOKIE_SAMESITE")
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
