@@ -16,7 +16,8 @@ from tablib import Dataset
 
 from traffic_control.models import ResponsibleEntity
 from traffic_control.models.utils import SoftDeleteQuerySet
-from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, clam_av_scan
+from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog
+from traffic_control.utils import get_file_upload_obstacles
 from users.models import User
 from users.utils import get_system_user
 
@@ -415,13 +416,14 @@ class CustomImportExportActionModelAdmin(ImportExportActionModelAdmin):
         return my_urls + urls
 
     def import_action(self, request, *args, **kwargs):
-        """Add virus scan to before actual import"""
+        """Add file type check and virus scan to before actual import"""
         if request.FILES:
-            scan_response = clam_av_scan([("FILES", v) for _, v in request.FILES.items()])
-            errors = scan_response["errors"]
-            if errors:
-                add_virus_scan_errors_to_auditlog(errors, request.user, self.model, object_id=None)
-                self.message_user(request, errors, messages.ERROR)
+            illegal_file_types, virus_scan_errors = get_file_upload_obstacles(request.FILES)
+            if illegal_file_types:
+                raise ValidationError(f"Illegal file types: {illegal_file_types}")
+            if virus_scan_errors:
+                add_virus_scan_errors_to_auditlog(virus_scan_errors, request.user, self.model, object_id=None)
+                self.message_user(request, virus_scan_errors, messages.ERROR)
                 del request.FILES["import_file"]
 
         return super().import_action(request, *args, **kwargs)

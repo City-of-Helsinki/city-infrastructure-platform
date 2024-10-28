@@ -376,6 +376,26 @@ GISSERVER_USE_DB_RENDERING = False
 # Virus scan
 CLAMAV_BASE_URL = env.str("CLAMAV_BASE_URL", "http://localhost:3030")
 
+# fileupload types
+ALLOWED_FILE_UPLOAD_TYPES = [
+    ".doc",
+    ".docx",
+    ".ppt",
+    ".pptx",
+    ".xls",
+    ".xlsx",
+    ".pdf",
+    ".txt",
+    ".png",
+    ".jpg",
+    ".bmp",
+    ".tif",
+    ".svg",
+    ".dwg",
+    ".dgn",
+    ".csv",
+]
+
 DEBUG_TOOLBAR = False
 if DEBUG:
     try:
