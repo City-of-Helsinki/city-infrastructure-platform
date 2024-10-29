@@ -27,6 +27,6 @@ def get_illegal_file_types(files):
 
 
 def get_file_upload_obstacles(files):
-    illegal_types = get_illegal_file_types([f.name for _, f in files.items()])
+    illegal_types = get_illegal_file_types([f.name for _, f in filter(lambda x: hasattr(x[1], "name"), files.items())])
     virus_scan_errors = clam_av_scan([("FILES", v) for _, v in files.items()])["errors"]
     return illegal_types, virus_scan_errors

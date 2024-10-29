@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import permissions, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
@@ -14,6 +14,8 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
 from traffic_control.permissions import ObjectInsideOperationalAreaOrAnonReadOnly
 from traffic_control.schema import geo_format_parameter
+from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
+from traffic_control.utils import get_file_upload_obstacles
 
 __all__ = ("prefetch_replacements", "FileUploadViews", "TrafficControlViewSet", "OperationViewSet")
 
@@ -121,6 +123,13 @@ class FileUploadViews(GenericViewSet):
         files = []
 
         # Validate request data
+        illegal_file_types, virus_scan_errors = get_file_upload_obstacles(request.data)
+        if illegal_file_types:
+            raise ValidationError(f"Illegal file types: {illegal_file_types}")
+        if virus_scan_errors:
+            add_virus_scan_errors_to_auditlog(virus_scan_errors, request.user, type(obj), object_id=None)
+            raise ValidationError(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}")
+
         for _filename, file in request.data.items():
             serializer = serializer_class(data={self.get_file_relation(): obj.id, "file": file})
             serializer.is_valid(raise_exception=True)
@@ -156,6 +165,13 @@ class FileUploadViews(GenericViewSet):
 
         if request.method == "PATCH":
             instance = self.file_queryset.get(id=file_pk)
+            illegal_file_types, virus_scan_errors = get_file_upload_obstacles(request.data)
+            if illegal_file_types:
+                raise ValidationError(f"Illegal file types: {illegal_file_types}")
+            if virus_scan_errors:
+                add_virus_scan_errors_to_auditlog(virus_scan_errors, request.user, type(instance), object_id=None)
+                raise ValidationError(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}")
+
             serializer_class = self.get_file_serializer()
             serializer = serializer_class(instance=instance, data=request.data, partial=True)
 

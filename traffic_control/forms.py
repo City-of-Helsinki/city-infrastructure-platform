@@ -25,7 +25,7 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog
+from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
 from traffic_control.utils import get_file_upload_obstacles
 from traffic_control.validators import validate_structured_content
 
@@ -287,9 +287,5 @@ class CityInfraFileUploadFormset(BaseInlineFormSet):
                 raise ValidationError(f"Illegal file types: {illegal_file_types}")
             if virus_scan_errors:
                 add_virus_scan_errors_to_auditlog(virus_scan_errors, None, self.model, None)
-                raise ValidationError(f"Virus scan failure: {self._get_error_details_message(virus_scan_errors)}")
+                raise ValidationError(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}")
         super().clean()
-
-    @staticmethod
-    def _get_error_details_message(errors):
-        return ", ".join(map(lambda x: x["detail"], errors))

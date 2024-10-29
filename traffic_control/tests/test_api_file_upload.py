@@ -4,6 +4,7 @@ import tempfile
 import uuid
 
 import pytest
+import requests_mock
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
@@ -40,6 +41,7 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
+from traffic_control.services.virus_scan import get_clam_av_scan_url
 from traffic_control.tests.factories import (
     get_additional_sign_plan,
     get_additional_sign_real,
@@ -141,6 +143,32 @@ DELETE_TEST_PARAMS = (
     ),
 )
 
+FILE_UPLOAD_PARAMS = (
+    (get_additional_sign_plan, AdditionalSignPlan, "additionalsignplan"),
+    (get_additional_sign_real, AdditionalSignReal, "additionalsignreal"),
+    (get_barrier_plan, BarrierPlan, "barrierplan"),
+    (get_barrier_real, BarrierReal, "barrierreal"),
+    (get_mount_plan, MountPlan, "mountplan"),
+    (get_mount_real, MountReal, "mountreal"),
+    (get_road_marking_plan, RoadMarkingPlan, "roadmarkingplan"),
+    (get_road_marking_real, RoadMarkingReal, "roadmarkingreal"),
+    (get_signpost_plan, SignpostPlan, "signpostplan"),
+    (get_signpost_real, SignpostReal, "signpostreal"),
+    (get_traffic_light_plan, TrafficLightPlan, "trafficlightplan"),
+    (get_traffic_light_real, TrafficLightReal, "trafficlightreal"),
+    (get_traffic_sign_plan, TrafficSignPlan, "trafficsignplan"),
+    (get_traffic_sign_real, TrafficSignReal, "trafficsignreal"),
+)
+
+
+DUMMY_OK_CLAMAV_RESPONSE = {"data": {"result": [{"is_infected": False, "name": "Ok", "viruses": []}]}}
+
+
+@pytest.fixture
+def mock_api():
+    with requests_mock.Mocker() as m:
+        yield m
+
 
 def setup_module():
     settings_overrides.enable()
@@ -152,35 +180,18 @@ def teardown_module():
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "factory,model_class,url_name",
-    (
-        (get_additional_sign_plan, AdditionalSignPlan, "additionalsignplan"),
-        (get_additional_sign_real, AdditionalSignReal, "additionalsignreal"),
-        (get_barrier_plan, BarrierPlan, "barrierplan"),
-        (get_barrier_real, BarrierReal, "barrierreal"),
-        (get_mount_plan, MountPlan, "mountplan"),
-        (get_mount_real, MountReal, "mountreal"),
-        (get_road_marking_plan, RoadMarkingPlan, "roadmarkingplan"),
-        (get_road_marking_real, RoadMarkingReal, "roadmarkingreal"),
-        (get_signpost_plan, SignpostPlan, "signpostplan"),
-        (get_signpost_real, SignpostReal, "signpostreal"),
-        (get_traffic_light_plan, TrafficLightPlan, "trafficlightplan"),
-        (get_traffic_light_real, TrafficLightReal, "trafficlightreal"),
-        (get_traffic_sign_plan, TrafficSignPlan, "trafficsignplan"),
-        (get_traffic_sign_real, TrafficSignReal, "trafficsignreal"),
-    ),
-)
-def test_file_upload(factory, model_class, url_name):
+@pytest.mark.parametrize("factory,model_class,url_name", FILE_UPLOAD_PARAMS)
+def test_file_upload(factory, model_class, url_name, mock_api):
     user = get_user("test_superuser", admin=True)
     api_client = get_api_client(user)
     obj = factory()
 
+    mock_api.post(get_clam_av_scan_url("v1"), status_code=200, json=DUMMY_OK_CLAMAV_RESPONSE)
     post_response = api_client.post(
         reverse(f"v1:{url_name}-post-files", kwargs={"pk": obj.pk}),
         data={
-            "file1": io.BytesIO(b"File 1 contents"),
-            "file2": io.BytesIO(b"File 2 contents"),
+            "file1.txt": io.BytesIO(b"File 1 contents"),
+            "file2.txt": io.BytesIO(b"File 2 contents"),
         },
         format="multipart",
     )
@@ -189,37 +200,73 @@ def test_file_upload(factory, model_class, url_name):
     assert post_response.status_code == status.HTTP_200_OK
     assert model_class.objects.count() == 1
     assert obj.files.count() == 2
-    with open(obj.files.get(file__endswith="file1").file.path, "r") as f:
+    with open(obj.files.get(file__endswith="file1.txt").file.path, "r") as f:
         assert f.read() == "File 1 contents"
-    with open(obj.files.get(file__endswith="file2").file.path, "r") as f:
+    with open(obj.files.get(file__endswith="file2.txt").file.path, "r") as f:
         assert f.read() == "File 2 contents"
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "factory,model_class,url_name",
-    (
-        (get_additional_sign_plan, AdditionalSignPlan, "additionalsignplan"),
-        (get_additional_sign_real, AdditionalSignReal, "additionalsignreal"),
-        (get_barrier_plan, BarrierPlan, "barrierplan"),
-        (get_barrier_real, BarrierReal, "barrierreal"),
-        (get_mount_plan, MountPlan, "mountplan"),
-        (get_mount_real, MountReal, "mountreal"),
-        (get_road_marking_plan, RoadMarkingPlan, "roadmarkingplan"),
-        (get_road_marking_real, RoadMarkingReal, "roadmarkingreal"),
-        (get_signpost_plan, SignpostPlan, "signpostplan"),
-        (get_signpost_real, SignpostReal, "signpostreal"),
-        (get_traffic_light_plan, TrafficLightPlan, "trafficlightplan"),
-        (get_traffic_light_real, TrafficLightReal, "trafficlightreal"),
-        (get_traffic_sign_plan, TrafficSignPlan, "trafficsignplan"),
-        (get_traffic_sign_real, TrafficSignReal, "trafficsignreal"),
-    ),
-)
-def test_invalid_file_upload(factory, model_class, url_name):
+@pytest.mark.parametrize("factory,model_class,url_name", FILE_UPLOAD_PARAMS)
+def test_file_upload_illegal_type(factory, model_class, url_name, mock_api):
     user = get_user("test_superuser", admin=True)
     api_client = get_api_client(user)
     obj = factory()
 
+    mock_api.post(get_clam_av_scan_url("v1"), status_code=200, json=DUMMY_OK_CLAMAV_RESPONSE)
+    post_response = api_client.post(
+        reverse(f"v1:{url_name}-post-files", kwargs={"pk": obj.pk}),
+        data={
+            "file1.illegal": io.BytesIO(b"File 1 contents"),
+            "file2.illegal2": io.BytesIO(b"File 2 contents"),
+        },
+        format="multipart",
+    )
+
+    obj.refresh_from_db()
+    assert post_response.status_code == status.HTTP_400_BAD_REQUEST
+    assert model_class.objects.count() == 1
+    assert obj.files.count() == 0
+    assert "illegal" in post_response.json()[0]
+    assert "illegal2" in post_response.json()[0]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("factory,model_class,url_name", FILE_UPLOAD_PARAMS)
+def test_file_upload_with_virus(factory, model_class, url_name, mock_api):
+    user = get_user("test_superuser", admin=True)
+    api_client = get_api_client(user)
+    obj = factory()
+
+    mock_api.post(
+        get_clam_av_scan_url("v1"),
+        status_code=200,
+        json={"data": {"result": [{"is_infected": True, "name": "file1.txt", "viruses": ["koli"]}]}},
+    )
+    post_response = api_client.post(
+        reverse(f"v1:{url_name}-post-files", kwargs={"pk": obj.pk}),
+        data={
+            # File content does not matter as clamav request is mocked
+            "file1.txt": io.BytesIO(b"Does not matter"),
+        },
+        format="multipart",
+    )
+
+    obj.refresh_from_db()
+    assert post_response.status_code == status.HTTP_400_BAD_REQUEST
+    assert model_class.objects.count() == 1
+    assert obj.files.count() == 0
+    assert post_response.json()[0] == "Virus scan failure: file1.txt is infected"
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("factory,model_class,url_name", FILE_UPLOAD_PARAMS)
+def test_invalid_file_upload(factory, model_class, url_name, mock_api):
+    user = get_user("test_superuser", admin=True)
+    api_client = get_api_client(user)
+    obj = factory()
+
+    mock_api.post(get_clam_av_scan_url("v1"), status_code=200, json=DUMMY_OK_CLAMAV_RESPONSE)
     post_response = api_client.post(
         reverse(f"v1:{url_name}-post-files", kwargs={"pk": obj.pk}),
         data={"file1": io.BytesIO(b"File contents"), "file2": "This is not a file"},
@@ -312,7 +359,7 @@ def test_invalid_file_upload(factory, model_class, url_name):
         ),
     ),
 )
-def test_file_rewrite(factory, model_class, file_model_class, related_name, url_name):
+def test_file_rewrite(factory, model_class, file_model_class, related_name, url_name, mock_api):
     user = get_user("test_superuser", admin=True)
     api_client = get_api_client(user)
     obj = factory()
@@ -323,12 +370,13 @@ def test_file_rewrite(factory, model_class, file_model_class, related_name, url_
         },
     )
 
+    mock_api.post(get_clam_av_scan_url("v1"), status_code=200, json=DUMMY_OK_CLAMAV_RESPONSE)
     patch_response = api_client.patch(
         reverse(
             f"v1:{url_name}-change-file",
             kwargs={"pk": obj.id, "file_pk": file_obj.id},
         ),
-        data={"file": io.BytesIO(b"Rewritten file contents")},
+        data={"file": SimpleUploadedFile("rewritten.csv", b"Rewritten file contents")},
         format="multipart",
     )
 
