@@ -54,5 +54,8 @@ def _get_errors_from_response_json(json_response) -> List[VirusScanError]:
     for result_d in json_response["data"]["result"]:
         if result_d["is_infected"]:
             errors.append(VirusScanError(detail=f"{result_d['name']} is infected", viruses=result_d["viruses"]))
-
     return errors
+
+
+def get_error_details_message(errors):
+    return ", ".join(map(lambda x: x["detail"], errors))
