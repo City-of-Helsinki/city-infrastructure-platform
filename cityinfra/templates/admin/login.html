@@ -1,0 +1,24 @@
+{% extends "admin/login.html" %}
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+    #privacy-policies {
+        text-align: center;
+        margin-top: 15rem;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    {{ block.super }}
+    <div id="privacy-policies">
+        <div id="finnish-pp">
+            <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Helsingin%20kaupungin%20liikenne-%20ja%20katusuunnittelun%20ja%20liikenteenohjauslaitteiden%20tietosuojaseloste.pdf"
+               target="noopener">Tietosuojaseloste</a>
+        </div>
+    </br />
+    <div id="swedish-pp">
+        <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Dataskyddsbeskrivning%20av%20Helsingfors%20stads%20trafik-%20och%20gatuplanering%20och%20trafikanordningar.pdf"
+           target="noopener">Dataskyddsbeskrivning</a>
+    </div>
+</div>
+{% endblock %}
