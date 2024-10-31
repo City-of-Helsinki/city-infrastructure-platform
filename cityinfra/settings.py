@@ -171,6 +171,7 @@ THIRD_PARTY_APPS = [
     "gisserver",
     "mptt",
     "django_advanced_password_validation",
+    "axes",
 ]
 LOCAL_APPS = [
     "users.apps.UsersConfig",
@@ -182,6 +183,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
 AUTHENTICATION_BACKENDS = (
+    "axes.backends.AxesBackend",
     "helusers.tunnistamo_oidc.TunnistamoOIDCAuth",
     "django.contrib.auth.backends.ModelBackend",
 )
@@ -204,6 +206,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "drf_custom_auth.middleware.DRFCustomAuthMiddleware",
     "auditlog_custom.middleware.AuditlogMiddleware",
+    "axes.middleware.AxesMiddleware",
 ]
 
 ROOT_URLCONF = "cityinfra.urls"
@@ -395,6 +398,11 @@ ALLOWED_FILE_UPLOAD_TYPES = [
     ".dgn",
     ".csv",
 ]
+
+# django-axes settings for login failure limitation
+AXES_FAILURE_LIMIT = 6
+AXES_COOLOFF_TIME = 0.5
+AXES_RESET_ON_SUCCESS = True
 
 DEBUG_TOOLBAR = False
 if DEBUG:

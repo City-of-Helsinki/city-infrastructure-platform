@@ -7,6 +7,7 @@ from rest_framework.test import APITestCase
 
 from traffic_control.models import PortalType
 from traffic_control.tests.factories import get_api_client, get_portal_type
+from traffic_control.tests.utils import DummyRequestForAxes
 from users.models import User
 
 
@@ -16,7 +17,7 @@ class PortalTypeTests(APITestCase):
             username="testadmin", password="testpw", email="testadmin@hel.fi"
         )
         self.user = User.objects.create_user(username="testuser", password="testpw")
-        self.client.login(username="testadmin", password="testpw")
+        self.client.login(request=DummyRequestForAxes, username="testadmin", password="testpw")
 
     def test__list__as_user__ok(self):
         """

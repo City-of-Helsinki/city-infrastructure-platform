@@ -4,6 +4,7 @@ from rest_framework.test import APITestCase
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import MountType, Owner, TrafficControlDeviceType
+from traffic_control.tests.utils import DummyRequestForAxes
 from users.models import User
 
 test_point_3d = Point(10.0, 10.0, 0.0, srid=settings.SRID)
@@ -71,7 +72,7 @@ line_location_error_test_data_3d = [
 class TrafficControlAPIBaseTestCase3D(APITestCase):
     def setUp(self):
         self.user = User.objects.create_superuser(username="testuser", password="testpw", email="testuser@example.com")
-        self.client.login(username="testuser", password="testpw")
+        self.client.login(request=DummyRequestForAxes, username="testuser", password="testpw")
         self.test_lifecycle = Lifecycle.ACTIVE
         self.test_lifecycle_2 = Lifecycle.INACTIVE
         self.test_device_type = TrafficControlDeviceType.objects.create(code="A11", description="Speed limit")
