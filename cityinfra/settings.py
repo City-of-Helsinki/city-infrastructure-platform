@@ -70,7 +70,7 @@ env = environ.Env(
     SESSION_COOKIE_SECURE=(bool, True),
     CSRF_COOKIE_HTTPONLY=(bool, True),
     CSRF_COOKIE_SAMESITE=(str, "Strict"),
-    SESSION_COOKIE_SAMESITE=(str, "Strict"),
+    SESSION_COOKIE_SAMESITE=(str, "Lax"),
 )
 
 if os.path.exists(env_file):
