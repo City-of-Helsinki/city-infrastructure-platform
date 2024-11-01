@@ -23,23 +23,23 @@
 {% endblock %}
 
 {% block userlinks %}
-    {% get_current_language as LANG %}
-    {% if LANG == "sv" %}
-        <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Dataskyddsbeskrivning%20av%20Helsingfors%20stads%20trafik-%20och%20gatuplanering%20och%20trafikanordningar.pdf"
-           target="noopener">Dataskyddsbeskrivning</a> /
-    {% elif LANG == "en" %}
-        <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Helsingin%20kaupungin%20liikenne-%20ja%20katusuunnittelun%20ja%20liikenteenohjauslaitteiden%20tietosuojaseloste.pdf"
-           target="noopener">Data Protection notice (in finnish)</a> /
-    {% else %}
-        <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Helsingin%20kaupungin%20liikenne-%20ja%20katusuunnittelun%20ja%20liikenteenohjauslaitteiden%20tietosuojaseloste.pdf"
-           target="noopener">Tietosuojaseloste</a> /
-    {% endif %}
     <a href="{% url "map-view" %}">{% trans "View map" %}</a> /
     <a href="{% url "django-admindocs-docroot" %}">{% trans "Documentation" %}</a> /
     <a href="{% url "v1:api-root" %}">{% trans "View API" %}</a> /
     <a href="{% url "schema-swagger-ui" %}">{% trans "View API documentation" %}</a> /
     <a href="{% url "my-account" %}">{% trans "My account" %}</a> /
     <a href="{% url "admin:logout" %}">{% trans "Log out" %}</a> /
+    {% get_current_language as LANG %}
+    {% if LANG == "sv" %}
+        <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Dataskyddsbeskrivning%20av%20Helsingfors%20stads%20trafik-%20och%20gatuplanering%20och%20trafikanordningar.pdf"
+           target="noopener">Dataskyddsbeskrivning</a> /
+    {% elif LANG == "en" %}
+        <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Helsingin%20kaupungin%20liikenne-%20ja%20katusuunnittelun%20ja%20liikenteenohjauslaitteiden%20tietosuojaseloste.pdf"
+           target="noopener">Data Protection Notice (in Finnish)</a> /
+    {% else %}
+        <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Helsingin%20kaupungin%20liikenne-%20ja%20katusuunnittelun%20ja%20liikenteenohjauslaitteiden%20tietosuojaseloste.pdf"
+           target="noopener">Tietosuojaseloste</a> /
+    {% endif %}
 
     <form class="language-select-form"
           id="languageSelectForm"
