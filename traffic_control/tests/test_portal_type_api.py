@@ -17,7 +17,7 @@ class PortalTypeTests(APITestCase):
             username="testadmin", password="testpw", email="testadmin@hel.fi"
         )
         self.user = User.objects.create_user(username="testuser", password="testpw")
-        self.client.login(request=DummyRequestForAxes, username="testadmin", password="testpw")
+        self.client.login(request=DummyRequestForAxes(), username="testadmin", password="testpw")
 
     def test__list__as_user__ok(self):
         """
