@@ -12,8 +12,8 @@ from traffic_control import models
 from traffic_control.enums import Lifecycle
 from traffic_control.models import BarrierPlan
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -32,6 +32,7 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    TrafficSignRealFactory,
 )
 
 test_point_inside_area = Point(20.0, 20.0, 0.0, srid=settings.SRID)
@@ -67,7 +68,7 @@ test_multipolygon_outside_area = MultiPolygon(
 
 model_factory_map = {
     "AdditionalSignPlan": get_additional_sign_plan,
-    "AdditionalSignReal": get_additional_sign_real,
+    "AdditionalSignReal": AdditionalSignRealFactory,
     "BarrierPlan": get_barrier_plan,
     "BarrierReal": get_barrier_real,
     "MountPlan": get_mount_plan,
@@ -173,6 +174,8 @@ def test__api_operational_area_permission__create(model, location, success):
         elif model in ["RoadMarkingPlan", "RoadMarkingReal"]:
             data["source_id"] = 1
             data["source_name"] = "test source"
+        elif model == "AdditionalSignReal":
+            data["parent"] = TrafficSignRealFactory().pk
 
     api_client = get_api_client(user=user)
     response = api_client.post(reverse(f"v1:{model.lower()}-list"), data=data, format="json")
@@ -301,6 +304,8 @@ def test__api_operational_area_permission__update(model, location, success):
         elif model in ["RoadMarkingPlan", "RoadMarkingReal"]:
             data["source_id"] = 1
             data["source_name"] = "test source"
+        elif model == "AdditionalSignReal":
+            data["parent"] = TrafficSignRealFactory().pk
 
     api_client = get_api_client(user=user)
     response = api_client.put(
@@ -365,6 +370,9 @@ def test__api_operational_area_permission__partial_update(model, location, succe
     data = {
         "location": location.ewkt,
     }
+    if model == "AdditionalSignReal":
+        data["parent"] = TrafficSignRealFactory().pk
+
     api_client = get_api_client(user=user)
     response = api_client.patch(
         reverse(f"v1:{model.lower()}-detail", kwargs={"pk": instance.pk}),

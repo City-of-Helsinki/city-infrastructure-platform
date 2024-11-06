@@ -15562,7 +15562,6 @@ components:
         parent:
           type: string
           format: uuid
-          nullable: true
           title: Parent Traffic Sign Real
           description: The traffic sign to which this additional sign is associated.
         additional_sign_plan:
@@ -15587,6 +15586,7 @@ components:
       - location
       - operations
       - owner
+      - parent
       - plan_decision_id
       - updated_at
       - updated_by
@@ -15981,7 +15981,6 @@ components:
         parent:
           type: string
           format: uuid
-          nullable: true
           title: Parent Traffic Sign Real
           description: The traffic sign to which this additional sign is associated.
         additional_sign_plan:
@@ -16002,6 +16001,7 @@ components:
       required:
       - location
       - owner
+      - parent
     BarrierPlanFile:
       type: object
       properties:
@@ -21680,7 +21680,6 @@ components:
         parent:
           type: string
           format: uuid
-          nullable: true
           title: Parent Traffic Sign Real
           description: The traffic sign to which this additional sign is associated.
         additional_sign_plan:

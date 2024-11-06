@@ -816,7 +816,7 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
     permit_decision_id = factory.sequence(lambda n: f"permit_decision{n}")
     operation = None
     scanned_at = None
-    attachment_url = factory.sequence(lambda n: f"attachment_url{n}")
+    attachment_url = factory.sequence(lambda n: f"https://attachment{n}.url")
     coverage_area = None
 
 

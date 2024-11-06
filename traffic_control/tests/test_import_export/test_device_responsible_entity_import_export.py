@@ -37,8 +37,8 @@ from traffic_control.resources import (
     TrafficSignRealResource,
 )
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_barrier_plan,
     get_barrier_real,
     get_mount_plan,
@@ -60,7 +60,7 @@ _models_resources_factories = (
     (FurnitureSignpostPlan, FurnitureSignpostPlanResource, get_furniture_signpost_plan),
     (FurnitureSignpostReal, FurnitureSignpostRealResource, get_furniture_signpost_real),
     (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-    (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+    (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     (BarrierPlan, BarrierPlanResource, get_barrier_plan),
     (BarrierReal, BarrierRealResource, get_barrier_real),
     (MountPlan, MountPlanResource, get_mount_plan),

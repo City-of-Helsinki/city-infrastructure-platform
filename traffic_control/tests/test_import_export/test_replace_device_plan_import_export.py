@@ -19,8 +19,8 @@ from traffic_control.resources import (
     TrafficSignPlanResource,
 )
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_barrier_plan,
     get_barrier_real,
     get_mount_plan,
@@ -59,7 +59,7 @@ plan_model_plan_factory_plan_relation_name_real_factory_resource = (
         AdditionalSignPlan,
         get_additional_sign_plan,
         "additional_sign_plan",
-        get_additional_sign_real,
+        AdditionalSignRealFactory,
         AdditionalSignPlanResource,
     ),
     (

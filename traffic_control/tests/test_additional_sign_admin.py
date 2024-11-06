@@ -8,11 +8,13 @@ from django.urls import reverse
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_owner,
     get_traffic_control_device_type,
     get_user,
+    TrafficControlDeviceTypeFactory,
+    TrafficSignRealFactory,
 )
 from traffic_control.tests.models.test_traffic_control_device_type import content_valid_by_simple_schema, simple_schema
 from traffic_control.tests.test_base_api import test_point
@@ -31,21 +33,20 @@ def teardown_module():
 
 
 @pytest.mark.parametrize(
-    ("model", "url_name"),
+    ("model", "url_name", "parent_factory"),
     (
-        (AdditionalSignPlan, "additionalsignplan"),
-        (AdditionalSignReal, "additionalsignreal"),
+        (AdditionalSignPlan, "additionalsignplan", None),
+        (AdditionalSignReal, "additionalsignreal", TrafficSignRealFactory),
     ),
     ids=("plan", "real"),
 )
 @pytest.mark.django_db
-def test__additional_sign__create_missing_content(client: Client, model, url_name):
+def test__additional_sign__create_missing_content(client: Client, model, url_name, parent_factory):
     client.force_login(get_user(admin=True))
     device_type = get_traffic_control_device_type(
         content_schema=simple_schema,
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
     )
-
     assert model.objects.count() == 0
 
     data = {
@@ -67,6 +68,8 @@ def test__additional_sign__create_missing_content(client: Client, model, url_nam
         "files-TOTAL_FORMS": 0,
         "files-INITIAL_FORMS": 0,
     }
+    if parent_factory:
+        data.update({"parent": parent_factory().id})
     response = client.post(reverse(f"admin:traffic_control_{url_name}_add"), data=data)
 
     assert response.status_code == HTTPStatus.FOUND
@@ -77,18 +80,24 @@ def test__additional_sign__create_missing_content(client: Client, model, url_nam
 
 
 @pytest.mark.parametrize(
-    ("model", "factory", "url_name"),
+    ("model", "factory", "url_name", "parent_factory"),
     (
-        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan"),
-        (AdditionalSignReal, get_additional_sign_real, "additionalsignreal"),
+        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan", None),
+        (AdditionalSignReal, AdditionalSignRealFactory, "additionalsignreal", TrafficSignRealFactory),
     ),
     ids=("plan", "real"),
 )
 @pytest.mark.django_db
-def test__additional_sign__update_device_with_content_to_missing_content(client: Client, model, factory, url_name):
+def test__additional_sign__update_device_with_content_to_missing_content(
+    client: Client,
+    model,
+    factory,
+    url_name,
+    parent_factory,
+):
     client.force_login(get_user(admin=True))
-    device_type = get_traffic_control_device_type(content_schema=simple_schema)
-    device = factory(device_type=device_type, content_s=content_valid_by_simple_schema)
+    device_type = TrafficControlDeviceTypeFactory(content_schema=simple_schema)
+    device = factory(device_type=device_type, content_s=content_valid_by_simple_schema, missing_content=False)
 
     assert model.objects.count() == 1
     assert model.objects.get(id=device.id).missing_content is False
@@ -114,6 +123,8 @@ def test__additional_sign__update_device_with_content_to_missing_content(client:
         "files-TOTAL_FORMS": 0,
         "files-INITIAL_FORMS": 0,
     }
+    if parent_factory:
+        data.update({"parent": parent_factory().id})
     response = client.post(
         reverse(f"admin:traffic_control_{url_name}_change", kwargs={"object_id": device.id}),
         data=data,
@@ -127,15 +138,21 @@ def test__additional_sign__update_device_with_content_to_missing_content(client:
 
 
 @pytest.mark.parametrize(
-    ("model", "factory", "url_name"),
+    ("model", "factory", "url_name", "parent_factory"),
     (
-        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan"),
-        (AdditionalSignReal, get_additional_sign_real, "additionalsignreal"),
+        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan", None),
+        (AdditionalSignReal, AdditionalSignRealFactory, "additionalsignreal", TrafficSignRealFactory),
     ),
     ids=("plan", "real"),
 )
 @pytest.mark.django_db
-def test__additional_sign__update_device_with_missing_content_to_have_content(client: Client, model, factory, url_name):
+def test__additional_sign__update_device_with_missing_content_to_have_content(
+    client: Client,
+    model,
+    factory,
+    url_name,
+    parent_factory,
+):
     client.force_login(get_user(admin=True))
     device_type = get_traffic_control_device_type(content_schema=simple_schema)
     device = factory(device_type=device_type, missing_content=True)
@@ -164,6 +181,8 @@ def test__additional_sign__update_device_with_missing_content_to_have_content(cl
         "files-TOTAL_FORMS": 0,
         "files-INITIAL_FORMS": 0,
     }
+    if parent_factory:
+        data.update({"parent": parent_factory().id})
     response = client.post(
         reverse(f"admin:traffic_control_{url_name}_change", kwargs={"object_id": device.id}),
         data=data,
@@ -204,20 +223,24 @@ def test__additional_sign__create_dont_accept_content_when_missing_content_is_en
 
 
 @pytest.mark.parametrize(
-    ("model", "factory", "url_name"),
+    ("model", "factory", "url_name", "parent_factory"),
     (
-        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan"),
-        (AdditionalSignReal, get_additional_sign_real, "additionalsignreal"),
+        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan", None),
+        (AdditionalSignReal, AdditionalSignRealFactory, "additionalsignreal", TrafficSignRealFactory),
     ),
     ids=("plan", "real"),
 )
 @pytest.mark.django_db
 def test__additional_sign__update_dont_accept_content_when_missing_content_is_enabled(
-    client: Client, model, factory, url_name
+    client: Client,
+    model,
+    factory,
+    url_name,
+    parent_factory,
 ):
     client.force_login(get_user(admin=True))
     device_type = get_traffic_control_device_type(content_schema=simple_schema)
-    device = factory(device_type=device_type, content_s=content_valid_by_simple_schema)
+    device = factory(device_type=device_type, content_s=content_valid_by_simple_schema, missing_content=False)
 
     data = {
         "missing_content": True,
@@ -232,6 +255,8 @@ def test__additional_sign__update_dont_accept_content_when_missing_content_is_en
         "operations-TOTAL_FORMS": 0,
         "operations-INITIAL_FORMS": 0,
     }
+    if parent_factory:
+        data.update({"parent": parent_factory().id})
     response = client.post(
         reverse(f"admin:traffic_control_{url_name}_change", kwargs={"object_id": device.id}),
         data=data,

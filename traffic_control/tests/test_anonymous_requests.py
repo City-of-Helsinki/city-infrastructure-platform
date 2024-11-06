@@ -5,8 +5,8 @@ from django.urls import reverse
 
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -51,7 +51,7 @@ def assert_no_user_ids(object: dict):
     "endpoint_name,device_factory",
     (
         ("v1:additionalsignplan", get_additional_sign_plan),
-        ("v1:additionalsignreal", get_additional_sign_real),
+        ("v1:additionalsignreal", AdditionalSignRealFactory),
         ("v1:barrierplan", get_barrier_plan),
         ("v1:barrierreal", get_barrier_real),
         ("v1:mountplan", get_mount_plan),
@@ -89,7 +89,7 @@ def test__hide_user_info_from_anonymous_request_single(
     "endpoint_name,device_factory",
     (
         ("v1:additionalsignplan", get_additional_sign_plan),
-        ("v1:additionalsignreal", get_additional_sign_real),
+        ("v1:additionalsignreal", AdditionalSignRealFactory),
         ("v1:barrierplan", get_barrier_plan),
         ("v1:barrierreal", get_barrier_real),
         ("v1:mountplan", get_mount_plan),
