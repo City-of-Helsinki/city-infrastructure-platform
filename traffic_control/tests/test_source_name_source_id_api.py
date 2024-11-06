@@ -21,11 +21,20 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.tests.factories import get_api_client, get_owner, get_user
+from traffic_control.tests.factories import get_api_client, get_owner, get_user, TrafficSignRealFactory
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
 def get_data_create_additional_sign():
+    parent = TrafficSignRealFactory()
+    return {
+        "location": test_point_3d.ewkt,
+        "owner": str(get_owner().id),
+        "parent": parent.id,
+    }
+
+
+def get_data_create_additional_sign_plan():
     return {
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
@@ -93,7 +102,7 @@ def get_data_create_furniture_signpost():
 @pytest.mark.parametrize(
     "model, url_name, data_factory",
     (
-        (AdditionalSignPlan, "additionalsignplan", get_data_create_additional_sign),
+        (AdditionalSignPlan, "additionalsignplan", get_data_create_additional_sign_plan),
         (AdditionalSignReal, "additionalsignreal", get_data_create_additional_sign),
         (BarrierPlan, "barrierplan", get_data_create_barrier),
         (BarrierReal, "barrierreal", get_data_create_barrier),

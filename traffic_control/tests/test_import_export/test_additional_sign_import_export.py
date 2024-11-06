@@ -9,14 +9,15 @@ from traffic_control.resources.additional_sign import (
     AdditionalSignRealResource,
 )
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_mount_plan,
     get_mount_real,
     get_owner,
     get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_traffic_sign_real,
+    TrafficSignRealFactory,
 )
 from traffic_control.tests.test_base_api import test_point
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
@@ -24,7 +25,7 @@ from traffic_control.tests.test_import_export.utils import file_formats, get_imp
 
 @pytest.mark.django_db
 def test__additional_sign_real__export():
-    obj = get_additional_sign_real()
+    obj = AdditionalSignRealFactory()
     dataset = AdditionalSignRealResource().export()
 
     assert dataset.dict[0]["location"] == str(obj.location)
@@ -36,13 +37,13 @@ def test__additional_sign_real__export():
     "resource, model, factory",
     (
         (AdditionalSignPlanResource, AdditionalSignPlan, get_additional_sign_plan),
-        (AdditionalSignRealResource, AdditionalSignReal, get_additional_sign_real),
+        (AdditionalSignRealResource, AdditionalSignReal, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign_real__import(resource, model, factory, format):
-    id = factory().id
+    fid = factory().id
     dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
     model.objects.all().delete()
 
@@ -52,7 +53,7 @@ def test__additional_sign_real__import(resource, model, factory, format):
     assert not result.has_errors()
     assert result.totals["new"] == 1
     assert model.objects.all().count() == 1
-    assert model.objects.all().first().id != id
+    assert model.objects.all().first().id != fid
 
 
 schema_1 = {
@@ -147,7 +148,7 @@ content_2 = {
     "resource, factory",
     (
         (AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.django_db
@@ -211,7 +212,7 @@ def test__additional_sign__export_with_content(resource, factory):
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize("format", file_formats)
@@ -235,13 +236,16 @@ def test__additional_sign__import__create_with_content(model, resource, factory,
     factory(
         device_type=dt_with_schema_1,
         content_s=content_1,
+        missing_content=False,
     )
     factory(
         device_type=dt_with_schema_2,
         content_s=content_2,
+        missing_content=False,
     )
     factory(
         device_type=dt_no_schema,
+        missing_content=True,
     )
 
     dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
@@ -267,7 +271,7 @@ def test__additional_sign__import__create_with_content(model, resource, factory,
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
     ids=("plan", "real"),
 )
@@ -330,7 +334,7 @@ def test__additional_sign__import__create_with_missing_content(model, resource, 
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
     ids=("plan", "real"),
 )
@@ -363,7 +367,7 @@ def test__additional_sign__import__create_fails_with_content_and_missing_content
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize("format", file_formats)
@@ -409,7 +413,7 @@ def test__additional_sign__import__create_with_invalid_content(model, resource, 
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize("format", file_formats)
@@ -444,16 +448,16 @@ def test__additional_sign__import__create_with_invalid_device_type(model, resour
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize(
     "columns",
     (
-        ("location", "owner__name_fi"),
-        ("location", "owner__name_fi", "id"),
-        ("location", "owner__name_fi", "device_type__code"),
-        ("location", "owner__name_fi", "id", "device_type__code"),
+        ("parent__id", "location", "owner__name_fi"),
+        ("parent__id", "location", "owner__name_fi", "id"),
+        ("parent__id", "location", "owner__name_fi", "device_type__code"),
+        ("parent__id", "location", "owner__name_fi", "id", "device_type__code"),
     ),
 )
 @pytest.mark.parametrize("format", file_formats)
@@ -481,7 +485,7 @@ def test__additional_sign__import__create_with_minimal_columns(model, resource, 
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize("has_device_type_column", (True, False))
@@ -497,6 +501,7 @@ def test__additional_sign__import__update_with_content(model, resource, factory,
     additional_sign = factory(
         device_type=dt_with_schema_1,
         content_s=content_1,
+        missing_content=False,
     )
 
     deleted_columns = [] if has_device_type_column else ["device_type__code"]
@@ -519,7 +524,7 @@ def test__additional_sign__import__update_with_content(model, resource, factory,
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
     ids=("plan", "real"),
 )
@@ -564,7 +569,7 @@ def test__additional_sign__import__update_with_missing_content(
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize("format", file_formats)
@@ -586,6 +591,7 @@ def test__additional_sign__import__update_device_type_with_content(model, resour
     additional_sign = factory(
         device_type=dt_with_schema_1,
         content_s=content_1,
+        missing_content=False,
     )
     dataset = get_import_dataset(resource, format=format)
 
@@ -609,7 +615,7 @@ def test__additional_sign__import__update_device_type_with_content(model, resour
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize("has_device_type_column", (True, False))
@@ -628,6 +634,7 @@ def test__additional_sign__import__update_with_invalid_content(
     additional_sign = factory(
         device_type=dt_with_schema_1,
         content_s={"invalid_prop": "invalid_val"},
+        missing_content=False,
     )
     deleted_columns = [] if has_device_type_column else ["device_type__code"]
     dataset = get_import_dataset(resource, format=format, delete_columns=deleted_columns)
@@ -649,7 +656,7 @@ def test__additional_sign__import__update_with_invalid_content(
     "model, resource, factory",
     (
         (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
-        (AdditionalSignReal, AdditionalSignRealResource, get_additional_sign_real),
+        (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.parametrize("format", file_formats)
@@ -671,6 +678,7 @@ def test__additional_sign__import__update_device_type_with_invalid_content(model
     additional_sign = factory(
         device_type=dt_with_schema_2,
         content_s=content_1,
+        missing_content=False,
     )
     dataset = get_import_dataset(resource, format=format)
 
@@ -899,6 +907,9 @@ def test__additional_sign__import__valid_and_invalid_content_properties(schema_p
         "owner__name_fi": str(owner.name_fi),
     }
 
+    if model == AdditionalSignReal:
+        additional_sign_data.update({"parent__id": TrafficSignRealFactory().pk})
+
     expect_valid = True if validity == "valid" else False
 
     for value in schema_property[validity]:
@@ -948,7 +959,7 @@ def test__additional_sign_plan_export_real_import(
     traffic_sign_real = get_traffic_sign_real() if has_traffic_sign_real else None
 
     plan_obj = get_additional_sign_plan(mount_plan=mount_plan, parent=traffic_sign_plan)
-    real_obj = get_additional_sign_real(additional_sign_plan=plan_obj) if real_preexists else None
+    real_obj = AdditionalSignRealFactory(additional_sign_plan=plan_obj) if real_preexists else None
 
     exported_dataset = AdditionalSignPlanToRealTemplateResource().export()
 

@@ -33,6 +33,8 @@ from traffic_control.tests.factories import (
     get_traffic_sign_real,
     get_user,
     PlanFactory,
+    TrafficControlDeviceTypeFactory,
+    TrafficSignRealFactory,
 )
 from traffic_control.tests.models.test_traffic_control_device_type import (
     another_content_valid_by_simple_schema,
@@ -57,7 +59,7 @@ def test__additional_sign_real__list(geo_format, plan_decision_id):
 
     for owner_name in ["foo", "bar", "baz"]:
         ads_plan = AdditionalSignPlanFactory(plan=plan) if plan else None
-        get_additional_sign_real(owner=get_owner(name_fi=owner_name), additional_sign_plan=ads_plan)
+        AdditionalSignRealFactory(owner=get_owner(name_fi=owner_name), additional_sign_plan=ads_plan)
 
     response = client.get(reverse("v1:additionalsignreal-list"), data={"geo_format": geo_format})
     response_data = response.json()
@@ -177,6 +179,7 @@ def test__additional_sign_real__create_with_existing_plan(admin_user):
         "location": str(existing_ads.location),
         "owner": str(get_owner().pk),
         "additional_sign_plan": str(ads_plan.pk),
+        "parent": TrafficSignRealFactory().pk,
     }
 
     response = client.post(reverse("v1:additionalsignreal-list"), data=data)
@@ -302,12 +305,11 @@ def test__additional_sign_real__update_device_type_and_content(
     client = get_api_client(user=get_user(admin=admin_user))
     old_dt = get_traffic_control_device_type(code="A1234", content_schema=old_schema)
     new_dt = get_traffic_control_device_type(code="new_code", content_schema=new_schema)
-    tsp = get_traffic_sign_real()
-    asr = get_additional_sign_real(content_s=old_content, device_type=old_dt)
+    asr = AdditionalSignRealFactory(content_s=old_content, device_type=old_dt, missing_content=False)
 
     data = {
-        "parent": tsp.pk,
-        "location": str(tsp.location),
+        "parent": asr.parent.pk,
+        "location": str(asr.parent.location),
         "owner": get_owner(name_en="New owner").pk,
         "device_type": new_dt.id,
         "content_s": new_content,
@@ -345,9 +347,10 @@ def test__additional_sign_real__partial_update_without_content(admin_user):
     is successful when content is not defined.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    dt = get_traffic_control_device_type(code="A1234")
-    asr = get_additional_sign_real()
-    traffic_sign_real = get_traffic_sign_real(device_type=dt)
+    dt = TrafficControlDeviceTypeFactory(code="A1234")
+    traffic_sign_real = TrafficSignRealFactory(device_type=dt)
+    asr = AdditionalSignRealFactory(missing_content=False, parent=traffic_sign_real)
+
     data = {
         "parent": traffic_sign_real.pk,
         "location": str(traffic_sign_real.location),
@@ -390,8 +393,8 @@ def test__additional_sign_real__partial_update_content(
     structured content when it's valid according to device type's content schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    dt = get_traffic_control_device_type(code="DT1", content_schema=schema)
-    asr = get_additional_sign_real(device_type=dt, content_s=old_content)
+    dt = TrafficControlDeviceTypeFactory(code="DT1", content_schema=schema)
+    asr = AdditionalSignRealFactory(device_type=dt, content_s=old_content, missing_content=False)
     asr_id = str(asr.pk)
     data = {
         "content_s": new_content,
@@ -449,9 +452,9 @@ def test__additional_sign_real__partial_update_device_type_and_content(
     content and device type when content is valid according to device type's content schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    old_dt = get_traffic_control_device_type(code="DT1", content_schema=old_schema)
-    new_dt = get_traffic_control_device_type(code="DT2", content_schema=new_schema)
-    asr = get_additional_sign_real(device_type=old_dt, content_s=old_content)
+    old_dt = TrafficControlDeviceTypeFactory(code="DT1", content_schema=old_schema)
+    new_dt = TrafficControlDeviceTypeFactory(code="DT2", content_schema=new_schema)
+    asr = AdditionalSignRealFactory(device_type=old_dt, content_s=old_content, missing_content=False)
     asr_id = str(asr.pk)
     data = {
         "content_s": new_content,
@@ -554,7 +557,7 @@ def test__additional_sign_real__create_dont_accept_content_when_missing_content_
 def test__additional_sign_real__delete(admin_user):
     user = get_user(admin=admin_user)
     client = get_api_client(user=user)
-    asr = get_additional_sign_real()
+    asr = AdditionalSignRealFactory()
 
     response = client.delete(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}))
 
@@ -576,7 +579,7 @@ def test__additional_sign_real__delete(admin_user):
 def test__additional_sign_real__soft_deleted_get_404_response():
     user = get_user()
     client = get_api_client()
-    asr = get_additional_sign_real()
+    asr = AdditionalSignRealFactory()
     asr.soft_delete(user)
 
     response = client.get(reverse("v1:additionalsignreal-detail", kwargs={"pk": asr.pk}))
@@ -603,7 +606,7 @@ def test__additional_sign_real__anonymous_user(method, expected_status, view_typ
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    asr = get_additional_sign_real(owner=get_owner(name_en="Old owner", name_fi="Vanha omistaja"))
+    asr = AdditionalSignRealFactory(owner=get_owner(name_en="Old owner", name_fi="Vanha omistaja"))
     kwargs = {"pk": asr.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:additionalsignreal-{view_type}", kwargs=kwargs)
     data = {"owner": str(get_owner(name_en="New owner", name_fi="Uusi omistaja").pk)}
@@ -624,7 +627,7 @@ def test__additional_sign_real__anonymous_user(method, expected_status, view_typ
 @pytest.mark.django_db
 def test__additional_sign_real_operation__create(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
-    asr = get_additional_sign_real()
+    asr = AdditionalSignRealFactory()
     operation_type = get_operation_type()
     data = {"operation_date": "2020-01-01", "operation_type_id": operation_type.pk}
     url = reverse("additional-sign-real-operations-list", kwargs={"additional_sign_real_pk": asr.pk})
@@ -642,7 +645,7 @@ def test__additional_sign_real_operation__create(admin_user):
 @pytest.mark.django_db
 def test__additional_sign_real_operation__update(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
-    asr = get_additional_sign_real()
+    asr = AdditionalSignRealFactory()
     operation_type = get_operation_type()
     operation = add_additional_sign_real_operation(
         additional_sign_real=asr, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
@@ -683,7 +686,7 @@ def test__additional_sign_real_operation__anonymous_user(method, expected_status
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    asr = get_additional_sign_real()
+    asr = AdditionalSignRealFactory()
     operation_type = get_operation_type()
     operation = add_additional_sign_real_operation(
         additional_sign_real=asr,

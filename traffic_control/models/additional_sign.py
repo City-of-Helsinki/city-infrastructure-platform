@@ -278,8 +278,8 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         verbose_name=_("Parent Traffic Sign Real"),
         on_delete=models.PROTECT,
         related_name="additional_signs",
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
         help_text=_("The traffic sign to which this additional sign is associated."),
     )
     additional_sign_plan = models.ForeignKey(

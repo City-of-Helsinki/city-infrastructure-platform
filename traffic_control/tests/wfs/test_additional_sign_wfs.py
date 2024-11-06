@@ -1,6 +1,6 @@
 import pytest
 
-from traffic_control.tests.factories import get_additional_sign_plan, get_additional_sign_real
+from traffic_control.tests.factories import AdditionalSignPlanFactory, AdditionalSignRealFactory
 from traffic_control.tests.wfs.wfs_utils import (
     EPSG_3879_URN,
     geojson_crs,
@@ -20,8 +20,8 @@ from traffic_control.tests.wfs.wfs_utils import (
 @pytest.mark.parametrize(
     "model_name, factory",
     (
-        ("additionalsignplan", get_additional_sign_plan),
-        ("additionalsignreal", get_additional_sign_real),
+        ("additionalsignplan", AdditionalSignPlanFactory),
+        ("additionalsignreal", AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.django_db
@@ -44,8 +44,8 @@ def test__wfs_additional_sign__gml(model_name: str, factory):
 @pytest.mark.parametrize(
     "model_name, factory",
     (
-        ("additionalsignplan", get_additional_sign_plan),
-        ("additionalsignreal", get_additional_sign_real),
+        ("additionalsignplan", AdditionalSignPlanFactory),
+        ("additionalsignreal", AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.django_db

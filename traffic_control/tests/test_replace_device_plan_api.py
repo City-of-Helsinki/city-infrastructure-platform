@@ -14,8 +14,8 @@ from traffic_control.models import (
     TrafficSignPlan,
 )
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -48,7 +48,7 @@ model_factory_url_name = (
 plan_factory_url_name_plan_relation_name_real_factory = (
     (get_traffic_sign_plan, "trafficsignplan", "traffic_sign_plan", get_traffic_sign_real),
     (get_mount_plan, "mountplan", "mount_plan", get_mount_real),
-    (get_additional_sign_plan, "additionalsignplan", "additional_sign_plan", get_additional_sign_real),
+    (get_additional_sign_plan, "additionalsignplan", "additional_sign_plan", AdditionalSignRealFactory),
     (get_traffic_light_plan, "trafficlightplan", "traffic_light_plan", get_traffic_light_real),
     (get_signpost_plan, "signpostplan", "signpost_plan", get_signpost_real),
     (get_barrier_plan, "barrierplan", "barrier_plan", get_barrier_real),

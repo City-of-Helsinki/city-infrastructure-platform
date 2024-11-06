@@ -7,8 +7,8 @@ from django.utils.translation import gettext_lazy as _
 
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
     get_additional_sign_plan,
-    get_additional_sign_real,
     get_barrier_plan,
     get_barrier_real,
     get_road_marking_plan,
@@ -76,7 +76,7 @@ invalid_schema = {"type": "asdf"}
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
         (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_plan),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_real),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.django_db
@@ -111,7 +111,7 @@ def test__traffic_control_device_type__target_model__restricts_relations(allowed
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
         (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_plan),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_additional_sign_real),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.django_db
@@ -140,7 +140,7 @@ def test__traffic_control_device_type__target_model__update_is_valid(new_target_
         (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_plan),
         (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_real),
         (DeviceTypeTargetModel.BARRIER, get_additional_sign_plan),
-        (DeviceTypeTargetModel.BARRIER, get_additional_sign_real),
+        (DeviceTypeTargetModel.BARRIER, AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.django_db
@@ -170,7 +170,7 @@ def test__traffic_control_device_type__target_model__validate_multiple_invalid_r
     get_traffic_sign_plan(device_type=device_type)
     get_traffic_sign_real(device_type=device_type)
     get_additional_sign_plan(device_type=device_type)
-    get_additional_sign_real(device_type=device_type)
+    AdditionalSignRealFactory(device_type=device_type)
 
     for target_model in DeviceTypeTargetModel:
         with pytest.raises(ValidationError):
