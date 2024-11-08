@@ -63,6 +63,15 @@ _base_fields = [
         "seasonal_validity_period_end",
         abstract="Ending date for period that the sign is temporarily valid/invalid",
     ),
+    FeatureField(
+        "parent_id",
+        model_attribute="parent.id",
+        abstract="Parent ID of the sign",
+    ),
+    FeatureField(
+        "additional_information",
+        abstract="Additional information about the sign",
+    ),
 ]
 
 AdditionalSignRealFeatureType = FeatureType(
