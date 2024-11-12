@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.contrib.gis import geos
+from django.db import models
 from gisserver import queries
 from gisserver.geometries import BoundingBox
 from gisserver.output import GML32Renderer
+from gisserver.types import XsdElement
 
 # Non-exhausting list of CRSs with axis order of (latitude longitude)
 _YX_CRS = (
@@ -80,3 +82,10 @@ class YXGML32Renderer(GML32Renderer):
                     <gml:lowerCorner>{lower}</gml:lowerCorner>
                     <gml:upperCorner>{upper}</gml:upperCorner>
                 </gml:Envelope></gml:boundedBy>\n"""
+
+
+class EnumNameXsdElement(XsdElement):
+    def get_value(self, instance: models.Model):
+        if not (enum_value := getattr(instance, self.name)):
+            return None
+        return enum_value.name
