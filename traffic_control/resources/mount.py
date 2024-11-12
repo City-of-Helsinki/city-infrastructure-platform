@@ -42,7 +42,7 @@ class AbstractMountResource(ResponsibleEntityPermissionImportMixin, GenericDevic
         column_name="portal_type__id",
         widget=ForeignKeyWidget(PortalType, "id"),
     )
-    base = Field(default="")
+    base = Field(attribute="base", column_name="base", default="")
 
     class Meta(GenericDeviceBaseResource.Meta):
         common_fields = (
