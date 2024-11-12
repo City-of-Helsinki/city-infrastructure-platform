@@ -9,7 +9,7 @@ from gisserver.operations.wfs20 import GetFeature
 from gisserver.output import GeoJsonRenderer
 from gisserver.types import XsdElement
 
-from traffic_control.views.wfs.utils import SwapBoundingBoxMixin, YXGML32Renderer
+from traffic_control.views.wfs.utils import EnumNameXsdElement, SwapBoundingBoxMixin, YXGML32Renderer
 
 DEFAULT_CRS = CRS.from_srid(settings.SRID)
 
@@ -17,6 +17,41 @@ OTHER_CRS = [
     CRS.from_srid(3067),  # ETRS89 / TM35FIN(E,N)
     CRS.from_srid(4326),  # WGS84
     CRS.from_srid(3857),  # WGS84 / Pseudo-Mercator
+]
+
+SOURCE_CONTROLLED_MODEL_FIELDS = [
+    FeatureField("source_name", abstract="Name of the source of this device."),
+    FeatureField("source_id", abstract="ID of this device in the source."),
+]
+
+USER_CONTROLLED_MODEL_FIELDS = [
+    FeatureField("created_at", abstract="Date when this device was created."),
+    FeatureField("created_by", abstract="User who created this device."),
+    FeatureField("updated_at", abstract="Date when this device was last updated."),
+    FeatureField("updated_by", abstract="User who last updated this device."),
+]
+
+OWNED_DEVICE_MODEL_FIELDS = [
+    FeatureField("owner_name_fi", model_attribute="owner.name_fi", abstract="Name of the owner of the device."),
+    FeatureField(
+        "responsible_entity_name",
+        model_attribute="responsible_entity.name",
+        abstract="Name of the responsible of the device.",
+    ),
+    FeatureField("lifecycle", xsd_class=EnumNameXsdElement, abstract="Lifecycle of the device."),
+]
+
+REPLACEABLE_MODEL_FIELDS = [
+    FeatureField(
+        "replaced_by",
+        model_attribute="replacement_to_new.new",
+        abstract="ID of the mount plan which replaces this mount plan",
+    ),
+    FeatureField(
+        "replaces",
+        model_attribute="replacement_to_old.old",
+        abstract="ID of the mount plan which this mount plan replaces",
+    ),
 ]
 
 
