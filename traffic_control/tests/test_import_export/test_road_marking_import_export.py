@@ -3,26 +3,28 @@ import pytest
 from traffic_control.models import RoadMarkingReal
 from traffic_control.resources.road_marking import RoadMarkingPlanToRealTemplateResource, RoadMarkingRealResource
 from traffic_control.tests.factories import (
-    get_road_marking_plan,
-    get_road_marking_real,
-    get_traffic_sign_plan,
-    get_traffic_sign_real,
+    RoadMarkingPlanFactory,
+    RoadMarkingRealFactory,
+    TrafficSignPlanFactory,
+    TrafficSignRealFactory,
 )
 
 
 @pytest.mark.django_db
 def test__road_marking_real__export():
-    obj = get_road_marking_real()
+    obj = RoadMarkingRealFactory()
     dataset = RoadMarkingRealResource().export()
 
     assert dataset.dict[0]["location"] == str(obj.location)
     assert dataset.dict[0]["owner__name_fi"] == obj.owner.name_fi
     assert dataset.dict[0]["lifecycle"] == obj.lifecycle.name
+    assert dataset.dict[0]["source_name"] == obj.source_name
+    assert dataset.dict[0]["source_id"] == obj.source_id
 
 
 @pytest.mark.django_db
 def test__road_marking_real__import():
-    get_road_marking_real()
+    RoadMarkingRealFactory()
     dataset = RoadMarkingRealResource().export()
     RoadMarkingReal.objects.all().delete()
 
@@ -51,11 +53,11 @@ def test__road_marking_real__import():
 def test__road_marking_plan_export_real_import(has_traffic_sign_plan, has_traffic_sign_real, real_preexists):
     """Test that a plan object can be exported as its real object (referencing to the plan)"""
 
-    traffic_sign_plan = get_traffic_sign_plan() if has_traffic_sign_plan else None
-    traffic_sign_real = get_traffic_sign_real() if has_traffic_sign_real else None
+    traffic_sign_plan = TrafficSignPlanFactory() if has_traffic_sign_plan else None
+    traffic_sign_real = TrafficSignRealFactory(traffic_sign_plan=traffic_sign_plan) if has_traffic_sign_real else None
 
-    plan_obj = get_road_marking_plan(traffic_sign_plan=traffic_sign_plan)
-    real_obj = get_road_marking_real(road_marking_plan=plan_obj) if real_preexists else None
+    plan_obj = RoadMarkingPlanFactory(traffic_sign_plan=traffic_sign_plan)
+    real_obj = RoadMarkingRealFactory(road_marking_plan=plan_obj) if real_preexists else None
 
     exported_dataset = RoadMarkingPlanToRealTemplateResource().export()
     assert len(exported_dataset) == 1

@@ -10,6 +10,7 @@ from traffic_control.resources.common import (
     ParentChildReplacementImportMixin,
     ParentChildReplacementPlanToRealExportMixin,
     ResponsibleEntityPermissionImportMixin,
+    SOURCE_NAME_ID_FIELDS,
 )
 
 
@@ -82,7 +83,7 @@ class AbstractFurnitureSignpostResource(
             "validity_period_end",
             "additional_material_url",
             "lifecycle",
-        )
+        ) + SOURCE_NAME_ID_FIELDS
 
 
 class FurnitureSignpostPlanResource(AbstractFurnitureSignpostResource):

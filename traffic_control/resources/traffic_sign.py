@@ -20,6 +20,7 @@ from traffic_control.resources.common import (
     ReplacementField,
     ReplacementWidget,
     ResponsibleEntityPermissionImportMixin,
+    SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.traffic_sign import traffic_sign_plan_replace, traffic_sign_plan_unreplace
 
@@ -70,7 +71,7 @@ class AbstractTrafficSignResource(ResponsibleEntityPermissionImportMixin, Generi
             "validity_period_end",
             "seasonal_validity_period_start",
             "seasonal_validity_period_end",
-        )
+        ) + SOURCE_NAME_ID_FIELDS
 
 
 class TrafficSignPlanResource(AbstractTrafficSignResource):

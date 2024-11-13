@@ -17,6 +17,7 @@ from traffic_control.resources.common import (
     ReplacementField,
     ReplacementWidget,
     ResponsibleEntityPermissionImportMixin,
+    SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.mount import mount_plan_replace, mount_plan_unreplace
 
@@ -62,7 +63,7 @@ class AbstractMountResource(ResponsibleEntityPermissionImportMixin, GenericDevic
             "electric_accountable",
             "is_foldable",
             "cross_bar_length",
-        )
+        ) + SOURCE_NAME_ID_FIELDS
 
 
 class MountPlanResource(AbstractMountResource):

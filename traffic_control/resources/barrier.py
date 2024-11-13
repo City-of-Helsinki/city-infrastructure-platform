@@ -16,6 +16,7 @@ from traffic_control.resources.common import (
     ReplacementField,
     ReplacementWidget,
     ResponsibleEntityPermissionImportMixin,
+    SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.barrier import barrier_plan_replace, barrier_plan_unreplace
 
@@ -58,7 +59,7 @@ class AbstractBarrierResource(ResponsibleEntityPermissionImportMixin, GenericDev
             "length",
             "count",
             "txt",
-        )
+        ) + SOURCE_NAME_ID_FIELDS
 
 
 class BarrierPlanResource(AbstractBarrierResource):

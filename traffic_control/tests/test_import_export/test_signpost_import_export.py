@@ -13,6 +13,7 @@ from traffic_control.tests.factories import (
     get_mount_real,
     get_signpost_plan,
     get_signpost_real,
+    SignpostPlanFactory,
     SignpostRealFactory,
 )
 from traffic_control.tests.test_base_api import test_point_2
@@ -21,17 +22,19 @@ from traffic_control.tests.test_import_export.utils import file_formats, get_imp
 
 @pytest.mark.django_db
 def test__signpost_real__export():
-    obj = get_signpost_real()
+    obj = SignpostRealFactory()
     dataset = SignpostRealResource().export()
 
     assert dataset.dict[0]["location"] == str(obj.location)
     assert dataset.dict[0]["owner__name_fi"] == obj.owner.name_fi
     assert dataset.dict[0]["lifecycle"] == obj.lifecycle.name
+    assert dataset.dict[0]["source_name"] == obj.source_name
+    assert dataset.dict[0]["source_id"] == obj.source_id
 
 
 @pytest.mark.django_db
 def test__signpost_real__import():
-    get_signpost_real()
+    SignpostRealFactory()
     dataset = SignpostRealResource().export()
     SignpostReal.objects.all().delete()
 
@@ -205,7 +208,7 @@ def test__signpost_plan_export_real_parent_and_child(parent_real_preexists, chil
     ("model", "resource", "factory"),
     (
         (SignpostReal, SignpostRealResource, SignpostRealFactory),
-        (SignpostPlan, SignpostPlanResource, get_signpost_plan),
+        (SignpostPlan, SignpostPlanResource, SignpostPlanFactory),
     ),
 )
 @pytest.mark.parametrize("format", file_formats)

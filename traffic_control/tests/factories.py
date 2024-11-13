@@ -111,7 +111,7 @@ class PlanFactory(factory.django.DjangoModelFactory):
     created_by = factory.SubFactory(UserFactory)
     updated_by = factory.SubFactory(UserFactory)
     name = "Test plan"
-    decision_id = "2020_1"
+    decision_id = factory.Sequence(lambda n: f"DECISION_ID_{n}")
     location = test_multi_polygon
     derive_location = False
     is_active = True
@@ -296,7 +296,7 @@ class MountRealFactory(factory.django.DjangoModelFactory):
 
     location = test_point
     height = 1
-    base = ""
+    base = factory.Sequence(lambda n: f"mount_base_{n}")
     portal_type = factory.SubFactory(PortalTypeFactory)
     mount_type = factory.SubFactory(MountTypeFactory)
     material = "test material"

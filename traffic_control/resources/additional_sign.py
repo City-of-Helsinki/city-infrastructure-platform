@@ -26,6 +26,7 @@ from traffic_control.resources.common import (
     ReplacementField,
     ReplacementWidget,
     ResponsibleEntityPermissionImportMixin,
+    SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.additional_sign import additional_sign_plan_replace, additional_sign_plan_unreplace
 
@@ -190,7 +191,7 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             "parent__id",
             "additional_information",
             "missing_content",
-        )
+        ) + SOURCE_NAME_ID_FIELDS
 
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):
         super().before_import(dataset, using_transactions, dry_run, **kwargs)

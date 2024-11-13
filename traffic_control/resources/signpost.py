@@ -21,6 +21,7 @@ from traffic_control.resources.common import (
     ReplacementField,
     ReplacementWidget,
     ResponsibleEntityPermissionImportMixin,
+    SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.signpost import signpost_plan_replace, signpost_plan_unreplace
 
@@ -81,7 +82,7 @@ class AbstractSignpostResource(
             "seasonal_validity_period_start",
             "seasonal_validity_period_end",
             "parent__id",
-        )
+        ) + SOURCE_NAME_ID_FIELDS
 
 
 class SignpostPlanResource(AbstractSignpostResource):
