@@ -18,6 +18,7 @@ from traffic_control.resources.common import (
     ReplacementField,
     ReplacementWidget,
     ResponsibleEntityPermissionImportMixin,
+    SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.road_marking import road_marking_plan_replace, road_marking_plan_unreplace
 
@@ -69,7 +70,7 @@ class AbstractRoadMarkingResource(ResponsibleEntityPermissionImportMixin, Generi
             "is_grinded",
             "additional_info",
             "amount",
-        )
+        ) + SOURCE_NAME_ID_FIELDS
 
 
 class RoadMarkingPlanResource(AbstractRoadMarkingResource):

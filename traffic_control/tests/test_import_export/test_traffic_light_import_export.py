@@ -7,22 +7,25 @@ from traffic_control.tests.factories import (
     get_mount_real,
     get_traffic_light_plan,
     get_traffic_light_real,
+    TrafficLightRealFactory,
 )
 
 
 @pytest.mark.django_db
 def test__traffic_light_real__export():
-    obj = get_traffic_light_real()
+    obj = TrafficLightRealFactory()
     dataset = TrafficLightRealResource().export()
 
     assert dataset.dict[0]["location"] == str(obj.location)
     assert dataset.dict[0]["owner__name_fi"] == obj.owner.name_fi
     assert dataset.dict[0]["lifecycle"] == obj.lifecycle.name
+    assert dataset.dict[0]["source_name"] == obj.source_name
+    assert dataset.dict[0]["source_id"] == obj.source_id
 
 
 @pytest.mark.django_db
 def test__traffic_light_real__import():
-    get_traffic_light_real()
+    TrafficLightRealFactory()
     dataset = TrafficLightRealResource().export()
     TrafficLightReal.objects.all().delete()
 

@@ -9,6 +9,7 @@ from traffic_control.resources.additional_sign import (
     AdditionalSignRealResource,
 )
 from traffic_control.tests.factories import (
+    AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
     get_additional_sign_plan,
     get_mount_plan,
@@ -147,7 +148,7 @@ content_2 = {
 @pytest.mark.parametrize(
     "resource, factory",
     (
-        (AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -190,6 +191,8 @@ def test__additional_sign__export_with_content(resource, factory):
     assert dataset.dict[0]["content_s.str"] == additional_sign_0.content_s["str"]
     assert dataset.dict[0]["content_s.enum"] == additional_sign_0.content_s["enum"]
     assert dataset.dict[0]["content_s.another_int"] is None
+    assert dataset.dict[0]["source_name"] == additional_sign_0.source_name
+    assert dataset.dict[0]["source_id"] == additional_sign_0.source_id
 
     assert dataset.dict[1]["device_type__code"] == additional_sign_1.device_type.code
     assert dataset.dict[1]["content_s.bool"] is None
@@ -198,6 +201,8 @@ def test__additional_sign__export_with_content(resource, factory):
     assert dataset.dict[1]["content_s.str"] is None
     assert dataset.dict[1]["content_s.enum"] is None
     assert dataset.dict[1]["content_s.another_int"] == additional_sign_1.content_s["another_int"]
+    assert dataset.dict[1]["source_name"] == additional_sign_1.source_name
+    assert dataset.dict[1]["source_id"] == additional_sign_1.source_id
 
     assert dataset.dict[2]["device_type__code"] == additional_sign_2.device_type.code
     assert dataset.dict[2]["content_s.bool"] is None
@@ -206,12 +211,14 @@ def test__additional_sign__export_with_content(resource, factory):
     assert dataset.dict[2]["content_s.str"] is None
     assert dataset.dict[2]["content_s.enum"] is None
     assert dataset.dict[2]["content_s.another_int"] is None
+    assert dataset.dict[2]["source_name"] == additional_sign_2.source_name
+    assert dataset.dict[2]["source_id"] == additional_sign_2.source_id
 
 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -237,15 +244,21 @@ def test__additional_sign__import__create_with_content(model, resource, factory,
         device_type=dt_with_schema_1,
         content_s=content_1,
         missing_content=False,
+        source_name="SCHEMA_1",
+        source_id="SCHEMA_1",
     )
     factory(
         device_type=dt_with_schema_2,
         content_s=content_2,
         missing_content=False,
+        source_name="SCHEMA_2",
+        source_id="SCHEMA_2",
     )
     factory(
         device_type=dt_no_schema,
         missing_content=True,
+        source_name="NO_SCHEMA",
+        source_id="NO_SCHEMA",
     )
 
     dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
@@ -257,20 +270,23 @@ def test__additional_sign__import__create_with_content(model, resource, factory,
     assert not result.has_errors()
 
     assert model.objects.all().count() == 3
-    assert model.objects.all()[0].content_s == content_1
-    assert model.objects.all()[0].device_type == dt_with_schema_1
+    obj1 = model.objects.get(source_name="SCHEMA_1", source_id="SCHEMA_1")
+    assert obj1.content_s == content_1
+    assert obj1.device_type == dt_with_schema_1
 
-    assert model.objects.all()[1].content_s == content_2
-    assert model.objects.all()[1].device_type == dt_with_schema_2
+    obj2 = model.objects.get(source_name="SCHEMA_2", source_id="SCHEMA_2")
+    assert obj2.content_s == content_2
+    assert obj2.device_type == dt_with_schema_2
 
-    assert model.objects.all()[2].content_s is None
-    assert model.objects.all()[2].device_type == dt_no_schema
+    obj3 = model.objects.get(source_name="NO_SCHEMA", source_id="NO_SCHEMA")
+    assert obj3.content_s is None
+    assert obj3.device_type == dt_no_schema
 
 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
     ids=("plan", "real"),
@@ -297,15 +313,21 @@ def test__additional_sign__import__create_with_missing_content(model, resource, 
         device_type=dt_with_schema_1,
         content_s=None,
         missing_content=True,
+        source_name="SCHEMA_1",
+        source_id="SCHEMA_1",
     )
     factory(
         device_type=dt_with_schema_2,
         content_s=None,
         missing_content=True,
+        source_name="SCHEMA_2",
+        source_id="SCHEMA_2",
     )
     factory(
         device_type=dt_no_schema,
         missing_content=True,
+        source_name="NO_SCHEMA",
+        source_id="NO_SCHEMA",
     )
 
     dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
@@ -317,17 +339,20 @@ def test__additional_sign__import__create_with_missing_content(model, resource, 
     assert not result.has_errors()
 
     assert model.objects.all().count() == 3
-    assert model.objects.all()[0].content_s is None
-    assert model.objects.all()[0].missing_content is True
-    assert model.objects.all()[0].device_type == dt_with_schema_1
+    obj1 = model.objects.get(source_name="SCHEMA_1", source_id="SCHEMA_1")
+    assert obj1.content_s is None
+    assert obj1.missing_content is True
+    assert obj1.device_type == dt_with_schema_1
 
-    assert model.objects.all()[1].content_s is None
-    assert model.objects.all()[1].missing_content is True
-    assert model.objects.all()[1].device_type == dt_with_schema_2
+    obj2 = model.objects.get(source_name="SCHEMA_2", source_id="SCHEMA_2")
+    assert obj2.content_s is None
+    assert obj2.missing_content is True
+    assert obj2.device_type == dt_with_schema_2
 
-    assert model.objects.all()[2].content_s is None
-    assert model.objects.all()[2].missing_content is True
-    assert model.objects.all()[2].device_type == dt_no_schema
+    obj3 = model.objects.get(source_name="NO_SCHEMA", source_id="NO_SCHEMA")
+    assert obj3.content_s is None
+    assert obj2.missing_content is True
+    assert obj3.device_type == dt_no_schema
 
 
 @pytest.mark.parametrize(
@@ -366,7 +391,7 @@ def test__additional_sign__import__create_fails_with_content_and_missing_content
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -391,13 +416,22 @@ def test__additional_sign__import__create_with_invalid_content(model, resource, 
     factory(
         device_type=dt_with_schema_1,
         content_s={"invalid_prop": "invalid_val"},
+        source_name="SCHEMA_1",
+        source_id="SCHEMA_1",
+        missing_content=False,
     )
     factory(
         device_type=dt_with_schema_2,
         content_s=content_2,
+        source_name="SCHEMA_2",
+        source_id="SCHEMA_2",
+        missing_content=False,
     )
     factory(
         device_type=dt_no_schema,
+        source_name="NO_SCHEMA",
+        source_id="NO_SCHEMA",
+        missing_content=False,
     )
 
     dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
@@ -518,12 +552,14 @@ def test__additional_sign__import__update_with_content(model, resource, factory,
     assert model.objects.all()[0].id == additional_sign.id
     assert str(model.objects.all()[0].id) == dataset.dict[0]["id"]
     assert model.objects.all()[0].content_s == {**content_1, "str": "Other value"}
+    assert model.objects.all()[0].source_name == additional_sign.source_name
+    assert model.objects.all()[0].source_id == additional_sign.source_id
 
 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
     ids=("plan", "real"),
@@ -563,12 +599,14 @@ def test__additional_sign__import__update_with_missing_content(
     assert model.objects.all()[0].id == additional_sign.id
     assert str(model.objects.all()[0].id) == dataset.dict[0]["id"]
     assert model.objects.all()[0].content_s == {"int": 1, "another_int": 2}
+    assert model.objects.all()[0].source_name == additional_sign.source_name
+    assert model.objects.all()[0].source_id == additional_sign.source_id
 
 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -609,12 +647,14 @@ def test__additional_sign__import__update_device_type_with_content(model, resour
     assert model.objects.all()[0].id == additional_sign.id
     assert model.objects.all()[0].device_type == dt_with_schema_1
     assert model.objects.all()[0].content_s == content_1
+    assert model.objects.all()[0].source_name == additional_sign.source_name
+    assert model.objects.all()[0].source_id == additional_sign.source_id
 
 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -650,12 +690,14 @@ def test__additional_sign__import__update_with_invalid_content(
     assert model.objects.all().count() == 1
     assert model.objects.all()[0].id == additional_sign.id
     assert model.objects.all()[0].content_s == content_1
+    assert model.objects.all()[0].source_name == additional_sign.source_name
+    assert model.objects.all()[0].source_id == additional_sign.source_id
 
 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -696,6 +738,8 @@ def test__additional_sign__import__update_device_type_with_invalid_content(model
     assert model.objects.all()[0].id == additional_sign.id
     assert model.objects.all()[0].device_type == dt_with_schema_1
     assert model.objects.all()[0].content_s == content_1
+    assert model.objects.all()[0].source_name == additional_sign.source_name
+    assert model.objects.all()[0].source_id == additional_sign.source_id
 
 
 schema_properties = (

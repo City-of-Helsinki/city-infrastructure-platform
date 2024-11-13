@@ -19,6 +19,7 @@ from traffic_control.resources.common import (
     ReplacementField,
     ReplacementWidget,
     ResponsibleEntityPermissionImportMixin,
+    SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.traffic_light import traffic_light_plan_replace, traffic_light_plan_unreplace
 
@@ -67,7 +68,7 @@ class AbstractTrafficLightResource(ResponsibleEntityPermissionImportMixin, Gener
             "mount_type__code",
             "height",
             "direction",
-        )
+        ) + SOURCE_NAME_ID_FIELDS
 
 
 class TrafficLightPlanResource(AbstractTrafficLightResource):

@@ -21,6 +21,8 @@ from traffic_control.utils import get_file_upload_obstacles
 from users.models import User
 from users.utils import get_system_user
 
+SOURCE_NAME_ID_FIELDS = ("source_name", "source_id")
+
 
 class EnumWidget(widgets.Widget):
     def __init__(self, enum=None):

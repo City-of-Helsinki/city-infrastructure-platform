@@ -2,22 +2,24 @@ import pytest
 
 from traffic_control.models import BarrierReal
 from traffic_control.resources.barrier import BarrierPlanToRealTemplateResource, BarrierRealResource
-from traffic_control.tests.factories import get_barrier_plan, get_barrier_real
+from traffic_control.tests.factories import BarrierPlanFactory, BarrierRealFactory
 
 
 @pytest.mark.django_db
 def test__barrier_real__export():
-    obj = get_barrier_real()
+    obj = BarrierRealFactory()
     dataset = BarrierRealResource().export()
 
     assert dataset.dict[0]["location"] == str(obj.location)
     assert dataset.dict[0]["owner__name_fi"] == obj.owner.name_fi
     assert dataset.dict[0]["lifecycle"] == obj.lifecycle.name
+    assert dataset.dict[0]["source_name"] == obj.source_name
+    assert dataset.dict[0]["source_id"] == obj.source_id
 
 
 @pytest.mark.django_db
 def test__barrier_real__import():
-    get_barrier_real()
+    BarrierRealFactory()
     dataset = BarrierRealResource().export()
     BarrierReal.objects.all().delete()
 
@@ -36,8 +38,12 @@ def test__barrier_real__import():
 def test__barrier_plan_export_real_import(real_preexists):
     """Test that a plan object can be exported as its real object (referencing to the plan)"""
 
-    plan_obj = get_barrier_plan()
-    real_obj = get_barrier_real() if real_preexists else None
+    plan_obj = BarrierPlanFactory(source_name="SOURCE_NAME", source_id="SOURCE_ID")
+    real_obj = (
+        BarrierRealFactory(source_name="SOURCE_NAME", source_id="SOURCE_ID", barrier_plan=plan_obj)
+        if real_preexists
+        else None
+    )
 
     exported_dataset = BarrierPlanToRealTemplateResource().export()
     assert len(exported_dataset) == 1
