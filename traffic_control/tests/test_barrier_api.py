@@ -9,7 +9,7 @@ from rest_framework_gis.fields import GeoJsonDict
 from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType, Lifecycle
 from traffic_control.models import BarrierPlan, BarrierReal, ConnectionType, Reflective
 from traffic_control.models.barrier import LocationSpecifier
-from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     add_barrier_real_operation,
     BarrierPlanFactory,
@@ -20,15 +20,18 @@ from traffic_control.tests.factories import (
     get_operation_type,
     get_traffic_control_device_type,
     get_user,
+    OwnerFactory,
     PlanFactory,
 )
 from traffic_control.tests.test_base_api import (
+    illegal_test_point,
     line_location_error_test_data,
     line_location_test_data,
     point_location_error_test_data,
     point_location_test_data,
     TrafficControlAPIBaseTestCase,
 )
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 @pytest.mark.django_db
@@ -142,6 +145,20 @@ def test__barrier_plan__invalid_device_type(target_model):
     barrier_plan.refresh_from_db()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert barrier_plan.device_type != device_type
+
+
+@pytest.mark.django_db
+def test__barrier_plan__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+        "road_name": "TestRoad",
+    }
+    do_illegal_geometry_test(
+        "v1:barrierplan-list",
+        data,
+        [f"Geometry for barrierplan {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 class BarrierPlanTests(TrafficControlAPIBaseTestCase):
@@ -401,6 +418,20 @@ def test__barrier_real__invalid_device_type(target_model):
     barrier_real.refresh_from_db()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert barrier_real.device_type != device_type
+
+
+@pytest.mark.django_db
+def test__barrier_real__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+        "road_name": "TestRoad",
+    }
+    do_illegal_geometry_test(
+        "v1:barrierreal-list",
+        data,
+        [f"Geometry for barrierreal {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 class BarrierRealTests(TrafficControlAPIBaseTestCase):
@@ -670,16 +701,16 @@ def test__barrier_plan__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    barrier = get_barrier_plan(location="SRID=3879;POINT Z (0 0 0)")
+    barrier = get_barrier_plan(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": barrier.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:barrierplan-{view_type}", kwargs=kwargs)
-    data = {"location": "SRID=3879;POINT Z (1 1 1)"}
+    data = {"location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)"}
 
     response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
 
     assert BarrierPlan.objects.count() == 1
     assert BarrierPlan.objects.first().is_active
-    assert BarrierPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert BarrierPlan.objects.first().location == f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)"
     assert response.status_code == expected_status
 
 
@@ -702,16 +733,16 @@ def test__barrier_real__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    barrier = get_barrier_real(location="SRID=3879;POINT Z (0 0 0)")
+    barrier = get_barrier_real(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": barrier.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:barrierreal-{view_type}", kwargs=kwargs)
-    data = {"location": "SRID=3879;POINT Z (1 1 1)"}
+    data = {"location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)"}
 
     response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
 
     assert BarrierReal.objects.count() == 1
     assert BarrierReal.objects.first().is_active
-    assert BarrierReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert BarrierReal.objects.first().location == f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)"
     assert response.status_code == expected_status
 
 

@@ -6,8 +6,9 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from traffic_control.models import OperationalArea
+from traffic_control.tests.api_utils import do_illegal_geometry_test
 from traffic_control.tests.factories import get_api_client, get_operational_area, get_user
-from traffic_control.tests.test_base_api import test_multi_polygon, test_multi_polygon_2
+from traffic_control.tests.test_base_api import illegal_multipolygon, test_multi_polygon, test_multi_polygon_2
 
 
 class OperationalAreaAPITestCase(APITestCase):
@@ -126,3 +127,16 @@ def test__operational_area__anonymous_user(method, expected_status, view_type):
     assert OperationalArea.objects.first().name == "Area 1"
     assert OperationalArea.objects.first().location.ewkt == test_multi_polygon.ewkt
     assert response.status_code == expected_status
+
+
+@pytest.mark.django_db
+def test__operational_area__create_with_invalid_geometry():
+    data = {
+        "location": illegal_multipolygon.ewkt,
+        "name": "TestArea",
+    }
+    do_illegal_geometry_test(
+        "v1:operationalarea-list",
+        data,
+        [f"Geometry for operationalarea {illegal_multipolygon.ewkt} is not legal"],
+    )

@@ -5,12 +5,14 @@ from typing import Optional
 
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
 from traffic_control.enums import Condition, InstallationStatus, Lifecycle
+from traffic_control.geometry_utils import geometry_is_legit
 from traffic_control.models.utils import SoftDeleteQuerySet
 
 logger = logging.getLogger("traffic_control")
@@ -224,3 +226,19 @@ class AbstractFileModel(models.Model):
 
     def __str__(self):
         return f"{self.file}"
+
+
+class BoundaryCheckedLocationMixin:
+    """A model mixin that does not allow geometry to be out of projection bounds.
+    Checks that geometry is within SRID boundary.
+    If WGS84 transformation when calculation WFS boundary box would fail if there are points outside..
+    """
+
+    GEOMETRY_FIELD_NAME = "location"
+
+    def save(self, *args, **kwargs):
+        geom = getattr(self, self.GEOMETRY_FIELD_NAME)
+        if not geometry_is_legit(geom):
+            raise ValidationError(f"Geometry for {self._meta.model_name} {self.location.ewkt} is not legal")
+
+        super().save(*args, **kwargs)

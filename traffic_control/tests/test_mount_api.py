@@ -9,7 +9,7 @@ from rest_framework_gis.fields import GeoJsonDict
 from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.models import MountPlan, MountReal
 from traffic_control.models.mount import LocationSpecifier
-from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     add_mount_real_operation,
     get_api_client,
@@ -18,15 +18,18 @@ from traffic_control.tests.factories import (
     get_operation_type,
     MountPlanFactory,
     MountRealFactory,
+    OwnerFactory,
     PlanFactory,
 )
 from traffic_control.tests.test_base_api import (
+    illegal_test_point,
     line_location_error_test_data,
     line_location_test_data,
     point_location_error_test_data,
     point_location_test_data,
     TrafficControlAPIBaseTestCase,
 )
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 @pytest.mark.django_db
@@ -67,6 +70,19 @@ def test_filter_error_mount_plans_location(location, location_query, expected):
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data.get("location")[0] == expected
+
+
+@pytest.mark.django_db
+def test__mount_plan__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:mountplan-list",
+        data,
+        [f"Geometry for mountplan {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 class MountPlanTests(TrafficControlAPIBaseTestCase):
@@ -281,6 +297,19 @@ def test__mount_real_filtering__list(field_name, value, second_value):
         field_name,
         value,
         second_value,
+    )
+
+
+@pytest.mark.django_db
+def test__mount_real__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:mountreal-list",
+        data,
+        [f"Geometry for mountreal {illegal_test_point.ewkt} is not legal"],
     )
 
 
@@ -534,16 +563,16 @@ def test__mount_plan__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    mount = get_mount_plan(location="SRID=3879;POINT Z (0 0 0)")
+    mount = get_mount_plan(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": mount.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:mountplan-{view_type}", kwargs=kwargs)
-    data = {"location": "SRID=3879;POINT Z (1 1 1)"}
+    data = {"location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)"}
 
     response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
 
     assert MountPlan.objects.count() == 1
     assert MountPlan.objects.first().is_active
-    assert MountPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert MountPlan.objects.first().location == f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)"
     assert response.status_code == expected_status
 
 
@@ -566,16 +595,16 @@ def test__mount_real__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    mount = get_mount_real(location="SRID=3879;POINT Z (0 0 0)")
+    mount = get_mount_real(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": mount.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:mountreal-{view_type}", kwargs=kwargs)
-    data = {"location": "SRID=3879;POINT Z (1 1 1)"}
+    data = {"location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)"}
 
     response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
 
     assert MountReal.objects.count() == 1
     assert MountReal.objects.first().is_active
-    assert MountReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert MountReal.objects.first().location == f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)"
     assert response.status_code == expected_status
 
 

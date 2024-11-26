@@ -1,7 +1,6 @@
 import datetime
 from typing import Any, Optional
 
-import factory
 import factory.django
 from django.conf import settings
 from django.contrib.auth import get_user_model

@@ -8,6 +8,7 @@ from enumfields import EnumIntegerField
 
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    BoundaryCheckedLocationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -89,7 +90,9 @@ class PortalType(models.Model):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
 
 
-class AbstractMount(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
+class AbstractMount(
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.DecimalField(
         _("Height"),

@@ -10,6 +10,7 @@ from traffic_control.admin import BarrierRealAdmin, TrafficSignRealAdmin
 from traffic_control.enums import Lifecycle
 from traffic_control.models import BarrierReal, TrafficSignReal
 from traffic_control.tests.factories import get_additional_sign_real, get_barrier_real, get_owner, get_user
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 class MockRequest:
@@ -21,7 +22,7 @@ class TrafficSignRealAdminTestCase(TestCase):
         self.user = get_user()
         self.admin = get_user(admin=True)
         self.traffic_sign_real = TrafficSignReal.objects.create(
-            location=Point(10, 10, 5, srid=settings.SRID),
+            location=Point(MIN_X + 10, MIN_Y + 5, 5, srid=settings.SRID),
             legacy_code="100",
             direction=0,
             created_by=self.user,
@@ -59,7 +60,7 @@ class TrafficSignRealAdminTestCase(TestCase):
         request = MockRequest()
         request.user = self.admin
         traffic_sign_real = TrafficSignReal(
-            location=Point(1, 1, 5, srid=settings.SRID),
+            location=Point(MIN_X + 1, MIN_Y + 1, 5, srid=settings.SRID),
             legacy_code="100",
             direction=0,
             owner=get_owner(),

@@ -4,35 +4,37 @@ from rest_framework.test import APITestCase
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import MountType, Owner, TrafficControlDeviceType
-from traffic_control.tests.utils import DummyRequestForAxes
+from traffic_control.tests.utils import DummyRequestForAxes, MIN_X, MIN_Y
 from users.models import User
 
-test_point_3d = Point(10.0, 10.0, 0.0, srid=settings.SRID)
-test_point_2_3d = Point(0.0, 0.0, 0.0, srid=settings.SRID)
-test_point_3_3d = Point(100.0, 100.0, 0.0, srid=settings.SRID)
-test_point_4_3d = Point(-44.3, 60.1, 0.0, srid=4326)
-test_point_5_3d = Point(150.0, 150.0, 0.0, srid=settings.SRID)
-test_line_3d = LineString((0.0, 0.0, 0.0), (50.0, 0.0, 0.0), srid=settings.SRID)
-test_line_2_3d = LineString((20.0, 20.0, 0.0), (30.0, 30.0, 0.0), srid=settings.SRID)
-test_line_3_3d = LineString((40.0, 40.0, 0.0), (60.0, 60.0, 0.0), srid=settings.SRID)
-test_line_4_3d = LineString((500.0, 500.0, 0.0), (500.0, 550.0, 0.0), srid=settings.SRID)
+test_point_3d = Point(MIN_X + 6, MIN_Y + 6, 0.0, srid=settings.SRID)
+test_point_2_3d = Point(MIN_X + 2, MIN_Y + 2, 0.0, srid=settings.SRID)
+test_point_3_3d = Point(MIN_X + 100.0, MIN_Y + 100.0, 0.0, srid=settings.SRID)
+test_point_4_3d = Point(MIN_X + 51, MIN_Y + 51, 0.0, srid=settings.SRID)
+test_point_5_3d = Point(MIN_X + 150.0, MIN_Y + 1 + 150.0, 0.0, srid=settings.SRID)
+test_line_3d = LineString((MIN_X + 1, MIN_Y + 1, 0.0), (MIN_X + 50.0, MIN_Y + 1, 0.0), srid=settings.SRID)
+test_line_2_3d = LineString((MIN_X + 20.0, MIN_Y + 20.0, 0.0), (MIN_X + 30.0, MIN_Y + 30.0, 0.0), srid=settings.SRID)
+test_line_3_3d = LineString((MIN_X + 40.0, MIN_Y + 40.0, 0.0), (MIN_X + 60.0, MIN_Y + 60.0, 0.0), srid=settings.SRID)
+test_line_4_3d = LineString(
+    (MIN_X + 500.0, MIN_Y + 500.0, 0.0), (MIN_X + 500.0, MIN_Y + 550.0, 0.0), srid=settings.SRID
+)
 test_polygon_3d = Polygon(
     (
-        (0.0, 0.0, 0.0),
-        (0.0, 50.0, 0.0),
-        (50.0, 50.0, 0.0),
-        (50.0, 0.0, 0.0),
-        (0.0, 0.0, 0.0),
+        (MIN_X + 1, MIN_Y + 1, 0.0),
+        (MIN_X + 1, MIN_Y + 50.0, 0.0),
+        (MIN_X + 50.0, MIN_Y + 50.0, 0.0),
+        (MIN_X + 50.0, MIN_Y + 1, 0.0),
+        (MIN_X + 1, MIN_Y + 1, 0.0),
     ),
     srid=settings.SRID,
 )
 test_polygon_2_3d = Polygon(
     (
-        (1000.0, 1000.0, 0.0),
-        (1000.0, 1050.0, 0.0),
-        (1050.0, 1050.0, 0.0),
-        (1050.0, 1000.0, 0.0),
-        (1000.0, 1000.0, 0.0),
+        (MIN_X + 1000.0, MIN_Y + 1000.0, 0.0),
+        (MIN_X + 1000.0, MIN_Y + 1050.0, 0.0),
+        (MIN_X + 1050.0, MIN_Y + 1050.0, 0.0),
+        (MIN_X + 1050.0, MIN_Y + 1000.0, 0.0),
+        (MIN_X + 1000.0, MIN_Y + 1000.0, 0.0),
     ),
     srid=settings.SRID,
 )

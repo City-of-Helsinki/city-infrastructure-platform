@@ -10,6 +10,7 @@ from traffic_control.enums import Lifecycle
 from traffic_control.forms import AdminEnumChoiceField, TrafficSignRealModelForm
 from traffic_control.models import TrafficSignReal
 from traffic_control.tests.factories import get_owner, get_traffic_control_device_type, get_user
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 class _TestEnum(Enum):
@@ -46,7 +47,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
         user = get_user()
         owner = get_owner()
         data = {
-            "location": Point(5, 5, 0.0, srid=settings.SRID),
+            "location": Point(MIN_X + 5, MIN_Y + 5, 0.0, srid=settings.SRID),
             "z_coord": 20,
             "direction": 0,
             "created_by": user.id,
@@ -57,7 +58,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
         }
         user = get_user()
         traffic_sign_real = TrafficSignReal.objects.create(
-            location=Point(10, 10, 5, srid=settings.SRID),
+            location=Point(MIN_X + 10, MIN_Y + 10, 5, srid=settings.SRID),
             direction=0,
             created_by=user,
             updated_by=user,
@@ -69,12 +70,12 @@ class TrafficSignRealModelFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
 
         instance = form.save()
-        self.assertEqual(instance.location, Point(5, 5, 20, srid=settings.SRID))
+        self.assertEqual(instance.location, Point(MIN_X + 5, MIN_Y + 5, 20, srid=settings.SRID))
 
     def test_create_traffic_sign_real_3d_location(self):
         user = get_user()
         data = {
-            "location": Point(10, 10, 0.0, srid=settings.SRID),
+            "location": Point(MIN_X + 10, MIN_Y + 10, 0.0, srid=settings.SRID),
             "z_coord": 20,
             "direction": 0,
             "created_by": user.id,
@@ -87,4 +88,4 @@ class TrafficSignRealModelFormTestCase(TestCase):
         form.is_valid()
         self.assertTrue(form.is_valid())
         instance = form.save()
-        self.assertEqual(instance.location, Point(10, 10, 20, srid=settings.SRID))
+        self.assertEqual(instance.location, Point(MIN_X + 10, MIN_Y + 10, 20, srid=settings.SRID))

@@ -22,7 +22,7 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus
-from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
+from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset, MountPlanModelForm, MountRealModelForm
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
@@ -91,6 +91,7 @@ class MountPlanAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    form = MountPlanModelForm
     fieldsets = (
         (
             _("General information"),
@@ -201,6 +202,7 @@ class MountRealAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    form = MountRealModelForm
     fieldsets = (
         (
             _("General information"),

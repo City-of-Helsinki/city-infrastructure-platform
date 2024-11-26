@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from traffic_control.models import MountReal, TrafficSignReal
 from traffic_control.tests.factories import get_mount_type, get_owner, get_user
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 class GenerateMountRealObjectsTestCase(TestCase):
@@ -15,7 +16,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
 
     def test_create_a_single_mount_real_for_nearby_traffic_signs(self):
         main_sign_1 = TrafficSignReal.objects.create(
-            location=Point(1, 1, 10, srid=settings.SRID),
+            location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
             legacy_code="100",
             mount_type=self.mount_type,
             direction=0,
@@ -24,7 +25,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             owner=get_owner(),
         )
         main_sign_2 = TrafficSignReal.objects.create(
-            location=Point(1, 0.8, 5, srid=settings.SRID),
+            location=Point(MIN_X + 1, MIN_Y + 0.8, 5, srid=settings.SRID),
             legacy_code="100",
             mount_type=self.mount_type,
             direction=0,
@@ -42,7 +43,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
 
     def test_create_separate_mount_reals_for_further_away_traffic_signs(self):
         TrafficSignReal.objects.create(
-            location=Point(1, 1, 10, srid=settings.SRID),
+            location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
             legacy_code="100",
             mount_type=self.mount_type,
             direction=0,
@@ -51,7 +52,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             owner=get_owner(),
         )
         TrafficSignReal.objects.create(
-            location=Point(2, 2, 5, srid=settings.SRID),
+            location=Point(MIN_X + 2, MIN_Y + 2, 5, srid=settings.SRID),
             legacy_code="100",
             mount_type=self.mount_type,
             direction=0,
@@ -64,7 +65,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
 
     def test_create_separate_mount_reals_for_different_mount_type_traffic_signs(self):
         TrafficSignReal.objects.create(
-            location=Point(1, 1, 10, srid=settings.SRID),
+            location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
             legacy_code="100",
             mount_type=self.mount_type,
             direction=0,
@@ -73,7 +74,7 @@ class GenerateMountRealObjectsTestCase(TestCase):
             owner=get_owner(),
         )
         TrafficSignReal.objects.create(
-            location=Point(1, 0.8, 5, srid=settings.SRID),
+            location=Point(MIN_X + 1, MIN_Y + 0.8, 5, srid=settings.SRID),
             legacy_code="100",
             mount_type=self.mount_type_2,
             direction=0,

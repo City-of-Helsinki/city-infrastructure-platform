@@ -9,7 +9,7 @@ from rest_framework_gis.fields import GeoJsonDict
 from traffic_control.enums import LaneNumber, LaneType, Lifecycle, Reflection, Size, Surface
 from traffic_control.models import AdditionalSignPlan
 from traffic_control.models.additional_sign import Color, LocationSpecifier
-from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     AdditionalSignPlanFactory,
     get_additional_sign_plan,
@@ -28,6 +28,7 @@ from traffic_control.tests.models.test_traffic_control_device_type import (
     simple_schema,
     simple_schema_2,
 )
+from traffic_control.tests.test_base_api import illegal_test_point
 
 # AdditionalSignPlan tests
 # ===============================================
@@ -204,6 +205,19 @@ def test__additional_sign_plan__create_with_content_invalid(schema, content, adm
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     assert AdditionalSignPlan.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test__additional_sign_plan__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": str(get_owner().pk),
+    }
+    do_illegal_geometry_test(
+        "v1:additionalsignplan-list",
+        data,
+        [f"Geometry for additionalsignplan {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 old_schemas_and_contents = (

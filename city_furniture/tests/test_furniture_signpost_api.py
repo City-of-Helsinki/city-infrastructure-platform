@@ -21,16 +21,22 @@ from city_furniture.tests.factories import (
 )
 from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.models import GroupResponsibleEntity
-from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     get_api_client,
     get_operation_type,
     get_owner,
     get_responsible_entity_project,
     get_user,
+    OwnerFactory,
     PlanFactory,
 )
+from traffic_control.tests.test_base_api import illegal_test_point
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
+from traffic_control.tests.utils import MIN_X, MIN_Y
+
+TEST_POINT1_EWKT = f"SRID=3879;POINT Z ({MIN_X + 1} {MIN_Y + 1} 0)"
+TEST_POINT2_EWKT = f"SRID=3879;POINT Z ({MIN_X + 2} {MIN_Y + 2} 0)"
 
 
 # Read
@@ -283,6 +289,34 @@ def test__furniture_signpost_real__create_with_incomplete_data(admin_user):
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     assert FurnitureSignpostReal.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test__furniture_signpost_plan__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+        "device_type": get_city_furniture_device_type().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:furnituresignpostplan-list",
+        data,
+        [f"Geometry for furnituresignpostplan {illegal_test_point.ewkt} is not legal"],
+    )
+
+
+@pytest.mark.django_db
+def test__furniture_signpost_real__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+        "device_type": get_city_furniture_device_type().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:furnituresignpostreal-list",
+        data,
+        [f"Geometry for furnituresignpostreal {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 # Update
@@ -557,11 +591,11 @@ def test__furniture_signpost_plan__anonymous_user(method, expected_status, view_
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    signpost = get_furniture_signpost_plan(location="SRID=3879;POINT Z (0 0 0)")
+    signpost = get_furniture_signpost_plan(location=TEST_POINT1_EWKT)
     kwargs = {"pk": signpost.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:furnituresignpostplan-{view_type}", kwargs=kwargs)
     data = {
-        "location": "SRID=3879;POINT Z (1 1 1)",
+        "location": TEST_POINT2_EWKT,
         "device_type": str(get_city_furniture_device_type().id),
         "owner": str(get_owner().id),
     }
@@ -569,7 +603,7 @@ def test__furniture_signpost_plan__anonymous_user(method, expected_status, view_
 
     assert FurnitureSignpostPlan.objects.count() == 1
     assert FurnitureSignpostPlan.objects.first().is_active
-    assert FurnitureSignpostPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert FurnitureSignpostPlan.objects.first().location == TEST_POINT1_EWKT
     assert response.status_code == expected_status
 
 
@@ -592,11 +626,11 @@ def test__furniture_signpost_real__anonymous_user(method, expected_status, view_
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    signpost = get_furniture_signpost_real(location="SRID=3879;POINT Z (0 0 0)")
+    signpost = get_furniture_signpost_real(location=TEST_POINT1_EWKT)
     kwargs = {"pk": signpost.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:furnituresignpostreal-{view_type}", kwargs=kwargs)
     data = {
-        "location": "SRID=3879;POINT Z (1 1 1)",
+        "location": TEST_POINT2_EWKT,
         "device_type": str(get_city_furniture_device_type().id),
         "owner": str(get_owner().id),
     }
@@ -605,7 +639,7 @@ def test__furniture_signpost_real__anonymous_user(method, expected_status, view_
 
     assert FurnitureSignpostReal.objects.count() == 1
     assert FurnitureSignpostReal.objects.first().is_active
-    assert FurnitureSignpostReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert FurnitureSignpostReal.objects.first().location == TEST_POINT1_EWKT
     assert response.status_code == expected_status
 
 

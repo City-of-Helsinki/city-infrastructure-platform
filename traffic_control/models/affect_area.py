@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 
-from traffic_control.mixins.models import SourceControlModel
+from traffic_control.mixins.models import BoundaryCheckedLocationMixin, SourceControlModel
 from traffic_control.models.common import Owner
 
 
@@ -20,7 +20,7 @@ class CoverageAreaCategory(models.Model):
         return self.name
 
 
-class CoverageArea(SourceControlModel):
+class CoverageArea(BoundaryCheckedLocationMixin, SourceControlModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
         CoverageAreaCategory,

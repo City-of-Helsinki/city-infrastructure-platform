@@ -19,7 +19,7 @@ from traffic_control.enums import (
 )
 from traffic_control.models import AdditionalSignReal
 from traffic_control.models.additional_sign import Color, LocationSpecifier
-from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     add_additional_sign_real_operation,
     AdditionalSignPlanFactory,
@@ -45,6 +45,7 @@ from traffic_control.tests.models.test_traffic_control_device_type import (
     simple_schema,
     simple_schema_2,
 )
+from traffic_control.tests.test_base_api import illegal_test_point
 
 # AdditionalSignReal tests
 # ===============================================
@@ -268,6 +269,16 @@ def test__additional_sign_real__create_with_content_invalid(schema, content, adm
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     assert AdditionalSignReal.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test__additional_sign_real__create_with_invalid_geometry():
+    data = {"location": illegal_test_point.ewkt, "owner": str(get_owner().pk), "parent": TrafficSignRealFactory().pk}
+    do_illegal_geometry_test(
+        "v1:additionalsignreal-list",
+        data,
+        [f"Geometry for additionalsignreal {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 old_schemas_and_contents = (

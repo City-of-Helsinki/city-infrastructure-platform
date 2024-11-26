@@ -9,7 +9,7 @@ from rest_framework_gis.fields import GeoJsonDict
 from traffic_control.enums import Condition, DeviceTypeTargetModel, InstallationStatus, LaneNumber, LaneType, Lifecycle
 from traffic_control.models import ArrowDirection, LineDirection, RoadMarkingColor, RoadMarkingPlan, RoadMarkingReal
 from traffic_control.models.road_marking import LocationSpecifier
-from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     add_road_marking_real_operation,
     get_api_client,
@@ -19,17 +19,20 @@ from traffic_control.tests.factories import (
     get_road_marking_real,
     get_traffic_control_device_type,
     get_user,
+    OwnerFactory,
     PlanFactory,
     RoadMarkingPlanFactory,
     RoadMarkingRealFactory,
 )
 from traffic_control.tests.test_base_api import (
+    illegal_test_point,
     line_location_error_test_data,
     line_location_test_data,
     point_location_error_test_data,
     point_location_test_data,
     TrafficControlAPIBaseTestCase,
 )
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 @pytest.mark.django_db
@@ -145,6 +148,20 @@ def test__road_marking_plan__invalid_device_type(target_model):
     road_marking_plan.refresh_from_db()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert road_marking_plan.device_type != device_type
+
+
+@pytest.mark.django_db
+def test__road_marking_plan__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "name": "TestName",
+        "owner": OwnerFactory().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:roadmarkingplan-list",
+        data,
+        [f"Geometry for roadmarkingplan {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 class RoadMarkingPlanTests(TrafficControlAPIBaseTestCase):
@@ -409,6 +426,20 @@ def test__road_marking_real__invalid_device_type(target_model):
     road_marking_real.refresh_from_db()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert road_marking_real.device_type != device_type
+
+
+@pytest.mark.django_db
+def test__road_marking_real__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "name": "TestName",
+        "owner": OwnerFactory().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:roadmarkingreal-list",
+        data,
+        [f"Geometry for roadmarkingreal {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 class RoadMarkingRealTests(TrafficControlAPIBaseTestCase):
@@ -679,11 +710,11 @@ def test__road_marking_plan__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    road_marking = get_road_marking_plan(location="SRID=3879;POINT Z (0 0 0)")
+    road_marking = get_road_marking_plan(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": road_marking.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:roadmarkingplan-{view_type}", kwargs=kwargs)
     data = {
-        "location": "SRID=3879;POINT Z (1 1 1)",
+        "location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)",
         "device_type": str(get_traffic_control_device_type().id),
         "owner": str(get_owner().id),
     }
@@ -692,7 +723,7 @@ def test__road_marking_plan__anonymous_user(method, expected_status, view_type):
 
     assert RoadMarkingPlan.objects.count() == 1
     assert RoadMarkingPlan.objects.first().is_active
-    assert RoadMarkingPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert RoadMarkingPlan.objects.first().location == f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)"
     assert response.status_code == expected_status
 
 
@@ -715,11 +746,11 @@ def test__road_marking_real__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    road_marking = get_road_marking_real(location="SRID=3879;POINT Z (0 0 0)")
+    road_marking = get_road_marking_real(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": road_marking.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:roadmarkingreal-{view_type}", kwargs=kwargs)
     data = {
-        "location": "SRID=3879;POINT Z (1 1 1)",
+        "location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)",
         "device_type": str(get_traffic_control_device_type().id),
         "owner": str(get_owner().id),
     }
@@ -728,7 +759,7 @@ def test__road_marking_real__anonymous_user(method, expected_status, view_type):
 
     assert RoadMarkingReal.objects.count() == 1
     assert RoadMarkingReal.objects.first().is_active
-    assert RoadMarkingReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert RoadMarkingReal.objects.first().location == f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)"
     assert response.status_code == expected_status
 
 

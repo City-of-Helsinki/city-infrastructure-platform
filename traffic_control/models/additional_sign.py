@@ -9,6 +9,7 @@ from enumfields import EnumField, EnumIntegerField
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    BoundaryCheckedLocationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -38,7 +39,9 @@ class Color(models.IntegerChoices):
     YELLOW = 2, _("Yellow")
 
 
-class AbstractAdditionalSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
+class AbstractAdditionalSign(
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+):
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),

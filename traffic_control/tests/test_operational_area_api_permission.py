@@ -34,19 +34,20 @@ from traffic_control.tests.factories import (
     get_user,
     TrafficSignRealFactory,
 )
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
-test_point_inside_area = Point(20.0, 20.0, 0.0, srid=settings.SRID)
-test_point_outside_area = Point(-20.0, -20.0, 0.0, srid=settings.SRID)
-test_3d_point_inside_area = Point(20.0, 20.0, 0.0, srid=settings.SRID)
-test_3d_point_outside_area = Point(-20.0, -20.0, 0.0, srid=settings.SRID)
+test_point_inside_area = Point(MIN_X + 20.0, MIN_Y + 20.0, 0.0, srid=settings.SRID)
+test_point_outside_area = Point(MIN_X + 1, MIN_Y + 1, 0.0, srid=settings.SRID)
+test_3d_point_inside_area = Point(MIN_X + 20.0, MIN_Y + 20.0, 0.0, srid=settings.SRID)
+test_3d_point_outside_area = Point(MIN_X + 1, MIN_Y + 1, 0.0, srid=settings.SRID)
 test_multipolygon_inside_area = MultiPolygon(
     Polygon(
         (
-            (20.0, 20.0, 0.0),
-            (20.0, 30.0, 0.0),
-            (30.0, 30.0, 0.0),
-            (30.0, 20.0, 0.0),
-            (20.0, 20.0, 0.0),
+            (MIN_X + 20.0, MIN_Y + 20.0, 0.0),
+            (MIN_X + 20.0, MIN_Y + 30.0, 0.0),
+            (MIN_X + 30.0, MIN_Y + 30.0, 0.0),
+            (MIN_X + 30.0, MIN_Y + 20.0, 0.0),
+            (MIN_X + 20.0, MIN_Y + 20.0, 0.0),
         ),
         srid=settings.SRID,
     ),
@@ -55,11 +56,11 @@ test_multipolygon_inside_area = MultiPolygon(
 test_multipolygon_outside_area = MultiPolygon(
     Polygon(
         (
-            (-20.0, -20.0, 0.0),
-            (-20.0, -30.0, 0.0),
-            (-30.0, -30.0, 0.0),
-            (-30.0, -20.0, 0.0),
-            (-20.0, -20.0, 0.0),
+            (MIN_X + 200.0, MIN_Y + 200.0, 0.0),
+            (MIN_X + 200.0, MIN_Y + 300.0, 0.0),
+            (MIN_X + 300.0, MIN_Y + 300.0, 0.0),
+            (MIN_X + 300.0, MIN_Y + 200.0, 0.0),
+            (MIN_X + 200.0, MIN_Y + 200.0, 0.0),
         ),
         srid=settings.SRID,
     ),
