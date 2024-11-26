@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 
-from traffic_control.mixins.models import SourceControlModel
+from traffic_control.mixins.models import BoundaryCheckedLocationMixin, SourceControlModel
 
 
 class GroupOperationalArea(models.Model):
@@ -36,7 +36,7 @@ class GroupOperationalArea(models.Model):
         return f"GroupOperationalArea {self.group.name}"
 
 
-class OperationalArea(SourceControlModel):
+class OperationalArea(BoundaryCheckedLocationMixin, SourceControlModel):
     """
     Model containing operational area polygon used to check location based
     permissions

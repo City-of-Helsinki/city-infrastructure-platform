@@ -2,6 +2,7 @@ from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
+from traffic_control.forms import OperationalModelForm
 from traffic_control.models import GroupOperationalArea, OperationalArea
 
 
@@ -16,6 +17,7 @@ class OperationalAreaAdmin(admin.GISModelAdmin):
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    form = OperationalModelForm
     list_display = [
         "name",
         "id",

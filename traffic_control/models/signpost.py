@@ -9,6 +9,7 @@ from enumfields import EnumField, EnumIntegerField
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    BoundaryCheckedLocationMixin,
     DecimalValueFromDeviceTypeMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
@@ -32,7 +33,9 @@ from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import LocationSpecifier
 
 
-class AbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
+class AbstractSignpost(
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
         _("Road name"),

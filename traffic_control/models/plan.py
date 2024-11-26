@@ -10,10 +10,15 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
-from traffic_control.mixins.models import SoftDeleteModel, SourceControlModel, UserControlModel
+from traffic_control.mixins.models import (
+    BoundaryCheckedLocationMixin,
+    SoftDeleteModel,
+    SourceControlModel,
+    UserControlModel,
+)
 
 
-class Plan(SourceControlModel, SoftDeleteModel, UserControlModel):
+class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel):
     # Permissions
     ADD_PERMISSION = "traffic_control.add_plan"
     CHANGE_PERMISSION = "traffic_control.change_plan"

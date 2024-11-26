@@ -10,6 +10,7 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     TrafficSignRealFactory,
 )
+from traffic_control.tests.utils import MIN_X, MIN_Y
 from traffic_control.tests.wfs.wfs_utils import (
     EPSG_3879_URN,
     geojson_feature_id,
@@ -41,13 +42,13 @@ def test__wfs__get_feature_bounding_box(model, model_name: str, factory, bbox_ha
     """
 
     # BBOX parameter order is (south, west, north, east) in EPSG:3879
-    bbox = "10.0,0.0,20.0,10.0"
+    bbox = f"{MIN_Y + 10},{MIN_X + 1},{MIN_Y + 20},{MIN_X+10}"
     if bbox_has_crs:
         bbox += f",{EPSG_3879_URN}"
 
     # Create two devices, one outside and one inside the bounding box
-    factory(location=Point(25, 15, 0, srid=3879))
-    device_in = factory(location=Point(5, 15, 0, srid=3879))
+    factory(location=Point(MIN_X + 25, MIN_Y + 15, 0, srid=3879))
+    device_in = factory(location=Point(MIN_X + 5, MIN_Y + 15, 0, srid=3879))
 
     if output_format == "gml":
         response = wfs_get_features_gml(model_name, bbox=bbox)
@@ -82,8 +83,8 @@ def test__wfs__replaced_device_plans_are_not_listed(model, model_name: str, fact
     Replaced device plans are not listed in WFS response by default
     """
 
-    replaced_device = factory(location=Point(1, 1, 1, srid=3879))
-    replacing_device = factory(location=Point(2, 2, 2, srid=3879), replaces=replaced_device)
+    replaced_device = factory(location=Point(MIN_X + 1, MIN_Y + 1, 1, srid=3879))
+    replacing_device = factory(location=Point(MIN_X + 2, MIN_Y + 2, 2, srid=3879), replaces=replaced_device)
 
     if output_format == "gml":
         response = wfs_get_features_gml(model_name)

@@ -6,6 +6,7 @@ from django.test import TestCase
 
 from traffic_control.models import RoadMarkingReal, TrafficControlDeviceType
 from traffic_control.tests.management.commands.utils import mock_open
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 class ImportPortalTypesTestCase(TestCase):
@@ -18,11 +19,11 @@ class ImportPortalTypesTestCase(TestCase):
         data = os.linesep.join(
             [
                 "id;xcoord;ycoord;Tyyppi koo;Nuolen suu;Pituus;Väri;m_arvo;Lisätieto",
-                "1;2000000;6000000;M1;F;;;;info",
-                "2;2100000;6100000;M1;F;;;;info",
-                "2;2100000;6100000;M1;F;;;;info",
-                "3;2200000;6200000;M1;F;;;;info",
-                "3;2300000;6300000;M1;F;;;;info",
+                f"1;{MIN_X+2000};{MIN_Y+6000};M1;F;;;;info",
+                f"2;{MIN_X+2100};{MIN_Y+6100};M1;F;;;;info",
+                f"2;{MIN_X+2100};{MIN_Y+6100};M1;F;;;;info",
+                f"3;{MIN_X+2200};{MIN_Y+6200};M1;F;;;;info",
+                f"3;{MIN_X+2300};{MIN_Y+6300};M1;F;;;;info",
             ]
         )
 

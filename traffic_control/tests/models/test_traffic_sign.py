@@ -12,13 +12,14 @@ from traffic_control.tests.factories import (
     get_traffic_sign_real,
     get_user,
 )
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 class TrafficSignPlanTestCase(TestCase):
     def setUp(self):
         self.user = get_user()
         self.main_sign = TrafficSignPlan.objects.create(
-            location=Point(0, 0, 10, srid=settings.SRID),
+            location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
             direction=0,
             device_type=get_traffic_control_device_type(code="T123"),
             created_by=self.user,
@@ -69,7 +70,7 @@ class TrafficSignRealTestCase(TestCase):
     def setUp(self):
         self.user = get_user()
         self.main_sign = TrafficSignReal.objects.create(
-            location=Point(0, 0, 10, srid=settings.SRID),
+            location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
             legacy_code="100",
             direction=0,
             created_by=self.user,

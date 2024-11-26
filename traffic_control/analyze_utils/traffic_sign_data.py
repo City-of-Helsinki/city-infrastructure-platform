@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 
 from traffic_control.enums import Condition, InstallationStatus
+from traffic_control.geometry_utils import geometry_is_legit
 from traffic_control.models.additional_sign import AdditionalSignReal, Color
 from traffic_control.models.common import Owner, TrafficControlDeviceType
 from traffic_control.models.mount import LocationSpecifier as MountLocationSpecifier, MountReal, MountType
@@ -308,8 +309,15 @@ class TrafficSignImporter:
         self.device_types_by_code = self._get_device_types_by_code()
 
         self.mount_reals_by_source_id = None
+        """populated with actual db objects after mount reals have been imported"""
+        self.mounts_with_invalid_location = []
+        """mount real source ids that do not have a legit location"""
         self.sign_reals_by_source_id = None
-
+        """populated with actual db objects after sign reals have been imported"""
+        self.signs_with_invalid_location = []
+        """sign real source ids that do not have a legit location. Not including additional signs"""
+        self.additional_signs_with_invalid_location = []
+        """additional sign real source ids that do not have a legit location"""
         self.results = []
 
     def import_data(self):
@@ -361,22 +369,36 @@ class TrafficSignImporter:
         for mount_source_id, mount_data in self.mount_data.items():
             if mount_source_id not in skip_source_ids and mount_source_id not in update_source_ids:
                 location_specifier = mount_data[CSVHeaders.location_specifier]
-                yield MountReal(
-                    mount_type=self.mount_types_by_name[mount_data[CSVHeaders.mount_type]],
-                    source_id=mount_source_id,
-                    source_name=self.SOURCE_NAME,
-                    location=Point(
-                        float(mount_data[CSVHeaders.coord_x]),
-                        float(mount_data[CSVHeaders.coord_y]),
-                        float(mount_data[CSVHeaders.coord_z]),
-                        srid=settings.SRID,
-                    ),
-                    owner=self.default_owner,
-                    installation_status=get_default_installation_status(),
-                    location_specifier=MountLocationSpecifier(int(location_specifier)) if location_specifier else None,
-                    scanned_at=self._get_sign_scanned_at(mount_data.get(CSVHeaders.scanned_at)),
-                    attachment_url=mount_data.get(CSVHeaders.attachment_url),
+                location = Point(
+                    float(mount_data[CSVHeaders.coord_x]),
+                    float(mount_data[CSVHeaders.coord_y]),
+                    float(mount_data[CSVHeaders.coord_z]),
+                    srid=settings.SRID,
                 )
+                if not geometry_is_legit(location):
+                    self.results.append(
+                        ImportResult(
+                            result_type="skip",
+                            object_type="mount",
+                            object_id=mount_source_id,
+                            reason=f"Invalid location: {location.ewkt}",
+                        )
+                    )
+                    self.mounts_with_invalid_location.append(mount_source_id)
+                else:
+                    yield MountReal(
+                        mount_type=self.mount_types_by_name[mount_data[CSVHeaders.mount_type]],
+                        source_id=mount_source_id,
+                        source_name=self.SOURCE_NAME,
+                        location=location,
+                        owner=self.default_owner,
+                        installation_status=get_default_installation_status(),
+                        location_specifier=MountLocationSpecifier(int(location_specifier))
+                        if location_specifier
+                        else None,
+                        scanned_at=self._get_sign_scanned_at(mount_data.get(CSVHeaders.scanned_at)),
+                        attachment_url=mount_data.get(CSVHeaders.attachment_url),
+                    )
 
     def _import_sign_data(self):
         skip_source_ids = set()
@@ -429,6 +451,12 @@ class TrafficSignImporter:
             ):
                 if not should_be_ignored_totally(sign_data):
                     device_type_obj = self._get_sign_device_type(sign_data[CSVHeaders.code])
+                    location = Point(
+                        float(sign_data[CSVHeaders.coord_x]),
+                        float(sign_data[CSVHeaders.coord_y]),
+                        float(sign_data[CSVHeaders.coord_z]),
+                        srid=settings.SRID,
+                    )
                     if not device_type_obj:
                         self.results.append(
                             ImportResult(
@@ -438,6 +466,25 @@ class TrafficSignImporter:
                                 reason=f"Device type not found: {sign_data[CSVHeaders.code]}",
                             )
                         )
+                    elif sign_data[CSVHeaders.mount_id] in self.mounts_with_invalid_location:
+                        self.results.append(
+                            ImportResult(
+                                result_type="skip",
+                                object_type="sign",
+                                object_id=sign_source_id,
+                                reason=f"Related mount has invalid location: {sign_data[CSVHeaders.mount_id]}",
+                            )
+                        )
+                    elif not geometry_is_legit(location):
+                        self.results.append(
+                            ImportResult(
+                                result_type="skip",
+                                object_type="sign",
+                                object_id=sign_source_id,
+                                reason=f"Invalid location: {location.ewkt}",
+                            )
+                        )
+                        self.signs_with_invalid_location.append(sign_source_id)
                     else:
                         yield TrafficSignReal(
                             owner=self.default_owner,
@@ -446,12 +493,7 @@ class TrafficSignImporter:
                             value=self._get_sign_value(sign_data.get(CSVHeaders.number_code)),
                             source_id=sign_source_id,
                             source_name=self.SOURCE_NAME,
-                            location=Point(
-                                float(sign_data[CSVHeaders.coord_x]),
-                                float(sign_data[CSVHeaders.coord_y]),
-                                float(sign_data[CSVHeaders.coord_z]),
-                                srid=settings.SRID,
-                            ),
+                            location=location,
                             direction=get_sign_direction(sign_data),
                             height=self._get_sign_height(sign_data.get(CSVHeaders.height)),
                             condition=get_sign_condition(sign_data),
@@ -633,40 +675,96 @@ class TrafficSignImporter:
                     )
                 )
 
-    def additional_sign_should_be_imported(self, row):
+    def additional_sign_should_be_imported(self, row) -> bool:
         """
         Do not import additional sign if:
             1. 'teksti' is unreadable (case does not matter, whitespaces stripped)
             2. if devicetype code is not found
-            3. only ticket machines without parent sign are in imported and these are counted as trafficsigns
-            4. Additional signs with signpost as parent are not imported if the signpost is not imported
-            5. if parent is not found
-            6. parent is found but it's device type code is not found
+            3. location is not legit
+            4. related mounts location is not legit
+            5. only ticket machines without parent sign are in imported and these are counted as trafficsigns
+            6. Additional signs with signpost as parent are not imported if the signpost is not imported
+            7. if parent is not found
+            8. parent is found but it's device type code is not found
+            9. parent is found but it's location is not legit
         """
+        if self._check_ticket_machine(row):
+            return False
+
+        check_functions = [
+            self._check_additional_sign_txt,
+            self._check_device_type,
+            self._check_additional_sign_location,
+            self._check_related_mount_location,
+            self._check_additional_sign_parent_signpost,
+            self._check_additional_sign_parent_device_type,
+            self._check_parent_location,
+        ]
+        return self._check_and_append_errors(check_functions, row)
+
+    def _check_and_append_errors(self, check_functions, row) -> bool:
+        """Apply given check functions. Return False on first found error."""
+        for check_function in check_functions:
+            if error := check_function(row):
+                self.results.append(error)
+                return False
+        return True
+
+    @staticmethod
+    def _check_additional_sign_txt(row) -> Union[ImportResult, None]:
         if row[CSVHeaders.txt].strip().lower() == "unreadable":
-            self.results.append(
-                ImportResult(
-                    result_type="skip",
-                    object_type="additionalsign",
-                    object_id=row[CSVHeaders.id],
-                    reason="text value is unreadable",
-                )
+            return ImportResult(
+                result_type="skip",
+                object_type="additionalsign",
+                object_id=row[CSVHeaders.id],
+                reason="text value is unreadable",
             )
-            return False
+
+    def _check_device_type(self, row, object_type="additionalsign") -> Union[ImportResult, None]:
         if not self._get_sign_device_type(row[CSVHeaders.code]):
-            self.results.append(
-                ImportResult(
-                    result_type="skip",
-                    object_type="additionalsign",
-                    object_id=row[CSVHeaders.id],
-                    reason=f"device type code not found: {row[CSVHeaders.code]}",
-                )
+            return ImportResult(
+                result_type="skip",
+                object_type=object_type,
+                object_id=row[CSVHeaders.id],
+                reason=f"device type code not found: {row[CSVHeaders.code]}",
             )
-            return False
+
+    @staticmethod
+    def _check_ticket_machine(row) -> Union[ImportResult, None]:
+        """Parentless ticket machines are not to be imported as an additional sign.
+        This is not an error but processing should be stopped anyways. These are imported as trafficsigns."""
         if not row[CSVHeaders.parent_sign_id].strip():
             # these are "lippuautomaatit"
-            return row[CSVHeaders.code] in TICKET_MACHINE_CODES
+            if row[CSVHeaders.code] in TICKET_MACHINE_CODES:
+                return True
 
+    def _check_additional_sign_location(self, row) -> Union[ImportResult, None]:
+        source_id = row[CSVHeaders.id]
+        location = Point(
+            float(row[CSVHeaders.coord_x]),
+            float(row[CSVHeaders.coord_y]),
+            float(row[CSVHeaders.coord_z]),
+            srid=settings.SRID,
+        )
+        if not geometry_is_legit(location):
+            self.additional_signs_with_invalid_location.append(source_id)
+            return ImportResult(
+                result_type="skip",
+                object_type="additionalsign",
+                object_id=source_id,
+                reason=f"Invalid location: {location.ewkt}",
+            )
+
+    def _check_related_mount_location(self, row, object_type="additionalsign") -> Union[ImportResult, None]:
+        if row[CSVHeaders.mount_id] in self.mounts_with_invalid_location:
+            return ImportResult(
+                result_type="skip",
+                object_type=object_type,
+                object_id=row[CSVHeaders.id],
+                reason=f"Related mount has invalid location: {row[CSVHeaders.mount_id]}",
+            )
+
+    def _check_additional_sign_parent_signpost(self, row) -> Union[ImportResult, None]:
         parent_sign_row = self.sign_data.get(row[CSVHeaders.parent_sign_id], None)
         if parent_sign_row and is_signpost(parent_sign_row) and not sign_post_should_be_imported(parent_sign_row):
             self.results.append(
@@ -677,8 +775,9 @@ class TrafficSignImporter:
                     reason=f"parent sign is signpost that should not be imported {row[CSVHeaders.parent_sign_id]}",
                 )
             )
-            return False
 
+    def _check_additional_sign_parent_device_type(self, row) -> Union[ImportResult, None]:
+        parent_sign_row = self.sign_data.get(row[CSVHeaders.parent_sign_id], None)
         parent_device_type_obj = (
             self._get_sign_device_type(parent_sign_row[CSVHeaders.code]) if parent_sign_row else None
         )
@@ -687,21 +786,24 @@ class TrafficSignImporter:
                 skip_reason = f"parent not found from csv with id: {row[CSVHeaders.parent_sign_id]}"
             else:
                 skip_reason = f"parent device type code not found: {parent_sign_row[CSVHeaders.code]}"
-            self.results.append(
-                ImportResult(
-                    result_type="skip",
-                    object_type="additionalsign",
-                    object_id=row[CSVHeaders.id],
-                    reason=skip_reason,
-                )
+            return ImportResult(
+                result_type="skip",
+                object_type="additionalsign",
+                object_id=row[CSVHeaders.id],
+                reason=skip_reason,
             )
-            return False
 
-        return True
+    def _check_parent_location(self, row, object_type="additionalsign") -> Union[ImportResult, None]:
+        if row[CSVHeaders.parent_sign_id] in self.signs_with_invalid_location:
+            return ImportResult(
+                result_type="skip",
+                object_type=object_type,
+                object_id=row[CSVHeaders.id],
+                reason=f"Related parent sign has invalid location: {row[CSVHeaders.parent_sign_id]}",
+            )
 
     def _get_mount_real_id(self, source_id, related_id, object_type):
         db_id = self.mount_reals_by_source_id.get(source_id, None)
-
         if db_id is None:
             (
                 self.results.append(
@@ -893,7 +995,10 @@ def is_signpost(row):
 
 
 def sign_post_should_be_imported(row):
-    """Signpost imports should not be done yet"""
+    """Signpost imports should not be done yet
+    If signposts are going to be imported at some point, remember to do
+    similar kind of location validity check as for signs.
+    """
     return False
 
 

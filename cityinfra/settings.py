@@ -366,6 +366,10 @@ if SENTRY_DSN:
 # Custom settings
 SRID = 3879  # the spatial reference id used for geometries
 
+# Format for invidual SRID boundary box is:
+# x0,y0, x1, y1
+SRID_BOUNDARIES = {3879: (21532262.0, 3639452.31, 26927342.37, 9557869.6)}
+
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 
 # Import / Export

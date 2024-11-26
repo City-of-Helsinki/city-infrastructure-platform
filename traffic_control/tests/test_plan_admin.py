@@ -20,7 +20,13 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_user,
 )
-from traffic_control.tests.test_base_api import test_point, test_point_2, test_polygon, test_polygon_2
+from traffic_control.tests.test_base_api import (
+    illegal_multipolygon,
+    test_point,
+    test_point_2,
+    test_polygon,
+    test_polygon_2,
+)
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
 
 settings_overrides = override_settings(
@@ -244,3 +250,13 @@ def test_plan_device_bulk_delete_update_plan_location(admin_client, factory, der
         assert plan.location != plan_location_before_delete
     else:
         assert plan.location is None
+
+
+@pytest.mark.django_db
+def test__plan_create_illegal_location(admin_client):
+    data = {"location": illegal_multipolygon.ewkt}
+    response = admin_client.post(reverse("admin:traffic_control_plan_add"), data=data)
+    assert response.status_code == 200
+    assert Plan.objects.count() == 0
+    assert "location" in response.context["adminform"].form.errors
+    assert response.context["adminform"].form.errors["location"] == [f"Invalid location: {illegal_multipolygon.ewkt}"]

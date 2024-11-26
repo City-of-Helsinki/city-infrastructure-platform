@@ -18,6 +18,7 @@ from traffic_control.tests.factories import (
 )
 from traffic_control.tests.test_base_api import test_point_2
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 @pytest.mark.django_db
@@ -106,11 +107,11 @@ def test__signpost_plan_export_real_replacement_importable():
     and the result is importable.
     """
 
-    get_signpost_plan(location="POINT Z(1 0 0)")
-    plan_b = get_signpost_plan(location="POINT Z(2 0 0)")
-    get_signpost_plan(location="POINT Z(3 0 0)", parent=plan_b)
-    plan_d = get_signpost_plan(location="POINT Z(4 0 0)", parent=plan_b)
-    get_signpost_plan(location="POINT Z(5 0 0)", parent=plan_d)
+    get_signpost_plan(location=f"POINT Z({MIN_X+1} {MIN_Y+1} 0)")
+    plan_b = get_signpost_plan(location=f"POINT Z({MIN_X+2} {MIN_Y+1} 0)")
+    get_signpost_plan(location=f"POINT Z({MIN_X+3} {MIN_Y+1} 0)", parent=plan_b)
+    plan_d = get_signpost_plan(location=f"POINT Z({MIN_X+4} {MIN_Y+1} 0)", parent=plan_b)
+    get_signpost_plan(location=f"POINT Z({MIN_X+5} {MIN_Y+1} 0)", parent=plan_d)
 
     exported_dataset = SignpostPlanToRealTemplateResource().export()
     assert len(exported_dataset) == 5

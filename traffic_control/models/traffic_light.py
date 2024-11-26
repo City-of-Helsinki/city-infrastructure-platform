@@ -9,6 +9,7 @@ from enumfields import EnumField, EnumIntegerField
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    BoundaryCheckedLocationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -65,7 +66,9 @@ class PushButton(models.IntegerChoices):
     YES = 2, _("Yes")
 
 
-class AbstractTrafficLight(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
+class AbstractTrafficLight(
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
         _("Road name"),

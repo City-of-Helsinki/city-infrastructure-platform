@@ -10,6 +10,7 @@ from enumfields import EnumField, EnumIntegerField
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    BoundaryCheckedLocationMixin,
     DecimalValueFromDeviceTypeMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
@@ -63,7 +64,9 @@ class TrafficSignRealQuerySet(SoftDeleteQuerySet):
         additional_signs.soft_delete(user)
 
 
-class AbstractTrafficSign(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
+class AbstractTrafficSign(
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,

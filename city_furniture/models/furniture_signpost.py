@@ -10,6 +10,7 @@ from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    BoundaryCheckedLocationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     SoftDeleteModel,
@@ -33,7 +34,9 @@ class ArrowDirection(models.IntegerChoices):
     BOTTOM_LEFT = 8, _("Bottom left")
 
 
-class FurnitureAbstractSignpost(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
+class FurnitureAbstractSignpost(
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     location_name_fi = models.CharField(
         _("Finnish location name"),

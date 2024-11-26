@@ -21,7 +21,12 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
-from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
+from traffic_control.forms import (
+    AdminFileWidget,
+    CityInfraFileUploadFormset,
+    RoadMarkingPlanModelForm,
+    RoadMarkingRealModelForm,
+)
 from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
@@ -101,6 +106,7 @@ class RoadMarkingPlanAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    form = RoadMarkingPlanModelForm
     fieldsets = (
         (
             _("General information"),
@@ -229,6 +235,7 @@ class RoadMarkingRealAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    form = RoadMarkingRealModelForm
     fieldsets = (
         (
             _("General information"),

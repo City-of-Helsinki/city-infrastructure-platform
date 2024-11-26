@@ -9,6 +9,7 @@ from enumfields import EnumField, EnumIntegerField
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType
 from traffic_control.mixins.models import (
     AbstractFileModel,
+    BoundaryCheckedLocationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -46,7 +47,9 @@ class LocationSpecifier(models.IntegerChoices):
     LEFT = 3, _("Left of road or lane")
 
 
-class AbstractBarrier(SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel):
+class AbstractBarrier(
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
         _("Road name"),

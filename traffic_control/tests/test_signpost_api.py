@@ -19,7 +19,7 @@ from traffic_control.enums import (
 )
 from traffic_control.models import SignpostPlan, SignpostReal
 from traffic_control.models.traffic_sign import LocationSpecifier
-from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     add_signpost_real_operation,
     get_api_client,
@@ -29,15 +29,18 @@ from traffic_control.tests.factories import (
     get_signpost_real,
     get_traffic_control_device_type,
     get_user,
+    OwnerFactory,
     PlanFactory,
     SignpostPlanFactory,
     SignpostRealFactory,
 )
 from traffic_control.tests.test_base_api import (
+    illegal_test_point,
     point_location_error_test_data,
     point_location_test_data,
     TrafficControlAPIBaseTestCase,
 )
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 @pytest.mark.django_db
@@ -151,6 +154,19 @@ def test__signpost_plan__invalid_device_type(target_model):
     signpost_plan.refresh_from_db()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert signpost_plan.device_type != device_type
+
+
+@pytest.mark.django_db
+def test__signpost_plan__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:signpostplan-list",
+        data,
+        [f"Geometry for signpostplan {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 class SignpostPlanTests(TrafficControlAPIBaseTestCase):
@@ -407,6 +423,19 @@ def test__signpost_real__invalid_device_type(target_model):
     assert signpost_real.device_type != device_type
 
 
+@pytest.mark.django_db
+def test__signpost_real__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:signpostreal-list",
+        data,
+        [f"Geometry for signpostreal {illegal_test_point.ewkt} is not legal"],
+    )
+
+
 class SignPostRealTests(TrafficControlAPIBaseTestCase):
     def test_get_all_signpost_reals(self):
         """
@@ -656,11 +685,11 @@ def test__signpost_plan__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    signpost = get_signpost_plan(location="SRID=3879;POINT Z (0 0 0)")
+    signpost = get_signpost_plan(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": signpost.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:signpostplan-{view_type}", kwargs=kwargs)
     data = {
-        "location": "SRID=3879;POINT Z (1 1 1)",
+        "location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)",
         "device_type": str(get_traffic_control_device_type().id),
         "owner": str(get_owner().id),
     }
@@ -669,7 +698,7 @@ def test__signpost_plan__anonymous_user(method, expected_status, view_type):
 
     assert SignpostPlan.objects.count() == 1
     assert SignpostPlan.objects.first().is_active
-    assert SignpostPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert SignpostPlan.objects.first().location == f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)"
     assert response.status_code == expected_status
 
 
@@ -692,11 +721,11 @@ def test__signpost_real__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    signpost = get_signpost_real(location="SRID=3879;POINT Z (0 0 0)")
+    signpost = get_signpost_real(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": signpost.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:signpostreal-{view_type}", kwargs=kwargs)
     data = {
-        "location": "SRID=3879;POINT Z (1 1 1)",
+        "location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)",
         "device_type": str(get_traffic_control_device_type().id),
         "owner": str(get_owner().id),
     }
@@ -705,7 +734,7 @@ def test__signpost_real__anonymous_user(method, expected_status, view_type):
 
     assert SignpostReal.objects.count() == 1
     assert SignpostReal.objects.first().is_active
-    assert SignpostReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert SignpostReal.objects.first().location == f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)"
     assert response.status_code == expected_status
 
 

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.admin import widgets
 from django.contrib.gis import forms
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import GEOSGeometry, Point
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms.models import BaseInlineFormSet, ModelChoiceIteratorValue
@@ -13,15 +13,24 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
 from city_furniture.models import FurnitureSignpostPlan
+from traffic_control.geometry_utils import geometry_is_legit
 from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignReal,
     BarrierPlan,
+    BarrierReal,
+    CoverageArea,
     MountPlan,
+    MountReal,
+    OperationalArea,
+    Plan,
     RoadMarkingPlan,
+    RoadMarkingReal,
     SignpostPlan,
+    SignpostReal,
     TrafficControlDeviceType,
     TrafficLightPlan,
+    TrafficLightReal,
     TrafficSignPlan,
     TrafficSignReal,
 )
@@ -157,6 +166,16 @@ class StructuredContentModelFormMixin:
         return cleaned_data
 
 
+class SRIDBoundGeometryFormMixin:
+    def clean(self):
+        cleaned_data = super().clean()
+        if "location" in cleaned_data:
+            location = cleaned_data.get("location")
+            if not geometry_is_legit(GEOSGeometry(location)):
+                raise ValidationError({"location": f"Invalid location: {location}"})
+        return cleaned_data
+
+
 class Point3DFieldForm(forms.ModelForm):
     """Form class that allows entering a z coordinate for 3d point"""
 
@@ -182,25 +201,7 @@ class Point3DFieldForm(forms.ModelForm):
         return cleaned_data
 
 
-class TrafficSignRealModelForm(Point3DFieldForm):
-    class Meta:
-        model = TrafficSignReal
-        fields = "__all__"
-        widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget,
-        }
-
-
-class TrafficSignPlanModelForm(Point3DFieldForm):
-    class Meta:
-        model = TrafficSignPlan
-        fields = "__all__"
-        widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget,
-        }
-
-
-class AdditionalSignRealModelForm(StructuredContentModelFormMixin, Point3DFieldForm):
+class AdditionalSignRealModelForm(StructuredContentModelFormMixin, SRIDBoundGeometryFormMixin, Point3DFieldForm):
     class Meta:
         model = AdditionalSignReal
         fields = "__all__"
@@ -210,13 +211,109 @@ class AdditionalSignRealModelForm(StructuredContentModelFormMixin, Point3DFieldF
         }
 
 
-class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, Point3DFieldForm):
+class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, SRIDBoundGeometryFormMixin, Point3DFieldForm):
     class Meta:
         model = AdditionalSignPlan
         fields = "__all__"
         widgets = {
             "device_type": AdminTrafficSignIconSelectWidget,
             "content_s": AdminStructuredContentWidget,
+        }
+
+
+class BarrierPlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = BarrierPlan
+        fields = "__all__"
+
+
+class BarrierRealModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = BarrierReal
+        fields = "__all__"
+
+
+class CoverageAreaModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = CoverageArea
+        fields = "__all__"
+
+
+class MountPlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = MountPlan
+        fields = "__all__"
+
+
+class MountRealModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = MountReal
+        fields = "__all__"
+
+
+class OperationalModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = OperationalArea
+        fields = "__all__"
+
+
+class PlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = Plan
+        fields = "__all__"
+
+
+class RoadMarkingPlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = RoadMarkingPlan
+        fields = "__all__"
+
+
+class RoadMarkingRealModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = RoadMarkingReal
+        fields = "__all__"
+
+
+class SignpostPlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = SignpostPlan
+        fields = "__all__"
+
+
+class SignpostRealModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+    class Meta:
+        model = SignpostReal
+        fields = "__all__"
+
+
+class TrafficLightPlanModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
+    class Meta:
+        model = TrafficLightPlan
+        fields = "__all__"
+
+
+class TrafficLightRealModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
+    class Meta:
+        model = TrafficLightReal
+        fields = "__all__"
+
+
+class TrafficSignPlanModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
+    class Meta:
+        model = TrafficSignPlan
+        fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficSignIconSelectWidget,
+        }
+
+
+class TrafficSignRealModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
+    class Meta:
+        model = TrafficSignReal
+        fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficSignIconSelectWidget,
         }
 
 

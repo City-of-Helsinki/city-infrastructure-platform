@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
-from traffic_control.forms import PlanRelationsForm
+from traffic_control.forms import PlanModelForm, PlanRelationsForm
 from traffic_control.mixins import EnumChoiceValueDisplayAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
 from traffic_control.models import Plan
 
@@ -25,6 +25,7 @@ class PlanAdmin(
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
 
+    form = PlanModelForm
     fieldsets = (
         (
             _("General information"),

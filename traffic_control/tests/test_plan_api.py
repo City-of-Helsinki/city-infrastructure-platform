@@ -10,8 +10,15 @@ from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
 from traffic_control.models import Plan
+from traffic_control.tests.api_utils import do_illegal_geometry_test
 from traffic_control.tests.factories import get_api_client, get_plan, get_user, PlanFactory
-from traffic_control.tests.test_base_api import test_multi_polygon, test_polygon, test_polygon_2, test_polygon_3
+from traffic_control.tests.test_base_api import (
+    illegal_multipolygon,
+    test_multi_polygon,
+    test_polygon,
+    test_polygon_2,
+    test_polygon_3,
+)
 
 PLAN_DIARY_NUMBER = "HEL 2023-000001"
 
@@ -262,6 +269,20 @@ def test_plan_create_validate_drawing_number(valid, input_drawing_numbers, db_dr
     else:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert Plan.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test__plan__create_with_invalid_geometry():
+    data = {
+        "location": illegal_multipolygon.ewkt,
+        "decision_id": "test",
+        "name": "TestName",
+    }
+    do_illegal_geometry_test(
+        "v1:plan-list",
+        data,
+        [f"Geometry for plan {illegal_multipolygon.ewkt} is not legal"],
+    )
 
 
 @pytest.mark.parametrize(

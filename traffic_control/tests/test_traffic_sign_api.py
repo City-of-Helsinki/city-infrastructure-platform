@@ -20,7 +20,7 @@ from traffic_control.enums import (
 )
 from traffic_control.models import TrafficSignPlan, TrafficSignReal
 from traffic_control.models.traffic_sign import LocationSpecifier
-from traffic_control.tests.api_utils import do_filtering_test
+from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     add_traffic_sign_real_operation,
     get_api_client,
@@ -30,15 +30,18 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    OwnerFactory,
     PlanFactory,
     TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
+from traffic_control.tests.test_base_api import illegal_test_point
 from traffic_control.tests.test_base_api_3d import (
     point_location_error_test_data_3d,
     point_location_test_data_3d,
     TrafficControlAPIBaseTestCase3D,
 )
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
 @pytest.mark.django_db
@@ -154,6 +157,19 @@ def test__traffic_sign_plan__invalid_device_type(target_model):
     traffic_sign_plan.refresh_from_db()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert traffic_sign_plan.device_type != device_type
+
+
+@pytest.mark.django_db
+def test__traffic_sign_plan__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:trafficsignplan-list",
+        data,
+        [f"Geometry for trafficsignplan {illegal_test_point.ewkt} is not legal"],
+    )
 
 
 class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
@@ -427,6 +443,19 @@ def test__traffic_sign_real__invalid_device_type(target_model):
     assert traffic_sign_real.device_type != device_type
 
 
+@pytest.mark.django_db
+def test__traffic_sign_real__create_with_invalid_geometry():
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": OwnerFactory().pk,
+    }
+    do_illegal_geometry_test(
+        "v1:trafficsignreal-list",
+        data,
+        [f"Geometry for trafficsignreal {illegal_test_point.ewkt} is not legal"],
+    )
+
+
 class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
     def test_get_all_traffic_sign_reals(self):
         """
@@ -664,11 +693,11 @@ def test__traffic_sign_plan__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    traffic_sign = get_traffic_sign_plan(location="SRID=3879;POINT Z (0 0 0)")
+    traffic_sign = get_traffic_sign_plan(location=f"SRID=3879;POINT Z ({MIN_X + 1} {MIN_Y + 1} 0)")
     kwargs = {"pk": traffic_sign.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:trafficsignplan-{view_type}", kwargs=kwargs)
     data = {
-        "location": "SRID=3879;POINT Z (1 1 1)",
+        "location": f"SRID=3879;POINT Z ({MIN_X + 2} {MIN_Y + 2} 0)",
         "device_type": str(get_traffic_control_device_type().id),
         "owner": str(get_owner().id),
     }
@@ -677,7 +706,7 @@ def test__traffic_sign_plan__anonymous_user(method, expected_status, view_type):
 
     assert TrafficSignPlan.objects.count() == 1
     assert TrafficSignPlan.objects.first().is_active
-    assert TrafficSignPlan.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert TrafficSignPlan.objects.first().location == f"SRID=3879;POINT Z ({MIN_X + 1} {MIN_Y + 1} 0)"
     assert response.status_code == expected_status
 
 
@@ -700,11 +729,11 @@ def test__traffic_sign_real__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    traffic_sign = get_traffic_sign_real(location="SRID=3879;POINT Z (0 0 0)")
+    traffic_sign = get_traffic_sign_real(location=f"SRID=3879;POINT Z ({MIN_X + 1} {MIN_Y + 1} 0)")
     kwargs = {"pk": traffic_sign.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:trafficsignreal-{view_type}", kwargs=kwargs)
     data = {
-        "location": "SRID=3879;POINT Z (1 1 1)",
+        "location": f"SRID=3879;POINT Z ({MIN_X + 2} {MIN_Y + 2} 0)",
         "device_type": str(get_traffic_control_device_type().id),
         "owner": str(get_owner().id),
     }
@@ -713,7 +742,7 @@ def test__traffic_sign_real__anonymous_user(method, expected_status, view_type):
 
     assert TrafficSignReal.objects.count() == 1
     assert TrafficSignReal.objects.first().is_active
-    assert TrafficSignReal.objects.first().location == "SRID=3879;POINT Z (0 0 0)"
+    assert TrafficSignReal.objects.first().location == f"SRID=3879;POINT Z ({MIN_X + 1} {MIN_Y + 1} 0)"
     assert response.status_code == expected_status
 
 

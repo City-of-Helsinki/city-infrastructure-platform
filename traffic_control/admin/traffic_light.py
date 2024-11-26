@@ -21,7 +21,12 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
-from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
+from traffic_control.forms import (
+    AdminFileWidget,
+    CityInfraFileUploadFormset,
+    TrafficLightPlanModelForm,
+    TrafficLightRealModelForm,
+)
 from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
@@ -94,6 +99,7 @@ class TrafficLightPlanAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    form = TrafficLightPlanModelForm
     fieldsets = (
         (
             _("General information"),
@@ -202,6 +208,7 @@ class TrafficLightRealAdmin(
     default_lon = HELSINKI_LONGITUDE
     default_lat = HELSINKI_LATITUDE
     default_zoom = 12
+    form = TrafficLightRealModelForm
     fieldsets = (
         (
             _("General information"),
