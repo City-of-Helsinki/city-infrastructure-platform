@@ -175,6 +175,7 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "validity_period_end",
         "seasonal_validity_period_start",
         "seasonal_validity_period_end",
+        "additional_information",
         #
         "owner",
         "responsible_entity",
