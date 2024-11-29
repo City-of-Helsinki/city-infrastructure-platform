@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 10:51+0300\n"
+"POT-Creation-Date: 2024-11-29 16:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -942,7 +942,8 @@ msgstr "enhet"
 msgid "project"
 msgstr "projekt"
 
-msgid "If set to true, returns only plans that have been superseded by a new plan."
+msgid ""
+"If set to true, returns only plans that have been superseded by a new plan."
 msgstr "Om sant, återställ endast planer, som är upphävda."
 
 msgid ""
@@ -2249,6 +2250,9 @@ msgstr "Spara och fortsätt redigera"
 
 msgid "Additional signs"
 msgstr "Tilläggsskyltar"
+
+msgid "No additional signs"
+msgstr ""
 
 msgid "No mount"
 msgstr "Ej fästpunkt"

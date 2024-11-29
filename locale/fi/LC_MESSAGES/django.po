@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 10:51+0300\n"
+"POT-Creation-Date: 2024-11-29 16:00+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -934,7 +934,8 @@ msgstr "yksikkö"
 msgid "project"
 msgstr "projekti"
 
-msgid "If set to true, returns only plans that have been superseded by a new plan."
+msgid ""
+"If set to true, returns only plans that have been superseded by a new plan."
 msgstr "Jos tosi, palauttaa vain suunnitelmat, jotka on kumottu uusilla."
 
 msgid ""
@@ -2240,6 +2241,9 @@ msgstr "Tallenna välillä ja jatka muokkaamista"
 
 msgid "Additional signs"
 msgstr "Lisäkilvet"
+
+msgid "No additional signs"
+msgstr "Ei lisäkilpiä"
 
 msgid "No mount"
 msgstr "Ei kiinnityskohdetta"
