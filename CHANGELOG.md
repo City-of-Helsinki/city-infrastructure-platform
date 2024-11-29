@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.0.0...city-infrastructure-platform-v1.1.0) (2024-11-29)
+
+
+### Features
+
+* Add source_name and source_id to import-export resources where applicable ([ca28781](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ca28781ee8a61bdc3e1303f9c553735611061038))
+* List additional signs right after trafficsign in embed view ([c2a1a7f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c2a1a7f08cc875f9edcc44780cb3df280783d1d7))
+
+
+### Bug Fixes
+
+* Add missing internalization and finnish translation for No additional signs ([6f723cf](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/6f723cf42a671a1911f7a6286227dbfa0371b0ba))
+* Do not allowd geometries outside given SRID ([e1794ac](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e1794ac026f52db688ca2a2d3fe9c39092ae8741))
+
 ## [1.0.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v0.1.0...city-infrastructure-platform-v1.0.0) (2024-11-12)
 
 
