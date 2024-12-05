@@ -21,7 +21,6 @@ from traffic_control.admin.utils import (
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
 )
-from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import (
     Condition,
     InstallationStatus,
@@ -41,7 +40,7 @@ from traffic_control.forms import (
 from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
-    Point3DFieldAdminMixin,
+    Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -150,7 +149,7 @@ class TrafficSignPlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
-    Point3DFieldAdminMixin,
+    Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
@@ -181,7 +180,7 @@ class TrafficSignPlanAdmin(
             _("Location information"),
             {
                 "fields": (
-                    ("location", "z_coord"),
+                    ("location", "z_coord", "location_ewkt"),
                     "direction",
                     "road_name",
                     "lane_number",
@@ -217,9 +216,6 @@ class TrafficSignPlanAdmin(
             {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
         ),
     )
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     list_display = (
         "id",
         "device_type",
@@ -284,7 +280,7 @@ class TrafficSignRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
-    Point3DFieldAdminMixin,
+    Geometry3DFieldAdminMixin,
     AdminFieldInitialValuesMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -320,7 +316,7 @@ class TrafficSignRealAdmin(
             _("Location information"),
             {
                 "fields": (
-                    ("location", "z_coord"),
+                    ("location", "z_coord", "location_ewkt"),
                     "direction",
                     "road_name",
                     "lane_number",
@@ -369,9 +365,6 @@ class TrafficSignRealAdmin(
             {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
         ),
     )
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     list_display = (
         "id",
         "traffic_sign_plan",

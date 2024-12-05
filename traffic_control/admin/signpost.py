@@ -19,7 +19,6 @@ from traffic_control.admin.utils import (
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
 )
-from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size
 from traffic_control.forms import (
     AdminFileWidget,
@@ -30,6 +29,7 @@ from traffic_control.forms import (
 from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
+    Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -88,6 +88,7 @@ class SignpostPlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
@@ -97,9 +98,6 @@ class SignpostPlanAdmin(
 ):
     resource_class = SignpostPlanResource
     extra_export_resource_classes = [SignpostPlanToRealTemplateResource]
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     form = SignpostPlanModelForm
     fieldsets = (
         (
@@ -123,7 +121,7 @@ class SignpostPlanAdmin(
             _("Location information"),
             {
                 "fields": (
-                    "location",
+                    ("location", "z_coord", "location_ewkt"),
                     "direction",
                     "road_name",
                     "lane_number",
@@ -206,6 +204,7 @@ class SignpostRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
+    Geometry3DFieldAdminMixin,
     AdminFieldInitialValuesMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -213,9 +212,6 @@ class SignpostRealAdmin(
 ):
     plan_model_field_name = "signpost_plan"
     resource_class = SignpostRealResource
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     form = SignpostRealModelForm
     fieldsets = (
         (
@@ -241,7 +237,7 @@ class SignpostRealAdmin(
             _("Location information"),
             {
                 "fields": (
-                    "location",
+                    ("location", "z_coord", "location_ewkt"),
                     "direction",
                     "road_name",
                     "lane_number",

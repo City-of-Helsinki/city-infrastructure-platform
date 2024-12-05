@@ -27,12 +27,11 @@ from traffic_control.admin.utils import (
     SimplifiedRelatedFieldListFilter,
     TreeModelFieldListFilter,
 )
-from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
-    Point3DFieldAdminMixin,
+    Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -69,16 +68,12 @@ class AbstractFurnitureSignpostAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
-    Point3DFieldAdminMixin,
+    Geometry3DFieldAdminMixin,
     AdminFieldInitialValuesMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
-
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
@@ -124,7 +119,7 @@ class AbstractFurnitureSignpostAdmin(
         _("Location information"),
         {
             "fields": (
-                ("location", "z_coord"),
+                ("location", "z_coord", "location_ewkt"),
                 "location_name_fi",
                 "location_name_sw",
                 "location_name_en",
