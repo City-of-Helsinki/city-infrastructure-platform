@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.1.0...city-infrastructure-platform-v1.2.0) (2024-12-05)
+
+
+### Features
+
+* Use map widget for all models that have a location ([25acfbe](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/25acfbe657c45296f0691aa238cfc7bb4b008b19))
+
 ## [1.1.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.0.0...city-infrastructure-platform-v1.1.0) (2024-11-29)
 
 
