@@ -19,7 +19,6 @@ from traffic_control.admin.utils import (
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
 )
-from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
     AdminFileWidget,
@@ -30,6 +29,7 @@ from traffic_control.forms import (
 from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
+    Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -86,6 +86,7 @@ class BarrierPlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
@@ -95,9 +96,6 @@ class BarrierPlanAdmin(
 ):
     resource_class = BarrierPlanResource
     extra_export_resource_classes = [BarrierPlanToRealTemplateResource]
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     form = BarrierPlanModelForm
     fieldsets = (
         (
@@ -121,6 +119,8 @@ class BarrierPlanAdmin(
             {
                 "fields": (
                     "location",
+                    "z_coord",
+                    "location_ewkt",
                     "road_name",
                     "lane_number",
                     "lane_type",
@@ -200,6 +200,7 @@ class BarrierRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
+    Geometry3DFieldAdminMixin,
     AdminFieldInitialValuesMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -207,9 +208,6 @@ class BarrierRealAdmin(
 ):
     plan_model_field_name = "barrier_plan"
     resource_class = BarrierRealResource
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     form = BarrierRealModelForm
     fieldsets = (
         (
@@ -233,6 +231,8 @@ class BarrierRealAdmin(
             {
                 "fields": (
                     "location",
+                    "z_coord",
+                    "location_ewkt",
                     "road_name",
                     "lane_number",
                     "lane_type",

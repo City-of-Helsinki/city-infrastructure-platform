@@ -5,9 +5,13 @@ from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import PlanModelForm, PlanRelationsForm
-from traffic_control.mixins import EnumChoiceValueDisplayAdminMixin, SoftDeleteAdminMixin, UserStampedAdminMixin
+from traffic_control.mixins import (
+    EnumChoiceValueDisplayAdminMixin,
+    Geometry3DFieldAdminMixin,
+    SoftDeleteAdminMixin,
+    UserStampedAdminMixin,
+)
 from traffic_control.models import Plan
 
 __all__ = ("PlanAdmin",)
@@ -18,13 +22,10 @@ class PlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    Geometry3DFieldAdminMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
 ):
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
-
     form = PlanModelForm
     fieldsets = (
         (
@@ -41,15 +42,7 @@ class PlanAdmin(
                 )
             },
         ),
-        (
-            _("Location information"),
-            {
-                "fields": (
-                    "derive_location",
-                    "location",
-                )
-            },
-        ),
+        (_("Location information"), {"fields": ("derive_location", "location", "z_coord", "location_ewkt")}),
         (
             _("Metadata"),
             {"fields": ("created_at", "updated_at", "created_by", "updated_by", "decision_date")},

@@ -1,7 +1,6 @@
-from django.conf import settings
 from django.contrib.admin import widgets
 from django.contrib.gis import forms
-from django.contrib.gis.geos import GEOSGeometry, Point
+from django.contrib.gis.geos import GEOSGeometry
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms.models import BaseInlineFormSet, ModelChoiceIteratorValue
@@ -13,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
 from city_furniture.models import FurnitureSignpostPlan
-from traffic_control.geometry_utils import geometry_is_legit
+from traffic_control.geometry_utils import geometry_is_legit, get_3d_geometry, get_z_for_geometry, is_simple_geometry
 from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignReal,
@@ -171,37 +170,67 @@ class SRIDBoundGeometryFormMixin:
         cleaned_data = super().clean()
         if "location" in cleaned_data:
             location = cleaned_data.get("location")
-            if not geometry_is_legit(GEOSGeometry(location)):
+            if location and not geometry_is_legit(GEOSGeometry(location)):
                 raise ValidationError({"location": f"Invalid location: {location}"})
         return cleaned_data
 
 
-class Point3DFieldForm(forms.ModelForm):
-    """Form class that allows entering a z coordinate for 3d point"""
+class Geometry3DFieldForm(forms.ModelForm):
+    """Form class that allows entering a z coordinate for 3d point and location in ewkt format"""
 
     z_coord = forms.FloatField(label=_("Location (z)"), initial=0)
+    location_ewkt = forms.CharField(label=_("Location (EWKT)"), widget=forms.Textarea, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         # Form is in read-only mode, so the field doesn't exist
         if "location" not in self.fields:
             return
 
         self.fields["location"].label = _("Location (x,y)")
         if self.instance.location:
-            self.fields["z_coord"].initial = self.instance.location.z
+            self.fields["z_coord"].initial = get_z_for_geometry(self.instance.location)
+            self.fields["location_ewkt"].initial = self.instance.location.ewkt
 
     def clean(self):
         cleaned_data = super().clean()
         if "location" in cleaned_data:
             z_coord = cleaned_data.pop("z_coord", 0)
             location = cleaned_data["location"]
-            cleaned_data["location"] = Point(location.x, location.y, z_coord, srid=settings.SRID)
+            new_geom = self._get_new_geom(location, cleaned_data.get("location_ewkt", None), z_coord)
+            cleaned_data["location"] = new_geom
+            cleaned_data["location_ewkt"] = new_geom.ewkt if new_geom else None
         return cleaned_data
 
+    def _get_new_geom(self, location, location_ewkt, z_coord):
+        """Get new location. On create location_ewkt is the first priority
+        If updating value coming from widget is not alloweed for complex geometries, eg. Points and Polygons can be.
+        """
+        if not self.instance.location:
+            if location_ewkt:
+                return GEOSGeometry(location_ewkt)
+            else:
+                return get_3d_geometry(location, z_coord)
+        location_ewkt_changed = location_ewkt and location_ewkt != self.instance.location.ewkt
+        location_changed = location and location.ewkt != self.instance.location.ewkt
+        if location_ewkt_changed:
+            return GEOSGeometry(location_ewkt)
+        if location_changed and not location_ewkt_changed:
+            if is_simple_geometry(location):
+                return get_3d_geometry(location, z_coord)
+            else:
+                raise ValidationError(
+                    {
+                        "location": _(
+                            "Changing location from map is not allowed for geometry '%(geometry_type)s'"
+                            % {"geometry_type": location.__class__.__name__}
+                        )
+                    }
+                )
+        return get_3d_geometry(location, z_coord)
 
-class AdditionalSignRealModelForm(StructuredContentModelFormMixin, SRIDBoundGeometryFormMixin, Point3DFieldForm):
+
+class AdditionalSignRealModelForm(StructuredContentModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = AdditionalSignReal
         fields = "__all__"
@@ -211,7 +240,7 @@ class AdditionalSignRealModelForm(StructuredContentModelFormMixin, SRIDBoundGeom
         }
 
 
-class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, SRIDBoundGeometryFormMixin, Point3DFieldForm):
+class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = AdditionalSignPlan
         fields = "__all__"
@@ -221,85 +250,85 @@ class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, SRIDBoundGeom
         }
 
 
-class BarrierPlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class BarrierPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = BarrierPlan
         fields = "__all__"
 
 
-class BarrierRealModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class BarrierRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = BarrierReal
         fields = "__all__"
 
 
-class CoverageAreaModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class CoverageAreaModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = CoverageArea
         fields = "__all__"
 
 
-class MountPlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class MountPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = MountPlan
         fields = "__all__"
 
 
-class MountRealModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class MountRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = MountReal
         fields = "__all__"
 
 
-class OperationalModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class OperationalModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = OperationalArea
         fields = "__all__"
 
 
-class PlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class PlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = Plan
         fields = "__all__"
 
 
-class RoadMarkingPlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class RoadMarkingPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = RoadMarkingPlan
         fields = "__all__"
 
 
-class RoadMarkingRealModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class RoadMarkingRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = RoadMarkingReal
         fields = "__all__"
 
 
-class SignpostPlanModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class SignpostPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = SignpostPlan
         fields = "__all__"
 
 
-class SignpostRealModelForm(SRIDBoundGeometryFormMixin, forms.ModelForm):
+class SignpostRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = SignpostReal
         fields = "__all__"
 
 
-class TrafficLightPlanModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
+class TrafficLightPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = TrafficLightPlan
         fields = "__all__"
 
 
-class TrafficLightRealModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
+class TrafficLightRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = TrafficLightReal
         fields = "__all__"
 
 
-class TrafficSignPlanModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
+class TrafficSignPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = TrafficSignPlan
         fields = "__all__"
@@ -308,7 +337,7 @@ class TrafficSignPlanModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
         }
 
 
-class TrafficSignRealModelForm(SRIDBoundGeometryFormMixin, Point3DFieldForm):
+class TrafficSignRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = TrafficSignReal
         fields = "__all__"

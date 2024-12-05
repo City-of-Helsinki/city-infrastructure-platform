@@ -6,10 +6,15 @@ from traffic_control.models.plan import Plan
 
 
 class CityInfra3DOSMWidget(OSMWidget):
+    """This point is near Helsinki railway station"""
+
+    default_lon = 24.9416259
+    default_lat = 60.170255
+    default_zoom = 12.5
     supports_3d = True
 
 
-class Point3DFieldAdminMixin:
+class Geometry3DFieldAdminMixin:
     """A mixin class that shows a map for 3d geometries.
 
     Django's default behaviour is to use a text field for 3d geometries.

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-29 16:00+0200\n"
+"POT-Creation-Date: 2024-12-05 15:29+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -944,8 +944,17 @@ msgid ""
 msgstr ""
 "Ei voida asettaa 'sisältö puuttuu' kun 'sisältö' (content_s) ei ole tyhjä."
 
+msgid "Location (EWKT)"
+msgstr "Sijainti (EWKT)"
+
 msgid "Location (x,y)"
 msgstr "Sijainti (x,y)"
+
+#, python-format
+msgid ""
+"Changing location from map is not allowed for geometry '%(geometry_type)s'"
+msgstr ""
+"Sijainnin muuttaminen kartalta ei ole sallittya geometrialle '%(geometry_type)s'"
 
 msgid "Barrier Plans"
 msgstr "Ajoeste (suunnitelmat)"

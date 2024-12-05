@@ -1,7 +1,7 @@
 from django.contrib.gis import admin
 
-from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.forms import CoverageAreaModelForm
+from traffic_control.mixins import Geometry3DFieldAdminMixin
 from traffic_control.models import CoverageArea, CoverageAreaCategory
 
 
@@ -11,10 +11,7 @@ class CoverageAreaCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(CoverageArea)
-class CoverageAreaAdmin(admin.GISModelAdmin):
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
+class CoverageAreaAdmin(Geometry3DFieldAdminMixin, admin.GISModelAdmin):
     form = CoverageAreaModelForm
     list_select_related = ("category",)
     list_display = [

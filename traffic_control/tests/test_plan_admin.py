@@ -8,6 +8,7 @@ from django.test import override_settings
 from django.urls import reverse
 
 from city_furniture.tests.factories import get_furniture_signpost_plan
+from traffic_control.forms import PlanModelForm
 from traffic_control.models import Plan
 from traffic_control.tests.factories import (
     get_additional_sign_plan,
@@ -19,6 +20,7 @@ from traffic_control.tests.factories import (
     get_traffic_light_plan,
     get_traffic_sign_plan,
     get_user,
+    PlanFactory,
 )
 from traffic_control.tests.test_base_api import (
     illegal_multipolygon,
@@ -260,3 +262,37 @@ def test__plan_create_illegal_location(admin_client):
     assert Plan.objects.count() == 0
     assert "location" in response.context["adminform"].form.errors
     assert response.context["adminform"].form.errors["location"] == [f"Invalid location: {illegal_multipolygon.ewkt}"]
+
+
+@pytest.mark.django_db
+def test__plan_update_location_using_location_field():
+    """Test that updating location using location field, value from map widget, is not allowed"""
+    orig_location = MultiPolygon(test_polygon, srid=settings.SRID)
+    new_location = MultiPolygon(test_polygon, test_polygon_2, srid=settings.SRID)
+    plan = PlanFactory(location=orig_location)
+    data = {"location": new_location, "name": plan.name, "decision_id": plan.decision_id, "z_coord": 5}
+    form = PlanModelForm(data, instance=plan)
+    assert form.is_valid() is False
+    assert form.errors["location"][0] == "Changing location from map is not allowed for geometry 'MultiPolygon'"
+    plan.refresh_from_db()
+    assert plan.location == orig_location
+
+
+@pytest.mark.django_db
+def test__plan_update_location_using_location_ewkt_field():
+    """Test that updating location using location_ewkt field can be done"""
+    orig_location = MultiPolygon(test_polygon, srid=settings.SRID)
+    new_location = MultiPolygon(test_polygon, test_polygon_2, srid=settings.SRID)
+    plan = PlanFactory(location=orig_location)
+    data = {
+        "location": orig_location,
+        "location_ewkt": new_location.ewkt,
+        "name": plan.name,
+        "decision_id": plan.decision_id,
+        "z_coord": 0,
+    }
+    form = PlanModelForm(data, instance=plan)
+    assert form.is_valid() is True
+    form.save()
+    plan.refresh_from_db()
+    assert plan.location.ewkt == new_location.ewkt

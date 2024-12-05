@@ -20,11 +20,11 @@ from traffic_control.admin.utils import (
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
 )
-from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset, MountPlanModelForm, MountRealModelForm
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
+    Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -79,6 +79,7 @@ class MountPlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
@@ -88,9 +89,6 @@ class MountPlanAdmin(
 ):
     resource_class = MountPlanResource
     extra_export_resource_classes = [MountPlanToRealTemplateResource]
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     form = MountPlanModelForm
     fieldsets = (
         (
@@ -106,7 +104,10 @@ class MountPlanAdmin(
                 )
             },
         ),
-        (_("Location information"), {"fields": ("location", "road_name", "location_specifier")}),
+        (
+            _("Location information"),
+            {"fields": ("location", "z_coord", "location_ewkt", "road_name", "location_specifier")},
+        ),
         (
             _("Physical properties"),
             {
@@ -192,6 +193,7 @@ class MountRealAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
+    Geometry3DFieldAdminMixin,
     AdminFieldInitialValuesMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -199,9 +201,6 @@ class MountRealAdmin(
 ):
     plan_model_field_name = "mount_plan"
     resource_class = MountRealResource
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     form = MountRealModelForm
     fieldsets = (
         (
@@ -219,7 +218,7 @@ class MountRealAdmin(
                 )
             },
         ),
-        (_("Location information"), {"fields": ("location",)}),
+        (_("Location information"), {"fields": ("location", "z_coord", "location_ewkt")}),
         (
             _("Physical properties"),
             {

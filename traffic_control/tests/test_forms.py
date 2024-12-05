@@ -43,7 +43,7 @@ def test_admin_enum_choice_field():
 
 
 class TrafficSignRealModelFormTestCase(TestCase):
-    def test_update_traffic_sign_real_3d_location(self):
+    def test_update_traffic_sign_real_3d_location_location_field(self):
         user = get_user()
         owner = get_owner()
         data = {
@@ -69,8 +69,35 @@ class TrafficSignRealModelFormTestCase(TestCase):
         self.assertEqual(form.fields["z_coord"].initial, 5)
         self.assertTrue(form.is_valid())
 
+    def test_update_traffic_sign_real_3d_location_location_ewkt_field(self):
+        user = get_user()
+        owner = get_owner()
+        data = {
+            "location": Point(MIN_X + 5, MIN_Y + 5, 0.0, srid=settings.SRID),
+            "location_ewkt": Point(MIN_X + 8, MIN_Y + 8, 0.0, srid=settings.SRID).ewkt,
+            "z_coord": 20,
+            "direction": 0,
+            "created_by": user.id,
+            "updated_by": user.id,
+            "owner": owner.pk,
+            "lifecycle": Lifecycle.ACTIVE,
+            "device_type": get_traffic_control_device_type().pk,
+        }
+        user = get_user()
+        traffic_sign_real = TrafficSignReal.objects.create(
+            location=Point(MIN_X + 10, MIN_Y + 10, 5, srid=settings.SRID),
+            direction=0,
+            created_by=user,
+            updated_by=user,
+            owner=owner,
+            lifecycle=Lifecycle.ACTIVE,
+        )
+        form = TrafficSignRealModelForm(data=data, instance=traffic_sign_real)
+        self.assertEqual(form.fields["z_coord"].initial, 5)
+        self.assertTrue(form.is_valid())
+
         instance = form.save()
-        self.assertEqual(instance.location, Point(MIN_X + 5, MIN_Y + 5, 20, srid=settings.SRID))
+        self.assertEqual(instance.location, Point(MIN_X + 8, MIN_Y + 8, 20, srid=settings.SRID))
 
     def test_create_traffic_sign_real_3d_location(self):
         user = get_user()

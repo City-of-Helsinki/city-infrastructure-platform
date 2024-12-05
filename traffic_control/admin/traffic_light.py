@@ -19,7 +19,6 @@ from traffic_control.admin.utils import (
     ResponsibleEntityPermissionFilter,
     TreeModelFieldListFilter,
 )
-from traffic_control.constants import HELSINKI_LATITUDE, HELSINKI_LONGITUDE
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
     AdminFileWidget,
@@ -30,6 +29,7 @@ from traffic_control.forms import (
 from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
+    Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -87,6 +87,7 @@ class TrafficLightPlanAdmin(
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
+    Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
@@ -96,9 +97,6 @@ class TrafficLightPlanAdmin(
 ):
     resource_class = TrafficLightPlanResource
     extra_export_resource_classes = [TrafficLightPlanToRealTemplateResource]
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     form = TrafficLightPlanModelForm
     fieldsets = (
         (
@@ -120,7 +118,7 @@ class TrafficLightPlanAdmin(
             _("Location information"),
             {
                 "fields": (
-                    "location",
+                    ("location", "z_coord", "location_ewkt"),
                     "direction",
                     "road_name",
                     "lane_number",
@@ -196,6 +194,7 @@ class TrafficLightRealAdmin(
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
+    Geometry3DFieldAdminMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
     AdminFieldInitialValuesMixin,
@@ -205,9 +204,6 @@ class TrafficLightRealAdmin(
 ):
     plan_model_field_name = "traffic_light_plan"
     resource_class = TrafficLightRealResource
-    default_lon = HELSINKI_LONGITUDE
-    default_lat = HELSINKI_LATITUDE
-    default_zoom = 12
     form = TrafficLightRealModelForm
     fieldsets = (
         (
@@ -229,7 +225,7 @@ class TrafficLightRealAdmin(
             _("Location information"),
             {
                 "fields": (
-                    "location",
+                    ("location", "z_coord", "location_ewkt"),
                     "direction",
                     "road_name",
                     "lane_number",

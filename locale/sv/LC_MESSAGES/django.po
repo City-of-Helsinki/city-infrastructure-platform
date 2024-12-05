@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-29 16:00+0200\n"
+"POT-Creation-Date: 2024-12-05 15:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -952,8 +952,16 @@ msgid ""
 msgstr ""
 "Kan inte vara 'innehåll saknas' när 'innehållet' (content_s) inte är tomt."
 
+msgid "Location (EWKT)"
+msgstr "Plats (EWKT)"
+
 msgid "Location (x,y)"
 msgstr "Plats (x, y)"
+
+#, python-format
+msgid ""
+"Changing location from map is not allowed for geometry '%(geometry_type)s'"
+msgstr ""
 
 msgid "Barrier Plans"
 msgstr "Bom (planer)"
