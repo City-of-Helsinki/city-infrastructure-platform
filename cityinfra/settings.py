@@ -368,7 +368,9 @@ SRID = 3879  # the spatial reference id used for geometries
 
 # Format for invidual SRID boundary box is:
 # x0,y0, x1, y1
-SRID_BOUNDARIES = {3879: (21532262.0, 3639452.31, 26927342.37, 9557869.6)}
+# for 3879 this is actually subset of it, bounding box is for Helsinki area only
+# the whole 3879 would be {3879: (21532262.0, 3639452.31, 26927342.37, 9557869.6)}
+SRID_BOUNDARIES = {3879: (25487917.144, 6645439.071, 25514074.175, 6687278.623)}
 
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 

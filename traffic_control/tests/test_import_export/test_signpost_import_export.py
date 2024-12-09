@@ -107,10 +107,10 @@ def test__signpost_plan_export_real_replacement_importable():
     and the result is importable.
     """
 
-    get_signpost_plan(location=f"POINT Z({MIN_X+1} {MIN_Y+1} 0)")
-    plan_b = get_signpost_plan(location=f"POINT Z({MIN_X+2} {MIN_Y+1} 0)")
+    get_signpost_plan(location=f"POINT Z({MIN_X+2} {MIN_Y+1} 0)")
+    plan_b = get_signpost_plan(location=f"POINT Z({MIN_X+2} {MIN_Y+2} 0)")
     get_signpost_plan(location=f"POINT Z({MIN_X+3} {MIN_Y+1} 0)", parent=plan_b)
-    plan_d = get_signpost_plan(location=f"POINT Z({MIN_X+4} {MIN_Y+1} 0)", parent=plan_b)
+    plan_d = get_signpost_plan(location=f"POINT Z({MIN_X+4} {MIN_Y+2} 0)", parent=plan_b)
     get_signpost_plan(location=f"POINT Z({MIN_X+5} {MIN_Y+1} 0)", parent=plan_d)
 
     exported_dataset = SignpostPlanToRealTemplateResource().export()
