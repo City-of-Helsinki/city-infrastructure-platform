@@ -12,6 +12,7 @@ from traffic_control.tests.factories import get_api_client
 
 test_point_helsinki = Point(25496751.5, 6673129.5, 1.5, srid=3879)
 
+
 EPSG_3879_URN = "urn:ogc:def:crs:EPSG::3879"
 
 namespaces = {
@@ -20,6 +21,8 @@ namespaces = {
     "gml": "http://www.opengis.net/gml/3.2",
     "xsi": "http://www.w3.org/2001/XMLSchema-instance",
 }
+
+MULTI_GEOMETRIES = ["MultiPolygon", "MultiPoint", "MultiLineString", "GeometryCollection"]
 
 
 def wfs_url_get_features(
@@ -58,6 +61,7 @@ def wfs_get_features_gml(
     assert response.status_code == status.HTTP_200_OK
 
     xml = get_response_content(response)
+
     return ElementTree.fromstring(xml)
 
 
@@ -93,12 +97,35 @@ def gml_feature_id(feature_element: ElementTree.Element):
     return feature_element.get(f"{{{namespaces['gml']}}}id")
 
 
-def gml_feature_geometry(feature_element: ElementTree.Element):
-    return feature_element.find("./app:location/gml:Point/gml:pos", namespaces).text
+def gml_feature_geometry(feature_element: ElementTree.Element, geometry_type="Point"):
+    geom_element = feature_element.find(_get_xpath_for_geometry_position(geometry_type), namespaces)
+    text = geom_element.text
+    return text if text else ElementTree.tostring(geom_element, encoding="unicode")
 
 
-def gml_feature_crs(feature_element: ElementTree.Element):
-    return feature_element.find("./app:location/gml:Point", namespaces).get("srsName")
+def gml_feature_crs(feature_element: ElementTree.Element, geometry_type="Point"):
+    return feature_element.find(
+        f"./app:location/gml:{'MultiGeometry' if geometry_type in MULTI_GEOMETRIES else geometry_type}", namespaces
+    ).get("srsName")
+
+
+def gml_envelope(feature_element: ElementTree.Element):
+    lower_corner = feature_element.find("./gml:boundedBy/gml:Envelope/gml:lowerCorner", namespaces).text
+    upper_corner = feature_element.find("./gml:boundedBy/gml:Envelope/gml:upperCorner", namespaces).text
+    return lower_corner, upper_corner
+
+
+def _get_xpath_for_geometry_position(geometry_type: str):
+    if geometry_type == "Point":
+        return "./app:location/gml:Point/gml:pos"
+    elif geometry_type == "Polygon":
+        return "./app:location/gml:Polygon/gml:exterior/gml:LinearRing/gml:posList"
+    elif geometry_type in MULTI_GEOMETRIES:
+        return "./app:location/gml:MultiGeometry"
+    elif geometry_type == "LineString":
+        return "./app:location/gml:LineString/gml:posList"
+
+    raise NotImplementedError(f"Getting gml position for {geometry_type} not implemented")
 
 
 # --- GeoJSON --- #
