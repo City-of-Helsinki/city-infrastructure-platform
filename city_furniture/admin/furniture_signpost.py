@@ -91,8 +91,6 @@ class AbstractFurnitureSignpostAdmin(
         "updated_at",
         "created_by",
         "updated_by",
-        "source_name",
-        "source_id",
     )
     list_display = (
         "id",

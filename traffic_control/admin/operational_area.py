@@ -22,10 +22,6 @@ class OperationalAreaAdmin(Geometry3DFieldAdminMixin, admin.GISModelAdmin):
         "contractor",
         "status",
     ]
-    readonly_fields = [
-        "source_name",
-        "source_id",
-    ]
     list_filter = ("area_type", "contractor", "status")
 
 

@@ -22,8 +22,4 @@ class CoverageAreaAdmin(Geometry3DFieldAdminMixin, admin.GISModelAdmin):
         "duration",
         "parking_slots",
     ]
-    readonly_fields = [
-        "source_name",
-        "source_id",
-    ]
     list_filter = ("category", "area_type")
