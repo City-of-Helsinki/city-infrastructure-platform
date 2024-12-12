@@ -188,8 +188,6 @@ class RoadMarkingPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
-        "source_name",
-        "source_id",
     )
     raw_id_fields = ("plan", "traffic_sign_plan")
     ordering = ("-created_at",)
@@ -322,8 +320,6 @@ class RoadMarkingRealAdmin(
         "updated_at",
         "created_by",
         "updated_by",
-        "source_name",
-        "source_id",
     )
     raw_id_fields = ("road_marking_plan", "traffic_sign_real")
     ordering = ("-created_at",)

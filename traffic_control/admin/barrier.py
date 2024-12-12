@@ -163,8 +163,6 @@ class BarrierPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
-        "source_name",
-        "source_id",
     )
     raw_id_fields = ("plan",)
     ordering = ("-created_at",)
@@ -281,8 +279,6 @@ class BarrierRealAdmin(
         "updated_at",
         "created_by",
         "updated_by",
-        "source_name",
-        "source_id",
     )
     raw_id_fields = ("barrier_plan",)
     ordering = ("-created_at",)
