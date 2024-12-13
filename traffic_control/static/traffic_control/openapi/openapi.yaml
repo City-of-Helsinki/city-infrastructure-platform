@@ -107,31 +107,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -771,31 +767,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -1663,31 +1655,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this barrier affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -2250,31 +2238,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this barrier affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -8075,31 +8059,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this road marking affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -8724,31 +8704,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this road marking affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -9574,31 +9550,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -10205,31 +10177,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -11360,31 +11328,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this traffic light affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -11989,31 +11953,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this traffic light affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -12855,31 +12815,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -13495,31 +13451,27 @@ paths:
           type: string
           nullable: true
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
         description: |-
           Describes which lane of the road this sign affects.
 
-          * `11` - Main lane
-          * `21` - Main lane
-          * `31` - Lane allowing traffic to both directions
-          * `X2` - First left additional lane
-          * `X3` - First right additional lane
-          * `X4` - Second left additional lane
-          * `X5` - Second right additional lane
-          * `X6` - Third left additional lane
-          * `X7` - Third right additional lane
-          * `X8` - Fourth left additional lane
-          * `X9` - Fourth right additional lane
+          * `1` - Main lane
+          * `2` - First left additional lane
+          * `3` - First right additional lane
+          * `4` - Second left additional lane
+          * `5` - Second right additional lane
+          * `6` - Third left additional lane
+          * `7` - Third right additional lane
+          * `8` - Fourth left additional lane
+          * `9` - Fourth right additional lane
       - in: query
         name: lane_type
         schema:
@@ -14471,17 +14423,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -14489,17 +14439,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -14753,17 +14701,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -14771,17 +14717,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -15043,17 +14987,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -15061,17 +15003,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -15386,17 +15326,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -15404,17 +15342,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -15815,17 +15751,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -15833,17 +15767,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -16090,17 +16022,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -16108,17 +16038,15 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -16311,17 +16239,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -16329,17 +16255,15 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -16544,17 +16468,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -16562,17 +16484,15 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -16831,17 +16751,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -16849,17 +16767,15 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -17160,17 +17076,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -17178,17 +17092,15 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -21205,17 +21117,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -21223,17 +21133,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -21514,17 +21422,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -21532,17 +21438,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -21749,17 +21653,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -21767,17 +21669,15 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -21996,17 +21896,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -22014,17 +21912,15 @@ components:
           description: |-
             Describes which lane of the road this barrier affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -23460,17 +23356,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -23478,17 +23372,15 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -23779,17 +23671,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -23797,17 +23687,15 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -24057,17 +23945,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -24075,17 +23961,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -24360,17 +24244,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -24378,17 +24260,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -24713,17 +24593,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -24731,17 +24609,15 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -25004,17 +24880,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -25022,17 +24896,15 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -25258,17 +25130,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -25276,17 +25146,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -25544,17 +25412,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -25562,17 +25428,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -26187,17 +26051,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -26205,17 +26067,15 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -26479,17 +26339,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -26497,17 +26355,15 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -26784,17 +26640,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -26802,17 +26656,15 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -27143,17 +26995,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -27161,17 +27011,15 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -27550,17 +27398,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -27568,17 +27414,15 @@ components:
           description: |-
             Describes which lane of the road this road marking affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -27868,17 +27712,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -27886,17 +27728,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -28144,17 +27984,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -28162,17 +28000,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -28433,17 +28269,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -28451,17 +28285,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -28776,17 +28608,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -28794,17 +28624,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -29180,17 +29008,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -29198,17 +29024,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -29666,17 +29490,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -29684,17 +29506,15 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -29930,17 +29750,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -29948,17 +29766,15 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -30207,17 +30023,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -30225,17 +30039,15 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -30538,17 +30350,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -30556,17 +30366,15 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -30910,17 +30718,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -30928,17 +30734,15 @@ components:
           description: |-
             Describes which lane of the road this traffic light affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -31203,17 +31007,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -31221,17 +31023,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -31470,17 +31270,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -31488,17 +31286,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -31749,17 +31545,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -31767,17 +31561,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -32075,17 +31867,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -32093,17 +31883,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
@@ -32489,17 +32277,15 @@ components:
           maxLength: 254
         lane_number:
           enum:
-          - '11'
-          - '21'
-          - '31'
-          - X2
-          - X3
-          - X4
-          - X5
-          - X6
-          - X7
-          - X8
-          - X9
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
           - ''
           - null
           type: string
@@ -32507,17 +32293,15 @@ components:
           description: |-
             Describes which lane of the road this sign affects.
 
-            * `11` - Main lane
-            * `21` - Main lane
-            * `31` - Lane allowing traffic to both directions
-            * `X2` - First left additional lane
-            * `X3` - First right additional lane
-            * `X4` - Second left additional lane
-            * `X5` - Second right additional lane
-            * `X6` - Third left additional lane
-            * `X7` - Third right additional lane
-            * `X8` - Fourth left additional lane
-            * `X9` - Fourth right additional lane
+            * `1` - Main lane
+            * `2` - First left additional lane
+            * `3` - First right additional lane
+            * `4` - Second left additional lane
+            * `5` - Second right additional lane
+            * `6` - Third left additional lane
+            * `7` - Third right additional lane
+            * `8` - Fourth left additional lane
+            * `9` - Fourth right additional lane
         lane_type:
           enum:
           - '1'
