@@ -42,17 +42,15 @@ class InstallationStatus(models.TextChoices):
 
 
 class LaneNumber(models.TextChoices):
-    MAIN_1 = "11", _("Main lane")
-    MAIN_2 = "21", _("Main lane")
-    REVERSIBLE = "31", _("Lane allowing traffic to both directions")
-    ADDITIONAL_LEFT_1 = "X2", _("First left additional lane")
-    ADDITIONAL_RIGHT_1 = "X3", _("First right additional lane")
-    ADDITIONAL_LEFT_2 = "X4", _("Second left additional lane")
-    ADDITIONAL_RIGHT_2 = "X5", _("Second right additional lane")
-    ADDITIONAL_LEFT_3 = "X6", _("Third left additional lane")
-    ADDITIONAL_RIGHT_3 = "X7", _("Third right additional lane")
-    ADDITIONAL_LEFT_4 = "X8", _("Fourth left additional lane")
-    ADDITIONAL_RIGHT_4 = "X9", _("Fourth right additional lane")
+    MAIN_1 = "1", _("Main lane")
+    ADDITIONAL_LEFT_1 = "2", _("First left additional lane")
+    ADDITIONAL_RIGHT_1 = "3", _("First right additional lane")
+    ADDITIONAL_LEFT_2 = "4", _("Second left additional lane")
+    ADDITIONAL_RIGHT_2 = "5", _("Second right additional lane")
+    ADDITIONAL_LEFT_3 = "6", _("Third left additional lane")
+    ADDITIONAL_RIGHT_3 = "7", _("Third right additional lane")
+    ADDITIONAL_LEFT_4 = "8", _("Fourth left additional lane")
+    ADDITIONAL_RIGHT_4 = "9", _("Fourth right additional lane")
 
 
 class LaneType(models.TextChoices):
