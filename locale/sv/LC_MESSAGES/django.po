@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 15:29+0200\n"
+"POT-Creation-Date: 2024-12-15 17:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -569,6 +569,12 @@ msgstr "Fältet är obligatoriskt."
 msgid "My account"
 msgstr "Egna uppgifter"
 
+#, python-brace-format
+msgid ""
+"Number of results to return per page. Maximum number of results is "
+"{max_limit}."
+msgstr ""
+
 msgid "City Infrastructure Platform"
 msgstr "Stadsinfrastrukturplattform"
 
@@ -818,9 +824,6 @@ msgstr "Saknas"
 
 msgid "Main lane"
 msgstr "Huvudled"
-
-msgid "Lane allowing traffic to both directions"
-msgstr "Led med trafik i båda riktningarna"
 
 msgid "First left additional lane"
 msgstr "Första extra körfält vänster"
@@ -2321,3 +2324,6 @@ msgstr ""
 
 msgid "User"
 msgstr "Användare"
+
+#~ msgid "Lane allowing traffic to both directions"
+#~ msgstr "Led med trafik i båda riktningarna"
