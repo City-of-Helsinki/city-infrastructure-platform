@@ -71,6 +71,7 @@ env = environ.Env(
     CSRF_COOKIE_HTTPONLY=(bool, True),
     CSRF_COOKIE_SAMESITE=(str, "Strict"),
     SESSION_COOKIE_SAMESITE=(str, "Lax"),
+    CITYINFRA_MAXIMUM_RESULTS_PER_PAGE=(int, 10000),
 )
 
 if os.path.exists(env_file):
@@ -303,6 +304,8 @@ STATICFILES_DIRS = [checkout_dir("map-view/build/static")]
 # Most often used in reverse proxy setups
 USE_X_FORWARDED_HOST = env("TRUST_X_FORWARDED_HOST")
 
+CITYINFRA_MAXIMUM_RESULTS_PER_PAGE = env("CITYINFRA_MAXIMUM_RESULTS_PER_PAGE")
+
 # Django REST Framework
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -311,7 +314,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_PAGINATION_CLASS": "cityinfra.drf_utils.MaxLimitOffsetPagination",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "EXCEPTION_HANDLER": "cityinfra.exceptions.cityinfra_exception_handler",
     "PAGE_SIZE": 20,

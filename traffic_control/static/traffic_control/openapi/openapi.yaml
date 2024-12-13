@@ -184,7 +184,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -848,7 +849,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -1104,7 +1106,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -1736,7 +1739,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -2319,7 +2323,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -2497,7 +2502,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -2969,7 +2975,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -3322,7 +3329,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -3533,7 +3541,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -3844,7 +3853,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -4414,7 +4424,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -4621,7 +4632,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -5180,7 +5192,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -5699,7 +5712,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -5877,7 +5891,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -6380,7 +6395,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -6578,7 +6594,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -6802,7 +6819,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -7031,7 +7049,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -7278,7 +7297,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -7517,7 +7537,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -7728,7 +7749,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -8140,7 +8162,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -8785,7 +8808,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -9222,7 +9246,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -9627,7 +9652,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -10254,7 +10280,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -10722,7 +10749,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -10999,7 +11027,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -11405,7 +11434,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -12030,7 +12060,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -12491,7 +12522,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset
@@ -12892,7 +12924,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -13532,7 +13565,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - in: query
@@ -14008,7 +14042,8 @@ paths:
       - name: limit
         required: false
         in: query
-        description: Number of results to return per page.
+        description: Number of results to return per page. Maximum number of results
+          is 10000.
         schema:
           type: integer
       - name: offset

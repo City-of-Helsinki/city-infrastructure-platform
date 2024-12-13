@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 15:29+0200\n"
+"POT-Creation-Date: 2024-12-15 17:20+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -561,6 +561,12 @@ msgstr "Tämä kenttä vaaditaan"
 msgid "My account"
 msgstr "Omat tiedot"
 
+#, python-brace-format
+msgid ""
+"Number of results to return per page. Maximum number of results is "
+"{max_limit}."
+msgstr "Tuloksia per sivu. Maksimi määrä on {max_limit}"
+
 msgid "City Infrastructure Platform"
 msgstr "Infraomaisuuden hallinta-alusta"
 
@@ -811,9 +817,6 @@ msgstr "Kadonnut"
 msgid "Main lane"
 msgstr "Pääkaista"
 
-msgid "Lane allowing traffic to both directions"
-msgstr "Molempiin suuntiin liikenteen salliva kaista"
-
 msgid "First left additional lane"
 msgstr "Ensimmäinen lisäkaista pääkaistan vasemmalla puolella"
 
@@ -954,7 +957,8 @@ msgstr "Sijainti (x,y)"
 msgid ""
 "Changing location from map is not allowed for geometry '%(geometry_type)s'"
 msgstr ""
-"Sijainnin muuttaminen kartalta ei ole sallittya geometrialle '%(geometry_type)s'"
+"Sijainnin muuttaminen kartalta ei ole sallittya geometrialle "
+"'%(geometry_type)s'"
 
 msgid "Barrier Plans"
 msgstr "Ajoeste (suunnitelmat)"
@@ -2310,6 +2314,9 @@ msgstr ""
 
 msgid "User"
 msgstr "Käyttäjä"
+
+#~ msgid "Lane allowing traffic to both directions"
+#~ msgstr "Molempiin suuntiin liikenteen salliva kaista"
 
 #~ msgid "Mark selected objects as not deleted"
 #~ msgstr "Kumoa valittujen kohteiden poistettu merkintä"
