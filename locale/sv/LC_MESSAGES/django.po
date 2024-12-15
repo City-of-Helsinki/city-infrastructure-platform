@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 17:20+0200\n"
+"POT-Creation-Date: 2024-12-15 20:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2282,6 +2282,9 @@ msgstr "Fil hittades inte."
 msgid "Error: Could not find %(model_name)s with id %(id)s."
 msgstr "Fel: Kunde inte hittas med koden %(model_name)s %(id)s."
 
+msgid "Additional user information"
+msgstr ""
+
 msgid "last login"
 msgstr "senast inloggad"
 
@@ -2321,6 +2324,9 @@ msgstr ""
 "Ansvariga enheter som denna användare hör till. Detta ger användarna "
 "skrivåtkomst till anordningar som tillhör ansvarsenheterna eller till en "
 "ansvarsenhet som är hierarkiskt underordnad de som valts."
+
+msgid "Additional information related to this user."
+msgstr ""
 
 msgid "User"
 msgstr "Användare"
