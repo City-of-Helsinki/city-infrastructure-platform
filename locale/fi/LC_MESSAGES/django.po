@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 17:20+0200\n"
+"POT-Creation-Date: 2024-12-15 20:24+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2275,6 +2275,9 @@ msgstr "Tiedostoa ei löytynyt."
 msgid "Error: Could not find %(model_name)s with id %(id)s."
 msgstr "Virhe: %(model_name)s tunnisteella %(id)s ei löytynyt."
 
+msgid "Additional user information"
+msgstr "Lisätiedot käyttäjälle"
+
 msgid "last login"
 msgstr "kirjautunut viimeksi"
 
@@ -2311,6 +2314,9 @@ msgstr ""
 "Vastuutahot, joihin tämä käyttäjä kuuluu. Tämä antaa käyttäjille "
 "kirjoitusoikeuden laitteisiin, jotka kuuluvat kyseiselle vastuutaholle tai "
 "vastuutaholle alempana hierarkiassa."
+
+msgid "Additional information related to this user."
+msgstr "Lisätietoa tästä käyttäjästä."
 
 msgid "User"
 msgstr "Käyttäjä"

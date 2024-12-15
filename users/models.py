@@ -41,6 +41,13 @@ class User(AbstractUser):
             "or any Responsible Entity that's hierarchically under the selected ones."
         ),
     )
+    additional_information = models.TextField(
+        _("Additional information"),
+        blank=True,
+        null=False,
+        default="",
+        help_text=_("Additional information related to this user."),
+    )
 
     def location_is_in_operational_area(self, location):
         """

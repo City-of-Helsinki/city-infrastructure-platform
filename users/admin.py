@@ -16,6 +16,7 @@ from .models import User
 
 class UserAdmin(BaseUserAdmin):
     fieldsets = BaseUserAdmin.fieldsets + (
+        (_("Additional user information"), {"fields": ("additional_information",)}),
         (
             _("Operational area"),
             {
