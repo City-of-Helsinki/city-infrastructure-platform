@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.1.0...city-infrastructure-platform-v1.2.0) (2024-12-16)
+
+
+### Features
+
+* Add additional_information to users ([dd8cb38](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/dd8cb3812e46be86de899cf6ac62857409bd55f8))
+* Allowed location is now bound with Helsinki city limits ([a44ba1e](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a44ba1e84a571228861749eec0ec3e9647abea8b))
+* API maximum result per page configuration ([0ff52f9](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0ff52f939ce8c44e5bac174ff5067101362a90bf))
+* Make source_name and source_id editable in all admin models where they exist ([ff0c74d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ff0c74d9cf02f1d8b00327f9477b93c02447b4c3))
+* Use map widget for all models that have a location ([25acfbe](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/25acfbe657c45296f0691aa238cfc7bb4b008b19))
+
+
+### Bug Fixes
+
+* Use same values for lane_number as digiroad ([6e753c5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/6e753c5de98cb8d99ca0256e4634094d3920285f))
+* Xy coordinate swap now done for all geometry types for WFS gml api ([064522d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/064522dfc22f9eea24441790cd8e25cdf32adef4))
+
 ## [1.1.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.0.0...city-infrastructure-platform-v1.1.0) (2024-11-29)
 
 
