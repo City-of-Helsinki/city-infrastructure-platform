@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.2.0...city-infrastructure-platform-v1.3.0) (2024-12-18)
+
+
+### Features
+
+* WFS Feature for mountplans and mountreals that uses centroid as instead of real location ([f5baeda](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f5baedadd976edc0b5ee092d08ca34dc065b47c3))
+
 ## [1.2.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.1.0...city-infrastructure-platform-v1.2.0) (2024-12-16)
 
 
