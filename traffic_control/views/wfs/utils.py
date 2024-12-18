@@ -136,3 +136,8 @@ class EnumNameXsdElement(XsdElement):
         if not (enum_value := getattr(instance, self.name)):
             return None
         return enum_value.name
+
+
+class CentroidLocationXsdElement(XsdElement):
+    def get_value(self, instance: models.Model):
+        return getattr(instance, "centroid_location", None)

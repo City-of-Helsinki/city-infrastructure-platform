@@ -15,12 +15,11 @@ from traffic_control.views.wfs.common import (
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
-from traffic_control.views.wfs.utils import EnumNameXsdElement
+from traffic_control.views.wfs.utils import CentroidLocationXsdElement, EnumNameXsdElement
 
 _base_fields = (
     [
         FeatureField("id", abstract="ID of the Mount."),
-        FeatureField("location", abstract="Location of the Mount."),
         FeatureField("height", abstract="Height of the Mount."),
         FeatureField(
             "mount_type_description_fi", model_attribute="mount_type.description_fi", abstract="Mount type description."
@@ -46,6 +45,11 @@ _base_fields = (
     + deepcopy(OWNED_DEVICE_MODEL_FIELDS)
 )
 
+_mount_non_portal_fields = deepcopy(_base_fields) + [FeatureField("location", abstract="Location of the Mount.")]
+_mount_portal_fields = deepcopy(_base_fields) + [
+    FeatureField("location", xsd_class=CentroidLocationXsdElement, abstract="Location of the Mount.")
+]
+
 
 MountRealFeatureType = FeatureType(
     crs=DEFAULT_CRS,
@@ -56,7 +60,32 @@ MountRealFeatureType = FeatureType(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
     ),
-    fields=deepcopy(_base_fields)
+    fields=deepcopy(_mount_non_portal_fields)
+    + [
+        FeatureField(
+            "mount_plan_id", model_attribute="mount_plan.id", abstract="ID of the Mount plan related to this Mount"
+        ),
+        FeatureField("inspected_at", abstract="Timestamp when the mount was inspected."),
+        FeatureField("diameter", abstract="Diameter of the mount."),
+        FeatureField("scanned_at", abstract="Timestamp when the mount was scanned."),
+        FeatureField("attachment_url", abstract="URL of the attachment of the mount."),
+    ],
+)
+
+
+MountRealPortalFeatureType = FeatureType(
+    title="Mount Real Portal",
+    name="mountrealportal",
+    crs=DEFAULT_CRS,
+    other_crs=OTHER_CRS,
+    queryset=MountReal.objects.active()
+    .filter(mount_type__description="Portal")
+    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
+    .filter(
+        Q(validity_period_start__isnull=True)
+        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
+    ),
+    fields=deepcopy(_mount_portal_fields)
     + [
         FeatureField(
             "mount_plan_id", model_attribute="mount_plan.id", abstract="ID of the Mount plan related to this Mount"
@@ -78,7 +107,27 @@ MountPlanFeatureType = FeatureType(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
     ),
-    fields=deepcopy(_base_fields)
+    fields=deepcopy(_mount_non_portal_fields)
+    + [
+        FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
+    ]
+    + deepcopy(REPLACEABLE_MODEL_FIELDS),
+)
+
+
+MountPlanPortalFeatureType = FeatureType(
+    title="Mount Plan Portal",
+    name="mountplanportal",
+    crs=DEFAULT_CRS,
+    other_crs=OTHER_CRS,
+    queryset=mount_plan_get_current()
+    .filter(mount_type__description="Portal")
+    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
+    .filter(
+        Q(validity_period_start__isnull=True)
+        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
+    ),
+    fields=deepcopy(_mount_portal_fields)
     + [
         FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
     ]

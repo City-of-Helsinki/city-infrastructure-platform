@@ -6,6 +6,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumIntegerField
 
+from traffic_control.geometry_utils import get_3d_geometry
 from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
@@ -186,6 +187,11 @@ class AbstractMount(
 
     def __str__(self):
         return f"{self.id} {self.mount_type}"
+
+    @property
+    def centroid_location(self):
+        """This always forces 3d geometry"""
+        return get_3d_geometry(self.location.centroid, 0.0)
 
 
 class MountPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractMount):
