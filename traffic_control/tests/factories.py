@@ -266,6 +266,7 @@ class MountPlanFactory(factory.django.DjangoModelFactory):
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
+    mount_type = factory.SubFactory(MountTypeFactory)
 
 
 def get_mount_plan(location="", plan=None, responsible_entity=None, replaces=None) -> MountPlan:

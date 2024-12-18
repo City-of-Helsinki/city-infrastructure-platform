@@ -1,3 +1,3 @@
 from .additional_sign import AdditionalSignPlanFeatureType, AdditionalSignRealFeatureType
-from .mount import MountPlanFeatureType, MountRealFeatureType
+from .mount import MountPlanFeatureType, MountPlanPortalFeatureType, MountRealFeatureType, MountRealPortalFeatureType
 from .traffic_sign import TrafficSignPlanFeatureType, TrafficSignRealFeatureType
