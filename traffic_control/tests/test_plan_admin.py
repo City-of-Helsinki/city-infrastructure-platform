@@ -1,4 +1,5 @@
 import pytest
+from auditlog.models import LogEntry
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
@@ -9,6 +10,7 @@ from django.urls import reverse
 
 from city_furniture.tests.factories import get_furniture_signpost_plan
 from traffic_control.forms import PlanModelForm
+from traffic_control.geometry_utils import get_z_for_polygon
 from traffic_control.models import Plan
 from traffic_control.tests.factories import (
     get_additional_sign_plan,
@@ -24,6 +26,7 @@ from traffic_control.tests.factories import (
 )
 from traffic_control.tests.test_base_api import (
     illegal_multipolygon,
+    test_multi_polygon,
     test_point,
     test_point_2,
     test_polygon,
@@ -296,3 +299,55 @@ def test__plan_update_location_using_location_ewkt_field():
     form.save()
     plan.refresh_from_db()
     assert plan.location.ewkt == new_location.ewkt
+
+
+@pytest.mark.django_db
+def test__plan_update_with_location_not_changed():
+    """This is to test that not update location does not appered in auditlog"""
+    location = MultiPolygon(test_polygon, srid=settings.SRID)
+    plan = PlanFactory(location=location)
+    logentries = LogEntry.objects.get_for_object(plan).filter(action=LogEntry.Action.CREATE)
+    assert logentries.count() == 1
+    assert Plan.objects.count() == 1
+
+    data = {
+        "location": location,
+        "location_ewkt": location.ewkt,
+        "name": plan.name,
+        "decision_id": plan.decision_id,
+        "z_coord": get_z_for_polygon(test_polygon),
+    }
+    form = PlanModelForm(data=data, instance=plan)
+    assert form.is_valid() is True
+    form.save()
+    update_entries = LogEntry.objects.get_for_object(plan).filter(action=LogEntry.Action.UPDATE)
+    assert update_entries.count() == 1
+    update_entry = update_entries[0]
+    assert "location_ewkt" not in update_entry.changes
+    assert "location" not in update_entry.changes
+
+
+@pytest.mark.django_db
+def test__plan_create_no_location():
+    form = PlanModelForm(data=_get_plan_mandatory_fields())
+    assert form.is_valid() is True
+    form.save()
+    assert Plan.objects.all().count() == 1
+
+
+@pytest.mark.django_db
+def test__plan_create_with_location_ewkt():
+    data = _get_plan_mandatory_fields()
+    data.update({"location_ewkt": test_multi_polygon.ewkt})
+    form = PlanModelForm(data=data)
+
+    assert form.is_valid() is True
+    form.save()
+    assert Plan.objects.all().count() == 1
+
+    plan = Plan.objects.get()
+    assert plan.location.ewkt == test_multi_polygon.ewkt
+
+
+def _get_plan_mandatory_fields():
+    return {"name": "testplan", "decision_id": "testid", "z_coord": 0}
