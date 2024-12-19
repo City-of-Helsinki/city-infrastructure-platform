@@ -78,6 +78,7 @@ def get_3d_linestring(linestring: LineString, z_coord: float) -> LineString:
 
 
 def get_z_for_geometry(geometry):
+    """For geometries that have multiple subgeometries z coordinate from the first one is returned."""
     if isinstance(geometry, Point):
         return get_z_for_point(geometry)
     elif isinstance(geometry, LinearRing):
@@ -88,6 +89,9 @@ def get_z_for_geometry(geometry):
         return get_z_for_multipolygon(geometry)
     elif isinstance(geometry, LineString):
         return get_z_for_linestring(geometry)
+    elif isinstance(geometry, GeometryCollection):
+        return get_z_for_geometry(geometry[0])
+    raise NotImplementedError(f"Could not get z for geometry {type(geometry)}")
 
 
 def get_z_for_point(point: Point) -> float:

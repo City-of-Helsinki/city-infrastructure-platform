@@ -1,6 +1,6 @@
 from django.contrib.admin import widgets
 from django.contrib.gis import forms
-from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.geos import GEOSGeometry, WKTWriter
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms.models import BaseInlineFormSet, ModelChoiceIteratorValue
@@ -194,25 +194,36 @@ class Geometry3DFieldForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if "location" in cleaned_data:
-            z_coord = cleaned_data.pop("z_coord", 0)
-            location = cleaned_data["location"]
-            new_geom = self._get_new_geom(location, cleaned_data.get("location_ewkt", None), z_coord)
+        z_coord = cleaned_data.pop("z_coord", 0)
+        location = cleaned_data.get("location", None)
+        new_geom = self._get_new_geom(location, cleaned_data.get("location_ewkt", None), z_coord)
+        if new_geom:
+            if "location" in self.errors:
+                del self.errors["location"]
             cleaned_data["location"] = new_geom
-            cleaned_data["location_ewkt"] = new_geom.ewkt if new_geom else None
+            cleaned_data["location_ewkt"] = new_geom.ewkt
+        else:
+            # sometimes mapwidget rounds coordinates differently
+            # in _get_new_geom check is done using 6 digits so when new_geom is None, location in new_geom need to be
+            # set to self.instance.location to prevent unnecessary auditlog entries on save.
+            cleaned_data["location"] = self.instance.location
         return cleaned_data
 
     def _get_new_geom(self, location, location_ewkt, z_coord):
         """Get new location. On create location_ewkt is the first priority
-        If updating value coming from widget is not alloweed for complex geometries, eg. Points and Polygons can be.
+        If updating value coming from widget is not allowed for complex geometries, eg. Points and Polygons can be.
         """
+        location_ewkt_changed = (not self.instance.location and location_ewkt) or (
+            location_ewkt and location_ewkt != self.instance.location.ewkt
+        )
+        location_changed = self._get_is_location_changed(location)
+        if not location_ewkt_changed and not location_changed:
+            return None
         if not self.instance.location:
             if location_ewkt:
                 return GEOSGeometry(location_ewkt)
             else:
                 return get_3d_geometry(location, z_coord)
-        location_ewkt_changed = location_ewkt and location_ewkt != self.instance.location.ewkt
-        location_changed = location and location.ewkt != self.instance.location.ewkt
         if location_ewkt_changed:
             return GEOSGeometry(location_ewkt)
         if location_changed and not location_ewkt_changed:
@@ -228,6 +239,16 @@ class Geometry3DFieldForm(forms.ModelForm):
                     }
                 )
         return get_3d_geometry(location, z_coord)
+
+    def _get_is_location_changed(self, location):
+        """location, coming from map widget has different precision compared to what is in our database,
+        so comparison needs to be done with the same precision, 6 should enough as it is micrometers.
+        """
+        wkt_w = WKTWriter(precision=6, trim=True, dim=3)
+
+        location_wkt = wkt_w.write(location) if location else None
+        instance_wkt = wkt_w.write(self.instance.location) if self.instance.location else None
+        return location_wkt != instance_wkt
 
 
 class AdditionalSignRealModelForm(StructuredContentModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
