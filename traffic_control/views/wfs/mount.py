@@ -2,6 +2,7 @@ from copy import deepcopy
 
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from gisserver.features import FeatureField, FeatureType, field
 
 from traffic_control.enums import Lifecycle
@@ -74,7 +75,7 @@ MountRealFeatureType = FeatureType(
 
 
 MountRealCentroidFeatureType = FeatureType(
-    title="Mount Real Centroid",
+    title=_("Mount Real Centroid"),
     name="mountrealcentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
@@ -115,7 +116,7 @@ MountPlanFeatureType = FeatureType(
 
 
 MountPlanCentroidFeatureType = FeatureType(
-    title="Mount Plan Centroid",
+    title=_("Mount Plan Centroid"),
     name="mountplancentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,

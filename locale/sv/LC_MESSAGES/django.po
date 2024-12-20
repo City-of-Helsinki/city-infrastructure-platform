@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 20:24+0200\n"
+"POT-Creation-Date: 2024-12-20 15:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2281,6 +2281,12 @@ msgstr "Fil hittades inte."
 #, python-format
 msgid "Error: Could not find %(model_name)s with id %(id)s."
 msgstr "Fel: Kunde inte hittas med koden %(model_name)s %(id)s."
+
+msgid "Mount Real Centroid"
+msgstr "Montering_medelpunkt (implementering)"
+
+msgid "Mount Plan Centroid"
+msgstr "Montering_medelpunkt (plan)"
 
 msgid "Additional user information"
 msgstr ""

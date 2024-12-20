@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-15 20:24+0200\n"
+"POT-Creation-Date: 2024-12-20 15:30+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2274,6 +2274,12 @@ msgstr "Tiedostoa ei löytynyt."
 #, python-format
 msgid "Error: Could not find %(model_name)s with id %(id)s."
 msgstr "Virhe: %(model_name)s tunnisteella %(id)s ei löytynyt."
+
+msgid "Mount Real Centroid"
+msgstr "Kiinnityskohta_keskipiste (toteuma)"
+
+msgid "Mount Plan Centroid"
+msgstr "Kiinnityskohta_keskipiste (suunnitelma)"
 
 msgid "Additional user information"
 msgstr "Lisätiedot käyttäjälle"
