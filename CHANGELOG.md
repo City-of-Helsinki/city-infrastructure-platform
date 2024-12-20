@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.2.0...city-infrastructure-platform-v1.3.0) (2024-12-20)
+
+
+### Features
+
+* Centroid WFS Feature for mount plans and reals instead of only for portal types. ([650a0d6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/650a0d69b588990291112f893dd58c36975bc1ad))
+* WFS Feature for mountplans and mountreals that uses centroid as instead of real location ([f5baeda](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f5baedadd976edc0b5ee092d08ca34dc065b47c3))
+
+
+### Bug Fixes
+
+* Add missing internationalization support for mount centroid titles ([84a2eb6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/84a2eb612617e0ba7b2921399a7c3ebf4f4f952f))
+* Many fixes related to location handling in admin forms ([5b09d92](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5b09d92b8d5736582a57cd2d79b772c563b28db8))
+
 ## [1.2.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.1.0...city-infrastructure-platform-v1.2.0) (2024-12-16)
 
 
