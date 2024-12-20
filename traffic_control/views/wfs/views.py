@@ -7,10 +7,10 @@ from city_furniture.views.wfs import FurnitureSignpostPlanFeatureType, Furniture
 from traffic_control.views.wfs import (
     AdditionalSignPlanFeatureType,
     AdditionalSignRealFeatureType,
+    MountPlanCentroidFeatureType,
     MountPlanFeatureType,
-    MountPlanPortalFeatureType,
+    MountRealCentroidFeatureType,
     MountRealFeatureType,
-    MountRealPortalFeatureType,
     TrafficSignPlanFeatureType,
     TrafficSignRealFeatureType,
 )
@@ -41,7 +41,7 @@ class CityInfrastructureWFSView(WFSView):
         AdditionalSignRealFeatureType,
         AdditionalSignPlanFeatureType,
         MountRealFeatureType,
-        MountRealPortalFeatureType,
+        MountRealCentroidFeatureType,
         MountPlanFeatureType,
-        MountPlanPortalFeatureType,
+        MountPlanCentroidFeatureType,
     ]
