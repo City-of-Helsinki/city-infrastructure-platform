@@ -45,8 +45,8 @@ _base_fields = (
     + deepcopy(OWNED_DEVICE_MODEL_FIELDS)
 )
 
-_mount_non_portal_fields = deepcopy(_base_fields) + [FeatureField("location", abstract="Location of the Mount.")]
-_mount_portal_fields = deepcopy(_base_fields) + [
+_mount_fields = deepcopy(_base_fields) + [FeatureField("location", abstract="Location of the Mount.")]
+_mount_centroid_fields = deepcopy(_base_fields) + [
     FeatureField("location", xsd_class=CentroidLocationXsdElement, abstract="Location of the Mount.")
 ]
 
@@ -60,7 +60,7 @@ MountRealFeatureType = FeatureType(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
     ),
-    fields=deepcopy(_mount_non_portal_fields)
+    fields=deepcopy(_mount_fields)
     + [
         FeatureField(
             "mount_plan_id", model_attribute="mount_plan.id", abstract="ID of the Mount plan related to this Mount"
@@ -73,19 +73,18 @@ MountRealFeatureType = FeatureType(
 )
 
 
-MountRealPortalFeatureType = FeatureType(
-    title="Mount Real Portal",
-    name="mountrealportal",
+MountRealCentroidFeatureType = FeatureType(
+    title="Mount Real Centroid",
+    name="mountrealcentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=MountReal.objects.active()
-    .filter(mount_type__description="Portal")
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
     .filter(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
     ),
-    fields=deepcopy(_mount_portal_fields)
+    fields=deepcopy(_mount_centroid_fields)
     + [
         FeatureField(
             "mount_plan_id", model_attribute="mount_plan.id", abstract="ID of the Mount plan related to this Mount"
@@ -107,7 +106,7 @@ MountPlanFeatureType = FeatureType(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
     ),
-    fields=deepcopy(_mount_non_portal_fields)
+    fields=deepcopy(_mount_fields)
     + [
         FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
     ]
@@ -115,19 +114,18 @@ MountPlanFeatureType = FeatureType(
 )
 
 
-MountPlanPortalFeatureType = FeatureType(
-    title="Mount Plan Portal",
-    name="mountplanportal",
+MountPlanCentroidFeatureType = FeatureType(
+    title="Mount Plan Centroid",
+    name="mountplancentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=mount_plan_get_current()
-    .filter(mount_type__description="Portal")
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
     .filter(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
     ),
-    fields=deepcopy(_mount_portal_fields)
+    fields=deepcopy(_mount_centroid_fields)
     + [
         FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
     ]

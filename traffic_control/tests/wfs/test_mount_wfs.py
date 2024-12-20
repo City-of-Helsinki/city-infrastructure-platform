@@ -1,5 +1,3 @@
-from typing import Dict
-
 import pytest
 from django.contrib.gis.geos import GeometryCollection, GEOSGeometry, MultiLineString, MultiPoint
 
@@ -98,207 +96,178 @@ def _get_expected_centroid_location(geometry):
 
 
 @pytest.mark.parametrize(
-    "model_name, factory, create_params, location, expected_location_value",
+    "model_name, factory, location, expected_location_value",
     (
         (
             "mountplan",
             MountPlanFactory,
-            {},
             test_point_helsinki,
             f"{test_point_helsinki.y} {test_point_helsinki.x} {test_point_helsinki.z}",
         ),
         (
-            "mountplanportal",
+            "mountplancentroid",
             MountPlanFactory,
-            {"mount_type__description": "Portal"},
             test_point_helsinki,
             _get_expected_centroid_location(test_point_helsinki),
         ),
         (
             "mountreal",
             MountRealFactory,
-            {},
             test_point_helsinki,
             f"{test_point_helsinki.y} {test_point_helsinki.x} {test_point_helsinki.z}",
         ),
         (
-            "mountrealportal",
+            "mountrealcentroid",
             MountRealFactory,
-            {"mount_type__description": "Portal"},
             test_point_helsinki,
             _get_expected_centroid_location(test_point_helsinki),
         ),
         (
             "mountplan",
             MountPlanFactory,
-            {},
             test_polygon,
             EXPECTED_POLYGON_LOCATION,
         ),
         (
-            "mountplanportal",
+            "mountplancentroid",
             MountPlanFactory,
-            {"mount_type__description": "Portal"},
             test_polygon,
             _get_expected_centroid_location(test_polygon),
         ),
         (
             "mountreal",
             MountRealFactory,
-            {},
             test_polygon,
             EXPECTED_POLYGON_LOCATION,
         ),
         (
-            "mountrealportal",
+            "mountrealcentroid",
             MountRealFactory,
-            {"mount_type__description": "Portal"},
             test_polygon,
             _get_expected_centroid_location(test_polygon),
         ),
         (
             "mountplan",
             MountPlanFactory,
-            {},
             test_multi_polygon,
             EXPECTED_MULTIPOLYGON,
         ),
         (
-            "mountplanportal",
+            "mountplancentroid",
             MountPlanFactory,
-            {"mount_type__description": "Portal"},
             test_multi_polygon,
             _get_expected_centroid_location(test_multi_polygon),
         ),
         (
             "mountreal",
             MountRealFactory,
-            {},
             test_multi_polygon,
             EXPECTED_MULTIPOLYGON,
         ),
         (
-            "mountrealportal",
+            "mountrealcentroid",
             MountRealFactory,
-            {"mount_type__description": "Portal"},
             test_multi_polygon,
             _get_expected_centroid_location(test_multi_polygon),
         ),
-        ("mountplan", MountPlanFactory, {}, test_line, " ".join(YXGML32Renderer.get_swapped_coordinates(test_line)[0])),
+        ("mountplan", MountPlanFactory, test_line, " ".join(YXGML32Renderer.get_swapped_coordinates(test_line)[0])),
         (
-            "mountplanportal",
+            "mountplancentroid",
             MountPlanFactory,
-            {"mount_type__description": "Portal"},
             test_line,
             _get_expected_centroid_location(test_line),
         ),
         (
             "mountreal",
             MountRealFactory,
-            {},
             test_line,
             " ".join(YXGML32Renderer.get_swapped_coordinates(test_line)[0]),
         ),
         (
-            "mountrealportal",
+            "mountrealcentroid",
             MountRealFactory,
-            {"mount_type__description": "Portal"},
             test_line,
             _get_expected_centroid_location(test_line),
         ),
         (
             "mountplan",
             MountPlanFactory,
-            {},
             TEST_MULTI_POINT,
             EXPECTED_MULTIPOINT,
         ),
         (
-            "mountplanportal",
+            "mountplancentroid",
             MountPlanFactory,
-            {"mount_type__description": "Portal"},
             TEST_MULTI_POINT,
             _get_expected_centroid_location(TEST_MULTI_POINT),
         ),
         (
             "mountreal",
             MountRealFactory,
-            {},
             TEST_MULTI_POINT,
             EXPECTED_MULTIPOINT,
         ),
         (
-            "mountrealportal",
+            "mountrealcentroid",
             MountRealFactory,
-            {"mount_type__description": "Portal"},
             TEST_MULTI_POINT,
             _get_expected_centroid_location(TEST_MULTI_POINT),
         ),
         (
             "mountplan",
             MountPlanFactory,
-            {},
             TEST_MULTI_LINE,
             EXPECTED_MULTILINE,
         ),
         (
-            "mountplanportal",
+            "mountplancentroid",
             MountPlanFactory,
-            {"mount_type__description": "Portal"},
             TEST_MULTI_LINE,
             _get_expected_centroid_location(TEST_MULTI_LINE),
         ),
         (
             "mountreal",
             MountRealFactory,
-            {},
             TEST_MULTI_LINE,
             EXPECTED_MULTILINE,
         ),
         (
-            "mountrealportal",
+            "mountrealcentroid",
             MountRealFactory,
-            {"mount_type__description": "Portal"},
             TEST_MULTI_LINE,
             _get_expected_centroid_location(TEST_MULTI_LINE),
         ),
         (
             "mountplan",
             MountPlanFactory,
-            {},
             TEST_GEOMETRY_COLLECTION,
             EXPECTED_GEOMETRY_COLLECTION,
         ),
         (
-            "mountplanportal",
+            "mountplancentroid",
             MountPlanFactory,
-            {"mount_type__description": "Portal"},
             TEST_GEOMETRY_COLLECTION,
             _get_expected_centroid_location(TEST_GEOMETRY_COLLECTION),
         ),
         (
             "mountreal",
             MountRealFactory,
-            {},
             TEST_GEOMETRY_COLLECTION,
             EXPECTED_GEOMETRY_COLLECTION,
         ),
         (
-            "mountrealportal",
+            "mountrealcentroid",
             MountRealFactory,
-            {"mount_type__description": "Portal"},
             TEST_GEOMETRY_COLLECTION,
             _get_expected_centroid_location(TEST_GEOMETRY_COLLECTION),
         ),
     ),
 )
 @pytest.mark.django_db
-def test__wfs_mount__gml(
-    model_name: str, factory, create_params: Dict, location: GEOSGeometry, expected_location_value
-):
-    device = factory(location=location, **create_params)
+def test__wfs_mount__gml(model_name: str, factory, location: GEOSGeometry, expected_location_value):
+    device = factory(location=location)
     geometry_type_str = (
-        location.__class__.__name__ if model_name not in ("mountplanportal", "mountrealportal") else "Point"
+        location.__class__.__name__ if model_name not in ("mountplancentroid", "mountrealcentroid") else "Point"
     )
 
     gml_xml = wfs_get_features_gml(model_name)
