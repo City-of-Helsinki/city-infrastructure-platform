@@ -1,6 +1,7 @@
 import uuid
 from typing import Optional, TYPE_CHECKING
 
+from auditlog.registry import auditlog
 from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models import Q
@@ -95,3 +96,6 @@ class User(AbstractUser):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+
+
+auditlog.register(User, m2m_fields={"operational_areas", "responsible_entities", "groups", "ad_groups"})
