@@ -277,22 +277,37 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
         return content_s or None
 
     def _content_s_to_columns(self, data: Dataset):
-        content_rows = data["content_s"]
+        """Assume that this is empty template export if there is no data.
+        In that case add all possible content_s fields as columns."""
+        if not data.dict:
+            device_types_schemas = list(
+                filter(
+                    lambda x: x is not None,
+                    TrafficControlDeviceType.objects.all().values_list("content_schema", flat=True),
+                )
+            )
+            content_properties = set()
+            for device_type_schema in device_types_schemas:
+                for property_name in device_type_schema.get("properties", {}).keys():
+                    content_properties.add(f"content_s.{property_name}")
+            data.headers.extend(list(content_properties))
 
-        # Collect all content_s properties names from every row.
-        # Use dict to retain properties order as they appear in data.
-        content_properties = {}
-        for row in content_rows:
-            for key in row:
-                content_properties[key] = None
+        else:
+            content_rows = data["content_s"]
+            # Collect all content_s properties names from every row.
+            # Use dict to retain properties order as they appear in data.
+            content_properties = {}
+            for row in content_rows:
+                for key in row:
+                    content_properties[key] = None
 
-        for property in content_properties:
-            values = self._get_values_for_property(property, content_rows)
+            for property in content_properties:
+                values = self._get_values_for_property(property, content_rows)
 
-            # Convert arrays and objects to JSON strings
-            values = self._structured_values_to_string(values)
+                # Convert arrays and objects to JSON strings
+                values = self._structured_values_to_string(values)
 
-            data.append_col(values, header=f"content_s.{property}")
+                data.append_col(values, header=f"content_s.{property}")
 
         del data["content_s"]
 
