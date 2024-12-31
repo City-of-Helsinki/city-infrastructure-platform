@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.3.0...city-infrastructure-platform-v1.4.0) (2024-12-31)
+
+
+### Features
+
+* Add all possible content_s fields to template export for additional sign plans and reals ([1305079](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1305079e7906ddf6bde90416de819ad287a50718))
+* Register User model to auditlog ([07fc4aa](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/07fc4aa41349b1ebe180267aadf109758e5aeb0a))
+
 ## [1.3.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.2.0...city-infrastructure-platform-v1.3.0) (2024-12-20)
 
 
