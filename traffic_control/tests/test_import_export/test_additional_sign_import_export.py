@@ -145,6 +145,29 @@ content_2 = {
 }
 
 
+@pytest.mark.parametrize("resource", (AdditionalSignRealResource, AdditionalSignPlanResource))
+@pytest.mark.django_db
+def test_additional_sign_template__export(resource):
+    """test template export, this happens when no data is provided."""
+    get_traffic_control_device_type(
+        code="type1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema_1,
+    )
+    dataset = resource().export()
+    assert dataset.dict == []
+    # check that all content_s fields from schema_1 are present
+    assert "content_s.bool" in dataset.headers
+    assert "content_s.num" in dataset.headers
+    assert "content_s.int" in dataset.headers
+    assert "content_s.str" in dataset.headers
+    assert "content_s.str_nolimit" in dataset.headers
+    assert "content_s.enum" in dataset.headers
+    assert "content_s.obj" in dataset.headers
+    assert "content_s.list" in dataset.headers
+    assert "content_s.not_required" in dataset.headers
+
+
 @pytest.mark.parametrize(
     "resource, factory",
     (
@@ -262,6 +285,10 @@ def test__additional_sign__import__create_with_content(model, resource, factory,
     )
 
     dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
+    # add content_s column that does not exist in the device type, it should just be ignored
+    dataset.dict[0]["content_s.does_not_exits_in_schema"] = "Some value"
+    dataset.dict[1]["content_s.does_not_exits_in_schema"] = "Some value"
+    dataset.dict[2]["content_s.does_not_exits_in_schema"] = "Some value"
     model.objects.all().delete()
 
     result = resource().import_data(dataset, raise_errors=True, collect_failed_rows=True)
@@ -542,6 +569,8 @@ def test__additional_sign__import__update_with_content(model, resource, factory,
     dataset = get_import_dataset(resource, format=format, delete_columns=deleted_columns)
     row = dataset.dict[0]
     row["content_s.str"] = "Other value"
+    # add content_s column that does not exist in the device type, it should just be ignored
+    row["content_s.does_not_exits_in_schema"] = "Some value"
     dataset.dict = [row]
 
     result = resource().import_data(dataset, raise_errors=False, collect_failed_rows=True)
