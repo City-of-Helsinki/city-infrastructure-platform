@@ -1,7 +1,7 @@
 import pytest
 from auditlog.models import LogEntry
 from django.conf import settings
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 
 from traffic_control.models import GroupOperationalArea
@@ -84,3 +84,13 @@ def test__user_group_operational_area__contains_location(location, expected):
 
     in_area = user.location_is_in_operational_area(location)
     assert in_area == expected
+
+
+@pytest.mark.django_db
+def test__user_permissions_changed_to_auditlog():
+    user = get_user()
+    assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.CREATE).count() == 1
+
+    permission = Permission.objects.get(codename="change_user")
+    user.user_permissions.add(permission)
+    assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).count() == 1

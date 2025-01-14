@@ -98,4 +98,6 @@ class User(AbstractUser):
         verbose_name_plural = _("Users")
 
 
-auditlog.register(User, m2m_fields={"operational_areas", "responsible_entities", "groups", "ad_groups"})
+auditlog.register(
+    User, m2m_fields={"operational_areas", "responsible_entities", "groups", "ad_groups", "user_permissions"}
+)
