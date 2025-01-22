@@ -628,6 +628,7 @@ class TrafficSignPlanFactory(factory.django.DjangoModelFactory):
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
 
 
 def get_traffic_sign_plan(
@@ -730,6 +731,8 @@ class AdditionalSignPlanFactory(factory.django.DjangoModelFactory):
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
+    parent = factory.SubFactory(TrafficSignPlanFactory)
 
 
 def get_additional_sign_plan(
