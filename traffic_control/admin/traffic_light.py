@@ -188,6 +188,7 @@ class TrafficLightRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(TrafficLightReal)
 class TrafficLightRealAdmin(
+    DeviceTypeSearchAdminMixin,
     DeviceComparisonAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,

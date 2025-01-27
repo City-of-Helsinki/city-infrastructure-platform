@@ -196,6 +196,7 @@ class SignpostRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(SignpostReal)
 class SignpostRealAdmin(
+    DeviceTypeSearchAdminMixin,
     DeviceComparisonAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
