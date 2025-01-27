@@ -192,6 +192,7 @@ class BarrierRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(BarrierReal)
 class BarrierRealAdmin(
+    DeviceTypeSearchAdminMixin,
     DeviceComparisonAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,

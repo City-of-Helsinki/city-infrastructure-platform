@@ -138,8 +138,5 @@ class UpdatePlanLocationAdminMixin:
 
 
 class DeviceTypeSearchAdminMixin:
-    search_fields = (
-        "device_type__code",
-        "device_type__legacy_code",
-    )
-    search_help_text = "Searches from code and legacy_code fields"
+    def get_search_fields(self, request):
+        return self.search_fields + ("device_type__code", "device_type__legacy_code")

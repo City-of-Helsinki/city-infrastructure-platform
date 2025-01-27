@@ -217,6 +217,7 @@ class RoadMarkingRealOperationInline(TrafficControlOperationInlineBase):
 
 @admin.register(RoadMarkingReal)
 class RoadMarkingRealAdmin(
+    DeviceTypeSearchAdminMixin,
     DeviceComparisonAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
