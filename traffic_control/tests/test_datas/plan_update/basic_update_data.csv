@@ -1,0 +1,4 @@
+﻿Päätösnumero;Päätöspäivä;Nimi;Diaarinumero;Piirustusnumerot;Linkki
+EXISTS1;13.1.2012;Name1;DN1;DrawingIllegal , 6103-1, 6102,6102-1 ;https://dummyurl
+NOTEXISTING;13.1.2012;Name1;DN1;DrawingIllegal , 6103-1, 6102 ;https://dummyurl
+
