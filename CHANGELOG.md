@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.4.0...city-infrastructure-platform-v1.5.0) (2025-01-29)
+
+
+### Features
+
+* Add devicetype code and legacy code to admin search to all models that have device type ([98fa983](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/98fa98349903f083be07880dfaa9558e1c8cd02d))
+* Management command for updating plan information from a csv-file ([bd56a0a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/bd56a0ab15c196a01fee6d87408576eacfbeb88d))
+* Unregister social_auth user admin view ([d960319](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d9603195fd8cd909cf7d38def71f0981b520eab5))
+
 ## [1.4.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.3.0...city-infrastructure-platform-v1.4.0) (2025-01-14)
 
 
