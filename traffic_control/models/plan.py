@@ -75,6 +75,14 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
         help_text=_("Date on which a decision was made on the plan."),
     )
 
+    decision_url = models.URLField(
+        _("Decision url"),
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text=_("URL to decision web page"),
+    )
+
     class Meta:
         db_table = "plan"
         verbose_name = _("Plan")

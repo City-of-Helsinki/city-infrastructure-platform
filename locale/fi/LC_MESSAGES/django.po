@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-20 15:30+0200\n"
+"POT-Creation-Date: 2025-01-29 13:53+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1679,6 +1679,12 @@ msgstr "Päätöspäivämäärä"
 
 msgid "Date on which a decision was made on the plan."
 msgstr "Päivämäärä, jona suunnitelmasta tehtiin päätös."
+
+msgid "Decision url"
+msgstr "Päätöslinkki"
+
+msgid "URL to decision web page"
+msgstr "Linkki päätökseen"
 
 msgid "Plans"
 msgstr "Suunnitelmat"

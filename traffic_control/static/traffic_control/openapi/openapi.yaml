@@ -7255,6 +7255,10 @@ paths:
         schema:
           type: string
       - in: query
+        name: decision_url
+        schema:
+          type: string
+      - in: query
         name: deleted_at
         schema:
           type: string
@@ -23293,6 +23297,12 @@ components:
           format: date
           nullable: true
           description: Date on which a decision was made on the plan.
+        decision_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to decision web page
+          maxLength: 500
     PatchedPortalTypeRequest:
       type: object
       properties:
@@ -25750,6 +25760,12 @@ components:
           format: date
           nullable: true
           description: Date on which a decision was made on the plan.
+        decision_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to decision web page
+          maxLength: 500
         created_by:
           type: string
           format: uuid
@@ -25884,6 +25900,12 @@ components:
           format: date
           nullable: true
           description: Date on which a decision was made on the plan.
+        decision_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to decision web page
+          maxLength: 500
       required:
       - decision_id
       - name
