@@ -138,7 +138,9 @@ class AdditionalSignPlanAdmin(
             _("Location information"),
             {
                 "fields": (
-                    ("location", "z_coord", "location_ewkt"),
+                    "location",
+                    "z_coord",
+                    "location_ewkt",
                     "direction",
                     "order",
                     "road_name",
@@ -249,7 +251,9 @@ class AdditionalSignRealAdmin(
             _("Location information"),
             {
                 "fields": (
-                    ("location", "z_coord", "location_ewkt"),
+                    "location",
+                    "z_coord",
+                    "location_ewkt",
                     "direction",
                     "order",
                     "road_name",

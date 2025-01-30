@@ -117,7 +117,9 @@ class AbstractFurnitureSignpostAdmin(
         _("Location information"),
         {
             "fields": (
-                ("location", "z_coord", "location_ewkt"),
+                "location",
+                "z_coord",
+                "location_ewkt",
                 "location_name_fi",
                 "location_name_sw",
                 "location_name_en",
