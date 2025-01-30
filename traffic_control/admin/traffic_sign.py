@@ -172,7 +172,6 @@ class TrafficSignPlanAdmin(
                     "value",
                     "txt",
                     "source_id",
-                    "source_name",
                 )
             },
         ),
@@ -180,7 +179,9 @@ class TrafficSignPlanAdmin(
             _("Location information"),
             {
                 "fields": (
-                    ("location", "z_coord", "location_ewkt"),
+                    "location",
+                    "z_coord",
+                    "location_ewkt",
                     "direction",
                     "road_name",
                     "lane_number",
@@ -315,7 +316,9 @@ class TrafficSignRealAdmin(
             _("Location information"),
             {
                 "fields": (
-                    ("location", "z_coord", "location_ewkt"),
+                    "location",
+                    "z_coord",
+                    "location_ewkt",
                     "direction",
                     "road_name",
                     "lane_number",
