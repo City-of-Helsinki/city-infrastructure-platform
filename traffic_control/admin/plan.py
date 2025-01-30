@@ -58,6 +58,7 @@ class PlanAdmin(
         "updated_by",
     )
     ordering = ("-created_at",)
+    search_fields = ("decision_id", "diary_number", "drawing_numbers")
 
     def get_urls(self):
         urls = super().get_urls()
