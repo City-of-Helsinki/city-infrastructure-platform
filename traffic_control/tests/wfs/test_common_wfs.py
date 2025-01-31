@@ -3,11 +3,12 @@ from django.contrib.gis.geos import Point
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
-from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, TrafficSignPlan, TrafficSignReal
+from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, Plan, TrafficSignPlan, TrafficSignReal
 from traffic_control.tests.factories import (
     AdditionalSignRealFactory,
     get_additional_sign_plan,
     get_traffic_sign_plan,
+    PlanFactory,
     TrafficSignRealFactory,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
@@ -17,38 +18,58 @@ from traffic_control.tests.wfs.wfs_utils import (
     geojson_get_features,
     gml_feature_id,
     gml_get_features,
+    multipoly_inside_bbox,
+    multipoly_outside_bbox,
+    point_inside_bbox,
+    point_outside_bbox,
+    test_bbox_str,
     wfs_get_features_geojson,
     wfs_get_features_gml,
 )
 
 
 @pytest.mark.parametrize(
-    "model, model_name, factory",
+    "model, model_name, factory, geom_outsidebbox, geom_insidebbox",
     (
-        (TrafficSignPlan, "trafficsignplan", get_traffic_sign_plan),
-        (TrafficSignReal, "trafficsignreal", TrafficSignRealFactory),
-        (AdditionalSignPlan, "additionalsignplan", get_additional_sign_plan),
-        (AdditionalSignReal, "additionalsignreal", AdditionalSignRealFactory),
-        (FurnitureSignpostPlan, "furnituresignpostplan", get_furniture_signpost_plan),
-        (FurnitureSignpostReal, "furnituresignpostreal", get_furniture_signpost_real),
+        (TrafficSignPlan, "trafficsignplan", get_traffic_sign_plan, point_outside_bbox, point_inside_bbox),
+        (TrafficSignReal, "trafficsignreal", TrafficSignRealFactory, point_outside_bbox, point_inside_bbox),
+        (AdditionalSignPlan, "additionalsignplan", get_additional_sign_plan, point_outside_bbox, point_inside_bbox),
+        (AdditionalSignReal, "additionalsignreal", AdditionalSignRealFactory, point_outside_bbox, point_inside_bbox),
+        (
+            FurnitureSignpostPlan,
+            "furnituresignpostplan",
+            get_furniture_signpost_plan,
+            point_outside_bbox,
+            point_inside_bbox,
+        ),
+        (
+            FurnitureSignpostReal,
+            "furnituresignpostreal",
+            get_furniture_signpost_real,
+            point_outside_bbox,
+            point_inside_bbox,
+        ),
+        (Plan, "plan", PlanFactory, multipoly_outside_bbox, multipoly_inside_bbox),
     ),
 )
 @pytest.mark.parametrize("bbox_has_crs", (True, False))
 @pytest.mark.parametrize("output_format", ("gml", "geojson"))
 @pytest.mark.django_db
-def test__wfs__get_feature_bounding_box(model, model_name: str, factory, bbox_has_crs, output_format):
+def test__wfs__get_feature_bounding_box(
+    model, model_name: str, factory, bbox_has_crs, output_format, geom_outsidebbox, geom_insidebbox
+):
     """
     Ensure getting correct set of devices using bounding box filtering
     """
 
     # BBOX parameter order is (south, west, north, east) in EPSG:3879
-    bbox = f"{MIN_Y + 10},{MIN_X + 1},{MIN_Y + 20},{MIN_X+10}"
+    bbox = test_bbox_str
     if bbox_has_crs:
         bbox += f",{EPSG_3879_URN}"
 
     # Create two devices, one outside and one inside the bounding box
-    factory(location=Point(MIN_X + 25, MIN_Y + 15, 0, srid=3879))
-    device_in = factory(location=Point(MIN_X + 5, MIN_Y + 15, 0, srid=3879))
+    factory(location=geom_outsidebbox)
+    device_in = factory(location=geom_insidebbox)
 
     if output_format == "gml":
         response = wfs_get_features_gml(model_name, bbox=bbox)

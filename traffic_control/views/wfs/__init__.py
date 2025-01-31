@@ -5,4 +5,5 @@ from .mount import (
     MountRealCentroidFeatureType,
     MountRealFeatureType,
 )
+from .plan import PlanFeatureType
 from .traffic_sign import TrafficSignPlanFeatureType, TrafficSignRealFeatureType
