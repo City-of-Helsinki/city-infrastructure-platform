@@ -4,14 +4,37 @@ from urllib.parse import urlencode
 from xml.etree import ElementTree
 
 from django.conf import settings
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.urls import reverse
 from rest_framework import status
 
 from traffic_control.tests.factories import get_api_client
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 test_point_helsinki = Point(25496751.5, 6673129.5, 1.5, srid=3879)
-
+test_bbox_str = f"{MIN_Y + 10},{MIN_X + 2},{MIN_Y + 20},{MIN_X + 10}"
+point_outside_bbox = Point(MIN_X + 25, MIN_Y + 15, 0, srid=3879)
+point_inside_bbox = Point(MIN_X + 5, MIN_Y + 15, 0, srid=3879)
+polygon_outside_bbox = Polygon(
+    (
+        (MIN_X + 1, MIN_Y + 1, 0),
+        (MIN_X + 1, MIN_Y + 2, 0),
+        (MIN_X + 2, MIN_Y + 2, 0),
+        (MIN_X + 2, MIN_Y + 1, 0),
+        (MIN_X + 1, MIN_Y + 1, 0),
+    )
+)
+polygon_inside_bbox = Polygon(
+    (
+        (MIN_X + 3, MIN_Y + 11, 0),
+        (MIN_X + 3, MIN_Y + 12, 0),
+        (MIN_X + 4, MIN_Y + 12, 0),
+        (MIN_X + 4, MIN_Y + 11, 0),
+        (MIN_X + 3, MIN_Y + 11, 0),
+    )
+)
+multipoly_outside_bbox = MultiPolygon(polygon_outside_bbox, srid=3879)
+multipoly_inside_bbox = MultiPolygon(polygon_inside_bbox, srid=3879)
 
 EPSG_3879_URN = "urn:ogc:def:crs:EPSG::3879"
 
@@ -144,5 +167,13 @@ def geojson_feature_id(feature: dict) -> str:
 
 
 def geojson_feature_point_coordinates(feature: dict) -> List[float]:
-    assert feature["geometry"]["type"] == "Point"
+    return _get_feature_coordinates(feature, "Point")
+
+
+def geojson_feature_multipolygon_coordinates(feature: dict) -> List[float]:
+    return _get_feature_coordinates(feature, "MultiPolygon")
+
+
+def _get_feature_coordinates(feature: dict, geom_type: str):
+    assert feature["geometry"]["type"] == geom_type
     return feature["geometry"]["coordinates"]
