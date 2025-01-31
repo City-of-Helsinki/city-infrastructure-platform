@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.6.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.5.0...city-infrastructure-platform-v1.6.0) (2025-01-31)
+
+
+### Features
+
+* Add decision_url to Plan admin page ([1cfe8b1](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1cfe8b1be070503864436fb7b607386a5a4f2dcd))
+* Add Plan WFS feature ([b939f1b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b939f1bfdfb9ba691575563911ef576b0f8cd0c6))
+* Add search fields to Plan admin ([98eb08a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/98eb08a81a9c1f0dbba05d14f38dda37ac0bdfa4))
+* Show location information fields one below another instead of side-by-side ([ab8b78e](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ab8b78ea6292729df0aee616b7114c48613f0d43))
+
 ## [1.5.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.4.0...city-infrastructure-platform-v1.5.0) (2025-01-29)
 
 
