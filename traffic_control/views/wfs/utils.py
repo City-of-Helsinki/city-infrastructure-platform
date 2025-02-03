@@ -141,3 +141,8 @@ class EnumNameXsdElement(XsdElement):
 class CentroidLocationXsdElement(XsdElement):
     def get_value(self, instance: models.Model):
         return getattr(instance, "centroid_location", None)
+
+
+class ConvexHullLocationXsdElement(XsdElement):
+    def get_value(self, instance: models.Model):
+        return getattr(instance, "convex_hull_location", None)
