@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.6.0...city-infrastructure-platform-v1.6.1) (2025-02-04)
+
+
+### Bug Fixes
+
+* Plan WFS now uses convex_hull instead of Multipolygon as geometry type ([23d89d2](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/23d89d2a72cab50c92847b3bf5f63ed5682cc580))
+
 ## [1.6.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.5.0...city-infrastructure-platform-v1.6.0) (2025-01-31)
 
 
