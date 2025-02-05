@@ -328,6 +328,29 @@ def test__plan_update_with_location_not_changed():
 
 
 @pytest.mark.django_db
+def test__plan_update_to_empty_location():
+    location = MultiPolygon(test_polygon, srid=settings.SRID)
+    plan = PlanFactory(location=location)
+    logentries = LogEntry.objects.get_for_object(plan).filter(action=LogEntry.Action.CREATE)
+    assert logentries.count() == 1
+    assert Plan.objects.count() == 1
+
+    data = {
+        "location": location,
+        "location_ewkt": "",
+        "name": plan.name,
+        "decision_id": plan.decision_id,
+        "z_coord": get_z_for_polygon(test_polygon),
+    }
+    form = PlanModelForm(data=data, instance=plan)
+    assert form.is_valid() is True
+    form.save()
+
+    plan.refresh_from_db()
+    assert plan.location is None
+
+
+@pytest.mark.django_db
 def test__plan_create_no_location():
     form = PlanModelForm(data=_get_plan_mandatory_fields())
     assert form.is_valid() is True
