@@ -196,17 +196,25 @@ class Geometry3DFieldForm(forms.ModelForm):
         cleaned_data = super().clean()
         z_coord = cleaned_data.pop("z_coord", 0)
         location = cleaned_data.get("location", None)
-        new_geom = self._get_new_geom(location, cleaned_data.get("location_ewkt", None), z_coord)
+        location_ewkt = cleaned_data.get("location_ewkt", None)
+        new_geom = self._get_new_geom(location, location_ewkt, z_coord)
+        has_location_error = True if "location" in self.errors else False
         if new_geom:
-            if "location" in self.errors:
+            if has_location_error:
                 del self.errors["location"]
             cleaned_data["location"] = new_geom
             cleaned_data["location_ewkt"] = new_geom.ewkt
         else:
+            if not location_ewkt and self.instance:
+                # this is update with clearing location_ewkt field
+                cleaned_data["location_ewkt"] = ""
+                cleaned_data["location"] = None
             # sometimes mapwidget rounds coordinates differently
             # in _get_new_geom check is done using 6 digits so when new_geom is None, location in new_geom need to be
             # set to self.instance.location to prevent unnecessary auditlog entries on save.
-            cleaned_data["location"] = self.instance.location
+            elif not has_location_error:
+                cleaned_data["location"] = self.instance.location
+
         return cleaned_data
 
     def _get_new_geom(self, location, location_ewkt, z_coord):
@@ -219,6 +227,7 @@ class Geometry3DFieldForm(forms.ModelForm):
         location_changed = self._get_is_location_changed(location)
         if not location_ewkt_changed and not location_changed:
             return None
+
         if not self.instance.location:
             if location_ewkt:
                 return GEOSGeometry(location_ewkt)
