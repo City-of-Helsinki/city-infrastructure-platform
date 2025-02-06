@@ -183,6 +183,7 @@ class RoadMarkingPlanAdmin(
         "owner",
         RoadMarkingPlanReplacementListFilter,
     ]
+    search_fields = ("id",)
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -316,6 +317,7 @@ class RoadMarkingRealAdmin(
         ("lifecycle", EnumFieldListFilter),
         "owner",
     ]
+    search_fields = ("id",)
     readonly_fields = (
         "created_at",
         "updated_at",

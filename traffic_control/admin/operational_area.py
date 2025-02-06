@@ -23,6 +23,7 @@ class OperationalAreaAdmin(Geometry3DFieldAdminMixin, admin.GISModelAdmin):
         "status",
     ]
     list_filter = ("area_type", "contractor", "status")
+    search_fields = ("id",)
 
 
 admin.site.register(OperationalArea, OperationalAreaAdmin)

@@ -19,6 +19,7 @@ class CityFurnitureDeviceTypeAdmin(EnumChoiceValueDisplayAdminMixin, AuditLogHis
         "size",
         "target_model",
     )
+    search_fields = ("id",)
     ordering = ("code", "class_type", "function_type")
     actions = None
 
@@ -45,5 +46,6 @@ class CityFurnitureTargetAdmin(AuditLogHistoryAdmin):
         "source_id",
         "source_name",
     )
+    search_fields = ("id",)
     ordering = ("name_fi",)
     actions = None
