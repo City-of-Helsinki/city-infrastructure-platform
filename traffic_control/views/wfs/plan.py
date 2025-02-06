@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from django.utils.translation import gettext_lazy as _
 from gisserver.features import FeatureField, FeatureType
 
 from traffic_control.models import Plan
@@ -31,6 +32,7 @@ _fields = (
 )
 
 PlanFeatureType = FeatureType(
+    title=_("Traffic Control Plan"),
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=Plan.objects.active(),
