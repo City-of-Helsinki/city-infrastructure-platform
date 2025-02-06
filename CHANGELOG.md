@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.6.1...city-infrastructure-platform-v1.7.0) (2025-02-06)
+
+
+### Features
+
+* Add id field to most Admin model search fields ([a13d4af](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a13d4afbfe237f04f3b41eba9756df8ab59ddf53))
+* Change Plan WFS title to Traffic Control Plan ([ba0615c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ba0615c115b84323a4b369f3c8de52c97fe98426))
+
+
+### Bug Fixes
+
+* Location can now be cleared from admin page using location_ekwt field in models that location is nullable ([fe577ce](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/fe577ce14874a870207ae7baf6a20e86bbb3809e))
+
 ## [1.6.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.6.0...city-infrastructure-platform-v1.6.1) (2025-02-04)
 
 
