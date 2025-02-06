@@ -192,6 +192,7 @@ class AdditionalSignPlanAdmin(
         "owner",
         AdditionalSignReplacementListFilter,
     ]
+    search_fields = ("id",)
     ordering = ("-created_at",)
     inlines = (
         AdditionalSignPlanFileInline,
@@ -380,6 +381,7 @@ class AdditionalSignRealAdmin(
         "lane_type",
         "source_id",
         "source_name",
+        "id",
     )
     inlines = (
         AdditionalSignRealFileInline,

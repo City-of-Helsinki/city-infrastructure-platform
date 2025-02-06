@@ -23,3 +23,4 @@ class CoverageAreaAdmin(Geometry3DFieldAdminMixin, admin.GISModelAdmin):
         "parking_slots",
     ]
     list_filter = ("category", "area_type")
+    search_fields = ("id",)

@@ -116,7 +116,11 @@ class TrafficControlDeviceTypeAdmin(
         "target_model",
     )
     list_filter = (TrafficSignTypeListFilter,)
-    search_fields = ("code", "legacy_code")
+    search_fields = (
+        "code",
+        "legacy_code",
+        "id",
+    )
     search_help_text = "Searches from code and legacy_code fields"
     ordering = ("code",)
     actions = None
@@ -233,6 +237,7 @@ class TrafficSignPlanAdmin(
         "owner",
         TrafficSignPlanReplacementListFilter,
     ]
+    search_fields = ("id",)
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -444,6 +449,7 @@ class TrafficSignRealAdmin(
         "lane_type",
         "source_id",
         "source_name",
+        "id",
     )
     inlines = (
         TrafficSignRealFileInline,

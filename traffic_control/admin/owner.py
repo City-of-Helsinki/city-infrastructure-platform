@@ -11,3 +11,4 @@ class OwnerAdmin(admin.ModelAdmin):
         "id",
     ]
     ordering = ("name_fi",)
+    search_fields = ("id",)

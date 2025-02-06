@@ -184,7 +184,10 @@ class FurnitureSignpostPlanAdmin(
     raw_id_fields = ("plan", "mount_plan")
     list_filter = AbstractFurnitureSignpostAdmin.list_filter
     inlines = (FurnitureSignpostPlanFileInline,)
-    search_fields = ("device_type__code",)
+    search_fields = (
+        "device_type__code",
+        "id",
+    )
 
 
 @admin.register(FurnitureSignpostReal)
@@ -232,6 +235,7 @@ class FurnitureSignpostRealAdmin(
         "location_name_en",
         "location_name_sw",
         "device_type__code",
+        "id",
     )
     inlines = (FurnitureSignpostRealFileInline, FurnitureSignpostRealOperationInline)
     initial_values = {

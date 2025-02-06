@@ -164,6 +164,7 @@ class SignpostPlanAdmin(
         "owner",
         SignpostPlanReplacementListFilter,
     ]
+    search_fields = ("id",)
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -295,6 +296,7 @@ class SignpostRealAdmin(
         ("lifecycle", EnumFieldListFilter),
         "owner",
     ]
+    search_fields = ("id",)
     readonly_fields = (
         "created_at",
         "updated_at",
