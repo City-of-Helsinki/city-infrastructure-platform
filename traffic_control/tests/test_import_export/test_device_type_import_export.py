@@ -85,6 +85,7 @@ def test__traffic_control_device_type__export(  # noqa: C901
     assert dataset.dict[0]["value"] == dt.value
     assert dataset.dict[0]["unit"] == dt.unit
     assert dataset.dict[0]["size"] == dt.size
+    assert dataset.dict[0]["id"] == str(dt.id)
 
     # Nullable fields are "" when value is None
     if legacy_code:
@@ -179,7 +180,7 @@ def test__traffic_control_device_type__import(
     if content_schema:
         kwargs["content_schema"] = content_schema
 
-    get_traffic_control_device_type(**kwargs)
+    orig_uuid = get_traffic_control_device_type(**kwargs).id
 
     dataset = get_import_dataset(TrafficControlDeviceTypeResource, format=format)
     TrafficControlDeviceType.objects.all().delete()
@@ -202,6 +203,8 @@ def test__traffic_control_device_type__import(
     assert imported_dt.legacy_description == legacy_description
     assert imported_dt.target_model == target_model
     assert imported_dt.type == dt_type
+    # id in import phase should be ignored
+    assert imported_dt.id != orig_uuid
 
 
 @pytest.mark.parametrize("format", file_formats)
@@ -330,3 +333,4 @@ def test__traffic_control_device_type__import__update(
     assert imported_dt.target_model == to_values["target_model"]
     assert imported_dt.type == to_values["type"]
     assert imported_dt.content_schema == to_values["content_schema"]
+    assert imported_dt.id == device_type.id
