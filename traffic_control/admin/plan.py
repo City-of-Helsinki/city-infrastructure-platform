@@ -63,6 +63,7 @@ class PlanAdmin(
         "diary_number",
         "drawing_numbers",
         "id",
+        "name",
     )
 
     def get_urls(self):
