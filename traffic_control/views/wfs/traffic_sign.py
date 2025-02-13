@@ -94,6 +94,7 @@ TrafficSignRealFeatureType = FeatureType(
             model_attribute="traffic_sign_plan",
             abstract="ID of this Traffic Sign's plan.",
         ),
+        FeatureField("mount_real_id", model_attribute="mount_real", abstract="Mount Real ID"),
     ],
 )
 
@@ -108,7 +109,8 @@ TrafficSignPlanFeatureType = FeatureType(
     ),
     fields=deepcopy(_base_fields)
     + [
-        FeatureField("plan_id", abstract="ID of the Plan that this traffic sign belongs to."),
+        FeatureField("plan_id", abstract="ID of the Plan that this Traffic Sign Plan belongs to."),
+        FeatureField("mount_plan_id", abstract="ID of the Mount Plan for this Traffic Sign Plan belongs to."),
     ]
     + deepcopy(REPLACEABLE_MODEL_FIELDS),
 )

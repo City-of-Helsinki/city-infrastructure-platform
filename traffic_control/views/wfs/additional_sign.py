@@ -112,6 +112,7 @@ AdditionalSignRealFeatureType = FeatureType(
             model_attribute="additional_sign_plan",
             abstract="ID of this Additional Sign's plan.",
         ),
+        FeatureField("mount_real_id", model_attribute="mount_real", abstract="Mount Real ID"),
     ],
 )
 
@@ -126,7 +127,8 @@ AdditionalSignPlanFeatureType = FeatureType(
     ),
     fields=deepcopy(_base_fields)
     + [
-        FeatureField("plan_id", abstract="ID of the Plan that this Additional Sign belongs to."),
+        FeatureField("plan_id", abstract="ID of the Plan that this Additional Sign Plan belongs to."),
+        FeatureField("mount_plan_id", abstract="ID of the Mount Plan that this Additional Sign plan belongs to."),
     ]
     + deepcopy(REPLACEABLE_MODEL_FIELDS),
 )
