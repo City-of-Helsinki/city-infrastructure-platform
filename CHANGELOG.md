@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.7.0...city-infrastructure-platform-v1.8.0) (2025-02-18)
+
+
+### Features
+
+* Add mount_real_id field to TrafficSignReal and AdditionalSignReal WFS api ([22480a6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/22480a65d276c041fe8e6ba1c93799c9039cb761))
+
 ## [1.7.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.6.1...city-infrastructure-platform-v1.7.0) (2025-02-12)
 
 
