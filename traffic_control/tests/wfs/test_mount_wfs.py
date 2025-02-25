@@ -308,7 +308,6 @@ def _assert_envelope(feature):
 @pytest.mark.django_db
 def test__wfs_mount__geojson(model_name: str, factory):
     device = factory(location=test_point_helsinki)
-
     geojson = wfs_get_features_geojson(model_name)
 
     features = geojson_get_features(geojson)
@@ -321,3 +320,29 @@ def test__wfs_mount__geojson(model_name: str, factory):
 
     # Coordinate order is always [X,Y,Z] in GeoJSON
     assert geojson_feature_point_coordinates(feature) == [device.location.x, device.location.y, device.location.z]
+
+
+@pytest.mark.parametrize(
+    "feature_name, factory",
+    (
+        ("mountrealcentroid", MountRealFactory),
+        ("mountplancentroid", MountPlanFactory),
+    ),
+)
+@pytest.mark.parametrize("geometry", (TEST_GEOMETRY_COLLECTION, TEST_MULTI_LINE, TEST_GEOMETRY_COLLECTION))
+@pytest.mark.django_db
+def test__wfs_mount_centroid_geojson(feature_name, factory, geometry):
+    device = factory(location=geometry)
+    geojson = wfs_get_features_geojson(feature_name)
+
+    features = geojson_get_features(geojson)
+    assert len(features) == 1
+    feature = features[0]
+
+    assert geojson_crs(geojson) == EPSG_3879_URN
+
+    assert geojson_feature_id(feature) == f"{feature_name}.{device.id}"
+
+    # Coordinate order is always [X,Y,Z] in GeoJSON
+    centroid_location = device.centroid_location
+    assert geojson_feature_point_coordinates(feature) == [centroid_location.x, centroid_location.y, centroid_location.z]
