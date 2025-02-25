@@ -1,6 +1,7 @@
 from typing import Optional, Type
 
 from django.conf import settings
+from django.db import models
 from enumfields import Enum
 from gisserver.features import ComplexFeatureField, FeatureField
 from gisserver.geometries import CRS
@@ -61,6 +62,22 @@ class CustomGeoJsonRenderer(GeoJsonRenderer):
         if isinstance(value, Enum):
             return value.label
         return super()._format_geojson_value(value)
+
+    def render_geometry(self, feature_type, instance: models.Model) -> bytes:
+        """Support to convert location to centroid location if supported by the instance"""
+        if self._is_centroid_feature_type(feature_type):
+            geometry = getattr(instance, "centroid_location", None)
+        else:
+            geometry = getattr(instance, feature_type.geometry_field.name)
+        if geometry is None:
+            return b"null"
+
+        self.output_crs.apply_to(geometry)
+        return geometry.json.encode()
+
+    @staticmethod
+    def _is_centroid_feature_type(feature_type):
+        return "centroid" in feature_type.name
 
 
 class CustomGetFeature(SwapBoundingBoxMixin, GetFeature):
