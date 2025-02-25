@@ -64,7 +64,7 @@ MountRealFeatureType = FeatureType(
     fields=deepcopy(_mount_fields)
     + [
         FeatureField(
-            "mount_plan_id", model_attribute="mount_plan.id", abstract="ID of the Mount plan related to this Mount"
+            "device_plan_id", model_attribute="mount_plan_id", abstract="ID of the Mount plan related to this Mount"
         ),
         FeatureField("inspected_at", abstract="Timestamp when the mount was inspected."),
         FeatureField("diameter", abstract="Diameter of the mount."),
@@ -88,7 +88,7 @@ MountRealCentroidFeatureType = FeatureType(
     fields=deepcopy(_mount_centroid_fields)
     + [
         FeatureField(
-            "mount_plan_id", model_attribute="mount_plan.id", abstract="ID of the Mount plan related to this Mount"
+            "device_plan_id", model_attribute="mount_plan_id", abstract="ID of the Mount plan related to this Mount"
         ),
         FeatureField("inspected_at", abstract="Timestamp when the mount was inspected."),
         FeatureField("diameter", abstract="Diameter of the mount."),
