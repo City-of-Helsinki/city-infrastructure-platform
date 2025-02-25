@@ -8,10 +8,14 @@
       "additionalsignreal": "Lisäkilpitoteuma",
       "additionalsignplan": "Lisäkilpisuunnitelma",
       "furnituresignpostreal": "Kaupunkikalustetoteuma",
-      "furnituresignpostplan": "Kaupunkikalustesuunnitelma"
+      "furnituresignpostplan": "Kaupunkikalustesuunnitelma",
+      "mountrealcentroid": "Kiinnityskohta_keskipiste (toteuma)",
+      "mountplancentroid": "Kiinnityskohta_keskipiste (suunnitelma)"
     },
     "Device type": "Merkki",
     "Direction": "Suunta",
-    "Additional info": "Lisätieto"
+    "Additional info": "Lisätieto",
+    "Mount type": "Kiinnityskohdan tyyppi",
+    "Content Schema": "Sisällön skeema"
   }
 }

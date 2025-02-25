@@ -8,10 +8,14 @@
       "additionalsignreal": "Additional Sign Real",
       "additionalsignplan": "Additional Sign Plan",
       "furnituresignpostreal": "Furniture Signpost Real",
-      "furnituresignpostplan": "Furniture Signpost Plan"
+      "furnituresignpostplan": "Furniture Signpost Plan",
+      "mountrealcentroid": "Mount Real Centroid",
+      "mountplancentroid": "Mount Plan Centroid"
     },
     "Device type": "Device type",
     "Direction": "Direction",
-    "Additional info": "Additional info"
+    "Additional info": "Additional info",
+    "Mount type": "Mount type",
+    "Content Schema": "Content Schema"
   }
 }

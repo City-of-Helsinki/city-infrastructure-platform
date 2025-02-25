@@ -83,7 +83,17 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     const feature = features[featureIndex];
     const fid = feature["id_"];
     const featureType = fid.split(".")[0];
-    const { id, value, txt, direction, device_type_code, device_type_description } = feature.getProperties();
+    const {
+      id,
+      value,
+      txt,
+      direction,
+      device_type_code,
+      device_type_description,
+      mount_type_description_fi,
+      content_s,
+      additional_information,
+    } = feature.getProperties();
     const deviceTypeText = `${device_type_code} - ${device_type_description}${value ? ` (${value})` : ""}`;
 
     // Only run when distance is undefined (don't spam requests)
@@ -99,12 +109,32 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
           </Typography>
           <Typography className={classes.content} variant="body1" component="p">
             <b>Id</b>: {id}
+            {device_type_code && (
+              <>
+                <br />
+                <b>{t("Device type")}</b>: {deviceTypeText}
+              </>
+            )}
+            {mount_type_description_fi && !device_type_code && (
+              <>
+                <br />
+                <b>{t("Mount type")}</b>: {mount_type_description_fi}
+              </>
+            )}
+            {direction && (
+              <>
+                <br />
+                <b>{t("Direction")}</b>: {direction}
+              </>
+            )}
             <br />
-            <b>{t("Device type")}</b>: {deviceTypeText}
-            <br />
-            <b>{t("Direction")}</b>: {direction}
-            <br />
-            <b>{t("Additional info")}</b>: {txt}
+            <b>{t("Additional info")}</b>: {txt || additional_information}
+            {content_s && (
+              <>
+                <br />
+                <b>{t("Content Schema")}</b>: {content_s}
+              </>
+            )}
             {feature.getProperties().device_plan_id && (
               <>
                 <br />

@@ -29,6 +29,9 @@ export interface FeatureProperties {
   device_type_code: string;
   device_type_description: string;
   device_plan_id: string;
+  mount_type_description_fi: string;
+  content_s: Object;
+  additional_information: string;
 }
 
 export interface Feature {
