@@ -13,6 +13,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import Map from "../common/Map";
 import { MapConfig } from "../models";
+import { withTranslation, WithTranslation } from "react-i18next";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -24,7 +25,7 @@ const styles = (theme: Theme) =>
     },
   });
 
-interface LayerSwitcherProps extends WithStyles<typeof styles> {
+interface LayerSwitcherProps extends WithStyles<typeof styles>, WithTranslation {
   mapConfig: MapConfig;
   onClose: () => void;
   onOverlayToggle: (checked: boolean) => void;
@@ -116,6 +117,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
   }
 
   renderSettings() {
+    const { t } = this.props;
     const { overlayConfig } = this.props.mapConfig;
     const { displayRealPlanDifference } = this.state;
 
@@ -133,18 +135,18 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
 
     return (
       <div className="settings-group">
-        <h4>Settings</h4>
+        <h4>{t("Settings")}</h4>
         <FormGroup>
           <FormControlLabel
             key={"real-plan-difference"}
             control={<Checkbox checked={displayRealPlanDifference} onChange={changeOverlayVisibility} />}
-            label={"Display Plan/Real difference"}
+            label={t("Display Plan/Real difference")}
           />
         </FormGroup>
         <FormGroup>
           <TextField
             id="project-id-filter"
-            label={"Filter by Project"}
+            label={t("Filter by Project")}
             variant={"standard"}
             onChange={changeProjectIdFilter}
           />
@@ -154,13 +156,13 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
   }
 
   render() {
-    const { classes, onClose } = this.props;
+    const { classes, onClose, t } = this.props;
     return (
       <div className="layer-switcher">
         <AppBar position="static" elevation={0}>
           <Toolbar>
             <Typography variant="h6" color="inherit" className={classes.title}>
-              Layers
+              {t("Layers")}
             </Typography>
             <IconButton color="inherit" aria-label="close" onClick={onClose}>
               <CloseIcon />
@@ -177,4 +179,4 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
   }
 }
 
-export default withStyles(styles)(LayerSwitcher);
+export default withTranslation()(withStyles(styles)(LayerSwitcher));

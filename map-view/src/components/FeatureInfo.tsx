@@ -138,7 +138,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
             {feature.getProperties().device_plan_id && (
               <>
                 <br />
-                <b>{t("Distance")}</b>: {this.state.realPlanDistance} m
+                <b>{t("Distance to plan")}</b>: {this.state.realPlanDistance} m
               </>
             )}
           </Typography>
