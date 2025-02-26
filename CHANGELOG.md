@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.8.0...city-infrastructure-platform-v1.9.0) (2025-02-26)
+
+
+### Features
+
+* Add mount plan and real map layer rendering ([168090c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/168090c21627dbc5b8a2c249105a3de9157840f9))
+* Add some new translation to mapview ([f5f8af6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f5f8af6af976dbc246b4f3c3044e5c3d4f5ff160))
+* Centroid location rendering to WFS json output ([06e353f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/06e353faa1139064213291a3b2dd6d3f4fd1c891))
+
 ## [1.8.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.7.0...city-infrastructure-platform-v1.8.0) (2025-02-18)
 
 
