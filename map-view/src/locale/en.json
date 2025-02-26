@@ -16,6 +16,11 @@
     "Direction": "Direction",
     "Additional info": "Additional info",
     "Mount type": "Mount type",
-    "Content Schema": "Content Schema"
+    "Content Schema": "Content Schema",
+    "Distance to plan": "Distance to plan",
+    "Layers": "Layers",
+    "Settings": "Settings",
+    "Display Plan/Real difference": "Display Plan/Real difference",
+    "Filter by Project": "Filter by Project"
   }
 }
