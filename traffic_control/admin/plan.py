@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.forms import PlanModelForm, PlanRelationsForm
 from traffic_control.mixins import (
+    CityInfraAdminConfirmMixin,
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
@@ -23,6 +24,7 @@ class PlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Geometry3DFieldAdminMixin,
+    CityInfraAdminConfirmMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
 ):
@@ -65,6 +67,20 @@ class PlanAdmin(
         "id",
         "name",
     )
+
+    confirm_change = True
+    confirmation_fields = ["location"]
+    change_confirmation_template = "admin/traffic_control/plan/change_confirmation.html"
+    only_form_fields = ["location_ewkt"]
+
+    def get_confirmation_fields(self, request, obj=None):
+        """This is an overridden function from CityInfraAdminConfirmMixin(AdminConfirmMixin)
+        for getting confirmation fields dynamically.
+        """
+        base_fields = super().get_confirmation_fields(request, obj)
+        if request.POST.get("derive_location") != "on":
+            base_fields.remove("location")
+        return base_fields
 
     def get_urls(self):
         urls = super().get_urls()
