@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 15:09+0200\n"
+"POT-Creation-Date: 2025-03-03 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2255,6 +2255,32 @@ msgstr ""
 
 msgid "Export template"
 msgstr "Exportmall"
+
+#, python-format
+msgid "Are you sure you want to add the %(model_name)s?"
+msgstr ""
+
+msgid ""
+"You have manually changed the location of the plan, while the 'derive "
+"location' option is turned on."
+msgstr ""
+
+msgid ""
+"For as long as the 'derive location' option is active, the location of the "
+"plan will always be derived anew, whenever a traffic control device plan is "
+"assigned to this plan."
+msgstr ""
+
+msgid ""
+"Are you sure you want to continue, without first disabling the 'derive "
+"location' option?"
+msgstr ""
+
+msgid "Yes, I’m sure"
+msgstr ""
+
+msgid "No, continue to edit"
+msgstr ""
 
 msgid "Set related plans"
 msgstr "Ange relaterade planer"
