@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 15:09+0200\n"
+"POT-Creation-Date: 2025-03-03 15:38+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2248,6 +2248,34 @@ msgstr ""
 
 msgid "Export template"
 msgstr "Vie malli"
+
+#, python-format
+msgid "Are you sure you want to add the %(model_name)s?"
+msgstr "Haluat varmasti lisätä %(model_name)s?"
+
+msgid ""
+"You have manually changed the location of the plan, while the 'derive "
+"location' option is turned on."
+msgstr "Olet käsin muuttanut suunnitelman sijaintia sijainnin johtamisen ollessa päällä."
+
+msgid ""
+"For as long as the 'derive location' option is active, the location of the "
+"plan will always be derived anew, whenever a traffic control device plan is "
+"assigned to this plan."
+msgstr ""
+"Niin kauan kuin sijainnin johtaminen on päällä, suunnitelman sijainti johdetaan aina uudestaan, "
+"jos jokin suunnitelmailmentymä asetetaan viittaamaan tähän suunnitelmaan."
+
+msgid ""
+"Are you sure you want to continue, without first disabling the 'derive "
+"location' option?"
+msgstr "Haluatko varmasti jatkaa kytkemättä ensin pois päältä sijainnin johtamista?"
+
+msgid "Yes, I’m sure"
+msgstr "Kyllä, olen varma "
+
+msgid "No, continue to edit"
+msgstr "En, jatka muokkaamista"
 
 msgid "Set related plans"
 msgstr "Aseta liittyvät suunnitelmat"

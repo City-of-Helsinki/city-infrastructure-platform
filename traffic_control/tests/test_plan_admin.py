@@ -1,6 +1,9 @@
+from unittest.mock import patch
+
 import pytest
 from auditlog.models import LogEntry
 from django.conf import settings
+from django.contrib.admin import site
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -9,6 +12,7 @@ from django.test import override_settings
 from django.urls import reverse
 
 from city_furniture.tests.factories import get_furniture_signpost_plan
+from traffic_control.admin.plan import PlanAdmin
 from traffic_control.forms import PlanModelForm
 from traffic_control.geometry_utils import get_z_for_polygon
 from traffic_control.models import Plan
@@ -27,6 +31,7 @@ from traffic_control.tests.factories import (
 from traffic_control.tests.test_base_api import (
     illegal_multipolygon,
     test_multi_polygon,
+    test_multi_polygon_2,
     test_point,
     test_point_2,
     test_polygon,
@@ -281,13 +286,15 @@ def test__plan_update_location_using_location_field():
     assert plan.location == orig_location
 
 
+@pytest.mark.parametrize("derive_location", (False, True))
 @pytest.mark.django_db
-def test__plan_update_location_using_location_ewkt_field():
+def test__plan_update_location_using_location_ewkt_field(derive_location):
     """Test that updating location using location_ewkt field can be done"""
     orig_location = MultiPolygon(test_polygon, srid=settings.SRID)
     new_location = MultiPolygon(test_polygon, test_polygon_2, srid=settings.SRID)
     plan = PlanFactory(location=orig_location)
     data = {
+        "derive_location": derive_location,
         "location": orig_location,
         "location_ewkt": new_location.ewkt,
         "name": plan.name,
@@ -370,6 +377,39 @@ def test__plan_create_with_location_ewkt():
 
     plan = Plan.objects.get()
     assert plan.location.ewkt == test_multi_polygon.ewkt
+
+
+@pytest.mark.parametrize("derive_location", (False, True))
+@pytest.mark.django_db
+def test_plan_location_change_with_derive_location(admin_client, derive_location):
+    """Just test that confirmation dialog _handle_change is called when derive_location is on
+    and not when it is off.
+    NOTE: this test should be removed when/if support for non-model fields is supported in django-admin-confirm."""
+    plan = PlanFactory(location=test_multi_polygon)
+    post_data = {
+        "derive_location": derive_location,
+        "location": plan.location,
+        "location_ewkt": test_multi_polygon_2.ewkt,
+        "z_coord": 0,
+        "decision_id": plan.decision_id,
+        "name": plan.name,
+        "_save": "Save",
+    }
+    url = reverse("admin:traffic_control_plan_change", kwargs={"object_id": plan.pk})
+    pa = PlanAdmin(Plan, site)
+    if derive_location:
+        post_data["_confirm_change"] = "Confirm"
+        with patch(
+            "traffic_control.admin.plan.PlanAdmin._handle_change", side_effect=pa._handle_change
+        ) as mocked_function:
+            admin_client.post(url, data=post_data)
+            assert mocked_function.assert_called_once() is None
+    else:
+        with patch(
+            "traffic_control.admin.plan.PlanAdmin._handle_change", side_effect=pa._handle_change
+        ) as mocked_function:
+            admin_client.post(url, data=post_data)
+            assert mocked_function.assert_not_called() is None
 
 
 def _get_plan_mandatory_fields():
