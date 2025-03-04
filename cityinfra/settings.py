@@ -144,6 +144,7 @@ LOGGING = {
 
 # Application definition
 DJANGO_APPS = [
+    "admin_confirm",
     "social_django",
     "helusers.apps.HelusersConfig",
     "helusers.apps.HelusersAdminConfig",
