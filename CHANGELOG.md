@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.9.0...city-infrastructure-platform-v1.10.0) (2025-03-05)
+
+
+### Features
+
+* Add confirmation if location of a Plan is manually changed and derive location is on ([12ad156](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/12ad1569e7665a30498c7ad0413549dbd86b34f4))
+
 ## [1.9.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.8.0...city-infrastructure-platform-v1.9.0) (2025-02-26)
 
 
