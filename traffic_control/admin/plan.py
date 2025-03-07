@@ -79,7 +79,8 @@ class PlanAdmin(
         """
         base_fields = super().get_confirmation_fields(request, obj)
         if request.POST.get("derive_location") != "on":
-            base_fields.remove("location")
+            if "location" in base_fields:
+                base_fields.remove("location")
         return base_fields
 
     def get_urls(self):
