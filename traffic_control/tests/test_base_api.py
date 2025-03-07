@@ -93,6 +93,13 @@ line_location_error_test_data = [
 ]
 
 
+invalid_ewkt_str = """
+SRID=3879;MULTIPOLYGON Z (((25496415.929282654 6673359.761058535 0, 25496415.6385598 6673350.891779969 0,
+25496430.44581493 6673350.877332475 0, 25496430.171727654 6673359.043233639 0,
+25496415.929282654 6673359.761058534 0)))
+"""
+
+
 class TrafficControlAPIBaseTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create_superuser(username="testuser", password="testpw", email="testuser@example.com")
