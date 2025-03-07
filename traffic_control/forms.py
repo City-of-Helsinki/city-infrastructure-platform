@@ -35,7 +35,7 @@ from traffic_control.models import (
 )
 from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
 from traffic_control.utils import get_file_upload_obstacles
-from traffic_control.validators import validate_structured_content
+from traffic_control.validators import validate_location_ewkt, validate_structured_content
 
 
 class AdminFileWidget(widgets.AdminFileWidget):
@@ -188,6 +188,7 @@ class Geometry3DFieldForm(forms.ModelForm):
             return
 
         self.fields["location"].label = _("Location (x,y)")
+        self.fields["location_ewkt"].validators.append(validate_location_ewkt)
         if self.instance.location:
             self.fields["z_coord"].initial = get_z_for_geometry(self.instance.location)
             self.fields["location_ewkt"].initial = self.instance.location.ewkt

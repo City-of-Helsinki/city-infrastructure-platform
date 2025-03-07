@@ -32,6 +32,7 @@ from traffic_control.tests.factories import (
 )
 from traffic_control.tests.test_base_api import (
     illegal_multipolygon,
+    invalid_ewkt_str,
     test_multi_polygon,
     test_multi_polygon_2,
     test_point,
@@ -275,6 +276,16 @@ def test__plan_create_illegal_location(admin_client):
 
 
 @pytest.mark.django_db
+def test__plan_create_invalid_location_ewkt(admin_client):
+    data = {"location_ewkt": invalid_ewkt_str}
+    response = admin_client.post(reverse("admin:traffic_control_plan_add"), data=data)
+    assert response.status_code == 200
+    assert Plan.objects.count() == 0
+    assert "location_ewkt" in response.context["adminform"].form.errors
+    assert response.context["adminform"].form.errors["location_ewkt"] == ["Invalid location_ewkt value"]
+
+
+@pytest.mark.django_db
 def test__plan_update_location_using_location_field():
     """Test that updating location using location field, value from map widget, is not allowed"""
     orig_location = MultiPolygon(test_polygon, srid=settings.SRID)
@@ -308,6 +319,22 @@ def test__plan_update_location_using_location_ewkt_field(derive_location):
     form.save()
     plan.refresh_from_db()
     assert plan.location.ewkt == new_location.ewkt
+
+
+@pytest.mark.django_db
+def test__plan_update_location_using_invalid_location_ewkt_field():
+    orig_location = MultiPolygon(test_polygon, srid=settings.SRID)
+    plan = PlanFactory(location=orig_location)
+    data = {
+        "location": orig_location,
+        "location_ewkt": invalid_ewkt_str,
+        "name": plan.name,
+        "decision_id": plan.decision_id,
+        "z_coord": 0,
+    }
+    form = PlanModelForm(data, instance=plan)
+    assert form.is_valid() is False
+    assert form.errors["location_ewkt"][0] == "Invalid location_ewkt value"
 
 
 @pytest.mark.django_db

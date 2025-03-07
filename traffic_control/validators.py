@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 import jsonschema
+from django.contrib.gis.geos import GEOSGeometry
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -39,3 +40,10 @@ def validate_structured_content(content, device_type: Optional[TrafficControlDev
         )
 
     return validation_errors
+
+
+def validate_location_ewkt(value):
+    try:
+        GEOSGeometry(value)
+    except Exception:
+        raise ValidationError(_("Invalid location_ewkt value"), code="invalid_location_ewkt")
