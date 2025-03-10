@@ -1,3 +1,5 @@
+from copy import copy
+
 from django.contrib.gis import admin
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -77,10 +79,10 @@ class PlanAdmin(
         """This is an overridden function from CityInfraAdminConfirmMixin(AdminConfirmMixin)
         for getting confirmation fields dynamically.
         """
-        base_fields = super().get_confirmation_fields(request, obj)
+        base_fields = copy(super().get_confirmation_fields(request, obj))
         if request.POST.get("derive_location") != "on":
-            if "location" in base_fields:
-                base_fields.remove("location")
+            # location should always be there
+            base_fields.remove("location")
         return base_fields
 
     def get_urls(self):
