@@ -1,7 +1,9 @@
+import logging
 from typing import List, Optional
 
 import jsonschema
 from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.geos.libgeos import logger as libgeos_logger
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -42,8 +44,25 @@ def validate_structured_content(content, device_type: Optional[TrafficControlDev
     return validation_errors
 
 
+class LibGeosLogFilter(logging.Filter):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.geos_error_mgs = ""
+
+    def filter(self, record):
+        self.geos_error_mgs = record.getMessage()
+        return True
+
+    def get_error_msg(self):
+        return self.geos_error_mgs or _("Invalid location_ewkt value")
+
+
 def validate_location_ewkt(value):
+    log_filter = LibGeosLogFilter()
     try:
+        libgeos_logger.addFilter(log_filter)
         GEOSGeometry(value)
     except Exception:
-        raise ValidationError(_("Invalid location_ewkt value"), code="invalid_location_ewkt")
+        raise ValidationError(log_filter.get_error_msg(), code="invalid_location_ewkt")
+    finally:
+        libgeos_logger.removeFilter(log_filter)
