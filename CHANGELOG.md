@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.10.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.9.0...city-infrastructure-platform-v1.10.0) (2025-03-10)
+
+
+### Features
+
+* Add confirmation if location of a Plan is manually changed and derive location is on ([12ad156](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/12ad1569e7665a30498c7ad0413549dbd86b34f4))
+* Capture log message from django libgeos and show that as location_ewkt validation error message. ([7ed0cbd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7ed0cbd623b7b80633022184fd05c0cefb5f6ed7))
+
+
+### Bug Fixes
+
+* Changing derive_location to false without changing location or location_ekwt caused unhandled exception ([71ef64f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/71ef64f8a043de949f86c06553f6c080fb7a53c3))
+* Derive location confirmation not asked when it should be ([1b505fb](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1b505fb0f12effe7173ad6b0f64d843616e43cab))
+* Validator for location_ewkt form field. ([516a064](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/516a06463f10a1f1555b835e487c2c87e3ab52bd))
+
 ## [1.9.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.8.0...city-infrastructure-platform-v1.9.0) (2025-02-26)
 
 
