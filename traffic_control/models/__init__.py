@@ -29,6 +29,7 @@ from traffic_control.models.mount import (
     PortalType,
 )
 from traffic_control.models.operational_area import GroupOperationalArea, OperationalArea
+from traffic_control.models.parking_zone_update_info import ParkingZoneUpdateInfo
 from traffic_control.models.plan import Plan
 from traffic_control.models.responsible_entity import GroupResponsibleEntity, ResponsibleEntity
 from traffic_control.models.road_marking import (
