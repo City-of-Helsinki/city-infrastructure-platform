@@ -15,7 +15,7 @@
     "@types/react-dom": "^16.9.0",
     "i18next": "^19.8.3",
     "i18next-browser-languagedetector": "^6.0.1",
-    "ol": "^6.4.3",
+    "ol": "^6.15.1",
     "prettier": "^2.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
