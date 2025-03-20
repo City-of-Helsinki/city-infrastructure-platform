@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.10.0...city-infrastructure-platform-v1.11.0) (2025-03-20)
+
+
+### Features
+
+* Update AdditionalSignReal additional_information and update content_s if possible ([7928821](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/79288218d2e460db592b82488a09c51d459ba2c9))
+
 ## [1.10.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.9.0...city-infrastructure-platform-v1.10.0) (2025-03-10)
 
 
