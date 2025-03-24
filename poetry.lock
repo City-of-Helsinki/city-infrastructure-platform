@@ -823,20 +823,20 @@ test = ["boto3", "celery", "django-storages", "pytest", "pytest-cov", "pytest-dj
 
 [[package]]
 name = "django-helusers"
-version = "0.10.0"
+version = "0.13.3"
 description = "Django app for the user infrastructure of the City of Helsinki"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "django-helusers-0.10.0.tar.gz", hash = "sha256:f69c43d55757e097042233c032fdfbde92ee253144c524e36c590ef6180ff632"},
-    {file = "django_helusers-0.10.0-py3-none-any.whl", hash = "sha256:709d1b865328d3f704bd5f2d45d76261b88bca19f2a74d7d6698dd04058382da"},
+    {file = "django_helusers-0.13.3-py3-none-any.whl", hash = "sha256:2b5e29f1440eabb380c1e9484953d91f159003f79fd5b4bf4f2df9061eb79b53"},
+    {file = "django_helusers-0.13.3.tar.gz", hash = "sha256:26b396edcfd247886171e185fe5f56a1d9ae2937edfa342f1cf2977371cb4974"},
 ]
 
 [package.dependencies]
 cachetools = ">=3.0.0"
 deprecation = ">=2"
-Django = ">=3.2"
+Django = ">=4.2"
 python-jose = "*"
 requests = "*"
 
@@ -2892,4 +2892,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11.9"
-content-hash = "5e014a503e6b529254027e5d3dba5d3303fcc0e6e9d926dbbb429022d76fe7c7"
+content-hash = "23293b5b511ddc36c2e142b05c214e6b24d52463599ad8d507a125cb044ca446"
