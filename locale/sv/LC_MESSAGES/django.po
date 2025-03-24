@@ -573,7 +573,7 @@ msgstr "Egna uppgifter"
 msgid ""
 "Number of results to return per page. Maximum number of results is "
 "{max_limit}."
-msgstr ""
+msgstr "Resultat per sida. Maximalt är {max_limit}"
 
 msgid "City Infrastructure Platform"
 msgstr "Stadsinfrastrukturplattform"
@@ -964,7 +964,8 @@ msgstr "Plats (x, y)"
 #, python-format
 msgid ""
 "Changing location from map is not allowed for geometry '%(geometry_type)s'"
-msgstr ""
+msgstr "Att ändra platsen från kartan är inte tillåtet för geometrin "
+"'%(geometry_type)s'"
 
 msgid "Barrier Plans"
 msgstr "Bom (planer)"
@@ -1687,10 +1688,10 @@ msgid "Date on which a decision was made on the plan."
 msgstr "Datum då ett beslut fattades om planen."
 
 msgid "Decision url"
-msgstr ""
+msgstr "Beslutslänk"
 
 msgid "URL to decision web page"
-msgstr ""
+msgstr "Länk till webbplatsen för beslutet"
 
 msgid "Plans"
 msgstr "Planer"
@@ -2258,29 +2259,30 @@ msgstr "Exportmall"
 
 #, python-format
 msgid "Are you sure you want to add the %(model_name)s?"
-msgstr ""
+msgstr "Är du säker på att du vill lägga till %(model_name)s"
 
 msgid ""
 "You have manually changed the location of the plan, while the 'derive "
 "location' option is turned on."
-msgstr ""
+msgstr "Du har manuellt ändrat platsen för planen medan alternativet 'härled läget' är aktiverat."
 
 msgid ""
 "For as long as the 'derive location' option is active, the location of the "
 "plan will always be derived anew, whenever a traffic control device plan is "
 "assigned to this plan."
-msgstr ""
+msgstr "Så länge lägeshärledning är aktiverad kommer planplatsen alltid att "
+"härledas på nytt, om någon plan är inställd att hänvisa till denna plan."
 
 msgid ""
 "Are you sure you want to continue, without first disabling the 'derive "
 "location' option?"
-msgstr ""
+msgstr "Är du säker på att du vill fortsätta utan att först stänga av lägeshärledning?"
 
 msgid "Yes, I’m sure"
-msgstr ""
+msgstr "Ja, jag är säker"
 
 msgid "No, continue to edit"
-msgstr ""
+msgstr "Nej, fortsätt redigera"
 
 msgid "Set related plans"
 msgstr "Ange relaterade planer"
@@ -2295,7 +2297,7 @@ msgid "Additional signs"
 msgstr "Tilläggsskyltar"
 
 msgid "No additional signs"
-msgstr ""
+msgstr "Inga tilläggsskyltar"
 
 msgid "No mount"
 msgstr "Ej fästpunkt"
@@ -2321,10 +2323,10 @@ msgid "Mount Plan Centroid"
 msgstr "Montering_medelpunkt (plan)"
 
 msgid "Traffic Control Plan"
-msgstr ""
+msgstr "Trafikledningsplan"
 
 msgid "Additional user information"
-msgstr ""
+msgstr "Ytterligare information om användaren"
 
 msgid "last login"
 msgstr "senast inloggad"
@@ -2367,7 +2369,7 @@ msgstr ""
 "ansvarsenhet som är hierarkiskt underordnad de som valts."
 
 msgid "Additional information related to this user."
-msgstr ""
+msgstr "Mer information om denna användare."
 
 msgid "User"
 msgstr "Användare"

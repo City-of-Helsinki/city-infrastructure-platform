@@ -565,7 +565,7 @@ msgstr "Omat tiedot"
 msgid ""
 "Number of results to return per page. Maximum number of results is "
 "{max_limit}."
-msgstr "Tuloksia per sivu. Maksimi määrä on {max_limit}"
+msgstr "Tuloksia sivua kohden. Enimmäismäärä on {max_limit}"
 
 msgid "City Infrastructure Platform"
 msgstr "Infraomaisuuden hallinta-alusta"
@@ -1684,7 +1684,7 @@ msgid "Decision url"
 msgstr "Päätöslinkki"
 
 msgid "URL to decision web page"
-msgstr "Linkki päätökseen"
+msgstr "Linkki päätöksen verkkosivulle"
 
 msgid "Plans"
 msgstr "Suunnitelmat"
@@ -2319,7 +2319,7 @@ msgid "Traffic Control Plan"
 msgstr "Liikenteenohjaussuunnitelma"
 
 msgid "Additional user information"
-msgstr "Lisätiedot käyttäjälle"
+msgstr "Lisätiedot käyttäjästä"
 
 msgid "last login"
 msgstr "kirjautunut viimeksi"
