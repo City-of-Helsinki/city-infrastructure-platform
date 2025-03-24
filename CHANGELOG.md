@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.11.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.10.0...city-infrastructure-platform-v1.11.0) (2025-03-24)
+
+
+### Features
+
+* Update AdditionalSignReal additional_information and update content_s if possible ([7928821](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/79288218d2e460db592b82488a09c51d459ba2c9))
+* Update missing (mostly swedish) translations ([d62fbbc](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d62fbbcff217303a61ca779b2c82d1d1026f2cad))
+
+
+### Bug Fixes
+
+* Update django-helusers version ([b85d848](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b85d84869fb5e40b72510948556346db4a3299d1))
+
 ## [1.10.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.9.0...city-infrastructure-platform-v1.10.0) (2025-03-10)
 
 
