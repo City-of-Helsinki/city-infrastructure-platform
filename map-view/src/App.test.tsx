@@ -4,13 +4,14 @@ import MapConfigAPI from "./api/MapConfigAPI";
 import { mockMapConfig } from "./api/__mocks__/mock-data";
 import App from "./App";
 import Map from "./common/Map";
+import { MockedFunction } from "vitest";
 
-jest.mock("./common/Map");
-jest.mock("./api/MapConfigAPI");
+vi.mock("./common/Map");
+vi.mock("./api/MapConfigAPI");
 
 describe("App", () => {
   beforeEach(() => {
-    const addListener = MapConfigAPI.getMapConfig as jest.MockedFunction<typeof MapConfigAPI.getMapConfig>;
+    const addListener = MapConfigAPI.getMapConfig as MockedFunction<typeof MapConfigAPI.getMapConfig>;
     addListener.mockResolvedValue(mockMapConfig);
   });
 
