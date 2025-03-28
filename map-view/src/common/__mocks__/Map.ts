@@ -1,7 +1,7 @@
-const mockInitialize = jest.fn();
-const mockRegisterFeatureInfoCallback = jest.fn();
-const mockSetVisibleBasemap = jest.fn();
-const mockSetOverlayVisible = jest.fn();
+const mockInitialize = vi.fn();
+const mockRegisterFeatureInfoCallback = vi.fn();
+const mockSetVisibleBasemap = vi.fn();
+const mockSetOverlayVisible = vi.fn();
 const mockMap = {
   initialize: mockInitialize,
   registerFeatureInfoCallback: mockRegisterFeatureInfoCallback,

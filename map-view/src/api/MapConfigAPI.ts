@@ -19,4 +19,5 @@ class MapConfigAPI {
   }
 }
 
-export default new MapConfigAPI();
+const mConf = new MapConfigAPI();
+export default mConf;

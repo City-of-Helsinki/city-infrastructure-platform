@@ -84,7 +84,7 @@ jobs:
 
       - name: Run NodeJS code functionality tests
         run: |
-          yarn --cwd map-view test --ci --coverage --watchAll=false
+          yarn --cwd map-view test:ci
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.1

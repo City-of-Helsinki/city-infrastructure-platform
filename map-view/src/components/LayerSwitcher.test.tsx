@@ -3,7 +3,7 @@ import React from "react";
 import { mockMapConfig } from "../api/__mocks__/mock-data";
 import LayerSwitcher from "./LayerSwitcher";
 
-jest.mock("../common/Map");
+vi.mock("../common/Map");
 
 test("renders basemaps and overlays", () => {
   const { getByText } = render(
