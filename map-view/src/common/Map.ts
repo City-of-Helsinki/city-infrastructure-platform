@@ -481,4 +481,5 @@ class Map {
   }
 }
 
-export default new Map();
+const map = new Map();
+export default map;
