@@ -21,7 +21,7 @@
     "react-dom": "^16.13.1",
     "react-i18next": "^11.7.3",
     "typescript": "^5.8.2",
-    "vite": "^6.2.3"
+    "vite": "^6.2.4"
   },
   "scripts": {
     "start": "vite",
