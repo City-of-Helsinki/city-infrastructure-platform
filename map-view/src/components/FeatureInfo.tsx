@@ -132,7 +132,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
             {content_s && (
               <>
                 <br />
-                <b>{t("Content Schema")}</b>: {content_s}
+                <b>{t("Content Schema")}</b>: {JSON.stringify(content_s)}
               </>
             )}
             {feature.getProperties().device_plan_id && (
