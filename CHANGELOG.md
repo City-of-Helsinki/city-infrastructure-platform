@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.12.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.11.0...city-infrastructure-platform-v1.12.0) (2025-04-03)
+
+
+### Features
+
+* Move some js package from devdeps to real deps so builds actually work ([1f88bec](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1f88beca92c411bffc9bc1bbc45fb5ec18c59238))
+* Update libraries for map-view ([c4f1fc6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c4f1fc68b25ac616567df3f06b91bdc19c1847f0))
+* Use Vite instead of Create React App ([0c17af9](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0c17af9c1afaff24447fd892441c33f4fdcefd79))
+
+
+### Bug Fixes
+
+* Mapview crash when feature has content_s ([e61e65a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e61e65a6384ba4172083a5472ba96c47243d4a9e))
+
 ## [1.11.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.10.0...city-infrastructure-platform-v1.11.0) (2025-03-24)
 
 
