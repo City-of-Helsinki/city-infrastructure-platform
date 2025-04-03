@@ -1,13 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { StyledEngineProvider } from "@mui/material/styles";
 
 import "./i18n"; // needs to be bundled
 
-ReactDOM.render(
-  <React.StrictMode>
+const container = document.getElementById("root");
+const root = createRoot(container!);
+root.render(
+  <StyledEngineProvider injectFirst>
     <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </StyledEngineProvider>
 );

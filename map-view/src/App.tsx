@@ -1,7 +1,8 @@
-import { Drawer } from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core/styles";
-import LayersIcon from "@material-ui/icons/Layers";
+import { Drawer } from "@mui/material";
+import Fab from "@mui/material/Fab";
+import { Theme } from "@mui/material/styles";
+import { createStyles, withStyles, WithStyles } from "@mui/styles";
+import LayersIcon from "@mui/icons-material/Layers";
 import "ol/ol.css";
 import React from "react";
 import MapConfigAPI from "./api/MapConfigAPI";
@@ -63,44 +64,51 @@ class App extends React.Component<AppProps, AppState> {
     const { classes } = this.props;
     const { open, mapConfig, features } = this.state;
     return (
-      <div className="App">
-        <div id={this.mapId} />
-        {features.length > 0 && mapConfig && (
-          <FeatureInfo
-            features={features}
-            onSelectFeature={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
-            onClose={() => {
-              this.setState({ features: [] });
-              Map.clearExtraVectorLayer();
-            }}
-          />
-        )}
-        <Fab size="medium" color="primary" onClick={() => this.setState({ open: !open })} className={classes.mapButton}>
-          <LayersIcon />
-        </Fab>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="right"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          {mapConfig && (
-            <LayerSwitcher
-              mapConfig={mapConfig}
-              onClose={() => this.setState({ open: false })}
-              onOverlayToggle={(checked) => {
-                if (!checked) {
-                  this.setState({ features: [] });
-                  Map.clearExtraVectorLayer();
-                }
+      <React.StrictMode>
+        <div className="App">
+          <div id={this.mapId} />
+          {features.length > 0 && mapConfig && (
+            <FeatureInfo
+              features={features}
+              onSelectFeature={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
+              onClose={() => {
+                this.setState({ features: [] });
+                Map.clearExtraVectorLayer();
               }}
             />
           )}
-        </Drawer>
-      </div>
+          <Fab
+            size="medium"
+            color="primary"
+            onClick={() => this.setState({ open: !open })}
+            className={classes.mapButton}
+          >
+            <LayersIcon />
+          </Fab>
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="right"
+            open={open}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            {mapConfig && (
+              <LayerSwitcher
+                mapConfig={mapConfig}
+                onClose={() => this.setState({ open: false })}
+                onOverlayToggle={(checked) => {
+                  if (!checked) {
+                    this.setState({ features: [] });
+                    Map.clearExtraVectorLayer();
+                  }
+                }}
+              />
+            )}
+          </Drawer>
+        </div>
+      </React.StrictMode>
     );
   }
 }
