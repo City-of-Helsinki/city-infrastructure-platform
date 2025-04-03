@@ -1,12 +1,13 @@
-import { createStyles, Theme, withStyles, WithStyles } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import NavigateBefore from "@material-ui/icons/NavigateBefore";
-import NavigateNext from "@material-ui/icons/NavigateNext";
+import { Theme } from "@mui/material";
+import { createStyles, withStyles, WithStyles } from "@mui/styles";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import NavigateBefore from "@mui/icons-material/NavigateBefore";
+import NavigateNext from "@mui/icons-material/NavigateNext";
 import React from "react";
 import { APIBaseUrl } from "../consts";
 import { Feature } from "../models";
@@ -52,10 +53,6 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
       featureIndex: 0,
       realPlanDistance: undefined,
     };
-  }
-
-  UNSAFE_componentWillReceiveProps() {
-    this.setState({ featureIndex: 0, realPlanDistance: undefined });
   }
 
   getAdminLink(feature: Feature) {
