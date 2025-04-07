@@ -24,8 +24,6 @@ from traffic_control.tests.factories import (
     add_additional_sign_real_operation,
     AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
-    get_additional_sign_plan,
-    get_additional_sign_real,
     get_api_client,
     get_operation_type,
     get_owner,
@@ -109,8 +107,8 @@ def test__additional_sign_real_filtering__list(field_name, value, second_value):
 def test__additional_sign_real__detail(geo_format, plan_decision_id):
     client = get_api_client()
     plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
-    ads_plan = get_additional_sign_plan(plan=plan) if plan else None
-    asr = get_additional_sign_real(parent=get_traffic_sign_real(), additional_sign_plan=ads_plan)
+    ads_plan = AdditionalSignPlanFactory(plan=plan) if plan else None
+    asr = AdditionalSignRealFactory(parent=get_traffic_sign_real(), additional_sign_plan=ads_plan)
     operation_1 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 5))
     operation_2 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 15))
     operation_3 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 10))

@@ -20,7 +20,7 @@ from traffic_control.resources import (
 )
 from traffic_control.tests.factories import (
     AdditionalSignRealFactory,
-    get_additional_sign_plan,
+    get_additional_sign_plan_and_replace,
     get_barrier_plan,
     get_barrier_real,
     get_mount_plan,
@@ -39,7 +39,7 @@ from traffic_control.tests.test_import_export.utils import file_formats, get_imp
 
 model_factory_resource = (
     (TrafficSignPlan, get_traffic_sign_plan, TrafficSignPlanResource),
-    (AdditionalSignPlan, get_additional_sign_plan, AdditionalSignPlanResource),
+    (AdditionalSignPlan, get_additional_sign_plan_and_replace, AdditionalSignPlanResource),
     (MountPlan, get_mount_plan, MountPlanResource),
     (TrafficLightPlan, get_traffic_light_plan, TrafficLightPlanResource),
     (SignpostPlan, get_signpost_plan, SignpostPlanResource),
@@ -57,7 +57,7 @@ plan_model_plan_factory_plan_relation_name_real_factory_resource = (
     ),
     (
         AdditionalSignPlan,
-        get_additional_sign_plan,
+        get_additional_sign_plan_and_replace,
         "additional_sign_plan",
         AdditionalSignRealFactory,
         AdditionalSignPlanResource,
@@ -134,7 +134,7 @@ def test__device_plan_replace_export__list_replaced_devices(model, factory, reso
 @pytest.mark.parametrize(("model", "factory", "resource"), model_factory_resource)
 @pytest.mark.django_db
 def test__device_plan_replace_import__create__old_is_marked_replaced(model, factory, resource, format):
-    old_device = factory()
+    old_device = factory(source_name=None, source_id=None)
     dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
     dataset.append_col([str(old_device.id)], header="replaces")
 
@@ -296,7 +296,7 @@ def test__device_plan_replace_import__create__real_devices_plan_is_updated_to_re
     resource,
     format,
 ):
-    old_device_plan = plan_factory()
+    old_device_plan = plan_factory(source_name=None, source_id=None)
     device_real = real_factory(**{plan_relation_name: old_device_plan})
 
     dataset = get_import_dataset(

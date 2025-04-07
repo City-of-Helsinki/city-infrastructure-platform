@@ -12,12 +12,12 @@ from traffic_control.models.additional_sign import Color, LocationSpecifier
 from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
 from traffic_control.tests.factories import (
     AdditionalSignPlanFactory,
-    get_additional_sign_plan,
     get_api_client,
     get_owner,
     get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_user,
+    TrafficSignPlanFactory,
 )
 from traffic_control.tests.models.test_traffic_control_device_type import (
     another_content_valid_by_simple_schema,
@@ -39,7 +39,7 @@ from traffic_control.tests.test_base_api import illegal_test_point
 def test__additional_sign_plan__list(geo_format):
     client = get_api_client()
     for owner_name in ["foo", "bar", "baz"]:
-        get_additional_sign_plan(owner=get_owner(name_fi=owner_name))
+        AdditionalSignPlanFactory(owner=get_owner(name_fi=owner_name))
 
     response = client.get(reverse("v1:additionalsignplan-list"), data={"geo_format": geo_format})
     response_data = response.json()
@@ -82,7 +82,7 @@ def test__additional_sign_plan_filtering__list(field_name, value, second_value):
 @pytest.mark.django_db
 def test__additional_sign_plan__detail(geo_format):
     client = get_api_client()
-    asp = get_additional_sign_plan(parent=get_traffic_sign_plan())
+    asp = AdditionalSignPlanFactory(parent=TrafficSignPlanFactory())
 
     response = client.get(
         reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}),
@@ -212,6 +212,7 @@ def test__additional_sign_plan__create_with_invalid_geometry():
     data = {
         "location": illegal_test_point.ewkt,
         "owner": str(get_owner().pk),
+        "parent": TrafficSignPlanFactory().pk,
     }
     do_illegal_geometry_test(
         "v1:additionalsignplan-list",
@@ -256,7 +257,7 @@ def test__additional_sign_plan__update_device_type_and_content(
     old_dt = get_traffic_control_device_type(code="A1234", content_schema=old_schema)
     new_dt = get_traffic_control_device_type(code="new_code", content_schema=new_schema)
     tsp = get_traffic_sign_plan()
-    asp = get_additional_sign_plan(content_s=old_content, device_type=old_dt)
+    asp = AdditionalSignPlanFactory(content_s=old_content, device_type=old_dt)
 
     data = {
         "parent": tsp.pk,
@@ -299,7 +300,7 @@ def test__additional_sign_plan__partial_update_without_content(admin_user):
     """
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="A1234")
-    asp = get_additional_sign_plan()
+    asp = AdditionalSignPlanFactory()
     tsp = get_traffic_sign_plan(device_type=dt)
     data = {
         "parent": tsp.pk,
@@ -344,7 +345,7 @@ def test__additional_sign_plan__partial_update_content(
     """
     client = get_api_client(user=get_user(admin=admin_user))
     dt = get_traffic_control_device_type(code="DT1", content_schema=schema)
-    asp = get_additional_sign_plan(device_type=dt, content_s=old_content)
+    asp = AdditionalSignPlanFactory(device_type=dt, content_s=old_content)
     asp_id = str(asp.pk)
     data = {
         "content_s": new_content,
@@ -404,7 +405,7 @@ def test__additional_sign_plan__partial_update_device_type_and_content(
     client = get_api_client(user=get_user(admin=admin_user))
     old_dt = get_traffic_control_device_type(code="DT1", content_schema=old_schema)
     new_dt = get_traffic_control_device_type(code="DT2", content_schema=new_schema)
-    asp = get_additional_sign_plan(device_type=old_dt, content_s=old_content)
+    asp = AdditionalSignPlanFactory(device_type=old_dt, content_s=old_content)
     asp_id = str(asp.pk)
     data = {
         "content_s": new_content,
@@ -507,7 +508,7 @@ def test__additional_sign_plan__create_dont_accept_content_when_missing_content_
 def test__additional_sign_plan__delete(admin_user):
     user = get_user(admin=admin_user)
     client = get_api_client(user=user)
-    asp = get_additional_sign_plan()
+    asp = AdditionalSignPlanFactory()
 
     response = client.delete(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}))
 
@@ -529,7 +530,7 @@ def test__additional_sign_plan__delete(admin_user):
 def test__additional_sign_plan__soft_deleted_get_404_response():
     user = get_user()
     client = get_api_client()
-    asp = get_additional_sign_plan()
+    asp = AdditionalSignPlanFactory()
     asp.soft_delete(user)
 
     response = client.get(reverse("v1:additionalsignplan-detail", kwargs={"pk": asp.pk}))
@@ -556,7 +557,7 @@ def test__additional_sign_plan__anonymous_user(method, expected_status, view_typ
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    asp = get_additional_sign_plan(owner=get_owner(name_en="Old owner", name_fi="Vanha omistaja"))
+    asp = AdditionalSignPlanFactory(owner=get_owner(name_en="Old owner", name_fi="Vanha omistaja"))
     kwargs = {"pk": asp.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:additionalsignplan-{view_type}", kwargs=kwargs)
     data = {"owner": str(get_owner(name_en="New owner", name_fi="Uusi omistaja").pk)}

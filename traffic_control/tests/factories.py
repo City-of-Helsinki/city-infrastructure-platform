@@ -158,6 +158,7 @@ def get_barrier_plan(
     device_type=None,
     responsible_entity=None,
     replaces=None,
+    **kwargs,
 ) -> BarrierPlan:
     user = get_user("test_user")
     barrier_plan = BarrierPlan.objects.get_or_create(
@@ -173,6 +174,7 @@ def get_barrier_plan(
         responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
+        **kwargs,
     )[0]
 
     if replaces:
@@ -269,7 +271,7 @@ class MountPlanFactory(factory.django.DjangoModelFactory):
     mount_type = factory.SubFactory(MountTypeFactory)
 
 
-def get_mount_plan(location="", plan=None, responsible_entity=None, replaces=None) -> MountPlan:
+def get_mount_plan(location="", plan=None, responsible_entity=None, replaces=None, **kwargs) -> MountPlan:
     user = get_user("test_user")
 
     mount_plan = MountPlan.objects.get_or_create(
@@ -281,6 +283,7 @@ def get_mount_plan(location="", plan=None, responsible_entity=None, replaces=Non
         responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
+        **kwargs,
     )[0]
 
     if replaces:
@@ -354,6 +357,7 @@ def get_road_marking_plan(
     traffic_sign_plan=None,
     responsible_entity=None,
     replaces=None,
+    **kwargs,
 ) -> RoadMarkingPlan:
     user = get_user("test_user")
 
@@ -373,6 +377,7 @@ def get_road_marking_plan(
         traffic_sign_plan=traffic_sign_plan,
         created_by=user,
         updated_by=user,
+        **kwargs,
     )[0]
 
     if replaces:
@@ -442,6 +447,7 @@ def get_signpost_plan(
     txt=None,
     responsible_entity=None,
     replaces=None,
+    **kwargs,
 ) -> SignpostPlan:
     user = get_user("test_user")
 
@@ -457,6 +463,7 @@ def get_signpost_plan(
         txt=txt,
         created_by=user,
         updated_by=user,
+        **kwargs,
     )[0]
 
     if replaces:
@@ -525,6 +532,7 @@ def get_traffic_light_plan(
     mount_plan=None,
     responsible_entity=None,
     replaces=None,
+    **kwargs,
 ) -> TrafficLightPlan:
     user = get_user("test_user")
 
@@ -542,6 +550,7 @@ def get_traffic_light_plan(
         responsible_entity=responsible_entity,
         created_by=user,
         updated_by=user,
+        **kwargs,
     )[0]
 
     if replaces:
@@ -638,6 +647,7 @@ def get_traffic_sign_plan(
     mount_plan=None,
     responsible_entity=None,
     replaces=None,
+    **kwargs,
 ) -> TrafficSignPlan:
     user = get_user("test_user")
 
@@ -651,6 +661,7 @@ def get_traffic_sign_plan(
         mount_plan=mount_plan,
         created_by=user,
         updated_by=user,
+        **kwargs,
     )[0]
     if replaces:
         traffic_sign_plan_replace(old=replaces, new=traffic_sign_plan)
@@ -733,6 +744,15 @@ class AdditionalSignPlanFactory(factory.django.DjangoModelFactory):
     plan = factory.SubFactory(PlanFactory)
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
     parent = factory.SubFactory(TrafficSignPlanFactory)
+
+
+def get_additional_sign_plan_and_replace(**kwargs):
+    replaces = kwargs.pop("replaces", None)
+    asp = AdditionalSignPlanFactory(**kwargs)
+    asp.refresh_from_db()
+    if replaces:
+        additional_sign_plan_replace(old=replaces, new=asp)
+    return asp
 
 
 def get_additional_sign_plan(

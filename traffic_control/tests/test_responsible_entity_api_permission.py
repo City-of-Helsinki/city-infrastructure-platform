@@ -11,6 +11,7 @@ from traffic_control.tests.factories import (
     get_responsible_entity_project,
     get_traffic_control_device_type,
     get_user,
+    TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
 from traffic_control.tests.test_base_api_3d import test_point_3d
@@ -59,6 +60,8 @@ def test__api_responsible_area_permission__create(model, add_to_responsible_enti
         data["road_name"] = "testroad"
     elif model == "AdditionalSignReal":
         data["parent"] = TrafficSignRealFactory().pk
+    elif model == "AdditionalSignPlan":
+        data["parent"] = TrafficSignPlanFactory().pk
 
     client = get_api_client(user=user)
     model_class = getattr(models, model)

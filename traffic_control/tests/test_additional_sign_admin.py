@@ -8,12 +8,13 @@ from django.urls import reverse
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal
 from traffic_control.tests.factories import (
+    AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
-    get_additional_sign_plan,
     get_owner,
     get_traffic_control_device_type,
     get_user,
     TrafficControlDeviceTypeFactory,
+    TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
 from traffic_control.tests.models.test_traffic_control_device_type import content_valid_by_simple_schema, simple_schema
@@ -35,7 +36,7 @@ def teardown_module():
 @pytest.mark.parametrize(
     ("model", "url_name", "parent_factory"),
     (
-        (AdditionalSignPlan, "additionalsignplan", None),
+        (AdditionalSignPlan, "additionalsignplan", TrafficSignPlanFactory),
         (AdditionalSignReal, "additionalsignreal", TrafficSignRealFactory),
     ),
     ids=("plan", "real"),
@@ -82,7 +83,7 @@ def test__additional_sign__create_missing_content(client: Client, model, url_nam
 @pytest.mark.parametrize(
     ("model", "factory", "url_name", "parent_factory"),
     (
-        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan", None),
+        (AdditionalSignPlan, AdditionalSignPlanFactory, "additionalsignplan", TrafficSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealFactory, "additionalsignreal", TrafficSignRealFactory),
     ),
     ids=("plan", "real"),
@@ -141,7 +142,7 @@ def test__additional_sign__update_device_with_content_to_missing_content(
 @pytest.mark.parametrize(
     ("model", "factory", "url_name", "parent_factory"),
     (
-        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan", None),
+        (AdditionalSignPlan, AdditionalSignPlanFactory, "additionalsignplan", TrafficSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealFactory, "additionalsignreal", TrafficSignRealFactory),
     ),
     ids=("plan", "real"),
@@ -227,7 +228,7 @@ def test__additional_sign__create_dont_accept_content_when_missing_content_is_en
 @pytest.mark.parametrize(
     ("model", "factory", "url_name", "parent_factory"),
     (
-        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan", None),
+        (AdditionalSignPlan, AdditionalSignPlanFactory, "additionalsignplan", TrafficSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealFactory, "additionalsignreal", TrafficSignRealFactory),
     ),
     ids=("plan", "real"),
@@ -273,7 +274,7 @@ def test__additional_sign__update_dont_accept_content_when_missing_content_is_en
 @pytest.mark.parametrize(
     "model,factory,url_name,parent_factory",
     (
-        (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan", None),
+        (AdditionalSignPlan, AdditionalSignPlanFactory, "additionalsignplan", TrafficSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealFactory, "additionalsignreal", TrafficSignRealFactory),
     ),
 )
@@ -315,7 +316,7 @@ def test_additional_sign_illegal_location(client: Client, model, factory, url_na
 @pytest.mark.parametrize(
     "model,url_name,parent_factory",
     (
-        (AdditionalSignPlan, "additionalsignplan", None),
+        (AdditionalSignPlan, "additionalsignplan", TrafficSignPlanFactory),
         (AdditionalSignReal, "additionalsignreal", TrafficSignRealFactory),
     ),
 )

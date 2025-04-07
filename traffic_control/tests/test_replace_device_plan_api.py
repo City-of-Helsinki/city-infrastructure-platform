@@ -15,7 +15,7 @@ from traffic_control.models import (
 )
 from traffic_control.tests.factories import (
     AdditionalSignRealFactory,
-    get_additional_sign_plan,
+    get_additional_sign_plan_and_replace,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -31,12 +31,13 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    TrafficSignPlanFactory,
 )
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3_3d, test_point_3d, test_point_5_3d
 
 model_factory_url_name = (
     (TrafficSignPlan, get_traffic_sign_plan, "trafficsignplan"),
-    (AdditionalSignPlan, get_additional_sign_plan, "additionalsignplan"),
+    (AdditionalSignPlan, get_additional_sign_plan_and_replace, "additionalsignplan"),
     (MountPlan, get_mount_plan, "mountplan"),
     (TrafficLightPlan, get_traffic_light_plan, "trafficlightplan"),
     (SignpostPlan, get_signpost_plan, "signpostplan"),
@@ -48,7 +49,7 @@ model_factory_url_name = (
 plan_factory_url_name_plan_relation_name_real_factory = (
     (get_traffic_sign_plan, "trafficsignplan", "traffic_sign_plan", get_traffic_sign_real),
     (get_mount_plan, "mountplan", "mount_plan", get_mount_real),
-    (get_additional_sign_plan, "additionalsignplan", "additional_sign_plan", AdditionalSignRealFactory),
+    (get_additional_sign_plan_and_replace, "additionalsignplan", "additional_sign_plan", AdditionalSignRealFactory),
     (get_traffic_light_plan, "trafficlightplan", "traffic_light_plan", get_traffic_light_real),
     (get_signpost_plan, "signpostplan", "signpost_plan", get_signpost_real),
     (get_barrier_plan, "barrierplan", "barrier_plan", get_barrier_real),
@@ -146,6 +147,8 @@ def test__device_plan_replace__create__old_is_marked_replaced(model, factory, ur
     }
     if model == BarrierPlan:
         data["road_name"] = "Road name"
+    elif model == AdditionalSignPlan:
+        data["parent"] = TrafficSignPlanFactory().pk
 
     response = client.post(reverse(f"v1:{url_name}-list"), data, format="json")
     old_device.refresh_from_db()
@@ -286,6 +289,8 @@ def test__device_plan_replace__create__real_devices_plan_is_updated_to_replacer(
     }
     if plan_url_name == "barrierplan":
         data["road_name"] = "Road name"
+    if plan_url_name == "additionalsignplan":
+        data["parent"] = TrafficSignPlanFactory().pk
 
     response = client.post(reverse(f"v1:{plan_url_name}-list"), data, format="json")
     old_device_plan.refresh_from_db()
@@ -414,6 +419,8 @@ def test__device_plan_replace__create__replaces_not_found(model, factory, url_na
     }
     if model == BarrierPlan:
         data["road_name"] = "Road name"
+    elif model == AdditionalSignPlan:
+        data["parent"] = TrafficSignPlanFactory().pk
 
     response = client.post(reverse(f"v1:{url_name}-list"), data, format="json")
 
@@ -452,6 +459,8 @@ def test__device_plan_replace__update__replaces_not_found__put(model, factory, u
     }
     if model == BarrierPlan:
         data["road_name"] = "Road name"
+    elif model == AdditionalSignPlan:
+        data["parent"] = TrafficSignPlanFactory().pk
 
     response = client.put(reverse(f"v1:{url_name}-detail", kwargs={"pk": new_device.id}), data, format="json")
 

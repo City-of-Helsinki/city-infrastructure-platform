@@ -14587,7 +14587,6 @@ components:
         parent:
           type: string
           format: uuid
-          nullable: true
           title: Parent Traffic Sign Plan
           description: The traffic sign to which this additional sign is associated.
         mount_plan:
@@ -14606,6 +14605,7 @@ components:
       - id
       - location
       - owner
+      - parent
       - updated_at
       - updated_by
     AdditionalSignPlanInputRequest:
@@ -14855,7 +14855,6 @@ components:
         parent:
           type: string
           format: uuid
-          nullable: true
           title: Parent Traffic Sign Plan
           description: The traffic sign to which this additional sign is associated.
         mount_plan:
@@ -14871,6 +14870,7 @@ components:
       required:
       - location
       - owner
+      - parent
     AdditionalSignPlanOutput:
       type: object
       properties:
@@ -15151,7 +15151,6 @@ components:
         parent:
           type: string
           format: uuid
-          nullable: true
           title: Parent Traffic Sign Plan
           description: The traffic sign to which this additional sign is associated.
         mount_plan:
@@ -15171,6 +15170,7 @@ components:
       - is_replaced
       - location
       - owner
+      - parent
       - replaced_by
       - replaces
       - updated_at
@@ -21271,7 +21271,6 @@ components:
         parent:
           type: string
           format: uuid
-          nullable: true
           title: Parent Traffic Sign Plan
           description: The traffic sign to which this additional sign is associated.
         mount_plan:

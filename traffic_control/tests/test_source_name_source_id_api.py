@@ -21,7 +21,13 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.tests.factories import get_api_client, get_owner, get_user, TrafficSignRealFactory
+from traffic_control.tests.factories import (
+    get_api_client,
+    get_owner,
+    get_user,
+    TrafficSignPlanFactory,
+    TrafficSignRealFactory,
+)
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
@@ -38,6 +44,7 @@ def get_data_create_additional_sign_plan():
     return {
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
+        "parent": TrafficSignPlanFactory().pk,
     }
 
 

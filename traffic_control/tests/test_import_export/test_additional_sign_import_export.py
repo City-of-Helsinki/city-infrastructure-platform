@@ -11,13 +11,13 @@ from traffic_control.resources.additional_sign import (
 from traffic_control.tests.factories import (
     AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
-    get_additional_sign_plan,
     get_mount_plan,
     get_mount_real,
     get_owner,
     get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_traffic_sign_real,
+    TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
 from traffic_control.tests.test_base_api import test_point
@@ -37,7 +37,7 @@ def test__additional_sign_real__export():
 @pytest.mark.parametrize(
     "resource, model, factory",
     (
-        (AdditionalSignPlanResource, AdditionalSignPlan, get_additional_sign_plan),
+        (AdditionalSignPlanResource, AdditionalSignPlan, AdditionalSignPlanFactory),
         (AdditionalSignRealResource, AdditionalSignReal, AdditionalSignRealFactory),
     ),
 )
@@ -385,7 +385,7 @@ def test__additional_sign__import__create_with_missing_content(model, resource, 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
     ids=("plan", "real"),
@@ -473,7 +473,7 @@ def test__additional_sign__import__create_with_invalid_content(model, resource, 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -508,7 +508,7 @@ def test__additional_sign__import__create_with_invalid_device_type(model, resour
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -545,7 +545,7 @@ def test__additional_sign__import__create_with_minimal_columns(model, resource, 
 @pytest.mark.parametrize(
     "model, resource, factory",
     (
-        (AdditionalSignPlan, AdditionalSignPlanResource, get_additional_sign_plan),
+        (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
         (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
     ),
 )
@@ -982,6 +982,8 @@ def test__additional_sign__import__valid_and_invalid_content_properties(schema_p
 
     if model == AdditionalSignReal:
         additional_sign_data.update({"parent__id": TrafficSignRealFactory().pk})
+    elif model == AdditionalSignPlan:
+        additional_sign_data.update({"parent__id": TrafficSignPlanFactory().pk})
 
     expect_valid = True if validity == "valid" else False
 
@@ -1006,11 +1008,6 @@ def test__additional_sign__import__valid_and_invalid_content_properties(schema_p
 @pytest.mark.parametrize("has_mount_plan", (True, False), ids=lambda x: "mount_plan" if x else "no_mount_plan")
 @pytest.mark.parametrize("has_mount_real", (True, False), ids=lambda x: "mount_real" if x else "no_mount_real")
 @pytest.mark.parametrize(
-    "has_traffic_sign_plan",
-    (True, False),
-    ids=lambda x: "traffic_sign_plan" if x else "no_traffic_sign_plan",
-)
-@pytest.mark.parametrize(
     "has_traffic_sign_real",
     (True, False),
     ids=lambda x: "traffic_sign_real" if x else "no_traffic_sign_real",
@@ -1020,7 +1017,6 @@ def test__additional_sign__import__valid_and_invalid_content_properties(schema_p
 def test__additional_sign_plan_export_real_import(
     has_mount_plan,
     has_mount_real,
-    has_traffic_sign_plan,
     has_traffic_sign_real,
     real_preexists,
 ):
@@ -1028,10 +1024,10 @@ def test__additional_sign_plan_export_real_import(
 
     mount_plan = get_mount_plan() if has_mount_plan else None
     mount_real = get_mount_real() if has_mount_real else None
-    traffic_sign_plan = get_traffic_sign_plan() if has_traffic_sign_plan else None
+    traffic_sign_plan = get_traffic_sign_plan()
     traffic_sign_real = get_traffic_sign_real() if has_traffic_sign_real else None
 
-    plan_obj = get_additional_sign_plan(mount_plan=mount_plan, parent=traffic_sign_plan)
+    plan_obj = AdditionalSignPlanFactory(mount_plan=mount_plan, parent=traffic_sign_plan)
     real_obj = AdditionalSignRealFactory(additional_sign_plan=plan_obj) if real_preexists else None
 
     exported_dataset = AdditionalSignPlanToRealTemplateResource().export()
@@ -1044,7 +1040,7 @@ def test__additional_sign_plan_export_real_import(
     else:
         assert real["mount_real__id"] is None
 
-    if has_traffic_sign_plan and has_traffic_sign_real:
+    if has_traffic_sign_real:
         assert real["parent__id"] == traffic_sign_real.id
     else:
         assert real["parent__id"] is None

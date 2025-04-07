@@ -12,8 +12,8 @@ from traffic_control import models
 from traffic_control.enums import Lifecycle
 from traffic_control.models import BarrierPlan
 from traffic_control.tests.factories import (
+    AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
-    get_additional_sign_plan,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -32,6 +32,7 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
@@ -68,7 +69,7 @@ test_multipolygon_outside_area = MultiPolygon(
 )
 
 model_factory_map = {
-    "AdditionalSignPlan": get_additional_sign_plan,
+    "AdditionalSignPlan": AdditionalSignPlanFactory,
     "AdditionalSignReal": AdditionalSignRealFactory,
     "BarrierPlan": get_barrier_plan,
     "BarrierReal": get_barrier_real,
@@ -177,6 +178,8 @@ def test__api_operational_area_permission__create(model, location, success):
             data["source_name"] = "test source"
         elif model == "AdditionalSignReal":
             data["parent"] = TrafficSignRealFactory().pk
+        elif model == "AdditionalSignPlan":
+            data["parent"] = TrafficSignPlanFactory().pk
 
     api_client = get_api_client(user=user)
     response = api_client.post(reverse(f"v1:{model.lower()}-list"), data=data, format="json")
@@ -307,6 +310,8 @@ def test__api_operational_area_permission__update(model, location, success):
             data["source_name"] = "test source"
         elif model == "AdditionalSignReal":
             data["parent"] = TrafficSignRealFactory().pk
+        elif model == "AdditionalSignPlan":
+            data["parent"] = TrafficSignPlanFactory().pk
 
     api_client = get_api_client(user=user)
     response = api_client.put(

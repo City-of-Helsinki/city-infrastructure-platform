@@ -19,7 +19,7 @@ from traffic_control.geometry_utils import get_z_for_polygon
 from traffic_control.mixins.admin import CityInfraAdminConfirmMixin
 from traffic_control.models import Plan
 from traffic_control.tests.factories import (
-    get_additional_sign_plan,
+    AdditionalSignPlanFactory,
     get_barrier_plan,
     get_mount_plan,
     get_plan,
@@ -132,7 +132,7 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
     signpost_plan = get_signpost_plan()
     traffic_light_plan = get_traffic_light_plan()
     traffic_sign_plan = get_traffic_sign_plan()
-    additional_sign_plan = get_additional_sign_plan()
+    additional_sign_plan = AdditionalSignPlanFactory()
     furniture_signpost_plan = get_furniture_signpost_plan()
 
     for p in [
@@ -196,7 +196,7 @@ def test_plan_relation_admin_view_available_choices(admin_client):
         get_signpost_plan(location=loc, plan=plan)
         get_traffic_light_plan(location=loc, plan=plan)
         get_traffic_sign_plan(location=loc_3d, plan=plan)
-        get_additional_sign_plan(location=loc_3d, plan=plan)
+        AdditionalSignPlanFactory(location=loc_3d, plan=plan)
         get_furniture_signpost_plan(location=loc, plan=plan)
 
     plan_1.refresh_from_db()
@@ -219,7 +219,7 @@ def test_plan_relation_admin_view_available_choices(admin_client):
 @pytest.mark.parametrize(
     "factory",
     (
-        get_additional_sign_plan,
+        AdditionalSignPlanFactory,
         get_barrier_plan,
         get_furniture_signpost_plan,
         get_mount_plan,
