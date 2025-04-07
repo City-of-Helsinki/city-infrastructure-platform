@@ -4,7 +4,7 @@ from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 
 from city_furniture.tests.factories import get_furniture_signpost_plan
 from traffic_control.tests.factories import (
-    get_additional_sign_plan,
+    AdditionalSignPlanFactory,
     get_barrier_plan,
     get_mount_plan,
     get_plan,
@@ -46,8 +46,8 @@ def test__plan__get_related_locations():
     tlp_2 = get_traffic_light_plan(location=Point(MIN_X + 90.0, MIN_Y + 115.0, 0, srid=settings.SRID), plan=plan)
     tsp_1 = get_traffic_sign_plan(location=Point(MIN_X + 55.0, MIN_Y + 5.0, 0.0, srid=settings.SRID), plan=plan)
     tsp_2 = get_traffic_sign_plan(location=Point(MIN_X + 95.0, MIN_Y + 110.0, 0.0, srid=settings.SRID), plan=plan)
-    asp_1 = get_additional_sign_plan(location=Point(MIN_X + 80.0, MIN_Y + 120.0, 0.0, srid=settings.SRID), plan=plan)
-    asp_2 = get_additional_sign_plan(
+    asp_1 = AdditionalSignPlanFactory(location=Point(MIN_X + 80.0, MIN_Y + 120.0, 0.0, srid=settings.SRID), plan=plan)
+    asp_2 = AdditionalSignPlanFactory(
         location=Point(MIN_X + 85.0, MIN_Y + 125.0, 0.0, srid=settings.SRID), parent=tsp_2, plan=plan
     )
     fsp_1 = get_furniture_signpost_plan(
@@ -101,8 +101,8 @@ def test__plan__derive_location_from_related_plans():
     tlp_2 = get_traffic_light_plan(location=Point(MIN_X + 90.0, MIN_Y + 115.0, 0.0, srid=settings.SRID), plan=plan)
     tsp_1 = get_traffic_sign_plan(location=Point(MIN_X + 55.0, MIN_Y + 6.0, 0.0, srid=settings.SRID), plan=plan)
     tsp_2 = get_traffic_sign_plan(location=Point(MIN_X + 95.0, MIN_Y + 110.0, 0.0, srid=settings.SRID), plan=plan)
-    asp_1 = get_additional_sign_plan(location=Point(MIN_X + 80.0, MIN_Y + 120.0, 1.0, srid=settings.SRID), plan=plan)
-    asp_2 = get_additional_sign_plan(
+    asp_1 = AdditionalSignPlanFactory(location=Point(MIN_X + 80.0, MIN_Y + 120.0, 1.0, srid=settings.SRID), plan=plan)
+    asp_2 = AdditionalSignPlanFactory(
         location=Point(MIN_X + 80.0, MIN_Y + 120.0, 2.0, srid=settings.SRID), parent=tsp_2, plan=plan
     )
     fsp_1 = get_furniture_signpost_plan(
@@ -118,7 +118,7 @@ def test__plan__derive_location_from_related_plans():
     noise_sp = get_signpost_plan(location=Point(MIN_X + 150.0, MIN_Y + 150.0, 0.4, srid=settings.SRID))
     noise_tlp = get_traffic_light_plan(location=Point(MIN_X + 150.0, MIN_Y + 150.0, 0.5, srid=settings.SRID))
     noise_tsp = get_traffic_sign_plan(location=Point(MIN_X + 150.0, MIN_Y + 150.0, 0.6, srid=settings.SRID))
-    noise_asp = get_additional_sign_plan(location=Point(MIN_X + 150.0, MIN_Y + 150.0, 0.7, srid=settings.SRID))
+    noise_asp = AdditionalSignPlanFactory(location=Point(MIN_X + 150.0, MIN_Y + 150.0, 0.7, srid=settings.SRID))
     noise_fsp = get_furniture_signpost_plan(location=Point(MIN_X + 150.0, MIN_Y + 150.0, 0.8, srid=settings.SRID))
 
     plan.refresh_from_db()
@@ -154,7 +154,7 @@ def test__plan__derive_location_from_related_plans():
 @pytest.mark.parametrize(
     "factory",
     (
-        get_additional_sign_plan,
+        AdditionalSignPlanFactory,
         get_barrier_plan,
         get_furniture_signpost_plan,
         get_mount_plan,
@@ -188,7 +188,7 @@ def test__plan__location_update_on_related_model_save(factory, derive_location: 
 @pytest.mark.parametrize(
     "factory",
     (
-        get_additional_sign_plan,
+        AdditionalSignPlanFactory,
         get_barrier_plan,
         get_furniture_signpost_plan,
         get_mount_plan,
@@ -235,7 +235,7 @@ def test__plan__both_plan_locations_update_when_plan_is_changed(factory, derive_
 @pytest.mark.parametrize(
     "factory",
     (
-        get_additional_sign_plan,
+        AdditionalSignPlanFactory,
         get_barrier_plan,
         get_furniture_signpost_plan,
         get_mount_plan,
@@ -271,7 +271,7 @@ def test__plan__location_update_when_plan_is_removed_from_object(factory, derive
 @pytest.mark.parametrize(
     "factory",
     (
-        get_additional_sign_plan,
+        AdditionalSignPlanFactory,
         get_barrier_plan,
         get_furniture_signpost_plan,
         get_mount_plan,

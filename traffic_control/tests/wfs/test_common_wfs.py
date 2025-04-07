@@ -6,7 +6,7 @@ from city_furniture.tests.factories import get_furniture_signpost_plan, get_furn
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, Plan, TrafficSignPlan, TrafficSignReal
 from traffic_control.tests.factories import (
     AdditionalSignRealFactory,
-    get_additional_sign_plan,
+    get_additional_sign_plan_and_replace,
     get_traffic_sign_plan,
     PlanFactory,
     TrafficSignRealFactory,
@@ -33,7 +33,13 @@ from traffic_control.tests.wfs.wfs_utils import (
     (
         (TrafficSignPlan, "trafficsignplan", get_traffic_sign_plan, point_outside_bbox, point_inside_bbox),
         (TrafficSignReal, "trafficsignreal", TrafficSignRealFactory, point_outside_bbox, point_inside_bbox),
-        (AdditionalSignPlan, "additionalsignplan", get_additional_sign_plan, point_outside_bbox, point_inside_bbox),
+        (
+            AdditionalSignPlan,
+            "additionalsignplan",
+            get_additional_sign_plan_and_replace,
+            point_outside_bbox,
+            point_inside_bbox,
+        ),
         (AdditionalSignReal, "additionalsignreal", AdditionalSignRealFactory, point_outside_bbox, point_inside_bbox),
         (
             FurnitureSignpostPlan,
@@ -94,7 +100,7 @@ def test__wfs__get_feature_bounding_box(
     "model, model_name, factory",
     (
         (TrafficSignPlan, "trafficsignplan", get_traffic_sign_plan),
-        (AdditionalSignPlan, "additionalsignplan", get_additional_sign_plan),
+        (AdditionalSignPlan, "additionalsignplan", get_additional_sign_plan_and_replace),
     ),
 )
 @pytest.mark.parametrize("output_format", ("gml", "geojson"))

@@ -43,8 +43,8 @@ from traffic_control.models import (
 )
 from traffic_control.services.virus_scan import get_clam_av_scan_url
 from traffic_control.tests.factories import (
+    AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
-    get_additional_sign_plan,
     get_api_client,
     get_barrier_plan,
     get_barrier_real,
@@ -68,7 +68,7 @@ settings_overrides = override_settings(MEDIA_ROOT=MEDIA_ROOT)
 
 DELETE_TEST_PARAMS = (
     (
-        get_additional_sign_plan,
+        AdditionalSignPlanFactory,
         AdditionalSignPlan,
         AdditionalSignPlanFile,
         "additional_sign_plan",
@@ -144,7 +144,7 @@ DELETE_TEST_PARAMS = (
 )
 
 FILE_UPLOAD_PARAMS = (
-    (get_additional_sign_plan, AdditionalSignPlan, "additionalsignplan"),
+    (AdditionalSignPlanFactory, AdditionalSignPlan, "additionalsignplan"),
     (AdditionalSignRealFactory, AdditionalSignReal, "additionalsignreal"),
     (get_barrier_plan, BarrierPlan, "barrierplan"),
     (get_barrier_real, BarrierReal, "barrierreal"),
@@ -284,7 +284,7 @@ def test_invalid_file_upload(factory, model_class, url_name, mock_api):
     "factory,model_class,file_model_class,related_name,url_name",
     (
         (
-            get_additional_sign_plan,
+            AdditionalSignPlanFactory,
             AdditionalSignPlan,
             AdditionalSignPlanFile,
             "additional_sign_plan",
@@ -452,7 +452,7 @@ def test_file_delete_with_non_existing_base_object(factory, model_class, file_mo
     "factory, model_class, file_model_class, related_name, url_name",
     (
         (
-            get_additional_sign_plan,
+            AdditionalSignPlanFactory,
             AdditionalSignPlan,
             AdditionalSignPlanFile,
             "additional_sign_plan",
