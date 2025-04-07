@@ -176,6 +176,7 @@ class TrafficSignPlanAdmin(
                     "value",
                     "txt",
                     "source_id",
+                    "source_name",
                 )
             },
         ),
