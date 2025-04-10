@@ -8,9 +8,11 @@ from gisserver.geometries import CRS
 from gisserver.operations.base import OutputFormat
 from gisserver.operations.wfs20 import GetFeature
 from gisserver.output import GeoJsonRenderer
+from gisserver.output.utils import ChunkedQuerySetIterator
 from gisserver.types import XsdElement
 
 from traffic_control.views.wfs.utils import EnumNameXsdElement, SwapBoundingBoxMixin, YXGML32Renderer
+from traffic_control.views.wfs.workarounds import replace__restore_caches
 
 DEFAULT_CRS = CRS.from_srid(settings.SRID)
 
@@ -54,6 +56,8 @@ REPLACEABLE_MODEL_FIELDS = [
         abstract="ID of the mount plan which this mount plan replaces",
     ),
 ]
+
+ChunkedQuerySetIterator._restore_caches = replace__restore_caches
 
 
 class CustomGeoJsonRenderer(GeoJsonRenderer):
