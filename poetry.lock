@@ -783,24 +783,24 @@ Django = ">=3.2"
 
 [[package]]
 name = "django-gisserver"
-version = "1.4.1"
+version = "1.5.0"
 description = "Django speaking WFS 2.0 (exposing GeoDjango model fields)"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "django-gisserver-1.4.1.tar.gz", hash = "sha256:2ce649a501ff13e31222d052e367aaee1a0f6e8e4d192eece2b2b7ba92174b25"},
-    {file = "django_gisserver-1.4.1-py3-none-any.whl", hash = "sha256:6c58f5e1d7d6e8ff56bd7102126ddff2728690f7292a280f8b611e8a14417295"},
+    {file = "django_gisserver-1.5.0-py3-none-any.whl", hash = "sha256:c9d8ee24e2f971857689df5c643de779894a9dfc76d851798560c3552c6fbc25"},
+    {file = "django_gisserver-1.5.0.tar.gz", hash = "sha256:a43530707d4cb74258a2ccfff01df6a6c26a44a3739e9572e65f9f966ec0228d"},
 ]
 
 [package.dependencies]
 defusedxml = ">=0.6.0"
 Django = ">=3.2"
-lru-dict = ">=1.1.7"
-orjson = ">=2.4.0"
+lru_dict = ">=1.1.7"
+orjson = ">=3.9.15"
 
 [package.extras]
-tests = ["django-environ (>=0.4.5)", "lxml (>=4.5.0)", "psycopg2-binary (>=2.8.4)", "pytest (>=6.2.3)", "pytest-cov (>=2.11.1)", "pytest-django (>=4.1.0)"]
+tests = ["django-environ (>=0.4.5)", "lxml (>=4.9.1)", "psycopg2-binary (>=2.8.4)", "pytest (>=6.2.3)", "pytest-cov (>=2.11.1)", "pytest-django (>=4.1.0)"]
 
 [[package]]
 name = "django-health-check"
@@ -2892,4 +2892,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11.9"
-content-hash = "23293b5b511ddc36c2e142b05c214e6b24d52463599ad8d507a125cb044ca446"
+content-hash = "b1fe114fdf3e8fbef8d0936c1dcccbda73bcfdd6a01a15b13bf3e7664745cfd7"

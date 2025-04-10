@@ -115,11 +115,11 @@ class YXGML32Renderer(GML32Renderer):
             "</gml:LineString>"
         )
 
-    def write_bounds(self, feature_type, instance):
+    def write_bounds(self, projection, instance):
         if self.output_crs.srid not in _YX_CRS:
-            return super().write_bounds(feature_type, instance)
+            return super().write_bounds(projection, instance)
         else:
-            envelope = feature_type.get_envelope(instance, self.output_crs)
+            envelope = projection.feature_type.get_envelope(instance, self.output_crs)
             if envelope is not None:
                 lower = " ".join(map(str, _swap_x_y_coordinates(envelope.lower_corner)))
                 upper = " ".join(map(str, _swap_x_y_coordinates(envelope.upper_corner)))
