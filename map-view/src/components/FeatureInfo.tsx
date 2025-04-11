@@ -44,6 +44,7 @@ interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
 interface FeatureInfoState {
   featureIndex: number;
   realPlanDistance?: number;
+  features: Feature[];
 }
 
 class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
@@ -52,7 +53,15 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     this.state = {
       featureIndex: 0,
       realPlanDistance: undefined,
+      features: props.features,
     };
+  }
+
+  static getDerivedStateFromProps(props: FeatureInfoProps, state: FeatureInfoState) {
+    if (props.features !== state.features) {
+      return { featureIndex: 0, realPlanDistance: undefined, features: props.features };
+    }
+    return null;
   }
 
   getAdminLink(feature: Feature) {
@@ -78,6 +87,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     const { features, classes, onClose, t } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
+
     const fid = feature["id_"];
     const featureType = fid.split(".")[0];
     const {
