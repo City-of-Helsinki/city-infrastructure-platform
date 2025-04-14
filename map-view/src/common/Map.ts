@@ -22,6 +22,7 @@ import { LineString } from "ol/geom";
 import { buildWFSQuery, getDistanceBetweenFeatures } from "./functions";
 import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
+import BaseObject from "ol/Object";
 
 class Map {
   /**
@@ -98,12 +99,12 @@ class Map {
       return await layer.getFeatures(pixel).then((features) => {
         if (features.length) {
           // `features` always contains zero or only one Feature
-          const clusterFeature: FeatureLike = features[0];
+          const clusterFeature = features[0];
           // Only get features are devices, ignore any non-device features such as lines between real and plan
           const clusterFeatures = clusterFeature.get("features");
           if (clusterFeatures !== undefined && clusterFeatures.length) {
             // Add `app_name` property to all features inside the `clusterFeature`
-            clusterFeature.set(
+            (clusterFeature as BaseObject).set(
               "features",
               clusterFeatures.map((feature: Feature) => {
                 const featureType: string = feature["id_"].split(".")[0];
