@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.12.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.11.0...city-infrastructure-platform-v1.12.0) (2025-04-14)
+
+
+### Features
+
+* Add source_name to TrafficSignPlanAdmin ([18e5716](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/18e57165be414925e8493ef0295cd7da4a1408c3))
+* Additional_sign_plan.parent is now nonnullable ([9f56002](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9f56002291508f861d5b2b1fad645623d7526cc3))
+* Move some js package from devdeps to real deps so builds actually work ([1f88bec](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1f88beca92c411bffc9bc1bbc45fb5ec18c59238))
+* Update django-gisserver version to 1.5.0 ([20cb850](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/20cb850604c884671b9a6398c25b10595257db46))
+* Update libraries for map-view ([c4f1fc6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c4f1fc68b25ac616567df3f06b91bdc19c1847f0))
+* Update ol.js version from 6 to 10 ([8db93b4](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8db93b4ac13b9d3add11a9c894cf0ccc1a0c1d4c))
+* Use Vite instead of Create React App ([0c17af9](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0c17af9c1afaff24447fd892441c33f4fdcefd79))
+* Workaround for gisserver not supporting all field types ([a3406d1](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a3406d1e955b98faabd87a62da6ce7f3adf5273d))
+
+
+### Bug Fixes
+
+* FeatureIndex was not reseted when cliking anohter feature from the map without closing previous feature ([3892e5a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/3892e5a017794cec9fee196150591f429f15d455))
+* Mapview crash when feature has content_s ([e61e65a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e61e65a6384ba4172083a5472ba96c47243d4a9e))
+
 ## [1.11.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.10.0...city-infrastructure-platform-v1.11.0) (2025-03-24)
 
 
