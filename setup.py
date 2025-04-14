@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="city-infrastructure-platform",
-    version="1.11.0",
+    version="1.12.0",
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
