@@ -28,7 +28,7 @@ test("renders feature info", () => {
       features={mockFeatures}
       onClose={() => {}}
       onSelectFeature={(feature = mockFeatures[0]) => new Promise((resolve) => resolve(0))}
-    />
+    />,
   );
   const featureInfoTitle = getByText(/traffic_sign_real/i);
   expect(featureInfoTitle).toBeInTheDocument();
