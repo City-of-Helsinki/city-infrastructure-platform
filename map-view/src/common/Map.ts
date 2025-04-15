@@ -111,7 +111,7 @@ class Map {
                 const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
                 feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
                 return feature;
-              })
+              }),
             );
           }
         }
@@ -240,7 +240,7 @@ class Map {
 
     // Get only visible layers
     const visibleLayers = Object.fromEntries(
-      Object.entries(this.overlayLayers).filter(([key, layer]) => layer.getVisible())
+      Object.entries(this.overlayLayers).filter(([key, layer]) => layer.getVisible()),
     );
 
     for (const [identifier, layer] of Object.entries(visibleLayers)) {
@@ -317,7 +317,7 @@ class Map {
       const layer_config = overlayConfig["layers"].find((l) => l.identifier === identifier);
       if (layer_config !== undefined && layer_config.filter_fields!.includes(filter_field)) {
         const clusterSource = this.createClusterSource(
-          sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId)}`
+          sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId)}`,
         );
         layer.setSource(clusterSource);
       }

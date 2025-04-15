@@ -7,7 +7,7 @@ vi.mock("../common/Map");
 
 test("renders basemaps and overlays", () => {
   const { getByText } = render(
-    <LayerSwitcher mapConfig={mockMapConfig} onClose={() => {}} onOverlayToggle={() => {}} />
+    <LayerSwitcher mapConfig={mockMapConfig} onClose={() => {}} onOverlayToggle={() => {}} />,
   );
   const basemaps = getByText(/Basemaps/i);
   expect(basemaps).toBeInTheDocument();

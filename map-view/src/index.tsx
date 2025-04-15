@@ -11,5 +11,5 @@ const root = createRoot(container!);
 root.render(
   <StyledEngineProvider injectFirst>
     <App />
-  </StyledEngineProvider>
+  </StyledEngineProvider>,
 );

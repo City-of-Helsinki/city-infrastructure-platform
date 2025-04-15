@@ -8,7 +8,7 @@ export function getDistanceBetweenFeatures(feature1: Feature | FeatureLike, feat
   // Calculate distance between two points using Pythagorean theorem
   const distance = Math.sqrt(
     (location1[0] - location2[0]) * (location1[0] - location2[0]) +
-      (location1[1] - location2[1]) * (location1[1] - location2[1])
+      (location1[1] - location2[1]) * (location1[1] - location2[1]),
   );
   // Round to two decimal places
   return Math.round(distance * 100) / 100;
@@ -33,7 +33,7 @@ export function buildWFSQuery(identifier: string, filterField?: string, filterVa
         "FILTER",
         "<Filter><PropertyIsLike wildCard='*' singleChar='.' escapeChar='!'>" +
           `<PropertyName>${filterField}</PropertyName><Literal>${filterValue}</Literal>` +
-          "</PropertyIsLike></Filter>"
+          "</PropertyIsLike></Filter>",
       );
     }
   }
