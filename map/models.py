@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -19,3 +21,24 @@ class Layer(models.Model):
 
     def __str__(self):
         return self.name_fi
+
+
+class FeatureTypeEditMapping(models.Model):
+    """Model for mapping feature type to another string that is used in map-view FeatureInfo component edit button.
+    Usage is eg. for mountplancentroids which do not have own model -> it should be mapped to mountplan
+    """
+
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    name = models.CharField(
+        _("Name"), max_length=200, null=False, blank=False, help_text=_("Name of feature type"), unique=True
+    )
+    edit_name = models.CharField(
+        max_length=200,
+        null=False,
+        blank=False,
+        help_text=_("Edit name, used in map-view FeatureInfo component edit link"),
+    )
+
+    @staticmethod
+    def get_featuretype_edit_name_mapping():
+        return {mapping.name: mapping.edit_name for mapping in FeatureTypeEditMapping.objects.all()}

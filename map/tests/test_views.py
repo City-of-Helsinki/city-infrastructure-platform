@@ -3,7 +3,7 @@ import json
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
-from map.models import Layer
+from map.models import FeatureTypeEditMapping, Layer
 from map.views import map_config, map_view
 from traffic_control.tests.factories import get_user
 
@@ -50,6 +50,7 @@ class MapConfigTestCase(TestCase):
             name_fi="Overlay 2 fi",
             is_basemap=False,
         )
+        FeatureTypeEditMapping.objects.create(name="featurename", edit_name="edit_featurename")
         request = self.factory.get(reverse("map-config"))
         request.LANGUAGE_CODE = "en"
         response = map_config(request)
@@ -57,3 +58,4 @@ class MapConfigTestCase(TestCase):
         response_data = json.loads(response.content)
         self.assertEqual(len(response_data["basemapConfig"]["layers"]), 1)
         self.assertEqual(len(response_data["overlayConfig"]["layers"]), 2)
+        self.assertEqual(response_data["featureTypeEditNameMapping"], {"featurename": "edit_featurename"})

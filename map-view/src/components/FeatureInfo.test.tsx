@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import React from "react";
 import FeatureInfo from "./FeatureInfo";
 import { Feature } from "../models";
+import { mockMapConfig } from "../api/__mocks__/mock-data";
 
 test("renders feature info", () => {
   const mockFeatures: Feature[] = [
@@ -26,6 +27,7 @@ test("renders feature info", () => {
   const { getByText } = render(
     <FeatureInfo
       features={mockFeatures}
+      mapConfig={mockMapConfig}
       onClose={() => {}}
       onSelectFeature={(feature = mockFeatures[0]) => new Promise((resolve) => resolve(0))}
     />,

@@ -10,7 +10,7 @@ import NavigateBefore from "@mui/icons-material/NavigateBefore";
 import NavigateNext from "@mui/icons-material/NavigateNext";
 import React from "react";
 import { APIBaseUrl } from "../consts";
-import { Feature } from "../models";
+import { Feature, MapConfig } from "../models";
 import { withTranslation, WithTranslation } from "react-i18next";
 
 const styles = (theme: Theme) =>
@@ -37,6 +37,7 @@ const styles = (theme: Theme) =>
 
 interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
   features: Feature[];
+  mapConfig: MapConfig;
   onSelectFeature: (feature: Feature) => Promise<any>;
   onClose: () => void;
 }
@@ -64,12 +65,20 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     return null;
   }
 
-  getAdminLink(feature: Feature) {
-    const app_name = feature["app_name"];
+  getFeatureType(feature: Feature) {
     const fid = feature["id_"];
-    const featureType = fid.split(".")[0];
+    return fid.split(".")[0];
+  }
+
+  getFeatureTypeEditName(featureType: string, featureTypeEditMapping: Record<string, string>) {
+    return featureTypeEditMapping[featureType] || featureType;
+  }
+
+  getAdminLink(feature: Feature, featureTypeEditMapping: Record<string, string>) {
+    const app_name = feature["app_name"];
+    const featureTypeEditName = this.getFeatureTypeEditName(this.getFeatureType(feature), featureTypeEditMapping);
     const featureId = feature.getProperties().id;
-    return `${APIBaseUrl}/admin/${app_name}/${featureType.replace(/_/g, "")}/${featureId}/change`;
+    return `${APIBaseUrl}/admin/${app_name}/${featureTypeEditName.replace(/_/g, "")}/${featureId}/change`;
   }
 
   runOnSelectFeature(featureIndex: number) {
@@ -84,7 +93,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
   }
 
   render() {
-    const { features, classes, onClose, t } = this.props;
+    const { features, classes, onClose, t, mapConfig } = this.props;
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
 
@@ -152,7 +161,11 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
         </CardContent>
         <CardActions>
           <Button onClick={onClose}>{t("close")}</Button>
-          <Button color="primary" target="_blank" href={this.getAdminLink(feature)}>
+          <Button
+            color="primary"
+            target="_blank"
+            href={this.getAdminLink(feature, mapConfig.featureTypeEditNameMapping)}
+          >
             {t("edit")}
           </Button>
           <div className={classes.spacer} />

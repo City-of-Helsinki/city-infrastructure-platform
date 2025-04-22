@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from .models import Layer
+from .models import FeatureTypeEditMapping, Layer
 
 
 @staff_member_required
@@ -49,5 +49,6 @@ def map_config(request):
             "sourceUrl": request.build_absolute_uri("/")[:-1] + reverse("wfs-city-infrastructure"),
         },
         "traffic_sign_icons_url": traffic_sign_icons_url,
+        "featureTypeEditNameMapping": FeatureTypeEditMapping.get_featuretype_edit_name_mapping(),
     }
     return JsonResponse(config)
