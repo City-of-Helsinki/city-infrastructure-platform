@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from map.models import Layer
+from map.models import FeatureTypeEditMapping, Layer
 
 
 @admin.register(Layer)
@@ -16,3 +16,8 @@ class LayerAdmin(admin.ModelAdmin):
     )
     search_fields = ("identifier", "name_fi", "name_en")
     list_filter = ("is_basemap",)
+
+
+@admin.register(FeatureTypeEditMapping)
+class FeatureTypeEditMappingAdmin(admin.ModelAdmin):
+    list_display = ("name", "edit_name")

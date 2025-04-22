@@ -70,6 +70,7 @@ class App extends React.Component<AppProps, AppState> {
           {features.length > 0 && mapConfig && (
             <FeatureInfo
               features={features}
+              mapConfig={mapConfig}
               onSelectFeature={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
               onClose={() => {
                 this.setState({ features: [] });
