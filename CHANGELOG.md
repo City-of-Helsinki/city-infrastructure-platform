@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.12.0...city-infrastructure-platform-v1.13.0) (2025-04-28)
+
+
+### Features
+
+* Add support to map feature edit links ([1ac8766](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1ac8766f279140b0e94082eb8a861cb2ba94d75c))
+* Update django-admin-confirmation ([37c9859](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/37c98592219cca115baf9214648a8fe0fe1606a8))
+
 ## [1.12.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.11.0...city-infrastructure-platform-v1.12.0) (2025-04-14)
 
 
