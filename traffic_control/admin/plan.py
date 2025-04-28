@@ -1,5 +1,6 @@
 from copy import copy
 
+from admin_confirm import AdminConfirmMixin
 from django.contrib.gis import admin
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -9,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.forms import PlanModelForm, PlanRelationsForm
 from traffic_control.mixins import (
-    CityInfraAdminConfirmMixin,
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
@@ -26,7 +26,7 @@ class PlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Geometry3DFieldAdminMixin,
-    CityInfraAdminConfirmMixin,
+    AdminConfirmMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
 ):
