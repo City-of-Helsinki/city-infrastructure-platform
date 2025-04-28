@@ -613,13 +613,14 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 name = "django-admin-confirm"
-version = "1.0.0"
+version = "1.0.1"
 description = "Adds confirmation to Django Admin changes, additions and actions"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "django_admin_confirm-1.0.0-py3-none-any.whl", hash = "sha256:2f1ebd432084d8f02a4123a8a8bfeed8065ebc88d9e3d3974cca2e9f1c9ad2e4"},
+    {file = "django-admin-confirm-1.0.1.tar.gz", hash = "sha256:fb6a4b7cb9fc6ccd97f92f88275ee8e3912f3ee0ce82da962ad0a2b1b17cd6a0"},
+    {file = "django_admin_confirm-1.0.1-py3-none-any.whl", hash = "sha256:271a7135e8e5f0cce94a6c06f708dec794d3538ada37e111c1f8d7c8f762b012"},
 ]
 
 [package.dependencies]
@@ -2901,4 +2902,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11.9"
-content-hash = "6e48038d93914b2c75fb2b39a2f221eb58a99c5f68196050f8252d70c83959f4"
+content-hash = "82c612df18b7efde8df66d39141ce3867d37cc0bb406968828a981e818b6b03e"
