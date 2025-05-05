@@ -13,6 +13,7 @@ class Layer(models.Model):
     order = models.IntegerField(_("Order"), default=1)
     filter_fields = models.CharField(_("Filter fields"), max_length=200, blank=True)
     use_traffic_sign_icons = models.BooleanField(_("Use Traffic Sign Icons"), default=False)
+    clustered = models.BooleanField(_("Clustered"), default=True)
 
     class Meta:
         verbose_name = _("Layer")

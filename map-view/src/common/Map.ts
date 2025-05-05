@@ -14,15 +14,17 @@ import ImageWMS from "ol/source/ImageWMS";
 import GeoJson from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
+import { Circle, Fill, Stroke, Style, Text } from "ol/style";
 import { Pixel } from "ol/pixel";
-import { Feature as OlFeature } from "ol";
+import { MapBrowserEvent, Feature as OlFeature } from "ol";
 import ImageSource from "ol/source/Image";
-import { LineString } from "ol/geom";
+import { LineString, Point } from "ol/geom";
 import { buildWFSQuery, getDistanceBetweenFeatures } from "./functions";
 import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
 import BaseObject from "ol/Object";
+import { getCenter } from "ol/extent";
+import { getSinglePointStyle, isCoordinateInsideFeature } from "./MapUtils";
 
 class Map {
   /**
@@ -46,9 +48,13 @@ class Map {
    */
   private basemapLayers: { [identifier: string]: ImageLayer<ImageSource> } = {};
   /**
-   * Available overlay layers
+   * Available clustered overlay layers
    */
-  private overlayLayers: { [identifier: string]: VectorLayer<VectorSource> } = {};
+  private clusteredOverlayLayers: { [identifier: string]: VectorLayer<VectorSource> } = {};
+  /**
+   * Available non-clustered overlay layers
+   */
+  private nonClusteredOverlayLayers: { [identifier: string]: VectorLayer<VectorSource> } = {};
   /**
    * A layer to draw temporary vector features on the map
    */
@@ -70,7 +76,8 @@ class Map {
   initialize(target: string, mapConfig: MapConfig) {
     const { basemapConfig, overlayConfig } = mapConfig;
     const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
-    const overlayLayerGroup = this.createOverlayLayerGroup(mapConfig);
+    const clusteredOverlayLayerGroup = this.createClusteredOverlayLayerGroup(mapConfig);
+    const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
     this.extraVectorLayer = Map.createExtraVectorLayer();
 
     const helsinkiCoords = [25499052.02, 6675851.38];
@@ -85,7 +92,7 @@ class Map {
     });
     this.map = new OLMap({
       target: target,
-      layers: [basemapLayerGroup, overlayLayerGroup, this.extraVectorLayer],
+      layers: [basemapLayerGroup, clusteredOverlayLayerGroup, nonClusteredOverlayLayerGroup, this.extraVectorLayer],
       controls: this.getControls(),
       view,
     });
@@ -119,22 +126,50 @@ class Map {
       });
     }
 
-    this.map.on("singleclick", (event) => {
-      const layers = { ...this.overlayLayers, extraVectorLayer: this.extraVectorLayer };
-      const visibleLayers = Object.values(layers).filter((layer) => layer.getVisible());
-      if (visibleLayers.length > 0) {
-        // Combine the topmost feature from all visible layers into a single array
-        Promise.all(visibleLayers.map((layer) => getFeatureFromLayer(layer, event.pixel))).then((features) => {
-          features = features.filter((f) => f.length > 0);
-          // Extract features from a cluster
-          if (features.length && features[0].length && features[0][0].get("features")) {
-            features = features[0][0].get("features");
-          }
+    async function getFeaturesFromLayer(layer: VectorLayer<VectorSource>, event: MapBrowserEvent) {
+      /**
+       * Getting features by pixel returns just the topmost one from a single layer, so coordinate check needs to be done
+       * separately.
+       * Return features from event coordinate and pixel.
+       * Filter out duplicate feature, as in some cases same feature is found from both.
+       */
+      // Get features from clicked coordinate
+      const at_coordinate = layer
+        .getSource()
+        ?.getFeatures()
+        .filter((feature) => {
+          const geometry = feature.getGeometry();
+          return isCoordinateInsideFeature(event.coordinate, geometry);
+        });
 
-          // @ts-ignore
-          const all_features = [].concat.apply([], features);
-          if (all_features.length > 0) {
-            this.featureInfoCallback(all_features);
+      // get feature from pixel, filter out the ones already from coordinate
+      const at_pixel = (await getFeatureFromLayer(layer, event.pixel)).filter((pixel_feat) => {
+        return !at_coordinate?.map((coord_feat) => coord_feat.getId()).includes(pixel_feat.getId());
+      });
+      return [...(at_coordinate || []), ...at_pixel];
+    }
+
+    this.map.on("singleclick", (event) => {
+      const layers = {
+        ...this.clusteredOverlayLayers,
+        ...this.nonClusteredOverlayLayers,
+        extraVectorLayer: this.extraVectorLayer,
+      };
+      const visibleLayers = Object.values(layers).filter((layer) => layer.getVisible());
+
+      if (visibleLayers.length > 0) {
+        Promise.all(visibleLayers.map((layer) => getFeaturesFromLayer(layer, event))).then((features) => {
+          const transformedFeatures = features
+            .filter((f) => f.length > 0)
+            .map((feature) => {
+              if (feature.length && feature[0].get("features")) {
+                return feature[0].get("features");
+              } else {
+                return feature;
+              }
+            });
+          if (transformedFeatures.length > 0) {
+            this.featureInfoCallback(transformedFeatures.flat());
           }
         });
       }
@@ -240,7 +275,9 @@ class Map {
 
     // Get only visible layers
     const visibleLayers = Object.fromEntries(
-      Object.entries(this.overlayLayers).filter(([key, layer]) => layer.getVisible()),
+      Object.entries({ ...this.clusteredOverlayLayers, ...this.nonClusteredOverlayLayers }).filter(([key, layer]) =>
+        layer.getVisible(),
+      ),
     );
 
     for (const [identifier, layer] of Object.entries(visibleLayers)) {
@@ -288,7 +325,11 @@ class Map {
   }
 
   setOverlayVisible(overlayIdentifier: string, visible: boolean) {
-    this.overlayLayers[overlayIdentifier].setVisible(visible);
+    if (overlayIdentifier in this.clusteredOverlayLayers) {
+      this.clusteredOverlayLayers[overlayIdentifier].setVisible(visible);
+    } else {
+      this.nonClusteredOverlayLayers[overlayIdentifier].setVisible(visible);
+    }
 
     if (visible) {
       this.handleShowAllPlanAndRealDifferences();
@@ -312,7 +353,10 @@ class Map {
     const filter_field = "responsible_entity_name";
 
     // Override layer source to apply the filter
-    for (const [identifier, layer] of Object.entries(this.overlayLayers)) {
+    for (const [identifier, layer] of Object.entries({
+      ...this.clusteredOverlayLayers,
+      ...this.nonClusteredOverlayLayers,
+    })) {
       // Make sure filter can be applied to the layer
       const layer_config = overlayConfig["layers"].find((l) => l.identifier === identifier);
       if (layer_config !== undefined && layer_config.filter_fields!.includes(filter_field)) {
@@ -347,94 +391,107 @@ class Map {
     });
   }
 
-  private createOverlayLayerGroup(mapConfig: MapConfig) {
+  private createNonClusteredOverlayLayerGroup(mapConfig: MapConfig) {
     const { overlayConfig, traffic_sign_icons_url } = mapConfig;
     const { layers, sourceUrl } = overlayConfig;
-
-    // Fetch device layers
-    const overlayLayers = layers.map(({ identifier, use_traffic_sign_icons }) => {
-      const styleCache: { [key: string]: Style } = {};
-      const getCachedStyle = (feature: FeatureLike) => {
-        const features = feature.get("features");
-
-        if (features !== undefined && features.length > 1) {
-          return styleCache[features.length.toString()];
-        }
-        return styleCache[feature.get("features")[0].get("device_type_code")];
-      };
-      const getClusterStyle = (clusterFeature: FeatureLike) => {
-        return new Style({
-          image: new Circle({
-            radius: 10,
-            stroke: new Stroke({
-              color: "#fff",
-            }),
-            fill: new Fill({
-              color: "#3399CC",
-            }),
-          }),
-          text: new Text({
-            text: clusterFeature.get("features").length.toString(),
-            fill: new Fill({
-              color: "#fff",
-            }),
-          }),
+    const overlayLayers = layers
+      .filter(({ clustered }) => !clustered)
+      .map(({ identifier, use_traffic_sign_icons }) => {
+        const vectorSource = new VectorSource({
+          format: this.geojsonFormat,
+          url: sourceUrl + `?${buildWFSQuery(identifier)}`,
+          overlaps: true,
         });
-      };
-      const getSinglePointStyle = (feature: FeatureLike) => {
-        if (use_traffic_sign_icons && feature.get("device_type_code") !== null) {
-          // Traffic sign style
-          return new Style({
-            image: new Icon({
-              src: `${traffic_sign_icons_url}${feature.get("device_type_code")}.svg`,
-              scale: 0.075,
-            }),
-          });
-        } else {
-          // Circle style
-          return new Style({
-            image: new Circle({
-              radius: 8,
-              fill: new Fill({
-                color: feature.get("color_code") || "#FFF",
-              }),
-              stroke: new Stroke({
-                color: "#000",
-                width: 2,
-              }),
-            }),
-          });
-        }
-      };
-      const getImageStyle = (clusterFeature: FeatureLike) => {
-        if (clusterFeature.get("features") === undefined) return;
 
-        let style = getCachedStyle(clusterFeature);
-        if (!style) {
-          const size: number = clusterFeature.get("features") ? clusterFeature.get("features").length : 0;
-          if (size > 1) {
-            style = getClusterStyle(clusterFeature);
-            styleCache[size] = style;
-          } else {
-            const feature = clusterFeature.get("features")[0];
-            style = getSinglePointStyle(feature);
-            styleCache[feature.get("device_type_code")] = style;
+        // When features are loaded, check if difference between plans/reals should be shown
+        vectorSource.on("featuresloadend", (featureEvent) => {
+          const features = featureEvent.features;
+          if (features) {
+            this.handleShowAllPlanAndRealDifferences();
           }
-        }
-        return style;
-      };
+        });
 
-      const clusterSource = this.createClusterSource(sourceUrl + `?${buildWFSQuery(identifier)}`);
-      const vectorLayer = new VectorLayer({
-        source: clusterSource,
-        style: (clusterFeature: FeatureLike) => getImageStyle(clusterFeature),
-        visible: false,
-        opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
+        const vectorLayer = new VectorLayer({
+          source: vectorSource,
+          style: (feature: FeatureLike) => getSinglePointStyle(feature, use_traffic_sign_icons, traffic_sign_icons_url),
+          visible: false,
+          opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
+        });
+
+        this.nonClusteredOverlayLayers[identifier] = vectorLayer;
+        return vectorLayer;
       });
 
-      this.overlayLayers[identifier] = vectorLayer;
-      return vectorLayer;
+    return new LayerGroup({
+      layers: overlayLayers,
     });
+  }
+
+  private createClusteredOverlayLayerGroup(mapConfig: MapConfig) {
+    const { overlayConfig, traffic_sign_icons_url } = mapConfig;
+    const { layers, sourceUrl } = overlayConfig;
+    // Fetch device layers
+    const overlayLayers = layers
+      .filter(({ clustered }) => clustered)
+      .map(({ identifier, use_traffic_sign_icons }) => {
+        const styleCache: { [key: string]: Style } = {};
+        const getCachedStyle = (feature: FeatureLike) => {
+          const features = feature.get("features");
+
+          if (features !== undefined && features.length > 1) {
+            return styleCache[features.length.toString()];
+          }
+          return styleCache[feature.get("features")[0].get("device_type_code")];
+        };
+        const getClusterStyle = (clusterFeature: FeatureLike) => {
+          return new Style({
+            image: new Circle({
+              radius: 10,
+              stroke: new Stroke({
+                color: "#fff",
+              }),
+              fill: new Fill({
+                color: "#3399CC",
+              }),
+            }),
+            text: new Text({
+              text: clusterFeature.get("features").length.toString(),
+              fill: new Fill({
+                color: "#fff",
+              }),
+            }),
+          });
+        };
+
+        const getImageStyle = (clusterFeature: FeatureLike) => {
+          if (clusterFeature.get("features") === undefined) return;
+
+          let style = getCachedStyle(clusterFeature);
+          if (!style) {
+            const size: number = clusterFeature.get("features") ? clusterFeature.get("features").length : 0;
+            if (size > 1) {
+              style = getClusterStyle(clusterFeature);
+              styleCache[size] = style;
+            } else {
+              const feature = clusterFeature.get("features")[0];
+              style = getSinglePointStyle(feature, use_traffic_sign_icons, traffic_sign_icons_url);
+              styleCache[feature.get("device_type_code")] = style;
+            }
+          }
+          return style;
+        };
+
+        const clusterSource = this.createClusterSource(sourceUrl + `?${buildWFSQuery(identifier)}`);
+        const vectorLayer = new VectorLayer({
+          source: clusterSource,
+          style: (clusterFeature: FeatureLike) => getImageStyle(clusterFeature),
+          visible: false,
+          opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
+        });
+
+        this.clusteredOverlayLayers[identifier] = vectorLayer;
+        return vectorLayer;
+      });
     return new LayerGroup({
       layers: overlayLayers,
     });
@@ -457,6 +514,28 @@ class Map {
     return new Cluster({
       distance: 40, // Distance in pixels within which features will be clustered together.
       source: vectorSource,
+      geometryFunction: this.clusterGeometryFunction,
+      createCluster: this.createCluster,
+    });
+  }
+
+  private clusterGeometryFunction(feature: FeatureLike) {
+    const geometry = feature.getGeometry();
+    if (geometry instanceof Point) {
+      return geometry;
+    } else {
+      const extent = feature.getGeometry()?.getExtent();
+      if (!extent) {
+        return null;
+      }
+      return new Point(getCenter(extent));
+    }
+  }
+
+  private createCluster(point: Point, features: Array<OlFeature>) {
+    return new OlFeature({
+      geometry: features[0].getGeometry(),
+      features: features,
     });
   }
 

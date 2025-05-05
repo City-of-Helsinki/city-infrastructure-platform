@@ -106,7 +106,8 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
 
     @property
     def convex_hull_location(self):
-        """This always forces 3d geometry"""
+        """This always forces 3d geometry.
+        In WFS CustomGeoJsonRenderer checks if this property exists for an instance."""
         return get_3d_geometry(self.location.convex_hull, 0.0)
 
     def save(self, *args, **kwargs):
