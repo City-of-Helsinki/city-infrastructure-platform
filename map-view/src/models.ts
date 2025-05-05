@@ -5,7 +5,8 @@ export interface Layer {
   name: string;
   app_name?: string;
   filter_fields?: string[];
-  use_traffic_sign_icons?: boolean;
+  use_traffic_sign_icons: boolean;
+  clustered: boolean;
 }
 
 export interface LayerConfig {

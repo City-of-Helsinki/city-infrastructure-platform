@@ -83,6 +83,11 @@ class CustomGeoJsonRenderer(GeoJsonRenderer):
     def _is_centroid_feature_type(feature_type):
         return "centroid" in feature_type.name
 
+    @staticmethod
+    def _is_convex_hull_feature_type(instance: models.Model) -> bool:
+        """Currently only Plan is represented as convex hull"""
+        return hasattr(instance, "convex_hull_location")
+
 
 class CustomGetFeature(SwapBoundingBoxMixin, GetFeature):
     # Use CustomGeoJsonRenderer

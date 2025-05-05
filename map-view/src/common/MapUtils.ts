@@ -1,0 +1,132 @@
+import { Circle, Geometry, GeometryCollection, LineString, MultiPolygon, Point, Polygon } from "ol/geom";
+import { Fill, Icon, Stroke, Style, Circle as CircleStyle } from "ol/style";
+import { FeatureLike } from "ol/Feature";
+import RenderFeature from "ol/render/Feature";
+import { Coordinate } from "ol/coordinate";
+
+const defaultFill = new Fill({ color: "magenta" });
+const defaultStroke = new Stroke({
+  color: "#000",
+  width: 2,
+});
+const areaStroke = new Stroke({
+  color: "magenta",
+  width: 5,
+});
+
+const geometryStyles = {
+  Point: new Style({
+    image: new CircleStyle({
+      radius: 5,
+      fill: defaultFill,
+      stroke: defaultStroke,
+    }),
+  }),
+  MultiPoint: new Style({
+    image: new CircleStyle({
+      radius: 5,
+      fill: defaultFill,
+      stroke: defaultStroke,
+    }),
+  }),
+  LineString: new Style({
+    stroke: defaultStroke,
+  }),
+  MultiLineString: new Style({
+    stroke: defaultStroke,
+  }),
+  LinearRing: new Style({
+    stroke: defaultStroke,
+  }),
+  Polygon: new Style({
+    fill: defaultFill,
+    stroke: areaStroke,
+  }),
+  MultiPolygon: new Style({
+    fill: defaultFill,
+    stroke: areaStroke,
+  }),
+  Circle: new Style({
+    fill: defaultFill,
+    stroke: areaStroke,
+  }),
+  GeometryCollection: new Style({
+    fill: defaultFill,
+    stroke: areaStroke,
+    image: new CircleStyle({
+      radius: 5,
+      fill: defaultFill,
+      stroke: defaultStroke,
+    }),
+  }),
+  unknown: new Style({
+    stroke: new Stroke({
+      color: "black",
+      width: 1,
+    }),
+    fill: new Fill({
+      color: "rgba(0, 0, 0, 0.1)",
+    }),
+  }),
+};
+
+export function getSinglePointStyle(
+  feature: FeatureLike,
+  use_traffic_sign_icons: boolean,
+  traffic_sign_icons_url: string,
+) {
+  if (use_traffic_sign_icons && feature.get("device_type_code") !== null) {
+    // Traffic sign style
+    return new Style({
+      image: new Icon({
+        src: `${traffic_sign_icons_url}${feature.get("device_type_code")}.svg`,
+        scale: 0.075,
+      }),
+    });
+  }
+
+  const geometry = feature.getGeometry();
+  return getStylesForGeometry(geometry);
+}
+
+export function getStylesForGeometry(geometry: Geometry | RenderFeature | undefined) {
+  if (geometry === undefined) {
+    return geometryStyles["unknown"];
+  } else {
+    return geometryStyles[geometry.getType()];
+  }
+}
+
+export function isCoordinateInsideFeature(coordinate: Coordinate, geometry: Geometry | undefined): boolean {
+  const [x, y] = coordinate;
+
+  if (geometry === undefined) {
+    return false;
+  }
+
+  if (geometry instanceof Point) {
+    // A point is considered inside itself
+    return geometry.getCoordinates()[0] === x && geometry.getCoordinates()[1] === y;
+  } else if (geometry instanceof LineString) {
+    // Check if the coordinate lies on the line string
+    return geometry.intersectsCoordinate(coordinate);
+  } else if (geometry instanceof Polygon) {
+    // Use containsXY to check if the coordinate is inside the polygon
+    return geometry.intersectsCoordinate(coordinate);
+  } else if (geometry instanceof MultiPolygon) {
+    // Check each polygon within the MultiPolygon
+    return geometry.getPolygons().some((polygon) => polygon.intersectsCoordinate(coordinate));
+  } else if (geometry instanceof Circle) {
+    // Check if the coordinate is within the circle
+    const center = geometry.getCenter();
+    const radius = geometry.getRadius();
+    const distance = Math.sqrt(Math.pow(x - center[0], 2) + Math.pow(y - center[1], 2));
+    return distance <= radius;
+  } else if (geometry instanceof GeometryCollection) {
+    // Check each geometry in the collection
+    return geometry.getGeometries().some((geom) => isCoordinateInsideFeature(coordinate, geom));
+  } else {
+    // Unsupported geometry type
+    return false;
+  }
+}
