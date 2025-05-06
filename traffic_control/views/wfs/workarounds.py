@@ -14,10 +14,12 @@ def replace__restore_caches(self, instances) -> bool:
 
     for lookup, cache in self._fk_caches.items():
         field = instances[0]._meta.get_field(lookup)
+        if not hasattr(field, "attname"):
+            # This quick fix will avoid crashing the code and let standard prefetch_related() take over.
+            all_restored = False
+            continue
         for instance in instances:
-            id_value = None
-            if hasattr(field, "attname"):
-                id_value = getattr(instance, field.attname)
+            id_value = getattr(instance, field.attname)
             if id_value is None:
                 continue
 
