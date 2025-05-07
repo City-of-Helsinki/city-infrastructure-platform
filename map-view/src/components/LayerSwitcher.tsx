@@ -124,7 +124,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
 
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
       const checked: boolean = event.target.checked;
-      Map.setExtraVectorLayerVisible(checked);
+      Map.setPlanRealDiffVectorLayerVisible(checked);
       this.setState({ displayRealPlanDifference: checked });
     };
 
