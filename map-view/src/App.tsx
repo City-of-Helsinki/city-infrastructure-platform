@@ -74,7 +74,7 @@ class App extends React.Component<AppProps, AppState> {
               onSelectFeature={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
               onClose={() => {
                 this.setState({ features: [] });
-                Map.clearExtraVectorLayer();
+                Map.clearPlanRealDiffVectorLayer();
               }}
             />
           )}
@@ -102,7 +102,7 @@ class App extends React.Component<AppProps, AppState> {
                 onOverlayToggle={(checked) => {
                   if (!checked) {
                     this.setState({ features: [] });
-                    Map.clearExtraVectorLayer();
+                    Map.clearPlanRealDiffVectorLayer();
                   }
                 }}
               />

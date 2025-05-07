@@ -58,7 +58,7 @@ class Map {
   /**
    * A layer to draw temporary vector features on the map
    */
-  private extraVectorLayer: VectorLayer<VectorSource>;
+  private planRealDiffVectorLayer: VectorLayer<VectorSource>;
 
   /**
    * Callback function to process features returned from GetFeatureInfo requests
@@ -78,7 +78,7 @@ class Map {
     const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
     const clusteredOverlayLayerGroup = this.createClusteredOverlayLayerGroup(mapConfig);
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
-    this.extraVectorLayer = Map.createExtraVectorLayer();
+    this.planRealDiffVectorLayer = Map.createPlanRealDiffVectorLayer();
 
     const helsinkiCoords = [25499052.02, 6675851.38];
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
@@ -92,7 +92,12 @@ class Map {
     });
     this.map = new OLMap({
       target: target,
-      layers: [basemapLayerGroup, clusteredOverlayLayerGroup, nonClusteredOverlayLayerGroup, this.extraVectorLayer],
+      layers: [
+        basemapLayerGroup,
+        clusteredOverlayLayerGroup,
+        nonClusteredOverlayLayerGroup,
+        this.planRealDiffVectorLayer,
+      ],
       controls: this.getControls(),
       view,
     });
@@ -153,7 +158,6 @@ class Map {
       const layers = {
         ...this.clusteredOverlayLayers,
         ...this.nonClusteredOverlayLayers,
-        extraVectorLayer: this.extraVectorLayer,
       };
       const visibleLayers = Object.values(layers).filter((layer) => layer.getVisible());
 
@@ -177,7 +181,7 @@ class Map {
   }
 
   /**
-   * Draw a line to extraVectorLayer between two features
+   * Draw a line to planRealDiffVectorLayer between two features
    */
   drawLineBetweenFeatures(feature1: Feature | FeatureLike, feature2: Feature | FeatureLike) {
     const location1 = feature1.getProperties().geometry.getFlatCoordinates();
@@ -187,7 +191,7 @@ class Map {
       geometry: lineString,
       name: "Line",
     });
-    this.extraVectorLayer.getSource()!.addFeature(olFeature);
+    this.planRealDiffVectorLayer.getSource()!.addFeature(olFeature);
   }
 
   /**
@@ -213,7 +217,7 @@ class Map {
               overlayConfig.sourceUrl +
               `?${buildWFSQuery(feature_layer.identifier, "id", feature.getProperties().device_plan_id)}`,
           });
-          this.extraVectorLayer.setSource(vectorSource);
+          this.planRealDiffVectorLayer.setSource(vectorSource);
 
           vectorSource.on("featuresloadend", (featureEvent) => {
             const features = featureEvent.features;
@@ -226,12 +230,14 @@ class Map {
           });
         }
       } else {
-        // If clicked feature belongs to extraVectorLayer, don't clear the layer
-        const extraVectorLayerSource = this.extraVectorLayer.getSource();
+        // If clicked feature belongs to planRealDiffVectorLayer, don't clear the layer
+        const planRealDiffVectorLayerSource = this.planRealDiffVectorLayer.getSource();
         // @ts-ignore
-        const extraFeatures = Object.values(extraVectorLayerSource!.getFeatures()).filter((f) => f.id_ === feature.id_);
-        if (!extraFeatures.length) {
-          extraVectorLayerSource!.clear();
+        const diffFeatures = Object.values(planRealDiffVectorLayerSource!.getFeatures()).filter(
+          (f) => f.getId() === feature.id_,
+        );
+        if (!diffFeatures.length) {
+          planRealDiffVectorLayerSource!.clear();
         }
       }
     });
@@ -269,7 +275,7 @@ class Map {
 
   handleShowAllPlanAndRealDifferences() {
     // Make sure plan/real difference setting is enabled
-    if (!this.extraVectorLayer.getVisible()) {
+    if (!this.planRealDiffVectorLayer.getVisible()) {
       return;
     }
 
@@ -288,10 +294,10 @@ class Map {
     }
   }
 
-  private static createExtraVectorLayer() {
-    const extraVectorLayer = new VectorSource({});
+  private static createPlanRealDiffVectorLayer() {
+    const planRealDiffVectorLayer = new VectorSource({});
     return new VectorLayer({
-      source: extraVectorLayer,
+      source: planRealDiffVectorLayer,
       // Point style
       style: new Style({
         image: new Circle({
@@ -336,16 +342,16 @@ class Map {
     }
   }
 
-  setExtraVectorLayerVisible(visible: boolean) {
-    this.extraVectorLayer.setVisible(visible);
+  setPlanRealDiffVectorLayerVisible(visible: boolean) {
+    this.planRealDiffVectorLayer.setVisible(visible);
 
     if (visible) {
       this.handleShowAllPlanAndRealDifferences();
     }
   }
 
-  clearExtraVectorLayer() {
-    this.extraVectorLayer.getSource()!.clear();
+  clearPlanRealDiffVectorLayer() {
+    this.planRealDiffVectorLayer.getSource()!.clear();
   }
 
   applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {
