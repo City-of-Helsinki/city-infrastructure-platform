@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.14.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.13.0...city-infrastructure-platform-v1.14.0) (2025-05-12)
+
+
+### Features
+
+* Slighly better workaround for ChunkedQuerySetIterator._restore_caches overwrite ([6544558](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/6544558531ef3ad92a1a3c4a96ce942774b94d27))
+* Support to  all geometry types in map-view ([d43f916](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d43f916fa82ecb73f36b3175531d2226894f0e2e))
+
+
+### Bug Fixes
+
+* Do not use plan real difference features for featureinfo popup ([f130d87](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f130d8739c10f286827c0542d83c5a4732344332))
+
 ## [1.13.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.12.0...city-infrastructure-platform-v1.13.0) (2025-04-28)
 
 
