@@ -10,8 +10,8 @@ const defaultStroke = new Stroke({
   width: 2,
 });
 const areaStroke = new Stroke({
-  color: "magenta",
-  width: 5,
+  color: "black",
+  width: 2,
 });
 
 const geometryStyles = {
