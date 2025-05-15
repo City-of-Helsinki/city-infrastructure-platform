@@ -5,7 +5,7 @@ import Control from "ol/control/Control";
 import MousePosition from "ol/control/MousePosition";
 import { createStringXY } from "ol/coordinate";
 import ScaleLine from "ol/control/ScaleLine";
-import { defaults as defaultControls } from "ol/control";
+import { defaults as defaultControls, OverviewMap } from "ol/control";
 import View from "ol/View";
 import { Feature, LayerConfig, MapConfig } from "../models";
 import ImageLayer from "ol/layer/Image";
@@ -25,6 +25,7 @@ import { Cluster } from "ol/source";
 import BaseObject from "ol/Object";
 import { getCenter } from "ol/extent";
 import { getSinglePointStyle, isCoordinateInsideFeature } from "./MapUtils";
+import Static from "ol/source/ImageStatic";
 
 class Map {
   /**
@@ -35,6 +36,10 @@ class Map {
    * Openlayers Map instance
    */
   private map: OLMap;
+  /**
+   * OpenLayers overviewmap
+   */
+  private overViewMap: OverviewMap;
   /**
    * Current visible basemap
    */
@@ -74,22 +79,22 @@ class Map {
    * @param mapConfig Configurations for the map
    */
   initialize(target: string, mapConfig: MapConfig) {
-    const { basemapConfig, overlayConfig } = mapConfig;
+    const { basemapConfig, overlayConfig, overviewConfig } = mapConfig;
     const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
     const clusteredOverlayLayerGroup = this.createClusteredOverlayLayerGroup(mapConfig);
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
     this.planRealDiffVectorLayer = Map.createPlanRealDiffVectorLayer();
 
-    const helsinkiCoords = [25499052.02, 6675851.38];
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
     const projection = this.getProjection();
     const view = new View({
       projection,
-      center: helsinkiCoords,
+      center: this.getDefaulViewCenter(),
       zoom: 5,
       resolutions,
       extent: projection.getExtent(),
     });
+
     this.map = new OLMap({
       target: target,
       layers: [
@@ -101,6 +106,25 @@ class Map {
       controls: this.getControls(),
       view,
     });
+
+    this.overViewMap = new OverviewMap({
+      className: "ol-overviewmap",
+      layers: [
+        new ImageLayer({
+          source: new Static({
+            url: overviewConfig["imageUrl"],
+            imageExtent: overviewConfig["imageExtent"],
+          }),
+        }),
+      ],
+      collapsed: false,
+      view: new View({
+        extent: overviewConfig["imageExtent"],
+        showFullExtent: true,
+        resolutions: [128],
+      }),
+    });
+    this.map.addControl(this.overViewMap);
 
     /**
      * Return all features that exist in the position that user clicked the map
@@ -564,6 +588,10 @@ class Map {
     const scaleLine = new ScaleLine();
 
     return defaultControls().extend([mousePosition, scaleLine]);
+  }
+
+  private getDefaulViewCenter() {
+    return [25499052.02, 6675851.38];
   }
 }
 

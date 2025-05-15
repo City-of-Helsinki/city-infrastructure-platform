@@ -15,9 +15,15 @@ export interface LayerConfig {
   sourceUrl: string;
 }
 
+export interface OverviewConfig {
+  imageUrl: string;
+  imageExtent: number[];
+}
+
 export interface MapConfig {
   basemapConfig: LayerConfig;
   overlayConfig: LayerConfig;
+  overviewConfig: OverviewConfig;
   traffic_sign_icons_url: string;
   featureTypeEditNameMapping: Record<string, string>;
 }

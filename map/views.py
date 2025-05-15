@@ -49,7 +49,20 @@ def map_config(request):
             "layers": overlays,
             "sourceUrl": request.build_absolute_uri("/")[:-1] + reverse("wfs-city-infrastructure"),
         },
+        "overviewConfig": {
+            "imageUrl": f"{request.build_absolute_uri(settings.STATIC_URL)}"
+            f"traffic_control/png/map/cityinfra_overview_map-704x704.png",
+            "imageExtent": _get_overview_image_extent(),
+        },
         "traffic_sign_icons_url": traffic_sign_icons_url,
         "featureTypeEditNameMapping": FeatureTypeEditMapping.get_featuretype_edit_name_mapping(),
     }
     return JsonResponse(config)
+
+
+def _get_overview_image_extent():
+    """In the hardcoded png file 1 px means 32 meters in real world.
+    Resolution of the image is 704x704
+    Coordinates for top left corner are 25490088.0, 6687593.0
+    """
+    return [25490088.0, 6687593.0 - 32 * 704, 25490088 + 32 * 704, 6687593.0]
