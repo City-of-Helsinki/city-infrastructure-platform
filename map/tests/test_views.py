@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
@@ -58,4 +59,9 @@ class MapConfigTestCase(TestCase):
         response_data = json.loads(response.content)
         self.assertEqual(len(response_data["basemapConfig"]["layers"]), 1)
         self.assertEqual(len(response_data["overlayConfig"]["layers"]), 2)
+        self.assertEqual(
+            response_data["overviewConfig"]["imageUrl"],
+            f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/png/map/cityinfra_overview_map-704x704.png",
+        )
+        self.assertEqual(response_data["overviewConfig"]["imageExtent"], [25490088.0, 6665065.0, 25512616, 6687593.0])
         self.assertEqual(response_data["featureTypeEditNameMapping"], {"featurename": "edit_featurename"})
