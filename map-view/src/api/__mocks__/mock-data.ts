@@ -45,4 +45,6 @@ export const mockMapConfig: MapConfig = {
   },
   traffic_sign_icons_url: "http://127.0.0.1:8000/static/traffic_control/svg/traffic_sign_icons/",
   featureTypeEditNameMapping: {},
+  icon_scale: 0.1,
+  icon_type: "svg",
 };

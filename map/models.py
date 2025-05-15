@@ -1,6 +1,6 @@
 import uuid
 
-from django.db import models
+from django.db import models, NotSupportedError
 from django.utils.translation import gettext_lazy as _
 
 
@@ -43,3 +43,45 @@ class FeatureTypeEditMapping(models.Model):
     @staticmethod
     def get_featuretype_edit_name_mapping():
         return {mapping.name: mapping.edit_name for mapping in FeatureTypeEditMapping.objects.all()}
+
+
+class IconDrawingConfig(models.Model):
+    DEFAULT_ICON_URL = "traffic_control/svg/traffic_sign_icons/"
+    DEFAULT_ICON_SCALE = 0.075
+
+    class ImageType(models.TextChoices):
+        PNG = "png", _("png")
+        SVG = "svg", _("svg")
+
+    class PngSize(models.IntegerChoices):
+        SMALL = 32
+        MEDIUM = 64
+        LARGE = 128
+        EXTRA_LARGE = 256
+
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    name = models.CharField(_("Name"), max_length=200, unique=True)
+    active = models.BooleanField(_("Active"), default=False)
+    image_type = models.CharField(_("Image Type"), choices=ImageType.choices, max_length=10, null=False, blank=False)
+    png_size = models.IntegerField(_("PNG Size"), choices=PngSize.choices, null=False, blank=False)
+    scale = models.FloatField(_("Scale"), null=True, blank=False, default=None)
+
+    constraints = [
+        models.UniqueConstraint(
+            fields=["image_type", "png_size"],
+            name="%(app_label)s_%(class)s_unique_image_type_png_size",
+        ),
+        models.UniqueConstraint(
+            fields=["active"],
+            condition=models.Q(active=True),
+            name="%(app_label)s_%(class)s_unique_active",
+        ),
+    ]
+
+    @property
+    def icons_relative_url(self) -> str:
+        if self.image_type == IconDrawingConfig.ImageType.SVG:
+            return self.DEFAULT_ICON_URL
+        elif self.image_type == IconDrawingConfig.ImageType.PNG:
+            return f"traffic_control/png/traffic_sign_icons/{self.png_size}/"
+        raise NotSupportedError(f"No support for image type: {self.image_type}")
