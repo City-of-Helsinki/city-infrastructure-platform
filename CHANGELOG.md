@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.14.0...city-infrastructure-platform-v1.15.0) (2025-05-15)
+
+
+### Features
+
+* Add overviewmap for map-view ([b7eb5ea](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b7eb5eadbe0003e4b1a45a0c29095d00dcf4de6b))
+
 ## [1.14.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.13.0...city-infrastructure-platform-v1.14.0) (2025-05-12)
 
 
