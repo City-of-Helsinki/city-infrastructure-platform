@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from map.models import FeatureTypeEditMapping, Layer
+from map.models import FeatureTypeEditMapping, IconDrawingConfig, Layer
 
 
 @admin.register(Layer)
@@ -22,3 +22,8 @@ class LayerAdmin(admin.ModelAdmin):
 @admin.register(FeatureTypeEditMapping)
 class FeatureTypeEditMappingAdmin(admin.ModelAdmin):
     list_display = ("name", "edit_name")
+
+
+@admin.register(IconDrawingConfig)
+class IconDrawingInfoAdmin(admin.ModelAdmin):
+    list_display = ("name", "image_type", "png_size", "active")

@@ -4,7 +4,8 @@ from django.conf import settings
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
-from map.models import FeatureTypeEditMapping, Layer
+from map.models import FeatureTypeEditMapping, IconDrawingConfig, Layer
+from map.tests.factories import IconDrawingConfigFactory
 from map.views import map_config, map_view
 from traffic_control.tests.factories import get_user
 
@@ -31,6 +32,38 @@ class MapViewTestCase(TestCase):
 class MapConfigTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
+
+    def test_with_no_icon_draw_config(self):
+        """Test that without any active IconDrawingConfig the default values are used."""
+        request = self.factory.get(reverse("map-config"))
+        request.LANGUAGE_CODE = "en"
+
+        response = map_config(request)
+        self.assertEqual(response.status_code, 200)
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data["icon_scale"], IconDrawingConfig.DEFAULT_ICON_SCALE)
+        self.assertEqual(response_data["icon_type"], "svg")
+        self.assertEqual(
+            response_data["traffic_sign_icons_url"],
+            f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/svg/traffic_sign_icons/",
+        )
+
+    def test_with_icon_draw_config(self):
+        """Test that with an active IconDrawingConfig the values are actually used."""
+        idc = IconDrawingConfigFactory(active=True, scale=IconDrawingConfig.DEFAULT_ICON_SCALE + 0.1, image_type="png")
+        request = self.factory.get(reverse("map-config"))
+        request.LANGUAGE_CODE = "en"
+
+        response = map_config(request)
+        self.assertEqual(response.status_code, 200)
+        response_data = json.loads(response.content)
+
+        self.assertEqual(response_data["icon_scale"], idc.scale)
+        self.assertEqual(response_data["icon_type"], idc.image_type)
+        self.assertEqual(
+            response_data["traffic_sign_icons_url"],
+            f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/png/traffic_sign_icons/{idc.png_size}/",
+        )
 
     def test_layer_config_return_ok(self):
         Layer.objects.create(

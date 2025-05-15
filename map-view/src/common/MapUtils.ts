@@ -74,19 +74,30 @@ export function getSinglePointStyle(
   feature: FeatureLike,
   use_traffic_sign_icons: boolean,
   traffic_sign_icons_url: string,
+  icon_scale: number,
+  icon_type: string,
 ) {
   if (use_traffic_sign_icons && feature.get("device_type_code") !== null) {
     // Traffic sign style
     return new Style({
       image: new Icon({
-        src: `${traffic_sign_icons_url}${feature.get("device_type_code")}.svg`,
-        scale: 0.075,
+        src: getIconSrc(traffic_sign_icons_url, icon_type, feature.get("device_type_code")),
+        scale: icon_scale,
       }),
     });
   }
 
   const geometry = feature.getGeometry();
   return getStylesForGeometry(geometry);
+}
+
+function getIconSrc(traffic_sign_icons_url: string, icon_type: string, device_type_code: string) {
+  const base_src = `${traffic_sign_icons_url}${device_type_code}.svg`;
+  if (icon_type === "png") {
+    return base_src.concat(".png");
+  } else {
+    return base_src;
+  }
 }
 
 export function getStylesForGeometry(geometry: Geometry | RenderFeature | undefined) {

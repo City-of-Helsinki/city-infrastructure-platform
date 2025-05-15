@@ -26,6 +26,8 @@ export interface MapConfig {
   overviewConfig: OverviewConfig;
   traffic_sign_icons_url: string;
   featureTypeEditNameMapping: Record<string, string>;
+  icon_scale: number;
+  icon_type: string;
 }
 
 export interface FeatureProperties {

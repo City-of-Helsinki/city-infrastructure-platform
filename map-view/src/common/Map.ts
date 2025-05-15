@@ -422,7 +422,7 @@ class Map {
   }
 
   private createNonClusteredOverlayLayerGroup(mapConfig: MapConfig) {
-    const { overlayConfig, traffic_sign_icons_url } = mapConfig;
+    const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
     const { layers, sourceUrl } = overlayConfig;
     const overlayLayers = layers
       .filter(({ clustered }) => !clustered)
@@ -443,7 +443,8 @@ class Map {
 
         const vectorLayer = new VectorLayer({
           source: vectorSource,
-          style: (feature: FeatureLike) => getSinglePointStyle(feature, use_traffic_sign_icons, traffic_sign_icons_url),
+          style: (feature: FeatureLike) =>
+            getSinglePointStyle(feature, use_traffic_sign_icons, traffic_sign_icons_url, icon_scale, icon_type),
           visible: false,
           opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
         });
@@ -458,7 +459,7 @@ class Map {
   }
 
   private createClusteredOverlayLayerGroup(mapConfig: MapConfig) {
-    const { overlayConfig, traffic_sign_icons_url } = mapConfig;
+    const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
     const { layers, sourceUrl } = overlayConfig;
     // Fetch device layers
     const overlayLayers = layers
@@ -504,7 +505,13 @@ class Map {
               styleCache[size] = style;
             } else {
               const feature = clusterFeature.get("features")[0];
-              style = getSinglePointStyle(feature, use_traffic_sign_icons, traffic_sign_icons_url);
+              style = getSinglePointStyle(
+                feature,
+                use_traffic_sign_icons,
+                traffic_sign_icons_url,
+                icon_scale,
+                icon_type,
+              );
               styleCache[feature.get("device_type_code")] = style;
             }
           }
