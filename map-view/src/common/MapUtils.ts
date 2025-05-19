@@ -3,6 +3,7 @@ import { Fill, Icon, Stroke, Style, Circle as CircleStyle } from "ol/style";
 import { FeatureLike } from "ol/Feature";
 import RenderFeature from "ol/render/Feature";
 import { Coordinate } from "ol/coordinate";
+import { Feature, LayerConfig } from "../models";
 
 const defaultFill = new Fill({ color: "magenta" });
 const defaultStroke = new Stroke({
@@ -140,4 +141,14 @@ export function isCoordinateInsideFeature(coordinate: Coordinate, geometry: Geom
     // Unsupported geometry type
     return false;
   }
+}
+
+export function getFeatureAppName(feature: Feature, overlayConfig: LayerConfig) {
+  const name_from_feat = feature["app_name"];
+  if (name_from_feat) {
+    return name_from_feat;
+  }
+  const featureType: string = feature["id_"].split(".")[0];
+  const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
+  return feature_layer ? feature_layer["app_name"] : "traffic_control";
 }
