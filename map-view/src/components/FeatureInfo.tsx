@@ -12,6 +12,7 @@ import React from "react";
 import { APIBaseUrl } from "../consts";
 import { Feature, MapConfig } from "../models";
 import { withTranslation, WithTranslation } from "react-i18next";
+import { getFeatureAppName } from "../common/MapUtils";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -75,7 +76,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
   }
 
   getAdminLink(feature: Feature, featureTypeEditMapping: Record<string, string>) {
-    const app_name = feature["app_name"];
+    const app_name = getFeatureAppName(feature, this.props.mapConfig.overlayConfig);
     const featureTypeEditName = this.getFeatureTypeEditName(this.getFeatureType(feature), featureTypeEditMapping);
     const featureId = feature.getProperties().id;
     return `${APIBaseUrl}/admin/${app_name}/${featureTypeEditName.replace(/_/g, "")}/${featureId}/change`;
