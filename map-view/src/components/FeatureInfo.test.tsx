@@ -9,7 +9,7 @@ test("renders feature info", () => {
     {
       geometry: { type: "Point", coordinates: [1, 1] },
       geometry_name: "location",
-      id_: "traffic_sign_real.20950c38-eb7e-11ea-adc1-0242ac120002",
+      id_: "overlay-1.20950c38-eb7e-11ea-adc1-0242ac120002",
       getProperties: () => ({
         id: "fcdbbc6f-5903-4574-baa3-fef33a4b0621",
         // @ts-ignore
@@ -32,6 +32,6 @@ test("renders feature info", () => {
       onSelectFeature={(feature = mockFeatures[0]) => new Promise((resolve) => resolve(0))}
     />,
   );
-  const featureInfoTitle = getByText(/traffic_sign_real/i);
+  const featureInfoTitle = getByText("Overlay 1");
   expect(featureInfoTitle).toBeInTheDocument();
 });

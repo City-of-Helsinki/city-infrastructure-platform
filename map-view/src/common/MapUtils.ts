@@ -148,7 +148,19 @@ export function getFeatureAppName(feature: Feature, overlayConfig: LayerConfig) 
   if (name_from_feat) {
     return name_from_feat;
   }
-  const featureType: string = feature["id_"].split(".")[0];
-  const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
+  const feature_layer = getFeatureLayer(getFeatureType(feature), overlayConfig);
   return feature_layer ? feature_layer["app_name"] : "traffic_control";
+}
+
+export function getFeatureLayerName(feature: Feature, overlayConfig: LayerConfig) {
+  const feature_layer = getFeatureLayer(getFeatureType(feature), overlayConfig);
+  return feature_layer ? feature_layer["name"] : "FeatureInfo title (missing)";
+}
+
+function getFeatureLayer(featureType: string, overlayConfig: LayerConfig) {
+  return overlayConfig["layers"].find((l) => l.identifier === featureType);
+}
+
+function getFeatureType(feature: Feature) {
+  return feature["id_"].split(".")[0];
 }
