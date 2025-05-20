@@ -12,7 +12,7 @@ import React from "react";
 import { APIBaseUrl } from "../consts";
 import { Feature, MapConfig } from "../models";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { getFeatureAppName } from "../common/MapUtils";
+import { getFeatureAppName, getFeatureLayerName } from "../common/MapUtils";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -82,6 +82,10 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     return `${APIBaseUrl}/admin/${app_name}/${featureTypeEditName.replace(/_/g, "")}/${featureId}/change`;
   }
 
+  getFeatureInfoTitle(feature: Feature) {
+    return getFeatureLayerName(feature, this.props.mapConfig.overlayConfig);
+  }
+
   runOnSelectFeature(featureIndex: number) {
     const { features, onSelectFeature } = this.props;
     const feature = features[featureIndex];
@@ -98,8 +102,6 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     const { featureIndex } = this.state;
     const feature = features[featureIndex];
 
-    const fid = feature["id_"];
-    const featureType = fid.split(".")[0];
     const {
       id,
       value,
@@ -122,7 +124,7 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
       <Card className={classes.root}>
         <CardContent>
           <Typography className={classes.title} variant="h5" component="h2">
-            {t(`featureInfoTitle.${featureType}`)}
+            {this.getFeatureInfoTitle(feature)}
           </Typography>
           <Typography className={classes.content} variant="body1" component="p">
             <b>Id</b>: {id}

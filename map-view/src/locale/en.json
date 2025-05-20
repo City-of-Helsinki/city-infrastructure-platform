@@ -2,16 +2,6 @@
   "translation": {
     "edit": "edit",
     "close": "close",
-    "featureInfoTitle": {
-      "trafficsignreal": "Traffic Sign Real",
-      "trafficsignplan": "Traffic Sign Plan",
-      "additionalsignreal": "Additional Sign Real",
-      "additionalsignplan": "Additional Sign Plan",
-      "furnituresignpostreal": "Furniture Signpost Real",
-      "furnituresignpostplan": "Furniture Signpost Plan",
-      "mountrealcentroid": "Mount Real Centroid",
-      "mountplancentroid": "Mount Plan Centroid"
-    },
     "Device type": "Device type",
     "Direction": "Direction",
     "Additional info": "Additional info",

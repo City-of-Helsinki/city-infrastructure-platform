@@ -2,16 +2,6 @@
   "translation": {
     "edit": "muokkaa",
     "close": "sulje",
-    "featureInfoTitle": {
-      "trafficsignreal": "Liikennemerkkitoteuma",
-      "trafficsignplan": "Liikennemerkkisuunnitelma",
-      "additionalsignreal": "Lisäkilpitoteuma",
-      "additionalsignplan": "Lisäkilpisuunnitelma",
-      "furnituresignpostreal": "Kaupunkikalustetoteuma",
-      "furnituresignpostplan": "Kaupunkikalustesuunnitelma",
-      "mountrealcentroid": "Kiinnityskohta_keskipiste (toteuma)",
-      "mountplancentroid": "Kiinnityskohta_keskipiste (suunnitelma)"
-    },
     "Device type": "Merkki",
     "Direction": "Suunta",
     "Additional info": "Lisätieto",
