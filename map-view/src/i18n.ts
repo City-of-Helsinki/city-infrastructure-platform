@@ -3,6 +3,7 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import en from "./locale/en.json";
 import fi from "./locale/fi.json";
+import sv from "./locale/sv.json";
 
 i18n
   .use(initReactI18next)
@@ -11,6 +12,7 @@ i18n
     resources: {
       en,
       fi,
+      sv,
     },
     detection: {
       order: ["path"],

@@ -1,0 +1,16 @@
+{
+  "translation": {
+    "edit": "redigera",
+    "close": "stäng",
+    "Device type": "Anordningstypen",
+    "Direction": "Riktning",
+    "Additional info": "Ytterligare information",
+    "Mount type": "Monteringstyp",
+    "Content Schema": "Schema för innehållet",
+    "Distance to plan": "Avstånd till planet",
+    "Layers": "Skikt",
+    "Settings": "Inställningar",
+    "Display Plan/Real difference": "Visa plan/implementering skillnad",
+    "Filter by Project": "Filtrera efter projekt"
+  }
+}

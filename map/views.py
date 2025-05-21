@@ -9,6 +9,9 @@ from traffic_control.services.icon_draw_config import get_icons_relative_url, ge
 
 from .models import FeatureTypeEditMapping, Layer
 
+ALLOWED_MAP_LANGUAGE_CODES = ["en", "fi", "sv"]
+"""Layer model needs to have field name_<language_code>"""
+
 
 @staff_member_required
 def map_view(request):
@@ -16,7 +19,7 @@ def map_view(request):
 
 
 def map_config(request):
-    language_code = request.LANGUAGE_CODE
+    language_code = _get_language_code(request)
     basemaps = []
     for basemap in Layer.objects.filter(is_basemap=True):
         basemaps.append(
@@ -70,3 +73,11 @@ def _get_overview_image_extent():
     Coordinates for top left corner are 25490088.0, 6687593.0
     """
     return [25490088.0, 6687593.0 - 32 * 704, 25490088 + 32 * 704, 6687593.0]
+
+
+def _get_language_code(request):
+    """Get language code from request. If not allowed then defaults to en."""
+    language_from_request = request.LANGUAGE_CODE
+    if language_from_request not in ALLOWED_MAP_LANGUAGE_CODES:
+        return "fi"
+    return language_from_request
