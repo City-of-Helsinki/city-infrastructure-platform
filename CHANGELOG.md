@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.15.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.14.0...city-infrastructure-platform-v1.15.0) (2025-05-21)
+
+
+### Features
+
+* Add overviewmap for map-view ([b7eb5ea](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b7eb5eadbe0003e4b1a45a0c29095d00dcf4de6b))
+* Add support for swedish in map-view ([12939bb](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/12939bb6a8871e01f9e8fb3422348c2904944369))
+* Get featureinfo titles from layer config ([3d4bf44](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/3d4bf44f3ceba02acde86a404c885483dd4b8911))
+* Support for drawing trafficsign icons also as pngs ([a6d6777](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a6d6777dbb1322b72585b6d277f6944ca3a644cb))
+* Use black as area border stroke color ([831a984](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/831a984378c74c90b7940dc5c052c3056349bbb8))
+
+
+### Bug Fixes
+
+* Non clustered features edit link was not working in FeatureInfo component ([109901c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/109901c2c73a88fd124f25cc1e4a0a1a98ca3248))
+
 ## [1.14.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.13.0...city-infrastructure-platform-v1.14.0) (2025-05-12)
 
 
