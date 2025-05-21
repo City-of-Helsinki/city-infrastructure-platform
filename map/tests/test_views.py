@@ -65,33 +65,52 @@ class MapConfigTestCase(TestCase):
             f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/png/traffic_sign_icons/{idc.png_size}/",
         )
 
-    def test_layer_config_return_ok(self):
+    def test_layer_config_return_ok_en(self):
+        self._do_test_layer_config_ok("en")
+
+    def test_layer_config_return_ok_fi(self):
+        self._do_test_layer_config_ok("fi")
+
+    def test_layer_config_return_ok_sv(self):
+        self._do_test_layer_config_ok("sv")
+
+    def test_layer_config_return_ok_not_supported(self):
+        self._do_test_layer_config_ok("not_supported_lang", "fi")
+
+    def _do_test_layer_config_ok(self, language_code, expected_language_code=None):
+        expect_language_code = expected_language_code or language_code
         Layer.objects.create(
             identifier="basemap",
             name_en="Basemap en",
             name_fi="Basemap fi",
+            name_sv="Basemap sv",
             is_basemap=True,
         )
         Layer.objects.create(
             identifier="overlay-1",
             name_en="Overlay 1 en",
             name_fi="Overlay 1 fi",
+            name_sv="Overlay 1 sv",
             is_basemap=False,
         )
         Layer.objects.create(
             identifier="overlay-2",
             name_en="Overlay 2 en",
             name_fi="Overlay 2 fi",
+            name_sv="Overlay 2 sv",
             is_basemap=False,
         )
         FeatureTypeEditMapping.objects.create(name="featurename", edit_name="edit_featurename")
         request = self.factory.get(reverse("map-config"))
-        request.LANGUAGE_CODE = "en"
+        request.LANGUAGE_CODE = language_code
         response = map_config(request)
         self.assertEqual(response.status_code, 200)
         response_data = json.loads(response.content)
         self.assertEqual(len(response_data["basemapConfig"]["layers"]), 1)
+        self.assertEqual(response_data["basemapConfig"]["layers"][0]["name"], f"Basemap {expect_language_code}")
         self.assertEqual(len(response_data["overlayConfig"]["layers"]), 2)
+        self.assertEqual(response_data["overlayConfig"]["layers"][0]["name"], f"Overlay 1 {expect_language_code}")
+        self.assertEqual(response_data["overlayConfig"]["layers"][1]["name"], f"Overlay 2 {expect_language_code}")
         self.assertEqual(
             response_data["overviewConfig"]["imageUrl"],
             f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/png/map/cityinfra_overview_map-704x704.png",
