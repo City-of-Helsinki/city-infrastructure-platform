@@ -284,15 +284,18 @@ class Map {
         .flat(1);
 
       if (realFeatures.length && planFeatures.length) {
-        realFeatures.forEach((realFeature) => {
+        const byPlanId = Object.fromEntries(planFeatures.map((pf) => {
+          return [pf.get("id"), pf];
+        }));
+        for (const realFeature of realFeatures) {
           const device_plan_id = realFeature.get("device_plan_id");
           if (device_plan_id) {
-            const planFeature = planFeatures.filter((planFeature) => planFeature.get("id") === device_plan_id);
-            if (planFeature.length) {
-              this.drawLineBetweenFeatures(realFeature, planFeature[0]);
+            const planFeature = byPlanId[device_plan_id];
+            if (planFeature) {
+              this.drawLineBetweenFeatures(realFeature, planFeature);
             }
           }
-        });
+        }
       }
     }
   }
