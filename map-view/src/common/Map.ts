@@ -66,6 +66,11 @@ class Map {
   private planRealDiffVectorLayer: VectorLayer<VectorSource>;
 
   /**
+   * A layer to draw plan of selected feature (from FeatureInfo)
+   */
+  private planOfRealVectorLayer: VectorLayer<VectorSource>;
+
+  /**
    * Callback function to process features returned from GetFeatureInfo requests
    *
    * @param features Features returned from GetFeatureInfo requests
@@ -84,6 +89,7 @@ class Map {
     const clusteredOverlayLayerGroup = this.createClusteredOverlayLayerGroup(mapConfig);
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
     this.planRealDiffVectorLayer = Map.createPlanRealDiffVectorLayer();
+    this.planOfRealVectorLayer = Map.createPlanOfRealVectorLayer();
 
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
     const projection = this.getProjection();
@@ -102,6 +108,7 @@ class Map {
         clusteredOverlayLayerGroup,
         nonClusteredOverlayLayerGroup,
         this.planRealDiffVectorLayer,
+        this.planOfRealVectorLayer,
       ],
       controls: this.getControls(),
       view,
@@ -207,7 +214,7 @@ class Map {
   /**
    * Draw a line to planRealDiffVectorLayer between two features
    */
-  drawLineBetweenFeatures(feature1: Feature | FeatureLike, feature2: Feature | FeatureLike) {
+  drawLineBetweenFeatures(feature1: Feature | FeatureLike, feature2: Feature | FeatureLike, layer: VectorLayer) {
     const location1 = feature1.getProperties().geometry.getFlatCoordinates();
     const location2 = feature2.getProperties().geometry.getFlatCoordinates();
     const lineString = new LineString([location1, location2]);
@@ -215,7 +222,7 @@ class Map {
       geometry: lineString,
       name: "Line",
     });
-    this.planRealDiffVectorLayer.getSource()!.addFeature(olFeature);
+    layer.getSource()!.addFeature(olFeature);
   }
 
   /**
@@ -241,12 +248,12 @@ class Map {
               overlayConfig.sourceUrl +
               `?${buildWFSQuery(feature_layer.identifier, "id", feature.getProperties().device_plan_id)}`,
           });
-          this.planRealDiffVectorLayer.setSource(vectorSource);
+          this.planOfRealVectorLayer.setSource(vectorSource);
 
           vectorSource.on("featuresloadend", (featureEvent) => {
             const features = featureEvent.features;
             if (features) {
-              this.drawLineBetweenFeatures(feature, features[0]);
+              this.drawLineBetweenFeatures(feature, features[0], this.planOfRealVectorLayer);
 
               // Return distance between Real and Plan
               resolve(getDistanceBetweenFeatures(feature, features[0]));
@@ -254,15 +261,7 @@ class Map {
           });
         }
       } else {
-        // If clicked feature belongs to planRealDiffVectorLayer, don't clear the layer
-        const planRealDiffVectorLayerSource = this.planRealDiffVectorLayer.getSource();
-        // @ts-ignore
-        const diffFeatures = Object.values(planRealDiffVectorLayerSource!.getFeatures()).filter(
-          (f) => f.getId() === feature.id_,
-        );
-        if (!diffFeatures.length) {
-          planRealDiffVectorLayerSource!.clear();
-        }
+        this.clearPlanOfRealVectorLayer();
       }
     });
   }
@@ -284,15 +283,17 @@ class Map {
         .flat(1);
 
       if (realFeatures.length && planFeatures.length) {
-        const byPlanId = Object.fromEntries(planFeatures.map((pf) => {
-          return [pf.get("id"), pf];
-        }));
+        const byPlanId = Object.fromEntries(
+          planFeatures.map((pf) => {
+            return [pf.get("id"), pf];
+          }),
+        );
         for (const realFeature of realFeatures) {
           const device_plan_id = realFeature.get("device_plan_id");
           if (device_plan_id) {
             const planFeature = byPlanId[device_plan_id];
             if (planFeature) {
-              this.drawLineBetweenFeatures(realFeature, planFeature);
+              this.drawLineBetweenFeatures(realFeature, planFeature, this.planRealDiffVectorLayer);
             }
           }
         }
@@ -346,6 +347,26 @@ class Map {
     });
   }
 
+  private static createPlanOfRealVectorLayer() {
+    const planOfRealVectorLayer = new VectorSource({});
+    return new VectorLayer({
+      source: planOfRealVectorLayer,
+      // Point style
+      style: new Style({
+        image: new Circle({
+          radius: 6,
+          fill: new Fill({
+            color: "#F20",
+          }),
+          stroke: new Stroke({
+            color: "#222",
+            width: 1,
+          }),
+        }),
+      }),
+    });
+  }
+
   registerFeatureInfoCallback(fn: (features: Feature[]) => void) {
     this.featureInfoCallback = fn;
   }
@@ -379,6 +400,10 @@ class Map {
 
   clearPlanRealDiffVectorLayer() {
     this.planRealDiffVectorLayer.getSource()!.clear();
+  }
+
+  clearPlanOfRealVectorLayer() {
+    this.planOfRealVectorLayer.getSource()!.clear();
   }
 
   applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {

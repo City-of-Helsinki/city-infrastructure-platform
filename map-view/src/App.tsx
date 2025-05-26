@@ -74,7 +74,7 @@ class App extends React.Component<AppProps, AppState> {
               onSelectFeature={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
               onClose={() => {
                 this.setState({ features: [] });
-                Map.clearPlanRealDiffVectorLayer();
+                Map.clearPlanOfRealVectorLayer();
               }}
             />
           )}
