@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.15.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.15.0...city-infrastructure-platform-v1.15.1) (2025-05-27)
+
+
+### Bug Fixes
+
+* Map-view line drawing between plan and real features was very slow ([f1c348b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f1c348b4532ee296575bcf2c192eee4c8758c9e5))
+* Plan and real difference line dissappeared every time when FeatureInfo was opened. ([fe28898](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/fe288986881ae5e62d2104f4666cabee4057cda2))
+
 ## [1.15.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.14.0...city-infrastructure-platform-v1.15.0) (2025-05-21)
 
 
