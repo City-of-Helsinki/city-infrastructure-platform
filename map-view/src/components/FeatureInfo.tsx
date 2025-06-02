@@ -10,9 +10,9 @@ import NavigateBefore from "@mui/icons-material/NavigateBefore";
 import NavigateNext from "@mui/icons-material/NavigateNext";
 import React from "react";
 import { APIBaseUrl } from "../consts";
-import { Feature, MapConfig } from "../models";
+import { Feature, FeatureProperties, MapConfig } from "../models";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { getFeatureAppName, getFeatureLayerName } from "../common/MapUtils";
+import { getFeatureAppName, getFeatureLayerExtraInfoFields, getFeatureLayerName } from "../common/MapUtils";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -97,11 +97,8 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     this.runOnSelectFeature(featureIndex);
   }
 
-  render() {
-    const { features, classes, onClose, t, mapConfig } = this.props;
-    const { featureIndex } = this.state;
-    const feature = features[featureIndex];
-
+  renderCommonFields(feature: Feature) {
+    const { t } = this.props;
     const {
       id,
       value,
@@ -114,6 +111,73 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
       additional_information,
     } = feature.getProperties();
     const deviceTypeText = `${device_type_code} - ${device_type_description}${value ? ` (${value})` : ""}`;
+    const additionalInfoText = txt || additional_information;
+
+    return (
+      <>
+        <b>Id</b>: {id}
+        {device_type_code && (
+          <>
+            <br />
+            <b>{t("Device type")}</b>: {deviceTypeText}
+          </>
+        )}
+        {mount_type_description_fi && !device_type_code && (
+          <>
+            <br />
+            <b>{t("Mount type")}</b>: {mount_type_description_fi}
+          </>
+        )}
+        {direction && (
+          <>
+            <br />
+            <b>{t("Direction")}</b>: {direction}
+          </>
+        )}
+        {additionalInfoText && (
+          <>
+            <br />
+            <b>{t("Additional info")}</b>: {additionalInfoText}
+          </>
+        )}
+        {content_s && (
+          <>
+            <br />
+            <b>{t("Content Schema")}</b>: {JSON.stringify(content_s)}
+          </>
+        )}
+        {feature.getProperties().device_plan_id && (
+          <>
+            <br />
+            <b>{t("Distance to plan")}</b>: {this.state.realPlanDistance} m
+          </>
+        )}
+      </>
+    );
+  }
+
+  renderFeatureSpecificFields(feature: Feature, mapConfig: MapConfig) {
+    const extra_fields = getFeatureLayerExtraInfoFields(feature, mapConfig.overlayConfig);
+    if (extra_fields) {
+      return (
+        <>
+          {Object.entries(extra_fields).map(([key, value]) => (
+            <React.Fragment key={key}>
+              <br />
+              <b>{value}</b>: {JSON.stringify(feature.getProperties()[key as keyof FeatureProperties])}{" "}
+            </React.Fragment>
+          ))}
+        </>
+      );
+    } else {
+      return <></>;
+    }
+  }
+
+  render() {
+    const { features, classes, onClose, t, mapConfig } = this.props;
+    const { featureIndex } = this.state;
+    const feature = features[featureIndex];
 
     // Only run when distance is undefined (don't spam requests)
     if (this.state.realPlanDistance === undefined) {
@@ -127,39 +191,10 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
             {this.getFeatureInfoTitle(feature)}
           </Typography>
           <Typography className={classes.content} variant="body1" component="p">
-            <b>Id</b>: {id}
-            {device_type_code && (
-              <>
-                <br />
-                <b>{t("Device type")}</b>: {deviceTypeText}
-              </>
-            )}
-            {mount_type_description_fi && !device_type_code && (
-              <>
-                <br />
-                <b>{t("Mount type")}</b>: {mount_type_description_fi}
-              </>
-            )}
-            {direction && (
-              <>
-                <br />
-                <b>{t("Direction")}</b>: {direction}
-              </>
-            )}
-            <br />
-            <b>{t("Additional info")}</b>: {txt || additional_information}
-            {content_s && (
-              <>
-                <br />
-                <b>{t("Content Schema")}</b>: {JSON.stringify(content_s)}
-              </>
-            )}
-            {feature.getProperties().device_plan_id && (
-              <>
-                <br />
-                <b>{t("Distance to plan")}</b>: {this.state.realPlanDistance} m
-              </>
-            )}
+            {this.renderCommonFields(feature)}
+          </Typography>
+          <Typography className={classes.content} variant="body1" component="p">
+            {this.renderFeatureSpecificFields(feature, mapConfig)}
           </Typography>
         </CardContent>
         <CardActions>

@@ -3,6 +3,8 @@ import uuid
 from django.db import models, NotSupportedError
 from django.utils.translation import gettext_lazy as _
 
+from map.validators import validate_layer_extra_feature_info
+
 
 class Layer(models.Model):
     identifier = models.CharField(_("Identifier"), max_length=200)
@@ -15,6 +17,13 @@ class Layer(models.Model):
     filter_fields = models.CharField(_("Filter fields"), max_length=200, blank=True)
     use_traffic_sign_icons = models.BooleanField(_("Use Traffic Sign Icons"), default=False)
     clustered = models.BooleanField(_("Clustered"), default=True)
+    extra_feature_info = models.JSONField(
+        _("Extra Feature Info"),
+        null=True,
+        blank=True,
+        help_text=_("Fields added here need to be included in the corresponding WFS Feature"),
+        validators=[validate_layer_extra_feature_info],
+    )
 
     class Meta:
         verbose_name = _("Layer")
@@ -23,6 +32,10 @@ class Layer(models.Model):
 
     def __str__(self):
         return self.name_fi
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class FeatureTypeEditMapping(models.Model):

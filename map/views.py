@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
@@ -8,6 +10,8 @@ from django.utils.translation import gettext as _
 from traffic_control.services.icon_draw_config import get_icons_relative_url, get_icons_scale, get_icons_type
 
 from .models import FeatureTypeEditMapping, Layer
+
+logger = logging.getLogger("map")
 
 ALLOWED_MAP_LANGUAGE_CODES = ["en", "fi", "sv"]
 """Layer model needs to have field name_<language_code>"""
@@ -39,6 +43,7 @@ def map_config(request):
                 "filter_fields": overlay.filter_fields.split(",") if overlay.filter_fields != "" else [],
                 "use_traffic_sign_icons": overlay.use_traffic_sign_icons,
                 "clustered": overlay.clustered,
+                "extra_feature_info": _get_extra_feature_info(language_code, overlay),
             }
         )
 
@@ -65,6 +70,23 @@ def map_config(request):
         "featureTypeEditNameMapping": FeatureTypeEditMapping.get_featuretype_edit_name_mapping(),
     }
     return JsonResponse(config)
+
+
+def _get_extra_feature_info(language_code: str, layer: Layer) -> dict:
+    layer_extra_info = layer.extra_feature_info
+    localized_extra_info = {}
+    if layer_extra_info:
+        for k, v in layer_extra_info.items():
+            localized_title = v.get(f"title_{language_code}", None)
+            if not localized_title:
+                logger.warning(
+                    f"localized title not found from layer info for field {k}: {v}: {language_code},"
+                    f" defaulting to fi"
+                )
+                localized_extra_info[k] = v.get("title_fi")
+            else:
+                localized_extra_info[k] = localized_title
+    return localized_extra_info
 
 
 def _get_overview_image_extent():

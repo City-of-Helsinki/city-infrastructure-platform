@@ -157,6 +157,11 @@ export function getFeatureLayerName(feature: Feature, overlayConfig: LayerConfig
   return feature_layer ? feature_layer["name"] : "FeatureInfo title (missing)";
 }
 
+export function getFeatureLayerExtraInfoFields(feature: Feature, overlayConfig: LayerConfig) {
+  const feature_layer = getFeatureLayer(getFeatureType(feature), overlayConfig);
+  return feature_layer ? feature_layer["extra_feature_info"] : {};
+}
+
 function getFeatureLayer(featureType: string, overlayConfig: LayerConfig) {
   return overlayConfig["layers"].find((l) => l.identifier === featureType);
 }
