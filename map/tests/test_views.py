@@ -1,6 +1,8 @@
 import json
 
+import pytest
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
@@ -32,6 +34,7 @@ class MapViewTestCase(TestCase):
 class MapConfigTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
+        self.extra_feature_info = {"testfield": {"title_fi": "testi kenttä", "title_en": "test field"}}
 
     def test_with_no_icon_draw_config(self):
         """Test that without any active IconDrawingConfig the default values are used."""
@@ -66,18 +69,22 @@ class MapConfigTestCase(TestCase):
         )
 
     def test_layer_config_return_ok_en(self):
-        self._do_test_layer_config_ok("en")
+        self._do_test_layer_config_ok("en", self.extra_feature_info.get("testfield").get("title_en"))
 
     def test_layer_config_return_ok_fi(self):
-        self._do_test_layer_config_ok("fi")
+        self._do_test_layer_config_ok("fi", self.extra_feature_info.get("testfield").get("title_fi"))
 
     def test_layer_config_return_ok_sv(self):
-        self._do_test_layer_config_ok("sv")
+        self._do_test_layer_config_ok("sv", self.extra_feature_info.get("testfield").get("title_fi"))
 
     def test_layer_config_return_ok_not_supported(self):
-        self._do_test_layer_config_ok("not_supported_lang", "fi")
+        self._do_test_layer_config_ok(
+            "not_supported_lang",
+            self.extra_feature_info.get("testfield").get("title_fi"),
+            "fi",
+        )
 
-    def _do_test_layer_config_ok(self, language_code, expected_language_code=None):
+    def _do_test_layer_config_ok(self, language_code, expected_testfield_value, expected_language_code=None):
         expect_language_code = expected_language_code or language_code
         Layer.objects.create(
             identifier="basemap",
@@ -99,6 +106,7 @@ class MapConfigTestCase(TestCase):
             name_fi="Overlay 2 fi",
             name_sv="Overlay 2 sv",
             is_basemap=False,
+            extra_feature_info=self.extra_feature_info,
         )
         FeatureTypeEditMapping.objects.create(name="featurename", edit_name="edit_featurename")
         request = self.factory.get(reverse("map-config"))
@@ -111,9 +119,43 @@ class MapConfigTestCase(TestCase):
         self.assertEqual(len(response_data["overlayConfig"]["layers"]), 2)
         self.assertEqual(response_data["overlayConfig"]["layers"][0]["name"], f"Overlay 1 {expect_language_code}")
         self.assertEqual(response_data["overlayConfig"]["layers"][1]["name"], f"Overlay 2 {expect_language_code}")
+        self.assertEqual(response_data["overlayConfig"]["layers"][0]["extra_feature_info"], {})
+        self.assertEqual(
+            response_data["overlayConfig"]["layers"][1]["extra_feature_info"]["testfield"],
+            expected_testfield_value,
+        )
         self.assertEqual(
             response_data["overviewConfig"]["imageUrl"],
             f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/png/map/cityinfra_overview_map-704x704.png",
         )
         self.assertEqual(response_data["overviewConfig"]["imageExtent"], [25490088.0, 6665065.0, 25512616, 6687593.0])
         self.assertEqual(response_data["featureTypeEditNameMapping"], {"featurename": "edit_featurename"})
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "extra_feature_info, exception_msg",
+    (
+        ({"testfield": None}, "Extra Feature Info field data value cannot be empty for key: testfield"),
+        ({"testfield": {"title_sv": None}}, "Extra field testfield does not have mandatory value title_fi"),
+        (
+            {"testfield": {"title_fi": None, "empty_list": [], "empty_dict": {}, "emptry_string": ""}},
+            "Extra Feature Info field data cannot be empty:",
+        ),
+    ),
+)
+def test_extra_feature_info_not_ok(extra_feature_info, exception_msg):
+    layer = Layer(
+        identifier="overlay-1",
+        name_en="Overlay 1 en",
+        name_fi="Overlay 1 fi",
+        name_sv="Overlay 1 sv",
+        is_basemap=False,
+        extra_feature_info=extra_feature_info,
+    )
+    with pytest.raises(ValidationError) as exc_info:
+        # full_clean has to be called so field validators are called.
+        layer.full_clean()
+    assert exc_info.value is not None
+    assert "extra_feature_info" in exc_info.value.error_dict
+    assert exception_msg in exc_info.value.error_dict.get("extra_feature_info", [])[0].messages[0]

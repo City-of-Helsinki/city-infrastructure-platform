@@ -7,6 +7,7 @@ export interface Layer {
   filter_fields?: string[];
   use_traffic_sign_icons: boolean;
   clustered: boolean;
+  extra_feature_info: Record<string, string>;
 }
 
 export interface LayerConfig {
