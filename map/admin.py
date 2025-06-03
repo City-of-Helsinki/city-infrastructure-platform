@@ -9,13 +9,14 @@ class LayerAdmin(admin.ModelAdmin):
         "identifier",
         "name_fi",
         "name_en",
+        "name_sv",
         "is_basemap",
         "order",
         "filter_fields",
         "use_traffic_sign_icons",
         "clustered",
     )
-    search_fields = ("identifier", "name_fi", "name_en")
+    search_fields = ("identifier", "name_fi", "name_en", "name_sv")
     list_filter = ("is_basemap",)
 
 
