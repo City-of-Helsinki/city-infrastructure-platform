@@ -39,6 +39,7 @@ class PlanAdmin(
                     "id",
                     "name",
                     "decision_id",
+                    "decision_date",
                     "diary_number",
                     "drawing_numbers",
                     "decision_url",
@@ -50,7 +51,7 @@ class PlanAdmin(
         (_("Location information"), {"fields": ("derive_location", "location", "z_coord", "location_ewkt")}),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "decision_date")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
         ),
     )
     list_display = ("id", "decision_id", "name", "diary_number", "drawing_numbers", "created_at")
