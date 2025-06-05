@@ -9,6 +9,7 @@ from traffic_control.models import AdditionalSignReal
 from traffic_control.services.additional_sign import additional_sign_plan_get_current
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
+    DEVICE_TYPE_FIELDS,
     EnumNameXsdElement,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
@@ -21,16 +22,6 @@ _base_fields = (
     [
         FeatureField("id", abstract="ID of the Additional Sign."),
         FeatureField("location", abstract="Additional sign's location (point) in EPSG:3879 coordinates."),
-        FeatureField(
-            "device_type_code",
-            model_attribute="device_type.code",
-            abstract="Device type code.",
-        ),
-        FeatureField(
-            "device_type_description",
-            model_attribute="device_type.description",
-            abstract="Device type description.",
-        ),
         FeatureField(
             "order",
             abstract="Order of the additional sign that are in the same point. "
@@ -82,6 +73,7 @@ _base_fields = (
             abstract="Specifies where the mount is in relation to the road.",
         ),
     ]
+    + deepcopy(DEVICE_TYPE_FIELDS)
     + deepcopy(SOURCE_CONTROLLED_MODEL_FIELDS)
     + deepcopy(USER_CONTROLLED_MODEL_FIELDS)
     + deepcopy(OWNED_DEVICE_MODEL_FIELDS)

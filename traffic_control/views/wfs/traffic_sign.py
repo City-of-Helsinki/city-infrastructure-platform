@@ -9,6 +9,7 @@ from traffic_control.models import TrafficSignReal
 from traffic_control.services.traffic_sign import traffic_sign_plan_get_current
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
+    DEVICE_TYPE_FIELDS,
     EnumNameXsdElement,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
@@ -25,12 +26,6 @@ _base_fields = (
         FeatureField("lane_number", abstract="Which lane does this sign affect."),
         FeatureField("lane_type", abstract="The type of lane this sign affects."),
         FeatureField("direction", abstract="Direction of the sign. North=0, East=90, South=180 and West=270."),
-        FeatureField("device_type_code", model_attribute="device_type.code", abstract="Device type code."),
-        FeatureField(
-            "device_type_description",
-            model_attribute="device_type.description",
-            abstract="Device type description.",
-        ),
         FeatureField("height", abstract="Sign's height measured from the top in centimeters."),
         FeatureField(
             "mount_type_description_fi",
@@ -64,6 +59,7 @@ _base_fields = (
             abstract="Specifies where the mount is in relation to the road.",
         ),
     ]
+    + deepcopy(DEVICE_TYPE_FIELDS)
     + deepcopy(SOURCE_CONTROLLED_MODEL_FIELDS)
     + deepcopy(USER_CONTROLLED_MODEL_FIELDS)
     + deepcopy(OWNED_DEVICE_MODEL_FIELDS)
