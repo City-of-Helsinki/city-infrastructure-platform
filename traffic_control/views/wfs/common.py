@@ -57,6 +57,23 @@ REPLACEABLE_MODEL_FIELDS = [
     ),
 ]
 
+DEVICE_TYPE_FIELDS = [
+    FeatureField(
+        "device_type_code",
+        model_attribute="device_type.code",
+        abstract="Device type code.",
+    ),
+    FeatureField(
+        "device_type_description",
+        model_attribute="device_type.description",
+        abstract="Device type description.",
+    ),
+    FeatureField(
+        "device_type_icon",
+        model_attribute="device_type.icon",
+        abstract="Device type icon.",
+    ),
+]
 ChunkedQuerySetIterator._restore_caches = replace__restore_caches
 
 

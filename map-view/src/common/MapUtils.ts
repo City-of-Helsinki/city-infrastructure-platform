@@ -82,7 +82,12 @@ export function getSinglePointStyle(
     // Traffic sign style
     return new Style({
       image: new Icon({
-        src: getIconSrc(traffic_sign_icons_url, icon_type, feature.get("device_type_code")),
+        src: getIconSrc(
+          traffic_sign_icons_url,
+          icon_type,
+          feature.get("device_type_code"),
+          feature.get("device_type_icon"),
+        ),
         scale: icon_scale,
       }),
     });
@@ -92,13 +97,27 @@ export function getSinglePointStyle(
   return getStylesForGeometry(geometry);
 }
 
-function getIconSrc(traffic_sign_icons_url: string, icon_type: string, device_type_code: string) {
-  const base_src = `${traffic_sign_icons_url}${device_type_code}.svg`;
+function getIconSrc(
+  traffic_sign_icons_url: string,
+  icon_type: string,
+  device_type_code: string,
+  overridden_icon: string = "",
+) {
+  const base_src = getIconBaseSrc(traffic_sign_icons_url, device_type_code, overridden_icon);
   if (icon_type === "png") {
     return base_src.concat(".png");
   } else {
     return base_src;
   }
+}
+
+/**
+ *
+ * @param device_type_code
+ * @param overridden_icon it is assumed that this ends always with .svg
+ */
+function getIconBaseSrc(traffic_sign_icons_url: string, device_type_code: string, overridden_icon: string) {
+  return `${traffic_sign_icons_url}${overridden_icon || `${device_type_code}.svg`}`;
 }
 
 export function getStylesForGeometry(geometry: Geometry | RenderFeature | undefined) {
