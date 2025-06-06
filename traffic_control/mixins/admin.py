@@ -23,6 +23,17 @@ class Geometry3DFieldAdminMixin:
     """
 
     gis_widget = CityInfra3DOSMWidget
+    SHOW_Z_COORD = True
+
+    def get_fieldsets(self, request, obj=None, **kwargs):
+        fieldsets = super().get_fieldsets(request, obj, **kwargs)
+        if not self.SHOW_Z_COORD:
+            for _, fields in fieldsets:
+                if "z_coord" in fields["fields"]:
+                    temp_list = list(fields["fields"])
+                    temp_list.remove("z_coord")
+                    fields["fields"] = temp_list
+        return fieldsets
 
 
 class UserStampedAdminMixin:

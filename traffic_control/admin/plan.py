@@ -31,6 +31,7 @@ class PlanAdmin(
     AuditLogHistoryAdmin,
 ):
     form = PlanModelForm
+    SHOW_Z_COORD = False
     fieldsets = (
         (
             _("General information"),

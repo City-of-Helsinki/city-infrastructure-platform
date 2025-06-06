@@ -105,6 +105,7 @@ class RoadMarkingPlanAdmin(
     resource_class = RoadMarkingPlanResource
     extra_export_resource_classes = [RoadMarkingPlanToRealTemplateResource]
     form = RoadMarkingPlanModelForm
+    SHOW_Z_COORD = False
     fieldsets = (
         (
             _("General information"),
@@ -234,6 +235,7 @@ class RoadMarkingRealAdmin(
     plan_model_field_name = "road_marking_plan"
     resource_class = RoadMarkingRealResource
     form = RoadMarkingRealModelForm
+    SHOW_Z_COORD = False
     fieldsets = (
         (
             _("General information"),

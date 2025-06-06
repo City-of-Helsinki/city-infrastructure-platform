@@ -178,7 +178,7 @@ class SRIDBoundGeometryFormMixin:
 class Geometry3DFieldForm(forms.ModelForm):
     """Form class that allows entering a z coordinate for 3d point and location in ewkt format"""
 
-    z_coord = forms.FloatField(label=_("Location (z)"), initial=0)
+    z_coord = forms.FloatField(label=_("Location (z)"), initial=0, required=False)
     location_ewkt = forms.CharField(label=_("Location (EWKT)"), widget=forms.Textarea, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -195,7 +195,7 @@ class Geometry3DFieldForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        z_coord = cleaned_data.pop("z_coord", 0)
+        z_coord = cleaned_data.pop("z_coord", 0) or 0
         location = cleaned_data.get("location", None)
         location_ewkt = cleaned_data.get("location_ewkt", None)
         new_geom = self._get_new_geom(location, location_ewkt, z_coord)
