@@ -5,7 +5,7 @@ from map.models import IconDrawingConfig
 
 def get_active_icon_drawing_config():
     try:
-        return IconDrawingConfig.objects.get(active=True)
+        return IconDrawingConfig.objects.get(enabled=True)
     except models.ObjectDoesNotExist:
         return None
 

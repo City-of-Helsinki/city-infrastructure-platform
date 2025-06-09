@@ -9,7 +9,7 @@ class IconDrawingConfigFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("name",)
 
     name = factory.Sequence(lambda n: f"iconDrawConfig{n}")
-    active = False
+    enabled = False
     image_type = "svg"
     png_size = 32
     scale = IconDrawingConfig.DEFAULT_ICON_SCALE

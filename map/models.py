@@ -75,7 +75,7 @@ class IconDrawingConfig(models.Model):
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     name = models.CharField(_("Name"), max_length=200, unique=True)
-    active = models.BooleanField(_("Active"), default=False)
+    enabled = models.BooleanField(_("Enabled"), default=False)
     image_type = models.CharField(_("Image Type"), choices=ImageType.choices, max_length=10, null=False, blank=False)
     png_size = models.IntegerField(_("PNG Size"), choices=PngSize.choices, null=False, blank=False)
     scale = models.FloatField(_("Scale"), null=True, blank=False, default=None)
@@ -86,9 +86,9 @@ class IconDrawingConfig(models.Model):
             name="%(app_label)s_%(class)s_unique_image_type_png_size",
         ),
         models.UniqueConstraint(
-            fields=["active"],
-            condition=models.Q(active=True),
-            name="%(app_label)s_%(class)s_unique_active",
+            fields=["enabled"],
+            condition=models.Q(enabled=True),
+            name="%(app_label)s_%(class)s_unique_enabled",
         ),
     ]
 
