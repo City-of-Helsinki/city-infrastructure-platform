@@ -53,7 +53,7 @@ class MapConfigTestCase(TestCase):
 
     def test_with_icon_draw_config(self):
         """Test that with an active IconDrawingConfig the values are actually used."""
-        idc = IconDrawingConfigFactory(active=True, scale=IconDrawingConfig.DEFAULT_ICON_SCALE + 0.1, image_type="png")
+        idc = IconDrawingConfigFactory(enabled=True, scale=IconDrawingConfig.DEFAULT_ICON_SCALE + 0.1, image_type="png")
         request = self.factory.get(reverse("map-config"))
         request.LANGUAGE_CODE = "en"
 

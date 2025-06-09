@@ -27,4 +27,4 @@ class FeatureTypeEditMappingAdmin(admin.ModelAdmin):
 
 @admin.register(IconDrawingConfig)
 class IconDrawingInfoAdmin(admin.ModelAdmin):
-    list_display = ("name", "image_type", "png_size", "active")
+    list_display = ("name", "image_type", "png_size", "enabled")
