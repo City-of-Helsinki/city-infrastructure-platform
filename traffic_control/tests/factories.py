@@ -692,8 +692,7 @@ class TrafficSignRealFactory(factory.django.DjangoModelFactory):
     location_specifier = None
     validity_period_start = None
     validity_period_end = None
-    seasonal_validity_period_start = None
-    seasonal_validity_period_end = None
+    seasonal_validity_period_information = ""
     owner = factory.SubFactory(OwnerFactory)
     traffic_sign_plan = None
     legacy_code = "TestLegacyCode"
@@ -823,8 +822,7 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
     location_specifier = None
     validity_period_start = None
     validity_period_end = None
-    seasonal_validity_period_start = None
-    seasonal_validity_period_end = None
+    seasonal_validity_period_information = ""
     owner = factory.SubFactory(OwnerFactory)
     responsible_entity = None
     parent = factory.SubFactory(TrafficSignRealFactory)

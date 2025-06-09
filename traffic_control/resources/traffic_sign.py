@@ -69,8 +69,7 @@ class AbstractTrafficSignResource(ResponsibleEntityPermissionImportMixin, Generi
             "location_specifier",
             "validity_period_start",
             "validity_period_end",
-            "seasonal_validity_period_start",
-            "seasonal_validity_period_end",
+            "seasonal_validity_period_information",
         ) + SOURCE_NAME_ID_FIELDS
 
 

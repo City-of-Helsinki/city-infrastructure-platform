@@ -79,8 +79,7 @@ class AbstractSignpostResource(
             "target_txt",
             "validity_period_start",
             "validity_period_end",
-            "seasonal_validity_period_start",
-            "seasonal_validity_period_end",
+            "seasonal_validity_period_information",
             "parent__id",
         ) + SOURCE_NAME_ID_FIELDS
 

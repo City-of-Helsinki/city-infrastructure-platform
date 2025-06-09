@@ -242,3 +242,28 @@ class BoundaryCheckedLocationMixin:
             raise ValidationError(f"Geometry for {self._meta.model_name} {self.location.ewkt} is not legal")
 
         super().save(*args, **kwargs)
+
+
+class ValidityPeriodModel(models.Model):
+    validity_period_start = models.DateField(
+        _("Validity period start"),
+        blank=True,
+        null=True,
+        help_text=_("Date on which this sign becomes active."),
+    )
+    validity_period_end = models.DateField(
+        _("Validity period end"),
+        blank=True,
+        null=True,
+        help_text=_("Date after which this sign becomes inactive."),
+    )
+    seasonal_validity_period_information = models.TextField(
+        _("Seasonal validity period information"),
+        blank=True,
+        null=False,
+        default="",
+        help_text=_("Seasonal validity period information related to this device."),
+    )
+
+    class Meta:
+        abstract = True

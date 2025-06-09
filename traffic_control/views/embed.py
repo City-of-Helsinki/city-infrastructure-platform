@@ -134,8 +134,7 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "value",
         "validity_period_start",
         "validity_period_end",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
+        "seasonal_validity_period_information",
         #
         "owner",
         "responsible_entity",
@@ -173,8 +172,7 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "content_s",
         "validity_period_start",
         "validity_period_end",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
+        "seasonal_validity_period_information",
         "additional_information",
         #
         "owner",
@@ -251,8 +249,7 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         "value",
         "validity_period_start",
         "validity_period_end",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
+        "seasonal_validity_period_information",
         #
         "condition",
         "installation_date",
@@ -303,8 +300,7 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         "content_s",
         "validity_period_start",
         "validity_period_end",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
+        "seasonal_validity_period_information",
         #
         "condition",
         "installation_date",

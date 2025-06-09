@@ -19,6 +19,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    ValidityPeriodModel,
 )
 from traffic_control.models.common import (
     OperationBase,
@@ -62,7 +63,12 @@ class LocationSpecifier(models.IntegerChoices):
 
 
 class AbstractRoadMarking(
-    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+    BoundaryCheckedLocationMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
+    OwnedDeviceModel,
+    ValidityPeriodModel,
 ):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
@@ -142,30 +148,6 @@ class AbstractRoadMarking(
         blank=True,
         null=True,
         help_text=_("Additional device type codes specific to the local public authorities."),
-    )
-    validity_period_start = models.DateField(
-        _("Validity period start"),
-        blank=True,
-        null=True,
-        help_text=_("Date on which this road marking becomes active."),
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"),
-        blank=True,
-        null=True,
-        help_text=_("Date after which this road marking becomes inactive."),
-    )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"),
-        blank=True,
-        null=True,
-        help_text=_("Date on which this road marking becomes seasonally active."),
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"),
-        blank=True,
-        null=True,
-        help_text=_("Date after which this road marking becomes seasonally inactive."),
     )
     symbol = models.CharField(
         _("Symbol"),

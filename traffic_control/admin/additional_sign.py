@@ -160,7 +160,7 @@ class AdditionalSignPlanAdmin(
             {
                 "fields": (
                     ("validity_period_start", "validity_period_end"),
-                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "seasonal_validity_period_information",
                     "lifecycle",
                 )
             },
@@ -299,7 +299,7 @@ class AdditionalSignRealAdmin(
             {
                 "fields": (
                     ("validity_period_start", "validity_period_end"),
-                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "seasonal_validity_period_information",
                     "lifecycle",
                 )
             },
@@ -327,8 +327,7 @@ class AdditionalSignRealAdmin(
         "condition",
         "reflection_class",
         "surface_class",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
+        "seasonal_validity_period_information",
         "owner",
         "lifecycle",
         "road_name",
