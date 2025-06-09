@@ -291,15 +291,9 @@ paths:
         schema:
           type: string
       - in: query
-        name: seasonal_validity_period_end
+        name: seasonal_validity_period_information
         schema:
           type: string
-          format: date
-      - in: query
-        name: seasonal_validity_period_start
-        schema:
-          type: string
-          format: date
       - in: query
         name: size
         schema:
@@ -972,15 +966,9 @@ paths:
           type: string
           format: date-time
       - in: query
-        name: seasonal_validity_period_end
+        name: seasonal_validity_period_information
         schema:
           type: string
-          format: date
-      - in: query
-        name: seasonal_validity_period_start
-        schema:
-          type: string
-          format: date
       - in: query
         name: size
         schema:
@@ -8251,15 +8239,9 @@ paths:
         schema:
           type: string
       - in: query
-        name: seasonal_validity_period_end
+        name: seasonal_validity_period_information
         schema:
           type: string
-          format: date
-      - in: query
-        name: seasonal_validity_period_start
-        schema:
-          type: string
-          format: date
       - in: query
         name: size
         schema:
@@ -8901,15 +8883,9 @@ paths:
         schema:
           type: string
       - in: query
-        name: seasonal_validity_period_end
+        name: seasonal_validity_period_information
         schema:
           type: string
-          format: date
-      - in: query
-        name: seasonal_validity_period_start
-        schema:
-          type: string
-          format: date
       - in: query
         name: size
         schema:
@@ -9746,15 +9722,9 @@ paths:
         schema:
           type: string
       - in: query
-        name: seasonal_validity_period_end
+        name: seasonal_validity_period_information
         schema:
           type: string
-          format: date
-      - in: query
-        name: seasonal_validity_period_start
-        schema:
-          type: string
-          format: date
       - in: query
         name: size
         schema:
@@ -10395,15 +10365,9 @@ paths:
           type: string
           format: date-time
       - in: query
-        name: seasonal_validity_period_end
+        name: seasonal_validity_period_information
         schema:
           type: string
-          format: date
-      - in: query
-        name: seasonal_validity_period_start
-        schema:
-          type: string
-          format: date
       - in: query
         name: signpost_plan
         schema:
@@ -13027,15 +12991,9 @@ paths:
         schema:
           type: string
       - in: query
-        name: seasonal_validity_period_end
+        name: seasonal_validity_period_information
         schema:
           type: string
-          format: date
-      - in: query
-        name: seasonal_validity_period_start
-        schema:
-          type: string
-          format: date
       - in: query
         name: size
         schema:
@@ -13684,15 +13642,9 @@ paths:
           type: string
           format: date-time
       - in: query
-        name: seasonal_validity_period_end
+        name: seasonal_validity_period_information
         schema:
           type: string
-          format: date
-      - in: query
-        name: seasonal_validity_period_start
-        schema:
-          type: string
-          format: date
       - in: query
         name: size
         schema:
@@ -14372,6 +14324,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         order:
           type: integer
           maximum: 32767
@@ -14544,26 +14509,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         created_by:
           type: string
           format: uuid
@@ -14650,6 +14595,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         order:
           type: integer
           maximum: 32767
@@ -14822,26 +14780,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         owner:
           type: string
           format: uuid
@@ -14936,6 +14874,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         order:
           type: integer
           maximum: 32767
@@ -15108,26 +15059,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         created_by:
           type: string
           format: uuid
@@ -15275,6 +15206,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         order:
           type: integer
           maximum: 32767
@@ -15447,26 +15391,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         installation_id:
           type: string
           nullable: true
@@ -15700,6 +15624,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         order:
           type: integer
           maximum: 32767
@@ -15872,26 +15809,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         installation_id:
           type: string
           nullable: true
@@ -21066,6 +20983,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         order:
           type: integer
           maximum: 32767
@@ -21238,26 +21168,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         owner:
           type: string
           format: uuid
@@ -21370,6 +21280,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         order:
           type: integer
           maximum: 32767
@@ -21542,26 +21465,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         installation_id:
           type: string
           nullable: true
@@ -23393,6 +23296,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -23543,26 +23459,6 @@ components:
           nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes seasonally inactive.
         symbol:
           type: string
           nullable: true
@@ -23708,6 +23604,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -23858,26 +23767,6 @@ components:
           nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes seasonally inactive.
         symbol:
           type: string
           nullable: true
@@ -23982,6 +23871,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -24148,26 +24050,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         owner:
           type: string
           format: uuid
@@ -24281,6 +24163,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -24447,26 +24342,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         material:
           type: string
           nullable: true
@@ -25167,6 +25042,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -25322,26 +25210,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         owner:
           type: string
           format: uuid
@@ -25449,6 +25317,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -25604,26 +25485,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         installation_id:
           type: string
           nullable: true
@@ -26100,6 +25961,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -26250,26 +26124,6 @@ components:
           nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes seasonally inactive.
         symbol:
           type: string
           nullable: true
@@ -26388,6 +26242,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -26538,26 +26405,6 @@ components:
           nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes seasonally inactive.
         symbol:
           type: string
           nullable: true
@@ -26689,6 +26536,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -26839,26 +26699,6 @@ components:
           nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes seasonally inactive.
         symbol:
           type: string
           nullable: true
@@ -27044,6 +26884,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -27194,26 +27047,6 @@ components:
           nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes seasonally inactive.
         symbol:
           type: string
           nullable: true
@@ -27447,6 +27280,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -27597,26 +27443,6 @@ components:
           nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this road marking becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this road marking becomes seasonally inactive.
         symbol:
           type: string
           nullable: true
@@ -27761,6 +27587,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -27927,26 +27766,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         created_by:
           type: string
           format: uuid
@@ -28033,6 +27852,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -28199,26 +28031,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         owner:
           type: string
           format: uuid
@@ -28318,6 +28130,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -28484,26 +28309,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         created_by:
           type: string
           format: uuid
@@ -28657,6 +28462,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -28823,26 +28641,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         material:
           type: string
           nullable: true
@@ -29057,6 +28855,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -29223,26 +29034,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         material:
           type: string
           nullable: true
@@ -31056,6 +30847,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -31211,26 +31015,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         created_by:
           type: string
           format: uuid
@@ -31319,6 +31103,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -31474,26 +31271,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         owner:
           type: string
           format: uuid
@@ -31594,6 +31371,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -31749,26 +31539,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         created_by:
           type: string
           format: uuid
@@ -31916,6 +31686,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -32071,26 +31854,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         installation_id:
           type: string
           nullable: true
@@ -32326,6 +32089,19 @@ components:
           nullable: true
           description: Name of the source for where this device was imported from.
           maxLength: 254
+        validity_period_start:
+          type: string
+          format: date
+          nullable: true
+          description: Date on which this sign becomes active.
+        validity_period_end:
+          type: string
+          format: date
+          nullable: true
+          description: Date after which this sign becomes inactive.
+        seasonal_validity_period_information:
+          type: string
+          description: Seasonal validity period information related to this device.
         road_name:
           type: string
           nullable: true
@@ -32481,26 +32257,6 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes inactive.
-        seasonal_validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this sign becomes seasonally active.
-        seasonal_validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this sign becomes seasonally inactive.
         installation_id:
           type: string
           nullable: true

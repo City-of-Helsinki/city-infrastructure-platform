@@ -20,6 +20,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    ValidityPeriodModel,
 )
 from traffic_control.models.common import (
     OperationBase,
@@ -34,7 +35,12 @@ from traffic_control.models.traffic_sign import LocationSpecifier
 
 
 class AbstractSignpost(
-    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+    BoundaryCheckedLocationMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
+    OwnedDeviceModel,
+    ValidityPeriodModel,
 ):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
@@ -158,30 +164,6 @@ class AbstractSignpost(
         blank=True,
         null=True,
         help_text=_("Specifies where the sign is in relation to the road."),
-    )
-    validity_period_start = models.DateField(
-        _("Validity period start"),
-        blank=True,
-        null=True,
-        help_text=_("Date on which this sign becomes active."),
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"),
-        blank=True,
-        null=True,
-        help_text=_("Date after which this sign becomes inactive."),
-    )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"),
-        blank=True,
-        null=True,
-        help_text=_("Date on which this sign becomes seasonally active."),
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"),
-        blank=True,
-        null=True,
-        help_text=_("Date after which this sign becomes seasonally inactive."),
     )
 
     class Meta:

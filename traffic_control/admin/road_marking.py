@@ -160,7 +160,7 @@ class RoadMarkingPlanAdmin(
             {
                 "fields": (
                     ("validity_period_start", "validity_period_end"),
-                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "seasonal_validity_period_information",
                     "lifecycle",
                 )
             },
@@ -296,7 +296,7 @@ class RoadMarkingRealAdmin(
             {
                 "fields": (
                     ("validity_period_start", "validity_period_end"),
-                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "seasonal_validity_period_information",
                     "lifecycle",
                 )
             },

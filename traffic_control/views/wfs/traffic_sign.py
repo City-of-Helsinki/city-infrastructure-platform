@@ -46,12 +46,8 @@ _base_fields = (
             abstract="Ending date for period that the sign is temporarily valid/invalid.",
         ),
         FeatureField(
-            "seasonal_validity_period_start",
-            abstract="Starting date for period that the sign is valid/invalid",
-        ),
-        FeatureField(
-            "seasonal_validity_period_end",
-            abstract="Ending date for period that the sign is temporarily valid/invalid",
+            "seasonal_validity_period_information",
+            abstract="Additional sign's validity period information.",
         ),
         FeatureField(
             "location_specifier",

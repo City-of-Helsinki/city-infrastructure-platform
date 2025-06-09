@@ -19,6 +19,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    ValidityPeriodModel,
 )
 from traffic_control.models.affect_area import CoverageArea
 from traffic_control.models.common import (
@@ -40,7 +41,12 @@ class Color(models.IntegerChoices):
 
 
 class AbstractAdditionalSign(
-    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+    BoundaryCheckedLocationMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
+    OwnedDeviceModel,
+    ValidityPeriodModel,
 ):
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
@@ -156,30 +162,6 @@ class AbstractAdditionalSign(
         blank=True,
         null=True,
         help_text=_("Specifies where the sign is in relation to the road."),
-    )
-    validity_period_start = models.DateField(
-        _("Validity period start"),
-        blank=True,
-        null=True,
-        help_text=_("Date on which this sign becomes active."),
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"),
-        blank=True,
-        null=True,
-        help_text=_("Date after which this sign becomes inactive."),
-    )
-    seasonal_validity_period_start = models.DateField(
-        _("Seasonal validity period start"),
-        blank=True,
-        null=True,
-        help_text=_("Date on which this sign becomes seasonally active."),
-    )
-    seasonal_validity_period_end = models.DateField(
-        _("Seasonal validity period end"),
-        blank=True,
-        null=True,
-        help_text=_("Date after which this sign becomes seasonally inactive."),
     )
 
     class Meta:

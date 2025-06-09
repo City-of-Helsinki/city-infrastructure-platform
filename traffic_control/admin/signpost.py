@@ -139,7 +139,7 @@ class SignpostPlanAdmin(
             {
                 "fields": (
                     ("validity_period_start", "validity_period_end"),
-                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "seasonal_validity_period_information",
                     "lifecycle",
                 )
             },
@@ -272,7 +272,7 @@ class SignpostRealAdmin(
             {
                 "fields": (
                     ("validity_period_start", "validity_period_end"),
-                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "seasonal_validity_period_information",
                     "lifecycle",
                 )
             },

@@ -212,7 +212,7 @@ class TrafficSignPlanAdmin(
             {
                 "fields": (
                     ("validity_period_start", "validity_period_end"),
-                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "seasonal_validity_period_information",
                     "lifecycle",
                 )
             },
@@ -363,7 +363,7 @@ class TrafficSignRealAdmin(
             {
                 "fields": (
                     ("validity_period_start", "validity_period_end"),
-                    ("seasonal_validity_period_start", "seasonal_validity_period_end"),
+                    "seasonal_validity_period_information",
                     "lifecycle",
                 )
             },
@@ -392,8 +392,7 @@ class TrafficSignRealAdmin(
         "condition",
         "reflection_class",
         "surface_class",
-        "seasonal_validity_period_start",
-        "seasonal_validity_period_end",
+        "seasonal_validity_period_information",
         "owner",
         "lifecycle",
         "road_name",
