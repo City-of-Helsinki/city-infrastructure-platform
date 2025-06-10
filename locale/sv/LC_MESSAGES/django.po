@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-03 15:38+0200\n"
+"POT-Creation-Date: 2025-06-10 16:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -647,11 +647,56 @@ msgstr "Filtrera fält"
 msgid "Use Traffic Sign Icons"
 msgstr "Använd trafikskyltsymboler"
 
+#, fuzzy
+#| msgid "Covered"
+msgid "Clustered"
+msgstr "Övertäckt"
+
+msgid "Extra Feature Info"
+msgstr ""
+
+msgid "Fields added here need to be included in the corresponding WFS Feature"
+msgstr ""
+
 msgid "Layer"
 msgstr "Skikt"
 
 msgid "Layers"
 msgstr "Skikt"
+
+#, fuzzy
+#| msgid "Name of the operation."
+msgid "Name of feature type"
+msgstr "Namn på åtgärden."
+
+msgid "Edit name, used in map-view FeatureInfo component edit link"
+msgstr ""
+
+msgid "png"
+msgstr ""
+
+msgid "svg"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Image Type"
+msgstr ""
+
+#, fuzzy
+#| msgid "Size"
+msgid "PNG Size"
+msgstr "Storlek"
+
+msgid "Scale"
+msgstr ""
+
+msgid "IconDrawingConfig"
+msgstr ""
+
+msgid "IconDrawingConfigs"
+msgstr ""
 
 msgid "Basemaps"
 msgstr "Grundkartor"
@@ -964,7 +1009,8 @@ msgstr "Plats (x, y)"
 #, python-format
 msgid ""
 "Changing location from map is not allowed for geometry '%(geometry_type)s'"
-msgstr "Att ändra platsen från kartan är inte tillåtet för geometrin "
+msgstr ""
+"Att ändra platsen från kartan är inte tillåtet för geometrin "
 "'%(geometry_type)s'"
 
 msgid "Barrier Plans"
@@ -1058,6 +1104,22 @@ msgstr "Källnamn"
 msgid "Name of the source for where this device was imported from."
 msgstr "Namn på källan varifrån denna anordning importerades."
 
+msgid "Date on which this sign becomes active."
+msgstr "Datum då skylten tas i bruk."
+
+msgid "Date after which this sign becomes inactive."
+msgstr "Datum efter vilket skylten inte är i bruk."
+
+#, fuzzy
+#| msgid "Seasonal validity period start"
+msgid "Seasonal validity period information"
+msgstr "Säsongsmässig giltighetsperiod, start"
+
+#, fuzzy
+#| msgid "Additional information related to this device."
+msgid "Seasonal validity period information related to this device."
+msgstr "Tilläggsuppgifter om denna anordning."
+
 msgid "Blue"
 msgstr "Blå"
 
@@ -1121,24 +1183,6 @@ msgstr "Platsspecifikation"
 
 msgid "Specifies where the sign is in relation to the road."
 msgstr "Fastställer skyltens läge i förhållande till vägen."
-
-msgid "Date on which this sign becomes active."
-msgstr "Datum då skylten tas i bruk."
-
-msgid "Date after which this sign becomes inactive."
-msgstr "Datum efter vilket skylten inte är i bruk."
-
-msgid "Seasonal validity period start"
-msgstr "Säsongsmässig giltighetsperiod, start"
-
-msgid "Date on which this sign becomes seasonally active."
-msgstr "Datum då skylten tas i bruk för en säsong."
-
-msgid "Seasonal validity period end"
-msgstr "Säsongsmässig giltighetsperiod, slut"
-
-msgid "Date after which this sign becomes seasonally inactive."
-msgstr "Säsongsmässig giltighetsperiod, slut"
 
 msgid "Parent Traffic Sign Plan"
 msgstr "Överordnad trafikskylt (plan)"
@@ -1812,18 +1856,6 @@ msgstr "Typspecifikation"
 msgid "Additional device type codes specific to the local public authorities."
 msgstr "Ytterligare anordningstypkoder specifika för de lokala myndigheterna."
 
-msgid "Date on which this road marking becomes active."
-msgstr "Datum då vägmarkeringen tas i bruk."
-
-msgid "Date after which this road marking becomes inactive."
-msgstr "Datum efter vilken vägmarkeringen inte är i bruk."
-
-msgid "Date on which this road marking becomes seasonally active."
-msgstr "Datum då vägmarkeringen tas i bruk för en säsong."
-
-msgid "Date after which this road marking becomes seasonally inactive."
-msgstr "Datum efter vilket vägmarkeringen inte är i bruk för en säsong."
-
 msgid "Symbol"
 msgstr "Symbol"
 
@@ -2264,19 +2296,24 @@ msgstr "Är du säker på att du vill lägga till %(model_name)s"
 msgid ""
 "You have manually changed the location of the plan, while the 'derive "
 "location' option is turned on."
-msgstr "Du har manuellt ändrat platsen för planen medan alternativet 'härled läget' är aktiverat."
+msgstr ""
+"Du har manuellt ändrat platsen för planen medan alternativet 'härled läget' "
+"är aktiverat."
 
 msgid ""
 "For as long as the 'derive location' option is active, the location of the "
 "plan will always be derived anew, whenever a traffic control device plan is "
 "assigned to this plan."
-msgstr "Så länge lägeshärledning är aktiverad kommer planplatsen alltid att "
-"härledas på nytt, om någon plan är inställd att hänvisa till denna plan."
+msgstr ""
+"Så länge lägeshärledning är aktiverad kommer planplatsen alltid att härledas "
+"på nytt, om någon plan är inställd att hänvisa till denna plan."
 
 msgid ""
 "Are you sure you want to continue, without first disabling the 'derive "
 "location' option?"
-msgstr "Är du säker på att du vill fortsätta utan att först stänga av lägeshärledning?"
+msgstr ""
+"Är du säker på att du vill fortsätta utan att först stänga av "
+"lägeshärledning?"
 
 msgid "Yes, I’m sure"
 msgstr "Ja, jag är säker"
@@ -2308,6 +2345,11 @@ msgstr "Fältet får inte vara tomt."
 #, python-format
 msgid "Device type '%(device_type)s' accepts no structured content"
 msgstr "Anordningstypen '%(device_type)s' använder inte strukturerat innehåll"
+
+#, fuzzy
+#| msgid "English location name"
+msgid "Invalid location_ewkt value"
+msgstr "Engelskt platsnamn"
 
 msgid "File not found."
 msgstr "Fil hittades inte."
@@ -2373,6 +2415,27 @@ msgstr "Mer information om denna användare."
 
 msgid "User"
 msgstr "Användare"
+
+#~ msgid "Date on which this sign becomes seasonally active."
+#~ msgstr "Datum då skylten tas i bruk för en säsong."
+
+#~ msgid "Seasonal validity period end"
+#~ msgstr "Säsongsmässig giltighetsperiod, slut"
+
+#~ msgid "Date after which this sign becomes seasonally inactive."
+#~ msgstr "Säsongsmässig giltighetsperiod, slut"
+
+#~ msgid "Date on which this road marking becomes active."
+#~ msgstr "Datum då vägmarkeringen tas i bruk."
+
+#~ msgid "Date after which this road marking becomes inactive."
+#~ msgstr "Datum efter vilken vägmarkeringen inte är i bruk."
+
+#~ msgid "Date on which this road marking becomes seasonally active."
+#~ msgstr "Datum då vägmarkeringen tas i bruk för en säsong."
+
+#~ msgid "Date after which this road marking becomes seasonally inactive."
+#~ msgstr "Datum efter vilket vägmarkeringen inte är i bruk för en säsong."
 
 #~ msgid "Lane allowing traffic to both directions"
 #~ msgstr "Led med trafik i båda riktningarna"
