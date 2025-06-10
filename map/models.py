@@ -80,17 +80,20 @@ class IconDrawingConfig(models.Model):
     png_size = models.IntegerField(_("PNG Size"), choices=PngSize.choices, null=False, blank=False)
     scale = models.FloatField(_("Scale"), null=True, blank=False, default=None)
 
-    constraints = [
-        models.UniqueConstraint(
-            fields=["image_type", "png_size"],
-            name="%(app_label)s_%(class)s_unique_image_type_png_size",
-        ),
-        models.UniqueConstraint(
-            fields=["enabled"],
-            condition=models.Q(enabled=True),
-            name="%(app_label)s_%(class)s_unique_enabled",
-        ),
-    ]
+    class Meta:
+        verbose_name = _("IconDrawingConfig")
+        verbose_name_plural = _("IconDrawingConfigs")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["image_type", "png_size"],
+                name="%(app_label)s_%(class)s_unique_image_type_png_size",
+            ),
+            models.UniqueConstraint(
+                fields=["enabled"],
+                condition=models.Q(enabled=True),
+                name="%(app_label)s_%(class)s_unique_enabled",
+            ),
+        ]
 
     @property
     def icons_relative_url(self) -> str:
