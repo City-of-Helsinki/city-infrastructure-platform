@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.16.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.15.0...city-infrastructure-platform-v1.16.0) (2025-06-10)
+
+
+### Features
+
+* Change active field name to enabled in IconDrawConfig model ([7945bdc](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7945bdc64d08134d5f5f12b99476625730356083))
+* Dynamic configuration for map-view FeatureInfos by layer ([8c44e19](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8c44e190713cddc2dde4704d27406b80d349ac48))
+* Replace seasonal validity period date fields with one information field ([42cbfb2](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/42cbfb23dae4e1fe2eae733a7afbe139936c2a09))
+* Z_coord can now be optional ([e840e98](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e840e984acb73b7170d7563f4d34eec01b8cbae8))
+
+
+### Bug Fixes
+
+* Add name_sv column to Layer admin list page ([1e8de49](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1e8de4916f1c40fb7df92f23e309d1cdfd5abbb2))
+* IconDrawingConfig constraints where not working ([12d8356](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/12d835611fe9f19fb5fb65920973b0989defe843))
+* Map-view line drawing between plan and real features was very slow ([f1c348b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f1c348b4532ee296575bcf2c192eee4c8758c9e5))
+* Map-view used device_type.code instead of device_type.icon ([b0be054](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b0be054cc5eaeb59670a86e9110c3165e82bcebd))
+* Move decision_date from metadata section to General information section ([2dc35c6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/2dc35c64ce0516a586263596051d3d1f97b241f7))
+* Plan and real difference line dissappeared every time when FeatureInfo was opened. ([fe28898](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/fe288986881ae5e62d2104f4666cabee4057cda2))
+
 ## [1.15.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.14.0...city-infrastructure-platform-v1.15.0) (2025-05-21)
 
 
