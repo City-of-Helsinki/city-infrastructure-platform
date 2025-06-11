@@ -150,6 +150,7 @@ class MountPlanAdmin(
         ("lifecycle", EnumFieldListFilter),
         "owner",
         MountPlanReplacementListFilter,
+        "mount_type",
     ]
     search_fields = ("id",)
     readonly_fields = (
