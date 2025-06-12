@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.17.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.16.0...city-infrastructure-platform-v1.17.0) (2025-06-12)
+
+
+### Features
+
+* Add mount_type to Mount admin filters ([63e1a4d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/63e1a4dd6badedda4bbb24c8c4a24c553832133e))
+* Add support to order FeatureInfo extra fields ([5d31797](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5d317978d0227a7807f9a85c38363d1a61889180))
+
 ## [1.16.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.15.0...city-infrastructure-platform-v1.16.0) (2025-06-10)
 
 
