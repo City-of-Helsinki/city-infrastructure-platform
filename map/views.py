@@ -78,14 +78,16 @@ def _get_extra_feature_info(language_code: str, layer: Layer) -> dict:
     if layer_extra_info:
         for k, v in layer_extra_info.items():
             localized_title = v.get(f"title_{language_code}", None)
+            extra_field_data = {"order": v.get("order", 0)}
             if not localized_title:
                 logger.warning(
                     f"localized title not found from layer info for field {k}: {v}: {language_code},"
                     f" defaulting to fi"
                 )
-                localized_extra_info[k] = v.get("title_fi")
+                extra_field_data["title"] = v.get("title_fi")
             else:
-                localized_extra_info[k] = localized_title
+                extra_field_data["title"] = localized_title
+            localized_extra_info[k] = extra_field_data
     return localized_extra_info
 
 
@@ -101,5 +103,6 @@ def _get_language_code(request):
     """Get language code from request. If not allowed then defaults to en."""
     language_from_request = request.LANGUAGE_CODE
     if language_from_request not in ALLOWED_MAP_LANGUAGE_CODES:
+        logger.warning(f"Not allowed: {language_from_request} defaulting to fi")
         return "fi"
     return language_from_request

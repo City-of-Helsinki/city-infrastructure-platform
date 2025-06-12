@@ -161,12 +161,16 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     if (extra_fields) {
       return (
         <>
-          {Object.entries(extra_fields).map(([key, value]) => (
-            <React.Fragment key={key}>
-              <br />
-              <b>{value}</b>: {JSON.stringify(feature.getProperties()[key as keyof FeatureProperties])}{" "}
-            </React.Fragment>
-          ))}
+          {Object.entries(extra_fields)
+            .sort((a, b) => {
+              return a[1].order - b[1].order || a[1].title.localeCompare(b[1].title);
+            })
+            .map(([key, value]) => (
+              <React.Fragment key={key}>
+                <br />
+                <b>{value.title}</b>: {JSON.stringify(feature.getProperties()[key as keyof FeatureProperties])}{" "}
+              </React.Fragment>
+            ))}
         </>
       );
     } else {

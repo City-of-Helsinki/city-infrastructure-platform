@@ -34,7 +34,7 @@ class MapViewTestCase(TestCase):
 class MapConfigTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.extra_feature_info = {"testfield": {"title_fi": "testi kenttä", "title_en": "test field"}}
+        self.extra_feature_info = {"testfield": {"title_fi": "testi kenttä", "title_en": "test field", "order": 1}}
 
     def test_with_no_icon_draw_config(self):
         """Test that without any active IconDrawingConfig the default values are used."""
@@ -69,22 +69,29 @@ class MapConfigTestCase(TestCase):
         )
 
     def test_layer_config_return_ok_en(self):
-        self._do_test_layer_config_ok("en", self.extra_feature_info.get("testfield").get("title_en"))
+        self._do_test_layer_config_ok(
+            "en", {"title": self.extra_feature_info.get("testfield").get("title_en"), "order": 1}
+        )
 
     def test_layer_config_return_ok_fi(self):
-        self._do_test_layer_config_ok("fi", self.extra_feature_info.get("testfield").get("title_fi"))
+        self._do_test_layer_config_ok(
+            "fi", {"title": self.extra_feature_info.get("testfield").get("title_fi"), "order": 1}
+        )
 
     def test_layer_config_return_ok_sv(self):
-        self._do_test_layer_config_ok("sv", self.extra_feature_info.get("testfield").get("title_fi"))
+        """title_sv is left out from extra_feature_info in purpose to check that fi is selected in this case"""
+        self._do_test_layer_config_ok(
+            "sv", {"title": self.extra_feature_info.get("testfield").get("title_fi"), "order": 1}
+        )
 
     def test_layer_config_return_ok_not_supported(self):
         self._do_test_layer_config_ok(
             "not_supported_lang",
-            self.extra_feature_info.get("testfield").get("title_fi"),
+            {"title": self.extra_feature_info.get("testfield").get("title_fi"), "order": 1},
             "fi",
         )
 
-    def _do_test_layer_config_ok(self, language_code, expected_testfield_value, expected_language_code=None):
+    def _do_test_layer_config_ok(self, language_code, expected_testfield_info, expected_language_code=None):
         expect_language_code = expected_language_code or language_code
         Layer.objects.create(
             identifier="basemap",
@@ -122,7 +129,7 @@ class MapConfigTestCase(TestCase):
         self.assertEqual(response_data["overlayConfig"]["layers"][0]["extra_feature_info"], {})
         self.assertEqual(
             response_data["overlayConfig"]["layers"][1]["extra_feature_info"]["testfield"],
-            expected_testfield_value,
+            expected_testfield_info,
         )
         self.assertEqual(
             response_data["overviewConfig"]["imageUrl"],
