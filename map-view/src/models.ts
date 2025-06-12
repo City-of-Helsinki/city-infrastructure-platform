@@ -1,5 +1,10 @@
 import { Point } from "ol/geom";
 
+interface ExtraFeatureInfo {
+  title: string;
+  order: number;
+}
+
 export interface Layer {
   identifier: string;
   name: string;
@@ -7,7 +12,7 @@ export interface Layer {
   filter_fields?: string[];
   use_traffic_sign_icons: boolean;
   clustered: boolean;
-  extra_feature_info: Record<string, string>;
+  extra_feature_info: Record<string, ExtraFeatureInfo>;
 }
 
 export interface LayerConfig {
