@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.17.0...city-infrastructure-platform-v1.17.1) (2025-06-13)
+
+
+### Bug Fixes
+
+* Difference drawing did not work for nonclustered layers ([09a4d43](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/09a4d4370d6ffbfff847dc331adc3b234063a938))
+
 ## [1.17.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.16.0...city-infrastructure-platform-v1.17.0) (2025-06-12)
 
 
