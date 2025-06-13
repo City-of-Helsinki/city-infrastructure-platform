@@ -24,7 +24,7 @@ import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
 import BaseObject from "ol/Object";
 import { getCenter } from "ol/extent";
-import { getSinglePointStyle, isCoordinateInsideFeature } from "./MapUtils";
+import { getSinglePointStyle, isCoordinateInsideFeature, isLayerClustered } from "./MapUtils";
 import Static from "ol/source/ImageStatic";
 
 class Map {
@@ -274,12 +274,12 @@ class Map {
       realFeatures = realLayer
         .getSource()!
         .getFeatures()
-        .map((clusterFeature) => clusterFeature!.get("features"))
+        .map((feature) => (isLayerClustered(realLayer) ? feature.get("features") : feature))
         .flat(1);
       planFeatures = planLayer
         .getSource()!
         .getFeatures()
-        .map((clusterFeature) => clusterFeature!.get("features"))
+        .map((feature) => (isLayerClustered(planLayer) ? feature.get("features") : feature))
         .flat(1);
 
       if (realFeatures.length && planFeatures.length) {
