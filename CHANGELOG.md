@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.18.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.17.0...city-infrastructure-platform-v1.18.0) (2025-06-16)
+
+
+### Features
+
+* Highlight selected feature in map-view ([8fddb05](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8fddb05784bc676cb35636bebd31d01cd11aaf19))
+
+
+### Bug Fixes
+
+* Difference drawing did not work for nonclustered layers ([09a4d43](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/09a4d4370d6ffbfff847dc331adc3b234063a938))
+
 ## [1.17.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.16.0...city-infrastructure-platform-v1.17.0) (2025-06-12)
 
 
