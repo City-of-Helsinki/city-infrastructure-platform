@@ -3,7 +3,7 @@ import { Fill, Icon, Stroke, Style, Circle as CircleStyle } from "ol/style";
 import { FeatureLike } from "ol/Feature";
 import RenderFeature from "ol/render/Feature";
 import { Coordinate } from "ol/coordinate";
-import { Feature, LayerConfig } from "../models";
+import { Feature, LayerConfig, MapConfig } from "../models";
 import VectorLayer from "ol/layer/Vector";
 import { Cluster } from "ol/source";
 
@@ -73,6 +73,49 @@ const geometryStyles = {
   }),
 };
 
+const highLightStyle = new Style({
+  fill: new Fill({ color: "yellow" }),
+  image: new CircleStyle({
+    radius: 5,
+    fill: new Fill({ color: "yellow" }),
+    stroke: defaultStroke,
+  }),
+  stroke: new Stroke({
+    color: "yellow",
+    width: 2,
+  }),
+});
+
+function getIconStyle(
+  iconsUrl: string,
+  iconType: string,
+  iconScale: number,
+  deviceTypeCode: string,
+  deviceTypeIcon: string,
+) {
+  return new Style({
+    image: new Icon({
+      src: getIconSrc(iconsUrl, iconType, deviceTypeCode, deviceTypeIcon),
+      scale: iconScale,
+    }),
+  });
+}
+
+export function getHighlightStyle(feature: Feature, mapConfig: MapConfig) {
+  const { traffic_sign_icons_url, icon_type, icon_scale, overlayConfig } = mapConfig;
+  const dtCode = feature.getProperties().device_type_code;
+  if (trafficSignIconsEnabled(feature, overlayConfig) && dtCode) {
+    return getIconStyle(
+      traffic_sign_icons_url,
+      icon_type,
+      icon_scale,
+      dtCode,
+      feature.getProperties().device_type_icon,
+    );
+  }
+  return highLightStyle;
+}
+
 export function getSinglePointStyle(
   feature: FeatureLike,
   use_traffic_sign_icons: boolean,
@@ -82,17 +125,13 @@ export function getSinglePointStyle(
 ) {
   if (use_traffic_sign_icons && feature.get("device_type_code") !== null) {
     // Traffic sign style
-    return new Style({
-      image: new Icon({
-        src: getIconSrc(
-          traffic_sign_icons_url,
-          icon_type,
-          feature.get("device_type_code"),
-          feature.get("device_type_icon"),
-        ),
-        scale: icon_scale,
-      }),
-    });
+    return getIconStyle(
+      traffic_sign_icons_url,
+      icon_type,
+      icon_scale,
+      feature.get("device_type_code"),
+      feature.get("device_type_icon"),
+    );
   }
 
   const geometry = feature.getGeometry();
@@ -193,4 +232,9 @@ function getFeatureLayer(featureType: string, overlayConfig: LayerConfig) {
 
 function getFeatureType(feature: Feature) {
   return feature["id_"].split(".")[0];
+}
+
+function trafficSignIconsEnabled(feature: Feature, overlayConfig: LayerConfig) {
+  const layer = getFeatureLayer(getFeatureType(feature), overlayConfig);
+  return layer?.use_traffic_sign_icons;
 }

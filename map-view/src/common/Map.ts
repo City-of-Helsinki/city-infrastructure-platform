@@ -24,7 +24,7 @@ import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
 import BaseObject from "ol/Object";
 import { getCenter } from "ol/extent";
-import { getSinglePointStyle, isCoordinateInsideFeature, isLayerClustered } from "./MapUtils";
+import { getHighlightStyle, getSinglePointStyle, isCoordinateInsideFeature, isLayerClustered } from "./MapUtils";
 import Static from "ol/source/ImageStatic";
 
 class Map {
@@ -71,6 +71,11 @@ class Map {
   private planOfRealVectorLayer: VectorLayer<VectorSource>;
 
   /**
+   * A layer to draw highlighted feature (when active in FeatureInfo dialog)
+   */
+  private highLightedFeatureLayer: VectorLayer<VectorSource>;
+
+  /**
    * Callback function to process features returned from GetFeatureInfo requests
    *
    * @param features Features returned from GetFeatureInfo requests
@@ -90,6 +95,7 @@ class Map {
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
     this.planRealDiffVectorLayer = Map.createPlanRealDiffVectorLayer();
     this.planOfRealVectorLayer = Map.createPlanOfRealVectorLayer();
+    this.highLightedFeatureLayer = Map.createHighLightLayer();
 
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
     const projection = this.getProjection();
@@ -109,11 +115,12 @@ class Map {
         nonClusteredOverlayLayerGroup,
         this.planRealDiffVectorLayer,
         this.planOfRealVectorLayer,
+        this.highLightedFeatureLayer,
       ],
       controls: this.getControls(),
       view,
     });
-
+    this.highLightedFeatureLayer.setVisible(true);
     this.overViewMap = new OverviewMap({
       className: "ol-overviewmap",
       layers: [
@@ -266,6 +273,21 @@ class Map {
     });
   }
 
+  /**
+   *
+   * @param feature Target feature to be highlighted
+   */
+  highlightFeature(feature: Feature, mapConfig: MapConfig) {
+    this.clearHighlightLayer();
+    const olFeature = new OlFeature({
+      geometry: feature.getProperties().geometry,
+      name: "HiglightedFeature",
+    });
+
+    this.highLightedFeatureLayer.setStyle(getHighlightStyle(feature, mapConfig));
+    this.highLightedFeatureLayer.getSource()?.addFeature(olFeature);
+  }
+
   showAllPlanAndRealDifferences(realLayer: VectorLayer<VectorSource>, planLayer: VectorLayer<VectorSource>) {
     let realFeatures: FeatureLike[],
       planFeatures: FeatureLike[] = [];
@@ -322,10 +344,17 @@ class Map {
     }
   }
 
-  private static createPlanRealDiffVectorLayer() {
-    const planRealDiffVectorLayer = new VectorSource({});
+  private static createHighLightLayer() {
+    const highLightLayerSource = new VectorSource({});
     return new VectorLayer({
-      source: planRealDiffVectorLayer,
+      source: highLightLayerSource,
+    });
+  }
+
+  private static createPlanRealDiffVectorLayer() {
+    const planRealDiffVectorLayerSource = new VectorSource({});
+    return new VectorLayer({
+      source: planRealDiffVectorLayerSource,
       // Point style
       style: new Style({
         image: new Circle({
@@ -348,9 +377,9 @@ class Map {
   }
 
   private static createPlanOfRealVectorLayer() {
-    const planOfRealVectorLayer = new VectorSource({});
+    const planOfRealVectorLayerSource = new VectorSource({});
     return new VectorLayer({
-      source: planOfRealVectorLayer,
+      source: planOfRealVectorLayerSource,
       // Point style
       style: new Style({
         image: new Circle({
@@ -404,6 +433,10 @@ class Map {
 
   clearPlanOfRealVectorLayer() {
     this.planOfRealVectorLayer.getSource()!.clear();
+  }
+
+  clearHighlightLayer() {
+    this.highLightedFeatureLayer.getSource()!.clear();
   }
 
   applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {
