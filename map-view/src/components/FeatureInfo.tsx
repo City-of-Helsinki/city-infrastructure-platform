@@ -39,7 +39,8 @@ const styles = (theme: Theme) =>
 interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
   features: Feature[];
   mapConfig: MapConfig;
-  onSelectFeature: (feature: Feature) => Promise<any>;
+  onSelectFeatureShowPlan: (feature: Feature) => Promise<any>;
+  onSelectFeatureHighLight: (feature: Feature) => void;
   onClose: () => void;
 }
 
@@ -87,9 +88,12 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
   }
 
   runOnSelectFeature(featureIndex: number) {
-    const { features, onSelectFeature } = this.props;
+    const { features, onSelectFeatureShowPlan, onSelectFeatureHighLight } = this.props;
     const feature = features[featureIndex];
-    onSelectFeature(feature).then((distance: number) => this.setState({ realPlanDistance: distance }));
+    onSelectFeatureShowPlan(feature).then(
+      (distance: number) => distance && this.setState({ realPlanDistance: distance }),
+    );
+    onSelectFeatureHighLight(feature);
   }
 
   setFeatureIndex(featureIndex: number) {

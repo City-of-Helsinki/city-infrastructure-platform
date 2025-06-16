@@ -71,10 +71,12 @@ class App extends React.Component<AppProps, AppState> {
             <FeatureInfo
               features={features}
               mapConfig={mapConfig}
-              onSelectFeature={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
+              onSelectFeatureShowPlan={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
+              onSelectFeatureHighLight={(feature: Feature) => Map.highlightFeature(feature, mapConfig)}
               onClose={() => {
                 this.setState({ features: [] });
                 Map.clearPlanOfRealVectorLayer();
+                Map.clearHighlightLayer();
               }}
             />
           )}
