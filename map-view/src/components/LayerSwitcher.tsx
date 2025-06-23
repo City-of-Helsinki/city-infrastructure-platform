@@ -15,6 +15,7 @@ import React from "react";
 import Map from "../common/Map";
 import { MapConfig } from "../models";
 import { withTranslation, WithTranslation } from "react-i18next";
+import { getDiffLayerIdentifierFromLayerIdentifier } from "../common/MapUtils";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -29,7 +30,7 @@ const styles = (theme: Theme) =>
 interface LayerSwitcherProps extends WithStyles<typeof styles>, WithTranslation {
   mapConfig: MapConfig;
   onClose: () => void;
-  onOverlayToggle: (checked: boolean) => void;
+  onOverlayToggle: (checked: boolean, diffLayerIdentifier: string) => void;
 }
 
 interface LayerSwitcherStates {
@@ -91,7 +92,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
       const identifier = event.target.name;
       const checked = event.target.checked;
-      onOverlayToggle(checked);
+      onOverlayToggle(checked, getDiffLayerIdentifierFromLayerIdentifier(identifier));
       visibleOverlays[identifier] = checked;
       Map.setOverlayVisible(identifier, checked);
       this.setState({ visibleOverlays });
@@ -124,7 +125,7 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
 
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
       const checked: boolean = event.target.checked;
-      Map.setPlanRealDiffVectorLayerVisible(checked);
+      Map.setPlanRealDiffVectorLayersVisible(checked);
       this.setState({ displayRealPlanDifference: checked });
     };
 

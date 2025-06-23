@@ -101,10 +101,10 @@ class App extends React.Component<AppProps, AppState> {
               <LayerSwitcher
                 mapConfig={mapConfig}
                 onClose={() => this.setState({ open: false })}
-                onOverlayToggle={(checked) => {
+                onOverlayToggle={(checked, diffLayerIdentifier) => {
                   if (!checked) {
                     this.setState({ features: [] });
-                    Map.clearPlanRealDiffVectorLayer();
+                    Map.clearPlanRealDiffVectorLayer(diffLayerIdentifier);
                   }
                 }}
               />

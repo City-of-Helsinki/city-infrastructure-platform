@@ -3,7 +3,7 @@ import { Fill, Icon, Stroke, Style, Circle as CircleStyle } from "ol/style";
 import { FeatureLike } from "ol/Feature";
 import RenderFeature from "ol/render/Feature";
 import { Coordinate } from "ol/coordinate";
-import { Feature, LayerConfig, MapConfig } from "../models";
+import { Feature, Layer, LayerConfig, MapConfig } from "../models";
 import VectorLayer from "ol/layer/Vector";
 import { Cluster } from "ol/source";
 
@@ -224,6 +224,19 @@ export function getFeatureLayerExtraInfoFields(feature: Feature, overlayConfig: 
 
 export function isLayerClustered(layer: VectorLayer) {
   return layer.getSource() instanceof Cluster;
+}
+
+export function getDiffLayerIdentifier(layer: Layer) {
+  return getDiffLayerIdentifierFromLayerIdentifier(layer.identifier);
+}
+
+export function getDiffLayerIdentifierFromLayerIdentifier(identifier: string) {
+  return identifier.replace("real", "").replace("plan", "");
+}
+
+export function getDiffLayerIdentifierFromFeature(feature: Feature | FeatureLike, overlayConfig: LayerConfig) {
+  const featureLayer = getFeatureLayer(getFeatureType(feature as Feature), overlayConfig);
+  return featureLayer ? getDiffLayerIdentifier(featureLayer) : null;
 }
 
 function getFeatureLayer(featureType: string, overlayConfig: LayerConfig) {
