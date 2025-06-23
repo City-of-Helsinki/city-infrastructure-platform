@@ -24,7 +24,14 @@ import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
 import BaseObject from "ol/Object";
 import { getCenter } from "ol/extent";
-import { getHighlightStyle, getSinglePointStyle, isCoordinateInsideFeature, isLayerClustered } from "./MapUtils";
+import {
+  getDiffLayerIdentifier,
+  getDiffLayerIdentifierFromFeature,
+  getHighlightStyle,
+  getSinglePointStyle,
+  isCoordinateInsideFeature,
+  isLayerClustered,
+} from "./MapUtils";
 import Static from "ol/source/ImageStatic";
 
 class Map {
@@ -61,9 +68,9 @@ class Map {
    */
   private nonClusteredOverlayLayers: { [identifier: string]: VectorLayer<VectorSource> } = {};
   /**
-   * A layer to draw temporary vector features on the map
+   * Layers for drawing difference lines between reals and plans
    */
-  private planRealDiffVectorLayer: VectorLayer<VectorSource>;
+  private planRealDiffVectorLayers: { [identifier: string]: VectorLayer<VectorSource> } = {};
 
   /**
    * A layer to draw plan of selected feature (from FeatureInfo)
@@ -83,6 +90,11 @@ class Map {
   private featureInfoCallback: (features: Feature[]) => void = (features: Feature[]) => {};
 
   /**
+   * mapConfig passed to this instance
+   */
+  private mapConfig: MapConfig;
+
+  /**
    * Initialize map on target element
    *
    * @param target The id of the element on which the map will be mounted
@@ -90,12 +102,13 @@ class Map {
    */
   initialize(target: string, mapConfig: MapConfig) {
     const { basemapConfig, overlayConfig, overviewConfig } = mapConfig;
+    this.mapConfig = mapConfig;
     const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
     const clusteredOverlayLayerGroup = this.createClusteredOverlayLayerGroup(mapConfig);
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
-    this.planRealDiffVectorLayer = Map.createPlanRealDiffVectorLayer();
     this.planOfRealVectorLayer = Map.createPlanOfRealVectorLayer();
     this.highLightedFeatureLayer = Map.createHighLightLayer();
+    const planRealDiffVectorLayerGroup = this.createPlanRealDiffVectorLayerGroup(mapConfig);
 
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
     const projection = this.getProjection();
@@ -113,7 +126,7 @@ class Map {
         basemapLayerGroup,
         clusteredOverlayLayerGroup,
         nonClusteredOverlayLayerGroup,
-        this.planRealDiffVectorLayer,
+        planRealDiffVectorLayerGroup,
         this.planOfRealVectorLayer,
         this.highLightedFeatureLayer,
       ],
@@ -221,7 +234,7 @@ class Map {
   /**
    * Draw a line to planRealDiffVectorLayer between two features
    */
-  drawLineBetweenFeatures(feature1: Feature | FeatureLike, feature2: Feature | FeatureLike, layer: VectorLayer) {
+  drawLineBetweenFeatures(feature1: Feature | FeatureLike, feature2: Feature | FeatureLike) {
     const location1 = feature1.getProperties().geometry.getFlatCoordinates();
     const location2 = feature2.getProperties().geometry.getFlatCoordinates();
     const lineString = new LineString([location1, location2]);
@@ -229,7 +242,10 @@ class Map {
       geometry: lineString,
       name: "Line",
     });
-    layer.getSource()!.addFeature(olFeature);
+    const diffLayerIdentifier = getDiffLayerIdentifierFromFeature(feature1, this.mapConfig.overlayConfig);
+    if (diffLayerIdentifier) {
+      this.planRealDiffVectorLayers[diffLayerIdentifier].getSource()!.addFeature(olFeature);
+    }
   }
 
   /**
@@ -260,7 +276,7 @@ class Map {
           vectorSource.on("featuresloadend", (featureEvent) => {
             const features = featureEvent.features;
             if (features) {
-              this.drawLineBetweenFeatures(feature, features[0], this.planOfRealVectorLayer);
+              this.drawLineBetweenFeatures(feature, features[0]);
 
               // Return distance between Real and Plan
               resolve(getDistanceBetweenFeatures(feature, features[0]));
@@ -315,7 +331,7 @@ class Map {
           if (device_plan_id) {
             const planFeature = byPlanId[device_plan_id];
             if (planFeature) {
-              this.drawLineBetweenFeatures(realFeature, planFeature, this.planRealDiffVectorLayer);
+              this.drawLineBetweenFeatures(realFeature, planFeature);
             }
           }
         }
@@ -324,11 +340,6 @@ class Map {
   }
 
   handleShowAllPlanAndRealDifferences() {
-    // Make sure plan/real difference setting is enabled
-    if (!this.planRealDiffVectorLayer.getVisible()) {
-      return;
-    }
-
     // Get only visible layers
     const visibleLayers = Object.fromEntries(
       Object.entries({ ...this.clusteredOverlayLayers, ...this.nonClusteredOverlayLayers }).filter(([key, layer]) =>
@@ -419,16 +430,21 @@ class Map {
     }
   }
 
-  setPlanRealDiffVectorLayerVisible(visible: boolean) {
-    this.planRealDiffVectorLayer.setVisible(visible);
+  /**
+   * This is called from settings in LayerSwitcher to show or hide all difference layers
+   * @param visible
+   * @param identifier
+   */
+  setPlanRealDiffVectorLayersVisible(visible: boolean) {
+    Object.values(this.planRealDiffVectorLayers).forEach((layer) => layer.setVisible(visible));
 
     if (visible) {
       this.handleShowAllPlanAndRealDifferences();
     }
   }
 
-  clearPlanRealDiffVectorLayer() {
-    this.planRealDiffVectorLayer.getSource()!.clear();
+  clearPlanRealDiffVectorLayer(identifier: string) {
+    this.planRealDiffVectorLayers[identifier].getSource()!.clear();
   }
 
   clearPlanOfRealVectorLayer() {
@@ -482,6 +498,19 @@ class Map {
     });
   }
 
+  private createPlanRealDiffVectorLayerGroup(mapConfig: MapConfig) {
+    const { overlayConfig } = mapConfig;
+    const { layers } = overlayConfig;
+    this.planRealDiffVectorLayers = Object.fromEntries(
+      layers
+        .filter((layer) => layer.identifier.includes("real"))
+        .map((layer) => {
+          return [getDiffLayerIdentifier(layer), Map.createPlanRealDiffVectorLayer()];
+        }),
+    );
+    return new LayerGroup({ layers: Object.values(this.planRealDiffVectorLayers) });
+  }
+
   private createNonClusteredOverlayLayerGroup(mapConfig: MapConfig) {
     const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
     const { layers, sourceUrl } = overlayConfig;
@@ -529,7 +558,6 @@ class Map {
         const styleCache: { [key: string]: Style } = {};
         const getCachedStyle = (feature: FeatureLike) => {
           const features = feature.get("features");
-
           if (features !== undefined && features.length > 1) {
             return styleCache[features.length.toString()];
           }
