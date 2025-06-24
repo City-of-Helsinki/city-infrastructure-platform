@@ -266,6 +266,7 @@ class MountRealAdmin(
         ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         "owner",
+        "mount_type",
     ]
     search_fields = ("id",)
     readonly_fields = (
