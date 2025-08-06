@@ -55,11 +55,6 @@ _base_fields = (
             model_attribute="parent.id",
             abstract="ID of the Parent signpost that this signpost is inside of.",
         ),
-        FeatureField(
-            "order",
-            abstract="Order of the signposts that are in the same point. "
-            "From top to bottom, left to right, starting from 1.",
-        ),
         FeatureField("pictogram", abstract="Description of the pictogram in this signpost."),
         FeatureField("value", abstract="Value in the signposts, when its numeric."),
         FeatureField("size", abstract="Size of the signpost. Filled only if signpost is of non-standard size."),
