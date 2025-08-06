@@ -763,7 +763,6 @@ def get_additional_sign_plan(
     plan=None,
     content_s=None,
     missing_content=False,
-    order=None,
     responsible_entity=None,
     replaces=None,
 ) -> AdditionalSignPlan:
@@ -771,8 +770,6 @@ def get_additional_sign_plan(
     owner = owner or get_owner()
 
     kwargs = {}
-    if order is not None:
-        kwargs["order"] = order
 
     asp = AdditionalSignPlan.objects.get_or_create(
         parent=parent,
@@ -804,7 +801,6 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
     source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
-    order = factory.sequence(lambda n: n)
     content_s = None
     missing_content = True
     additional_information = ""
@@ -850,15 +846,12 @@ def get_additional_sign_real(
     owner=None,
     content_s=None,
     missing_content=False,
-    order=None,
     responsible_entity=None,
 ) -> AdditionalSignReal:
     user = get_user("test_user")
     owner = owner or get_owner()
 
     kwargs = {}
-    if order is not None:
-        kwargs["order"] = order
 
     asr = AdditionalSignReal.objects.get_or_create(
         parent=parent,

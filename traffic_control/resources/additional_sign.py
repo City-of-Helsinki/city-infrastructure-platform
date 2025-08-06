@@ -170,7 +170,6 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
             "owner__name_fi",
             "responsible_entity__name",
             "device_type__code",
-            "order",
             "lifecycle",
             "location",
             "height",

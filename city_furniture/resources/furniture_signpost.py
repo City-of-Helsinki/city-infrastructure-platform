@@ -69,7 +69,6 @@ class AbstractFurnitureSignpostResource(
             "height",
             "mount_type__code",
             "parent__id",
-            "order",
             "pictogram",
             "value",
             "size",

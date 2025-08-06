@@ -22,11 +22,6 @@ _base_fields = (
     [
         FeatureField("id", abstract="ID of the Additional Sign."),
         FeatureField("location", abstract="Additional sign's location (point) in EPSG:3879 coordinates."),
-        FeatureField(
-            "order",
-            abstract="Order of the additional sign that are in the same point. "
-            "From top to bottom, left to right, starting from 1.",
-        ),
         FeatureField("content_s", abstract="Structured content of the additional sign."),
         FeatureField("road_name", abstract="Name of the road this sign is installed on."),
         FeatureField("lane_number", abstract="Which lane does this sign affect."),
