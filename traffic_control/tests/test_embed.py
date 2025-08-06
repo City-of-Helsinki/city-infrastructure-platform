@@ -87,13 +87,11 @@ def test__embed__traffic_sign__context(
         additional_sign_1 = as_factory(
             device_type=additional_sign_type_1,
             parent=traffic_sign,
-            order=1,
             **{mount_parameter: mount},
         )
         additional_sign_2 = as_factory(
             device_type=additional_sign_type_2,
             parent=traffic_sign,
-            order=2,
             **{mount_parameter: mount},
         )
     else:

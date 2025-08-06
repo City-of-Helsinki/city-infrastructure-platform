@@ -100,14 +100,6 @@ class FurnitureAbstractSignpost(
         null=True,
         help_text=_("The height of the sign from the ground, measured from the bottom in centimeters."),
     )
-    order = models.SmallIntegerField(
-        verbose_name=_("Order"),
-        default=1,
-        help_text=_(
-            "The order of the sign in relation to the signs at the same point. "
-            "Order from top to bottom, from left to right starting at 1."
-        ),
-    )
     mount_type = models.ForeignKey(
         MountType,
         verbose_name=_("Mount type"),
