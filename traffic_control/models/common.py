@@ -169,6 +169,7 @@ class TrafficControlDeviceType(models.Model):
 
     def clean(self):
         self.validate_target_model_content_schema()
+        self.validate_change_target_model(self.target_model, raise_exception=True)
 
     def validate_target_model_content_schema(self):
         target_models_with_content_schema = (DeviceTypeTargetModel.ADDITIONAL_SIGN,)
