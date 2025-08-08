@@ -103,7 +103,6 @@ class Command(BaseCommand):
                 "location_name_fi": row["location_name_fi"],
                 "direction": int(row["direction"]) if row["direction"] else 0,
                 "height": int(row["height"]) if row["height"] else None,
-                "order": int(row["order"]) if row["order"] else 1,
                 "mount_type": self.get_mount_type(row["mount_type"]) if row["mount_type"] else None,
                 "arrow_direction": ArrowDirection[row["arrow_direction"]] if row["arrow_direction"] else None,
                 "color": self.get_color(row["sign_color"]) if row["sign_color"] else None,
