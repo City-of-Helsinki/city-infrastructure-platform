@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.18.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.17.0...city-infrastructure-platform-v1.18.0) (2025-08-11)
+
+
+### Features
+
+* Highlight selected feature in map-view ([8fddb05](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8fddb05784bc676cb35636bebd31d01cd11aaf19))
+* Management command to print target_model validity checks ([7831ac0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7831ac0263dd7faceaf0ac107152e6e557ca2658))
+
+
+### Bug Fixes
+
+* Change order of highlight and planofreal layers ([b36f911](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b36f911354dce4b408171d93e97b7693e3c1e234))
+* Difference drawing did not work for nonclustered layers ([09a4d43](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/09a4d4370d6ffbfff847dc331adc3b234063a938))
+* Difference drawing did not work properly when 2 or more real-plan pairs were activated ([3177840](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/317784090779c7571d5c7a579ad3f912e0cf5d1f))
+* Disabling layer with no real-plan mapping ([d837fe4](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d837fe4666d519dc8e815701583fa3fe372ec729))
+* Missing mount_type filter from MountReal admin page ([10ce03f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/10ce03fae5056c2801f7257c2841d9d65479459b))
+* Show helfpul error when invalid target data model is selected ([7859505](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7859505f3b49a29ebdf07f2af1df56d1516a7d4f))
+
 ## [1.17.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.16.0...city-infrastructure-platform-v1.17.0) (2025-06-12)
 
 
