@@ -444,7 +444,9 @@ class Map {
   }
 
   clearPlanRealDiffVectorLayer(identifier: string) {
-    this.planRealDiffVectorLayers[identifier].getSource()!.clear();
+    if (identifier) {
+      this.planRealDiffVectorLayers[identifier].getSource()!.clear();
+    }
   }
 
   clearPlanOfRealVectorLayer() {
