@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.18.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.18.0...city-infrastructure-platform-v1.18.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* Add lazy-apps = true to uwsgi start up ([a357b70](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a357b70f292b33e80c2f869304c94805e1775549))
+* Add py-call-uwsgi-fork-hooks = true to uwsgi start parameters ([5282593](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/52825939ed4bb08d43915e598f553ca02b87003e))
+
 ## [1.18.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.17.0...city-infrastructure-platform-v1.18.0) (2025-08-11)
 
 
