@@ -414,6 +414,7 @@ class BaseAdditionalSignInline(admin.TabularInline):
         "id",
         "device_type",
         "content_s",
+        "height",
     )
     extra = 0
     ordering = ("height",)
