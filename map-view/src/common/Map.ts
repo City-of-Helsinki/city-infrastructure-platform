@@ -269,7 +269,7 @@ class Map {
             format: this.geojsonFormat,
             url:
               overlayConfig.sourceUrl +
-              `?${buildWFSQuery(feature_layer.identifier, "id", feature.getProperties().device_plan_id)}`,
+              `?${buildWFSQuery(feature_layer.identifier, "id", feature.getProperties().device_plan_id)}`, // JF täällä buildWFSQuery tämä on, hakee vain featuren planin, ei tarvitse bbox himmelöintiä
           });
           this.planOfRealVectorLayer.setSource(vectorSource);
 
@@ -419,7 +419,11 @@ class Map {
   }
 
   setOverlayVisible(overlayIdentifier: string, visible: boolean) {
+    const {sourceUrl} =this.mapConfig.overlayConfig
+    console.log("JF set visible", overlayIdentifier, this.mapConfig);
     if (overlayIdentifier in this.clusteredOverlayLayers) {
+      console.log("JF setting source")
+      const layer = this.clusteredOverlayLayers[overlayIdentifier].setSource(this.createClusterSource(sourceUrl + `?${buildWFSQuery(overlayIdentifier, undefined, undefined, this.getCurrentBoundingBox())}`));
       this.clusteredOverlayLayers[overlayIdentifier].setVisible(visible);
     } else {
       this.nonClusteredOverlayLayers[overlayIdentifier].setVisible(visible);
@@ -458,7 +462,7 @@ class Map {
   applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {
     const { sourceUrl } = overlayConfig;
     const filter_field = "responsible_entity_name";
-
+    console.log("JF applying project filters", projectId)
     // Override layer source to apply the filter
     for (const [identifier, layer] of Object.entries({
       ...this.clusteredOverlayLayers,
@@ -468,8 +472,9 @@ class Map {
       const layer_config = overlayConfig["layers"].find((l) => l.identifier === identifier);
       if (layer_config !== undefined && layer_config.filter_fields!.includes(filter_field)) {
         const clusterSource = this.createClusterSource(
-          sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId)}`,
+          sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId, this.getCurrentBoundingBox())}`, // JF Täällä tarvii, ja toimikohan muutenkin vain clusteroiduille
         );
+        console.log("JF layer", layer)
         layer.setSource(clusterSource);
       }
     }
@@ -519,10 +524,10 @@ class Map {
       .map(({ identifier, use_traffic_sign_icons }) => {
         const vectorSource = new VectorSource({
           format: this.geojsonFormat,
-          url: sourceUrl + `?${buildWFSQuery(identifier)}`,
+          url: sourceUrl + `?${buildWFSQuery(identifier)}`, // JF täällä buildWFSQuery Tarvii himmelöintiä, koska tämä tehdään heti initissä.
+                                                            // voi olla että menee dynaamisella urlilla, ja sitten maping johonkin eventtiin lisäfeatureiden hakeminen bboxilla, voi olla simppelimpää että tästä source kokonaan pois
           overlaps: true,
         });
-
         // When features are loaded, check if difference between plans/reals should be shown
         vectorSource.on("featuresloadend", (featureEvent) => {
           const features = featureEvent.features;
@@ -607,9 +612,11 @@ class Map {
           return style;
         };
 
-        const clusterSource = this.createClusterSource(sourceUrl + `?${buildWFSQuery(identifier)}`);
+        //const clusterSource = this.createClusterSource(sourceUrl + `?${buildWFSQuery(identifier)}`);
+                                                            // JF täällä buildWFSQuery Tarvii himmelöintiä, koska tämä tehdään heti initissä.
+                                                            // voi olla että menee dynaamisella urlilla, ja sitten maping johonkin eventtiin lisäfeatureiden hakeminen bboxilla, voi olla simppelimpää että tästä source kokonaan pois
         const vectorLayer = new VectorLayer({
-          source: clusterSource,
+          //source: clusterSource,
           style: (clusterFeature: FeatureLike) => getImageStyle(clusterFeature),
           visible: false,
           opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
@@ -622,6 +629,7 @@ class Map {
       layers: overlayLayers,
     });
   }
+
 
   private createClusterSource(wfsUrl: string) {
     const vectorSource = new VectorSource({
@@ -688,6 +696,11 @@ class Map {
 
   private getDefaulViewCenter() {
     return [25499052.02, 6675851.38];
+  }
+
+  private getCurrentBoundingBox() {
+    console.log("JF bbox?", this.map.getView().calculateExtent())
+    return this.map.getView().calculateExtent();
   }
 }
 
