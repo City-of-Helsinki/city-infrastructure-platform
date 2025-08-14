@@ -7,81 +7,191 @@
 
 City Infrastructure Platform REST-API backend application.
 
-## Development
+## Setting up the environment for development
 
-### Install required system packages
+There are multiple ways to prepare the project for development. Described here is a method to run the auxiliary services using docker containers and a method to run these services directly using system packages. For both paths you should go through the common dependencies and setting up the python environment first.
 
-#### PostgreSQL and PostGIS
+### Common dependencies
+
+Install required system packages, some of these are needed to build some of the python project dependencies and some of these are used in runtime.
+
+
+```bash
+sudo apt install binutils gdal-bin libpq-dev libproj-dev pipx
+```
+
+Install [Poetry](https://github.com/python-poetry/poetry#installation) for managing python dependencies.
+
+```bash
+# Let pipx handle it (without messing with the project's environment, the x at the end of pipx is important!)
+pipx install poetry
+
+# Or use the system package (may be less bleeding-edge but good enough for this project)
+sudo apt install python3-poetry
+```
+
+#### Common dependencies - python environment
+
+Check whether you have the minimum required version of python (3.11.9)
+
+```bash
+python --version
+```
+
+or
+
+```
+python3 --version
+```
+
+##### Common dependencies - python environment - use correct python version (optional)
+
+If your version of python is equal to or newer than 3.11.9, you may skip this section.
+
+If your python version is older, we recommend you install [pyenv](https://github.com/pyenv/pyenv) to manage the installation of a newer version, follow the instructions to set up the [suggested build environment](https://github.com/pyenv/pyenv/wiki#suggested-build-environment) for your system, and then finally install and activate python 3.11.9.
+
+
+```bash
+# This command will build python version 3.11.9, it is a lengthy process
+# so make sure you have followed the steps for setting up the suggested
+# build environment linked above.
+pyenv install 3.11.9
+```
+
+If you encounter trouble building python 3.11.9 even after setting up the suggested build environment, you should consult the [pyenv common problems FAQ](https://github.com/pyenv/pyenv/wiki/Common-build-problems) to proceed.
+
+```bash
+# This command will activate python 3.11.9
+pyenv global 3.11.9
+```
+
+##### Common dependencies - python environment - virtual environment
+
+Ensure you are using python 3.11.9 or newer and at the root of this project run
+
+
+```bash
+# Create the environment
+python -m venv venv
+
+# Activate the environment
+source venv/bin/activate
+
+# Install project dependencies (development)
+poetry install --no-root
+
+# Install project dependencies (production)
+poetry install --no-dev
+```
+
+(optional) You can also use poetry to update the project's python dependencies:
+
+```bash
+# Update python dependencies / lock file
+poetry update
+```
+
+### Development environment with docker
+
+Install [docker](https://docs.docker.com/engine/install/ubuntu/), their provided packages are preferred since system packages are likely to be lagging behind the official distribution.
+
+```bash
+# Add docker's official repository as described in the link above
+# ...
+# Install required docker packages
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+#### Development environment with docker - rootless mode (optional)
+
+By default, docker needs to be executed with root privileges, which may put your system at risk of malicious docker images, so you may consider setting [rootless mode](https://docs.docker.com/engine/security/rootless/). If you installed docker using the official packages and the commands suggested in the [install instructions](https://docs.docker.com/engine/install/ubuntu/) on a fresh Ubuntu system it will be as easy as running the following command as a regular user:
+
+```bash
+dockerd-rootless-setuptool.sh install
+```
+
+The script will be available in your PATH, and will let you know if you are missing any other system packages and give you a command to install them. Follow those steps and re-run the script, and it's done.
+
+### Development environment without docker
+
+**Note:** These instructions are currently outdated, and could use updating to a newer LTS version of Ubuntu
+
+#### Development environment without docker - PostgreSQL and PostGIS
 
 Install PostgreSQL and PostGIS.
 
-    # Ubuntu 18.04
-    sudo apt-get install python3-dev libpq-dev postgresql postgis
+```bash
+# Ubuntu 18.04
+sudo apt-get install python3-dev libpq-dev postgresql postgis
+```
 
-#### GeoDjango extra packages
+#### Development environment without docker - GeoDjango extra packages
 
-    # Ubuntu 18.04
-    sudo apt-get install binutils libproj-dev gdal-bin
-    export CPLUS_INCLUDE_PATH=/usr/include/gdal
-    export C_INCLUDE_PATH=/usr/include/gdal
+```bash
+# Ubuntu 18.04
+export CPLUS_INCLUDE_PATH=/usr/include/gdal
+export C_INCLUDE_PATH=/usr/include/gdal
+```
 
-### Creating a Python virtualenv
-
-Create a Python 3.x virtualenv either using the [`venv`](https://docs.python.org/3/library/venv.html) tool or using
-the great [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) toolset. Assuming the latter,
-once installed, simply do:
-
-    mkvirtualenv -p /usr/bin/python3 city-infrastructure-platform
-
-The virtualenv will automatically activate. To activate it in the future, just do:
-
-    workon city-infrastructure-platform
-
-Install [Poetry](https://github.com/python-poetry/poetry#installation) for installing requirements
-
-### Creating and updating requirements
-
-* Run `poetry update`
-
-### Installing Python requirements
-
-* For development run `poetry install`
-* For production run  `poetry install --no-dev`
-
-### Prepare the database
+#### Development environment without docker - Prepare the database
 
 Enable PostGIS extension for the default template
 
-    sudo -u postgres psql -d template1 -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+```bash
+sudo -u postgres psql -h localhost -d template1 -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+```
 
 Create user and database
 
-    sudo -u postgres createuser -P -R -S city-infrastructure-platform  # use password `city-infrastructure-platform`
-    sudo -u postgres createdb -O city-infrastructure-platform city-infrastructure-platform
+```bash
+sudo -u postgres createuser -h localhost -P -R -S city-infrastructure-platform  # use password `city-infrastructure-platform`
+sudo -u postgres createdb -h localhost -O city-infrastructure-platform city-infrastructure-platform
+```
 
 Allow user to create test database
 
-    sudo -u postgres psql -c "ALTER USER city-infrastructure-platform CREATEDB;"
+```bash
+sudo -u postgres psql -h localhost -c "ALTER USER city-infrastructure-platform CREATEDB;"
+```
 
-### Django configuration
+## Running the project
+
+### Running the project - Django
 
 Environment variables are used to customize configuration in `cityinfra/settings.py`. If you wish to override any
 settings, you can place them in a local `.env` file which will automatically be sourced when Django imports
 the settings file.
 
-Copy .env.example file as .env: `cp .env.example .env`
+```
+# Use example configuration
+cp .env.example .env
 
-### Running development environment
 
-* Enable debug `echo 'DEBUG=True' >> .env`
-* Run `python manage.py migrate`
-* Run `python manage.py runserver 0.0.0.0:8000`
+# Enable debug (optional)
+echo 'DEBUG=True' >> .env
 
-### Docker
+# Run database migrations
+# (Requires that the database is up and running)
+python manage.py migrate
 
-Build Docker image: `docker build -t city-infrastructure-platform .`
+# Run server (host defaults to 127.0.0.1 and port defaults to 8000)
+# (Requires that the database is up and running)
+python manage.py runserver
+```
 
-Run container: `docker run -d -p 8000:8000 -e DEBUG=1 city-infrastructure-platform`
+#### Running the project - Docker services (without compose)
+
+Build Docker image:
+
+```bash
+docker build -t city-infrastructure-platform .
+```
+
+Run container:
+
+```bash
+docker run -d -p 8000:8000 -e DEBUG=1 city-infrastructure-platform
+```
 
 **Available configs (environment variables):**
 
@@ -93,25 +203,38 @@ To set any of the settings below, use the `-e <ENV_VAR>=<VALUE>` flag when runni
 * COLLECT_STATIC: Set to `1` to collect static files on startup, default is empty value.
 * APPLY_MIGRATIONS: Set to `1` to run `manage.py migrate` on startup, default is empty value.
 
-### Docker Compose
+#### Running the project - Docker services (with compose)
 
-Run the application `docker-compose up`
+The file `docker-compose.yml` contains the environment configuration for the different services that can be executed.
 
-#### To run just database
-`docker-compose up db`
+Run the entire application, with all its auxiliary services
 
-#### To run local ClamAV instances
-first do `docker-compose up clamd`
-after it is started `docker-compose up clamv-api`
+```bash
+docker-compose up
+```
 
-### Translations (fi)
+##### Running the project - Docker services - individual services
 
-Run script `./makemessages.sh`
+```bash
+# Run just the DB
+docker-compose up db
 
-Running this script locally needs gettext to be installed:
-`apt-get install gettext`
+# Run ClamAV locally (initialize clamd and then launch clamv-api)
+docker compose up clamd
+docker compose up clamv-api
+```
 
-### Traffic sign icons
+## Translations (fi)
+
+```
+# Ensure gettext is installed
+sudo apt install gettext
+
+# Run the script
+./makemessages.sh
+```
+
+## Traffic sign icons
 
 Traffic sign icons are from Finnish Transport Infrastructure Agency which has released these icons in public
 domain under Creative Commons 1.0 universal (CC0 1.0) license. Original icons can be found
