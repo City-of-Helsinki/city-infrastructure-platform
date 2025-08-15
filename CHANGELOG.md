@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.2](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.18.1...city-infrastructure-platform-v1.18.2) (2025-08-15)
+
+
+### Bug Fixes
+
+* Use base image that is tagged for debian bookworm version (12) ([7cd9847](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7cd9847f675db7514b7ee4ca40ef826d679a1a4f))
+
 ## [1.18.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.18.0...city-infrastructure-platform-v1.18.1) (2025-08-12)
 
 
