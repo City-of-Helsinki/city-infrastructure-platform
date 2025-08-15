@@ -1,7 +1,7 @@
 ARG VERSION=""
 
 # ==============================
-FROM public.ecr.aws/docker/library/python:3.11-slim AS base
+FROM public.ecr.aws/docker/library/python:3.11-slim-bookworm AS base
 # ==============================
 LABEL vendor="City of Helsinki"
 ENV PYTHONUNBUFFERED 1
