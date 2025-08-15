@@ -125,7 +125,6 @@ class AbstractFurnitureSignpostAdmin(
                 "location_name_en",
                 "location_additional_info",
                 "direction",
-                "order",
                 "height",
             )
         },

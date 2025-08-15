@@ -24,14 +24,14 @@ class ImportTrafficControlDeviceTypesTestCase(TestCase):
     def test_import_furniture_signposts_success(self, mock_exists):
         data = os.linesep.join(
             [
-                "id,device_type,latitude,longitude,location_name_fi,direction,height,order,mount_type,arrow_direction,sign_color,pictogram,value,text_content_fi,text_content_sw,text_content_en,content_responsible_entity,validity_period_start,validity_period_end,additional_material_url",  # noqa: E501
-                "A42,reittivahvennelaatta,25497601.12758740,6672058.993934970,Laivasillankatu,45,140,,Tolppa,,Kantakaupunki,,,,,,,,,,",  # noqa: E501
-                "A1B,reittivahvennelaatta,25497601.12758740,6672058.993934970,JokuKatu,0,220,1,Katuvalopylväs,UP,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
-                "A2B,tarrat,25496195.72344000,6673869.586320790,JokuKatu,0,220,1,Katuvalopylväs,UP,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
-                "A3B,kartat,25497707.19834310,6672915.894190060,JokuKatu,0,220,1,Tolppa,UP,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
-                "A4B,pollarit,25496702.18210040,6671287.668982360,JokuKatu,0,220,1,Tolppa,BOTTOM_RIGHT,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
-                "A5B,viitat,25495251.56117200,6672573.32108099,JokuKatu,0,220,1,Tolppa,DOWN,Kantakaupunki,piktogrammi,500,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
-                "A6B,viitat,25495251.56117200,6672573.32108099,,,,,,,,,,,,,,,,",
+                "id,device_type,latitude,longitude,location_name_fi,direction,height,mount_type,arrow_direction,sign_color,pictogram,value,text_content_fi,text_content_sw,text_content_en,content_responsible_entity,validity_period_start,validity_period_end,additional_material_url",  # noqa: E501
+                "A42,reittivahvennelaatta,25497601.12758740,6672058.993934970,Laivasillankatu,45,140,Tolppa,,Kantakaupunki,,,,,,,,,,",  # noqa: E501
+                "A1B,reittivahvennelaatta,25497601.12758740,6672058.993934970,JokuKatu,0,220,Katuvalopylväs,UP,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
+                "A2B,tarrat,25496195.72344000,6673869.586320790,JokuKatu,0,220,Katuvalopylväs,UP,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
+                "A3B,kartat,25497707.19834310,6672915.894190060,JokuKatu,0,220,Tolppa,UP,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
+                "A4B,pollarit,25496702.18210040,6671287.668982360,JokuKatu,0,220,Tolppa,BOTTOM_RIGHT,Kantakaupunki,piktogrammi,,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
+                "A5B,viitat,25495251.56117200,6672573.32108099,JokuKatu,0,220,Tolppa,DOWN,Kantakaupunki,piktogrammi,500,Suomi,Svenska,English,Kaupunki,2020-01-01,2020-12-31,https://example.com/",  # noqa: E501
+                "A6B,viitat,25495251.56117200,6672573.32108099,,,,,,,,,,,,,,,",
             ]
         )
 
