@@ -267,9 +267,7 @@ class Map {
           // Fetch feature's Plan from WFS API if it exists
           const vectorSource = new VectorSource({
             format: this.geojsonFormat,
-            url:
-              overlayConfig.sourceUrl +
-              `?${buildWFSQuery(feature_layer.identifier, "id", feature.getProperties().device_plan_id)}`,
+            url: this.getWfsUrl(feature_layer.identifier, "id", feature.getProperties().device_plan_id, true),
           });
           this.planOfRealVectorLayer.setSource(vectorSource);
 
@@ -420,14 +418,57 @@ class Map {
 
   setOverlayVisible(overlayIdentifier: string, visible: boolean) {
     if (overlayIdentifier in this.clusteredOverlayLayers) {
+      if (visible) {
+        this.getAndAddFeaturesFromBoundingBox(overlayIdentifier, true);
+      }
       this.clusteredOverlayLayers[overlayIdentifier].setVisible(visible);
     } else {
+      if (visible) {
+        this.getAndAddFeaturesFromBoundingBox(overlayIdentifier, false);
+      }
       this.nonClusteredOverlayLayers[overlayIdentifier].setVisible(visible);
     }
+  }
 
-    if (visible) {
-      this.handleShowAllPlanAndRealDifferences();
-    }
+  getWfsUrl(overlayIdentifier: string, filterId?: string, filterValue?: string, ignoreBbox?: boolean) {
+    return this.mapConfig.overlayConfig.sourceUrl + `?${buildWFSQuery(overlayIdentifier, filterId, filterValue, ignoreBbox ? undefined : this.getCurrentBoundingBox())}`;
+  }
+
+  getAndAddFeaturesFromBoundingBox(overlayIdentifier: string, isClustered: boolean) {
+    const wfsUrl = this.getWfsUrl(overlayIdentifier);
+    const tempSource = isClustered ? this.createClusterSource(wfsUrl) : this.createNonClusteredSource(wfsUrl);
+    const tempVectorSource = isClustered ? tempSource.getSource() : tempSource;
+    // create a temporary layer and add it to the map
+    // to initialize data fetch
+    const tempLayer = new VectorLayer({
+      source: tempVectorSource,
+      visible: true,
+      style: new Style({
+              fill: new Fill({ color: 'rgba(0, 0, 0, 0)' }),
+              stroke: new Stroke({ color: 'rgba(0, 0, 0, 0)' }),
+          }),
+    });
+    this.map.addLayer(tempLayer);
+    tempVectorSource.once("featuresloadend", (featureEvent) => {
+      const features = featureEvent.features;
+      if (features) {
+        if (features && features.length > 0) {
+          const layer = isClustered ? this.clusteredOverlayLayers[overlayIdentifier] : this.nonClusteredOverlayLayers[overlayIdentifier];
+          layer.once('postrender', () => {
+            this.handleShowAllPlanAndRealDifferences();
+          });
+          const existingSource = layer.getSource();
+          if (existingSource) {
+            const targetVectorSource = isClustered ? existingSource.getSource() : existingSource;
+            targetVectorSource.addFeatures(features);
+          } else {
+            layer.setSource(tempSource);
+          }
+          //this.handleShowAllPlanAndRealDifferences();
+        }
+        this.map.removeLayer(tempLayer);
+      }
+    })
   }
 
   /**
@@ -460,7 +501,6 @@ class Map {
   applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {
     const { sourceUrl } = overlayConfig;
     const filter_field = "responsible_entity_name";
-
     // Override layer source to apply the filter
     for (const [identifier, layer] of Object.entries({
       ...this.clusteredOverlayLayers,
@@ -470,7 +510,7 @@ class Map {
       const layer_config = overlayConfig["layers"].find((l) => l.identifier === identifier);
       if (layer_config !== undefined && layer_config.filter_fields!.includes(filter_field)) {
         const clusterSource = this.createClusterSource(
-          sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId)}`,
+          sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId, this.getCurrentBoundingBox())}`,
         );
         layer.setSource(clusterSource);
       }
@@ -515,26 +555,11 @@ class Map {
 
   private createNonClusteredOverlayLayerGroup(mapConfig: MapConfig) {
     const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
-    const { layers, sourceUrl } = overlayConfig;
+    const { layers } = overlayConfig;
     const overlayLayers = layers
       .filter(({ clustered }) => !clustered)
       .map(({ identifier, use_traffic_sign_icons }) => {
-        const vectorSource = new VectorSource({
-          format: this.geojsonFormat,
-          url: sourceUrl + `?${buildWFSQuery(identifier)}`,
-          overlaps: true,
-        });
-
-        // When features are loaded, check if difference between plans/reals should be shown
-        vectorSource.on("featuresloadend", (featureEvent) => {
-          const features = featureEvent.features;
-          if (features) {
-            this.handleShowAllPlanAndRealDifferences();
-          }
-        });
-
         const vectorLayer = new VectorLayer({
-          source: vectorSource,
           style: (feature: FeatureLike) =>
             getSinglePointStyle(feature, use_traffic_sign_icons, traffic_sign_icons_url, icon_scale, icon_type),
           visible: false,
@@ -552,7 +577,7 @@ class Map {
 
   private createClusteredOverlayLayerGroup(mapConfig: MapConfig) {
     const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
-    const { layers, sourceUrl } = overlayConfig;
+    const { layers } = overlayConfig;
     // Fetch device layers
     const overlayLayers = layers
       .filter(({ clustered }) => clustered)
@@ -609,9 +634,7 @@ class Map {
           return style;
         };
 
-        const clusterSource = this.createClusterSource(sourceUrl + `?${buildWFSQuery(identifier)}`);
         const vectorLayer = new VectorLayer({
-          source: clusterSource,
           style: (clusterFeature: FeatureLike) => getImageStyle(clusterFeature),
           visible: false,
           opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
@@ -625,19 +648,12 @@ class Map {
     });
   }
 
-  private createClusterSource(wfsUrl: string) {
-    const vectorSource = new VectorSource({
-      format: this.geojsonFormat,
-      url: wfsUrl,
-    });
+  private createNonClusteredSource(wfsUrl: string) {
+    return this.createVectorSource(wfsUrl)
+  }
 
-    // When features are loaded, check if difference between plans/reals should be shown
-    vectorSource.on("featuresloadend", (featureEvent) => {
-      const features = featureEvent.features;
-      if (features) {
-        this.handleShowAllPlanAndRealDifferences();
-      }
-    });
+  private createClusterSource(wfsUrl: string) {
+    const vectorSource = this.createVectorSource(wfsUrl);
 
     return new Cluster({
       distance: 40, // Distance in pixels within which features will be clustered together.
@@ -645,6 +661,14 @@ class Map {
       geometryFunction: this.clusterGeometryFunction,
       createCluster: this.createCluster,
     });
+  }
+
+  private createVectorSource(wfsUrl: string) {
+    const vectorSource = new VectorSource({
+      format: this.geojsonFormat,
+      url: wfsUrl,
+    });
+    return vectorSource;    
   }
 
   private clusterGeometryFunction(feature: FeatureLike) {
@@ -690,6 +714,10 @@ class Map {
 
   private getDefaulViewCenter() {
     return [25499052.02, 6675851.38];
+  }
+
+  private getCurrentBoundingBox() {
+    return this.map.getView().calculateExtent();
   }
 }
 
