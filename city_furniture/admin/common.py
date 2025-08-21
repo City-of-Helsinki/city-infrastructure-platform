@@ -1,7 +1,12 @@
 from django.contrib.gis import admin
 
 from city_furniture.forms import CityFurnitureDeviceTypeForm
-from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from city_furniture.models.common import (
+    CityFurnitureColor,
+    CityFurnitureDeviceType,
+    CityFurnitureDeviceTypeIcon,
+    CityFurnitureTarget,
+)
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.mixins import EnumChoiceValueDisplayAdminMixin
 
@@ -52,3 +57,5 @@ class CityFurnitureTargetAdmin(AuditLogHistoryAdmin):
     search_fields = ("id",)
     ordering = ("name_fi",)
     actions = None
+
+admin.site.register(CityFurnitureDeviceTypeIcon)
