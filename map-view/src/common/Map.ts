@@ -23,7 +23,7 @@ import { buildWFSQuery, getDistanceBetweenFeatures } from "./functions";
 import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
 import BaseObject from "ol/Object";
-import { getCenter } from "ol/extent";
+import { Extent, getCenter } from "ol/extent";
 import {
   getDiffLayerIdentifier,
   getDiffLayerIdentifierFromFeature,
@@ -33,6 +33,24 @@ import {
   isLayerClustered,
 } from "./MapUtils";
 import Static from "ol/source/ImageStatic";
+import { bboxPolygon, booleanIntersects, union, featureCollection } from "@turf/turf";
+import { Feature as TurfFeature, Polygon as TurfPolygon, MultiPolygon as TurfMultiPolygon, BBox } from "geojson";
+type TurfPolygonFeature = TurfFeature<TurfPolygon | TurfMultiPolygon>;
+
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout> | null;
+  return function (this: any, ...args: Parameters<T>): void {
+    const context = this;
+    const later = () => {
+      timeout = null;
+      func.apply(context, args);
+    };
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(later, wait);
+  };
+}
 
 class Map {
   /**
@@ -90,9 +108,30 @@ class Map {
   private featureInfoCallback: (features: Feature[]) => void = (features: Feature[]) => {};
 
   /**
+
+   * Callback function to handle showing of features being loaded
+   */
+  private ongoingFeatureFetchesCallback: (fetches: Set<string>) => void = (fetches: Set<string>) => {};
+  /**
+   *  Array to store ongoing feature fetches
+   */
+  private readonly ongoingFeatureFetches: Set<string> = new Set();
+
+  /**
    * mapConfig passed to this instance
    */
   private mapConfig: MapConfig;
+
+  /**
+   * Stores bounding box polygons from areas from which data has already been fetched.
+   * This array might grow as the user explores the map, intersecting area will be merged.
+   */
+  private fetchedAreaPolygons: { [identifier: string]: TurfFeature<TurfPolygon | TurfMultiPolygon>[] } = {};
+
+  /**
+   * Debounce time before data fetch is initiated after move event
+   */
+  private readonly getFeaturesDebounceTime = 1000;
 
   /**
    * Initialize map on target element
@@ -229,6 +268,25 @@ class Map {
         });
       }
     });
+    // for fetching data on all layers after move or zoom
+    this.map.on("moveend", debounce(this.updateVisibleLayers.bind(this), this.getFeaturesDebounceTime));
+  }
+
+  /**
+   * Fetch new bounding box data for all visible layers
+   */
+  private updateVisibleLayers() {
+    const allLayers = {
+      ...this.clusteredOverlayLayers,
+      ...this.nonClusteredOverlayLayers,
+    };
+
+    for (const [identifier, layer] of Object.entries(allLayers)) {
+      if (layer.getVisible()) {
+        const isClustered = identifier in this.clusteredOverlayLayers;
+        this.getAndAddFeaturesFromBoundingBox(identifier, isClustered);
+      }
+    }
   }
 
   /**
@@ -267,9 +325,7 @@ class Map {
           // Fetch feature's Plan from WFS API if it exists
           const vectorSource = new VectorSource({
             format: this.geojsonFormat,
-            url:
-              overlayConfig.sourceUrl +
-              `?${buildWFSQuery(feature_layer.identifier, "id", feature.getProperties().device_plan_id)}`,
+            url: this.getWfsUrl(feature_layer.identifier, "id", feature.getProperties().device_plan_id, true),
           });
           this.planOfRealVectorLayer.setSource(vectorSource);
 
@@ -420,14 +476,178 @@ class Map {
 
   setOverlayVisible(overlayIdentifier: string, visible: boolean) {
     if (overlayIdentifier in this.clusteredOverlayLayers) {
+      if (visible) {
+        this.getAndAddFeaturesFromBoundingBox(overlayIdentifier, true);
+      }
       this.clusteredOverlayLayers[overlayIdentifier].setVisible(visible);
     } else {
+      if (visible) {
+        this.getAndAddFeaturesFromBoundingBox(overlayIdentifier, false);
+      }
       this.nonClusteredOverlayLayers[overlayIdentifier].setVisible(visible);
     }
+  }
 
-    if (visible) {
-      this.handleShowAllPlanAndRealDifferences();
+  getWfsUrl(overlayIdentifier: string, filterId?: string, filterValue?: string, ignoreBbox?: boolean) {
+    const urlBuildResult = buildWFSQuery(
+      overlayIdentifier,
+      ignoreBbox ? undefined :this.fetchedAreaPolygons[overlayIdentifier],
+      filterId,
+      filterValue,
+      ignoreBbox ? undefined : this.getCurrentBoundingBox(),
+    );
+    if (urlBuildResult) {
+      return this.mapConfig.overlayConfig.sourceUrl + `?${urlBuildResult}`;
+    } else {
+      return undefined;
     }
+  }
+
+  getAndAddFeaturesFromBoundingBox(overlayIdentifier: string, isClustered: boolean) {
+    const wfsUrl = this.getWfsUrl(overlayIdentifier);
+    if (!wfsUrl) {
+      // nothing to fetch
+      return;
+    }
+    const tempSource = isClustered ? this.createClusterSource(wfsUrl) : this.createNonClusteredSource(wfsUrl);
+    const tempVectorSource = isClustered ? (tempSource as Cluster).getSource() : tempSource;
+    if (!tempVectorSource) {
+      console.log("No vector source, skipping getting new features");
+      return;
+    }
+
+    // create a temporary layer and add it to the map
+    // to initialize data fetch
+    const tempLayer = new VectorLayer({
+      source: tempVectorSource,
+      visible: true,
+      style: new Style({
+        fill: new Fill({ color: "rgba(0, 0, 0, 0)" }),
+        stroke: new Stroke({ color: "rgba(0, 0, 0, 0)" }),
+      }),
+    });
+    this.map.addLayer(tempLayer);
+    tempVectorSource.once("featuresloadend", (featureEvent: any) => {
+      const features = featureEvent.features;
+      if (features && features.length > 0) {
+        const layer = isClustered
+          ? this.clusteredOverlayLayers[overlayIdentifier]
+          : this.nonClusteredOverlayLayers[overlayIdentifier];
+        layer.once("postrender", () => {
+          this.handleShowAllPlanAndRealDifferences();
+        });
+
+        const existingSource = layer.getSource();
+        if (existingSource) {
+          const targetVectorSource = isClustered ? (existingSource as Cluster).getSource() : existingSource;
+          if (!targetVectorSource) {
+            console.log("No vector source, skipping add of new features");
+            return;
+          }
+          targetVectorSource.addFeatures(features);
+        } else {
+          layer.setSource(tempSource);
+        }
+        this.addFetchedArea(overlayIdentifier, this.getCurrentBoundingBox());
+      }
+      this.map.removeLayer(tempLayer);
+      this.ongoingFeatureFetches.delete(overlayIdentifier);
+      this.ongoingFeatureFetchesCallback(this.ongoingFeatureFetches);
+    });
+  }
+
+  /**
+   * Checks if two polygons intersect and attempts to merge them.
+   * @param mergedPolygon The polygon to merge with.
+   * @param existingPolygon The existing polygon to check for intersection.
+   * @returns An array containing the merged polygon if successful, otherwise returns the existing polygon.
+   */
+  attemptMerge(mergedPolygon: TurfPolygonFeature, existingPolygon: TurfPolygonFeature): TurfPolygonFeature[] {
+    // Check for invalid geometry before performing the union.
+    if (!mergedPolygon?.geometry || !existingPolygon?.geometry) {
+      console.error("Skipping union due to invalid input geometry.", mergedPolygon, existingPolygon);
+      return [existingPolygon]; // Return original to prevent data loss.
+    }
+
+    try {
+      const unionResult = union(featureCollection([mergedPolygon, existingPolygon]));
+      return unionResult ? [unionResult] : [existingPolygon];
+    } catch (e) {
+      console.error("Error during polygon union. Keeping the original polygon.", e);
+      return [existingPolygon];
+    }
+  }
+
+  /**
+   * Iterates through existing polygons and merges them with a new polygon if they intersect.
+   * @param newPolygon The new polygon to merge.
+   * @param existingPolygons The array of existing polygons.
+   * @returns An object containing the final merged polygon and the list of non-intersecting polygons.
+   */
+  mergeIntersectingPolygons(
+    newPolygon: TurfPolygonFeature,
+    existingPolygons: TurfPolygonFeature[],
+  ): { mergedPolygon: TurfPolygonFeature; nonIntersecting: TurfPolygonFeature[]; wasMerged: boolean } {
+    let mergedPolygon = newPolygon;
+    let wasMerged = false;
+    const nonIntersecting: TurfPolygonFeature[] = [];
+
+    for (const existingPolygon of existingPolygons) {
+      if (booleanIntersects(mergedPolygon, existingPolygon)) {
+        const unionResults = this.attemptMerge(mergedPolygon, existingPolygon);
+        mergedPolygon = unionResults[0];
+        wasMerged = true;
+      } else {
+        nonIntersecting.push(existingPolygon);
+      }
+    }
+
+    return { mergedPolygon, nonIntersecting, wasMerged };
+  }
+
+  /**
+   * Adds a new fetched area polygon to the cache, merging it with any intersecting polygons.
+   * @param layerIdentifier The identifier for the layer.
+   * @param fetchedBbox The bounding box of the newly fetched area.
+   */
+  addFetchedArea(layerIdentifier: string, fetchedBbox: Extent) {
+    // Use a guard clause for early return if there's no layer identifier
+    if (!layerIdentifier) {
+      console.error("No layer identifier provided.");
+      return;
+    }
+
+    // Initialize the array if it doesn't exist
+    this.fetchedAreaPolygons[layerIdentifier] = this.fetchedAreaPolygons[layerIdentifier] || [];
+
+    const newTurfPolygon = bboxPolygon(fetchedBbox as BBox);
+
+    const { mergedPolygon, nonIntersecting, wasMerged } = this.mergeIntersectingPolygons(
+      newTurfPolygon as TurfPolygonFeature,
+      this.fetchedAreaPolygons[layerIdentifier],
+    );
+
+    // Update the cache with the final merged polygon and the non-intersecting ones
+    this.fetchedAreaPolygons[layerIdentifier] = [...nonIntersecting, mergedPolygon];
+
+    this.logMergeStatus(layerIdentifier, wasMerged);
+  }
+
+  /**
+   * Logs the status of the polygon merge.
+   * @param layerIdentifier The identifier for the layer.
+   * @param wasMerged Indicates if a merge occurred.
+   */
+  private logMergeStatus(layerIdentifier: string, wasMerged: boolean) {
+    if (wasMerged) {
+      console.log(`Merged fetched polygons for layer '${layerIdentifier}'.`);
+    } else {
+      console.log(`Added new polygon to layer '${layerIdentifier}'.`);
+    }
+    console.log(
+      `Total polygons for '${layerIdentifier}': ${this.fetchedAreaPolygons[layerIdentifier].length}`,
+      this.fetchedAreaPolygons[layerIdentifier],
+    );
   }
 
   /**
@@ -460,17 +680,17 @@ class Map {
   applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {
     const { sourceUrl } = overlayConfig;
     const filter_field = "responsible_entity_name";
-
     // Override layer source to apply the filter
     for (const [identifier, layer] of Object.entries({
       ...this.clusteredOverlayLayers,
       ...this.nonClusteredOverlayLayers,
     })) {
       // Make sure filter can be applied to the layer
+      // atleast for now everyhing is just loaded within the current bbox, not exclusion
       const layer_config = overlayConfig["layers"].find((l) => l.identifier === identifier);
       if (layer_config !== undefined && layer_config.filter_fields!.includes(filter_field)) {
         const clusterSource = this.createClusterSource(
-          sourceUrl + `?${buildWFSQuery(identifier, filter_field, projectId)}`,
+          sourceUrl + `?${buildWFSQuery(identifier, undefined, filter_field, projectId, this.getCurrentBoundingBox())}`,
         );
         layer.setSource(clusterSource);
       }
@@ -515,26 +735,11 @@ class Map {
 
   private createNonClusteredOverlayLayerGroup(mapConfig: MapConfig) {
     const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
-    const { layers, sourceUrl } = overlayConfig;
+    const { layers } = overlayConfig;
     const overlayLayers = layers
       .filter(({ clustered }) => !clustered)
       .map(({ identifier, use_traffic_sign_icons }) => {
-        const vectorSource = new VectorSource({
-          format: this.geojsonFormat,
-          url: sourceUrl + `?${buildWFSQuery(identifier)}`,
-          overlaps: true,
-        });
-
-        // When features are loaded, check if difference between plans/reals should be shown
-        vectorSource.on("featuresloadend", (featureEvent) => {
-          const features = featureEvent.features;
-          if (features) {
-            this.handleShowAllPlanAndRealDifferences();
-          }
-        });
-
         const vectorLayer = new VectorLayer({
-          source: vectorSource,
           style: (feature: FeatureLike) =>
             getSinglePointStyle(feature, use_traffic_sign_icons, traffic_sign_icons_url, icon_scale, icon_type),
           visible: false,
@@ -552,7 +757,7 @@ class Map {
 
   private createClusteredOverlayLayerGroup(mapConfig: MapConfig) {
     const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
-    const { layers, sourceUrl } = overlayConfig;
+    const { layers } = overlayConfig;
     // Fetch device layers
     const overlayLayers = layers
       .filter(({ clustered }) => clustered)
@@ -609,9 +814,7 @@ class Map {
           return style;
         };
 
-        const clusterSource = this.createClusterSource(sourceUrl + `?${buildWFSQuery(identifier)}`);
         const vectorLayer = new VectorLayer({
-          source: clusterSource,
           style: (clusterFeature: FeatureLike) => getImageStyle(clusterFeature),
           visible: false,
           opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
@@ -625,19 +828,12 @@ class Map {
     });
   }
 
-  private createClusterSource(wfsUrl: string) {
-    const vectorSource = new VectorSource({
-      format: this.geojsonFormat,
-      url: wfsUrl,
-    });
+  private createNonClusteredSource(wfsUrl: string) {
+    return this.createVectorSource(wfsUrl);
+  }
 
-    // When features are loaded, check if difference between plans/reals should be shown
-    vectorSource.on("featuresloadend", (featureEvent) => {
-      const features = featureEvent.features;
-      if (features) {
-        this.handleShowAllPlanAndRealDifferences();
-      }
-    });
+  private createClusterSource(wfsUrl: string) {
+    const vectorSource = this.createVectorSource(wfsUrl);
 
     return new Cluster({
       distance: 40, // Distance in pixels within which features will be clustered together.
@@ -645,6 +841,14 @@ class Map {
       geometryFunction: this.clusterGeometryFunction,
       createCluster: this.createCluster,
     });
+  }
+
+  private createVectorSource(wfsUrl: string) {
+    const vectorSource = new VectorSource({
+      format: this.geojsonFormat,
+      url: wfsUrl,
+    });
+    return vectorSource;
   }
 
   private clusterGeometryFunction(feature: FeatureLike) {
@@ -690,6 +894,10 @@ class Map {
 
   private getDefaulViewCenter() {
     return [25499052.02, 6675851.38];
+  }
+
+  private getCurrentBoundingBox() {
+    return this.map.getView().calculateExtent();
   }
 }
 
