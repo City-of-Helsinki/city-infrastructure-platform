@@ -18,7 +18,7 @@ import { Circle, Fill, Stroke, Style, Text } from "ol/style";
 import { Pixel } from "ol/pixel";
 import { MapBrowserEvent, Feature as OlFeature } from "ol";
 import ImageSource from "ol/source/Image";
-import { Geometry, LineString, Point } from "ol/geom";
+import { LineString, Point } from "ol/geom";
 import { buildWFSQuery, getDistanceBetweenFeatures } from "./functions";
 import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
@@ -35,8 +35,21 @@ import {
 import Static from "ol/source/ImageStatic";
 import { bboxPolygon, booleanIntersects, union, featureCollection } from "@turf/turf";
 import { Feature as TurfFeature, Polygon as TurfPolygon, MultiPolygon as TurfMultiPolygon, BBox } from "geojson";
-import { default as BaseEvent } from "ol/events/Event";
-import * as Vector from "ol/source/Vector";
+
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout> | null;
+  return function(this: any, ...args: Parameters<T>): void {
+    const context = this;
+    const later = () => {
+      timeout = null;
+      func.apply(context, args);
+    };
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(later, wait);
+  };
+}
 
 class Map {
   /**
@@ -103,6 +116,12 @@ class Map {
    * This array might grow as the user explores the map, intersecting area will be merged.
    */
   private fetchedAreaPolygons: { [identifier: string]: TurfFeature<TurfPolygon | TurfMultiPolygon>[] } = {};
+
+  /** 
+   * Debounce time before data fetch is initiated after move event
+   */
+  private getFeaturesDebounceTime = 1000;
+  private getFeaturesDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   /**
    * Initialize map on target element
@@ -239,6 +258,25 @@ class Map {
         });
       }
     });
+    // for fetching data on all layers after move or zoom
+    this.map.on('moveend', debounce(this.updateVisibleLayers.bind(this), this.getFeaturesDebounceTime));
+  }
+
+  /**
+   * Fetch new bounding box data for all visible layers
+   */
+  private updateVisibleLayers() {
+    const allLayers = {
+      ...this.clusteredOverlayLayers,
+      ...this.nonClusteredOverlayLayers,
+    };
+
+    for (const [identifier, layer] of Object.entries(allLayers)) {
+      if (layer.getVisible()) {
+        const isClustered = identifier in this.clusteredOverlayLayers;
+        this.getAndAddFeaturesFromBoundingBox(identifier, isClustered);
+      }
+    }
   }
 
   /**
@@ -469,7 +507,6 @@ class Map {
     this.map.addLayer(tempLayer);
     tempVectorSource.once("featuresloadend", (featureEvent: any) => {
       const features = featureEvent.features;
-      console.log("JF featuresloaded", features.length);
       if (features) {
         if (features && features.length > 0) {
           const layer = isClustered
@@ -501,51 +538,30 @@ class Map {
     if (!this.fetchedAreaPolygons[layerIdentifier]) {
       this.fetchedAreaPolygons[layerIdentifier] = [];
     }
-
-    console.log("JF addfa 1", this.projectionCode);
-    console.log("JF bbox", fetchedBbox);
-    console.log("JF transformed", fetchedBbox);
     const newTurfPolygon = bboxPolygon(fetchedBbox as BBox);
-    //const newTurfPolygon = polygon([transformedExtent]);
-    console.log("JF turfPolygon", newTurfPolygon);
     let mergedPolygon = newTurfPolygon as TurfFeature<TurfPolygon | TurfMultiPolygon>;
     const finalPolygons: TurfFeature<TurfPolygon | TurfMultiPolygon>[] = [];
     let wasMerged = false;
-    console.log("JF addfa 2");
 
     // Iterate over existing polygons to find and merge intersecting ones
     for (const existingPolygon of this.fetchedAreaPolygons[layerIdentifier]) {
-      console.log("JF addfa 3");
-      try {
-        const temp = booleanIntersects(mergedPolygon, existingPolygon);
-        console.log("JF intersects", temp);
-      } catch (e) {
-        console.log("JF failed to get intersects for", e, mergedPolygon, existingPolygon);
-      }
       if (booleanIntersects(mergedPolygon, existingPolygon)) {
-        console.log("JF addfa 3.1 merged", mergedPolygon);
-        console.log("JF addfa 3.1 existing", existingPolygon);
         if (!mergedPolygon || !mergedPolygon.geometry || !existingPolygon || !existingPolygon.geometry) {
-          console.error("Skipping union due to invalid input geometry.");
+          console.error("Skipping union due to invalid input geometry.", mergedPolygon, existingPolygon);
           finalPolygons.push(existingPolygon);
           continue; // Skip to the next iteration
         }
 
         try {
           const unionResult = union(featureCollection([mergedPolygon, mergedPolygon]));
-          console.log("JF addfa 3.2 - Union successful", unionResult);
-
           if (unionResult) {
             mergedPolygon = unionResult as TurfFeature<TurfPolygon | TurfMultiPolygon>;
             wasMerged = true;
-            console.log("JF addfa 3.3 - Merged and updated polygon");
           } else {
             // If unionResult is null/undefined, it means no valid geometry was created.
-            console.error("JF addfa 3.2.1 - Union returned an invalid result. Skipping merge.");
             finalPolygons.push(existingPolygon); // Keep the original existing polygon
           }
         } catch (e) {
-          console.error("JF addfa 3.2.2 - Error during union:", e);
           // On error, a merge cannot be performed. Keep the existing polygon to prevent data loss.
           finalPolygons.push(existingPolygon);
         }
