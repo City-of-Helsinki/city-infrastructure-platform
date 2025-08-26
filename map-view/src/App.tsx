@@ -11,6 +11,7 @@ import LayerSwitcher from "./components/LayerSwitcher";
 import FeatureInfo from "./components/FeatureInfo";
 import Map from "./common/Map";
 import { Feature, MapConfig } from "./models";
+import OngoingFetchInfo from "./components/OngoingFetchInfo";
 
 const drawWidth = "400px";
 
@@ -36,6 +37,7 @@ interface AppState {
   open: boolean;
   mapConfig: MapConfig | null;
   features: Feature[];
+  ongoingFeatureFetches: Set<string>;
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -47,6 +49,7 @@ class App extends React.Component<AppProps, AppState> {
       open: false,
       mapConfig: null,
       features: [],
+      ongoingFeatureFetches: new Set<string>(),
     };
   }
 
@@ -57,12 +60,15 @@ class App extends React.Component<AppProps, AppState> {
       });
       Map.initialize(this.mapId, mapConfig);
       Map.registerFeatureInfoCallback((features: Feature[]) => this.setState({ features }));
+      Map.registerOngoingFeatureFetchesCallback((fetches: Set<string>) =>
+        this.setState({ ongoingFeatureFetches: fetches }),
+      );
     });
   }
 
   render() {
     const { classes } = this.props;
-    const { open, mapConfig, features } = this.state;
+    const { open, mapConfig, features, ongoingFeatureFetches } = this.state;
     return (
       <React.StrictMode>
         <div className="App">
@@ -79,6 +85,9 @@ class App extends React.Component<AppProps, AppState> {
                 Map.clearHighlightLayer();
               }}
             />
+          )}
+          {ongoingFeatureFetches.size > 0 && (
+            <OngoingFetchInfo layerIdentifiers={ongoingFeatureFetches}></OngoingFetchInfo>
           )}
           <Fab
             size="medium"

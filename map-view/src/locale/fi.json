@@ -11,6 +11,8 @@
     "Layers": "Tasot",
     "Settings": "Asetukset",
     "Display Plan/Real difference": "Näytä suunnitelman ja toteuman etäisyys",
-    "Filter by Project": "Suodata projektin perusteella"
+    "Filter by Project": "Suodata projektin perusteella",
+    "Active data fetches": "Aktiiviset tietojen haut",
+    "No active data fetches.": "Ei aktiivisia tietojen hakuja"
   }
 }

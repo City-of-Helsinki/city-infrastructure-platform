@@ -15,7 +15,7 @@ i18n
       sv,
     },
     detection: {
-      order: ["path"],
+      order: ["path", "navigator"],
       lookupFromPathIndex: 0,
     },
     fallbackLng: "en",

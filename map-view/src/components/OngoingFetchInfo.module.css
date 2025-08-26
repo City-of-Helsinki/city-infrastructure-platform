@@ -1,0 +1,26 @@
+.ongoingFetchInfoContainer {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000; /* Ensure it stays on top */
+
+    background-color: #fff; /* Using a neutral white, similar to Material-UI's background.paper */
+    padding: 16px; /* Equivalent to MUI padding: 2 (16px) */
+    border-radius: 8px; /* Equivalent to MUI borderRadius: 2 */
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2); /* A common Material-UI shadow (boxShadow: 3) */
+    border: 1px solid #e0e0e0; /* Light grey border */
+    min-width: 200px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.centeredSpinner {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    width: 100%;
+    min-height: 50px; /* Optional: Adjust height as needed to provide space */
+}
