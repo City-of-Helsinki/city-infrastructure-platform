@@ -11,6 +11,8 @@
     "Layers": "Layers",
     "Settings": "Settings",
     "Display Plan/Real difference": "Display Plan/Real difference",
-    "Filter by Project": "Filter by Project"
+    "Filter by Project": "Filter by Project",
+    "Active data fetches": "Active data fetches",
+    "No active data fetches": "No active data fetches"
   }
 }

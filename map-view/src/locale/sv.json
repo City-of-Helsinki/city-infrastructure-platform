@@ -11,6 +11,8 @@
     "Layers": "Skikt",
     "Settings": "Inställningar",
     "Display Plan/Real difference": "Visa plan/implementering skillnad",
-    "Filter by Project": "Filtrera efter projekt"
+    "Filter by Project": "Filtrera efter projekt",
+    "Active data fetches": "Aktiva datahämtningar",
+    "No active data fetches.": "Inga aktiva datahämtningar."
   }
 }

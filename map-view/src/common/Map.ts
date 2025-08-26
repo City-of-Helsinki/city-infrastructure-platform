@@ -467,6 +467,10 @@ class Map {
     this.featureInfoCallback = fn;
   }
 
+  registerOngoingFeatureFetchesCallback(fn: (fetches: Set<string>) => void) {
+    this.ongoingFeatureFetchesCallback = fn;
+  }
+
   setVisibleBasemap(basemap: string) {
     // there can be only one visible base
     this.basemapLayers[this.visibleBasemap].setVisible(false);
@@ -491,7 +495,7 @@ class Map {
   getWfsUrl(overlayIdentifier: string, filterId?: string, filterValue?: string, ignoreBbox?: boolean) {
     const urlBuildResult = buildWFSQuery(
       overlayIdentifier,
-      ignoreBbox ? undefined :this.fetchedAreaPolygons[overlayIdentifier],
+      ignoreBbox ? undefined : this.fetchedAreaPolygons[overlayIdentifier],
       filterId,
       filterValue,
       ignoreBbox ? undefined : this.getCurrentBoundingBox(),
@@ -509,6 +513,7 @@ class Map {
       // nothing to fetch
       return;
     }
+
     const tempSource = isClustered ? this.createClusterSource(wfsUrl) : this.createNonClusteredSource(wfsUrl);
     const tempVectorSource = isClustered ? (tempSource as Cluster).getSource() : tempSource;
     if (!tempVectorSource) {
@@ -516,6 +521,8 @@ class Map {
       return;
     }
 
+    this.ongoingFeatureFetches.add(overlayIdentifier);
+    this.ongoingFeatureFetchesCallback(this.ongoingFeatureFetches);
     // create a temporary layer and add it to the map
     // to initialize data fetch
     const tempLayer = new VectorLayer({

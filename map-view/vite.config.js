@@ -9,6 +9,12 @@ export default defineConfig(() => {
       assetsDir: "static",
     },
     plugins: [react(), eslint()],
+    css: {
+      modules: {
+        localsConvention: "camelCase",
+        generateScopedName: "[local]_[hash:base64:2]",
+      },
+    },
     test: {
       globals: true,
       environment: "jsdom",
