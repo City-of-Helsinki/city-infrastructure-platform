@@ -142,7 +142,6 @@ class AdditionalSignPlanAdmin(
                     "z_coord",
                     "location_ewkt",
                     "direction",
-                    "order",
                     "road_name",
                     "lane_number",
                     "lane_type",
@@ -256,7 +255,6 @@ class AdditionalSignRealAdmin(
                     "z_coord",
                     "location_ewkt",
                     "direction",
-                    "order",
                     "road_name",
                     "lane_number",
                     "lane_type",
@@ -407,7 +405,7 @@ class AdditionalSignRealAdmin(
 class BaseAdditionalSignInline(admin.TabularInline):
     model = None
     fields = (
-        "order",
+        "height",
         "id",
         "device_type",
         "content_s",
@@ -416,9 +414,10 @@ class BaseAdditionalSignInline(admin.TabularInline):
         "id",
         "device_type",
         "content_s",
+        "height",
     )
     extra = 0
-    ordering = ("order",)
+    ordering = ("height",)
     show_change_link = True
     can_delete = False
 

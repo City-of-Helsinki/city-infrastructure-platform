@@ -65,7 +65,7 @@ class TrafficSignEmbed(DetailView):
     def get_additional_signs(self, traffic_sign):
         objects = (
             traffic_sign.additional_signs.active()
-            .order_by("order")
+            .order_by("height")
             .select_related("device_type", "owner", "responsible_entity")
         )
 
@@ -157,7 +157,6 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "lifecycle",
         #
         "location",
-        "order",
         "road_name",
         "lane_number",
         "lane_type",
@@ -285,7 +284,6 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         "legacy_code",
         #
         "location",
-        "order",
         "road_name",
         "lane_number",
         "lane_type",

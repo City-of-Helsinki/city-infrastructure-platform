@@ -56,16 +56,6 @@ class AbstractAdditionalSign(
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)),
     )
-    order = models.SmallIntegerField(
-        verbose_name=_("Order"),
-        default=1,
-        blank=False,
-        null=False,
-        help_text=_(
-            "The order of the sign in relation to the signs at the same point. "
-            "Order from top to bottom, from left to right starting at 1."
-        ),
-    )
     content_s = models.JSONField(
         verbose_name=_("Content"),
         blank=True,
