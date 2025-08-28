@@ -26,9 +26,23 @@ def get_illegal_file_types(files):
     return illegal_types
 
 
+def get_illegal_icon_file_types(files):
+    illegal_types = set()
+    for _, file_ext in map(lambda x: splitext(x), files):
+        if file_ext != ".svg":
+            illegal_types.add(file_ext)
+    return illegal_types
+
+
 def get_file_upload_obstacles(files):
     illegal_types = get_illegal_file_types([f.name for _, f in filter(lambda x: hasattr(x[1], "name"), files.items())])
     virus_scan_errors = clam_av_scan([("FILES", v) for _, v in files.items()])["errors"]
+    return illegal_types, virus_scan_errors
+
+
+def get_icon_upload_obstacles(files):
+    illegal_types = get_illegal_icon_file_types([f.name for f in filter(lambda x: hasattr(x, "name"), files)])
+    virus_scan_errors = clam_av_scan([("FILES", f) for f in files])["errors"]
     return illegal_types, virus_scan_errors
 
 
