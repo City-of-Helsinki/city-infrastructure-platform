@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 
-from city_furniture.forms import CityFurnitureDeviceTypeForm
+from city_furniture.forms import CityFurnitureDeviceTypeForm, CityFurnitureDeviceTypeIconForm
 from city_furniture.models.common import (
     CityFurnitureColor,
     CityFurnitureDeviceType,
@@ -58,4 +58,8 @@ class CityFurnitureTargetAdmin(AuditLogHistoryAdmin):
     ordering = ("name_fi",)
     actions = None
 
-admin.site.register(CityFurnitureDeviceTypeIcon)
+@admin.register(CityFurnitureDeviceTypeIcon)
+class CityFurnitureDeviceTypeIconAdmin(admin.ModelAdmin):
+    form = CityFurnitureDeviceTypeIconForm
+    list_display = ("id", "file")
+    search_fields = ("id", "file")
