@@ -6368,6 +6368,10 @@ paths:
         schema:
           type: string
       - in: query
+        name: description_sv
+        schema:
+          type: string
+      - in: query
         name: digiroad_code
         schema:
           type: integer
@@ -19817,6 +19821,10 @@ components:
           type: string
           title: Description (fi)
           maxLength: 256
+        description_sv:
+          type: string
+          title: Description (sv)
+          maxLength: 256
         digiroad_code:
           type: integer
           maximum: 2147483647
@@ -19843,6 +19851,10 @@ components:
         description_fi:
           type: string
           title: Description (fi)
+          maxLength: 256
+        description_sv:
+          type: string
+          title: Description (sv)
           maxLength: 256
         digiroad_code:
           type: integer
@@ -23013,6 +23025,10 @@ components:
         description_fi:
           type: string
           title: Description (fi)
+          maxLength: 256
+        description_sv:
+          type: string
+          title: Description (sv)
           maxLength: 256
         digiroad_code:
           type: integer
