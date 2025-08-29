@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.19.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.18.2...city-infrastructure-platform-v1.19.0) (2025-08-29)
+
+
+### Features
+
+* Add loading indicator when features are being fetched ([a5a6f06](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a5a6f06c1961561f60bacebeb6cfc04a301bc4d2))
+* Add location specifier to MountRealAdmin ([38da4a2](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/38da4a214f047de4197652d7040cacfb6af8888a))
+* Add swedish description to MountType model ([d08d9bf](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d08d9bfe3d52ab21bba6b6a415922284cd64edc5))
+* Cumulative feature loading based on current view bounding box ([d55c742](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d55c742ac3263c6aecabd2f1cb213370139c204a))
+* TraffiControl and CityFurnitureDeviceTypes can now be search by description (fi, sw, en) fields ([dec740d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/dec740d8592e2173939793f01e7067f676b81bd3))
+
 ## [1.18.2](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.18.1...city-infrastructure-platform-v1.18.2) (2025-08-15)
 
 
