@@ -298,6 +298,7 @@ class MountTypeAdmin(AuditLogHistoryAdmin):
         "code",
         "description",
         "description_fi",
+        "description_sv",
         "digiroad_code",
         "digiroad_description",
     )
