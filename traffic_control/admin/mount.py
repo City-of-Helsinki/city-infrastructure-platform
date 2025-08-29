@@ -218,7 +218,7 @@ class MountRealAdmin(
                 )
             },
         ),
-        (_("Location information"), {"fields": ("location", "z_coord", "location_ewkt")}),
+        (_("Location information"), {"fields": ("location", "z_coord", "location_ewkt", "location_specifier")}),
         (
             _("Physical properties"),
             {
