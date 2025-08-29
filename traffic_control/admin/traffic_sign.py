@@ -120,6 +120,8 @@ class TrafficControlDeviceTypeAdmin(
         "code",
         "legacy_code",
         "id",
+        "description",
+        "legacy_description",
     )
     search_help_text = "Searches from code and legacy_code fields"
     ordering = ("code",)
