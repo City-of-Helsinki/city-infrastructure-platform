@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-03 15:38+0200\n"
+"POT-Creation-Date: 2025-08-29 10:35+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -639,11 +639,50 @@ msgstr "Suodatettavat kentät"
 msgid "Use Traffic Sign Icons"
 msgstr "Käytä liikennemerkkikuvia"
 
+msgid "Clustered"
+msgstr "Ryhmitelty"
+
+msgid "Extra Feature Info"
+msgstr "Ominaisuuden lisätieto"
+
+msgid "Fields added here need to be included in the corresponding WFS Feature"
+msgstr "Tänne lisätyt kentät täytyvät olla mukana vastaavassa WFS ominaisuudessa"
+
 msgid "Layer"
 msgstr "Taso"
 
 msgid "Layers"
 msgstr "tasot"
+
+msgid "Name of feature type"
+msgstr "Ominaisuuden nimi."
+
+msgid "Edit name, used in map-view FeatureInfo component edit link"
+msgstr ""
+
+msgid "png"
+msgstr ""
+
+msgid "svg"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Image Type"
+msgstr ""
+
+msgid "PNG Size"
+msgstr "PNG Koko"
+
+msgid "Scale"
+msgstr ""
+
+msgid "IconDrawingConfig"
+msgstr ""
+
+msgid "IconDrawingConfigs"
+msgstr ""
 
 msgid "Basemaps"
 msgstr "Pohjakartat"
@@ -1051,6 +1090,18 @@ msgstr "Lähteen nimi"
 msgid "Name of the source for where this device was imported from."
 msgstr "Sen lähteen nimi, josta tämä laite on tuotu."
 
+msgid "Date on which this sign becomes active."
+msgstr "Päivämäärä, josta lähtien tämä kilpi on käytössä."
+
+msgid "Date after which this sign becomes inactive."
+msgstr "Päivämäärä, jonka jälkeen tämä kilpi on poissa käytöstä."
+
+msgid "Seasonal validity period information"
+msgstr "Kausiluontoisen voimassaolon tiedot"
+
+msgid "Seasonal validity period information related to this device."
+msgstr "Tämän laitteen kausiluontoisen voimassaolon tiedot"
+
 msgid "Blue"
 msgstr "Sininen"
 
@@ -1114,25 +1165,6 @@ msgstr "Sijaintitarkenne"
 
 msgid "Specifies where the sign is in relation to the road."
 msgstr "Määrittää kilven sijainnin suhteessa tiehen."
-
-msgid "Date on which this sign becomes active."
-msgstr "Päivämäärä, josta lähtien tämä kilpi on käytössä."
-
-msgid "Date after which this sign becomes inactive."
-msgstr "Päivämäärä, jonka jälkeen tämä kilpi on poissa käytöstä."
-
-msgid "Seasonal validity period start"
-msgstr "Kausiluontoinen voimassaoloaika alkaa"
-
-msgid "Date on which this sign becomes seasonally active."
-msgstr "Päivämäärä, josta lähtien tämä kilpi on kausiluontoisesti käytössä."
-
-msgid "Seasonal validity period end"
-msgstr "Kausiluontoinen voimassaoloaika loppuu"
-
-msgid "Date after which this sign becomes seasonally inactive."
-msgstr ""
-"Päivämäärä, jonka jälkeen tämä kilpi on kausiluontoisesti poissa käytöstä."
 
 msgid "Parent Traffic Sign Plan"
 msgstr "Isäntäkilpi (suunnitelma)"
@@ -1492,6 +1524,9 @@ msgstr "Tie tai katuverkon ulkopuolella"
 msgid "Description (fi)"
 msgstr "Kuvaus (fi)"
 
+msgid "Description (sv)"
+msgstr "Kuvaus (sv)"
+
 msgid "Digiroad code"
 msgstr "Digiroad koodi"
 
@@ -1804,21 +1839,6 @@ msgstr "Tyypin tarkenne"
 
 msgid "Additional device type codes specific to the local public authorities."
 msgstr "Paikallisten viranomaisten lisäkoodit laitetyypille."
-
-msgid "Date on which this road marking becomes active."
-msgstr "Päivämäärä, josta lähtien tämä tiemerkintä on käytössä."
-
-msgid "Date after which this road marking becomes inactive."
-msgstr "Päivämäärä, jonka jälkeen tämä tiemerkintä on poissa käytöstä."
-
-msgid "Date on which this road marking becomes seasonally active."
-msgstr ""
-"Päivämäärä, josta lähtien tämä tiemerkintä on kausiluontoisesti käytössä."
-
-msgid "Date after which this road marking becomes seasonally inactive."
-msgstr ""
-"Päivämäärä, jonka jälkeen tämä tiemerkintä on kausiluontoisesti poissa "
-"käytöstä."
 
 msgid "Symbol"
 msgstr "Symboli"
@@ -2256,20 +2276,24 @@ msgstr "Haluat varmasti lisätä %(model_name)s?"
 msgid ""
 "You have manually changed the location of the plan, while the 'derive "
 "location' option is turned on."
-msgstr "Olet käsin muuttanut suunnitelman sijaintia sijainnin johtamisen ollessa päällä."
+msgstr ""
+"Olet käsin muuttanut suunnitelman sijaintia sijainnin johtamisen ollessa "
+"päällä."
 
 msgid ""
 "For as long as the 'derive location' option is active, the location of the "
 "plan will always be derived anew, whenever a traffic control device plan is "
 "assigned to this plan."
 msgstr ""
-"Niin kauan kuin sijainnin johtaminen on päällä, suunnitelman sijainti johdetaan aina uudestaan, "
-"jos jokin suunnitelmailmentymä asetetaan viittaamaan tähän suunnitelmaan."
+"Niin kauan kuin sijainnin johtaminen on päällä, suunnitelman sijainti "
+"johdetaan aina uudestaan, jos jokin suunnitelmailmentymä asetetaan "
+"viittaamaan tähän suunnitelmaan."
 
 msgid ""
 "Are you sure you want to continue, without first disabling the 'derive "
 "location' option?"
-msgstr "Haluatko varmasti jatkaa kytkemättä ensin pois päältä sijainnin johtamista?"
+msgstr ""
+"Haluatko varmasti jatkaa kytkemättä ensin pois päältä sijainnin johtamista?"
 
 msgid "Yes, I’m sure"
 msgstr "Kyllä, olen varma "
@@ -2301,6 +2325,9 @@ msgstr "Tämä kenttä ei voi olla tyhjä"
 #, python-format
 msgid "Device type '%(device_type)s' accepts no structured content"
 msgstr "Laitetyyppi '%(device_type)s' ei käytä rakenteista sisältöä"
+
+msgid "Invalid location_ewkt value"
+msgstr "location_ewkt arvo ei kelpaa"
 
 msgid "File not found."
 msgstr "Tiedostoa ei löytynyt."
@@ -2363,9 +2390,3 @@ msgstr "Lisätietoa tästä käyttäjästä."
 
 msgid "User"
 msgstr "Käyttäjä"
-
-#~ msgid "Lane allowing traffic to both directions"
-#~ msgstr "Molempiin suuntiin liikenteen salliva kaista"
-
-#~ msgid "Mark selected objects as not deleted"
-#~ msgstr "Kumoa valittujen kohteiden poistettu merkintä"
