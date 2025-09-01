@@ -74,7 +74,7 @@ const geometryStyles = {
 };
 
 const highLightStyle = new Style({
-  fill: new Fill({ color: "yellow" }),
+  fill: new Fill({ color: "rgba(255, 255, 0, 0.3)" }),
   image: new CircleStyle({
     radius: 5,
     fill: new Fill({ color: "yellow" }),
