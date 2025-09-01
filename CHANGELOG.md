@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.20.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.19.0...city-infrastructure-platform-v1.20.0) (2025-09-01)
+
+
+### Features
+
+* Add transparency to a selected feature ([af090fd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/af090fde525e1198e99101e2a13c6425336b6545))
+* Do not allow height edit for linked additional sign real nor plans ([766a2a6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/766a2a68c809c1426e6f113462dd68934b4409e3))
+* Remove order fields from all models that have it ([1905eb9](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1905eb93e924ac22f04ef5782dae76e4c65e1978))
+
 ## [1.19.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.18.2...city-infrastructure-platform-v1.19.0) (2025-08-29)
 
 
