@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-29 10:35+0300\n"
+"POT-Creation-Date: 2025-09-02 12:50+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -406,16 +406,6 @@ msgid ""
 "centimeters."
 msgstr "Skyltens höjd över marken i centimeter, mätt från den övre kanten."
 
-msgid "Order"
-msgstr "Ordning"
-
-msgid ""
-"The order of the sign in relation to the signs at the same point. Order from "
-"top to bottom, from left to right starting at 1."
-msgstr ""
-"Skyltens läge i förhållande till de övriga skyltar som ligger på samma punkt."
-"Ordning uppifrån och ner, från vänster till höger, med början nummer 1."
-
 msgid "Mount type"
 msgstr "Monteringstyp"
 
@@ -640,6 +630,9 @@ msgstr "Appnamn"
 
 msgid "Is basemap"
 msgstr "Grundkarta"
+
+msgid "Order"
+msgstr "Ordning"
 
 msgid "Filter fields"
 msgstr "Filtrera fält"
