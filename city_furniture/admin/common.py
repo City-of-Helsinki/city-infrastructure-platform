@@ -58,6 +58,7 @@ class CityFurnitureTargetAdmin(AuditLogHistoryAdmin):
     ordering = ("name_fi",)
     actions = None
 
+
 @admin.register(CityFurnitureDeviceTypeIcon)
 class CityFurnitureDeviceTypeIconAdmin(admin.ModelAdmin):
     form = CityFurnitureDeviceTypeIconForm

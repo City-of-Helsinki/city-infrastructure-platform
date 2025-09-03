@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
 from city_furniture.enums import CityFurnitureClassType, CityFurnitureDeviceTypeTargetModel, CityFurnitureFunctionType
+from cityinfra import settings
 from traffic_control.mixins.models import AbstractFileModel, SourceControlModel
 
 
@@ -19,7 +20,9 @@ class CityFurnitureDeviceTypeQuerySet(models.QuerySet):
 
 
 class CityFurnitureDeviceTypeIcon(AbstractFileModel):
-    file = models.FileField(_("File"), blank=False, null=False, upload_to="icons/city_furniture_device_type/svg/")
+    file = models.FileField(
+        _("File"), blank=False, null=False, upload_to=settings.CITY_FURNITURE_DEVICE_TYPE_SVG_ICON_DESTINATION
+    )
 
     class Meta:
         db_table = "city_furniture_device_type_icon"
