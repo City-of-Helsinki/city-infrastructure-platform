@@ -412,6 +412,11 @@ ALLOWED_FILE_UPLOAD_TYPES = [
     ".csv",
 ]
 
+# PNG icons
+PNG_ICON_SIZES = [32, 64, 128, 256]
+CITY_FURNITURE_DEVICE_TYPE_SVG_ICON_DESTINATION = "icons/city_furniture_device_type/svg/"
+CITY_FURNITURE_DEVICE_TYPE_PNG_ICON_DESTINATION = "icons/city_furniture_device_type/png/"
+
 # django-axes settings for login failure limitation
 AXES_FAILURE_LIMIT = 6
 AXES_COOLOFF_TIME = 0.5

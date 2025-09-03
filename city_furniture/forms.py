@@ -1,4 +1,3 @@
-
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms.models import ModelChoiceIteratorValue
@@ -56,7 +55,7 @@ class CityFurnitureDeviceTypeIconForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        file = cleaned_data.get('file')
+        file = cleaned_data.get("file")
 
         if file:
             illegal_file_types, virus_scan_errors = get_icon_upload_obstacles([file])
@@ -67,8 +66,14 @@ class CityFurnitureDeviceTypeIconForm(forms.ModelForm):
             if virus_scan_errors:
                 add_virus_scan_errors_to_auditlog(virus_scan_errors, None, CityFurnitureDeviceTypeIcon, None)
                 raise ValidationError(_(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}"))
-
         return cleaned_data
+
+    def save(self, commit=True):
+        file = self.cleaned_data.get("file")
+        if file and self.has_changed() and "file" in self.changed_data:
+            pass
+
+        return super().save(commit=commit)
 
 
 class CityFurnitureDeviceTypeForm(forms.ModelForm):
@@ -78,6 +83,7 @@ class CityFurnitureDeviceTypeForm(forms.ModelForm):
             "icon_file": AdminCityFurnitureDeviceTypeIconSelectWidget,
         }
         fields = "__all__"
+
 
 class FurnitureSignpostRealModelForm(
     SRIDBoundGeometryFormMixin, ResponsibleEntityPermissionAdminFormMixin, Geometry3DFieldForm
