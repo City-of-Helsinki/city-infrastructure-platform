@@ -1,0 +1,31 @@
+services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: "azurite"
+    hostname: azurite
+    restart: always
+    ports:
+      - "10001:10001"
+      - "10002:10002"
+      - "10000:10000"
+    volumes:
+      - azurite-data:/data
+  # Utility command to create the media container on azurite
+  azurite-init:
+    image: mcr.microsoft.com/azure-cli
+    depends_on:
+      - azurite
+    volumes:
+      - ./azurite-init.sh:/azurite-init.sh # Mount the script into the container
+    entrypoint: /bin/bash /azurite-init.sh
+  # Utility command to wipe the media container on azurite
+  azurite-delete-media-container:
+    image: mcr.microsoft.com/azure-cli
+    depends_on:
+      - azurite
+    volumes:
+      - ./azurite-cleanup.sh:/azurite-cleanup.sh
+    entrypoint: /bin/bash /azurite-cleanup.sh
+
+volumes:
+  azurite-data:
