@@ -72,6 +72,7 @@ env = environ.Env(
     CSRF_COOKIE_SAMESITE=(str, "Strict"),
     SESSION_COOKIE_SAMESITE=(str, "Lax"),
     CITYINFRA_MAXIMUM_RESULTS_PER_PAGE=(int, 10000),
+    EMULATE_AZURE_BLOBSTORAGE=(bool, False),
 )
 
 if os.path.exists(env_file):
@@ -297,6 +298,10 @@ STORAGES = {
     },
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
 }
+AZURE_ACCOUNT_NAME = "devstoreaccount1"
+AZURE_CONTAINER = "media"
+AZURE_ACCOUNT_KEY = "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+
 STATICFILES_DIRS = [checkout_dir("map-view/build/static")]
 
 # Whether to trust X-Forwarded-Host headers for all purposes
@@ -350,6 +355,18 @@ if not DEBUG:
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGIN_REGEXES = env("CORS_ALLOWED_ORIGIN_REGEXES")
+
+# Azurite-specific configuration, meant only for local testing
+EMULATE_AZURE_BLOBSTORAGE = env.bool("EMULATE_AZURE_BLOBSTORAGE")
+if EMULATE_AZURE_BLOBSTORAGE:
+    print("Configuring default storage for azurite...")
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "connection_string": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;",
+            "azure_container": "media",
+        },
+    }
 
 # OpenShift-specific configuration
 OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")

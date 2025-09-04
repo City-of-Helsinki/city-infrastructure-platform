@@ -222,6 +222,13 @@ docker-compose up db
 # Run ClamAV locally (initialize clamd and then launch clamv-api)
 docker compose up clamd
 docker compose up clamv-api
+
+# Run azurite (local emulation of azure storage)
+# NOTE: To you use azurite you must also set the EMULATE_AZURE_BLOBSTORAGE variable on your .env file to True
+docker compose -f docker-compose.azurite.yml up azurite
+
+# Create the media storage in azurite and grant it public read permissions for serving static files
+docker compose -f docker-compose.azurite.yml up azurite-init
 ```
 
 ## Translations (fi)
