@@ -12,6 +12,8 @@ import FeatureInfo from "./components/FeatureInfo";
 import Map from "./common/Map";
 import { Feature, MapConfig } from "./models";
 import OngoingFetchInfo from "./components/OngoingFetchInfo";
+import AddressInput from "./components/AddressInput";
+import { Address, convertToEPSG3879OL, getAddressSearchResults } from "./common/AddressSearchUtils";
 
 const drawWidth = "400px";
 
@@ -38,6 +40,7 @@ interface AppState {
   mapConfig: MapConfig | null;
   features: Feature[];
   ongoingFeatureFetches: Set<string>;
+  addressSearchResults: Address[];
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -50,6 +53,7 @@ class App extends React.Component<AppProps, AppState> {
       mapConfig: null,
       features: [],
       ongoingFeatureFetches: new Set<string>(),
+      addressSearchResults: [],
     };
   }
 
@@ -66,9 +70,25 @@ class App extends React.Component<AppProps, AppState> {
     });
   }
 
+  handleSearch = async (address: string) => {
+    const addressSearchResults = await getAddressSearchResults(Map.getAddressSearchUrl(address));
+    this.setState({ addressSearchResults  });
+  };
+
+  handleSelect = (result: Address) => {
+    if (result && result.location && result.location.coordinates) {
+      const coordinates = result.location.coordinates;
+      Map.centerToCoordinates(convertToEPSG3879OL(coordinates));
+      this.setState({ addressSearchResults: [] }); // Clear results after selection
+    } else {
+      console.error("No valid coordinates found for selected address.");
+    }
+  };
+
+
   render() {
     const { classes } = this.props;
-    const { open, mapConfig, features, ongoingFeatureFetches } = this.state;
+    const { open, mapConfig, features, ongoingFeatureFetches, addressSearchResults } = this.state;
     return (
       <React.StrictMode>
         <div className="App">
@@ -86,6 +106,11 @@ class App extends React.Component<AppProps, AppState> {
               }}
             />
           )}
+          <AddressInput
+            onSearch={this.handleSearch}
+            onSelect={this.handleSelect}
+            results={addressSearchResults}
+          />
           {ongoingFeatureFetches.size > 0 && (
             <OngoingFetchInfo layerIdentifiers={ongoingFeatureFetches}></OngoingFetchInfo>
           )}

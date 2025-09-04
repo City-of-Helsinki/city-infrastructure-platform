@@ -35,6 +35,7 @@ import {
 import Static from "ol/source/ImageStatic";
 import { bboxPolygon, booleanIntersects, union, featureCollection } from "@turf/turf";
 import { Feature as TurfFeature, Polygon as TurfPolygon, MultiPolygon as TurfMultiPolygon, BBox } from "geojson";
+import { buildAddressSearchQuery } from "./AddressSearchUtils";
 type TurfPolygonFeature = TurfFeature<TurfPolygon | TurfMultiPolygon>;
 
 function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
@@ -702,6 +703,25 @@ class Map {
         layer.setSource(clusterSource);
       }
     }
+  }
+
+  centerToCoordinates(coords: Array<number>) {
+    this.map.once('moveend', () => {
+        this.updateVisibleLayers();
+    });
+    this.map.getView().animate({
+      center: coords,
+      zoom: 10,
+      duration: 2000,
+    })
+  }
+
+  getAddressSearchUrl(address: string) {
+    const searchUrlWithParams = buildAddressSearchQuery(address);
+    // TODO map conffiing base urli
+    console.log("JF params", searchUrlWithParams)
+    return "https://api.hel.fi/servicemap/v2/search" + `?${searchUrlWithParams}`;
+
   }
 
   private createBasemapLayerGroup(basemapConfig: LayerConfig) {
