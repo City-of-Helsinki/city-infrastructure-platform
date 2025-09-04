@@ -64,6 +64,7 @@ env = environ.Env(
     HELUSERS_ADGROUPS_CLAIM=(str, "groups"),
     LOGGING_AUTH_DEBUG=(bool, False),
     BASEMAP_SOURCE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/wms"),
+    ADDRESS_SEARCH_BASE_URL=(str, "https://api.hel.fi/servicemap/v2/search"),
     STATIC_URL=(str, "/static/"),
     MEDIA_URL=(str, "/media/"),
     CSRF_COOKIE_SECURE=(bool, True),
@@ -377,6 +378,7 @@ SRID = 3879  # the spatial reference id used for geometries
 SRID_BOUNDARIES = {3879: (25487917.144, 6645439.071, 25514074.175, 6687278.623)}
 
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
+ADDRESS_SEARCH_BASE_URL = env.str("ADDRESS_SEARCH_BASE_URL")
 
 # Import / Export
 IMPORT_EXPORT_USE_TRANSACTIONS = True

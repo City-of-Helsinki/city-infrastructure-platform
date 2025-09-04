@@ -1,5 +1,5 @@
 import { Circle, Geometry, GeometryCollection, LineString, MultiPolygon, Point, Polygon } from "ol/geom";
-import { Fill, Icon, Stroke, Style, Circle as CircleStyle } from "ol/style";
+import { Fill, Icon, Stroke, Style, Circle as CircleStyle, Text } from "ol/style";
 import { FeatureLike } from "ol/Feature";
 import RenderFeature from "ol/render/Feature";
 import { Coordinate } from "ol/coordinate";
@@ -133,9 +133,30 @@ export function getSinglePointStyle(
       feature.get("device_type_icon"),
     );
   }
-
   const geometry = feature.getGeometry();
   return getStylesForGeometry(geometry);
+}
+
+export function getAddressMarkerStyle(note: string) {
+  return new Style({
+    image: new CircleStyle({
+      radius: 5,
+      fill: defaultFill,
+      stroke: defaultStroke,
+    }),
+    text: new Text({
+      text: note,
+      font: "14px Calibri,sans-serif",
+      fill: new Fill({
+        color: "black",
+      }),
+      stroke: new Stroke({
+        color: "white",
+        width: 3,
+      }),
+      offsetY: -15, // Position the text above the marker
+    }),
+  });
 }
 
 function getIconSrc(

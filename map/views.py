@@ -68,6 +68,7 @@ def map_config(request):
         "icon_scale": get_icons_scale(),
         "icon_type": get_icons_type(),
         "featureTypeEditNameMapping": FeatureTypeEditMapping.get_featuretype_edit_name_mapping(),
+        "address_search_base_url": settings.ADDRESS_SEARCH_BASE_URL,
     }
     return JsonResponse(config)
 

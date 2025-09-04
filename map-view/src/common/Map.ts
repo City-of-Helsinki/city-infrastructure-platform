@@ -25,6 +25,7 @@ import { Cluster } from "ol/source";
 import BaseObject from "ol/Object";
 import { Extent, getCenter } from "ol/extent";
 import {
+  getAddressMarkerStyle,
   getDiffLayerIdentifier,
   getDiffLayerIdentifierFromFeature,
   getHighlightStyle,
@@ -35,6 +36,7 @@ import {
 import Static from "ol/source/ImageStatic";
 import { bboxPolygon, booleanIntersects, union, featureCollection } from "@turf/turf";
 import { Feature as TurfFeature, Polygon as TurfPolygon, MultiPolygon as TurfMultiPolygon, BBox } from "geojson";
+import { buildAddressSearchQuery } from "./AddressSearchUtils";
 type TurfPolygonFeature = TurfFeature<TurfPolygon | TurfMultiPolygon>;
 
 function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
@@ -101,6 +103,11 @@ class Map {
   private highLightedFeatureLayer: VectorLayer<VectorSource>;
 
   /**
+   * A layer to draw selected address marker
+   */
+  private selectedAddressFeatureLayer: VectorLayer<VectorSource>;
+
+  /**
    * Callback function to process features returned from GetFeatureInfo requests
    *
    * @param features Features returned from GetFeatureInfo requests
@@ -147,6 +154,7 @@ class Map {
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
     this.planOfRealVectorLayer = Map.createPlanOfRealVectorLayer();
     this.highLightedFeatureLayer = Map.createHighLightLayer();
+    this.selectedAddressFeatureLayer = Map.createSelectedAddressLayer();
     const planRealDiffVectorLayerGroup = this.createPlanRealDiffVectorLayerGroup(mapConfig);
 
     const resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625];
@@ -168,11 +176,13 @@ class Map {
         planRealDiffVectorLayerGroup,
         this.highLightedFeatureLayer,
         this.planOfRealVectorLayer,
+        this.selectedAddressFeatureLayer,
       ],
       controls: this.getControls(),
       view,
     });
     this.highLightedFeatureLayer.setVisible(true);
+    this.selectedAddressFeatureLayer.setVisible(true);
     this.overViewMap = new OverviewMap({
       className: "ol-overviewmap",
       layers: [
@@ -360,6 +370,18 @@ class Map {
     this.highLightedFeatureLayer.getSource()?.addFeature(olFeature);
   }
 
+  /**
+   *
+   */
+  markSelectedAddress(coords: [number, number], address: string) {
+    const olFeature = new OlFeature({
+      geometry: new Point(coords),
+      name: "selectedAddress",
+    });
+    this.selectedAddressFeatureLayer.setStyle(getAddressMarkerStyle(address));
+    this.selectedAddressFeatureLayer.getSource()?.addFeature(olFeature);
+  }
+
   showAllPlanAndRealDifferences(realLayer: VectorLayer<VectorSource>, planLayer: VectorLayer<VectorSource>) {
     let realFeatures: FeatureLike[],
       planFeatures: FeatureLike[] = [];
@@ -415,6 +437,13 @@ class Map {
     const highLightLayerSource = new VectorSource({});
     return new VectorLayer({
       source: highLightLayerSource,
+    });
+  }
+
+  private static createSelectedAddressLayer() {
+    const selectedAddressSource = new VectorSource({});
+    return new VectorLayer({
+      source: selectedAddressSource,
     });
   }
 
@@ -684,6 +713,14 @@ class Map {
     this.highLightedFeatureLayer.getSource()!.clear();
   }
 
+  clearSelectedAddressLayer() {
+    this.selectedAddressFeatureLayer.getSource()!.clear();
+  }
+
+  showSelectedAddressLayer(show: boolean) {
+    this.selectedAddressFeatureLayer.setVisible(show);
+  }
+
   applyProjectFilters(overlayConfig: LayerConfig, projectId: string) {
     const { sourceUrl } = overlayConfig;
     const filter_field = "responsible_entity_name";
@@ -702,6 +739,22 @@ class Map {
         layer.setSource(clusterSource);
       }
     }
+  }
+
+  centerToCoordinates(coords: Array<number>) {
+    this.map.once("moveend", () => {
+      this.updateVisibleLayers();
+    });
+    this.map.getView().animate({
+      center: coords,
+      zoom: 10,
+      duration: 2000,
+    });
+  }
+
+  getAddressSearchUrl(address: string) {
+    const searchUrlWithParams = buildAddressSearchQuery(address);
+    return `${this.mapConfig.address_search_base_url}?${searchUrlWithParams}`;
   }
 
   private createBasemapLayerGroup(basemapConfig: LayerConfig) {

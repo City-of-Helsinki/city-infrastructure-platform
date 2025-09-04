@@ -5667,6 +5667,11 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
+mgrs@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mgrs/-/mgrs-1.0.0.tgz#fb91588e78c90025672395cb40b25f7cd6ad1829"
+  integrity sha512-awNbTOqCxK1DBGjalK3xqWIstBZgN6fxsMSiXLs9/spqWkF2pAhb2rrYCFSsr1/tT7PhcDGjZndG8SWYn0byYA==
+
 micromatch@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.8.tgz#d66fa18f3a47076789320b9b1af32bd86d9fa202"
@@ -6014,6 +6019,14 @@ pretty-format@^27.0.2:
     ansi-regex "^5.0.1"
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
+
+proj4@^2.19.10:
+  version "2.19.10"
+  resolved "https://registry.yarnpkg.com/proj4/-/proj4-2.19.10.tgz#ca2a51627d4dfa20f68f3babed3380f8ef626262"
+  integrity sha512-uL6/C6kA8+ncJAEDmUeV8PmNJcTlRLDZZa4/87CzRpb8My4p+Ame4LhC4G3H/77z2icVqcu3nNL9h5buSdnY+g==
+  dependencies:
+    mgrs "1.0.0"
+    wkt-parser "^1.5.1"
 
 prop-types@^15.6.2, prop-types@^15.8.1:
   version "15.8.1"
@@ -7054,6 +7067,11 @@ why-is-node-running@^2.3.0:
   dependencies:
     siginfo "^2.0.0"
     stackback "0.0.2"
+
+wkt-parser@^1.5.1:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/wkt-parser/-/wkt-parser-1.5.2.tgz#a8eaf86ac2cc1d0a2e6a8082a930f5c7ebdb5771"
+  integrity sha512-1ZUiV1FTwSiSrgWzV9KXJuOF2BVW91KY/mau04BhnmgOdroRQea7Q0s5TVqwGLm0D2tZwObd/tBYXW49sSxp3Q==
 
 word-wrap@^1.2.5:
   version "1.2.5"
