@@ -73,6 +73,7 @@ env = environ.Env(
     CSRF_COOKIE_SAMESITE=(str, "Strict"),
     SESSION_COOKIE_SAMESITE=(str, "Lax"),
     CITYINFRA_MAXIMUM_RESULTS_PER_PAGE=(int, 10000),
+    EMULATE_AZURE_BLOBSTORAGE=(bool, False),
 )
 
 if os.path.exists(env_file):
@@ -353,6 +354,20 @@ if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGIN_REGEXES = env("CORS_ALLOWED_ORIGIN_REGEXES")
 
+# Azurite-specific configuration, meant only for local testing
+EMULATE_AZURE_BLOBSTORAGE = env.bool("EMULATE_AZURE_BLOBSTORAGE")
+if EMULATE_AZURE_BLOBSTORAGE:
+    print("Using azurite (azure emulator)")
+    STORAGES["icons"] = {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            # NOTE (2025-09-11 thiago): This is public info
+            # https://github.com/Azure/Azurite/blob/92743bac3cf580c6dfe1ecc9ac777a6ce16cd985/README.md#connection-strings
+            "connection_string": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;",
+            "azure_container": "media",
+        },
+    }
+
 # OpenShift-specific configuration
 OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
 if OPENSHIFT_DEPLOYMENT:
@@ -361,6 +376,11 @@ if OPENSHIFT_DEPLOYMENT:
     AZURE_ACCOUNT_NAME = env.str("AZURE_ACCOUNT_NAME")
     AZURE_CONTAINER = env.str("AZURE_CONTAINER")
     AZURE_ACCOUNT_KEY = env.str("AZURE_ACCOUNT_KEY")
+
+if EMULATE_AZURE_BLOBSTORAGE and OPENSHIFT_DEPLOYMENT:
+    raise ImproperlyConfigured(
+        "You cannot have EMULATE_AZURE_BLOBSTORAGE and OPENSHIFT_DEPLOYMENT enabled at the same time"
+    )
 
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
