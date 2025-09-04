@@ -13,6 +13,9 @@
     "Display Plan/Real difference": "Visa plan/implementering skillnad",
     "Filter by Project": "Filtrera efter projekt",
     "Active data fetches": "Aktiva datahämtningar",
-    "No active data fetches.": "Inga aktiva datahämtningar."
+    "No active data fetches.": "Inga aktiva datahämtningar.",
+    "Address": "Adress",
+    "e.g. Vaasankatu 20": "t.ex Gustav Vasas väg 20",
+    "Address search": "Adress sök"
   }
 }

@@ -13,6 +13,9 @@
     "Display Plan/Real difference": "Display Plan/Real difference",
     "Filter by Project": "Filter by Project",
     "Active data fetches": "Active data fetches",
-    "No active data fetches": "No active data fetches"
+    "No active data fetches": "No active data fetches",
+    "Address": "Address",
+    "e.g. Vaasankatu 20": "e.g. Vaasankatu 20",
+    "Address search": "Address search"
   }
 }

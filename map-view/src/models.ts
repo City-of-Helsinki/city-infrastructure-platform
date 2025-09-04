@@ -31,6 +31,7 @@ export interface MapConfig {
   overlayConfig: LayerConfig;
   overviewConfig: OverviewConfig;
   traffic_sign_icons_url: string;
+  address_search_base_url: string;
   featureTypeEditNameMapping: Record<string, string>;
   icon_scale: number;
   icon_type: string;

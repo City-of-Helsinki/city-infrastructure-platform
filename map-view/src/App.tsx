@@ -3,6 +3,7 @@ import Fab from "@mui/material/Fab";
 import { Theme } from "@mui/material/styles";
 import { createStyles, withStyles, WithStyles } from "@mui/styles";
 import LayersIcon from "@mui/icons-material/Layers";
+import SearchIcon from "@mui/icons-material/Search";
 import "ol/ol.css";
 import React from "react";
 import MapConfigAPI from "./api/MapConfigAPI";
@@ -12,14 +13,22 @@ import FeatureInfo from "./components/FeatureInfo";
 import Map from "./common/Map";
 import { Feature, MapConfig } from "./models";
 import OngoingFetchInfo from "./components/OngoingFetchInfo";
+import AddressInput from "./components/AddressInput";
+import { Address, convertToEPSG3879OL, getAddressSearchResults, getNameFromAddress } from "./common/AddressSearchUtils";
 
 const drawWidth = "400px";
 
 const styles = (theme: Theme) =>
   createStyles({
-    mapButton: {
+    layerSwitcherButton: {
       position: "absolute",
       right: "16px",
+      top: "16px",
+      color: "white",
+    },
+    searchButton: {
+      position: "absolute",
+      left: "50px",
       top: "16px",
       color: "white",
     },
@@ -35,9 +44,11 @@ interface AppProps extends WithStyles<typeof styles> {}
 
 interface AppState {
   open: boolean;
+  openAddressSearch: boolean;
   mapConfig: MapConfig | null;
   features: Feature[];
   ongoingFeatureFetches: Set<string>;
+  addressSearchResults: Address[];
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -47,9 +58,11 @@ class App extends React.Component<AppProps, AppState> {
     super(props);
     this.state = {
       open: false,
+      openAddressSearch: false,
       mapConfig: null,
       features: [],
       ongoingFeatureFetches: new Set<string>(),
+      addressSearchResults: [],
     };
   }
 
@@ -66,9 +79,30 @@ class App extends React.Component<AppProps, AppState> {
     });
   }
 
+  handleSearch = async (address: string) => {
+    const addressSearchResults = await getAddressSearchResults(Map.getAddressSearchUrl(address));
+    this.setState({ addressSearchResults });
+  };
+
+  clearSearchResults = () => {
+    this.setState({ addressSearchResults: [] });
+  };
+
+  handleSelect = (result: Address) => {
+    if (result?.location?.coordinates) {
+      const coordinates = convertToEPSG3879OL(result.location.coordinates);
+      Map.clearSelectedAddressLayer();
+      Map.markSelectedAddress(coordinates, getNameFromAddress(result) || "Address name not found");
+      Map.centerToCoordinates(coordinates);
+    } else {
+      console.error("No valid coordinates found for selected address.");
+    }
+    this.setState({ addressSearchResults: [] });
+  };
+
   render() {
     const { classes } = this.props;
-    const { open, mapConfig, features, ongoingFeatureFetches } = this.state;
+    const { open, openAddressSearch, mapConfig, features, ongoingFeatureFetches, addressSearchResults } = this.state;
     return (
       <React.StrictMode>
         <div className="App">
@@ -86,6 +120,37 @@ class App extends React.Component<AppProps, AppState> {
               }}
             />
           )}
+          <Fab
+            size="medium"
+            color="primary"
+            onClick={() => {
+              Map.showSelectedAddressLayer(!openAddressSearch);
+              this.setState({ openAddressSearch: !openAddressSearch });
+            }}
+            className={classes.searchButton}
+          >
+            <SearchIcon />
+          </Fab>
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="left"
+            open={openAddressSearch}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <AddressInput
+              onClose={() => {
+                Map.showSelectedAddressLayer(false);
+                this.setState({ openAddressSearch: false });
+              }}
+              onSearch={this.handleSearch}
+              onSelect={this.handleSelect}
+              clearResults={this.clearSearchResults}
+              results={addressSearchResults}
+            />
+          </Drawer>
           {ongoingFeatureFetches.size > 0 && (
             <OngoingFetchInfo layerIdentifiers={ongoingFeatureFetches}></OngoingFetchInfo>
           )}
@@ -93,7 +158,7 @@ class App extends React.Component<AppProps, AppState> {
             size="medium"
             color="primary"
             onClick={() => this.setState({ open: !open })}
-            className={classes.mapButton}
+            className={classes.layerSwitcherButton}
           >
             <LayersIcon />
           </Fab>

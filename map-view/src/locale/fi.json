@@ -13,6 +13,9 @@
     "Display Plan/Real difference": "Näytä suunnitelman ja toteuman etäisyys",
     "Filter by Project": "Suodata projektin perusteella",
     "Active data fetches": "Aktiiviset tietojen haut",
-    "No active data fetches.": "Ei aktiivisia tietojen hakuja"
+    "No active data fetches": "Ei aktiivisia tietojen hakuja",
+    "Address": "Osoite",
+    "e.g. Vaasankatu 20": "esim. Vaasankatu 20",
+    "Address search": "Osoite haku"
   }
 }
