@@ -2,6 +2,7 @@ import pytest
 from django import forms
 
 from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.forms import AdminTrafficControlDeviceTypeIconSelectWidget
 from traffic_control.models.common import TrafficControlDeviceType
 from traffic_control.tests.factories import AdditionalSignRealFactory, TrafficControlDeviceTypeFactory
 
@@ -9,6 +10,9 @@ from traffic_control.tests.factories import AdditionalSignRealFactory, TrafficCo
 class TrafficControlDeviceTypeForm(forms.ModelForm):
     class Meta:
         model = TrafficControlDeviceType
+        widgets = {
+            "icon_file": AdminTrafficControlDeviceTypeIconSelectWidget,
+        }
         fields = "__all__"
 
 
