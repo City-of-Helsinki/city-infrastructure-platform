@@ -16,7 +16,7 @@ from traffic_control.enums import (
     TRAFFIC_SIGN_TYPE_MAP,
     TrafficControlDeviceTypeType,
 )
-from traffic_control.mixins.models import UserControlModel
+from traffic_control.mixins.models import AbstractFileModel, UserControlModel
 
 VERBOSE_NAME_NEW = _("New")
 VERBOSE_NAME_OLD = _("Old")
@@ -70,6 +70,17 @@ class TrafficControlDeviceTypeQuerySet(models.QuerySet):
         return self.filter(Q(target_model=None) | Q(target_model=target_model))
 
 
+class TrafficControlDeviceTypeIcon(AbstractFileModel):
+    file = models.FileField(
+        _("File"), blank=False, null=False, upload_to=settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION
+    )
+
+    class Meta:
+        db_table = "traffic_control_device_type_icon"
+        verbose_name = _("Traffic Control Device Type Icon")
+        verbose_name_plural = _("Traffic Control Device Type Icons")
+
+
 class TrafficControlDeviceType(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     code = models.CharField(
@@ -82,6 +93,13 @@ class TrafficControlDeviceType(models.Model):
         _("Icon"),
         max_length=100,
         blank=True,
+    )
+    icon_file = models.ForeignKey(
+        TrafficControlDeviceTypeIcon,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        help_text=_("Icon of the actual device"),
     )
     description = models.CharField(
         _("Description"),
