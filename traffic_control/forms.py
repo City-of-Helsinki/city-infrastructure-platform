@@ -33,8 +33,9 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
+from traffic_control.models.common import TrafficControlDeviceTypeIcon
 from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
-from traffic_control.utils import get_file_upload_obstacles
+from traffic_control.utils import get_file_upload_obstacles, get_icon_upload_obstacles
 from traffic_control.validators import validate_location_ewkt, validate_structured_content
 
 
@@ -44,6 +45,51 @@ class AdminFileWidget(widgets.AdminFileWidget):
     """
 
     template_name = "admin/traffic_control/widgets/clearable_file_input.html"
+
+
+class AbstractAdminDeviceTypeIconSelectWidget(Select):
+    """
+    Widget that show a traffic sign icon representing the selected device type
+    next to the select input
+    """
+
+    template_name = "admin/traffic_control/widgets/traffic_sign_icon_select.html"
+    Model = None
+
+    class Media:
+        css = {"all": ("traffic_control/css/traffic_sign_icon_select.css",)}
+        js = ("traffic_control/js/traffic_sign_icon_select.js",)
+
+    def __init__(self, *args, **kwargs):
+        if self.Model is None:
+            raise NotImplementedError("Inherited class is missing Model declaration")
+
+        super().__init__(*args, **kwargs)
+        self.icon_url_mapping = None
+
+    def get_icon_url(self, value):
+        if not self.icon_url_mapping:
+            self.icon_url_mapping = {}
+            icons = self.Model.objects.all().only("id", "file")
+            for icon in icons:
+                self.icon_url_mapping[icon.id] = icon.file.url
+        return self.icon_url_mapping.get(value, "")
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context["icon_path"] = self.get_icon_url(value)
+        return context
+
+    def create_option(self, name, value, *args, **kwargs):
+        if isinstance(value, ModelChoiceIteratorValue):
+            value = value.value
+        option = super().create_option(name, value, *args, **kwargs)
+        option["attrs"]["icon-url"] = self.get_icon_url(value)
+        return option
+
+
+class AdminTrafficControlDeviceTypeIconSelectWidget(AbstractAdminDeviceTypeIconSelectWidget):
+    Model = TrafficControlDeviceTypeIcon
 
 
 class AdminTrafficSignIconSelectWidget(Select):
@@ -344,6 +390,45 @@ class SignpostPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
 class SignpostRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = SignpostReal
+        fields = "__all__"
+
+
+class TrafficControlDeviceTypeForm(forms.ModelForm):
+    class Meta:
+        model = TrafficControlDeviceType
+        widgets = {
+            "icon_file": AdminTrafficControlDeviceTypeIconSelectWidget,
+        }
+        fields = "__all__"
+
+
+class AbstractDeviceTypeIconForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+        file = cleaned_data.get("file")
+
+        if file:
+            illegal_file_types, virus_scan_errors = get_icon_upload_obstacles([file])
+
+            if illegal_file_types:
+                raise ValidationError(_(f"Illegal file types: {', '.join(illegal_file_types)}"))
+
+            if virus_scan_errors:
+                add_virus_scan_errors_to_auditlog(virus_scan_errors, None, self._meta.model, None)
+                raise ValidationError(_(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}"))
+        return cleaned_data
+
+    def save(self, commit=True):
+        file = self.cleaned_data.get("file")
+        if file and self.has_changed() and "file" in self.changed_data:
+            pass
+
+        return super().save(commit=commit)
+
+
+class TrafficControlDeviceTypeIconForm(AbstractDeviceTypeIconForm):
+    class Meta:
+        model = TrafficControlDeviceTypeIcon
         fields = "__all__"
 
 
