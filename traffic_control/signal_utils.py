@@ -39,3 +39,32 @@ def generate_pngs_on_svg_save(*, instance, png_folder):
                 return
 
             logger.info(f"PNG icon generated: {png_file_path}")
+
+
+def delete_icon_files_on_row_delete(*, instance, png_folder):
+    """
+    Deletes the SVG and associated PNG files from storage.
+    """
+    try:
+        # Check if the file field is not empty before attempting to delete.
+        if instance.file:
+            # Delete all generated PNG files for different sizes
+            svg_file_name = os.path.basename(instance.file.name)
+            base_file_name = os.path.splitext(svg_file_name)[0]
+
+            for size in settings.PNG_ICON_SIZES:
+                png_file_path = os.path.join(png_folder, str(size), base_file_name + ".png")
+
+                if instance.file.storage.exists(png_file_path):
+                    try:
+                        instance.file.storage.delete(png_file_path)
+                        logger.info(f"PNG file deleted: {png_file_path}")
+                    except Exception as e:
+                        logger.error(f"Unable to delete {png_file_path}: {e}")
+
+            # Delete the main SVG file
+            instance.file.storage.delete(instance.file.name)
+            logger.info(f"SVG file deleted: {instance.file.name}")
+
+    except Exception as e:
+        logger.error(f"Error deleting files for instance {instance.pk}: {e}")
