@@ -6,6 +6,7 @@ from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
+from django.core.files.storage import Storage, storages
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField
@@ -70,9 +71,23 @@ class TrafficControlDeviceTypeQuerySet(models.QuerySet):
         return self.filter(Q(target_model=None) | Q(target_model=target_model))
 
 
+def traffic_control_device_type_icon_storage() -> Storage:
+    return storages["icons"]
+
+
 class TrafficControlDeviceTypeIcon(AbstractFileModel):
     file = models.FileField(
-        _("File"), blank=False, null=False, upload_to=settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION
+        _("File"),
+        blank=False,
+        null=False,
+        upload_to=settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION,
+        # NOTE (2025-09-10 thiago)
+        # We need to pass our storage as a callback that returns the target storage. If we don't the generated migration
+        # will contain runtime server settings used when running migrations generation. This would mean either
+        # 1) The migration produces an incorrectly configured field for production
+        #    or
+        # 2) The migration leaks the production keys into git via the generated migrations file
+        storage=traffic_control_device_type_icon_storage,
     )
 
     class Meta:
