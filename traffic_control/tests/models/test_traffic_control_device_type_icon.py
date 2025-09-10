@@ -35,3 +35,43 @@ def test__traffic_control_device_type_icon__enforces_uniqueness(override_setting
     TrafficControlDeviceTypeIcon.objects.create(file=svg_file)
     with pytest.raises(IntegrityError):
         TrafficControlDeviceTypeIcon.objects.create(file=svg_file)
+
+
+@pytest.mark.django_db
+def test__traffic_control_device_type_icon__custom_signal_handlers(override_settings, svg_file, settings):
+    """
+    Creating TrafficControlDeviceTypeIcon objects triggers as a side effect the creation of PNG icons in different sizes
+    corresponding to the uploaded SVG. Check the following:
+    * The SVG and its corresponding PNG files are found in expected places after creation.
+    * The SVG and its corresponding PNG files are wiped from disk after deletion.
+    """
+    td = TrafficControlDeviceTypeIcon.objects.create(file=svg_file)
+    storage = td.file.storage
+
+    # NOTE (2025-09-18 thiago)
+    # This test is written with big faith in WORKS ON MY MACHINE - At least locally, running this test doesn't seem to
+    # require any sort of waiting before checking that the custom signal handlers for post_save and post_delete have
+    # taken effect. In case this test is flakey consider introducing some sort of waiting here.
+
+    # Check that after object creation the files are in the right place
+    assert storage.exists(os.path.join(settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION, EXAMPLE_SVG_NAME))
+    for size in settings.PNG_ICON_SIZES:
+        assert storage.exists(
+            os.path.join(
+                settings.TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION,
+                str(size),
+                EXAMPLE_PNG_NAME,
+            )
+        )
+
+    # Check that after object deletion the files have been wiped
+    td.delete()
+    assert not storage.exists(os.path.join(settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION, EXAMPLE_SVG_NAME))
+    for size in settings.PNG_ICON_SIZES:
+        assert not storage.exists(
+            os.path.join(
+                settings.TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION,
+                str(size),
+                EXAMPLE_PNG_NAME,
+            )
+        )
