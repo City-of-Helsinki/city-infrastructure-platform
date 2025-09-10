@@ -53,6 +53,7 @@ env = environ.Env(
     OPENSHIFT_DEPLOYMENT=(bool, False),
     AZURE_ACCOUNT_KEY=(str, False),
     AZURE_CONTAINER=(str, False),
+    AZURE_ICON_CONTAINER=(str, False),
     AZURE_ACCOUNT_NAME=(str, False),
     OIDC_AUTHENTICATION_ENABLED=(bool, True),
     SOCIAL_AUTH_TUNNISTAMO_KEY=(str, None),
@@ -298,6 +299,12 @@ STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
+    "icons": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        # NOTE (2025-09-10 thiago): For azure/azurite this is configured to enable file overwriting
+        # Such behavior is unavailable to default django storages prior to django 5.1 - so some of
+        # the behaviors regarding file reuploads will be different in non-azure/(non-azurite) setups
+    },
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
 }
 STATICFILES_DIRS = [checkout_dir("map-view/build/static")]
@@ -361,10 +368,11 @@ if EMULATE_AZURE_BLOBSTORAGE:
     STORAGES["icons"] = {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
+            "azure_container": "media",
             # NOTE (2025-09-11 thiago): This is public info
             # https://github.com/Azure/Azurite/blob/92743bac3cf580c6dfe1ecc9ac777a6ce16cd985/README.md#connection-strings
             "connection_string": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;",
-            "azure_container": "media",
+            "overwrite_files": True,
         },
     }
 
@@ -372,10 +380,25 @@ if EMULATE_AZURE_BLOBSTORAGE:
 OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
 if OPENSHIFT_DEPLOYMENT:
     # Use Azure Storage Container as file storage in OpenShift deployment
-    STORAGES["default"]["BACKEND"] = "storages.backends.azure_storage.AzureStorage"
-    AZURE_ACCOUNT_NAME = env.str("AZURE_ACCOUNT_NAME")
-    AZURE_CONTAINER = env.str("AZURE_CONTAINER")
-    AZURE_ACCOUNT_KEY = env.str("AZURE_ACCOUNT_KEY")
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "account_key": env.str("AZURE_ACCOUNT_KEY"),
+            "account_name": env.str("AZURE_ACCOUNT_NAME"),
+            "azure_container": env.str("AZURE_CONTAINER"),
+        },
+    }
+
+    # Icons storage
+    STORAGES["icons"] = {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "account_key": env.str("AZURE_ACCOUNT_KEY"),
+            "account_name": env.str("AZURE_ACCOUNT_NAME"),
+            "azure_container": env.str("AZURE_ICON_CONTAINER"),
+            "overwrite_files": True,
+        },
+    }
 
 if EMULATE_AZURE_BLOBSTORAGE and OPENSHIFT_DEPLOYMENT:
     raise ImproperlyConfigured(
