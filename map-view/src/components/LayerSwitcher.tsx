@@ -1,138 +1,136 @@
-import { TextField, Theme } from "@mui/material";
-import { createStyles, withStyles, WithStyles } from "@mui/styles";
-import AppBar from "@mui/material/AppBar";
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
-import IconButton from "@mui/material/IconButton";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import {
+  TextField,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  IconButton,
+  Radio,
+  RadioGroup,
+  Toolbar,
+  Typography,
+  AppBar,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
-import React from "react";
+import React, { useState } from "react";
 import Map from "../common/Map";
 import { MapConfig } from "../models";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { getDiffLayerIdentifierFromLayerIdentifier } from "../common/MapUtils";
 
-const styles = (theme: Theme) =>
-  createStyles({
-    title: {
-      flexGrow: 1,
-    },
-    layers: {
-      padding: "16px",
-    },
-  });
+const StyledAppBar = styled(AppBar)({
+  position: "static",
+  elevation: 0,
+});
 
-interface LayerSwitcherProps extends WithStyles<typeof styles>, WithTranslation {
+const StyledToolbar = styled(Toolbar)({
+  minHeight: "auto !important",
+});
+
+const StyledTitleTypography = styled(Typography)({
+  flexGrow: 1,
+});
+
+const StyledLayersDiv = styled("div")({
+  padding: "16px",
+});
+
+interface LayerSwitcherProps {
   mapConfig: MapConfig;
   onClose: () => void;
   onOverlayToggle: (checked: boolean, diffLayerIdentifier: string) => void;
 }
 
-interface LayerSwitcherStates {
-  visibleBasemap: string;
-  visibleOverlays: {
-    [identifier: string]: boolean;
-  };
-  displayRealPlanDifference: boolean;
-  projectIdFilter: string;
-}
+const LayerSwitcher = ({ mapConfig, onClose, onOverlayToggle }: LayerSwitcherProps) => {
+  const { t } = useTranslation();
+  const { basemapConfig, overlayConfig } = mapConfig;
 
-class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherStates> {
-  constructor(props: LayerSwitcherProps) {
-    super(props);
-    const { basemapConfig, overlayConfig } = props.mapConfig;
-    const visibleBasemap = basemapConfig.layers.length > 0 ? basemapConfig.layers[0].identifier : "";
-    const visibleOverlays: { [identifier: string]: boolean } = {};
+  const [visibleBasemap, setVisibleBasemap] = useState<string>(
+    basemapConfig.layers.length > 0 ? basemapConfig.layers[0].identifier : "",
+  );
+  const [visibleOverlays, setVisibleOverlays] = useState<{ [identifier: string]: boolean }>(() => {
+    const overlays: { [identifier: string]: boolean } = {};
     overlayConfig.layers.forEach(({ identifier }) => {
-      visibleOverlays[identifier] = false;
+      overlays[identifier] = false;
     });
-    this.state = {
-      visibleBasemap,
-      visibleOverlays,
-      displayRealPlanDifference: true,
-      projectIdFilter: "",
-    };
-  }
+    return overlays;
+  });
+  const [displayRealPlanDifference, setDisplayRealPlanDifference] = useState<boolean>(true);
 
-  renderBasemapGroup() {
-    const { basemapConfig } = this.props.mapConfig;
+  const renderBasemapGroup = () => {
     const { name, layers } = basemapConfig;
-    const { visibleBasemap } = this.state;
-    const basemapRadios = layers.map((layer) => (
-      <FormControlLabel key={layer.identifier} control={<Radio />} label={layer.name} value={layer.identifier} />
-    ));
     const changeBasemap = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const basemap = (event.target as HTMLInputElement).value;
+      const basemap = event.target.value;
       Map.setVisibleBasemap(basemap);
-      this.setState({ visibleBasemap: basemap });
+      setVisibleBasemap(basemap);
     };
+
     return (
       <div className="basemap-group">
         <h4>{name}</h4>
         <FormControl component="fieldset">
           <RadioGroup aria-label="basemap" name="basemap" value={visibleBasemap} onChange={changeBasemap}>
-            {basemapRadios}
+            {layers.map((layer) => (
+              <FormControlLabel
+                key={layer.identifier}
+                control={<Radio />}
+                label={layer.name}
+                value={layer.identifier}
+              />
+            ))}
           </RadioGroup>
         </FormControl>
       </div>
     );
-  }
+  };
 
-  renderOverlayGroup() {
-    const { onOverlayToggle } = this.props;
-    const { overlayConfig } = this.props.mapConfig;
+  const renderOverlayGroup = () => {
     const { name, layers } = overlayConfig;
-    const { visibleOverlays } = this.state;
 
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
       const identifier = event.target.name;
       const checked = event.target.checked;
       onOverlayToggle(checked, getDiffLayerIdentifierFromLayerIdentifier(identifier));
-      visibleOverlays[identifier] = checked;
+      setVisibleOverlays((prev) => ({
+        ...prev,
+        [identifier]: checked,
+      }));
       Map.setOverlayVisible(identifier, checked);
-      this.setState({ visibleOverlays });
     };
-    const overlayCheckboxes = layers.map((layer) => (
-      <FormControlLabel
-        key={layer.identifier}
-        control={
-          <Checkbox
-            checked={visibleOverlays[layer.identifier]}
-            onChange={changeOverlayVisibility}
-            name={layer.identifier}
-          />
-        }
-        label={layer.name}
-      />
-    ));
+
     return (
       <div className="overlay-group">
         <h4>{name}</h4>
-        <FormGroup>{overlayCheckboxes}</FormGroup>
+        <FormGroup>
+          {layers.map((layer) => (
+            <FormControlLabel
+              key={layer.identifier}
+              control={
+                <Checkbox
+                  checked={visibleOverlays[layer.identifier]}
+                  onChange={changeOverlayVisibility}
+                  name={layer.identifier}
+                />
+              }
+              label={layer.name}
+            />
+          ))}
+        </FormGroup>
       </div>
     );
-  }
+  };
 
-  renderSettings() {
-    const { t } = this.props;
-    const { overlayConfig } = this.props.mapConfig;
-    const { displayRealPlanDifference } = this.state;
-
+  const renderSettings = () => {
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const checked: boolean = event.target.checked;
+      const checked = event.target.checked;
       Map.setPlanRealDiffVectorLayersVisible(checked);
-      this.setState({ displayRealPlanDifference: checked });
+      setDisplayRealPlanDifference(checked);
     };
 
     const changeProjectIdFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const text: string = event.target.value || "";
+      const text = event.target.value || "";
       Map.applyProjectFilters(overlayConfig, text);
-      this.setState({ projectIdFilter: text });
     };
 
     return (
@@ -155,30 +153,27 @@ class LayerSwitcher extends React.Component<LayerSwitcherProps, LayerSwitcherSta
         </FormGroup>
       </div>
     );
-  }
+  };
 
-  render() {
-    const { classes, onClose, t } = this.props;
-    return (
-      <div className="layer-switcher">
-        <AppBar position="static" elevation={0}>
-          <Toolbar>
-            <Typography variant="h6" color="inherit" className={classes.title}>
-              {t("Layers")}
-            </Typography>
-            <IconButton color="inherit" aria-label="close" onClick={onClose}>
-              <CloseIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <div className={classes.layers}>
-          {this.renderBasemapGroup()}
-          {this.renderOverlayGroup()}
-          {this.renderSettings()}
-        </div>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="layer-switcher">
+      <StyledAppBar elevation={0}>
+        <StyledToolbar>
+          <StyledTitleTypography variant="h6" color="inherit">
+            {t("Layers")}
+          </StyledTitleTypography>
+          <IconButton color="inherit" aria-label="close" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </StyledToolbar>
+      </StyledAppBar>
+      <StyledLayersDiv>
+        {renderBasemapGroup()}
+        {renderOverlayGroup()}
+        {renderSettings()}
+      </StyledLayersDiv>
+    </div>
+  );
+};
 
-export default withTranslation()(withStyles(styles)(LayerSwitcher));
+export default LayerSwitcher;
