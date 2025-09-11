@@ -1,42 +1,37 @@
-import { Theme } from "@mui/material";
-import { createStyles, withStyles, WithStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import { Button, Card, CardActions, CardContent, IconButton, Typography, Divider } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import NavigateBefore from "@mui/icons-material/NavigateBefore";
 import NavigateNext from "@mui/icons-material/NavigateNext";
-import React from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import React, { useState, useEffect, useCallback } from "react";
 import { APIBaseUrl } from "../consts";
 import { Feature, FeatureProperties, MapConfig } from "../models";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { getFeatureAppName, getFeatureLayerExtraInfoFields, getFeatureLayerName } from "../common/MapUtils";
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      position: "absolute",
-      bottom: "8px",
-      left: 0,
-      right: 0,
-      marginLeft: "auto",
-      marginRight: "auto",
-      width: "480px",
-    },
-    title: {
-      textTransform: "capitalize",
-    },
-    spacer: {
-      flexGrow: 1,
-    },
-    content: {
-      marginTop: "10px",
-    },
-  });
+const StyledCard = styled(Card)(() => ({
+  position: "absolute",
+  bottom: "8px",
+  left: 0,
+  right: 0,
+  marginLeft: "auto",
+  marginRight: "auto",
+  width: "480px",
+}));
 
-interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
+const TitleTypography = styled(Typography)(() => ({
+  textTransform: "capitalize",
+}));
+
+const ContentTypography = styled(Typography)(() => ({
+  marginTop: "10px",
+}));
+
+const Spacer = styled("div")(() => ({
+  flexGrow: 1,
+}));
+
+interface FeatureInfoProps {
   features: Feature[];
   mapConfig: MapConfig;
   onSelectFeatureShowPlan: (feature: Feature) => Promise<any>;
@@ -44,65 +39,65 @@ interface FeatureInfoProps extends WithStyles<typeof styles>, WithTranslation {
   onClose: () => void;
 }
 
-interface FeatureInfoState {
-  featureIndex: number;
-  realPlanDistance?: number;
-  features: Feature[];
-}
+const FeatureInfo = ({
+  features,
+  mapConfig,
+  onSelectFeatureShowPlan,
+  onSelectFeatureHighLight,
+  onClose,
+}: FeatureInfoProps) => {
+  const [featureIndex, setFeatureIndex] = useState<number>(0);
+  const [realPlanDistance, setRealPlanDistance] = useState<number | undefined>(undefined);
+  const { t } = useTranslation();
 
-class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
-  constructor(props: FeatureInfoProps) {
-    super(props);
-    this.state = {
-      featureIndex: 0,
-      realPlanDistance: undefined,
-      features: props.features,
-    };
-  }
+  // Reset state when features prop changes
+  useEffect(() => {
+    setFeatureIndex(0);
+    setRealPlanDistance(undefined);
+  }, [features]);
 
-  static getDerivedStateFromProps(props: FeatureInfoProps, state: FeatureInfoState) {
-    if (props.features !== state.features) {
-      return { featureIndex: 0, realPlanDistance: undefined, features: props.features };
+  const runOnSelectFeature = useCallback(
+    (index: number) => {
+      const feature = features[index];
+      onSelectFeatureShowPlan(feature).then((distance: number) => distance && setRealPlanDistance(distance));
+      onSelectFeatureHighLight(feature);
+    },
+    [features, onSelectFeatureShowPlan, onSelectFeatureHighLight, setRealPlanDistance],
+  );
+
+  const setFeatureIndexAndRunSelect = (index: number) => {
+    setFeatureIndex(index);
+    runOnSelectFeature(index);
+  };
+
+  // Run on initial render or when the featureIndex changes
+  useEffect(() => {
+    if (features.length > 0 && realPlanDistance === undefined) {
+      runOnSelectFeature(featureIndex);
     }
-    return null;
-  }
+  }, [features, featureIndex, realPlanDistance, runOnSelectFeature]);
 
-  getFeatureType(feature: Feature) {
+  const getFeatureType = (feature: Feature) => {
     const fid = feature["id_"];
     return fid.split(".")[0];
-  }
+  };
 
-  getFeatureTypeEditName(featureType: string, featureTypeEditMapping: Record<string, string>) {
+  const getFeatureTypeEditName = (featureType: string, featureTypeEditMapping: Record<string, string>) => {
     return featureTypeEditMapping[featureType] || featureType;
-  }
+  };
 
-  getAdminLink(feature: Feature, featureTypeEditMapping: Record<string, string>) {
-    const app_name = getFeatureAppName(feature, this.props.mapConfig.overlayConfig);
-    const featureTypeEditName = this.getFeatureTypeEditName(this.getFeatureType(feature), featureTypeEditMapping);
+  const getAdminLink = (feature: Feature, featureTypeEditMapping: Record<string, string>) => {
+    const app_name = getFeatureAppName(feature, mapConfig.overlayConfig);
+    const featureTypeEditName = getFeatureTypeEditName(getFeatureType(feature), featureTypeEditMapping);
     const featureId = feature.getProperties().id;
     return `${APIBaseUrl}/admin/${app_name}/${featureTypeEditName.replace(/_/g, "")}/${featureId}/change`;
-  }
+  };
 
-  getFeatureInfoTitle(feature: Feature) {
-    return getFeatureLayerName(feature, this.props.mapConfig.overlayConfig);
-  }
+  const getFeatureInfoTitle = (feature: Feature) => {
+    return getFeatureLayerName(feature, mapConfig.overlayConfig);
+  };
 
-  runOnSelectFeature(featureIndex: number) {
-    const { features, onSelectFeatureShowPlan, onSelectFeatureHighLight } = this.props;
-    const feature = features[featureIndex];
-    onSelectFeatureShowPlan(feature).then(
-      (distance: number) => distance && this.setState({ realPlanDistance: distance }),
-    );
-    onSelectFeatureHighLight(feature);
-  }
-
-  setFeatureIndex(featureIndex: number) {
-    this.setState({ featureIndex: featureIndex });
-    this.runOnSelectFeature(featureIndex);
-  }
-
-  renderCommonFields(feature: Feature) {
-    const { t } = this.props;
+  const renderCommonFields = (feature: Feature) => {
     const {
       id,
       value,
@@ -153,14 +148,14 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
         {feature.getProperties().device_plan_id && (
           <>
             <br />
-            <b>{t("Distance to plan")}</b>: {this.state.realPlanDistance} m
+            <b>{t("Distance to plan")}</b>: {realPlanDistance} m
           </>
         )}
       </>
     );
-  }
+  };
 
-  renderFeatureSpecificFields(feature: Feature, mapConfig: MapConfig) {
+  const renderFeatureSpecificFields = (feature: Feature, mapConfig: MapConfig) => {
     const extra_fields = getFeatureLayerExtraInfoFields(feature, mapConfig.overlayConfig);
     if (extra_fields) {
       return (
@@ -180,62 +175,57 @@ class FeatureInfo extends React.Component<FeatureInfoProps, FeatureInfoState> {
     } else {
       return <></>;
     }
+  };
+
+  if (!features || features.length === 0) {
+    return null;
   }
 
-  render() {
-    const { features, classes, onClose, t, mapConfig } = this.props;
-    const { featureIndex } = this.state;
-    const feature = features[featureIndex];
+  const feature = features[featureIndex];
 
-    // Only run when distance is undefined (don't spam requests)
-    if (this.state.realPlanDistance === undefined) {
-      this.runOnSelectFeature(featureIndex);
-    }
-
-    return (
-      <Card className={classes.root}>
-        <CardContent>
-          <Typography className={classes.title} variant="h5" component="h2">
-            {this.getFeatureInfoTitle(feature)}
-          </Typography>
-          <Typography className={classes.content} variant="body1" component="p">
-            {this.renderCommonFields(feature)}
-          </Typography>
-          <Typography className={classes.content} variant="body1" component="p">
-            {this.renderFeatureSpecificFields(feature, mapConfig)}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button onClick={onClose}>{t("close")}</Button>
-          <Button
-            color="primary"
-            target="_blank"
-            href={this.getAdminLink(feature, mapConfig.featureTypeEditNameMapping)}
-          >
-            {t("edit")}
-          </Button>
-          <div className={classes.spacer} />
-          <Typography color="textSecondary">
-            {featureIndex + 1} / {features.length}
-          </Typography>
-          <IconButton
-            color="primary"
-            disabled={featureIndex === 0}
-            onClick={() => this.setFeatureIndex(featureIndex - 1)}
-          >
-            <NavigateBefore />
+  return (
+    <StyledCard>
+      <CardContent>
+        <TitleTypography variant="h5" as="h2">
+          {getFeatureInfoTitle(feature)}
+          <IconButton onClick={onClose} sx={{ float: "right" }}>
+            <CloseIcon />
           </IconButton>
-          <IconButton
-            color="primary"
-            disabled={featureIndex === features.length - 1}
-            onClick={() => this.setFeatureIndex(featureIndex + 1)}
-          >
-            <NavigateNext />
-          </IconButton>
-        </CardActions>
-      </Card>
-    );
-  }
-}
+        </TitleTypography>
+        <Divider sx={{ my: 1 }} />
+        <ContentTypography variant="body1" as="p">
+          {renderCommonFields(feature)}
+        </ContentTypography>
+        <ContentTypography variant="body1" as="p">
+          {renderFeatureSpecificFields(feature, mapConfig)}
+        </ContentTypography>
+      </CardContent>
+      <CardActions>
+        <Button onClick={onClose}>{t("close")}</Button>
+        <Button color="primary" target="_blank" href={getAdminLink(feature, mapConfig.featureTypeEditNameMapping)}>
+          {t("edit")}
+        </Button>
+        <Spacer />
+        <Typography color="textSecondary">
+          {featureIndex + 1} / {features.length}
+        </Typography>
+        <IconButton
+          color="primary"
+          disabled={featureIndex === 0}
+          onClick={() => setFeatureIndexAndRunSelect(featureIndex - 1)}
+        >
+          <NavigateBefore />
+        </IconButton>
+        <IconButton
+          color="primary"
+          disabled={featureIndex === features.length - 1}
+          onClick={() => setFeatureIndexAndRunSelect(featureIndex + 1)}
+        >
+          <NavigateNext />
+        </IconButton>
+      </CardActions>
+    </StyledCard>
+  );
+};
 
-export default withTranslation()(withStyles(styles)(FeatureInfo));
+export default FeatureInfo;
