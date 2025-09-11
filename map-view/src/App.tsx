@@ -1,11 +1,9 @@
-import { Drawer } from "@mui/material";
-import Fab from "@mui/material/Fab";
-import { Theme } from "@mui/material/styles";
-import { createStyles, withStyles, WithStyles } from "@mui/styles";
+import { Drawer, Fab } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import LayersIcon from "@mui/icons-material/Layers";
 import SearchIcon from "@mui/icons-material/Search";
 import "ol/ol.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MapConfigAPI from "./api/MapConfigAPI";
 import "./App.css";
 import LayerSwitcher from "./components/LayerSwitcher";
@@ -16,79 +14,61 @@ import OngoingFetchInfo from "./components/OngoingFetchInfo";
 import AddressInput from "./components/AddressInput";
 import { Address, convertToEPSG3879OL, getAddressSearchResults, getNameFromAddress } from "./common/AddressSearchUtils";
 
-const drawWidth = "400px";
+const drawerWidth = "400px";
 
-const styles = (theme: Theme) =>
-  createStyles({
-    layerSwitcherButton: {
-      position: "absolute",
-      right: "16px",
-      top: "16px",
-      color: "white",
-    },
-    searchButton: {
-      position: "absolute",
-      left: "50px",
-      top: "16px",
-      color: "white",
-    },
-    drawer: {
-      width: drawWidth,
-    },
-    drawerPaper: {
-      width: drawWidth,
-    },
-  });
+const StyledSearchFab = styled(Fab)(() => ({
+  position: "absolute",
+  left: "50px",
+  top: "16px",
+  color: "white",
+}));
 
-interface AppProps extends WithStyles<typeof styles> {}
+const StyledLayersFab = styled(Fab)(() => ({
+  position: "absolute",
+  right: "16px",
+  top: "16px",
+  color: "white",
+}));
 
-interface AppState {
-  open: boolean;
-  openAddressSearch: boolean;
-  mapConfig: MapConfig | null;
-  features: Feature[];
-  ongoingFeatureFetches: Set<string>;
-  addressSearchResults: Address[];
-}
+const StyledDrawer = styled(Drawer)(() => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  "& .MuiDrawer-paper": {
+    width: drawerWidth,
+    boxSizing: "border-box",
+  },
+}));
 
-class App extends React.Component<AppProps, AppState> {
-  mapId = "map";
+const App = () => {
+  const [open, setOpen] = useState<boolean>(false);
+  const [openAddressSearch, setOpenAddressSearch] = useState<boolean>(false);
+  const [mapConfig, setMapConfig] = useState<MapConfig | null>(null);
+  const [features, setFeatures] = useState<Feature[]>([]);
+  const [ongoingFeatureFetches, setOngoingFeatureFetches] = useState<Set<string>>(new Set());
+  const [addressSearchResults, setAddressSearchResults] = useState<Address[]>([]);
 
-  constructor(props: AppProps) {
-    super(props);
-    this.state = {
-      open: false,
-      openAddressSearch: false,
-      mapConfig: null,
-      features: [],
-      ongoingFeatureFetches: new Set<string>(),
-      addressSearchResults: [],
-    };
-  }
-
-  componentDidMount() {
-    MapConfigAPI.getMapConfig().then((mapConfig) => {
-      this.setState({
-        mapConfig,
+  useEffect(() => {
+    const mapId = "map";
+    MapConfigAPI.getMapConfig().then((config: MapConfig) => {
+      setMapConfig(config);
+      Map.initialize(mapId, config);
+      Map.registerFeatureInfoCallback((newFeatures: Feature[]) => setFeatures(newFeatures));
+      Map.registerOngoingFeatureFetchesCallback((fetches: Set<string>) => {
+        setOngoingFeatureFetches(new Set(fetches));
       });
-      Map.initialize(this.mapId, mapConfig);
-      Map.registerFeatureInfoCallback((features: Feature[]) => this.setState({ features }));
-      Map.registerOngoingFeatureFetchesCallback((fetches: Set<string>) =>
-        this.setState({ ongoingFeatureFetches: fetches }),
-      );
     });
-  }
+  }, []);
 
-  handleSearch = async (address: string) => {
-    const addressSearchResults = await getAddressSearchResults(Map.getAddressSearchUrl(address));
-    this.setState({ addressSearchResults });
+  const handleSearch = async (address: string) => {
+    const results: Address[] = await getAddressSearchResults(Map.getAddressSearchUrl(address));
+    setAddressSearchResults(results);
   };
 
-  clearSearchResults = () => {
-    this.setState({ addressSearchResults: [] });
+  const clearSearchResults = () => {
+    setAddressSearchResults([]);
   };
 
-  handleSelect = (result: Address) => {
+  const handleSelect = (result: Address) => {
     if (result?.location?.coordinates) {
       const coordinates = convertToEPSG3879OL(result.location.coordinates);
       Map.clearSelectedAddressLayer();
@@ -97,97 +77,71 @@ class App extends React.Component<AppProps, AppState> {
     } else {
       console.error("No valid coordinates found for selected address.");
     }
-    this.setState({ addressSearchResults: [] });
+    setAddressSearchResults([]);
   };
 
-  render() {
-    const { classes } = this.props;
-    const { open, openAddressSearch, mapConfig, features, ongoingFeatureFetches, addressSearchResults } = this.state;
-    return (
-      <React.StrictMode>
-        <div className="App">
-          <div id={this.mapId} />
-          {features.length > 0 && mapConfig && (
-            <FeatureInfo
-              features={features}
+  return (
+    <React.StrictMode>
+      <div className="App">
+        <div id="map" />
+        {features.length > 0 && mapConfig && (
+          <FeatureInfo
+            features={features}
+            mapConfig={mapConfig}
+            onSelectFeatureShowPlan={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
+            onSelectFeatureHighLight={(feature: Feature) => Map.highlightFeature(feature, mapConfig)}
+            onClose={() => {
+              setFeatures([]);
+              Map.clearPlanOfRealVectorLayer();
+              Map.clearHighlightLayer();
+            }}
+          />
+        )}
+        <StyledSearchFab
+          size="medium"
+          color="primary"
+          onClick={() => {
+            Map.showSelectedAddressLayer(!openAddressSearch);
+            setOpenAddressSearch(!openAddressSearch);
+          }}
+        >
+          <SearchIcon />
+        </StyledSearchFab>
+        <StyledDrawer variant="persistent" anchor="left" open={openAddressSearch}>
+          <AddressInput
+            onClose={() => {
+              Map.showSelectedAddressLayer(false);
+              setOpenAddressSearch(false);
+            }}
+            onSearch={handleSearch}
+            onSelect={handleSelect}
+            clearResults={clearSearchResults}
+            results={addressSearchResults}
+          />
+        </StyledDrawer>
+        {ongoingFeatureFetches.size > 0 && (
+          <OngoingFetchInfo layerIdentifiers={ongoingFeatureFetches}></OngoingFetchInfo>
+        )}
+        <StyledLayersFab size="medium" color="primary" onClick={() => setOpen(!open)}>
+          <LayersIcon />
+        </StyledLayersFab>
+        <StyledDrawer variant="persistent" anchor="right" open={open}>
+          {mapConfig && (
+            <LayerSwitcher
               mapConfig={mapConfig}
-              onSelectFeatureShowPlan={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
-              onSelectFeatureHighLight={(feature: Feature) => Map.highlightFeature(feature, mapConfig)}
-              onClose={() => {
-                this.setState({ features: [] });
-                Map.clearPlanOfRealVectorLayer();
-                Map.clearHighlightLayer();
+              onClose={() => setOpen(false)}
+              onOverlayToggle={(checked: boolean, diffLayerIdentifier: string) => {
+                if (!checked) {
+                  setFeatures([]);
+                  Map.clearPlanRealDiffVectorLayer(diffLayerIdentifier);
+                }
               }}
             />
           )}
-          <Fab
-            size="medium"
-            color="primary"
-            onClick={() => {
-              Map.showSelectedAddressLayer(!openAddressSearch);
-              this.setState({ openAddressSearch: !openAddressSearch });
-            }}
-            className={classes.searchButton}
-          >
-            <SearchIcon />
-          </Fab>
-          <Drawer
-            className={classes.drawer}
-            variant="persistent"
-            anchor="left"
-            open={openAddressSearch}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            <AddressInput
-              onClose={() => {
-                Map.showSelectedAddressLayer(false);
-                this.setState({ openAddressSearch: false });
-              }}
-              onSearch={this.handleSearch}
-              onSelect={this.handleSelect}
-              clearResults={this.clearSearchResults}
-              results={addressSearchResults}
-            />
-          </Drawer>
-          {ongoingFeatureFetches.size > 0 && (
-            <OngoingFetchInfo layerIdentifiers={ongoingFeatureFetches}></OngoingFetchInfo>
-          )}
-          <Fab
-            size="medium"
-            color="primary"
-            onClick={() => this.setState({ open: !open })}
-            className={classes.layerSwitcherButton}
-          >
-            <LayersIcon />
-          </Fab>
-          <Drawer
-            className={classes.drawer}
-            variant="persistent"
-            anchor="right"
-            open={open}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            {mapConfig && (
-              <LayerSwitcher
-                mapConfig={mapConfig}
-                onClose={() => this.setState({ open: false })}
-                onOverlayToggle={(checked, diffLayerIdentifier) => {
-                  if (!checked) {
-                    this.setState({ features: [] });
-                    Map.clearPlanRealDiffVectorLayer(diffLayerIdentifier);
-                  }
-                }}
-              />
-            )}
-          </Drawer>
-        </div>
-      </React.StrictMode>
-    );
-  }
-}
+        </StyledDrawer>
+      </div>
+    </React.StrictMode>
+  );
+};
 
-export default withStyles(styles)(App);
+export default App;
