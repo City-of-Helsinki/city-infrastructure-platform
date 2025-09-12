@@ -10,7 +10,7 @@ logger = logging.getLogger("django")
 
 def generate_pngs_on_svg_save(*, instance, png_folder):
     """
-    Shared implementation of icon PNG file generation.
+    Shared implementation of icon PNG file generation. Used by some custom post_save signal handlers in our code.
     """
     # This block ensures the signal only runs for objects that have an SVG file.
     if instance.file and instance.file.name.endswith(".svg"):
@@ -43,7 +43,7 @@ def generate_pngs_on_svg_save(*, instance, png_folder):
 
 def delete_icon_files_on_row_delete(*, instance, png_folder):
     """
-    Deletes the SVG and associated PNG files from storage.
+    Deletes the SVG and associated PNG files from storage. Used by some custom post_save signal handlers in our code.
     """
     try:
         # Check if the file field is not empty before attempting to delete.
