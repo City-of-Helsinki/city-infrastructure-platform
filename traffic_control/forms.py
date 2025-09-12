@@ -402,11 +402,7 @@ class TrafficControlDeviceTypeForm(forms.ModelForm):
         fields = "__all__"
 
 
-class TrafficControlDeviceTypeIconForm(forms.ModelForm):
-    class Meta:
-        model = TrafficControlDeviceTypeIcon
-        fields = "__all__"
-
+class AbstractDeviceTypeIconForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         file = cleaned_data.get("file")
@@ -418,7 +414,7 @@ class TrafficControlDeviceTypeIconForm(forms.ModelForm):
                 raise ValidationError(_(f"Illegal file types: {', '.join(illegal_file_types)}"))
 
             if virus_scan_errors:
-                add_virus_scan_errors_to_auditlog(virus_scan_errors, None, TrafficControlDeviceTypeIcon, None)
+                add_virus_scan_errors_to_auditlog(virus_scan_errors, None, self._meta.model, None)
                 raise ValidationError(_(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}"))
         return cleaned_data
 
@@ -428,6 +424,12 @@ class TrafficControlDeviceTypeIconForm(forms.ModelForm):
             pass
 
         return super().save(commit=commit)
+
+
+class TrafficControlDeviceTypeIconForm(AbstractDeviceTypeIconForm):
+    class Meta:
+        model = TrafficControlDeviceTypeIcon
+        fields = "__all__"
 
 
 class TrafficLightPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
