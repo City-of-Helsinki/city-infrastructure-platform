@@ -47,26 +47,30 @@ class AdminFileWidget(widgets.AdminFileWidget):
     template_name = "admin/traffic_control/widgets/clearable_file_input.html"
 
 
-class AdminTrafficControlDeviceTypeIconSelectWidget(Select):
+class AbstractAdminDeviceTypeIconSelectWidget(Select):
     """
     Widget that show a traffic sign icon representing the selected device type
     next to the select input
     """
 
     template_name = "admin/traffic_control/widgets/traffic_sign_icon_select.html"
+    MODEL = None
 
     class Media:
         css = {"all": ("traffic_control/css/traffic_sign_icon_select.css",)}
         js = ("traffic_control/js/traffic_sign_icon_select.js",)
 
     def __init__(self, *args, **kwargs):
+        if self.MODEL is None:
+            raise NotImplementedError("Inherited class is missing MODEL declaration")
+
         super().__init__(*args, **kwargs)
         self.icon_url_mapping = None
 
     def get_icon_url(self, value):
         if not self.icon_url_mapping:
             self.icon_url_mapping = {}
-            icons = TrafficControlDeviceTypeIcon.objects.all().only("id", "file")
+            icons = self.MODEL.objects.all().only("id", "file")
             for icon in icons:
                 self.icon_url_mapping[icon.id] = icon.file.url
         return self.icon_url_mapping.get(value, "")
@@ -82,6 +86,10 @@ class AdminTrafficControlDeviceTypeIconSelectWidget(Select):
         option = super().create_option(name, value, *args, **kwargs)
         option["attrs"]["icon-url"] = self.get_icon_url(value)
         return option
+
+
+class AdminTrafficControlDeviceTypeIconSelectWidget(AbstractAdminDeviceTypeIconSelectWidget):
+    MODEL = TrafficControlDeviceTypeIcon
 
 
 class AdminTrafficSignIconSelectWidget(Select):
