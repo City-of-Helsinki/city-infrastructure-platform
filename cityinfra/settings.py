@@ -362,7 +362,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = env("CORS_ALLOWED_ORIGIN_REGEXES")
 # Azurite-specific configuration, meant only for local testing
 EMULATE_AZURE_BLOBSTORAGE = env.bool("EMULATE_AZURE_BLOBSTORAGE")
 if EMULATE_AZURE_BLOBSTORAGE:
-    print("Configuring default storage for azurite...")
+    print("Using azurite (azure emulator)")
     STORAGES["icons"] = {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
