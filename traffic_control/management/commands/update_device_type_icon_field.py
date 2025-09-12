@@ -37,7 +37,7 @@ class Command(BaseCommand):
                     )
                 )
 
-        TrafficControlDeviceType.objects.bulk_update(updated_device_types, ["icon_file"])
+        TrafficControlDeviceType.objects.bulk_update(updated_device_types, ["icon_file"], batch_size=1000)
 
         if len(bogus_device_types) > 0:
             self.stdout.write(
