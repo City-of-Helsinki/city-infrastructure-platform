@@ -398,6 +398,11 @@ if OPENSHIFT_DEPLOYMENT:
         },
     }
 
+if EMULATE_AZURE_BLOBSTORAGE and OPENSHIFT_DEPLOYMENT:
+    raise ImproperlyConfigured(
+        "You cannot have EMULATE_AZURE_BLOBSTORAGE and OPENSHIFT_DEPLOYMENT enabled at the same time"
+    )
+
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
 SENTRY_DEBUG = env.bool("SENTRY_DEBUG")
