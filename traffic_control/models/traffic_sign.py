@@ -170,6 +170,11 @@ class AbstractTrafficSign(
         null=True,
         help_text=_("Specifies where the sign is in relation to the road."),
     )
+    double_sided = models.BooleanField(
+        _("Double sided"),
+        default=False,
+        help_text=_("Indicates if this object is double sided"),
+    )
 
     class Meta:
         abstract = True

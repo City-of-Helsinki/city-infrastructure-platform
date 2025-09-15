@@ -9498,6 +9498,10 @@ paths:
         schema:
           type: integer
       - in: query
+        name: double_sided
+        schema:
+          type: boolean
+      - in: query
         name: electric_maintainer
         schema:
           type: string
@@ -10109,6 +10113,10 @@ paths:
         name: direction
         schema:
           type: integer
+      - in: query
+        name: double_sided
+        schema:
+          type: boolean
       - in: query
         name: electric_maintainer
         schema:
@@ -12762,6 +12770,10 @@ paths:
         schema:
           type: integer
       - in: query
+        name: double_sided
+        schema:
+          type: boolean
+      - in: query
         name: geo_format
         schema:
           type: string
@@ -13374,6 +13386,10 @@ paths:
         name: direction
         schema:
           type: integer
+      - in: query
+        name: double_sided
+        schema:
+          type: boolean
       - in: query
         name: geo_format
         schema:
@@ -23972,6 +23988,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         owner:
           type: string
           format: uuid
@@ -24264,6 +24283,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         material:
           type: string
           nullable: true
@@ -25132,6 +25154,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         owner:
           type: string
           format: uuid
@@ -25407,6 +25432,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         installation_id:
           type: string
           nullable: true
@@ -27688,6 +27716,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         created_by:
           type: string
           format: uuid
@@ -27953,6 +27984,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         owner:
           type: string
           format: uuid
@@ -28231,6 +28265,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         created_by:
           type: string
           format: uuid
@@ -28563,6 +28600,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         material:
           type: string
           nullable: true
@@ -28956,6 +28996,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         material:
           type: string
           nullable: true
@@ -30937,6 +30980,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         created_by:
           type: string
           format: uuid
@@ -31193,6 +31239,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         owner:
           type: string
           format: uuid
@@ -31461,6 +31510,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         created_by:
           type: string
           format: uuid
@@ -31776,6 +31828,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         installation_id:
           type: string
           nullable: true
@@ -32179,6 +32234,9 @@ components:
             * `4` - Middle
             * `5` - Vertical
             * `6` - Outside
+        double_sided:
+          type: boolean
+          description: Indicates if this object is double sided
         installation_id:
           type: string
           nullable: true
