@@ -205,6 +205,7 @@ class TrafficSignPlanAdmin(
                     "height",
                     "reflection_class",
                     "surface_class",
+                    "double_sided",
                 )
             },
         ),
@@ -345,6 +346,7 @@ class TrafficSignRealAdmin(
                     "reflection_class",
                     "surface_class",
                     "condition",
+                    "double_sided",
                 )
             },
         ),

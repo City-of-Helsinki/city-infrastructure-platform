@@ -132,7 +132,7 @@ class SignpostPlanAdmin(
                 )
             },
         ),
-        (_("Physical properties"), {"fields": ("height", "size", "reflection_class")}),
+        (_("Physical properties"), {"fields": ("height", "size", "reflection_class", "double_sided")}),
         (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
         (
             _("Validity"),
@@ -259,6 +259,7 @@ class SignpostRealAdmin(
                     "reflection_class",
                     "material",
                     "condition",
+                    "double_sided",
                 )
             },
         ),
