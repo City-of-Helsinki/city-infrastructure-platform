@@ -229,6 +229,9 @@ docker compose -f docker-compose.azurite.yml up azurite
 
 # Create the media storage in azurite and grant it public read permissions for serving static files
 docker compose -f docker-compose.azurite.yml up azurite-init
+
+# Wipe the media container on azurite (you will need to re-run azurite-init after this)
+docker compose -f docker-compose.azurite.yml up azurite-delete-media-container
 ```
 
 ## Translations (fi)
