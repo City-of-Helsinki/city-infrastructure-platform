@@ -26,7 +26,7 @@ def svg_file():
 
 @pytest.mark.xfail(reason="Requires azurite storage or django >=5.1+, django 4.2 simply renames file")
 @pytest.mark.django_db
-def test__TRAFFIC_CONTROL_DEVICE_type_icon__enforces_uniqueness(override_settings, svg_file):
+def test__traffic_control_device_type_icon__enforces_uniqueness(override_settings, svg_file):
     """
     We don't want two separate rows meaning traffic_control_traffic_stop_1.svg in our table, as it would produce an
     unintended 'overwrite generated PNGs' effect on creation of a duplicate or 'delete PNGs that should be preserved'
