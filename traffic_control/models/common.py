@@ -10,7 +10,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField
 
-from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_MAP, TrafficControlDeviceTypeType
+from traffic_control.enums import (
+    DeviceTypeTargetModel,
+    TRAFFIC_SIGN_ALLOWED_TARGET_MODELS,
+    TRAFFIC_SIGN_TYPE_MAP,
+    TrafficControlDeviceTypeType,
+)
 from traffic_control.mixins.models import UserControlModel
 
 VERBOSE_NAME_NEW = _("New")
@@ -209,13 +214,17 @@ class TrafficControlDeviceType(models.Model):
             "additionalsignreal",
         ]
         ignore_prefix = target_type.value.replace("_", "")
+        traffic_sign_allowed_values = [v.value.replace("_", "") for v in TRAFFIC_SIGN_ALLOWED_TARGET_MODELS]
         relevant_relations = [relation for relation in relations if not relation.startswith(ignore_prefix)]
+        # Remove specific relations if the prefix is in the allowed values
+        if ignore_prefix in traffic_sign_allowed_values:
+            relations_to_remove = {"trafficsignplan", "trafficsignreal"}
+            relevant_relations = [relation for relation in relevant_relations if relation not in relations_to_remove]
 
         related_pks = []
         queryset = TrafficControlDeviceType.objects.filter(pk=self.pk).values_list(*relevant_relations)
         if queryset.exists():
             related_pks = queryset.first()
-
         return any(related_pks)
 
     def validate_change_target_model(

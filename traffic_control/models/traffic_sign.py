@@ -7,7 +7,15 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
+from traffic_control.enums import (
+    DeviceTypeTargetModel,
+    LaneNumber,
+    LaneType,
+    Reflection,
+    Size,
+    Surface,
+    TRAFFIC_SIGN_ALLOWED_TARGET_MODELS,
+)
 from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
@@ -73,6 +81,9 @@ class AbstractTrafficSign(
     OwnedDeviceModel,
     ValidityPeriodModel,
 ):
+    ALLOWED_TARGET_MODELS = TRAFFIC_SIGN_ALLOWED_TARGET_MODELS
+    """There exists some special codes that are signposts or barriers but we want to have them in trafficsign tables"""
+
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
@@ -186,7 +197,11 @@ class AbstractTrafficSign(
         return self.additional_signs.active().exists()
 
     def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.TRAFFIC_SIGN):
+        if (
+            self.device_type
+            and self.device_type.target_model
+            and self.device_type.target_model not in AbstractTrafficSign.ALLOWED_TARGET_MODELS
+        ):
             raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
 
         super().save(*args, **kwargs)

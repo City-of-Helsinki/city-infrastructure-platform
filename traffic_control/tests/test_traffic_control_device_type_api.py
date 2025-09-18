@@ -264,8 +264,8 @@ def test__device_type__target_model__valid(target_model, factory):
         (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_signpost_real),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_plan),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_real),
-        (DeviceTypeTargetModel.BARRIER, get_traffic_sign_plan),
-        (DeviceTypeTargetModel.BARRIER, get_traffic_sign_real),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_plan),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_real),
     ),
 )
 @pytest.mark.django_db
