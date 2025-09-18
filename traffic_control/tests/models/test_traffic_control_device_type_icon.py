@@ -38,7 +38,7 @@ def test__traffic_control_device_type_icon__enforces_uniqueness(override_setting
 
 
 @pytest.mark.django_db
-def test__TRAFFIC_CONTROL_DEVICE_type_icon__custom_signal_handlers(override_settings, svg_file, settings):
+def test__traffic_control_device_type_icon__custom_signal_handlers(override_settings, svg_file, settings):
     """
     Creating TrafficControlDeviceTypeIcon objects triggers as a side effect the creation of PNG icons in different sizes
     corresponding to the uploaded SVG. Check the following:
