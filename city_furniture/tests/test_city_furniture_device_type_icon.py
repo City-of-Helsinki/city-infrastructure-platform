@@ -24,6 +24,7 @@ def svg_file():
         return SimpleUploadedFile(EXAMPLE_SVG_NAME, bytes(svg_bytestring, "utf-8"), content_type="image/svg+xml")
 
 
+@pytest.mark.xfail(reason="Requires azurite storage or django >=5.1+, django 4.2 simply renames the file")
 @pytest.mark.django_db
 def test__city_furniture_device_type_icon__enforces_uniqueness(override_settings, svg_file):
     """
