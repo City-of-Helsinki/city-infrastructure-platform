@@ -6,6 +6,7 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.models.traffic_sign import AbstractTrafficSign
 from traffic_control.tests.factories import (
     AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
@@ -20,6 +21,9 @@ from traffic_control.tests.factories import (
     get_traffic_light_real,
     get_traffic_sign_plan,
     get_traffic_sign_real,
+    TrafficControlDeviceTypeFactory,
+    TrafficSignPlanFactory,
+    TrafficSignRealFactory,
 )
 
 simple_schema = {
@@ -63,30 +67,28 @@ invalid_schema = {"type": "asdf"}
 
 
 @pytest.mark.parametrize(
-    "allowed_value,factory",
+    "allowed_values,factory",
     (
-        (DeviceTypeTargetModel.BARRIER, get_barrier_plan),
-        (DeviceTypeTargetModel.BARRIER, get_barrier_real),
-        (DeviceTypeTargetModel.ROAD_MARKING, get_road_marking_plan),
-        (DeviceTypeTargetModel.ROAD_MARKING, get_road_marking_real),
-        (DeviceTypeTargetModel.SIGNPOST, get_signpost_plan),
-        (DeviceTypeTargetModel.SIGNPOST, get_signpost_real),
-        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_plan),
-        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_real),
-        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
-        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, AdditionalSignPlanFactory),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, AdditionalSignRealFactory),
+        ([DeviceTypeTargetModel.BARRIER], get_barrier_plan),
+        ([DeviceTypeTargetModel.BARRIER], get_barrier_real),
+        ([DeviceTypeTargetModel.ROAD_MARKING], get_road_marking_plan),
+        ([DeviceTypeTargetModel.ROAD_MARKING], get_road_marking_real),
+        ([DeviceTypeTargetModel.SIGNPOST], get_signpost_plan),
+        ([DeviceTypeTargetModel.SIGNPOST], get_signpost_real),
+        ([DeviceTypeTargetModel.TRAFFIC_LIGHT], get_traffic_light_plan),
+        ([DeviceTypeTargetModel.TRAFFIC_LIGHT], get_traffic_light_real),
+        (AbstractTrafficSign.ALLOWED_TARGET_MODELS, get_traffic_sign_plan),
+        (AbstractTrafficSign.ALLOWED_TARGET_MODELS, get_traffic_sign_real),
+        ([DeviceTypeTargetModel.ADDITIONAL_SIGN], AdditionalSignPlanFactory),
+        ([DeviceTypeTargetModel.ADDITIONAL_SIGN], AdditionalSignRealFactory),
     ),
 )
 @pytest.mark.django_db
-def test__traffic_control_device_type__target_model__restricts_relations(allowed_value, factory):
+def test__traffic_control_device_type__target_model__restricts_relations(allowed_values, factory):
     related_obj = factory()
-
     for choice in DeviceTypeTargetModel:
         device_type = get_traffic_control_device_type(code=get_random_string(length=12), target_model=choice)
-
-        if choice == allowed_value:
+        if choice in allowed_values:
             related_obj.device_type = device_type
             related_obj.save(update_fields=["device_type"])
             related_obj.refresh_from_db()
@@ -258,3 +260,30 @@ def test__traffic_control_device_type__content_schema__valid_for_target_models(t
     else:
         with pytest.raises(ValidationError):
             device_type.full_clean()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "model_factory, target_model",
+    (
+        (TrafficSignRealFactory, DeviceTypeTargetModel.SIGNPOST),
+        (TrafficSignRealFactory, DeviceTypeTargetModel.BARRIER),
+        (TrafficSignRealFactory, DeviceTypeTargetModel.TRAFFIC_SIGN),
+        (TrafficSignPlanFactory, DeviceTypeTargetModel.SIGNPOST),
+        (TrafficSignPlanFactory, DeviceTypeTargetModel.BARRIER),
+        (TrafficSignPlanFactory, DeviceTypeTargetModel.TRAFFIC_SIGN),
+    ),
+)
+def test__object_with_mismatching_target_model_can_be_changed(model_factory, target_model):
+    """Currently possible only for trafficsignreals/plans that can have devicetype with additional target_models.
+    See AbstractTrafficSign.ALLOWED_TARGET_MODELS for more details.
+    Tests that device type objects other fields can still be modified.
+    """
+    dt = TrafficControlDeviceTypeFactory(code="test", description="test desc", icon="icon", target_model=target_model)
+    model_factory(device_type=dt)
+    dt.description = "test desc2"
+    dt.icon = "newIcon"
+    dt.save(update_fields=["description", "icon"])
+    dt.refresh_from_db()
+    assert dt.description == "test desc2"
+    assert dt.icon == "newIcon"

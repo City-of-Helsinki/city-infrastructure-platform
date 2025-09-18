@@ -108,3 +108,10 @@ class OrganizationLevel(models.IntegerChoices):
     SERVICE = 20, _("service")
     UNIT = 30, _("unit")
     PROJECT = 50, _("project")
+
+
+TRAFFIC_SIGN_ALLOWED_TARGET_MODELS = [
+    DeviceTypeTargetModel.TRAFFIC_SIGN,
+    DeviceTypeTargetModel.SIGNPOST,
+    DeviceTypeTargetModel.BARRIER,
+]
