@@ -53,6 +53,7 @@ env = environ.Env(
     OPENSHIFT_DEPLOYMENT=(bool, False),
     AZURE_ACCOUNT_KEY=(str, False),
     AZURE_CONTAINER=(str, False),
+    AZURE_ICON_CONTAINER=(str, False),
     AZURE_ACCOUNT_NAME=(str, False),
     OIDC_AUTHENTICATION_ENABLED=(bool, True),
     SOCIAL_AUTH_TUNNISTAMO_KEY=(str, None),
@@ -73,6 +74,7 @@ env = environ.Env(
     CSRF_COOKIE_SAMESITE=(str, "Strict"),
     SESSION_COOKIE_SAMESITE=(str, "Lax"),
     CITYINFRA_MAXIMUM_RESULTS_PER_PAGE=(int, 10000),
+    EMULATE_AZURE_BLOBSTORAGE=(bool, False),
 )
 
 if os.path.exists(env_file):
@@ -297,6 +299,12 @@ STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
+    "icons": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        # NOTE (2025-09-10 thiago): For azure/azurite this is configured to enable file overwriting
+        # Such behavior is unavailable to default django storages prior to django 5.1 - so some of
+        # the behaviors regarding file reuploads will be different in non-azure/(non-azurite) setups
+    },
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
 }
 STATICFILES_DIRS = [checkout_dir("map-view/build/static")]
@@ -353,14 +361,49 @@ if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGIN_REGEXES = env("CORS_ALLOWED_ORIGIN_REGEXES")
 
+# Azurite-specific configuration, meant only for local testing
+EMULATE_AZURE_BLOBSTORAGE = env.bool("EMULATE_AZURE_BLOBSTORAGE")
+if EMULATE_AZURE_BLOBSTORAGE:
+    print("Using azurite (azure emulator)")
+    STORAGES["icons"] = {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "azure_container": "media",
+            # NOTE (2025-09-11 thiago): This is public info
+            # https://github.com/Azure/Azurite/blob/92743bac3cf580c6dfe1ecc9ac777a6ce16cd985/README.md#connection-strings
+            "connection_string": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;",
+            "overwrite_files": True,
+        },
+    }
+
 # OpenShift-specific configuration
 OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
 if OPENSHIFT_DEPLOYMENT:
     # Use Azure Storage Container as file storage in OpenShift deployment
-    STORAGES["default"]["BACKEND"] = "storages.backends.azure_storage.AzureStorage"
-    AZURE_ACCOUNT_NAME = env.str("AZURE_ACCOUNT_NAME")
-    AZURE_CONTAINER = env.str("AZURE_CONTAINER")
-    AZURE_ACCOUNT_KEY = env.str("AZURE_ACCOUNT_KEY")
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "account_key": env.str("AZURE_ACCOUNT_KEY"),
+            "account_name": env.str("AZURE_ACCOUNT_NAME"),
+            "azure_container": env.str("AZURE_CONTAINER"),
+        },
+    }
+
+    # Icons storage
+    STORAGES["icons"] = {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "account_key": env.str("AZURE_ACCOUNT_KEY"),
+            "account_name": env.str("AZURE_ACCOUNT_NAME"),
+            "azure_container": env.str("AZURE_ICON_CONTAINER"),
+            "overwrite_files": True,
+        },
+    }
+
+if EMULATE_AZURE_BLOBSTORAGE and OPENSHIFT_DEPLOYMENT:
+    raise ImproperlyConfigured(
+        "You cannot have EMULATE_AZURE_BLOBSTORAGE and OPENSHIFT_DEPLOYMENT enabled at the same time"
+    )
 
 # Sentry-SDK
 SENTRY_DSN = env.str("SENTRY_DSN")
@@ -411,6 +454,13 @@ ALLOWED_FILE_UPLOAD_TYPES = [
     ".dgn",
     ".csv",
 ]
+
+# PNG icons
+PNG_ICON_SIZES = [32, 64, 128, 256]
+CITY_FURNITURE_DEVICE_TYPE_SVG_ICON_DESTINATION = "icons/city_furniture_device_type/svg/"
+CITY_FURNITURE_DEVICE_TYPE_PNG_ICON_DESTINATION = "icons/city_furniture_device_type/png/"
+TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION = "icons/traffic_control_device_type/svg/"
+TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION = "icons/traffic_control_device_type/png/"
 
 # django-axes settings for login failure limitation
 AXES_FAILURE_LIMIT = 6

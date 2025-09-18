@@ -34,6 +34,8 @@ from traffic_control.enums import (
 from traffic_control.forms import (
     AdminFileWidget,
     CityInfraFileUploadFormset,
+    TrafficControlDeviceTypeForm,
+    TrafficControlDeviceTypeIconForm,
     TrafficSignPlanModelForm,
     TrafficSignRealModelForm,
 )
@@ -54,6 +56,7 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
+from traffic_control.models.common import TrafficControlDeviceTypeIcon
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignRealOperation
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
@@ -97,16 +100,25 @@ class TrafficSignTypeListFilter(SimpleListFilter):
         return queryset
 
 
+@admin.register(TrafficControlDeviceTypeIcon)
+class TrafficControlDeviceTypeIconAdmin(admin.ModelAdmin):
+    form = TrafficControlDeviceTypeIconForm
+    list_display = ("id", "file")
+    search_fields = ("id", "file")
+
+
 @admin.register(TrafficControlDeviceType)
 class TrafficControlDeviceTypeAdmin(
     EnumChoiceValueDisplayAdminMixin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
+    form = TrafficControlDeviceTypeForm
     resource_class = TrafficControlDeviceTypeResource
     list_display = (
         "code",
         "icon",
+        "icon_file",
         "description",
         "value",
         "unit",

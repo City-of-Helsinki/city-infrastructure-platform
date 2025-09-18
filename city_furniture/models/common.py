@@ -5,17 +5,45 @@ from auditlog.registry import auditlog
 from colorfield.fields import ColorField
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
+from django.core.files.storage import Storage, storages
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
 from city_furniture.enums import CityFurnitureClassType, CityFurnitureDeviceTypeTargetModel, CityFurnitureFunctionType
-from traffic_control.mixins.models import SourceControlModel
+from cityinfra import settings
+from traffic_control.mixins.models import AbstractFileModel, SourceControlModel
 
 
 class CityFurnitureDeviceTypeQuerySet(models.QuerySet):
     def for_target_model(self, target_model: CityFurnitureDeviceTypeTargetModel):
         return self.filter(Q(target_model=None) | Q(target_model=target_model))
+
+
+def city_furniture_device_type_icon_storage() -> Storage:
+    return storages["icons"]
+
+
+class CityFurnitureDeviceTypeIcon(AbstractFileModel):
+    file = models.FileField(
+        _("File"),
+        blank=False,
+        null=False,
+        unique=True,
+        upload_to=settings.CITY_FURNITURE_DEVICE_TYPE_SVG_ICON_DESTINATION,
+        # NOTE (2025-09-10 thiago)
+        # We need to pass our storage as a callback that returns the target storage. If we don't the generated migration
+        # will contain runtime server settings used when running migrations generation. This would mean either
+        # 1) The migration produces an incorrectly configured field for production
+        #    or
+        # 2) The migration leaks the production keys into git via the generated migrations file
+        storage=city_furniture_device_type_icon_storage,
+    )
+
+    class Meta:
+        db_table = "city_furniture_device_type_icon"
+        verbose_name = _("City Furniture Device Type Icon")
+        verbose_name_plural = _("City Furniture Device Type Icons")
 
 
 class CityFurnitureDeviceType(models.Model):
@@ -45,6 +73,13 @@ class CityFurnitureDeviceType(models.Model):
         _("Icon"),
         max_length=100,
         blank=True,
+        help_text=_("Icon of the actual device"),
+    )
+    icon_file = models.ForeignKey(
+        CityFurnitureDeviceTypeIcon,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
         help_text=_("Icon of the actual device"),
     )
     description_fi = models.CharField(

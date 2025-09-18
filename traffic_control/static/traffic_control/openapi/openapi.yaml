@@ -3302,6 +3302,11 @@ paths:
         schema:
           type: string
       - in: query
+        name: icon_file
+        schema:
+          type: string
+          format: uuid
+      - in: query
         name: id
         schema:
           type: string
@@ -10976,6 +10981,11 @@ paths:
         schema:
           type: string
       - in: query
+        name: icon_file
+        schema:
+          type: string
+          format: uuid
+      - in: query
         name: id
         schema:
           type: string
@@ -17370,6 +17380,11 @@ components:
             City Furniture model that this Device Type is usable for.
 
             * `furniture_signpost` - Furniture signpost
+        icon_file:
+          type: string
+          format: uuid
+          nullable: true
+          description: Icon of the actual device
       required:
       - class_type
       - code
@@ -17551,6 +17566,11 @@ components:
             City Furniture model that this Device Type is usable for.
 
             * `furniture_signpost` - Furniture signpost
+        icon_file:
+          type: string
+          format: uuid
+          nullable: true
+          description: Icon of the actual device
       required:
       - class_type
       - code
@@ -22119,6 +22139,11 @@ components:
             City Furniture model that this Device Type is usable for.
 
             * `furniture_signpost` - Furniture signpost
+        icon_file:
+          type: string
+          format: uuid
+          nullable: true
+          description: Icon of the actual device
     PatchedCityFurnitureTargetRequest:
       type: object
       properties:
@@ -24407,6 +24432,11 @@ components:
           type: object
           additionalProperties: {}
           nullable: true
+        icon_file:
+          type: string
+          format: uuid
+          nullable: true
+          description: Icon of the actual device
     PatchedTrafficLightPlanInputRequest:
       type: object
       properties:
@@ -29134,6 +29164,11 @@ components:
           type: object
           additionalProperties: {}
           nullable: true
+        icon_file:
+          type: string
+          format: uuid
+          nullable: true
+          description: Icon of the actual device
       required:
       - code
       - icons
@@ -29214,6 +29249,11 @@ components:
           type: object
           additionalProperties: {}
           nullable: true
+        icon_file:
+          type: string
+          format: uuid
+          nullable: true
+          description: Icon of the actual device
       required:
       - code
     TrafficLightPlanFile:

@@ -1,6 +1,33 @@
-from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
+from django import forms
+
+from city_furniture.models import CityFurnitureDeviceType, FurnitureSignpostPlan, FurnitureSignpostReal
+from city_furniture.models.common import CityFurnitureDeviceTypeIcon
 from traffic_control.admin.utils import ResponsibleEntityPermissionAdminFormMixin
-from traffic_control.forms import Geometry3DFieldForm, SRIDBoundGeometryFormMixin
+from traffic_control.forms import (
+    AbstractAdminDeviceTypeIconSelectWidget,
+    AbstractDeviceTypeIconForm,
+    Geometry3DFieldForm,
+    SRIDBoundGeometryFormMixin,
+)
+
+
+class AdminCityFurnitureDeviceTypeIconSelectWidget(AbstractAdminDeviceTypeIconSelectWidget):
+    MODEL = CityFurnitureDeviceTypeIcon
+
+
+class CityFurnitureDeviceTypeIconForm(AbstractDeviceTypeIconForm):
+    class Meta:
+        model = CityFurnitureDeviceTypeIcon
+        fields = "__all__"
+
+
+class CityFurnitureDeviceTypeForm(forms.ModelForm):
+    class Meta:
+        model = CityFurnitureDeviceType
+        widgets = {
+            "icon_file": AdminCityFurnitureDeviceTypeIconSelectWidget,
+        }
+        fields = "__all__"
 
 
 class FurnitureSignpostRealModelForm(
