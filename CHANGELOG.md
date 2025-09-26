@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.21.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.20.0...city-infrastructure-platform-v1.21.0) (2025-09-26)
+
+
+### Features
+
+* Allow BARRIER and SIGNPOST target_model devicetypes for TrafficSignReal and Plan objects ([967a3e6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/967a3e6bd3d951b7ed203e10c42b27d53e4439df))
+
+
+### Bug Fixes
+
+* Update sonarqube-scan-action version ([e1c6d29](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e1c6d29341bc70a762450e50fe47c0bdbc47b849))
+
 ## [1.20.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.19.0...city-infrastructure-platform-v1.20.0) (2025-09-16)
 
 
