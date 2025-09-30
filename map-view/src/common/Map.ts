@@ -312,7 +312,7 @@ class Map {
     });
     const diffLayerIdentifier = getDiffLayerIdentifierFromFeature(feature1, this.mapConfig.overlayConfig);
     if (diffLayerIdentifier) {
-      this.planRealDiffVectorLayers[diffLayerIdentifier].getSource()!.addFeature(olFeature);
+      this.planRealDiffVectorLayers[diffLayerIdentifier]?.getSource()?.addFeature(olFeature);
     }
   }
 
@@ -385,16 +385,15 @@ class Map {
   showAllPlanAndRealDifferences(realLayer: VectorLayer<VectorSource>, planLayer: VectorLayer<VectorSource>) {
     let realFeatures: FeatureLike[],
       planFeatures: FeatureLike[] = [];
-    if (realLayer.getSource()?.getFeatures() !== undefined && planLayer.getSource()?.getFeatures() !== undefined) {
+
+    const realLayerFeatures = realLayer.getSource()?.getFeatures();
+    const planLayerFeatures = planLayer.getSource()?.getFeatures();
+    if (realLayerFeatures !== undefined && planLayerFeatures !== undefined) {
       // Get all features to single flat lists
-      realFeatures = realLayer
-        .getSource()!
-        .getFeatures()
+      realFeatures = realLayerFeatures
         .map((feature) => (isLayerClustered(realLayer) ? feature.get("features") : feature))
         .flat(1);
-      planFeatures = planLayer
-        .getSource()!
-        .getFeatures()
+      planFeatures = planLayerFeatures
         .map((feature) => (isLayerClustered(planLayer) ? feature.get("features") : feature))
         .flat(1);
 
@@ -701,20 +700,20 @@ class Map {
 
   clearPlanRealDiffVectorLayer(identifier: string) {
     if (identifier) {
-      this.planRealDiffVectorLayers[identifier].getSource()!.clear();
+      this.planRealDiffVectorLayers[identifier]?.getSource()?.clear();
     }
   }
 
   clearPlanOfRealVectorLayer() {
-    this.planOfRealVectorLayer.getSource()!.clear();
+    this.planOfRealVectorLayer.getSource()?.clear();
   }
 
   clearHighlightLayer() {
-    this.highLightedFeatureLayer.getSource()!.clear();
+    this.highLightedFeatureLayer.getSource()?.clear();
   }
 
   clearSelectedAddressLayer() {
-    this.selectedAddressFeatureLayer.getSource()!.clear();
+    this.selectedAddressFeatureLayer.getSource()?.clear();
   }
 
   showSelectedAddressLayer(show: boolean) {
