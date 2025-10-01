@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.22.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.21.0...city-infrastructure-platform-v1.22.0) (2025-10-01)
+
+
+### Features
+
+* Add icon upload support for traffic sign device types ([6d4c88b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/6d4c88b99226db5bc1da0923a1835264be88258c))
+* Add icon_file field to CityFurnitureDeviceType, override form widget ([01e9340](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/01e9340e5cd35073c9c1832835e9afe575ae7f6d))
+* Add signal handlers for city_furniture / traffic_control icon deleted ([4aca0ac](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4aca0accedc23ba93996ea07183240b261791fb4))
+* Enable usage of azurite for locally testing blobstorage operations ([0aef58c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0aef58c66ced65b12d05df2d5e9f944aa30cf29d))
+* Generate PNG icons for city_furniture icons upon SVG icon upload ([498f610](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/498f61096f98d77a3af253611a0683619e7da943))
+* Improve dropdown selector for the icon_file field ([11e3d12](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/11e3d12ab36d6cea8a35b7a643048c38b4e04446))
+* Management commands for icon upload, device type object fixes ([491831f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/491831fe34cf26934179252d419a37870c63e61f))
+* Scan incoming icon files for viruses ([22f30f4](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/22f30f434de0de304d6b47acc8b46c2fe65c61a6))
+* Separate icon storage, enable overwrite, enforce unique filename ([d0e6f1d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d0e6f1d42f8f0da9997ca2d28d098494c4751c66))
+
+
+### Bug Fixes
+
+* UI crash condition on the dropdown selector with icon preview ([cfaaa11](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/cfaaa11a877e3880aa79e090665c87765b079025))
+
 ## [1.21.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.20.0...city-infrastructure-platform-v1.21.0) (2025-09-26)
 
 
