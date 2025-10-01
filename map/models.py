@@ -1,5 +1,6 @@
 import uuid
 
+from django.conf import settings
 from django.db import models, NotSupportedError
 from django.utils.translation import gettext_lazy as _
 
@@ -60,7 +61,7 @@ class FeatureTypeEditMapping(models.Model):
 
 
 class IconDrawingConfig(models.Model):
-    DEFAULT_ICON_URL = "traffic_control/svg/traffic_sign_icons/"
+    DEFAULT_ICON_URL = settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION
     DEFAULT_ICON_SCALE = 0.075
 
     class ImageType(models.TextChoices):
@@ -100,5 +101,5 @@ class IconDrawingConfig(models.Model):
         if self.image_type == IconDrawingConfig.ImageType.SVG:
             return self.DEFAULT_ICON_URL
         elif self.image_type == IconDrawingConfig.ImageType.PNG:
-            return f"traffic_control/png/traffic_sign_icons/{self.png_size}/"
+            return f"{settings.TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION}/{self.png_size}/"
         raise NotSupportedError(f"No support for image type: {self.image_type}")
