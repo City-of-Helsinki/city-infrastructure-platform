@@ -28,6 +28,7 @@ import {
   getAddressMarkerStyle,
   getDiffLayerIdentifier,
   getDiffLayerIdentifierFromFeature,
+  getFeatureType,
   getHighlightStyle,
   getSinglePointStyle,
   isCoordinateInsideFeature,
@@ -364,10 +365,22 @@ class Map {
     const olFeature = new OlFeature({
       geometry: feature.getProperties().geometry,
       name: "HiglightedFeature",
+      featureType: getFeatureType(feature),
     });
 
     this.highLightedFeatureLayer.setStyle(getHighlightStyle(feature, mapConfig));
     this.highLightedFeatureLayer.getSource()?.addFeature(olFeature);
+  }
+
+  /**
+   *
+   */
+  getHighlightFeatureType() {
+    const features = this.highLightedFeatureLayer.getSource()?.getFeatures();
+    // there is always 0 or 1 highlighted features
+    if (features && features?.length > 0) {
+      return features[0].getProperties().featureType;
+    }
   }
 
   /**
@@ -418,11 +431,7 @@ class Map {
 
   handleShowAllPlanAndRealDifferences() {
     // Get only visible layers
-    const visibleLayers = Object.fromEntries(
-      Object.entries({ ...this.clusteredOverlayLayers, ...this.nonClusteredOverlayLayers }).filter(([key, layer]) =>
-        layer.getVisible(),
-      ),
-    );
+    const visibleLayers = this.getVisibleLayers();
 
     for (const [identifier, layer] of Object.entries(visibleLayers)) {
       // Check if real layer and its plan layer are both visible
@@ -430,6 +439,14 @@ class Map {
         this.showAllPlanAndRealDifferences(layer, visibleLayers[identifier.replace("real", "plan")]);
       }
     }
+  }
+
+  getVisibleLayers() {
+    return Object.fromEntries(
+      Object.entries({ ...this.clusteredOverlayLayers, ...this.nonClusteredOverlayLayers }).filter(([key, layer]) =>
+        layer.getVisible(),
+      ),
+    );
   }
 
   private static createHighLightLayer() {
