@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.22.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.22.0...city-infrastructure-platform-v1.22.1) (2025-10-02)
+
+
+### Bug Fixes
+
+* Layer with no matching plan or real layer cannot be disabled ([bcf07e7](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/bcf07e7de8ae826196ac8ee2d639a974c4281a65))
+* Selected feature stays visible features layer is disabled. ([e5acd87](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e5acd8705718d0679cc3f197faf32dc6484f893b))
+
 ## [1.22.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.21.0...city-infrastructure-platform-v1.22.0) (2025-10-01)
 
 
