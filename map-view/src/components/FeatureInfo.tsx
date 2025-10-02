@@ -52,13 +52,24 @@ const FeatureInfo = ({
 
   // Reset state when features prop changes
   useEffect(() => {
-    setFeatureIndex(0);
-    setRealPlanDistance(undefined);
-  }, [features]);
+    // Check if the current index is out of bounds for the new features array
+    if (featureIndex >= features.length && features.length > 0) {
+      // If out of bounds, reset to 0
+      setFeatureIndex(0);
+    } else if (features.length === 0) {
+      // If features is empty, reset index and distance
+      setFeatureIndex(0);
+      setRealPlanDistance(undefined);
+    }
+  }, [features, featureIndex]);
 
   const runOnSelectFeature = useCallback(
     (index: number) => {
       const feature = features[index];
+      if (!feature) {
+        console.warn(`Attempted to select feature at invalid index ${index}. Skipping.`);
+        return;
+      }
       onSelectFeatureShowPlan(feature).then((distance: number) => distance && setRealPlanDistance(distance));
       onSelectFeatureHighLight(feature);
     },
@@ -181,7 +192,7 @@ const FeatureInfo = ({
     return null;
   }
 
-  const feature = features[featureIndex];
+  const feature = features[featureIndex] || features[0];
 
   return (
     <StyledCard>

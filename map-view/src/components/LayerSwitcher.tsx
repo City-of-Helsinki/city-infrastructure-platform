@@ -39,7 +39,7 @@ const StyledLayersDiv = styled("div")({
 interface LayerSwitcherProps {
   mapConfig: MapConfig;
   onClose: () => void;
-  onOverlayToggle: (checked: boolean, diffLayerIdentifier: string) => void;
+  onOverlayToggle: (checked: boolean, diffLayerIdentifier: string, layerIdentifier: string) => void;
 }
 
 const LayerSwitcher = ({ mapConfig, onClose, onOverlayToggle }: LayerSwitcherProps) => {
@@ -91,12 +91,12 @@ const LayerSwitcher = ({ mapConfig, onClose, onOverlayToggle }: LayerSwitcherPro
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
       const identifier = event.target.name;
       const checked = event.target.checked;
-      onOverlayToggle(checked, getDiffLayerIdentifierFromLayerIdentifier(identifier));
       setVisibleOverlays((prev) => ({
         ...prev,
         [identifier]: checked,
       }));
       Map.setOverlayVisible(identifier, checked);
+      onOverlayToggle(checked, getDiffLayerIdentifierFromLayerIdentifier(identifier), identifier);
     };
 
     return (

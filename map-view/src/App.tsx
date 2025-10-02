@@ -13,6 +13,7 @@ import { Feature, MapConfig } from "./models";
 import OngoingFetchInfo from "./components/OngoingFetchInfo";
 import AddressInput from "./components/AddressInput";
 import { Address, convertToEPSG3879OL, getAddressSearchResults, getNameFromAddress } from "./common/AddressSearchUtils";
+import { getFeatureType } from "./common/MapUtils";
 
 const drawerWidth = "400px";
 
@@ -80,6 +81,14 @@ const App = () => {
     setAddressSearchResults([]);
   };
 
+  const removeFeatures = (removeLayerIdentifier: string) => {
+    if (features.length === 0) {
+      // Do nothing as there is nothing to remove
+      return;
+    }
+    setFeatures(features.filter((feature) => getFeatureType(feature) !== removeLayerIdentifier));
+  };
+
   return (
     <React.StrictMode>
       <div className="App">
@@ -130,10 +139,16 @@ const App = () => {
             <LayerSwitcher
               mapConfig={mapConfig}
               onClose={() => setOpen(false)}
-              onOverlayToggle={(checked: boolean, diffLayerIdentifier: string) => {
+              onOverlayToggle={(checked: boolean, diffLayerIdentifier: string, layerIdentifier: string) => {
                 if (!checked) {
-                  setFeatures([]);
+                  removeFeatures(layerIdentifier);
                   Map.clearPlanRealDiffVectorLayer(diffLayerIdentifier);
+                  if (
+                    Object.keys(Map.getVisibleLayers()).length === 0 ||
+                    Map.getHighlightFeatureType() === layerIdentifier
+                  ) {
+                    Map.clearHighlightLayer();
+                  }
                 }
               }}
             />

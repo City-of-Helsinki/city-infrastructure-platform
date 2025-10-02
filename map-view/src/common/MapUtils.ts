@@ -264,7 +264,7 @@ function getFeatureLayer(featureType: string, overlayConfig: LayerConfig) {
   return overlayConfig["layers"].find((l) => l.identifier === featureType);
 }
 
-function getFeatureType(feature: Feature) {
+export function getFeatureType(feature: Feature) {
   return feature["id_"].split(".")[0];
 }
 
