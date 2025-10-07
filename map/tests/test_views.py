@@ -3,12 +3,13 @@ import json
 import pytest
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.test import RequestFactory, TestCase
+from django.test import override_settings, RequestFactory, TestCase
 from django.urls import reverse
 
 from map.models import FeatureTypeEditMapping, IconDrawingConfig, Layer
 from map.tests.factories import IconDrawingConfigFactory
 from map.views import map_config, map_view
+from traffic_control.services.azure import get_azure_icons_base_url
 from traffic_control.tests.factories import get_user
 
 
@@ -31,6 +32,17 @@ class MapViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+@override_settings(
+    STORAGES={
+        "icons": {
+            "OPTIONS": {
+                "azure_container": "media",
+                "connection_string": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;",
+                "overwrite_files": True,
+            }
+        }
+    }
+)
 class MapConfigTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -41,6 +53,7 @@ class MapConfigTestCase(TestCase):
         request = self.factory.get(reverse("map-config"))
         request.LANGUAGE_CODE = "en"
 
+        icon_options = settings.STORAGES["icons"]["OPTIONS"]
         response = map_config(request)
         self.assertEqual(response.status_code, 200)
         response_data = json.loads(response.content)
@@ -48,15 +61,17 @@ class MapConfigTestCase(TestCase):
         self.assertEqual(response_data["icon_type"], "svg")
         self.assertEqual(
             response_data["traffic_sign_icons_url"],
-            f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/svg/traffic_sign_icons/",
+            f"{get_azure_icons_base_url(icon_options)}icons/traffic_control_device_type/svg/",
         )
 
+    @override_settings(EMULATE_AZURE_BLOBSTORAGE=True)
     def test_with_icon_draw_config(self):
         """Test that with an active IconDrawingConfig the values are actually used."""
         idc = IconDrawingConfigFactory(enabled=True, scale=IconDrawingConfig.DEFAULT_ICON_SCALE + 0.1, image_type="png")
         request = self.factory.get(reverse("map-config"))
         request.LANGUAGE_CODE = "en"
 
+        icon_options = settings.STORAGES["icons"]["OPTIONS"]
         response = map_config(request)
         self.assertEqual(response.status_code, 200)
         response_data = json.loads(response.content)
@@ -65,7 +80,7 @@ class MapConfigTestCase(TestCase):
         self.assertEqual(response_data["icon_type"], idc.image_type)
         self.assertEqual(
             response_data["traffic_sign_icons_url"],
-            f"{request.build_absolute_uri(settings.STATIC_URL)}traffic_control/png/traffic_sign_icons/{idc.png_size}/",
+            f"{get_azure_icons_base_url(icon_options)}icons/traffic_control_device_type/png/{idc.png_size}/",
         )
 
     def test_layer_config_return_ok_en(self):

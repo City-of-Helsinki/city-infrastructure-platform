@@ -78,7 +78,8 @@ AdditionalSignRealFeatureType = FeatureType(
     .filter(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-    ),
+    )
+    .select_related("device_type"),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("manufacturer", abstract="Manufacturer of the sign."),
@@ -107,7 +108,8 @@ AdditionalSignPlanFeatureType = FeatureType(
     .filter(
         Q(validity_period_start__isnull=True)
         | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-    ),
+    )
+    .select_related("device_type"),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("plan_id", abstract="ID of the Plan that this Additional Sign Plan belongs to."),
