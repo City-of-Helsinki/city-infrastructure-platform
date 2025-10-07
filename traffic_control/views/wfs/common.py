@@ -11,7 +11,7 @@ from gisserver.output import GeoJsonRenderer
 from gisserver.output.utils import ChunkedQuerySetIterator
 from gisserver.types import XsdElement
 
-from traffic_control.views.wfs.utils import EnumNameXsdElement, SwapBoundingBoxMixin, YXGML32Renderer
+from traffic_control.views.wfs.utils import EnumNameXsdElement, IconXsdElement, SwapBoundingBoxMixin, YXGML32Renderer
 from traffic_control.views.wfs.workarounds import replace__restore_caches
 
 DEFAULT_CRS = CRS.from_srid(settings.SRID)
@@ -70,7 +70,10 @@ DEVICE_TYPE_FIELDS = [
     ),
     FeatureField(
         "device_type_icon",
-        model_attribute="device_type.icon",
+        model_attribute="id",
+        # this is a workaround, as django-gisserver check that model attribute is an actual field
+        # property is not enough, needs to be checked if this is needed anymore when we update gisserver version.
+        xsd_class=IconXsdElement,
         abstract="Device type icon.",
     ),
 ]

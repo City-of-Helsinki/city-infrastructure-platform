@@ -1,3 +1,4 @@
+import os
 import uuid
 from typing import Optional
 
@@ -204,6 +205,11 @@ class TrafficControlDeviceType(models.Model):
     @property
     def traffic_sign_type(self):
         return TRAFFIC_SIGN_TYPE_MAP.get(self.code[0])
+
+    @property
+    def icon_name(self):
+        """Return just the name of the file without full path"""
+        return os.path.basename(self.icon_file.file.name)
 
     def clean(self):
         self.validate_target_model_content_schema()

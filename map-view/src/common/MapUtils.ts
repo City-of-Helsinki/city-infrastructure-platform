@@ -167,7 +167,7 @@ function getIconSrc(
 ) {
   const base_src = getIconBaseSrc(traffic_sign_icons_url, device_type_code, overridden_icon);
   if (icon_type === "png") {
-    return base_src.concat(".png");
+    return base_src.replace(".svg", ".png");
   } else {
     return base_src;
   }
