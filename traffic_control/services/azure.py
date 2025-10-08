@@ -1,5 +1,6 @@
 from urllib.parse import urljoin
 
+
 def get_azure_storage_base_url(options: dict) -> str:
     """
     Retrieves the base path/URL for an azure storage backend

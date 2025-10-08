@@ -15,13 +15,14 @@ from traffic_control.models.road_marking import RoadMarkingRealOperation
 from traffic_control.serializers.common import (
     EwktGeometryField,
     HideFromAnonUserSerializerMixin,
+    HidePrivateFileUrlMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
 from traffic_control.services.road_marking import road_marking_plan_create, road_marking_plan_update
 
 
-class RoadMarkingPlanFileSerializer(serializers.ModelSerializer):
+class RoadMarkingPlanFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = RoadMarkingPlanFile
         fields = "__all__"
@@ -90,7 +91,7 @@ class RoadMarkingPlanGeoJSONOutputSerializer(RoadMarkingPlanOutputSerializer):
     location = GeometryField()
 
 
-class RoadMarkingRealFileSerializer(serializers.ModelSerializer):
+class RoadMarkingRealFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = RoadMarkingRealFile
         fields = "__all__"

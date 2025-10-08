@@ -15,13 +15,14 @@ from traffic_control.models.barrier import BarrierRealOperation
 from traffic_control.serializers.common import (
     EwktGeometryField,
     HideFromAnonUserSerializerMixin,
+    HidePrivateFileUrlMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
 from traffic_control.services.barrier import barrier_plan_create, barrier_plan_update
 
 
-class BarrierPlanFileSerializer(serializers.ModelSerializer):
+class BarrierPlanFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierPlanFile
         fields = "__all__"
@@ -90,7 +91,7 @@ class BarrierPlanGeoJSONOutputSerializer(BarrierPlanOutputSerializer):
     location = GeometryField()
 
 
-class BarrierRealFileSerializer(serializers.ModelSerializer):
+class BarrierRealFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierRealFile
         fields = "__all__"

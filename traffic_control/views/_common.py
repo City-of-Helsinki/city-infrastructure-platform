@@ -131,7 +131,9 @@ class FileUploadViews(GenericViewSet):
             raise ValidationError(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}")
 
         for _filename, file in request.data.items():
-            serializer = serializer_class(data={self.get_file_relation(): obj.id, "file": file})
+            serializer = serializer_class(
+                data={self.get_file_relation(): obj.id, "file": file}, context={"request": request}
+            )
             serializer.is_valid(raise_exception=True)
             serializer_cache.append(serializer)
 
@@ -173,7 +175,9 @@ class FileUploadViews(GenericViewSet):
                 raise ValidationError(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}")
 
             serializer_class = self.get_file_serializer()
-            serializer = serializer_class(instance=instance, data=request.data, partial=True)
+            serializer = serializer_class(
+                instance=instance, data=request.data, partial=True, context={"request": request}
+            )
 
             serializer.is_valid(raise_exception=True)
             serializer.save()
