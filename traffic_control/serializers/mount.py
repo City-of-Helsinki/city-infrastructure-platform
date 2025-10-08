@@ -16,6 +16,7 @@ from traffic_control.models import (
 from traffic_control.models.mount import MountRealOperation
 from traffic_control.serializers.common import (
     EwktGeometryField,
+    FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
@@ -35,7 +36,7 @@ class MountTypeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MountPlanFileSerializer(serializers.ModelSerializer):
+class MountPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MountPlanFile
         fields = "__all__"
@@ -94,7 +95,7 @@ class MountPlanGeoJSONOutputSerializer(MountPlanOutputSerializer):
     location = GeometryField()
 
 
-class MountRealFileSerializer(serializers.ModelSerializer):
+class MountRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MountRealFile
         fields = "__all__"

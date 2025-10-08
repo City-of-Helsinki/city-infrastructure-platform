@@ -1,6 +1,10 @@
+import mimetypes
+
 from django.conf import settings
-from django.http import JsonResponse
+from django.core.files.storage import storages
+from django.http import FileResponse, Http404, JsonResponse
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.cache import never_cache
 from health_check.views import MainView
 
@@ -19,3 +23,23 @@ class HealthCheckView(MainView):
         }
 
         return JsonResponse(response, status=status_code)
+
+
+class FileProxyView(View):
+    @classmethod
+    def get_storage(cls):
+        return storages["default"]
+
+    def get(self, _request, upload_folder, model_name, file_id):
+        # TODO authenticate the request
+
+        storage_path = f"{upload_folder}/{model_name}/{file_id}"
+        if not self.get_storage().exists(storage_path):
+            raise Http404("File not found.")
+
+        file_handle = self.get_storage().open(storage_path)
+        content_type, _ = mimetypes.guess_type(storage_path)
+        content_type = content_type or "application/octet-stream"
+        response = FileResponse(file_handle, content_type=content_type)
+        response["Content-Disposition"] = f'inline; filename="{file_id}"'
+        return response

@@ -73,6 +73,15 @@ class EwktGeometryField(serializers.CharField):
     pass
 
 
+class FileProxySerializerMixin:
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if "file" in representation:
+            request = self.context.get("request")
+            representation["file"] = f"{request.scheme}://{request.get_host()}/uploads/{instance.file.name}"
+        return representation
+
+
 # Don't include object's user information to unauthenticated requests
 class HideFromAnonUserSerializerMixin:
     def to_representation(self, instance):

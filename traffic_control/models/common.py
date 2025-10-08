@@ -20,7 +20,7 @@ from traffic_control.enums import (
     TrafficControlDeviceTypeType,
 )
 from traffic_control.mixins.models import AbstractFileModel, UserControlModel
-from traffic_control.services.azure import get_azure_icons_base_url
+from traffic_control.services.azure import get_azure_storage_base_url
 
 logger = logging.getLogger("traffic_control.models.common")
 
@@ -203,7 +203,7 @@ class TrafficControlDeviceType(models.Model):
         png_name = svg_name.replace("svg", "png")
         png_sizes = [32, 64, 128, 256]
         try:
-            base_url = get_azure_icons_base_url(settings.STORAGES["icons"]["OPTIONS"])
+            base_url = get_azure_storage_base_url(settings.STORAGES["icons"]["OPTIONS"])
         except KeyError as e:
             # this is a misconfiguration
             logger.warning(f"icon base url could not be fetched: {e}")

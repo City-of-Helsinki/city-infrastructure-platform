@@ -12,10 +12,10 @@ from city_furniture.models import (
 )
 from city_furniture.models.common import CityFurnitureDeviceType
 from traffic_control.models import OperationType
-from traffic_control.serializers.common import EwktPointField, HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import EwktPointField, FileProxySerializerMixin, HideFromAnonUserSerializerMixin
 
 
-class FurnitureSignpostPlanFileSerializer(serializers.ModelSerializer):
+class FurnitureSignpostPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = FurnitureSignpostPlanFile
         fields = "__all__"
@@ -49,7 +49,7 @@ class FurnitureSignpostPlanGeoJSONSerializer(FurnitureSignpostPlanSerializer):
     location = GeometryField()
 
 
-class FurnitureSignpostRealFileSerializer(serializers.ModelSerializer):
+class FurnitureSignpostRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = FurnitureSignpostRealFile
         fields = "__all__"
