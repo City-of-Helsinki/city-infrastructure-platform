@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from traffic_control.services.azure import get_azure_icons_base_url
+from traffic_control.services.azure import get_azure_storage_base_url
 from traffic_control.services.icon_draw_config import get_icons_relative_url, get_icons_scale, get_icons_type
 
 from .models import FeatureTypeEditMapping, Layer
@@ -49,7 +49,7 @@ def map_config(request):
         )
 
     icon_options = settings.STORAGES["icons"]["OPTIONS"]
-    traffic_sign_icons_url = f"{get_azure_icons_base_url(icon_options)}{get_icons_relative_url()}"
+    traffic_sign_icons_url = f"{get_azure_storage_base_url(icon_options)}{get_icons_relative_url()}"
     config = {
         "basemapConfig": {
             "name": _("Basemaps"),

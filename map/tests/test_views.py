@@ -9,7 +9,7 @@ from django.urls import reverse
 from map.models import FeatureTypeEditMapping, IconDrawingConfig, Layer
 from map.tests.factories import IconDrawingConfigFactory
 from map.views import map_config, map_view
-from traffic_control.services.azure import get_azure_icons_base_url
+from traffic_control.services.azure import get_azure_storage_base_url
 from traffic_control.tests.factories import get_user
 
 
@@ -61,7 +61,7 @@ class MapConfigTestCase(TestCase):
         self.assertEqual(response_data["icon_type"], "svg")
         self.assertEqual(
             response_data["traffic_sign_icons_url"],
-            f"{get_azure_icons_base_url(icon_options)}icons/traffic_control_device_type/svg/",
+            f"{get_azure_storage_base_url(icon_options)}icons/traffic_control_device_type/svg/",
         )
 
     @override_settings(EMULATE_AZURE_BLOBSTORAGE=True)
@@ -80,7 +80,7 @@ class MapConfigTestCase(TestCase):
         self.assertEqual(response_data["icon_type"], idc.image_type)
         self.assertEqual(
             response_data["traffic_sign_icons_url"],
-            f"{get_azure_icons_base_url(icon_options)}icons/traffic_control_device_type/png/{idc.png_size}/",
+            f"{get_azure_storage_base_url(icon_options)}icons/traffic_control_device_type/png/{idc.png_size}/",
         )
 
     def test_layer_config_return_ok_en(self):
