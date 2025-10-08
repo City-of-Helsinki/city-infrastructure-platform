@@ -81,6 +81,7 @@ class TrafficControlDeviceTypeIcon(AbstractFileModel):
         _("File"),
         blank=False,
         null=False,
+        unique=True,
         upload_to=settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION,
         # NOTE (2025-09-10 thiago)
         # We need to pass our storage as a callback that returns the target storage. If we don't the generated migration
