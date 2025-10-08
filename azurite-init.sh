@@ -7,13 +7,13 @@ set -u
 # https://github.com/Azure/Azurite/blob/92743bac3cf580c6dfe1ecc9ac777a6ce16cd985/README.md#connection-strings
 CONN_STRING="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
 
-echo "Creating 'files' container..."
+echo "Creating 'uploads' container..."
 az storage container create \
   --fail-on-exist \
   --name files \
   --connection-string "${CONN_STRING}"
 
-echo "Setting 'files' container permissions to public read access..."
+echo "Setting 'uploads' container permissions to public read access..."
 az storage container set-permission \
   --name files \
   --public-access blob \
