@@ -365,6 +365,28 @@ CORS_ALLOWED_ORIGIN_REGEXES = env("CORS_ALLOWED_ORIGIN_REGEXES")
 EMULATE_AZURE_BLOBSTORAGE = env.bool("EMULATE_AZURE_BLOBSTORAGE")
 if EMULATE_AZURE_BLOBSTORAGE:
     print("Using azurite (azure emulator)")
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "azure_container": "uploads",
+            # NOTE (2025-10-08 thiago): This is public info
+            # https://github.com/Azure/Azurite/blob/92743bac3cf580c6dfe1ecc9ac777a6ce16cd985/README.md#connection-strings
+            "connection_string": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;",
+            # NOTE (2025-10-15 thiago)
+            # I'd prefer to ensure predictable and overwritable paths to produce fewer orphaned files in the storage,
+            # but the current deployments of the platform do the default django behavior of adding a randomized suffix
+            # to the filename, so explicitly prevent overwrite for now.
+            #
+            # It's important to notice that allowing overwrites would also require a rearrangement on how files are
+            # stored. Currently, they go to CLOUD/STORAGE_ACCOUNT/STORAGE/some-model/file.name (see the model code). If
+            # one wants to allow overwrites within an object, they'd have to go to a different path, for example
+            # CLOUD/STORAGE_ACCOUNT/STORAGE/some-model/:row-pk/file.name
+            #
+            # So a lot of administrative tasks to do such a move
+            "overwrite_files": False,  # Don't touch before reading dissertation above
+        },
+    }
+
     STORAGES["icons"] = {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
