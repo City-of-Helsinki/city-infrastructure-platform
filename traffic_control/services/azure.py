@@ -1,11 +1,8 @@
 from urllib.parse import urljoin
 
-
-def get_azure_icons_base_url(options: dict) -> str:
+def get_azure_storage_base_url(options: dict) -> str:
     """
-    Retrieves the base path/URL for the 'icons' storage backend
-    by inspecting the provided configuration options (STORAGES['icons']['OPTIONS']).
-
+    Retrieves the base path/URL for an azure storage backend
     :param options: The 'OPTIONS' dictionary from the Django STORAGES setting.
     :return: The calculated base URL string.
     """
