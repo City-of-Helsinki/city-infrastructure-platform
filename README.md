@@ -227,11 +227,11 @@ docker compose up clamv-api
 # NOTE: To you use azurite you must also set the EMULATE_AZURE_BLOBSTORAGE variable on your .env file to True
 docker compose -f docker-compose.azurite.yml up azurite
 
-# Create the media storage in azurite and grant it public read permissions for serving static files
+# Create the media, upload storage containers in azurite and grant it public read permissions for serving static files
 docker compose -f docker-compose.azurite.yml up azurite-init
 
-# Wipe the media container on azurite (you will need to re-run azurite-init after this)
-docker compose -f docker-compose.azurite.yml up azurite-delete-media-container
+# Wipe the media, upload storage containers on azurite (you will need to re-run azurite-init after this)
+docker compose -f docker-compose.azurite.yml up azurite-delete-storage-containers
 ```
 
 ## Translations (fi)
