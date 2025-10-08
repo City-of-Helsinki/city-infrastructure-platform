@@ -15,6 +15,7 @@ from traffic_control.models.traffic_sign import TrafficSignRealOperation
 from traffic_control.serializers.common import (
     EwktPointField,
     EwktPolygonField,
+    FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
@@ -22,7 +23,7 @@ from traffic_control.serializers.common import (
 from traffic_control.services.traffic_sign import traffic_sign_plan_create, traffic_sign_plan_update
 
 
-class TrafficSignPlanFileSerializer(serializers.ModelSerializer):
+class TrafficSignPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = TrafficSignPlanFile
         fields = "__all__"
@@ -93,7 +94,7 @@ class TrafficSignPlanGeoJSONOutputSerializer(TrafficSignPlanInputSerializer):
     location = GeometryField()
 
 
-class TrafficSignRealFileSerializer(serializers.ModelSerializer):
+class TrafficSignRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = TrafficSignRealFile
         fields = "__all__"
