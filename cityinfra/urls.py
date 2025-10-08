@@ -15,7 +15,7 @@ from city_furniture.views import (
     furniture_signpost as furniture_signpost_views,
 )
 from cityinfra.admin.views import MyAccountView
-from cityinfra.views import HealthCheckView
+from cityinfra.views import CloudUploadProxyView, HealthCheckView
 from map import views as map_views
 from traffic_control.views import (
     additional_sign as additional_sign_views,
@@ -140,6 +140,10 @@ urlpatterns += [
 urlpatterns += [
     path("device-types/traffic-signs/", TrafficSignCatalog.as_view(), name="traffic-sign-catalog"),
     path("device-types/additional-signs/", AdditionalSignCatalog.as_view(), name="traffic-sign-catalog"),
+]
+
+urlpatterns += [
+    path("uploads/", CloudUploadProxyView.as_view(), name="cloud_upload_proxy"),
 ]
 
 if settings.SENTRY_DEBUG:
