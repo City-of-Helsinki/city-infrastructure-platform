@@ -1,6 +1,6 @@
 import pytest
 
-from traffic_control.services.azure import get_azure_icons_base_url
+from traffic_control.services.azure import get_azure_storage_base_url
 
 # Define a single list of test cases for parametrization
 AZURITE_CONN_STRING = (
@@ -84,4 +84,4 @@ def test_base_url_resolution(test_id, input_options, expected_url):
     by passing the options dictionary directly to the utility function.
     """
     # We call the refactored function, passing the test case's options dictionary directly.
-    assert get_azure_icons_base_url(input_options) == expected_url
+    assert get_azure_storage_base_url(input_options) == expected_url
