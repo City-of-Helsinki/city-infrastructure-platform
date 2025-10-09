@@ -17,7 +17,7 @@ from traffic_control.models.barrier import (
     ConnectionType,
     Reflective,
 )
-from traffic_control.models.common import OperationType, Owner, TrafficControlDeviceType
+from traffic_control.models.common import OperationType, Owner, TrafficControlDeviceType, TrafficControlDeviceTypeIcon
 from traffic_control.models.mount import (
     MountPlan,
     MountPlanFile,

@@ -1,7 +1,6 @@
 import json
 
 import pytest
-from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -24,6 +23,7 @@ from traffic_control.tests.factories import (
     get_traffic_sign_real,
     get_user,
     TrafficControlDeviceTypeFactory,
+    TrafficControlDeviceTypeIconFactory,
 )
 from users.models import User
 
@@ -301,27 +301,39 @@ def test__device_type__target_model__invalid(target_model, factory):
 @pytest.mark.parametrize(
     ("svg_icon", "png_icon"),
     (
-        ("X1.1.svg", "X1.1.svg.png"),
+        ("X1.1.svg", "X1.1.png"),
         ("", None),
     ),
 )
 @pytest.mark.django_db
-def test__device_type__icons(svg_icon, png_icon):
+def test__device_type__icons(temp_icon_storage, svg_icon, png_icon):
     client = get_api_client()
-    dt = get_traffic_control_device_type(code="X1.1", icon=svg_icon)
-    hostname = "testserver"
+    icon_file = TrafficControlDeviceTypeIconFactory(file__filename=svg_icon) if svg_icon else None
+    dt = TrafficControlDeviceTypeFactory(code="X.1", icon_file=icon_file)
 
     response = client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": dt.pk}))
     response_data = response.json()
     icons = response_data["icons"]
-    static = settings.STATIC_URL
 
+    # expected paths are coming from temp_icon_storage fixture
     if svg_icon:
-        assert icons["svg"] == f"http://{hostname}{static}traffic_control/svg/traffic_sign_icons/{svg_icon}"
-        assert icons["png_32"] == f"http://{hostname}{static}traffic_control/png/traffic_sign_icons/32/{png_icon}"
-        assert icons["png_64"] == f"http://{hostname}{static}traffic_control/png/traffic_sign_icons/64/{png_icon}"
-        assert icons["png_128"] == f"http://{hostname}{static}traffic_control/png/traffic_sign_icons/128/{png_icon}"
-        assert icons["png_256"] == f"http://{hostname}{static}traffic_control/png/traffic_sign_icons/256/{png_icon}"
+        assert icons["svg"] == f"http://127.0.0.1:10/teststore1/media/icons/traffic_control_device_type/svg/{svg_icon}"
+        assert (
+            icons["png_32"]
+            == f"http://127.0.0.1:10/teststore1/media/icons/traffic_control_device_type/png/32/{png_icon}"
+        )
+        assert (
+            icons["png_64"]
+            == f"http://127.0.0.1:10/teststore1/media/icons/traffic_control_device_type/png/64/{png_icon}"
+        )
+        assert (
+            icons["png_128"]
+            == f"http://127.0.0.1:10/teststore1/media/icons/traffic_control_device_type/png/128/{png_icon}"
+        )
+        assert (
+            icons["png_256"]
+            == f"http://127.0.0.1:10/teststore1/media/icons/traffic_control_device_type/png/256/{png_icon}"
+        )
     else:
         assert icons is None
 

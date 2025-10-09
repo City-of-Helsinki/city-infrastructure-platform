@@ -36,6 +36,7 @@ from traffic_control.models import (
     SignpostReal,
     SignpostRealOperation,
     TrafficControlDeviceType,
+    TrafficControlDeviceTypeIcon,
     TrafficLightPlan,
     TrafficLightReal,
     TrafficLightRealOperation,
@@ -122,6 +123,17 @@ def get_plan(location=test_multi_polygon, name="Test plan", derive_location=Fals
     return PlanFactory(location=location, name=name, derive_location=derive_location)
 
 
+class TrafficControlDeviceTypeIconFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TrafficControlDeviceTypeIcon
+        django_get_or_create = ("file",)
+
+    file = factory.django.FileField(
+        filename=factory.Sequence(lambda n: f"test_icon_{n}.svg"),
+        data=b'<svg viewBox="0 0 10 10"><rect width="10" height="10"/></svg>',
+    )
+
+
 class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TrafficControlDeviceType
@@ -129,6 +141,7 @@ class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
 
     code = factory.sequence(lambda n: str(n))
     icon = factory.sequence(lambda n: f"icon_{n}")
+    icon_file = factory.SubFactory(TrafficControlDeviceTypeIconFactory)
     description = factory.sequence(lambda n: f"description_{n}")
     value = factory.sequence(lambda n: f"value_{n}")
     unit = ""

@@ -379,7 +379,6 @@ def test_file_rewrite(factory, model_class, file_model_class, related_name, url_
         data={"file": SimpleUploadedFile("rewritten.csv", b"Rewritten file contents")},
         format="multipart",
     )
-
     obj.refresh_from_db()
     file_obj.refresh_from_db()
     assert patch_response.status_code == status.HTTP_200_OK

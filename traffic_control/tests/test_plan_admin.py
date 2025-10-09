@@ -36,7 +36,10 @@ from traffic_control.tests.test_base_api import (
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
 
 settings_overrides = override_settings(
-    STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
+    STORAGES={
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+        "icons": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    }
 )
 
 

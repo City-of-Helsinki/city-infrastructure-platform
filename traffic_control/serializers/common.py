@@ -187,11 +187,7 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
         icons = obj.get_icons()
         if not icons:
             return None
-        request = self.context.get("request")
-        scheme = request.scheme
-        host = request.get_host()
-        icon_urls = {key: f"{scheme}://{host}{value}" for key, value in icons.items()}
-        return icon_urls
+        return icons
 
     @extend_schema_field(field=TrafficSignType)
     def get_traffic_sign_type(self, obj):
