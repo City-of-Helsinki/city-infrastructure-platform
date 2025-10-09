@@ -16,7 +16,11 @@ from traffic_control.tests.factories import (
 )
 
 settings_overrides = override_settings(
-    STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}, LANGUAGE_CODE="en"
+    STORAGES={
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+        "icons": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    },
+    LANGUAGE_CODE="en",
 )
 
 
@@ -41,7 +45,6 @@ def teardown_module():
 @pytest.mark.parametrize("has_mount", (False, True))
 @pytest.mark.django_db
 def test__embed__traffic_sign__context(
-    settings,
     client,
     ts_factory,
     as_factory,

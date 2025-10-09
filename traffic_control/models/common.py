@@ -1,3 +1,4 @@
+import logging
 import os
 import uuid
 from typing import Optional
@@ -19,6 +20,9 @@ from traffic_control.enums import (
     TrafficControlDeviceTypeType,
 )
 from traffic_control.mixins.models import AbstractFileModel, UserControlModel
+from traffic_control.services.azure import get_azure_icons_base_url
+
+logger = logging.getLogger("traffic_control.models.common")
 
 VERBOSE_NAME_NEW = _("New")
 VERBOSE_NAME_OLD = _("Old")
@@ -189,17 +193,23 @@ class TrafficControlDeviceType(models.Model):
         Get icon file paths for each type and size. File paths are based on the `icon` field,
         and it is not guaranteed that the file really exists.
         """
-        if not self.icon:
+        if not self.icon_file:
             return None
 
-        svg_name = self.icon
-        png_name = f"{self.icon}.png"
+        svg_name = self.icon_name
+        png_name = svg_name.replace("svg", "png")
         png_sizes = [32, 64, 128, 256]
-        static_url = settings.STATIC_URL
-
-        icons = {"svg": f"{static_url}traffic_control/svg/traffic_sign_icons/{svg_name}"}
+        try:
+            base_url = get_azure_icons_base_url(settings.STORAGES["icons"]["OPTIONS"])
+        except KeyError as e:
+            # this is a misconfiguration
+            logger.warning(f"icon base url could not be fetched: {e}")
+            return None
+        icons = {"svg": f"{base_url}{settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION}{svg_name}"}
         for size in png_sizes:
-            icons[f"png_{size}"] = f"{static_url}traffic_control/png/traffic_sign_icons/{size}/{png_name}"
+            icons[
+                f"png_{size}"
+            ] = f"{base_url}{settings.TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION}{size}/{png_name}"
 
         return icons
 
