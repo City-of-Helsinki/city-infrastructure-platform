@@ -220,7 +220,7 @@ class TrafficControlDeviceType(models.Model):
     @property
     def icon_name(self):
         """Return just the name of the file without full path"""
-        return os.path.basename(self.icon_file.file.name)
+        return os.path.basename(self.icon_file.file.name) if self.icon_file else ""
 
     def clean(self):
         self.validate_target_model_content_schema()
