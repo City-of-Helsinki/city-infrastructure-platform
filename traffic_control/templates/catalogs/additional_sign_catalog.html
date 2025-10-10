@@ -51,11 +51,11 @@
                     <td>{{ device_type.code }}</td>
                     <td>{{ device_type.description }}</td>
                     <td>
-                        {% if device_type.icon %}
+                        {% if device_type.icon_file %}
                             <img src="{{ device_type.get_icons.svg }}"
                                  width="200"
                                  height="200"
-                                 alt="{{ device_type.icon }}" />
+                                 alt="{{ device_type.icon_name }}" />
                         {% else %}
                             -
                         {% endif %}
