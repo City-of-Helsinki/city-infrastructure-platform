@@ -49,11 +49,11 @@ class TrafficSignRealAdminTestCase(TestCase):
     def test_has_additional_signs_return_yes(self):
         get_additional_sign_real(parent=self.traffic_sign_real)
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
-        self.assertEqual(ma.has_additional_signs(self.traffic_sign_real), "Kyllä")
+        self.assertEqual(ma.has_additional_signs(self.traffic_sign_real), "Yes")
 
     def test_has_additional_signs_return_no(self):
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
-        self.assertEqual(ma.has_additional_signs(self.traffic_sign_real), "Ei")
+        self.assertEqual(ma.has_additional_signs(self.traffic_sign_real), "No")
 
     def test_save_model_set_created_by_and_updated_by_for_creating(self):
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)

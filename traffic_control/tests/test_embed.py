@@ -20,7 +20,6 @@ settings_overrides = override_settings(
         "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
         "icons": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     },
-    LANGUAGE_CODE="en",
 )
 
 

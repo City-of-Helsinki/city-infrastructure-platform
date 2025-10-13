@@ -4,7 +4,6 @@ from datetime import datetime
 import pytest
 from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon
-from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
@@ -77,7 +76,6 @@ def test_plan_create():
 
 
 @pytest.mark.django_db
-@override_settings(LANGUAGE_CODE="en")
 def test_plan_create_with_existing_diary_number():
     """Test plan create with existing diary number"""
     user = get_user(admin=True)

@@ -72,8 +72,8 @@ point_location_test_data = [
 ]
 
 point_location_error_test_data = [
-    (test_point, "invalid_test_string", "Virheellinen geometria-arvo."),
-    (test_point, 123123, "Virheellinen geometria-arvo."),
+    (test_point, "invalid_test_string", "Invalid geometry value."),
+    (test_point, 123123, "Invalid geometry value."),
 ]
 
 line_location_test_data = [
@@ -88,8 +88,8 @@ line_location_test_data = [
 ]
 
 line_location_error_test_data = [
-    (test_line, "invalid_test_string", "Virheellinen geometria-arvo."),
-    (test_line, 123123, "Virheellinen geometria-arvo."),
+    (test_line, "invalid_test_string", "Invalid geometry value."),
+    (test_line, 123123, "Invalid geometry value."),
 ]
 
 
