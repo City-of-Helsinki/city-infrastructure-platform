@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.23.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.22.0...city-infrastructure-platform-v1.23.0) (2025-10-13)
+
+
+### Features
+
+* Use blobstorage icons in additional and trafficsign listing pages ([c84caad](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c84caadd2634b0b04af360158288194801c06640))
+* Use blobstorage icons in map-view ([51286ce](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/51286ce92578e2dbcc5c7f7fc9778dbced78fff4))
+* Use blobstorage icons location for in REST API ([82a4f16](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/82a4f163e4bf2f1a157b20ef3155d47a7666f8e1))
+
+
+### Bug Fixes
+
+* Force unittest to use english translations ([a221e60](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a221e60c556d3eb33660b74c4769ebe94b661b01))
+* Layer with no matching plan or real layer cannot be disabled ([bcf07e7](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/bcf07e7de8ae826196ac8ee2d639a974c4281a65))
+* Selected feature stays visible features layer is disabled. ([e5acd87](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e5acd8705718d0679cc3f197faf32dc6484f893b))
+* Traffic control device type icon not enforcing uniqueness ([9952815](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9952815af8aed4a1b9852ff30319d6be706531d0))
+
 ## [1.22.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.21.0...city-infrastructure-platform-v1.22.0) (2025-10-01)
 
 
