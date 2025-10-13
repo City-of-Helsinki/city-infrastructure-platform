@@ -7,6 +7,7 @@ import pytest
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.test.utils import override_settings
+from django.utils.translation import activate
 
 CUSTOM_STORAGE_PATH = "traffic_control.models.common.traffic_control_device_type_icon_storage"
 
@@ -53,3 +54,10 @@ def temp_icon_storage(tmp_path):
     if os.path.exists(temp_media_dir):
         # tmp_path should handle this, but an explicit cleanup is maintained as requested
         shutil.rmtree(temp_media_dir, ignore_errors=True)
+
+
+@pytest.fixture(autouse=True)
+def force_english():
+    with override_settings(LANGUAGE_CODE="en"):
+        activate("en")
+        yield

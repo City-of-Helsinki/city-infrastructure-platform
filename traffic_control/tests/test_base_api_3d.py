@@ -50,8 +50,8 @@ point_location_test_data_3d = [
 ]
 
 point_location_error_test_data_3d = [
-    (test_point_3d, "invalid_test_string", "Virheellinen geometria-arvo."),
-    (test_point_3d, 123123, "Virheellinen geometria-arvo."),
+    (test_point_3d, "invalid_test_string", "Invalid geometry value."),
+    (test_point_3d, 123123, "Invalid geometry value."),
 ]
 
 line_location_test_data_3d = [
@@ -66,8 +66,8 @@ line_location_test_data_3d = [
 ]
 
 line_location_error_test_data_3d = [
-    (test_line_3d, "invalid_test_string", "Virheellinen geometria-arvo."),
-    (test_line_3d, 123123, "Virheellinen geometria-arvo."),
+    (test_line_3d, "invalid_test_string", "Invalid geometry value."),
+    (test_line_3d, 123123, "Invalid geometry value."),
 ]
 
 

@@ -2,9 +2,9 @@ import pytest
 from django.test import Client, override_settings
 from django.urls import reverse
 
-TOO_CLOSE_TO_USERNAME = "Salasana on liian lähellä kohdetta käyttäjätunnus."
-TOO_SHORT = "Tämä salasana on liian lyhyt. Sen tulee sisältää ainakin 12 merkkiä."
-TOO_COMMON = "Tämä salasana on liian yleinen."
+TOO_CLOSE_TO_USERNAME = "The password is too similar to the username."
+TOO_SHORT = "This password is too short. It must contain at least 12 characters."
+TOO_COMMON = "This password is too common."
 NUMBER_MISSING = "Password must contain at least 1 number."
 UPPERCASE_MISSING = "Password must contain at least 1 uppercase character."
 LOWERCASE_MISSING = "Password must contain at least 1 lowercase character."
