@@ -838,56 +838,69 @@ class Map {
     const overlayLayers = layers
       .filter(({ clustered }) => clustered)
       .map(({ identifier, use_traffic_sign_icons }) => {
-        const styleCache: { [key: string]: Style } = {};
-        const getCachedStyle = (feature: FeatureLike) => {
-          const features = feature.get("features");
-          if (features !== undefined && features.length > 1) {
-            return styleCache[features.length.toString()];
+        const styleCache: { [key: string]: Style | Style[] | undefined } = {};
+        const getStyleCacheKey = (clusterFeature: FeatureLike, size: number): string | undefined => {
+          if (size > 1) {
+            return size.toString();
           }
-          return styleCache[feature.get("features")[0].get("device_type_code")];
-        };
-        const getClusterStyle = (clusterFeature: FeatureLike) => {
-          return new Style({
-            image: new Circle({
-              radius: 10,
-              stroke: new Stroke({
-                color: "#fff",
-              }),
-              fill: new Fill({
-                color: "#3399CC",
-              }),
-            }),
-            text: new Text({
-              text: clusterFeature.get("features").length.toString(),
-              fill: new Fill({
-                color: "#fff",
-              }),
-            }),
-          });
-        };
 
-        const getImageStyle = (clusterFeature: FeatureLike) => {
-          if (clusterFeature.get("features") === undefined) return;
-
-          let style = getCachedStyle(clusterFeature);
-          if (!style) {
-            const size: number = clusterFeature.get("features") ? clusterFeature.get("features").length : 0;
-            if (size > 1) {
-              style = getClusterStyle(clusterFeature);
-              styleCache[size] = style;
-            } else {
-              const feature = clusterFeature.get("features")[0];
-              style = getSinglePointStyle(
-                feature,
-                use_traffic_sign_icons,
-                traffic_sign_icons_url,
-                icon_scale,
-                icon_type,
-              );
-              styleCache[feature.get("device_type_code")] = style;
+          const features = clusterFeature.get("features");
+          if (features && features.length === 1) {
+            const feature = features[0];
+            const deviceCode = feature.get("device_type_code");
+            const direction = feature.getProperties()["direction"];
+            if (deviceCode) {
+              // The key now reflects both base style and rotation:
+              return `${deviceCode}::${direction || "0"}`;
             }
           }
-          return style;
+          return undefined;
+        };
+        const getClusterStyle = (clusterFeature: FeatureLike): Style[] => {
+          const text = clusterFeature.get("features").length.toString();
+          return [
+            new Style({
+              image: new Circle({
+                radius: 10,
+                stroke: new Stroke({ color: "#fff" }),
+                fill: new Fill({ color: "#3399CC" }),
+              }),
+              text: new Text({
+                text: text,
+                fill: new Fill({ color: "#fff" }),
+              }),
+            }),
+          ];
+        };
+        const getImageStyle = (clusterFeature: FeatureLike) => {
+          const features = clusterFeature.get("features");
+          if (!features || features.length === 0) return;
+
+          const size: number = features.length;
+          const cacheKey = getStyleCacheKey(clusterFeature, size);
+
+          let styleResult = cacheKey ? styleCache[cacheKey] : undefined;
+          if (styleResult) {
+            return styleResult;
+          }
+          if (size > 1) {
+            // Cluster style
+            styleResult = getClusterStyle(clusterFeature);
+          } else {
+            // Single feature style: getSinglePointStyle already includes the arrow.
+            const feature = features[0];
+            styleResult = getSinglePointStyle(
+              feature,
+              use_traffic_sign_icons,
+              traffic_sign_icons_url,
+              icon_scale,
+              icon_type,
+            );
+          }
+          if (cacheKey && styleResult) {
+            styleCache[cacheKey] = styleResult;
+          }
+          return styleResult;
         };
 
         const vectorLayer = new VectorLayer({
