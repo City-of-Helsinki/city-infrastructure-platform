@@ -103,17 +103,105 @@ function getIconStyle(
 
 export function getHighlightStyle(feature: Feature, mapConfig: MapConfig) {
   const { traffic_sign_icons_url, icon_type, icon_scale, overlayConfig } = mapConfig;
-  const dtCode = feature.getProperties().device_type_code;
+  const props = feature.getProperties();
+  const dtCode = props.device_type_code;
+
+  let baseStyles: Style[];
+
   if (trafficSignIconsEnabled(feature, overlayConfig) && dtCode) {
-    return getIconStyle(
-      traffic_sign_icons_url,
-      icon_type,
-      icon_scale,
-      dtCode,
-      feature.getProperties().device_type_icon,
-    );
+    const iconStyleResult = getIconStyle(traffic_sign_icons_url, icon_type, icon_scale, dtCode, props.device_type_icon);
+    baseStyles = toStyleArray(iconStyleResult);
+  } else {
+    baseStyles = toStyleArray(highLightStyle);
   }
-  return highLightStyle;
+
+  const arrowStyle = getDirectionArrowStyle(feature, icon_scale);
+  if (arrowStyle) {
+    // Add the arrow style to the end of the array, ensuring it's on top.
+    baseStyles.push(arrowStyle);
+  }
+
+  return baseStyles;
+}
+
+/**
+ * Ensures the result is an array of Style objects.
+ * @param styleResult The style or array of styles returned by a utility function.
+ * @returns An array of Style objects.
+ */
+const toStyleArray = (styleResult: Style | Style[] | null | undefined): Style[] => {
+  if (Array.isArray(styleResult)) {
+    return styleResult;
+  }
+  if (styleResult) {
+    return [styleResult];
+  }
+  return [];
+};
+
+const createArrowSvg = (color: string, strokeColor: string): string => {
+  // Polygon points: Tip (20,0), Base (0,70) to (40,70)
+  const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 70" width="40" height="70">
+            <polygon 
+                points="20,0 0,70 40,70" 
+                fill="${color}" 
+                stroke="${strokeColor}" 
+                stroke-width="3" 
+                stroke-linejoin="round"
+            />
+        </svg>
+    `;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg.trim())}`;
+};
+
+const arrowSvgUrl = createArrowSvg("red", "black");
+const ARROW_SVG_WIDTH = 40;
+const ARROW_SVG_HEIGHT = 70;
+const GAP_PIXELS = 70;
+
+const getFeatureRotation = (feature: FeatureLike | Feature): number | undefined => {
+  const props = feature.getProperties();
+  const rotation = props["direction"];
+
+  if (typeof rotation === "number") {
+    return rotation;
+  }
+  return undefined;
+};
+
+/**
+ * Creates the Style object for the directional arrow.
+ * @param feature The feature being styled.
+ * @param icon_scale The scale factor for the icon.
+ * @returns A Style object containing the rotated arrow, or null/undefined if no direction data exists.
+ */
+export function getDirectionArrowStyle(feature: FeatureLike | Feature, icon_scale: number): Style | undefined {
+  const rotation_degrees = getFeatureRotation(feature);
+
+  if (typeof rotation_degrees === "number") {
+    // OpenLayers wants to have rotation as radians
+    const rotation_radians = (rotation_degrees * Math.PI) / 180;
+
+    // Anchor Calculation (Displacement Effect)
+    const finalAnchorX = ARROW_SVG_WIDTH / 2;
+    const finalAnchorY = ARROW_SVG_HEIGHT + GAP_PIXELS;
+
+    return new Style({
+      zIndex: 100, // Highest Z-index to ensure it sits on top
+      image: new Icon({
+        src: arrowSvgUrl,
+        anchor: [finalAnchorX, finalAnchorY],
+        anchorXUnits: "pixels",
+        anchorYUnits: "pixels",
+        scale: icon_scale,
+        rotation: rotation_radians,
+        rotateWithView: false,
+      }),
+    });
+  }
+
+  return undefined;
 }
 
 export function getSinglePointStyle(
@@ -123,18 +211,25 @@ export function getSinglePointStyle(
   icon_scale: number,
   icon_type: string,
 ) {
-  if (use_traffic_sign_icons && feature.get("device_type_code") !== null) {
-    // Traffic sign style
-    return getIconStyle(
-      traffic_sign_icons_url,
-      icon_type,
-      icon_scale,
-      feature.get("device_type_code"),
-      feature.get("device_type_icon"),
-    );
+  const initialStyleResult =
+    use_traffic_sign_icons && feature.get("device_type_code") !== null
+      ? getIconStyle(
+          traffic_sign_icons_url,
+          icon_type,
+          icon_scale,
+          feature.get("device_type_code"),
+          feature.get("device_type_icon"),
+        )
+      : getStylesForGeometry(feature.getGeometry() as Geometry | undefined);
+
+  const finalStyles: Style[] = toStyleArray(initialStyleResult);
+
+  const arrowStyle = getDirectionArrowStyle(feature, icon_scale);
+  if (arrowStyle) {
+    finalStyles.push(arrowStyle);
   }
-  const geometry = feature.getGeometry();
-  return getStylesForGeometry(geometry);
+
+  return finalStyles;
 }
 
 export function getAddressMarkerStyle(note: string) {
