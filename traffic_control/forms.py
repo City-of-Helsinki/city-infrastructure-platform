@@ -406,9 +406,10 @@ class AbstractDeviceTypeIconForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         file = cleaned_data.get("file")
-
         if file:
-            illegal_file_types, virus_scan_errors = get_icon_upload_obstacles([file])
+            illegal_file_types, virus_scan_errors, existing_icons = get_icon_upload_obstacles([file])
+            if existing_icons:
+                raise ValidationError(_(f"Icon with name '{', '.join(existing_icons)}' already exists."))
 
             if illegal_file_types:
                 raise ValidationError(_(f"Illegal file types: {', '.join(illegal_file_types)}"))

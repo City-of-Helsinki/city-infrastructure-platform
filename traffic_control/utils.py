@@ -1,8 +1,9 @@
 from os.path import splitext
 
 from django.conf import settings
+from django.db.models import Q
 
-from traffic_control.models import Owner
+from traffic_control.models import Owner, TrafficControlDeviceTypeIcon
 from traffic_control.services.virus_scan import clam_av_scan
 
 
@@ -41,9 +42,21 @@ def get_file_upload_obstacles(files):
 
 
 def get_icon_upload_obstacles(files):
-    illegal_types = get_illegal_icon_file_types([f.name for f in filter(lambda x: hasattr(x, "name"), files)])
+    filenames = [f.name for f in filter(lambda x: hasattr(x, "name"), files)]
+    illegal_types = get_illegal_icon_file_types(filenames)
     virus_scan_errors = clam_av_scan([("FILES", f) for f in files])["errors"]
-    return illegal_types, virus_scan_errors
+
+    # Check for files that exist in the database, matching by filename
+    query = Q()
+    for filename in filenames:
+        # Match if the `file` field is exactly the filename or ends with `/<filename>`
+        query |= Q(file=filename) | Q(file__endswith=f"/{filename}")
+
+    existing_icons = TrafficControlDeviceTypeIcon.objects.filter(query).values_list("file", flat=True)
+    # Extract just the filename from the full path for the return value
+    existing_filenames = {path.split("/")[-1] for path in existing_icons}
+
+    return illegal_types, virus_scan_errors, list(existing_filenames)
 
 
 def get_client_ip(request):
