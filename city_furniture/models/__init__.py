@@ -1,4 +1,4 @@
-from .common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from .common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureDeviceTypeIcon, CityFurnitureTarget
 from .furniture_signpost import (
     FurnitureSignpostPlan,
     FurnitureSignpostPlanFile,
