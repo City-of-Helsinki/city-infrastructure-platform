@@ -102,6 +102,9 @@ class TrafficControlDeviceTypeIcon(AbstractFileModel):
         verbose_name_plural = _("Traffic Control Device Type Icons")
 
 
+auditlog.register(TrafficControlDeviceTypeIcon)
+
+
 class TrafficControlDeviceType(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     code = models.CharField(

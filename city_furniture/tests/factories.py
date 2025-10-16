@@ -8,6 +8,7 @@ from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models import (
     CityFurnitureColor,
     CityFurnitureDeviceType,
+    CityFurnitureDeviceTypeIcon,
     CityFurnitureTarget,
     FurnitureSignpostPlan,
     FurnitureSignpostReal,
@@ -56,12 +57,24 @@ def get_city_furniture_target(
     )[0]
 
 
+class CityFurnitureDeviceTypeIconFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = CityFurnitureDeviceTypeIcon
+        django_get_or_create = ("file",)
+
+    file = factory.django.FileField(
+        filename=factory.Sequence(lambda n: f"test_icon_{n}.svg"),
+        data=b'<svg viewBox="0 0 10 10"><rect width="10" height="10"/></svg>',
+    )
+
+
 class CityFurnitureDeviceTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CityFurnitureDeviceType
         django_get_or_create = ("code",)
 
     code = factory.sequence(lambda n: f"Code{n}")
+    icon_file = factory.SubFactory(CityFurnitureDeviceTypeIconFactory)
     class_type = "1030"
     function_type = "1090"
     description_fi = factory.sequence(lambda n: "DescFI_{n}")

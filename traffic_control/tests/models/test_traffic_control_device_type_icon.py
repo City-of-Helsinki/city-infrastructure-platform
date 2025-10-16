@@ -2,76 +2,105 @@ import os
 from tempfile import TemporaryDirectory
 
 import pytest
-from django.core.files.uploadedfile import SimpleUploadedFile
+from auditlog.models import LogEntry
 from django.db import IntegrityError
 
 from traffic_control.models.common import TrafficControlDeviceTypeIcon
-
-EXAMPLE_SVG_NAME = "test_traffic_control_device_type_icon__A.svg"
-EXAMPLE_PNG_NAME = "test_traffic_control_device_type_icon__A.png"
-INCOMING_SVG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), EXAMPLE_SVG_NAME)
+from traffic_control.tests.factories import TrafficControlDeviceTypeIconFactory
 
 
 @pytest.fixture
 def override_settings(settings):
+    """Override MEDIA_ROOT for tests to avoid cluttering the project's media folder."""
     settings.MEDIA_ROOT = TemporaryDirectory().name
-
-
-@pytest.fixture
-def svg_file():
-    with open(INCOMING_SVG_PATH, "rt") as fin:
-        svg_bytestring = fin.read()
-        return SimpleUploadedFile(EXAMPLE_SVG_NAME, bytes(svg_bytestring, "utf-8"), content_type="image/svg+xml")
 
 
 @pytest.mark.xfail(reason="Requires azurite storage or django >=5.1+, django 4.2 simply renames file")
 @pytest.mark.django_db
-def test__traffic_control_device_type_icon__enforces_uniqueness(override_settings, svg_file):
+def test__traffic_control_device_type_icon__enforces_uniqueness(override_settings):
     """
-    We don't want two separate rows meaning traffic_control_traffic_stop_1.svg in our table, as it would produce an
-    unintended 'overwrite generated PNGs' effect on creation of a duplicate or 'delete PNGs that should be preserved'
-    effect in the deletion of a duplicate due to the custom signal handlers related to this model.
+    We don't want two separate rows meaning the same file in our table.
+    This test ensures the database uniqueness constraint on the 'file' field is active.
     """
-    TrafficControlDeviceTypeIcon.objects.create(file=svg_file)
+    # The factory's `django_get_or_create` would prevent an error, so we must
+    # bypass it to test the actual database constraint.
+    icon1 = TrafficControlDeviceTypeIconFactory()
     with pytest.raises(IntegrityError):
-        TrafficControlDeviceTypeIcon.objects.create(file=svg_file)
+        # Attempt to create a new record with the exact same file path
+        TrafficControlDeviceTypeIcon.objects.create(file=icon1.file)
 
 
 @pytest.mark.django_db
-def test__traffic_control_device_type_icon__custom_signal_handlers(override_settings, svg_file, settings):
+def test__traffic_control_device_type_icon__custom_signal_handlers(override_settings, settings):
     """
-    Creating TrafficControlDeviceTypeIcon objects triggers as a side effect the creation of PNG icons in different sizes
-    corresponding to the uploaded SVG. Check the following:
-    * The SVG and its corresponding PNG files are found in expected places after creation.
-    * The SVG and its corresponding PNG files are wiped from disk after deletion.
+    Check that creating and deleting TrafficControlDeviceTypeIcon objects correctly
+    triggers the side effect of creating and deleting corresponding PNG icon files.
     """
-    td = TrafficControlDeviceTypeIcon.objects.create(file=svg_file)
+    td = TrafficControlDeviceTypeIconFactory()
     storage = td.file.storage
-
-    # NOTE (2025-09-18 thiago)
-    # This test is written with big faith in WORKS ON MY MACHINE - At least locally, running this test doesn't seem to
-    # require any sort of waiting before checking that the custom signal handlers for post_save and post_delete have
-    # taken effect. In case this test is flakey consider introducing some sort of waiting here.
+    svg_name = os.path.basename(td.file.name)
+    png_name = svg_name.replace(".svg", ".png")
 
     # Check that after object creation the files are in the right place
-    assert storage.exists(os.path.join(settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION, EXAMPLE_SVG_NAME))
+    assert storage.exists(os.path.join(settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION, svg_name))
     for size in settings.PNG_ICON_SIZES:
         assert storage.exists(
             os.path.join(
                 settings.TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION,
                 str(size),
-                EXAMPLE_PNG_NAME,
+                png_name,
             )
         )
 
     # Check that after object deletion the files have been wiped
     td.delete()
-    assert not storage.exists(os.path.join(settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION, EXAMPLE_SVG_NAME))
+    assert not storage.exists(os.path.join(settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION, svg_name))
     for size in settings.PNG_ICON_SIZES:
         assert not storage.exists(
             os.path.join(
                 settings.TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION,
                 str(size),
-                EXAMPLE_PNG_NAME,
+                png_name,
             )
         )
+
+
+@pytest.mark.django_db
+def test__traffic_control_device_type_icon__auditlog_entries(override_settings):
+    """
+    Test that create, change, and delete actions are correctly recorded in the audit log.
+    """
+    # 1. Test CREATE action
+    icon = TrafficControlDeviceTypeIconFactory()
+    logs = LogEntry.objects.get_for_object(icon)
+    assert logs.count() == 1
+    create_log = logs.first()
+    assert create_log.action == LogEntry.Action.CREATE
+    assert create_log.content_type.get_object_for_this_type(pk=create_log.object_pk) == icon
+
+    # 2. Test CHANGE (update) action
+    # Use the factory's .build() strategy to generate a new file object
+    # without creating another database record.
+    new_file_data = TrafficControlDeviceTypeIconFactory.build()
+    icon.file = new_file_data.file
+    icon.save()
+
+    logs = LogEntry.objects.get_for_object(icon)
+    assert logs.count() == 2
+    update_log = logs.latest("timestamp")
+    assert update_log.action == LogEntry.Action.UPDATE
+    assert update_log.content_type.get_object_for_this_type(pk=update_log.object_pk) == icon
+    assert "file" in update_log.changes_dict
+
+    # 3. Test DELETE action
+    icon_pk = icon.pk
+    icon_str = str(icon)
+    icon.delete()
+
+    # After deletion, query by model and PK since the object is gone
+    logs = LogEntry.objects.get_for_model(TrafficControlDeviceTypeIcon).filter(object_pk=str(icon_pk))
+    assert logs.count() == 3
+    delete_log = logs.latest("timestamp")
+    assert delete_log.action == LogEntry.Action.DELETE
+    assert delete_log.object_pk == str(icon_pk)
+    assert delete_log.object_repr == icon_str

@@ -46,6 +46,9 @@ class CityFurnitureDeviceTypeIcon(AbstractFileModel):
         verbose_name_plural = _("City Furniture Device Type Icons")
 
 
+auditlog.register(CityFurnitureDeviceTypeIcon)
+
+
 class CityFurnitureDeviceType(models.Model):
     """
     A separate model from TrafficControlDeviceType is used, as these will contain overlapping device codes that
