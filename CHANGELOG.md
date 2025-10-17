@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.24.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.23.0...city-infrastructure-platform-v1.24.0) (2025-10-17)
+
+
+### Features
+
+* Add an arrow pointing to a features direction ([920e3af](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/920e3af89d813a2c59bd18c6346ee36e4348cb3b))
+* Add TrafficControlDeviceType and CityFurnitureDeviceType Icons to audit log ([ee36a5b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ee36a5b76a235ccb3b68c067d7067d7a7a5fe45e))
+
+
+### Bug Fixes
+
+* Show error note in TrafficControlDeviceTypeIcon also in case with already existing icon ([dd5bd56](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/dd5bd568ac69f188668413c8ddcf39d2381ec27a))
+
 ## [1.23.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.22.0...city-infrastructure-platform-v1.23.0) (2025-10-13)
 
 
