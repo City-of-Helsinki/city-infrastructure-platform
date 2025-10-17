@@ -19,7 +19,7 @@ services:
       - ./azurite-init.sh:/azurite-init.sh # Mount the script into the container
     entrypoint: /bin/bash /azurite-init.sh
   # Utility command to wipe the media container on azurite
-  azurite-delete-media-container:
+  azurite-delete-storage-containers:
     image: mcr.microsoft.com/azure-cli
     depends_on:
       - azurite

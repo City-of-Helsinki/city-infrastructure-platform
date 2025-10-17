@@ -15,13 +15,14 @@ from traffic_control.models.signpost import SignpostRealOperation
 from traffic_control.serializers.common import (
     EwktPointField,
     HideFromAnonUserSerializerMixin,
+    HidePrivateFileUrlMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
 from traffic_control.services.signpost import signpost_plan_create, signpost_plan_update
 
 
-class SignpostPlanFileSerializer(serializers.ModelSerializer):
+class SignpostPlanFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = SignpostPlanFile
         fields = "__all__"
@@ -90,7 +91,7 @@ class SignpostPlanGeoJSONOutputSerializer(SignpostPlanOutputSerializer):
     location = GeometryField()
 
 
-class SignpostRealFileSerializer(serializers.ModelSerializer):
+class SignpostRealFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = SignpostRealFile
         fields = "__all__"

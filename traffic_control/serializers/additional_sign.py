@@ -15,6 +15,7 @@ from traffic_control.models import (
 from traffic_control.serializers.common import (
     EwktPointField,
     HideFromAnonUserSerializerMixin,
+    HidePrivateFileUrlMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
     StructuredContentValidator,
@@ -22,7 +23,7 @@ from traffic_control.serializers.common import (
 from traffic_control.services.additional_sign import additional_sign_plan_create, additional_sign_plan_update
 
 
-class AdditionalSignPlanFileSerializer(serializers.ModelSerializer):
+class AdditionalSignPlanFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = AdditionalSignPlanFile
         fields = "__all__"
@@ -91,7 +92,7 @@ class AdditionalSignPlanGeoJSONOutputSerializer(AdditionalSignPlanOutputSerializ
     location = GeometryField(required=False)
 
 
-class AdditionalSignRealFileSerializer(serializers.ModelSerializer):
+class AdditionalSignRealFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = AdditionalSignRealFile
         fields = "__all__"

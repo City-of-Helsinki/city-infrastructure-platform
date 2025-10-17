@@ -15,13 +15,14 @@ from traffic_control.models.traffic_light import TrafficLightRealOperation
 from traffic_control.serializers.common import (
     EwktPointField,
     HideFromAnonUserSerializerMixin,
+    HidePrivateFileUrlMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
 from traffic_control.services.traffic_light import traffic_light_plan_create, traffic_light_plan_update
 
 
-class TrafficLightPlanFileSerializer(serializers.ModelSerializer):
+class TrafficLightPlanFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = TrafficLightPlanFile
         fields = "__all__"
@@ -90,7 +91,7 @@ class TrafficLightPlanGeoJSONOutputSerializer(TrafficLightPlanOutputSerializer):
     location = GeometryField()
 
 
-class TrafficLightRealFileSerializer(serializers.ModelSerializer):
+class TrafficLightRealFileSerializer(HidePrivateFileUrlMixin, serializers.ModelSerializer):
     class Meta:
         model = TrafficLightRealFile
         fields = "__all__"

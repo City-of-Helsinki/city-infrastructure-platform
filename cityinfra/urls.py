@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, register_converter
 from django.views.decorators.cache import cache_page
 from django.views.i18n import set_language
 from drf_spectacular.views import SpectacularRedocView, SpectacularSwaggerView, SpectacularYAMLAPIView
@@ -15,7 +15,7 @@ from city_furniture.views import (
     furniture_signpost as furniture_signpost_views,
 )
 from cityinfra.admin.views import MyAccountView
-from cityinfra.views import HealthCheckView
+from cityinfra.views import CloudUploadProxyView, HealthCheckView
 from map import views as map_views
 from traffic_control.views import (
     additional_sign as additional_sign_views,
@@ -34,6 +34,20 @@ from traffic_control.views import (
 from traffic_control.views.device_catalog import AdditionalSignCatalog, TrafficSignCatalog
 from traffic_control.views.embed import TrafficSignPlanEmbed, TrafficSignRealEmbed
 from traffic_control.views.wfs.views import CityInfrastructureWFSView
+
+
+class UploadFolderConverter:
+    regex = "realfiles|planfiles"
+
+    def to_python(self, value):
+        return value
+
+    def to_url(self, value):
+        return value
+
+
+register_converter(UploadFolderConverter, "upload_folder")
+
 
 router = routers.DefaultRouter()
 router.register("barrier-plans", barrier_views.BarrierPlanViewSet)
@@ -140,6 +154,14 @@ urlpatterns += [
 urlpatterns += [
     path("device-types/traffic-signs/", TrafficSignCatalog.as_view(), name="traffic-sign-catalog"),
     path("device-types/additional-signs/", AdditionalSignCatalog.as_view(), name="traffic-sign-catalog"),
+]
+
+urlpatterns += [
+    path(
+        "uploads/<upload_folder:upload_folder>/<str:model_name>/<str:file_id>",
+        CloudUploadProxyView.as_view(),
+        name="cloud_upload_proxy",
+    ),
 ]
 
 if settings.SENTRY_DEBUG:
