@@ -72,12 +72,6 @@ class CityFurnitureDeviceType(models.Model):
         verbose_name=_("City Furniture Function or Usage type"),
         help_text=_("OGC CityGML City Furniture Function or Usage type"),
     )
-    icon = models.CharField(
-        _("Icon"),
-        max_length=100,
-        blank=True,
-        help_text=_("Icon of the actual device"),
-    )
     icon_file = models.ForeignKey(
         CityFurnitureDeviceTypeIcon,
         on_delete=models.PROTECT,
