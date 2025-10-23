@@ -61,6 +61,9 @@ from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignRe
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 from traffic_control.resources.device_type import TrafficControlDeviceTypeResource
+from traffic_control.resources.device_type_icon import (
+    TrafficControlDeviceTypeIconResource,
+)
 from traffic_control.resources.traffic_sign import (
     TrafficSignPlanResource,
     TrafficSignPlanToRealTemplateResource,
@@ -101,7 +104,8 @@ class TrafficSignTypeListFilter(SimpleListFilter):
 
 
 @admin.register(TrafficControlDeviceTypeIcon)
-class TrafficControlDeviceTypeIconAdmin(admin.ModelAdmin):
+class TrafficControlDeviceTypeIconAdmin(CustomImportExportActionModelAdmin):
+    resource_class = TrafficControlDeviceTypeIconResource
     form = TrafficControlDeviceTypeIconForm
     list_display = ("id", "file")
     search_fields = ("id", "file")

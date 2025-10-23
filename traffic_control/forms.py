@@ -28,12 +28,12 @@ from traffic_control.models import (
     SignpostPlan,
     SignpostReal,
     TrafficControlDeviceType,
+    TrafficControlDeviceTypeIcon,
     TrafficLightPlan,
     TrafficLightReal,
     TrafficSignPlan,
     TrafficSignReal,
 )
-from traffic_control.models.common import TrafficControlDeviceTypeIcon
 from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
 from traffic_control.utils import get_file_upload_obstacles, get_icon_upload_obstacles
 from traffic_control.validators import validate_location_ewkt, validate_structured_content
