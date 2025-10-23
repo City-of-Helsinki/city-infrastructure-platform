@@ -1,31 +1,63 @@
-from traffic_control.resources.additional_sign import (
+from .additional_sign import (
     AdditionalSignPlanResource,
     AdditionalSignPlanToRealTemplateResource,
     AdditionalSignRealResource,
 )
-from traffic_control.resources.barrier import (
+from .barrier import (
     BarrierPlanResource,
     BarrierPlanToRealTemplateResource,
     BarrierRealResource,
 )
-from traffic_control.resources.mount import MountPlanResource, MountPlanToRealTemplateResource, MountRealResource
-from traffic_control.resources.road_marking import (
+from .device_type import TrafficControlDeviceTypeResource
+from .device_type_icon import TrafficControlDeviceTypeIconResource
+from .mount import (
+    MountPlanResource,
+    MountPlanToRealTemplateResource,
+    MountRealResource,
+)
+from .road_marking import (
     RoadMarkingPlanResource,
     RoadMarkingPlanToRealTemplateResource,
     RoadMarkingRealResource,
 )
-from traffic_control.resources.signpost import (
+from .signpost import (
     SignpostPlanResource,
     SignpostPlanToRealTemplateResource,
     SignpostRealResource,
 )
-from traffic_control.resources.traffic_light import (
+from .traffic_light import (
     TrafficLightPlanResource,
     TrafficLightPlanToRealTemplateResource,
     TrafficLightRealResource,
 )
-from traffic_control.resources.traffic_sign import (
+from .traffic_sign import (
     TrafficSignPlanResource,
     TrafficSignPlanToRealTemplateResource,
     TrafficSignRealResource,
 )
+
+__all__ = [
+    "AdditionalSignPlanResource",
+    "AdditionalSignPlanToRealTemplateResource",
+    "AdditionalSignRealResource",
+    "BarrierPlanResource",
+    "BarrierPlanToRealTemplateResource",
+    "BarrierRealResource",
+    "MountPlanResource",
+    "MountPlanToRealTemplateResource",
+    "MountRealResource",
+    "RoadMarkingPlanResource",
+    "RoadMarkingPlanToRealTemplateResource",
+    "RoadMarkingRealResource",
+    "SignpostPlanResource",
+    "SignpostPlanToRealTemplateResource",
+    "SignpostRealResource",
+    "TrafficControlDeviceTypeIconResource",
+    "TrafficControlDeviceTypeResource",
+    "TrafficLightPlanResource",
+    "TrafficLightPlanToRealTemplateResource",
+    "TrafficLightRealResource",
+    "TrafficSignPlanResource",
+    "TrafficSignPlanToRealTemplateResource",
+    "TrafficSignRealResource",
+]
