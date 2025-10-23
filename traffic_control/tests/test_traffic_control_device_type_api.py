@@ -16,7 +16,6 @@ from traffic_control.tests.factories import (
     get_road_marking_real,
     get_signpost_plan,
     get_signpost_real,
-    get_traffic_control_device_type,
     get_traffic_light_plan,
     get_traffic_light_real,
     get_traffic_sign_plan,
@@ -197,10 +196,10 @@ class TrafficControlDeviceTypeTests(APITestCase):
         self.assertEqual(TrafficControlDeviceType.objects.count(), 0)
 
     def test__traffic_sign_type__filtering(self):
-        dt_1 = get_traffic_control_device_type(code="A1")
-        dt_2 = get_traffic_control_device_type(code="A2")
-        get_traffic_control_device_type(code="B1")
-        get_traffic_control_device_type(code="C1")
+        dt_1 = TrafficControlDeviceTypeFactory(code="A1")
+        dt_2 = TrafficControlDeviceTypeFactory(code="A2")
+        TrafficControlDeviceTypeFactory(code="B1")
+        TrafficControlDeviceTypeFactory(code="C1")
 
         response = self.client.get(reverse("v1:trafficcontroldevicetype-list"), data={"traffic_sign_type": "A"})
 
@@ -236,7 +235,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
 @pytest.mark.django_db
 def test__device_type__target_model__valid(target_model, factory):
     client = get_api_client(user=get_user(admin=True))
-    related_model = factory(device_type=get_traffic_control_device_type())
+    related_model = factory(device_type=TrafficControlDeviceTypeFactory())
     device_type = related_model.device_type
     data = {
         "target_model": target_model.value,
@@ -271,7 +270,7 @@ def test__device_type__target_model__valid(target_model, factory):
 @pytest.mark.django_db
 def test__device_type__target_model__invalid(target_model, factory):
     client = get_api_client(user=get_user(admin=True))
-    related_model = factory(device_type=get_traffic_control_device_type())
+    related_model = factory(device_type=TrafficControlDeviceTypeFactory())
     device_type = related_model.device_type
     data = {
         "target_model": target_model.value,
@@ -357,7 +356,7 @@ def test__device_type__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    device_type = get_traffic_control_device_type(code="TYPE-1")
+    device_type = TrafficControlDeviceTypeFactory(code="TYPE-1")
     kwargs = {"pk": device_type.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:trafficcontroldevicetype-{view_type}", kwargs=kwargs)
     data = {"code": "TYPE-2"}

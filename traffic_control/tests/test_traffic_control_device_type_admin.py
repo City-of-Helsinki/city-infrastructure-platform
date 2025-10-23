@@ -2,7 +2,11 @@ import pytest
 
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.forms import TrafficControlDeviceTypeForm
-from traffic_control.tests.factories import AdditionalSignRealFactory, TrafficControlDeviceTypeFactory
+from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
+    TrafficControlDeviceTypeFactory,
+    TrafficControlDeviceTypeIconFactory,
+)
 
 
 @pytest.mark.parametrize("create_related_object, expect_valid", ((False, True), (True, False)))
@@ -16,7 +20,7 @@ def test__traffic_control_device_type_admin__change_target_model(create_related_
     """
     data = {
         "code": "D123",
-        "icon": "d123.svg",
+        "icon_file": TrafficControlDeviceTypeIconFactory(),
         "description": "A test device type",
         "legacy_code": "123D",
         "legacy_description": "A legacy description",

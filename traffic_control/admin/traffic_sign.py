@@ -117,7 +117,6 @@ class TrafficControlDeviceTypeAdmin(
     resource_class = TrafficControlDeviceTypeResource
     list_display = (
         "code",
-        "icon",
         "icon_file",
         "description",
         "value",

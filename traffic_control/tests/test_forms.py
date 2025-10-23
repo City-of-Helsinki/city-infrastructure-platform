@@ -9,7 +9,7 @@ from enumfields import Enum, EnumIntegerField
 from traffic_control.enums import Lifecycle
 from traffic_control.forms import AdminEnumChoiceField, TrafficSignRealModelForm
 from traffic_control.models import TrafficSignReal
-from traffic_control.tests.factories import get_owner, get_traffic_control_device_type, get_user
+from traffic_control.tests.factories import get_owner, get_user, TrafficControlDeviceTypeFactory
 from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
@@ -54,7 +54,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
             "updated_by": user.id,
             "owner": owner.pk,
             "lifecycle": Lifecycle.ACTIVE,
-            "device_type": get_traffic_control_device_type().pk,
+            "device_type": TrafficControlDeviceTypeFactory().pk,
         }
         user = get_user()
         traffic_sign_real = TrafficSignReal.objects.create(
@@ -81,7 +81,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
             "updated_by": user.id,
             "owner": owner.pk,
             "lifecycle": Lifecycle.ACTIVE,
-            "device_type": get_traffic_control_device_type().pk,
+            "device_type": TrafficControlDeviceTypeFactory().pk,
         }
         user = get_user()
         traffic_sign_real = TrafficSignReal.objects.create(
@@ -109,7 +109,7 @@ class TrafficSignRealModelFormTestCase(TestCase):
             "updated_by": user.id,
             "owner": get_owner().pk,
             "lifecycle": Lifecycle.ACTIVE,
-            "device_type": get_traffic_control_device_type().pk,
+            "device_type": TrafficControlDeviceTypeFactory().pk,
         }
         form = TrafficSignRealModelForm(data=data)
         form.is_valid()

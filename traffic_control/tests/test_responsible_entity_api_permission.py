@@ -9,8 +9,8 @@ from traffic_control.tests.factories import (
     get_api_client,
     get_owner,
     get_responsible_entity_project,
-    get_traffic_control_device_type,
     get_user,
+    TrafficControlDeviceTypeFactory,
     TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
@@ -50,7 +50,7 @@ def test__api_responsible_area_permission__create(model, add_to_responsible_enti
 
     data = {
         "location": str(test_point_3d),
-        "device_type": get_traffic_control_device_type().pk,
+        "device_type": TrafficControlDeviceTypeFactory().pk,
         "lifecycle": Lifecycle.ACTIVE.value,
         "owner": get_owner().pk,
         "responsible_entity": responsible_entity.pk,

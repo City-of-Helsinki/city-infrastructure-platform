@@ -17,12 +17,12 @@ from traffic_control.tests.factories import (
     get_mount_type,
     get_operation_type,
     get_owner,
-    get_traffic_control_device_type,
     get_traffic_light_plan,
     get_traffic_light_real,
     get_user,
     OwnerFactory,
     PlanFactory,
+    TrafficControlDeviceTypeFactory,
     TrafficLightPlanFactory,
     TrafficLightRealFactory,
 )
@@ -108,7 +108,7 @@ def test__traffic_light_plan__valid_device_type(target_model):
     user = get_user(admin=True)
     client = get_api_client(user=user, use_token_auth=True)
     traffic_light_plan = get_traffic_light_plan()
-    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
+    device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -150,7 +150,7 @@ def test__traffic_light_plan__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_light_plan = get_traffic_light_plan()
-    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
+    device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -396,7 +396,7 @@ def test__traffic_light_real__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_light_real = get_traffic_light_real()
-    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
+    device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -426,7 +426,7 @@ def test__traffic_light_real__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     traffic_light_real = get_traffic_light_real()
-    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
+    device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -723,7 +723,7 @@ def test__traffic_light_plan__anonymous_user(method, expected_status, view_type)
     resource_path = reverse(f"v1:trafficlightplan-{view_type}", kwargs=kwargs)
     data = {
         "location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)",
-        "device_type": str(get_traffic_control_device_type().id),
+        "device_type": str(TrafficControlDeviceTypeFactory().id),
         "owner": str(get_owner().id),
     }
 
@@ -759,7 +759,7 @@ def test__traffic_light_real__anonymous_user(method, expected_status, view_type)
     resource_path = reverse(f"v1:trafficlightreal-{view_type}", kwargs=kwargs)
     data = {
         "location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)",
-        "device_type": str(get_traffic_control_device_type().id),
+        "device_type": str(TrafficControlDeviceTypeFactory().id),
         "owner": str(get_owner().id),
     }
 

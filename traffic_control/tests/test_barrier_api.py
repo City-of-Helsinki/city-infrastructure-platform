@@ -18,10 +18,10 @@ from traffic_control.tests.factories import (
     get_barrier_plan,
     get_barrier_real,
     get_operation_type,
-    get_traffic_control_device_type,
     get_user,
     OwnerFactory,
     PlanFactory,
+    TrafficControlDeviceTypeFactory,
 )
 from traffic_control.tests.test_base_api import (
     illegal_test_point,
@@ -103,7 +103,7 @@ def test__barrier_plan__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     barrier_plan = get_barrier_plan()
-    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
+    device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -133,7 +133,7 @@ def test__barrier_plan__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     barrier_plan = get_barrier_plan()
-    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
+    device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -376,7 +376,7 @@ def test__barrier_real__valid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     barrier_real = get_barrier_real()
-    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
+    device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(
@@ -406,7 +406,7 @@ def test__barrier_real__invalid_device_type(target_model):
     """
     client = get_api_client(user=get_user(admin=True))
     barrier_real = get_barrier_real()
-    device_type = get_traffic_control_device_type(code="123", description="test", target_model=target_model)
+    device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
     response = client.patch(

@@ -1,5 +1,4 @@
 import datetime
-from typing import Any, Optional
 
 import factory.django
 from django.conf import settings
@@ -8,7 +7,7 @@ from django.contrib.gis.geos import MultiPolygon
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
-from traffic_control.enums import DeviceTypeTargetModel, Lifecycle, OrganizationLevel, TrafficControlDeviceTypeType
+from traffic_control.enums import Lifecycle, OrganizationLevel
 from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignReal,
@@ -140,7 +139,6 @@ class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ["code"]
 
     code = factory.sequence(lambda n: str(n))
-    icon = factory.sequence(lambda n: f"icon_{n}")
     icon_file = factory.SubFactory(TrafficControlDeviceTypeIconFactory)
     description = factory.sequence(lambda n: f"description_{n}")
     value = factory.sequence(lambda n: f"value_{n}")
@@ -608,36 +606,6 @@ def get_traffic_light_real(
         created_by=user,
         updated_by=user,
     )[0]
-
-
-def get_traffic_control_device_type(
-    code: str = "A11",
-    icon: str = "",
-    description: str = "Test",
-    value: str = "",
-    unit: str = "",
-    size: str = "",
-    legacy_code: Optional[str] = None,
-    legacy_description: Optional[str] = None,
-    target_model: Optional[DeviceTypeTargetModel] = None,
-    type: Optional[TrafficControlDeviceTypeType] = None,
-    content_schema: Optional[Any] = None,
-) -> TrafficControlDeviceType:
-    dt = TrafficControlDeviceType.objects.get_or_create(
-        code=code,
-        icon=icon,
-        description=description,
-        value=value,
-        unit=unit,
-        size=size,
-        legacy_code=legacy_code,
-        legacy_description=legacy_description,
-        target_model=target_model,
-        type=type,
-        content_schema=content_schema,
-    )[0]
-    dt.refresh_from_db()
-    return dt
 
 
 class TrafficSignPlanFactory(factory.django.DjangoModelFactory):

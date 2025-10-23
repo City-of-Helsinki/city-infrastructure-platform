@@ -7,10 +7,10 @@ from traffic_control.tests.factories import (
     get_additional_sign_plan,
     get_additional_sign_real,
     get_owner,
-    get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    TrafficControlDeviceTypeFactory,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
 
@@ -21,7 +21,7 @@ class TrafficSignPlanTestCase(TestCase):
         self.main_sign = TrafficSignPlan.objects.create(
             location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
             direction=0,
-            device_type=get_traffic_control_device_type(code="T123"),
+            device_type=TrafficControlDeviceTypeFactory(code="T123"),
             created_by=self.user,
             updated_by=self.user,
             owner=get_owner(),

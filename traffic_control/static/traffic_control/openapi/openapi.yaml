@@ -3298,10 +3298,6 @@ paths:
           * `1530` - Bench
           * `1540` - Others
       - in: query
-        name: icon
-        schema:
-          type: string
-      - in: query
         name: icon_file
         schema:
           type: string
@@ -10977,10 +10973,6 @@ paths:
         schema:
           type: string
       - in: query
-        name: icon
-        schema:
-          type: string
-      - in: query
         name: icon_file
         schema:
           type: string
@@ -17342,10 +17334,6 @@ components:
             * `1520` - Boundary post
             * `1530` - Bench
             * `1540` - Others
-        icon:
-          type: string
-          description: Icon of the actual device
-          maxLength: 100
         description_fi:
           type: string
           nullable: true
@@ -17528,10 +17516,6 @@ components:
             * `1520` - Boundary post
             * `1530` - Bench
             * `1540` - Others
-        icon:
-          type: string
-          description: Icon of the actual device
-          maxLength: 100
         description_fi:
           type: string
           nullable: true
@@ -22101,10 +22085,6 @@ components:
             * `1520` - Boundary post
             * `1530` - Bench
             * `1540` - Others
-        icon:
-          type: string
-          description: Icon of the actual device
-          maxLength: 100
         description_fi:
           type: string
           nullable: true
@@ -24365,9 +24345,6 @@ components:
           minLength: 1
           description: Standardised code of the device type.
           maxLength: 32
-        icon:
-          type: string
-          maxLength: 100
         description:
           type: string
           nullable: true
@@ -29097,9 +29074,6 @@ components:
           type: string
           description: Standardised code of the device type.
           maxLength: 32
-        icon:
-          type: string
-          maxLength: 100
         description:
           type: string
           nullable: true
@@ -29182,9 +29156,6 @@ components:
           minLength: 1
           description: Standardised code of the device type.
           maxLength: 32
-        icon:
-          type: string
-          maxLength: 100
         description:
           type: string
           nullable: true

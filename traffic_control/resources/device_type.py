@@ -1,6 +1,11 @@
+from import_export.fields import Field
 from import_export.resources import Diff, ModelResource
+from import_export.widgets import ForeignKeyWidget
 
-from traffic_control.models import TrafficControlDeviceType
+from traffic_control.models import (
+    TrafficControlDeviceType,
+    TrafficControlDeviceTypeIcon,
+)
 from traffic_control.resources.common import EnumFieldResourceMixin
 
 
@@ -21,11 +26,17 @@ class TrafficControlDeviceTypeDiff(Diff):
 class TrafficControlDeviceTypeResource(EnumFieldResourceMixin, ModelResource):
     """Traffic control device type resource for import/export."""
 
+    icon_file = Field(
+        attribute="icon_file",
+        column_name="icon_file",
+        widget=ForeignKeyWidget(TrafficControlDeviceTypeIcon, "file"),
+    )
+
     class Meta:
         model = TrafficControlDeviceType
         fields = (
             "code",
-            "icon",
+            "icon_file",
             "description",
             "value",
             "unit",
@@ -41,7 +52,6 @@ class TrafficControlDeviceTypeResource(EnumFieldResourceMixin, ModelResource):
         clean_model_instances = True
         # Force None and empty strings to be always "" in imports.
         widgets = {
-            "icon": {"allow_blank": True, "coerce_to_string": True},
             "description": {"allow_blank": True, "coerce_to_string": True},
             "size": {"allow_blank": True, "coerce_to_string": True},
             "unit": {"allow_blank": True, "coerce_to_string": True},
@@ -51,9 +61,13 @@ class TrafficControlDeviceTypeResource(EnumFieldResourceMixin, ModelResource):
         }
         import_id_fields = ["code"]
 
+    def dehydrate_icon_file(self, obj: TrafficControlDeviceType):
+        return obj.icon_file.file.name if obj.icon_file and obj.icon_file.file else ""
+
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):
         """ID field is just informative when creating export file"""
-        del dataset["id"]
+        if "id" in dataset.headers:
+            del dataset["id"]
 
     def get_diff_class(self):
         return TrafficControlDeviceTypeDiff
