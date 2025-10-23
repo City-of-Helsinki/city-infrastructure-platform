@@ -2,7 +2,7 @@ import json
 from http import HTTPStatus
 
 import pytest
-from django.test import Client, override_settings
+from django.test import Client
 from django.urls import reverse
 
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle
@@ -11,7 +11,6 @@ from traffic_control.tests.factories import (
     AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
     get_owner,
-    get_traffic_control_device_type,
     get_user,
     TrafficControlDeviceTypeFactory,
     TrafficSignPlanFactory,
@@ -19,18 +18,6 @@ from traffic_control.tests.factories import (
 )
 from traffic_control.tests.models.test_traffic_control_device_type import content_valid_by_simple_schema, simple_schema
 from traffic_control.tests.test_base_api import illegal_test_point, test_point
-
-settings_overrides = override_settings(
-    STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
-)
-
-
-def setup_module():
-    settings_overrides.enable()
-
-
-def teardown_module():
-    settings_overrides.disable()
 
 
 @pytest.mark.parametrize(
@@ -44,7 +31,7 @@ def teardown_module():
 @pytest.mark.django_db
 def test__additional_sign__create_missing_content(client: Client, model, url_name, parent_factory):
     client.force_login(get_user(admin=True))
-    device_type = get_traffic_control_device_type(
+    device_type = TrafficControlDeviceTypeFactory(
         content_schema=simple_schema,
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
     )
@@ -156,7 +143,7 @@ def test__additional_sign__update_device_with_missing_content_to_have_content(
     parent_factory,
 ):
     client.force_login(get_user(admin=True))
-    device_type = get_traffic_control_device_type(content_schema=simple_schema)
+    device_type = TrafficControlDeviceTypeFactory(content_schema=simple_schema)
     device = factory(device_type=device_type, missing_content=True)
 
     assert model.objects.count() == 1
@@ -208,7 +195,7 @@ def test__additional_sign__update_device_with_missing_content_to_have_content(
 @pytest.mark.django_db
 def test__additional_sign__create_dont_accept_content_when_missing_content_is_enabled(client: Client, model, url_name):
     client.force_login(get_user(admin=True))
-    device_type = get_traffic_control_device_type(content_schema=simple_schema)
+    device_type = TrafficControlDeviceTypeFactory(content_schema=simple_schema)
 
     data = {
         "location": test_point.ewkt,
@@ -242,7 +229,7 @@ def test__additional_sign__update_dont_accept_content_when_missing_content_is_en
     parent_factory,
 ):
     client.force_login(get_user(admin=True))
-    device_type = get_traffic_control_device_type(content_schema=simple_schema)
+    device_type = TrafficControlDeviceTypeFactory(content_schema=simple_schema)
     device = factory(device_type=device_type, content_s=content_valid_by_simple_schema, missing_content=False)
 
     data = {
@@ -281,7 +268,7 @@ def test__additional_sign__update_dont_accept_content_when_missing_content_is_en
 @pytest.mark.django_db
 def test_additional_sign_illegal_location(client: Client, model, factory, url_name, parent_factory):
     client.force_login(get_user(admin=True))
-    device_type = get_traffic_control_device_type(content_schema=simple_schema)
+    device_type = TrafficControlDeviceTypeFactory(content_schema=simple_schema)
 
     assert model.objects.count() == 0
 
@@ -323,7 +310,7 @@ def test_additional_sign_illegal_location(client: Client, model, factory, url_na
 @pytest.mark.django_db
 def test__additional_sign_create_with_location_ewkt(client: Client, model, url_name, parent_factory):
     client.force_login(get_user(admin=True))
-    device_type = get_traffic_control_device_type(content_schema=simple_schema)
+    device_type = TrafficControlDeviceTypeFactory(content_schema=simple_schema)
     data = {
         "missing_content": True,
         "content_s": "null",

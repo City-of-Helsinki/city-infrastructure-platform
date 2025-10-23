@@ -5,12 +5,12 @@ import pytest
 from traffic_control.enums import DeviceTypeTargetModel, TrafficControlDeviceTypeType
 from traffic_control.models import TrafficControlDeviceType
 from traffic_control.resources.device_type import TrafficControlDeviceTypeResource
-from traffic_control.tests.factories import get_traffic_control_device_type
+from traffic_control.tests.factories import TrafficControlDeviceTypeFactory, TrafficControlDeviceTypeIconFactory
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
 
 @pytest.mark.parametrize(
-    ("icon", "value", "unit", "size"),
+    ("icon_file", "value", "unit", "size"),
     (
         ("A11.svg", "value", "unit", "size"),
         ("", "", "", ""),
@@ -42,7 +42,7 @@ from traffic_control.tests.test_import_export.utils import file_formats, get_imp
 )
 @pytest.mark.django_db
 def test__traffic_control_device_type__export(  # noqa: C901
-    icon,
+    icon_file,
     value,
     unit,
     size,
@@ -54,9 +54,9 @@ def test__traffic_control_device_type__export(  # noqa: C901
 ):
     """Test simple export of a single traffic control device type with multiple variations"""
 
-    kwargs = {"code": "123"}
-    if icon:
-        kwargs["icon"] = icon
+    kwargs = {"code": "123", "legacy_code": None, "legacy_description": None, "target_model": None}
+    if icon_file:
+        kwargs["icon_file"] = TrafficControlDeviceTypeIconFactory(file__filename=icon_file)
     if value:
         kwargs["value"] = value
     if unit:
@@ -73,14 +73,13 @@ def test__traffic_control_device_type__export(  # noqa: C901
         kwargs["type"] = dt_type
     if content_schema:
         kwargs["content_schema"] = content_schema
-
-    dt = get_traffic_control_device_type(**kwargs)
+    dt = TrafficControlDeviceTypeFactory(**kwargs)
 
     dataset = TrafficControlDeviceTypeResource().export()
 
     assert len(dataset) == 1
     assert dataset.dict[0]["code"] == dt.code
-    assert dataset.dict[0]["icon"] == dt.icon
+    assert dataset.dict[0]["icon_file"] == dt.icon_file.file
     assert dataset.dict[0]["description"] == dt.description
     assert dataset.dict[0]["value"] == dt.value
     assert dataset.dict[0]["unit"] == dt.unit
@@ -109,13 +108,13 @@ def test__traffic_control_device_type__export(  # noqa: C901
         assert dataset.dict[0]["type"] == ""
 
     if content_schema:
-        assert dataset.dict[0]["content_schema"] == json.dumps(dt.content_schema)
+        assert json.loads(dataset.dict[0]["content_schema"]) == dt.content_schema
     else:
         assert dataset.dict[0]["content_schema"] == ""
 
 
 @pytest.mark.parametrize(
-    ("icon", "value", "unit", "size"),
+    ("icon_file", "value", "unit", "size"),
     (
         ("A11.svg", "value", "unit", "size"),
         ("", "", "", ""),
@@ -148,7 +147,8 @@ def test__traffic_control_device_type__export(  # noqa: C901
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__traffic_control_device_type__import(
-    icon,
+    temp_icon_storage,
+    icon_file,
     value,
     unit,
     size,
@@ -161,18 +161,15 @@ def test__traffic_control_device_type__import(
 ):
     """Test simple import of a single traffic control device type with multiple variations"""
     kwargs = {"code": "123"}
-    if icon:
-        kwargs["icon"] = icon
-    if value:
-        kwargs["value"] = value
+    icon_file_obj = TrafficControlDeviceTypeIconFactory(file__filename=icon_file) if icon_file else None
+    kwargs["icon_file"] = icon_file_obj
+    kwargs["value"] = value or ""
+    kwargs["legacy_code"] = legacy_code or ""
+    kwargs["legacy_description"] = legacy_description or ""
     if unit:
         kwargs["unit"] = unit
     if size:
         kwargs["size"] = size
-    if legacy_code:
-        kwargs["legacy_code"] = legacy_code
-    if legacy_description:
-        kwargs["legacy_description"] = legacy_description
     if target_model:
         kwargs["target_model"] = target_model
     if dt_type:
@@ -180,7 +177,7 @@ def test__traffic_control_device_type__import(
     if content_schema:
         kwargs["content_schema"] = content_schema
 
-    orig_uuid = get_traffic_control_device_type(**kwargs).id
+    orig_uuid = TrafficControlDeviceTypeFactory(**kwargs).id
 
     dataset = get_import_dataset(TrafficControlDeviceTypeResource, format=format)
     TrafficControlDeviceType.objects.all().delete()
@@ -194,7 +191,7 @@ def test__traffic_control_device_type__import(
     imported_dt = TrafficControlDeviceType.objects.first()
 
     assert imported_dt.code == "123"
-    assert imported_dt.icon == icon
+    assert imported_dt.icon_file == icon_file_obj
     assert imported_dt.content_schema == content_schema
     assert imported_dt.value == value
     assert imported_dt.unit == unit
@@ -210,7 +207,7 @@ def test__traffic_control_device_type__import(
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__traffic_control_device_type__import__invalid_content_schema(format):
-    get_traffic_control_device_type()
+    TrafficControlDeviceTypeFactory()
     dataset = get_import_dataset(
         TrafficControlDeviceTypeResource,
         format=format,
@@ -231,7 +228,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
     (
         {
             "code": "VALUE",
-            "icon": "A2.svg",
+            "icon_file": "A2.svg",
             "description": "Description 2",
             "value": "value2",
             "unit": "unit2",
@@ -244,7 +241,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
         },
         {
             "code": "VALUE",
-            "icon": "",
+            "icon_file": "",
             "description": "",
             "value": "",
             "unit": "",
@@ -263,7 +260,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
     (
         {
             "code": "VALUE",
-            "icon": "A1.svg",
+            "icon_file": "A1.svg",
             "description": "Description 1",
             "value": "value1",
             "unit": "unit1",
@@ -276,7 +273,7 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
         },
         {
             "code": "VALUE",
-            "icon": "",
+            "icon_file": "",
             "description": "",
             "value": "",
             "unit": "",
@@ -293,16 +290,28 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__traffic_control_device_type__import__update(
+    temp_icon_storage,
     to_values,
     from_values,
     format,
 ):
-    device_type = get_traffic_control_device_type(**to_values)
+    from_icon = (
+        TrafficControlDeviceTypeIconFactory(file__filename=from_values["icon_file"])
+        if from_values["icon_file"]
+        else None
+    )
+    to_icon = (
+        TrafficControlDeviceTypeIconFactory(file__filename=to_values["icon_file"]) if to_values["icon_file"] else None
+    )
+
+    factory_kwargs = to_values.copy()
+    del factory_kwargs["icon_file"]
+    device_type = TrafficControlDeviceTypeFactory(icon_file=to_icon, **factory_kwargs)
     dataset = get_import_dataset(TrafficControlDeviceTypeResource, format=format)
     assert len(dataset) == 1
 
     device_type.code = from_values["code"]
-    device_type.icon = from_values["icon"]
+    device_type.icon_file = from_icon
     device_type.description = from_values["description"]
     device_type.value = from_values["value"]
     device_type.unit = from_values["unit"]
@@ -323,7 +332,7 @@ def test__traffic_control_device_type__import__update(
     imported_dt = TrafficControlDeviceType.objects.first()
 
     assert imported_dt.code == to_values["code"]
-    assert imported_dt.icon == to_values["icon"]
+    assert imported_dt.icon_file == to_icon
     assert imported_dt.description == to_values["description"]
     assert imported_dt.value == to_values["value"]
     assert imported_dt.unit == to_values["unit"]

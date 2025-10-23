@@ -27,7 +27,6 @@ from traffic_control.tests.factories import (
     get_api_client,
     get_operation_type,
     get_owner,
-    get_traffic_control_device_type,
     get_traffic_sign_real,
     get_user,
     PlanFactory,
@@ -202,7 +201,7 @@ def test__additional_sign_real__create_with_content(admin_user):
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_real()
-    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+    dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
         "parent": str(tsp.pk),
@@ -247,7 +246,7 @@ def test__additional_sign_real__create_with_content_invalid(schema, content, adm
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_real()
-    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=schema)
+    dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=schema)
 
     data = {
         "parent": str(tsp.pk),
@@ -312,8 +311,8 @@ def test__additional_sign_real__update_device_type_and_content(
     not successful when structured content doesn't match device type's content_schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    old_dt = get_traffic_control_device_type(code="A1234", content_schema=old_schema)
-    new_dt = get_traffic_control_device_type(code="new_code", content_schema=new_schema)
+    old_dt = TrafficControlDeviceTypeFactory(code="A1234", content_schema=old_schema)
+    new_dt = TrafficControlDeviceTypeFactory(code="new_code", content_schema=new_schema)
     asr = AdditionalSignRealFactory(content_s=old_content, device_type=old_dt, missing_content=False)
 
     data = {
@@ -500,7 +499,7 @@ def test__additional_sign_real__create_with_missing_content(admin_user):
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_real()
-    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+    dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
         "parent": str(tsp.pk),
@@ -536,7 +535,7 @@ def test__additional_sign_real__create_dont_accept_content_when_missing_content_
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_real()
-    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+    dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
         "parent": str(tsp.pk),

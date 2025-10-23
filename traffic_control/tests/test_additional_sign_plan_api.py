@@ -14,9 +14,9 @@ from traffic_control.tests.factories import (
     AdditionalSignPlanFactory,
     get_api_client,
     get_owner,
-    get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_user,
+    TrafficControlDeviceTypeFactory,
     TrafficSignPlanFactory,
 )
 from traffic_control.tests.models.test_traffic_control_device_type import (
@@ -140,7 +140,7 @@ def test__additional_sign_plan__create_with_content(admin_user):
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_plan()
-    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+    dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
         "parent": str(tsp.pk),
@@ -185,7 +185,7 @@ def test__additional_sign_plan__create_with_content_invalid(schema, content, adm
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_plan()
-    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=schema)
+    dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=schema)
 
     data = {
         "parent": str(tsp.pk),
@@ -254,8 +254,8 @@ def test__additional_sign_plan__update_device_type_and_content(
     not successful when structured content doesn't match device type's content_schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    old_dt = get_traffic_control_device_type(code="A1234", content_schema=old_schema)
-    new_dt = get_traffic_control_device_type(code="new_code", content_schema=new_schema)
+    old_dt = TrafficControlDeviceTypeFactory(code="A1234", content_schema=old_schema)
+    new_dt = TrafficControlDeviceTypeFactory(code="new_code", content_schema=new_schema)
     tsp = get_traffic_sign_plan()
     asp = AdditionalSignPlanFactory(content_s=old_content, device_type=old_dt)
 
@@ -299,7 +299,7 @@ def test__additional_sign_plan__partial_update_without_content(admin_user):
     is successful.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    dt = get_traffic_control_device_type(code="A1234")
+    dt = TrafficControlDeviceTypeFactory(code="A1234")
     asp = AdditionalSignPlanFactory()
     tsp = get_traffic_sign_plan(device_type=dt)
     data = {
@@ -344,7 +344,7 @@ def test__additional_sign_plan__partial_update_content(
     structured content when it's valid according to device type's content schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    dt = get_traffic_control_device_type(code="DT1", content_schema=schema)
+    dt = TrafficControlDeviceTypeFactory(code="DT1", content_schema=schema)
     asp = AdditionalSignPlanFactory(device_type=dt, content_s=old_content)
     asp_id = str(asp.pk)
     data = {
@@ -403,8 +403,8 @@ def test__additional_sign_plan__partial_update_device_type_and_content(
     content and device type when content is valid according to device type's content schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    old_dt = get_traffic_control_device_type(code="DT1", content_schema=old_schema)
-    new_dt = get_traffic_control_device_type(code="DT2", content_schema=new_schema)
+    old_dt = TrafficControlDeviceTypeFactory(code="DT1", content_schema=old_schema)
+    new_dt = TrafficControlDeviceTypeFactory(code="DT2", content_schema=new_schema)
     asp = AdditionalSignPlanFactory(device_type=old_dt, content_s=old_content)
     asp_id = str(asp.pk)
     data = {
@@ -442,7 +442,7 @@ def test__additional_sign_plan__create_with_missing_content(admin_user):
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_plan()
-    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+    dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
         "parent": str(tsp.pk),
@@ -478,7 +478,7 @@ def test__additional_sign_plan__create_dont_accept_content_when_missing_content_
     """
     client = get_api_client(user=get_user(admin=admin_user))
     tsp = get_traffic_sign_plan()
-    dt = get_traffic_control_device_type(code=get_random_string(length=12), content_schema=simple_schema)
+    dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
         "parent": str(tsp.pk),

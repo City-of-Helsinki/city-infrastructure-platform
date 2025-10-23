@@ -1,7 +1,6 @@
 import uuid
 
 import pytest
-from django.test import override_settings
 from django.urls import reverse
 
 from traffic_control.enums import DeviceTypeTargetModel
@@ -10,25 +9,10 @@ from traffic_control.tests.factories import (
     get_additional_sign_real,
     get_mount_plan,
     get_mount_real,
-    get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_traffic_sign_real,
+    TrafficControlDeviceTypeFactory,
 )
-
-settings_overrides = override_settings(
-    STORAGES={
-        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
-        "icons": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-    },
-)
-
-
-def setup_module():
-    settings_overrides.enable()
-
-
-def teardown_module():
-    settings_overrides.disable()
 
 
 @pytest.mark.parametrize(
@@ -63,7 +47,7 @@ def test__embed__traffic_sign__context(
         mount = None
 
     if has_device_type:
-        traffic_sign_type = get_traffic_control_device_type(
+        traffic_sign_type = TrafficControlDeviceTypeFactory(
             code="TS1",
             target_model=DeviceTypeTargetModel.TRAFFIC_SIGN,
         )
@@ -74,11 +58,11 @@ def test__embed__traffic_sign__context(
 
     if has_additional_signs:
         if has_additional_sign_device_types:
-            additional_sign_type_1 = get_traffic_control_device_type(
+            additional_sign_type_1 = TrafficControlDeviceTypeFactory(
                 code="AS1",
                 target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
             )
-            additional_sign_type_2 = get_traffic_control_device_type(
+            additional_sign_type_2 = TrafficControlDeviceTypeFactory(
                 code="AS2",
                 target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
             )

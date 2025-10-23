@@ -111,7 +111,7 @@ class AdminTrafficSignIconSelectWidget(Select):
     def get_icon_url(self, value):
         if not self.icon_url_mapping:
             self.icon_url_mapping = {}
-            device_types = TrafficControlDeviceType.objects.all().only("id", "icon")
+            device_types = TrafficControlDeviceType.objects.all().only("id", "icon_file")
             for device_type in device_types:
                 icons = device_type.get_icons()
                 if icons:

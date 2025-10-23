@@ -14,9 +14,9 @@ from traffic_control.tests.factories import (
     get_mount_plan,
     get_mount_real,
     get_owner,
-    get_traffic_control_device_type,
     get_traffic_sign_plan,
     get_traffic_sign_real,
+    TrafficControlDeviceTypeFactory,
     TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
@@ -149,7 +149,7 @@ content_2 = {
 @pytest.mark.django_db
 def test_additional_sign_template__export(resource):
     """test template export, this happens when no data is provided."""
-    get_traffic_control_device_type(
+    TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
@@ -177,17 +177,17 @@ def test_additional_sign_template__export(resource):
 )
 @pytest.mark.django_db
 def test__additional_sign__export_with_content(resource, factory):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
     )
-    dt_with_schema_2 = get_traffic_control_device_type(
+    dt_with_schema_2 = TrafficControlDeviceTypeFactory(
         code="type2",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_2,
     )
-    dt_no_schema = get_traffic_control_device_type(
+    dt_no_schema = TrafficControlDeviceTypeFactory(
         code="type3",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
     )
@@ -248,17 +248,17 @@ def test__additional_sign__export_with_content(resource, factory):
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign__import__create_with_content(model, resource, factory, format):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
     )
-    dt_with_schema_2 = get_traffic_control_device_type(
+    dt_with_schema_2 = TrafficControlDeviceTypeFactory(
         code="type2",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_2,
     )
-    dt_no_schema = get_traffic_control_device_type(
+    dt_no_schema = TrafficControlDeviceTypeFactory(
         code="type3",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
     )
@@ -321,17 +321,17 @@ def test__additional_sign__import__create_with_content(model, resource, factory,
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign__import__create_with_missing_content(model, resource, factory, format):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
     )
-    dt_with_schema_2 = get_traffic_control_device_type(
+    dt_with_schema_2 = TrafficControlDeviceTypeFactory(
         code="type2",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_2,
     )
-    dt_no_schema = get_traffic_control_device_type(
+    dt_no_schema = TrafficControlDeviceTypeFactory(
         code="type3",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
     )
@@ -393,7 +393,7 @@ def test__additional_sign__import__create_with_missing_content(model, resource, 
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign__import__create_fails_with_content_and_missing_content(model, resource, factory, format):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
@@ -425,17 +425,17 @@ def test__additional_sign__import__create_fails_with_content_and_missing_content
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign__import__create_with_invalid_content(model, resource, factory, format):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
     )
-    dt_with_schema_2 = get_traffic_control_device_type(
+    dt_with_schema_2 = TrafficControlDeviceTypeFactory(
         code="type2",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_2,
     )
-    dt_no_schema = get_traffic_control_device_type(
+    dt_no_schema = TrafficControlDeviceTypeFactory(
         code="type3",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
     )
@@ -480,7 +480,7 @@ def test__additional_sign__import__create_with_invalid_content(model, resource, 
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign__import__create_with_invalid_device_type(model, resource, factory, format):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
@@ -553,7 +553,7 @@ def test__additional_sign__import__create_with_minimal_columns(model, resource, 
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign__import__update_with_content(model, resource, factory, has_device_type_column, format):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
@@ -600,7 +600,7 @@ def test__additional_sign__import__update_with_missing_content(
     model, resource, factory, has_device_type_column, format
 ):
     """Test it is possible to add valid content and remove missing_content flag with import"""
-    dt_with_schema_2 = get_traffic_control_device_type(
+    dt_with_schema_2 = TrafficControlDeviceTypeFactory(
         code="type2",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_2,
@@ -642,13 +642,13 @@ def test__additional_sign__import__update_with_missing_content(
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign__import__update_device_type_with_content(model, resource, factory, format):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
     )
 
-    dt_with_schema_2 = get_traffic_control_device_type(
+    dt_with_schema_2 = TrafficControlDeviceTypeFactory(
         code="type2",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_2,
@@ -693,7 +693,7 @@ def test__additional_sign__import__update_device_type_with_content(model, resour
 def test__additional_sign__import__update_with_invalid_content(
     model, resource, factory, has_device_type_column, format
 ):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
@@ -733,13 +733,13 @@ def test__additional_sign__import__update_with_invalid_content(
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__additional_sign__import__update_device_type_with_invalid_content(model, resource, factory, format):
-    dt_with_schema_1 = get_traffic_control_device_type(
+    dt_with_schema_1 = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_1,
     )
 
-    dt_with_schema_2 = get_traffic_control_device_type(
+    dt_with_schema_2 = TrafficControlDeviceTypeFactory(
         code="type2",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema_2,
@@ -967,7 +967,7 @@ def test__additional_sign__import__valid_and_invalid_content_properties(schema_p
         "required": [property_name],
     }
 
-    dt = get_traffic_control_device_type(
+    dt = TrafficControlDeviceTypeFactory(
         code="type1",
         target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
         content_schema=schema,

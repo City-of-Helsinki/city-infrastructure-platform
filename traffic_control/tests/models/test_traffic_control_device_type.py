@@ -16,12 +16,12 @@ from traffic_control.tests.factories import (
     get_road_marking_real,
     get_signpost_plan,
     get_signpost_real,
-    get_traffic_control_device_type,
     get_traffic_light_plan,
     get_traffic_light_real,
     get_traffic_sign_plan,
     get_traffic_sign_real,
     TrafficControlDeviceTypeFactory,
+    TrafficControlDeviceTypeIconFactory,
     TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
@@ -87,7 +87,7 @@ invalid_schema = {"type": "asdf"}
 def test__traffic_control_device_type__target_model__restricts_relations(allowed_values, factory):
     related_obj = factory()
     for choice in DeviceTypeTargetModel:
-        device_type = get_traffic_control_device_type(code=get_random_string(length=12), target_model=choice)
+        device_type = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), target_model=choice)
         if choice in allowed_values:
             related_obj.device_type = device_type
             related_obj.save(update_fields=["device_type"])
@@ -118,7 +118,7 @@ def test__traffic_control_device_type__target_model__restricts_relations(allowed
 )
 @pytest.mark.django_db
 def test__traffic_control_device_type__target_model__update_is_valid(new_target_model, factory):
-    device_type = get_traffic_control_device_type()
+    device_type = TrafficControlDeviceTypeFactory()
     factory(device_type=device_type)
 
     device_type.target_model = new_target_model
@@ -147,7 +147,7 @@ def test__traffic_control_device_type__target_model__update_is_valid(new_target_
 )
 @pytest.mark.django_db
 def test__traffic_control_device_type__target_model__update_is_invalid(new_target_model, factory):
-    device_type = get_traffic_control_device_type()
+    device_type = TrafficControlDeviceTypeFactory()
     factory(device_type=device_type)
 
     with pytest.raises(ValidationError):
@@ -160,7 +160,7 @@ def test__traffic_control_device_type__target_model__update_is_invalid(new_targe
 
 @pytest.mark.django_db
 def test__traffic_control_device_type__target_model__validate_multiple_invalid_relations():
-    device_type = get_traffic_control_device_type()
+    device_type = TrafficControlDeviceTypeFactory()
     get_barrier_plan(device_type=device_type)
     get_barrier_real(device_type=device_type)
     get_road_marking_plan(device_type=device_type)
@@ -201,7 +201,7 @@ def test__traffic_control_device_type__target_model__validate_multiple_invalid_r
 )
 @pytest.mark.django_db
 def test__traffic_control_device_type__traffic_sign_type(code, expected_value):
-    device_type = get_traffic_control_device_type(code=code)
+    device_type = TrafficControlDeviceTypeFactory(code=code)
 
     assert device_type.traffic_sign_type == expected_value
 
@@ -227,7 +227,7 @@ def test__traffic_control_device_type__traffic_sign_type(code, expected_value):
 def test__traffic_control_device_type__content_schema__valid_values(schema, expect_valid):
     expectation = does_not_raise() if expect_valid else pytest.raises(ValidationError)
 
-    device_type = get_traffic_control_device_type(content_schema=schema)
+    device_type = TrafficControlDeviceTypeFactory(content_schema=schema)
     with expectation:
         device_type.full_clean()
 
@@ -251,7 +251,7 @@ def test__traffic_control_device_type__content_schema__valid_values(schema, expe
 @pytest.mark.django_db
 def test__traffic_control_device_type__content_schema__valid_for_target_models(target_model, expect_valid):
     content_schema = simple_schema
-    device_type = get_traffic_control_device_type(target_model=target_model, content_schema=content_schema)
+    device_type = TrafficControlDeviceTypeFactory(target_model=target_model, content_schema=content_schema)
 
     if expect_valid:
         device_type.full_clean()
@@ -279,11 +279,15 @@ def test__object_with_mismatching_target_model_can_be_changed(model_factory, tar
     See AbstractTrafficSign.ALLOWED_TARGET_MODELS for more details.
     Tests that device type objects other fields can still be modified.
     """
-    dt = TrafficControlDeviceTypeFactory(code="test", description="test desc", icon="icon", target_model=target_model)
+    orig_icon = TrafficControlDeviceTypeIconFactory()
+    dt = TrafficControlDeviceTypeFactory(
+        code="test", description="test desc", icon_file=orig_icon, target_model=target_model
+    )
     model_factory(device_type=dt)
     dt.description = "test desc2"
-    dt.icon = "newIcon"
-    dt.save(update_fields=["description", "icon"])
+    new_icon = TrafficControlDeviceTypeIconFactory()
+    dt.icon = new_icon
+    dt.save(update_fields=["description", "icon_file"])
     dt.refresh_from_db()
     assert dt.description == "test desc2"
-    assert dt.icon == "newIcon"
+    assert dt.icon == new_icon

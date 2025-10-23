@@ -113,11 +113,6 @@ class TrafficControlDeviceType(models.Model):
         max_length=32,
         help_text=_("Standardised code of the device type."),
     )
-    icon = models.CharField(
-        _("Icon"),
-        max_length=100,
-        blank=True,
-    )
     icon_file = models.ForeignKey(
         TrafficControlDeviceTypeIcon,
         on_delete=models.PROTECT,

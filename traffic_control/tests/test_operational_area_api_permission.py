@@ -26,12 +26,12 @@ from traffic_control.tests.factories import (
     get_road_marking_real,
     get_signpost_plan,
     get_signpost_real,
-    get_traffic_control_device_type,
     get_traffic_light_plan,
     get_traffic_light_real,
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    TrafficControlDeviceTypeFactory,
     TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
@@ -144,7 +144,7 @@ def test__api_operational_area_permission__create(model, location, success):
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
     user.user_permissions.add(*perms)
-    device_type = get_traffic_control_device_type()
+    device_type = TrafficControlDeviceTypeFactory()
 
     location = location.ewkt if location else None
 
@@ -207,7 +207,7 @@ def test__api_operational_area_permission__create__geojson(location, success):
     perms = Permission.objects.filter(codename__contains="barrierplan")
     user.operational_areas.add(operational_area)
     user.user_permissions.add(*perms)
-    device_type = get_traffic_control_device_type()
+    device_type = TrafficControlDeviceTypeFactory()
 
     if location:
         location = json.loads(location.geojson)
@@ -277,7 +277,7 @@ def test__api_operational_area_permission__update(model, location, success):
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
     user.user_permissions.add(*perms)
-    device_type = get_traffic_control_device_type()
+    device_type = TrafficControlDeviceTypeFactory()
     instance = model_factory_map[model](location=location)
 
     if model == "Plan":
