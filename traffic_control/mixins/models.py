@@ -220,11 +220,18 @@ class DecimalValueFromDeviceTypeMixin:
 
 class AbstractFileModel(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    is_public = models.BooleanField(
+        _("Is public"),
+        default=True,
+        help_text=_("If unchecked, access is restricted to users/groups with appropriate table or file permissions"),
+    )
 
     class Meta:
         abstract = True
 
     def __str__(self):
+        if not self.is_public:
+            return f"{self.file} (restricted)"
         return f"{self.file}"
 
 

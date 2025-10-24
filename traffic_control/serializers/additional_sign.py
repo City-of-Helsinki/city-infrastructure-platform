@@ -16,6 +16,7 @@ from traffic_control.serializers.common import (
     EwktPointField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
+    PermissionFilteredRelatedField,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
     StructuredContentValidator,
@@ -75,6 +76,10 @@ class AdditionalSignPlanOutputSerializer(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN),
         allow_null=True,
         required=False,
+    )
+    files = PermissionFilteredRelatedField(
+        permission_codename="traffic_control.view_additionalsignplanfile",
+        serializer_class=AdditionalSignPlanFileSerializer,
     )
 
     class Meta:

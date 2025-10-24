@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-04 10:20+0200\n"
+"POT-Creation-Date: 2025-11-05 13:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1102,6 +1102,14 @@ msgstr "Källnamn"
 
 msgid "Name of the source for where this device was imported from."
 msgstr "Namn på källan varifrån denna anordning importerades."
+
+msgid "Is public"
+msgstr ""
+
+msgid ""
+"If unchecked, access is restricted to users/groups with appropriate table or "
+"file permissions"
+msgstr ""
 
 msgid "Date on which this sign becomes active."
 msgstr "Datum då skylten tas i bruk."

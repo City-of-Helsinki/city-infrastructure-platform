@@ -2,6 +2,7 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
+from guardian.admin import GuardedModelAdmin
 
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
@@ -45,6 +46,18 @@ __all__ = (
     "FurnitureSignpostRealAdmin",
     "FurnitureSignpostRealFileInline",
 )
+
+
+@admin.register(FurnitureSignpostPlanFile)
+class TrafficSignPlanFileAdmin(GuardedModelAdmin):
+    list_display = ("id", "file", "is_public")
+    raw_id_fields = ("furniture_signpost_plan",)
+
+
+@admin.register(FurnitureSignpostRealFile)
+class TrafficSignRealFileAdmin(GuardedModelAdmin):
+    list_display = ("id", "file", "is_public")
+    raw_id_fields = ("furniture_signpost_real",)
 
 
 class FurnitureSignpostPlanFileInline(admin.TabularInline):

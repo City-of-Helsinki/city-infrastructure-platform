@@ -17,6 +17,7 @@ from traffic_control.serializers.common import (
     EwktPolygonField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
+    PermissionFilteredRelatedField,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
@@ -72,7 +73,10 @@ class TrafficSignPlanOutputSerializer(
 ):
     location = EwktPointField()
     affect_area = EwktPolygonField(required=False)
-    files = TrafficSignPlanFileSerializer(many=True, read_only=True)
+    files = PermissionFilteredRelatedField(
+        permission_codename="traffic_control.view_trafficsignplanfile",
+        serializer_class=TrafficSignPlanFileSerializer,
+    )
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN),
         allow_null=True,
@@ -130,7 +134,10 @@ class TrafficSignRealSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
-    files = TrafficSignRealFileSerializer(many=True, read_only=True)
+    files = PermissionFilteredRelatedField(
+        permission_codename="traffic_control.view_trafficsignrealfile",
+        serializer_class=TrafficSignRealFileSerializer,
+    )
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_SIGN),
         allow_null=True,

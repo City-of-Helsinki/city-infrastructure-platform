@@ -16,6 +16,7 @@ from traffic_control.serializers.common import (
     EwktGeometryField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
+    PermissionFilteredRelatedField,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
@@ -69,7 +70,10 @@ class BarrierPlanOutputSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
-    files = BarrierPlanFileSerializer(many=True, read_only=True)
+    files = PermissionFilteredRelatedField(
+        permission_codename="traffic_control.view_barrierplanfile",
+        serializer_class=BarrierPlanFileSerializer,
+    )
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER),
         allow_null=True,
@@ -127,7 +131,10 @@ class BarrierRealSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
-    files = BarrierRealFileSerializer(many=True, read_only=True)
+    files = PermissionFilteredRelatedField(
+        permission_codename="traffic_control.view_barrierrealfile",
+        serializer_class=BarrierRealFileSerializer,
+    )
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.BARRIER),
         allow_null=True,

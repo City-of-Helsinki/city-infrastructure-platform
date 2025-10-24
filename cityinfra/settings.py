@@ -177,6 +177,7 @@ THIRD_PARTY_APPS = [
     "mptt",
     "django_advanced_password_validation",
     "axes",
+    "guardian",
 ]
 LOCAL_APPS = [
     "users.apps.UsersConfig",
@@ -191,6 +192,7 @@ AUTHENTICATION_BACKENDS = (
     "axes.backends.AxesBackend",
     "helusers.tunnistamo_oidc.TunnistamoOIDCAuth",
     "django.contrib.auth.backends.ModelBackend",
+    "guardian.backends.ObjectPermissionBackend",
 )
 
 AUTH_USER_MODEL = "users.User"
