@@ -3,6 +3,7 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
+from guardian.admin import GuardedModelAdmin
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
@@ -59,6 +60,18 @@ shared_initial_values = {
     "reflection_class": Reflection.R1,
     "location_specifier": LocationSpecifier.RIGHT,
 }
+
+
+@admin.register(SignpostPlanFile)
+class SignpostPlanFileAdmin(GuardedModelAdmin):
+    list_display = ("id", "file", "is_public")
+    raw_id_fields = ("signpost_plan",)
+
+
+@admin.register(SignpostRealFile)
+class SignpostRealFileAdmin(GuardedModelAdmin):
+    list_display = ("id", "file", "is_public")
+    raw_id_fields = ("signpost_real",)
 
 
 class SignpostPlanFileInline(admin.TabularInline):

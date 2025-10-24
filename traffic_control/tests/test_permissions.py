@@ -4,10 +4,19 @@ import pytest
 from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import RequestFactory
+from django.urls import reverse
+from guardian.shortcuts import assign_perm
 
 from traffic_control.models import OperationalArea
 from traffic_control.permissions import IsAdminUserOrReadOnly, ObjectInsideOperationalAreaOrAnonReadOnly
-from traffic_control.tests.factories import get_barrier_real, get_user
+from traffic_control.tests.factories import (
+    BarrierPlanFactory,
+    BarrierPlanFileFactory,
+    get_api_client,
+    get_barrier_real,
+    get_user,
+    UserFactory,
+)
 from traffic_control.tests.test_base_api import test_polygon
 from traffic_control.tests.utils import MIN_X, MIN_Y
 
@@ -190,3 +199,46 @@ def test__operational_area_permission__polygon_not_in_area(method, expected):
     has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(request, mock_view, barrier_real)
 
     assert has_permission == expected
+
+
+@pytest.mark.parametrize("has_table_permission", [False, True])
+@pytest.mark.parametrize("has_object_permission", [False, True])
+@pytest.mark.django_db
+def test__file_access_is_optionally_restricted(has_table_permission, has_object_permission):
+    user = UserFactory()
+    barrier_plan = BarrierPlanFactory()
+    file_public = BarrierPlanFileFactory(barrier_plan=barrier_plan, is_public=True)
+    file_private = BarrierPlanFileFactory(barrier_plan=barrier_plan, is_public=False)
+    file_with_object_permissions = BarrierPlanFileFactory(barrier_plan=barrier_plan, is_public=False)
+
+    if has_table_permission:
+        assign_perm("traffic_control.view_barrierplanfile", user)
+        user.refresh_from_db()
+
+    if has_object_permission:
+        assign_perm("traffic_control.view_barrierplanfile", user, file_with_object_permissions)
+        user.refresh_from_db()
+
+    client = get_api_client(user=user)
+    response = client.get(reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.pk}), format="json")
+
+    files = response.data.get("files")
+    response_files_public = [f for f in files if f["id"] == str(file_public.pk)]
+    response_files_private = [f for f in files if f["id"] == str(file_private.pk)]
+    response_files_with_object_permission = [f for f in files if f["id"] == str(file_with_object_permissions.pk)]
+    assert len(response_files_public) == 1
+    if has_table_permission:
+        assert len(files) == 3
+        assert len(response_files_public) == 1
+        assert len(response_files_private) == 1
+        assert len(response_files_with_object_permission) == 1
+    elif has_object_permission:
+        assert len(files) == 2
+        assert len(response_files_public) == 1
+        assert len(response_files_private) == 0
+        assert len(response_files_with_object_permission) == 1
+    else:
+        assert len(files) == 1
+        assert len(response_files_public) == 1
+        assert len(response_files_private) == 0
+        assert len(response_files_with_object_permission) == 0

@@ -14258,6 +14258,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -14835,6 +14839,11 @@ components:
           type: string
           format: uuid
           nullable: true
+        files:
+          type: string
+          readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         created_at:
           type: string
           format: date-time
@@ -15085,6 +15094,7 @@ components:
       required:
       - created_at
       - created_by
+      - files
       - id
       - is_replaced
       - location
@@ -15478,6 +15488,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -15873,6 +15887,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -16353,10 +16371,10 @@ components:
             6672170.5 0, 25497651.5 6672629.5 0, 25497646.5 6672775.5 0, 25497733.5
             6672927.5 0)))
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/BarrierPlanFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -16584,10 +16602,10 @@ components:
             6672170.5 0, 25497651.5 6672629.5 0, 25497646.5 6672775.5 0, 25497733.5
             6672927.5 0)))
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/BarrierRealFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -16858,6 +16876,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -16877,18 +16899,6 @@ components:
             $ref: '#/components/schemas/BarrierRealFile'
       required:
       - files
-    BarrierRealFileRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        barrier_real:
-          type: string
-          format: uuid
-      required:
-      - barrier_real
-      - file
     BarrierRealOperation:
       type: object
       properties:
@@ -17653,10 +17663,10 @@ components:
           format: EWKT
           example: SRID=3879;POINT Z (25496751.5 6673129.5 1.5)
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/FurnitureSignpostPlanFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -17885,6 +17895,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -17904,18 +17918,6 @@ components:
             $ref: '#/components/schemas/FurnitureSignpostPlanFile'
       required:
       - files
-    FurnitureSignpostPlanFileRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        furniture_signpost_plan:
-          type: string
-          format: uuid
-      required:
-      - file
-      - furniture_signpost_plan
     FurnitureSignpostPlanRequest:
       type: object
       properties:
@@ -18125,10 +18127,10 @@ components:
           format: EWKT
           example: SRID=3879;POINT Z (25496751.5 6673129.5 1.5)
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/FurnitureSignpostRealFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -18411,6 +18413,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -18430,18 +18436,6 @@ components:
             $ref: '#/components/schemas/FurnitureSignpostRealFile'
       required:
       - files
-    FurnitureSignpostRealFileRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        furniture_signpost_real:
-          type: string
-          format: uuid
-      required:
-      - file
-      - furniture_signpost_real
     FurnitureSignpostRealOperation:
       type: object
       properties:
@@ -18750,6 +18744,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -19097,10 +19095,10 @@ components:
             6672170.5 0, 25497651.5 6672629.5 0, 25497646.5 6672775.5 0, 25497733.5
             6672927.5 0)))
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/MountPlanFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         created_at:
           type: string
           format: date-time
@@ -19268,10 +19266,10 @@ components:
             format: uuid
           readOnly: true
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/MountRealFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         operations:
           type: array
           items:
@@ -19499,6 +19497,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -19518,18 +19520,6 @@ components:
             $ref: '#/components/schemas/MountRealFile'
       required:
       - files
-    MountRealFileRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        mount_real:
-          type: string
-          format: uuid
-      required:
-      - file
-      - mount_real
     MountRealOperation:
       type: object
       properties:
@@ -25843,6 +25833,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -26452,10 +26446,10 @@ components:
             6672170.5 0, 25497651.5 6672629.5 0, 25497646.5 6672775.5 0, 25497733.5
             6672927.5 0)))
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/RoadMarkingPlanFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -26748,10 +26742,10 @@ components:
             6672170.5 0, 25497651.5 6672629.5 0, 25497646.5 6672775.5 0, 25497733.5
             6672927.5 0)))
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/RoadMarkingRealFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -27094,6 +27088,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -27113,18 +27111,6 @@ components:
             $ref: '#/components/schemas/RoadMarkingRealFile'
       required:
       - files
-    RoadMarkingRealFileRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        road_marking_real:
-          type: string
-          format: uuid
-      required:
-      - file
-      - road_marking_real
     RoadMarkingRealOperation:
       type: object
       properties:
@@ -27472,6 +27458,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -28052,10 +28042,10 @@ components:
           format: EWKT
           example: SRID=3879;POINT Z (25496751.5 6673129.5 1.5)
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/SignpostPlanFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -28335,10 +28325,10 @@ components:
           format: EWKT
           example: SRID=3879;POINT Z (25496751.5 6673129.5 1.5)
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/SignpostRealFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -28684,6 +28674,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -28703,18 +28697,6 @@ components:
             $ref: '#/components/schemas/SignpostRealFile'
       required:
       - files
-    SignpostRealFileRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        signpost_real:
-          type: string
-          format: uuid
-      required:
-      - file
-      - signpost_real
     SignpostRealOperation:
       type: object
       properties:
@@ -29234,6 +29216,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -29798,10 +29784,10 @@ components:
           format: EWKT
           example: SRID=3879;POINT Z (25496751.5 6673129.5 1.5)
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrafficLightPlanFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -30073,10 +30059,10 @@ components:
           format: EWKT
           example: SRID=3879;POINT Z (25496751.5 6673129.5 1.5)
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrafficLightRealFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -30394,6 +30380,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -30413,18 +30403,6 @@ components:
             $ref: '#/components/schemas/TrafficLightRealFile'
       required:
       - files
-    TrafficLightRealFileRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        traffic_light_real:
-          type: string
-          format: uuid
-      required:
-      - file
-      - traffic_light_real
     TrafficLightRealOperation:
       type: object
       properties:
@@ -30744,6 +30722,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -31312,10 +31294,10 @@ components:
             0, 25497651.5 6672629.5 0, 25497646.5 6672775.5 0, 25497733.5 6672927.5
             0))
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrafficSignPlanFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -31578,10 +31560,10 @@ components:
           format: EWKT
           example: SRID=3879;POINT Z (25496751.5 6673129.5 1.5)
         files:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrafficSignRealFile'
+          type: string
           readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -31937,6 +31919,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        is_public:
+          type: boolean
+          description: If unchecked, access is restricted to users/groups with appropriate
+            table or file permissions
         file:
           type: string
           format: uri
@@ -31956,18 +31942,6 @@ components:
             $ref: '#/components/schemas/TrafficSignRealFile'
       required:
       - files
-    TrafficSignRealFileRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        traffic_sign_real:
-          type: string
-          format: uuid
-      required:
-      - file
-      - traffic_sign_real
     TrafficSignRealOperation:
       type: object
       properties:

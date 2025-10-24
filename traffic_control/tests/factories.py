@@ -13,6 +13,7 @@ from traffic_control.models import (
     AdditionalSignReal,
     AdditionalSignRealOperation,
     BarrierPlan,
+    BarrierPlanFile,
     BarrierReal,
     BarrierRealOperation,
     ConnectionType,
@@ -161,6 +162,18 @@ class BarrierPlanFactory(factory.django.DjangoModelFactory):
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
+
+
+class BarrierPlanFileFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = BarrierPlanFile
+        django_get_or_create = ("file",)
+
+    file = factory.django.FileField(
+        filename=factory.Sequence(lambda n: f"test_file_{n}.svg"),
+        data=b"Just another file",
+    )
+    is_public = True
 
 
 def get_barrier_plan(

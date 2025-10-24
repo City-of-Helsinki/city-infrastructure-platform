@@ -3,6 +3,7 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
+from guardian.admin import GuardedModelAdmin
 
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
@@ -87,6 +88,18 @@ shared_initial_values = {
     "surface_class": Surface.FLAT,
     "location_specifier": LocationSpecifier.RIGHT,
 }
+
+
+@admin.register(TrafficSignPlanFile)
+class TrafficSignPlanFileAdmin(GuardedModelAdmin):
+    list_display = ("id", "file", "is_public")
+    raw_id_fields = ("traffic_sign_plan",)
+
+
+@admin.register(TrafficSignRealFile)
+class TrafficSignRealFileAdmin(GuardedModelAdmin):
+    list_display = ("id", "file", "is_public")
+    raw_id_fields = ("traffic_sign_real",)
 
 
 class TrafficSignTypeListFilter(SimpleListFilter):

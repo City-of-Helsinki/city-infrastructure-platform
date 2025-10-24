@@ -2,13 +2,16 @@ from typing import Optional, OrderedDict
 from uuid import UUID
 
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema_field
 from enumfields.drf import EnumSupportSerializerMixin
+from guardian.shortcuts import get_objects_for_user
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
 from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.mixins.models import AbstractFileModel
 from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceType
 from traffic_control.schema import IconsType, TrafficSignType
 from traffic_control.validators import validate_structured_content
@@ -227,3 +230,66 @@ class OwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Owner
         fields = "__all__"
+
+
+class PermissionFilteredRelatedField(serializers.Field):
+    """
+    A custom, read-only field that accepts a related manager,
+    filters its queryset based on `is_public` and user permissions,
+    and returns the serialized data.
+    """
+
+    def __init__(self, permission_codename: str, serializer_class, **kwargs):
+        """
+        :param permission_codename: The full permission string to check
+                                    (e.g., "app.view_modelfile").
+        :param serializer_class: The serializer class to use for the
+                                 related objects (e.g., MyFileSerializer).
+        """
+        self.permission_codename = permission_codename
+        self.serializer_class = serializer_class
+        kwargs.setdefault(
+            "help_text", "List of public and private attached files that the user has permission to view."
+        )
+        kwargs.setdefault("read_only", True)
+        super().__init__(**kwargs)
+
+    def to_representation(self, value):
+        """
+        Converts the 'value' (a queryset manager, e.g., barrier_plan.files)
+        into a primitive, serializable list of its filtered objects.
+        """
+        # Double-check we're dealing with a collection
+        if not isinstance(value, models.Manager):
+            raise TypeError(
+                f"The attribute for the field '{self.field_name}' on serializer '{self.parent.__class__.__name__}'"
+                f"is not a 'models.Manager' instance (basically a collection). It received a '{type(value).__name__}'"
+                f"instead."
+            )
+
+        if not issubclass(value.model, AbstractFileModel):
+            raise TypeError(
+                f"The model '{value.model.__name__}' for the field '{self.field_name}' on serializer"
+                f"'{self.parent.__class__.__name__}' does not inherit from 'AbstractFileModel'."
+            )
+
+        request = self.context.get("request")
+        public_objects_qs = value.filter(is_public=True)
+
+        if not request or not request.user or not request.user.is_authenticated:
+            final_queryset = public_objects_qs
+        else:
+            user = request.user
+            private_objects_qs = value.filter(is_public=False)
+            viewable_private_objects_qs = get_objects_for_user(
+                user,
+                self.permission_codename,
+                klass=private_objects_qs,
+                accept_global_perms=True,
+            )
+            final_queryset = public_objects_qs | viewable_private_objects_qs
+        return self.serializer_class(
+            final_queryset,
+            many=True,
+            context=self.context,
+        ).data
