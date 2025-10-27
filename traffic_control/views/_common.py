@@ -11,7 +11,7 @@ from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from traffic_control.mixins import SoftDeleteMixin, UserCreateMixin, UserUpdateMixin
+from traffic_control.mixins import AuditLoggingMixin
 from traffic_control.permissions import ObjectInsideOperationalAreaOrAnonReadOnly
 from traffic_control.schema import geo_format_parameter
 from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
@@ -25,7 +25,7 @@ def prefetch_replacements(queryset):
 
 
 @extend_schema(methods=("get",), parameters=[geo_format_parameter])
-class TrafficControlViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin, SoftDeleteMixin):
+class TrafficControlViewSet(ModelViewSet, AuditLoggingMixin):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["-created_at"]
@@ -187,7 +187,7 @@ class FileUploadViews(GenericViewSet):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class OperationViewSet(ModelViewSet, UserCreateMixin, UserUpdateMixin):
+class OperationViewSet(ModelViewSet, AuditLoggingMixin):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["-created_at"]
