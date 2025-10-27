@@ -2,6 +2,7 @@ import datetime
 import json
 
 import pytest
+from auditlog.models import LogEntry
 from django.urls import reverse
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
@@ -526,6 +527,13 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
             "road_name": "Test street 1",
         }
         response = self.client.post(reverse("v1:barrierreal-list"), data, format="json")
+        barrier_real = BarrierReal.objects.first()
+        logs = LogEntry.objects.get_for_object(barrier_real)
+        assert logs.count() == 1
+        log_entry = logs.latest()
+        assert log_entry.action == LogEntry.Action.CREATE
+        assert log_entry.actor == self.user
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(BarrierReal.objects.count(), 1)
         self.assertEqual(response.data.get("location"), data["location"])
@@ -595,6 +603,13 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         Ensure we can soft-delete one real barrier object.
         """
         barrier_real = self.__create_test_barrier_real()
+        logs = LogEntry.objects.get_for_object(barrier_real)
+        assert logs.count() == 1
+        log_entry = logs.latest()
+        assert log_entry.action == LogEntry.Action.CREATE
+        # actor is none as this is created by factory, not via API
+        assert log_entry.actor is None
+
         response = self.client.delete(
             reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
         )
@@ -605,6 +620,11 @@ class BarrierRealTests(TrafficControlAPIBaseTestCase):
         self.assertFalse(deleted_barrier_real.is_active)
         self.assertEqual(deleted_barrier_real.deleted_by, self.user)
         self.assertTrue(deleted_barrier_real.deleted_at)
+        logs = LogEntry.objects.get_for_object(deleted_barrier_real)
+        assert logs.count() == 2
+        log_entry = logs.latest()
+        assert log_entry.action == LogEntry.Action.UPDATE
+        assert log_entry.actor == self.user
 
     def test_get_deleted_barrier_real_returns_not_found(self):
         barrier_real = self.__create_test_barrier_real()

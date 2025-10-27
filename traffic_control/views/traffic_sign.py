@@ -13,7 +13,7 @@ from traffic_control.filters import (
     TrafficSignRealFilterSet,
     TrafficSignRealOperationFilterSet,
 )
-from traffic_control.mixins import ReplaceableModelMixin
+from traffic_control.mixins import AuditLoggingMixin, ReplaceableModelMixin
 from traffic_control.models import (
     TrafficControlDeviceType,
     TrafficSignPlanFile,
@@ -68,7 +68,7 @@ __all__ = (
     partial_update=extend_schema(summary="Partially update single TrafficSign Code"),
     destroy=extend_schema(summary="Delete single TrafficSign Code"),
 )
-class TrafficControlDeviceTypeViewSet(ModelViewSet):
+class TrafficControlDeviceTypeViewSet(ModelViewSet, AuditLoggingMixin):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = "__all__"
     ordering = ["code"]
