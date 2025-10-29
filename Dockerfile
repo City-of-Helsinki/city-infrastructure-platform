@@ -74,7 +74,6 @@ ENV COLLECT_STATIC=1
 
 COPY . /city-infrastructure-platform
 COPY --from=build /map-view/build/ /city-infrastructure-platform/map-view/build/
-RUN python svg_icons_to_png.py
 
 # OpenShift runs container in arbitrary user which belongs to group `root` (0)
 RUN chgrp -R 0 /city-infrastructure-platform && \
