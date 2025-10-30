@@ -81,11 +81,8 @@ class User(AbstractUser):
         """
         Check if user has permissions to edit given device based on ResponsibleEntity
         """
-        if self.has_bypass_responsible_entity_permission():
+        if self.has_bypass_responsible_entity_permission() or responsible_entity is None:
             return True
-
-        if responsible_entity is None:
-            return False
 
         return (
             responsible_entity.get_ancestors(include_self=True)
