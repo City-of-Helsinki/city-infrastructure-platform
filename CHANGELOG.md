@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.24.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.23.0...city-infrastructure-platform-v1.24.0) (2025-10-30)
+
+
+### Features
+
+* Add an arrow pointing to a features direction ([920e3af](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/920e3af89d813a2c59bd18c6346ee36e4348cb3b))
+* Add import export for TrafficControlDeviceTypeIcon ([292e27d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/292e27d96c900a04ced0fd87b6c5df85a4810550))
+* Add TrafficControlDeviceType and CityFurnitureDeviceType Icons to audit log ([ee36a5b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ee36a5b76a235ccb3b68c067d7067d7a7a5fe45e))
+* Remove icon field from city_furniture application ([5dbc022](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5dbc022169eb48f21737a2afd35b33c9c66334d3))
+* Remove icon field from traffic_control appilcation ([174d2cd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/174d2cd184709debce0a39094249b5d1b6ff53af))
+* Remove obsolete command for importing TrafficControlDeviceTypes ([12c2fae](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/12c2fae18fef3b7cf3bbabb6b784fe666f4e36d2))
+* Remove old obsolete management command for importing city_furniture_device_types ([92b64df](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/92b64df604fc4e6cd1ee3a86ae28bb90c9f46f7f))
+* Remove png generation from build phase ([0112a0c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0112a0ca4154ca01b4cf18fd8018b12f05c2cdff))
+* Remove svg icons from repository ([307acc3](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/307acc35fdd25c5ec27213da2d153ebc8d53080a))
+* Remove tests for updating device type icon field ([237d8e5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/237d8e59f97903e49abb8e397ede4243fd6331a7))
+
+
+### Bug Fixes
+
+* Audit log does not show user of the action if done via REST and with JWTToken authentication ([7f3f9ee](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7f3f9eec0a0baa4647114520e6591b8bae48fab6))
+* Changing objects responsible entity fix ([38014f1](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/38014f17816cbd8df72ed966d51ecca6d8d894ae))
+* Show error note in TrafficControlDeviceTypeIcon also in case with already existing icon ([dd5bd56](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/dd5bd568ac69f188668413c8ddcf39d2381ec27a))
+
 ## [1.23.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.22.0...city-infrastructure-platform-v1.23.0) (2025-10-13)
 
 
