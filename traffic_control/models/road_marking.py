@@ -30,6 +30,7 @@ from traffic_control.models.common import (
 )
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
+from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class LineDirection(models.TextChoices):
@@ -349,3 +350,7 @@ auditlog.register(RoadMarkingPlanFile)
 auditlog.register(RoadMarkingReal)
 auditlog.register(RoadMarkingRealFile)
 auditlog.register(RoadMarkingPlanReplacement)
+
+# Create signals for parent models
+create_auditlog_signals_for_parent_model(RoadMarkingRealFile, "road_marking_real")
+create_auditlog_signals_for_parent_model(RoadMarkingPlanFile, "road_marking_plan")

@@ -2,8 +2,10 @@ import logging
 import os
 
 import cairosvg
+from auditlog.models import LogEntry
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.db.models.signals import post_save, pre_save
 
 logger = logging.getLogger("django")
 
@@ -68,3 +70,64 @@ def delete_icon_files_on_row_delete(*, instance, png_folder):
 
     except Exception as e:
         logger.error(f"Error deleting files for instance {instance.pk}: {e}")
+
+
+def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
+    """
+    A factory that creates and connects pre_save and post_save signal handlers
+    for a child model to audit log changes on its parent model.
+
+    :param child_model: The child model class (e.g., AdditionalSignReal).
+    :param parent_field_name: The name of the ForeignKey field on the child model
+                              that points to the parent model (e.g., 'parent').
+    """
+    cache_attr = f"_old_{parent_field_name}"
+    child_model_name = child_model._meta.verbose_name.capitalize()
+
+    def cache_old_parent(sender, instance, **kwargs):
+        if instance.pk:
+            try:
+                old_instance = sender.objects.get(pk=instance.pk)
+                setattr(instance, cache_attr, getattr(old_instance, parent_field_name))
+            except sender.DoesNotExist:
+                setattr(instance, cache_attr, None)
+
+    def log_parent_change(sender, instance, created, **kwargs):
+        old_parent = getattr(instance, cache_attr, None)
+        new_parent = getattr(instance, parent_field_name)
+
+        # Log removal from the old parent if the parent has changed
+        if not created and old_parent and old_parent != new_parent:
+            message = f"{child_model_name} '{instance}' was removed."
+            LogEntry.objects.log_create(
+                instance=old_parent,
+                action=LogEntry.Action.UPDATE,
+                changes={"relations": [message, None]},
+            )
+
+        # Log addition or update to the new parent
+        if new_parent:
+            is_new_relation = created or old_parent != new_parent
+            if is_new_relation:
+                message = f"{child_model_name} '{instance}' was added."
+                changes = {"relations": [None, message]}
+            else:
+                message = f"{child_model_name} '{instance}' was updated."
+                changes = {"relations": [message, message]}
+
+            LogEntry.objects.log_create(
+                instance=new_parent,
+                action=LogEntry.Action.UPDATE,
+                changes=changes,
+            )
+
+    pre_save.connect(
+        cache_old_parent,
+        sender=child_model,
+        dispatch_uid=f"cache_old_parent_{child_model.__name__}_{parent_field_name}",
+    )
+    post_save.connect(
+        log_parent_change,
+        sender=child_model,
+        dispatch_uid=f"log_parent_change_{child_model.__name__}_{parent_field_name}",
+    )

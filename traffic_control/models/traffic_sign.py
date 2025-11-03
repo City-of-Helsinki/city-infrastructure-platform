@@ -42,6 +42,7 @@ from traffic_control.models.common import (
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import SoftDeleteQuerySet
+from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class LocationSpecifier(models.IntegerChoices):
@@ -428,3 +429,7 @@ auditlog.register(TrafficSignPlan)
 auditlog.register(TrafficSignPlanFile)
 auditlog.register(TrafficSignReal)
 auditlog.register(TrafficSignRealFile)
+
+# Create signals for parent models
+create_auditlog_signals_for_parent_model(TrafficSignRealFile, "traffic_sign_real")
+create_auditlog_signals_for_parent_model(TrafficSignPlanFile, "traffic_sign_plan")

@@ -21,6 +21,7 @@ from traffic_control.mixins.models import (
 from traffic_control.models.common import OperationBase, OperationType
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
+from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class ArrowDirection(models.IntegerChoices):
@@ -338,3 +339,7 @@ auditlog.register(FurnitureSignpostPlan)
 auditlog.register(FurnitureSignpostPlanFile)
 auditlog.register(FurnitureSignpostReal)
 auditlog.register(FurnitureSignpostRealFile)
+
+# Create signals for parent models
+create_auditlog_signals_for_parent_model(FurnitureSignpostPlanFile, "furniture_signpost_plan")
+create_auditlog_signals_for_parent_model(FurnitureSignpostRealFile, "furniture_signpost_real")
