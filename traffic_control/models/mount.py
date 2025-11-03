@@ -23,6 +23,7 @@ from traffic_control.mixins.models import (
 from traffic_control.models.common import OperationBase, OperationType, VERBOSE_NAME_NEW, VERBOSE_NAME_OLD
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
+from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class LocationSpecifier(models.IntegerChoices):
@@ -357,3 +358,7 @@ auditlog.register(MountPlanFile)
 auditlog.register(MountReal)
 auditlog.register(MountRealFile)
 auditlog.register(MountPlanReplacement)
+
+# Create signals for parent models
+create_auditlog_signals_for_parent_model(MountRealFile, "mount_real")
+create_auditlog_signals_for_parent_model(MountPlanFile, "mount_plan")

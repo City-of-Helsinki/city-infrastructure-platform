@@ -28,6 +28,7 @@ from traffic_control.models.common import (
     VERBOSE_NAME_OLD,
 )
 from traffic_control.models.plan import Plan
+from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class ConnectionType(models.IntegerChoices):
@@ -273,3 +274,7 @@ auditlog.register(BarrierPlanFile)
 auditlog.register(BarrierReal)
 auditlog.register(BarrierRealFile)
 auditlog.register(BarrierPlanReplacement)
+
+# Create signals for parent models
+create_auditlog_signals_for_parent_model(BarrierRealFile, "barrier_real")
+create_auditlog_signals_for_parent_model(BarrierPlanFile, "barrier_plan")

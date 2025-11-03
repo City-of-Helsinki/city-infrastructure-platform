@@ -32,6 +32,7 @@ from traffic_control.models.common import (
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
+from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 from traffic_control.validators import validate_structured_content
 
 
@@ -415,3 +416,10 @@ auditlog.register(AdditionalSignPlanFile)
 auditlog.register(AdditionalSignReal)
 auditlog.register(AdditionalSignRealFile)
 auditlog.register(AdditionalSignPlanReplacement)
+
+
+# Create signals for parent models
+create_auditlog_signals_for_parent_model(AdditionalSignRealFile, "additional_sign_real")
+create_auditlog_signals_for_parent_model(AdditionalSignPlanFile, "additional_sign_plan")
+create_auditlog_signals_for_parent_model(AdditionalSignReal, "parent")
+create_auditlog_signals_for_parent_model(AdditionalSignPlan, "parent")
