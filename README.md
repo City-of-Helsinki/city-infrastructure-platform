@@ -161,6 +161,8 @@ sudo -u postgres psql -h localhost -c "ALTER USER city-infrastructure-platform C
 Environment variables are used to customize configuration in `cityinfra/settings.py`. If you wish to override any
 settings, you can place them in a local `.env` file which will automatically be sourced when Django imports
 the settings file.
+Another way, easiest with Azurite emulation is to copy cityinfra/local_settings_example.py to cityinfra/local_settings.py and modify the settings there.
+Example already sets AZURE_BLOBSTORAGE settings to use Azurite emulation.
 
 ```
 # Use example configuration
@@ -177,6 +179,8 @@ python manage.py migrate
 # Run server (host defaults to 127.0.0.1 and port defaults to 8000)
 # (Requires that the database is up and running)
 python manage.py runserver
+# or with the local_settings
+python manage.py runserver --settings=cityinfra.local_settings
 ```
 
 #### Running the project - Docker services (without compose)
