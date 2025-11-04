@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-29 10:35+0300\n"
+"POT-Creation-Date: 2025-11-04 10:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,6 +216,15 @@ msgstr "Gränsstolpe"
 msgid "Bench"
 msgstr "Bänk"
 
+msgid "File"
+msgstr "Fil"
+
+msgid "City Furniture Device Type Icon"
+msgstr ""
+
+msgid "City Furniture Device Type Icons"
+msgstr ""
+
 msgid "Code"
 msgstr "Kod"
 
@@ -233,9 +242,6 @@ msgstr "Markdetaljer - funktion eller användningstyp"
 
 msgid "OGC CityGML City Furniture Function or Usage type"
 msgstr "Markdetaljer - funktion eller användningstyp"
-
-msgid "Icon"
-msgstr "Symbol"
 
 msgid "Icon of the actual device"
 msgstr "Ikon för egentlig anordning"
@@ -406,16 +412,6 @@ msgid ""
 "centimeters."
 msgstr "Skyltens höjd över marken i centimeter, mätt från den övre kanten."
 
-msgid "Order"
-msgstr "Ordning"
-
-msgid ""
-"The order of the sign in relation to the signs at the same point. Order from "
-"top to bottom, from left to right starting at 1."
-msgstr ""
-"Skyltens läge i förhållande till de övriga skyltar som ligger på samma punkt."
-"Ordning uppifrån och ner, från vänster till höger, med början nummer 1."
-
 msgid "Mount type"
 msgstr "Monteringstyp"
 
@@ -545,9 +541,6 @@ msgstr "Lokaliseringsmärke (implementeringsåtgärd)"
 msgid "Furniture Signpost Real operations"
 msgstr "Lokaliseringsmärke (implementeringsåtgärder)"
 
-msgid "File"
-msgstr "Fil"
-
 msgid "Furniture Signpost Plan File"
 msgstr "Lokaliseringsmärke (planfil)"
 
@@ -640,6 +633,9 @@ msgstr "Appnamn"
 
 msgid "Is basemap"
 msgstr "Grundkarta"
+
+msgid "Order"
+msgstr "Ordning"
 
 msgid "Filter fields"
 msgstr "Filtrera fält"
@@ -1006,6 +1002,15 @@ msgid ""
 msgstr ""
 "Att ändra platsen från kartan är inte tillåtet för geometrin "
 "'%(geometry_type)s'"
+
+msgid "Icon with name '{', '.join(existing_icons)}' already exists."
+msgstr ""
+
+msgid "Illegal file types: {', '.join(illegal_file_types)}"
+msgstr ""
+
+msgid "Virus scan failure: {get_error_details_message(virus_scan_errors)}"
+msgstr ""
 
 msgid "Barrier Plans"
 msgstr "Bom (planer)"
@@ -1456,6 +1461,12 @@ msgstr "Namn (en)"
 
 msgid "Owners"
 msgstr "Ägare"
+
+msgid "Traffic Control Device Type Icon"
+msgstr ""
+
+msgid "Traffic Control Device Type Icons"
+msgstr ""
 
 msgid "Standardised code of the device type."
 msgstr "Standardiserad kod för anordningstypen."
@@ -1981,6 +1992,12 @@ msgstr "Elektriskt underhåll"
 
 msgid "Organization in charge of electric maintenance of the device."
 msgstr "Organisation som ansvarar för elektriskt underhåll av anordningen."
+
+msgid "Double sided"
+msgstr ""
+
+msgid "Indicates if this object is double sided"
+msgstr ""
 
 msgid "Parent Signpost Plan"
 msgstr "Överordnad vägvisare (plan)"
