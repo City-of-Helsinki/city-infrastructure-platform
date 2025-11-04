@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-29 10:35+0300\n"
+"POT-Creation-Date: 2025-11-04 10:20+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -210,6 +210,15 @@ msgstr "Rajapyykki"
 msgid "Bench"
 msgstr "Penkki"
 
+msgid "File"
+msgstr "Tiedosto"
+
+msgid "City Furniture Device Type Icon"
+msgstr "Kaupunkikalusteen tyypin kuvake"
+
+msgid "City Furniture Device Type Icons"
+msgstr "Kaupunkikalusteiden tyyppien kuvakkeet"
+
 msgid "Code"
 msgstr "Koodi"
 
@@ -227,9 +236,6 @@ msgstr "Kaupunkikalusteen toiminnon tai käytön tyyppi"
 
 msgid "OGC CityGML City Furniture Function or Usage type"
 msgstr "OGC CityGML -kaupunkikalusteen toiminnon tai käytön tyyppi"
-
-msgid "Icon"
-msgstr "Kuvaustyyli"
 
 msgid "Icon of the actual device"
 msgstr "Varsinaisen laitteen kuvake"
@@ -400,16 +406,6 @@ msgid ""
 "centimeters."
 msgstr "Kilven korkeus maasta senttimetreinä alareunasta mitattuna."
 
-msgid "Order"
-msgstr "Järjestys"
-
-msgid ""
-"The order of the sign in relation to the signs at the same point. Order from "
-"top to bottom, from left to right starting at 1."
-msgstr ""
-"Kilven sijainti suhteessa muihin samassa pisteessä oleviin kilpiin. "
-"Järjestys ylhäältä alas, vasemmalta oikealle, alkaen numerosta 1."
-
 msgid "Mount type"
 msgstr "Kiinnityskohteen tyyppi"
 
@@ -537,9 +533,6 @@ msgstr "Kaupunkiopastetoteuman toimenpide"
 msgid "Furniture Signpost Real operations"
 msgstr "Kaupunkiopastetetuman toimenpiteet"
 
-msgid "File"
-msgstr "Tiedosto"
-
 msgid "Furniture Signpost Plan File"
 msgstr "Kaupunkiopasteen suunnitelman tiedosto"
 
@@ -633,6 +626,9 @@ msgstr "Sovelluksen nimi"
 msgid "Is basemap"
 msgstr "On pohjakartta"
 
+msgid "Order"
+msgstr "Järjestys"
+
 msgid "Filter fields"
 msgstr "Suodatettavat kentät"
 
@@ -646,7 +642,8 @@ msgid "Extra Feature Info"
 msgstr "Ominaisuuden lisätieto"
 
 msgid "Fields added here need to be included in the corresponding WFS Feature"
-msgstr "Tänne lisätyt kentät täytyvät olla mukana vastaavassa WFS ominaisuudessa"
+msgstr ""
+"Tänne lisätyt kentät täytyvät olla mukana vastaavassa WFS ominaisuudessa"
 
 msgid "Layer"
 msgstr "Taso"
@@ -998,6 +995,15 @@ msgid ""
 msgstr ""
 "Sijainnin muuttaminen kartalta ei ole sallittya geometrialle "
 "'%(geometry_type)s'"
+
+msgid "Icon with name '{', '.join(existing_icons)}' already exists."
+msgstr ""
+
+msgid "Illegal file types: {', '.join(illegal_file_types)}"
+msgstr ""
+
+msgid "Virus scan failure: {get_error_details_message(virus_scan_errors)}"
+msgstr ""
 
 msgid "Barrier Plans"
 msgstr "Ajoeste (suunnitelmat)"
@@ -1447,6 +1453,12 @@ msgstr "Nimi (en)"
 
 msgid "Owners"
 msgstr "Omistajat"
+
+msgid "Traffic Control Device Type Icon"
+msgstr "Liikenteenohjauslaitteen tyypin kuvake"
+
+msgid "Traffic Control Device Type Icons"
+msgstr "Liikenteenohjauslaitteiden tyyppien kuvakkeet"
 
 msgid "Standardised code of the device type."
 msgstr "Laitetyypin standardoitu koodi."
@@ -1968,6 +1980,12 @@ msgstr "Sähköisen opastimen ylläpitäjä"
 
 msgid "Organization in charge of electric maintenance of the device."
 msgstr "Laitteen sähköisestä ylläpidosta vastaava organisaatio."
+
+msgid "Double sided"
+msgstr ""
+
+msgid "Indicates if this object is double sided"
+msgstr ""
 
 msgid "Parent Signpost Plan"
 msgstr "Isäntäopaste (suunnitelma)"
