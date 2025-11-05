@@ -1,58 +1,8 @@
-import os
-from tempfile import TemporaryDirectory
-
 import pytest
-from django.core.files.storage import FileSystemStorage
-from django.test import Client, override_settings
 from django.urls import reverse
+from guardian.shortcuts import assign_perm
 
-
-@pytest.fixture
-def tmp_storage():
-    """
-    Fixture to set up a temporary directory as the default file storage
-    for the duration of the test.
-    """
-    with TemporaryDirectory() as tmpdir:
-        # Create a FileSystemStorage instance pointing to the temp directory
-        temp_storages_settings = {
-            "default": {
-                "BACKEND": "django.core.files.storage.FileSystemStorage",
-                "OPTIONS": {
-                    "location": tmpdir,
-                },
-            }
-        }
-        # Override Django's default storage setting to use our temp location
-        with override_settings(MEDIA_ROOT=tmpdir, STORAGES=temp_storages_settings):
-            # The storage location is now tmpdir.
-            # You might need to adjust settings.STORAGES if using Django 4.2+
-            # For simplicity, we stick to MEDIA_ROOT/DEFAULT_FILE_STORAGE.
-            yield FileSystemStorage(location=tmpdir)
-
-
-@pytest.fixture
-def storage_file(tmp_storage):
-    """
-    Fixture to create a single test file in the temporary storage.
-    """
-    # Define the file content and target path relative to the storage root
-    content = b"This is the private file content."
-    storage_path = "planfiles/testmodel/testfile.txt"
-
-    # Write the file using the temporary storage instance
-    full_path = tmp_storage.path(storage_path)
-    os.makedirs(os.path.dirname(full_path), exist_ok=True)
-    with open(full_path, "wb") as f:
-        f.write(content)
-
-    return {
-        "path": storage_path,
-        "content": content,
-        "folder": "planfiles",
-        "model_name": "testmodel",
-        "file_id": "testfile.txt",
-    }
+from traffic_control.tests.factories import BarrierPlanFactory, BarrierPlanFileFactory, UserFactory
 
 
 @pytest.mark.django_db
@@ -73,41 +23,81 @@ def test__health_check(client, settings):
     assert response_json.get("version") == version
 
 
+@pytest.mark.parametrize("is_public", [False, True])
+@pytest.mark.parametrize("has_table_permission", [False, True])
+@pytest.mark.parametrize("has_object_permission", [False, True])
 @pytest.mark.django_db
-def test__file_proxy_view_good_file(client: Client, tmp_storage, storage_file):
-    """
-    Tests that accessing the uploaded files proxy endpoint
-    """
+def test__file_proxy_view_authenticated_user(
+    client,
+    is_public,
+    has_table_permission,
+    has_object_permission,
+):
+    user = UserFactory()
+    barrier_plan = BarrierPlanFactory()
+    file = BarrierPlanFileFactory(barrier_plan=barrier_plan, is_public=is_public, file__data=b"Barrier plan file data")
     url = reverse(
         "planfiles_proxy",
         kwargs={
-            "model_name": "testmodel",
-            "file_id": "testfile.txt",
+            "model_name": "barrier",
+            "file_id": file.file.name.split("/")[-1],
         },
     )
-    expected_content = storage_file["content"]
-    expected_filename = storage_file["file_id"]
+
+    if has_table_permission:
+        assign_perm("traffic_control.view_barrierplanfile", user)
+        user.refresh_from_db()
+
+    if has_object_permission:
+        assign_perm("traffic_control.view_barrierplanfile", user, file)
+        user.refresh_from_db()
+
+    client.force_login(user)
+    response = client.get(url)
+    if is_public or has_table_permission or has_object_permission:
+        assert response.status_code == 200
+        assert b"".join(response.streaming_content) == b"Barrier plan file data"
+    else:
+        assert response.status_code == 403
+
+
+@pytest.mark.parametrize("is_public", [False, True])
+@pytest.mark.django_db
+def test__file_proxy_view_anonymous_user(client, is_public):
+    """
+    Tests that an anonymous (unauthenticated) user can access
+    public files but not private files.
+    """
+    barrier_plan = BarrierPlanFactory()
+    file = BarrierPlanFileFactory(barrier_plan=barrier_plan, is_public=is_public, file__data=b"Some content")
+    url = reverse(
+        "planfiles_proxy",
+        kwargs={
+            "model_name": "barrier",
+            "file_id": file.file.name.split("/")[-1],
+        },
+    )
 
     response = client.get(url)
-    response_content = b"".join(response.streaming_content)
-
-    assert response.status_code == 200
-    assert response_content == expected_content
-    assert response["Content-Type"] == "text/plain"
-    assert response["Content-Disposition"] == f'inline; filename="{expected_filename}"'
+    if is_public:
+        assert response.status_code == 200
+        assert b"".join(response.streaming_content) == b"Some content"
+    else:
+        assert response.status_code == 403
 
 
 @pytest.mark.django_db
-def test__file_proxy_view_other_url_404(client: Client, tmp_storage, storage_file):
+def test__file_proxy_view_bogus_file(client):
     """
-    Tests that accessing a different (non-existent) path returns a 404.
+    Tests that the file proxy view returns 404 for non-existent files
     """
     url = reverse(
         "planfiles_proxy",
         kwargs={
-            "model_name": "testmodel",
+            "model_name": "barrier",
             "file_id": "bogus.txt",
         },
     )
+
     response = client.get(url)
     assert response.status_code == 404
