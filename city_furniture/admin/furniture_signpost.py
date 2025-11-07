@@ -33,6 +33,7 @@ from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
+    PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -86,6 +87,7 @@ class AbstractFurnitureSignpostAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
@@ -107,7 +109,7 @@ class AbstractFurnitureSignpostAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "location_name_fi",
         "lifecycle",
     )

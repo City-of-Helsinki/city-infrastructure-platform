@@ -32,6 +32,7 @@ from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
+    PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -126,6 +127,7 @@ class AdditionalSignPlanAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     resource_class = AdditionalSignPlanResource
     extra_export_resource_classes = [AdditionalSignPlanToRealTemplateResource]
@@ -184,7 +186,7 @@ class AdditionalSignPlanAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "lifecycle",
         "location",
         "is_replaced_as_str",
@@ -232,6 +234,7 @@ class AdditionalSignRealAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     plan_model_field_name = "additional_sign_plan"
     resource_class = AdditionalSignRealResource
@@ -322,7 +325,7 @@ class AdditionalSignRealAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "additional_sign_plan",
         "legacy_code",
         "installation_id",

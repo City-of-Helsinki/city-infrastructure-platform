@@ -1,3 +1,4 @@
+import os
 import uuid
 from typing import Optional
 
@@ -13,6 +14,7 @@ from enumfields import EnumField, EnumIntegerField
 from city_furniture.enums import CityFurnitureClassType, CityFurnitureDeviceTypeTargetModel, CityFurnitureFunctionType
 from cityinfra import settings
 from traffic_control.mixins.models import AbstractFileModel, SourceControlModel
+from traffic_control.models.common import AbstractDeviceTypeMixin
 
 
 class CityFurnitureDeviceTypeQuerySet(models.QuerySet):
@@ -49,11 +51,14 @@ class CityFurnitureDeviceTypeIcon(AbstractFileModel):
 auditlog.register(CityFurnitureDeviceTypeIcon)
 
 
-class CityFurnitureDeviceType(models.Model):
+class CityFurnitureDeviceType(models.Model, AbstractDeviceTypeMixin):
     """
     A separate model from TrafficControlDeviceType is used, as these will contain overlapping device codes that
     come from two separate external sources.
     """
+
+    SVG_ICON_DESTINATION = settings.CITY_FURNITURE_DEVICE_TYPE_SVG_ICON_DESTINATION
+    PNG_ICON_DESTINATION = settings.CITY_FURNITURE_DEVICE_TYPE_PNG_ICON_DESTINATION
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     code = models.CharField(
@@ -124,6 +129,11 @@ class CityFurnitureDeviceType(models.Model):
 
     def __str__(self) -> str:
         return f"{self.code} - {self.description_fi}"
+
+    @property
+    def icon_name(self):
+        """Return just the name of the file without full path"""
+        return os.path.basename(self.icon_file.file.name) if self.icon_file else ""
 
     def save(self, validate_target_model_change=True, *args, **kwargs) -> None:
         if self.pk:

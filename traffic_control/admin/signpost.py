@@ -31,6 +31,7 @@ from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
+    PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -108,6 +109,7 @@ class SignpostPlanAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     resource_class = SignpostPlanResource
     extra_export_resource_classes = [SignpostPlanToRealTemplateResource]
@@ -164,7 +166,7 @@ class SignpostPlanAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "txt",
         "lifecycle",
         "location",
@@ -224,6 +226,7 @@ class SignpostRealAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     plan_model_field_name = "signpost_plan"
     resource_class = SignpostRealResource
@@ -298,7 +301,7 @@ class SignpostRealAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "txt",
         "lifecycle",
         "location",

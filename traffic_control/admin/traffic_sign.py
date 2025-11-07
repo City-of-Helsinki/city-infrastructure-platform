@@ -44,6 +44,9 @@ from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
+    PreviewDeviceTypeRelationMixin,
+    PreviewIconFileRelationMixin,
+    PreviewImageFileFieldMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -117,10 +120,11 @@ class TrafficSignTypeListFilter(SimpleListFilter):
 
 
 @admin.register(TrafficControlDeviceTypeIcon)
-class TrafficControlDeviceTypeIconAdmin(CustomImportExportActionModelAdmin):
+class TrafficControlDeviceTypeIconAdmin(CustomImportExportActionModelAdmin, PreviewImageFileFieldMixin):
     resource_class = TrafficControlDeviceTypeIconResource
     form = TrafficControlDeviceTypeIconForm
-    list_display = ("id", "file")
+    list_display = ("id", "image_file_preview", "file")
+    readonly_fields = ("image_file_preview",)
     search_fields = ("id", "file")
 
 
@@ -129,11 +133,13 @@ class TrafficControlDeviceTypeAdmin(
     EnumChoiceValueDisplayAdminMixin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewIconFileRelationMixin,
 ):
     form = TrafficControlDeviceTypeForm
     resource_class = TrafficControlDeviceTypeResource
     list_display = (
         "code",
+        "icon_preview",
         "icon_file",
         "description",
         "value",
@@ -190,6 +196,7 @@ class TrafficSignPlanAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     resource_class = TrafficSignPlanResource
     extra_export_resource_classes = [TrafficSignPlanToRealTemplateResource]
@@ -255,7 +262,7 @@ class TrafficSignPlanAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "value",
         "lifecycle",
         "location",
@@ -322,6 +329,7 @@ class TrafficSignRealAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     plan_model_field_name = "traffic_sign_plan"
     resource_class = TrafficSignRealResource
@@ -408,7 +416,7 @@ class TrafficSignRealAdmin(
     list_display = (
         "id",
         "traffic_sign_plan",
-        "device_type",
+        "device_type_preview",
         "legacy_code",
         "value",
         "installation_id",

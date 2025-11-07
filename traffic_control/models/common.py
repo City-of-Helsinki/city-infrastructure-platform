@@ -105,7 +105,38 @@ class TrafficControlDeviceTypeIcon(AbstractFileModel):
 auditlog.register(TrafficControlDeviceTypeIcon)
 
 
-class TrafficControlDeviceType(models.Model):
+class AbstractDeviceTypeMixin:
+    SVG_ICON_DESTINATION = None
+    PNG_ICON_DESTINATION = None
+
+    def get_icons(self):
+        """
+        Get icon file paths for each type and size. File paths are based on the `icon` field,
+        and it is not guaranteed that the file really exists.
+        """
+        if not self.icon_file:
+            return None
+
+        svg_name = self.icon_name
+        png_name = svg_name.replace("svg", "png")
+        png_sizes = [32, 64, 128, 256]
+        try:
+            base_url = get_azure_storage_base_url(settings.STORAGES["icons"]["OPTIONS"])
+        except KeyError as e:
+            # this is a misconfiguration
+            logger.warning(f"icon base url could not be fetched: {e}")
+            return None
+        icons = {"svg": f"{base_url}{self.SVG_ICON_DESTINATION}{svg_name}"}
+        for size in png_sizes:
+            icons[f"png_{size}"] = f"{base_url}{self.PNG_ICON_DESTINATION}{size}/{png_name}"
+
+        return icons
+
+
+class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
+    SVG_ICON_DESTINATION = settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION
+    PNG_ICON_DESTINATION = settings.TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION
+
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     code = models.CharField(
         _("Code"),
@@ -185,31 +216,6 @@ class TrafficControlDeviceType(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.code, self.description)
-
-    def get_icons(self):
-        """
-        Get icon file paths for each type and size. File paths are based on the `icon` field,
-        and it is not guaranteed that the file really exists.
-        """
-        if not self.icon_file:
-            return None
-
-        svg_name = self.icon_name
-        png_name = svg_name.replace("svg", "png")
-        png_sizes = [32, 64, 128, 256]
-        try:
-            base_url = get_azure_storage_base_url(settings.STORAGES["icons"]["OPTIONS"])
-        except KeyError as e:
-            # this is a misconfiguration
-            logger.warning(f"icon base url could not be fetched: {e}")
-            return None
-        icons = {"svg": f"{base_url}{settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION}{svg_name}"}
-        for size in png_sizes:
-            icons[
-                f"png_{size}"
-            ] = f"{base_url}{settings.TRAFFIC_CONTROL_DEVICE_TYPE_PNG_ICON_DESTINATION}{size}/{png_name}"
-
-        return icons
 
     @property
     def traffic_sign_type(self):

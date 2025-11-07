@@ -1,5 +1,6 @@
 from django.contrib.admin import SimpleListFilter
 from django.contrib.gis.forms import OSMWidget
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.models.plan import Plan
@@ -34,6 +35,61 @@ class Geometry3DFieldAdminMixin:
                     temp_list.remove("z_coord")
                     fields["fields"] = temp_list
         return fieldsets
+
+
+class PreviewImageFileFieldMixin:
+    """
+    Use this if your admin class is for a model that has a file field. Remember to add file_preview to the list_display
+    field on your admin class. Assumes that the file is an image.
+    """
+
+    @staticmethod
+    def image_file_preview(obj):
+        if obj.file and obj.file.url:
+            icon_url = obj.file.url
+            return format_html('<img src="{url}" width="50" height="50" />', url=icon_url)
+        else:
+            return None
+
+
+class PreviewIconFileRelationMixin:
+    """
+    Use this if your admin class is for a model that has an icon_file field. Remember to add icon_preview to the
+    list_display field on your admin class.
+    """
+
+    @staticmethod
+    def icon_preview(obj):
+        if obj.icon_file and obj.icon_file.file and obj.icon_file.file.url:
+            icon_url = obj.icon_file.file.url
+            return format_html('<img src="{url}" width="50" height="50" />', url=icon_url)
+        else:
+            return None
+
+
+class PreviewDeviceTypeRelationMixin:
+    """
+    Use this if your admin class is for a model that has a device_type field. Remember to add device_type_preview to the
+    list_display field on your admin class.
+    """
+
+    @staticmethod
+    def device_type_preview(obj):
+        device_type = obj.device_type
+        if device_type and device_type.icon_file and device_type.icon_file.file and device_type.icon_file.file.url:
+            icon_url = device_type.icon_file.file.url
+            return format_html(
+                """
+            <div>
+                <img src="{icon_url}" width="50" height="50" />
+                <span>{name}</span>
+            </div>
+            """,
+                icon_url=icon_url,
+                name=str(device_type),
+            )
+        else:
+            return device_type
 
 
 class UserStampedAdminMixin:
