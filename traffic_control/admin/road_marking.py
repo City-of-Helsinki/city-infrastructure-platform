@@ -31,6 +31,7 @@ from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
+    PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -114,6 +115,7 @@ class RoadMarkingPlanAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     resource_class = RoadMarkingPlanResource
     extra_export_resource_classes = [RoadMarkingPlanToRealTemplateResource]
@@ -185,7 +187,7 @@ class RoadMarkingPlanAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "lifecycle",
         "location",
         "is_replaced_as_str",
@@ -244,6 +246,7 @@ class RoadMarkingRealAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     plan_model_field_name = "road_marking_plan"
     resource_class = RoadMarkingRealResource
@@ -321,7 +324,7 @@ class RoadMarkingRealAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "lifecycle",
         "location",
         "installation_date",

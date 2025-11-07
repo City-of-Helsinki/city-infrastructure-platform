@@ -54,23 +54,22 @@ class AbstractAdminDeviceTypeIconSelectWidget(Select):
     """
 
     template_name = "admin/traffic_control/widgets/traffic_sign_icon_select.html"
-    Model = None
+    device_type_icon_model = None
 
     class Media:
         css = {"all": ("traffic_control/css/traffic_sign_icon_select.css",)}
         js = ("traffic_control/js/traffic_sign_icon_select.js",)
 
     def __init__(self, *args, **kwargs):
-        if self.Model is None:
-            raise NotImplementedError("Inherited class is missing Model declaration")
-
         super().__init__(*args, **kwargs)
         self.icon_url_mapping = None
+        if self.device_type_icon_model is None:
+            raise NotImplementedError("Inherited class is missing Model declaration")
 
     def get_icon_url(self, value):
         if not self.icon_url_mapping:
             self.icon_url_mapping = {}
-            icons = self.Model.objects.all().only("id", "file")
+            icons = self.device_type_icon_model.objects.all().only("id", "file")
             for icon in icons:
                 self.icon_url_mapping[icon.id] = icon.file.url
         return self.icon_url_mapping.get(value, "")
@@ -89,16 +88,17 @@ class AbstractAdminDeviceTypeIconSelectWidget(Select):
 
 
 class AdminTrafficControlDeviceTypeIconSelectWidget(AbstractAdminDeviceTypeIconSelectWidget):
-    Model = TrafficControlDeviceTypeIcon
+    device_type_icon_model = TrafficControlDeviceTypeIcon
 
 
-class AdminTrafficSignIconSelectWidget(Select):
+class AbstractAdminDeviceTypeSelectWithIcon(Select):
     """
     Widget that show a traffic sign icon representing the selected device type
     next to the select input
     """
 
     template_name = "admin/traffic_control/widgets/traffic_sign_icon_select.html"
+    device_type_model = None
 
     class Media:
         css = {"all": ("traffic_control/css/traffic_sign_icon_select.css",)}
@@ -107,11 +107,13 @@ class AdminTrafficSignIconSelectWidget(Select):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.icon_url_mapping = None
+        if not self.device_type_model:
+            raise NotImplementedError
 
     def get_icon_url(self, value):
         if not self.icon_url_mapping:
             self.icon_url_mapping = {}
-            device_types = TrafficControlDeviceType.objects.all().only("id", "icon_file")
+            device_types = self.device_type_model.objects.all().only("id", "icon_file")
             for device_type in device_types:
                 icons = device_type.get_icons()
                 if icons:
@@ -129,6 +131,10 @@ class AdminTrafficSignIconSelectWidget(Select):
         option = super().create_option(name, value, *args, **kwargs)
         option["attrs"]["icon-url"] = self.get_icon_url(value)
         return option
+
+
+class AdminTrafficDeviceTypeSelectWithIcon(AbstractAdminDeviceTypeSelectWithIcon):
+    device_type_model = TrafficControlDeviceType
 
 
 class AdminStructuredContentWidget(forms.Widget):
@@ -312,7 +318,7 @@ class AdditionalSignRealModelForm(StructuredContentModelFormMixin, SRIDBoundGeom
         model = AdditionalSignReal
         fields = "__all__"
         widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget,
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
             "content_s": AdminStructuredContentWidget,
         }
 
@@ -322,7 +328,7 @@ class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, SRIDBoundGeom
         model = AdditionalSignPlan
         fields = "__all__"
         widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget,
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
             "content_s": AdminStructuredContentWidget,
         }
 
@@ -331,12 +337,18 @@ class BarrierPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = BarrierPlan
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
+        }
 
 
 class BarrierRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = BarrierReal
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
+        }
 
 
 class CoverageAreaModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
@@ -373,24 +385,36 @@ class RoadMarkingPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = RoadMarkingPlan
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
+        }
 
 
 class RoadMarkingRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = RoadMarkingReal
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
+        }
 
 
 class SignpostPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = SignpostPlan
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
+        }
 
 
 class SignpostRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = SignpostReal
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
+        }
 
 
 class TrafficControlDeviceTypeForm(forms.ModelForm):
@@ -437,12 +461,18 @@ class TrafficLightPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm)
     class Meta:
         model = TrafficLightPlan
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
+        }
 
 
 class TrafficLightRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = TrafficLightReal
         fields = "__all__"
+        widgets = {
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
+        }
 
 
 class TrafficSignPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
@@ -450,7 +480,7 @@ class TrafficSignPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
         model = TrafficSignPlan
         fields = "__all__"
         widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget,
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
         }
 
 
@@ -459,7 +489,7 @@ class TrafficSignRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
         model = TrafficSignReal
         fields = "__all__"
         widgets = {
-            "device_type": AdminTrafficSignIconSelectWidget,
+            "device_type": AdminTrafficDeviceTypeSelectWithIcon,
         }
 
 

@@ -31,6 +31,7 @@ from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
+    PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
     UserStampedAdminMixin,
@@ -107,6 +108,7 @@ class TrafficLightPlanAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     resource_class = TrafficLightPlanResource
     extra_export_resource_classes = [TrafficLightPlanToRealTemplateResource]
@@ -160,7 +162,7 @@ class TrafficLightPlanAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "txt",
         "lifecycle",
         "location",
@@ -216,6 +218,7 @@ class TrafficLightRealAdmin(
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
+    PreviewDeviceTypeRelationMixin,
 ):
     plan_model_field_name = "traffic_light_plan"
     resource_class = TrafficLightRealResource
@@ -273,7 +276,7 @@ class TrafficLightRealAdmin(
     )
     list_display = (
         "id",
-        "device_type",
+        "device_type_preview",
         "txt",
         "lifecycle",
         "location",

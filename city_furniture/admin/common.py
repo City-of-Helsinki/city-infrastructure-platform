@@ -8,19 +8,28 @@ from city_furniture.models.common import (
     CityFurnitureTarget,
 )
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
-from traffic_control.mixins import EnumChoiceValueDisplayAdminMixin
+from traffic_control.mixins import (
+    EnumChoiceValueDisplayAdminMixin,
+    PreviewIconFileRelationMixin,
+    PreviewImageFileFieldMixin,
+)
 
 __all__ = ("CityFurnitureDeviceTypeAdmin",)
 
 
 @admin.register(CityFurnitureDeviceType)
-class CityFurnitureDeviceTypeAdmin(EnumChoiceValueDisplayAdminMixin, AuditLogHistoryAdmin):
+class CityFurnitureDeviceTypeAdmin(
+    EnumChoiceValueDisplayAdminMixin,
+    AuditLogHistoryAdmin,
+    PreviewIconFileRelationMixin,
+):
     form = CityFurnitureDeviceTypeForm
     list_display = (
         "id",
         "code",
         "class_type",
         "function_type",
+        "icon_preview",
         "icon_file",
         "description_fi",
         "size",
@@ -59,7 +68,8 @@ class CityFurnitureTargetAdmin(AuditLogHistoryAdmin):
 
 
 @admin.register(CityFurnitureDeviceTypeIcon)
-class CityFurnitureDeviceTypeIconAdmin(admin.ModelAdmin):
+class CityFurnitureDeviceTypeIconAdmin(admin.ModelAdmin, PreviewImageFileFieldMixin):
     form = CityFurnitureDeviceTypeIconForm
-    list_display = ("id", "file")
+    list_display = ("id", "image_file_preview", "file")
+    readonly_fields = ("image_file_preview",)
     search_fields = ("id", "file")
