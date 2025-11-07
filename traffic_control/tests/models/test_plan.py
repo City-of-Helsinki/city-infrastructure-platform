@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
@@ -12,6 +14,7 @@ from traffic_control.tests.factories import (
     get_signpost_plan,
     get_traffic_light_plan,
     get_traffic_sign_plan,
+    PlanFactory,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
 
@@ -301,3 +304,38 @@ def test__plan__location_update_when_related_object_is_deleted(factory, derive_l
         assert plan.location is None, "Expected empty plan location to be None"
     else:
         assert plan.location == test_multipolygon, "Expected plan location to be unchanged"
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "factory",
+    (
+        AdditionalSignPlanFactory,
+        get_road_marking_plan,
+        get_signpost_plan,
+        get_traffic_sign_plan,
+    ),
+)
+def test_plan_decision_date_change_updates_related_devices_validity_period(factory):
+    """
+    Verify that changing the decision_date of a Plan and saving it
+    updates the validity_period_start of its related device plans.
+    Parmeterized to test multiple device plan factories,
+     only the ones that are derived from ValidityPeriodModel are included.
+    """
+    # 1. Create a plan with an initial decision date
+    plan = PlanFactory(decision_date=date(2025, 1, 1))
+
+    # 2. Create a related device plan. Its validity_period_start should be
+    # automatically set to the plan's decision_date on its first save.
+    device_plan = factory(plan=plan)
+    assert device_plan.validity_period_start == date(2025, 1, 1)
+
+    # 3. Change the plan's decision date and save it
+    new_decision_date = date(2025, 6, 15)
+    plan.decision_date = new_decision_date
+    plan.save()
+
+    # 4. Refresh the device plan from the database and assert its validity period was updated
+    device_plan.refresh_from_db()
+    assert device_plan.validity_period_start == new_decision_date
