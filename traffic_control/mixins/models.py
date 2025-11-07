@@ -274,3 +274,10 @@ class ValidityPeriodModel(models.Model):
 
     class Meta:
         abstract = True
+
+    def save(self, *args, **kwargs):
+        """Always set validity_period_start to plan's decision_date on save if plan exists and dates differ."""
+        plan_decision_date = self.plan.decision_date if hasattr(self, "plan") and self.plan else None
+        if plan_decision_date and plan_decision_date is not self.validity_period_start:
+            self.validity_period_start = plan_decision_date
+        super().save(*args, **kwargs)
