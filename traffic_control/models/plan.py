@@ -8,6 +8,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.geometry_utils import get_3d_geometry
@@ -113,7 +114,53 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
     def save(self, *args, **kwargs):
         # Make drawing numbers a unique sorted list
         self.drawing_numbers = sorted(set(self.drawing_numbers or []))
-        return super().save(*args, **kwargs)
+
+        # Check if decision_date has changed on an existing object
+        is_creating = self._state.adding
+        original_decision_date = None
+        if not is_creating:
+            # Store original decision_date from memory if available, otherwise fetch
+            if hasattr(self, "_loaded_values") and "decision_date" in self._loaded_values:
+                original_decision_date = self._loaded_values["decision_date"]
+            else:
+                # As a fallback, fetch from DB if not already loaded
+                original_decision_date = Plan.objects.get(pk=self.pk).decision_date
+
+        super().save(*args, **kwargs)
+
+        decision_date_changed = not is_creating and original_decision_date != self.decision_date
+        if decision_date_changed:
+            self._update_related_device_validity_periods()
+
+    @transaction.atomic
+    def _update_related_device_validity_periods(self):
+        """
+        Update the validity_period_start of all related device plans
+        to match this plan's decision_date.
+        """
+        related_devices = self._get_related_device_plans()
+        for device in related_devices:
+            # This assumes device models have a 'validity_period_start' field
+            if hasattr(device, "validity_period_start"):
+                device.validity_period_start = self.decision_date
+                device.save(update_fields=["validity_period_start"])
+
+    def _get_related_device_plans(self):
+        """
+        Get a list of all device plan objects related to this plan instance.
+        """
+        return list(
+            chain(
+                self.barrier_plans.all(),
+                self.mount_plans.all(),
+                self.road_marking_plans.all(),
+                self.signpost_plans.all(),
+                self.traffic_light_plans.all(),
+                self.traffic_sign_plans.all(),
+                self.additional_sign_plans.all(),
+                self.furniture_signpost_plans.all(),
+            )
+        )
 
     def _get_related_locations(self) -> List[Point]:
         """
