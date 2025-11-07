@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 from auditlog.models import LogEntry
 from django.conf import settings
@@ -11,6 +13,7 @@ from django.urls import reverse
 from city_furniture.tests.factories import get_furniture_signpost_plan
 from traffic_control.forms import PlanModelForm
 from traffic_control.geometry_utils import get_z_for_polygon
+from traffic_control.mixins.models import ValidityPeriodModel
 from traffic_control.models import Plan
 from traffic_control.tests.factories import (
     AdditionalSignPlanFactory,
@@ -172,6 +175,57 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
     assert plan.traffic_sign_plans.count() == 0
     assert plan.additional_sign_plans.count() == 0
     assert plan.furniture_signpost_plans.count() == 0
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "factory, field_name",
+    (
+        (get_barrier_plan, "barrier_plans"),
+        (get_mount_plan, "mount_plans"),
+        (get_road_marking_plan, "road_marking_plans"),
+        (get_signpost_plan, "signpost_plans"),
+        (get_traffic_light_plan, "traffic_light_plans"),
+        (get_traffic_sign_plan, "traffic_sign_plans"),
+        (AdditionalSignPlanFactory, "additional_sign_plans"),
+        (get_furniture_signpost_plan, "furniture_signpost_plans"),
+    ),
+)
+def test_plan_relation_admin_view_updates_validity_period(admin_client, factory, field_name):
+    """
+    Verify that associating a device plan with a Plan via the admin view
+    correctly updates the device's validity_period_start.
+    This is because the view iterates and saves each object, triggering the
+    ValidityPeriodModel's save method.
+    """
+    # 1. Create a plan with a specific decision date
+    plan = PlanFactory(decision_date=date(2025, 10, 15))
+
+    # 2. Create a device plan, which should not have a validity period start date yet
+    device_plan = factory(plan=None)
+    assert device_plan.validity_period_start is None
+
+    # 3. Use the admin view to associate the device with the plan
+    url = reverse("admin:traffic_control_plan_set-plans", kwargs={"object_id": plan.pk})
+    post_data = {
+        "barrier_plans": [],
+        "mount_plans": [],
+        "road_marking_plans": [],
+        "signpost_plans": [],
+        "traffic_light_plans": [],
+        "traffic_sign_plans": [],
+        "additional_sign_plans": [],
+        "furniture_signpost_plans": [],
+        field_name: [device_plan.pk],  # Add the device to the plan
+    }
+    response = admin_client.post(url, data=post_data)
+    assert response.status_code == 200
+
+    # 4. Refresh the device from the DB and assert its validity period is now set
+    device_plan.refresh_from_db()
+    assert device_plan.plan == plan
+    if isinstance(device_plan, ValidityPeriodModel):
+        assert device_plan.validity_period_start == plan.decision_date
 
 
 @pytest.mark.django_db
