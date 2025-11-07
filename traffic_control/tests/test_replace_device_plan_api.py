@@ -1,9 +1,11 @@
+from datetime import date, timedelta
 from uuid import UUID, uuid4
 
 import pytest
 from django.urls import reverse
 from rest_framework import status
 
+from traffic_control.mixins.models import ValidityPeriodModel
 from traffic_control.models import (
     AdditionalSignPlan,
     BarrierPlan,
@@ -31,6 +33,7 @@ from traffic_control.tests.factories import (
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
+    PlanFactory,
     TrafficSignPlanFactory,
 )
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3_3d, test_point_3d, test_point_5_3d
@@ -140,10 +143,15 @@ def test__device_plan_replace__create__old_is_marked_replaced(model, factory, ur
     client = get_api_client(user=get_user(admin=True))
     old_device = factory()
 
+    # Set a decision_date for the new device's plan
+    decision_date = date(2025, 11, 6)
+    plan = PlanFactory(decision_date=decision_date)
+
     data = {
         "replaces": old_device.id,
         "location": test_point_3d.ewkt,
         "owner": get_owner().id,
+        "plan": plan.id,
     }
     if model == BarrierPlan:
         data["road_name"] = "Road name"
@@ -152,6 +160,8 @@ def test__device_plan_replace__create__old_is_marked_replaced(model, factory, ur
 
     response = client.post(reverse(f"v1:{url_name}-list"), data, format="json")
     old_device.refresh_from_db()
+    new_device_id = response.json().get("id")
+    new_device = model.objects.get(id=new_device_id)
 
     assert response.status_code == status.HTTP_201_CREATED, response.json()
     assert model.objects.count() == 2
@@ -160,6 +170,11 @@ def test__device_plan_replace__create__old_is_marked_replaced(model, factory, ur
     assert response_json.get("replaces") == str(old_device.id)
     assert old_device.replaced_by.id == UUID(response_json.get("id"))
     assert old_device.replaces is None
+    # New checks for validity period
+    if isinstance(new_device, ValidityPeriodModel):
+        assert new_device.plan.decision_date == decision_date
+        assert new_device.validity_period_start == decision_date
+        assert old_device.validity_period_end == new_device.validity_period_start - timedelta(days=1)
 
 
 @pytest.mark.parametrize(("model", "factory", "url_name"), model_factory_url_name)
@@ -168,6 +183,12 @@ def test__device_plan_replace__update__old_is_marked_replaced(model, factory, ur
     client = get_api_client(user=get_user(admin=True))
     old_device = factory(location=test_point_3d)
     new_device = factory(location=test_point_2_3d)
+
+    # Set a decision_date for the new device's plan
+    decision_date = date(2025, 11, 6)
+    plan = PlanFactory(decision_date=decision_date)
+    new_device.plan = plan
+    new_device.save()
 
     data = {
         "replaces": old_device.id,
@@ -185,6 +206,11 @@ def test__device_plan_replace__update__old_is_marked_replaced(model, factory, ur
     assert new_device.replaces == old_device
     assert old_device.replaced_by == new_device
     assert old_device.replaces is None
+    # New checks for validity period
+    if isinstance(new_device, ValidityPeriodModel):
+        assert new_device.plan.decision_date == decision_date
+        assert new_device.validity_period_start == decision_date
+        assert old_device.validity_period_end == new_device.validity_period_start - timedelta(days=1)
 
 
 @pytest.mark.parametrize(("model", "factory", "url_name"), model_factory_url_name)

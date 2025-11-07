@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Callable, Type
 from uuid import UUID
 
@@ -116,6 +117,7 @@ def device_plan_replace(
 
     This function checks for valid replacements, removes older replacements if necessary,
     creates a new replacement, and updates the relevant real model object.
+    Also updates the validity period end date of the old device plan if applicable.
 
     :param old: The old device plan to be replaced.
     :param new: The new device plan that will replace the old one.
@@ -142,6 +144,9 @@ def device_plan_replace(
     replacement_model.objects.create(old=old, new=new)
 
     # Update relevant real(s)
+    if hasattr(old, "validity_period_end"):
+        old.validity_period_end = new.validity_period_start - timedelta(days=1) if new.validity_period_start else None
+        old.save(update_fields=["validity_period_end"])
     real_model.objects.filter(**{plan_relation_name: old}).update(**{plan_relation_name: new})
 
 
