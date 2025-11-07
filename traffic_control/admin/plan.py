@@ -15,6 +15,7 @@ from traffic_control.mixins import (
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
 )
+from traffic_control.mixins.models import ValidityPeriodModel
 from traffic_control.models import Plan
 
 __all__ = ("PlanAdmin",)
@@ -130,7 +131,12 @@ class PlanAdmin(
 
                 # Set the relation to `plan` for all instances that were selected
                 for field, selected_qs in cleaned_data.items():
-                    selected_qs.active().update(plan=plan)
+                    if issubclass(selected_qs.model, ValidityPeriodModel):
+                        # For ValidityPeriodModel subclasses, we need to ensure
+                        # that the validity_period_start matches the plan's decision_date
+                        selected_qs.update(plan=plan, validity_period_start=plan.decision_date)
+                    else:
+                        selected_qs.active().update(plan=plan)
 
             if "_save" in request.POST and not form.errors:
                 # "Save" button was pressed. Redirect to admin plan list view.
