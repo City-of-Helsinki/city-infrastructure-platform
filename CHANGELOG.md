@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.25.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.24.0...city-infrastructure-platform-v1.25.0) (2025-11-10)
+
+
+### Features
+
+* Add example local_settings.py file ([798918c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/798918cc9093e82a3fdfdf25a98ae8787aba6f30))
+* Gate access to files in FileProxyView ([95d8522](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/95d8522a482bb5f5c59078089a6bfa2c09bdd58b))
+* Make files uploads optionally public, handle permissions in api ([a905561](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a90556117c948a942fdfe7d4f108b28a67778b7a))
+* Management command to update planinstance validity periods from plan decision_date ([989cfe4](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/989cfe4105641117f756e7ca6993eec53ceef2d1))
+* Set validity_period_start to ValidityPeriodModel object's plan's decision_date ([f293420](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f293420a54a89271fb7ab6a8e08d751944cad1f8))
+* Support for loggging related models changes to parent model's auditlog ([e7469dd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e7469dde106048b8f0ed666d6f78deb46d2c65c3))
+* Update validity_period_start when setting related plan instances to a plan from admin UI ([d005e19](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d005e19e3909694a47cfe7f8586116e6b86c0dd5))
+* When plan is updated, update all related planinstance validity_period_start, if they support it ([4d32a03](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4d32a03a8d36913f8675755f88aff3d1da601188))
+
 ## [1.24.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.23.0...city-infrastructure-platform-v1.24.0) (2025-10-30)
 
 
