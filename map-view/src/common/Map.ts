@@ -9,15 +9,17 @@ import { defaults as defaultControls, OverviewMap } from "ol/control";
 import View from "ol/View";
 import { Feature, LayerConfig, MapConfig } from "../models";
 import ImageLayer from "ol/layer/Image";
+import TileLayer from "ol/layer/Tile";
 import LayerGroup from "ol/layer/Group";
-import ImageWMS from "ol/source/ImageWMS";
+import WMTS, { optionsFromCapabilities } from "ol/source/WMTS";
+import WMTSCapabilities from "ol/format/WMTSCapabilities";
+import WMTSTileGrid from "ol/tilegrid/WMTS";
 import GeoJson from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { Circle, Fill, Stroke, Style, Text } from "ol/style";
 import { Pixel } from "ol/pixel";
 import { MapBrowserEvent, Feature as OlFeature } from "ol";
-import ImageSource from "ol/source/Image";
 import { LineString, Point } from "ol/geom";
 import { buildWFSQuery, getDistanceBetweenFeatures } from "./functions";
 import { FeatureLike } from "ol/Feature";
@@ -79,7 +81,7 @@ class Map {
   /**
    * Available basemap layers
    */
-  private basemapLayers: { [identifier: string]: ImageLayer<ImageSource> } = {};
+  private basemapLayers: { [identifier: string]: TileLayer<WMTS> } = {};
   /**
    * Available clustered overlay layers
    */
@@ -142,15 +144,15 @@ class Map {
   private readonly getFeaturesDebounceTime = 1000;
 
   /**
-   * Initialize map on target element
+   * Initialize the map with given configurations
    *
    * @param target The id of the element on which the map will be mounted
    * @param mapConfig Configurations for the map
    */
-  initialize(target: string, mapConfig: MapConfig) {
+  async initialize(target: string, mapConfig: MapConfig) {
     const { basemapConfig, overlayConfig, overviewConfig } = mapConfig;
     this.mapConfig = mapConfig;
-    const basemapLayerGroup = this.createBasemapLayerGroup(basemapConfig);
+    const basemapLayerGroup = await this.createBasemapLayerGroup(basemapConfig);
     const clusteredOverlayLayerGroup = this.createClusteredOverlayLayerGroup(mapConfig);
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
     this.planOfRealVectorLayer = Map.createPlanOfRealVectorLayer();
@@ -773,23 +775,129 @@ class Map {
     return `${this.mapConfig.address_search_base_url}?${searchUrlWithParams}`;
   }
 
-  private createBasemapLayerGroup(basemapConfig: LayerConfig) {
+  private async createBasemapLayerGroup(basemapConfig: LayerConfig) {
     const { layers, sourceUrl } = basemapConfig;
-    const basemapLayers = layers.map(({ identifier }, index) => {
-      const wmsSource = new ImageWMS({
-        url: sourceUrl,
-        params: { LAYERS: identifier },
-      });
-      const layer = new ImageLayer({
-        source: wmsSource,
-        visible: index === 0,
-      });
-      if (index === 0) {
-        this.visibleBasemap = identifier;
-      }
-      this.basemapLayers[identifier] = layer;
-      return layer;
-    });
+
+    console.log("Using optionsFromCapabilities for proper WMTS configuration");
+
+    const basemapLayers = await Promise.all(
+      layers.map(async ({ identifier }, index) => {
+        if (sourceUrl) {
+          try {
+            // Fetch WMTS capabilities and let OpenLayers parse it correctly
+            const capabilitiesUrl = `${sourceUrl}?SERVICE=WMTS&REQUEST=GetCapabilities`;
+
+            const response = await fetch(capabilitiesUrl);
+            if (!response.ok) {
+              throw new Error(`Failed to fetch capabilities: ${response.status} ${response.statusText}`);
+            }
+
+            const capabilitiesText = await response.text();
+
+            const parser = new WMTSCapabilities();
+            const capabilities = parser.read(capabilitiesText);
+
+            // Check if our desired layer exists
+            const layerExists = capabilities.Contents?.Layer?.find((l: any) => l.Identifier === identifier);
+            if (!layerExists) {
+              console.error(
+                `Layer ${identifier} not found in capabilities. Available layers:`,
+                capabilities.Contents?.Layer?.map((l: any) => l.Identifier) || [],
+              );
+              throw new Error(`Layer ${identifier} not found in WMTS capabilities`);
+            }
+
+            // Use optionsFromCapabilities to get the correct configuration
+            const options = optionsFromCapabilities(capabilities, {
+              layer: identifier,
+              matrixSet: "ETRS-GK25",
+              // Don't specify style, let it use the default
+            });
+
+            if (!options) {
+              console.error("optionsFromCapabilities returned null. Available layer info:", layerExists);
+              throw new Error(`Could not create WMTS options for layer ${identifier} with ETRS-GK25 matrix set`);
+            }
+
+            if (!options.url) {
+              options.url = sourceUrl;
+            }
+
+            // Remove the restrictive extent from tile grid
+            // The parsed extent is too small and excludes your working tiles
+            // This is kind of a hack to fix it
+            // might be something related with resolutions and extent mismatch in capabilities
+            // LIIK-857 created to investigate further
+            if (options.tileGrid) {
+              // Fix the origin using working tile coordinates
+              // Working tile: TileCol=510, TileRow=835 at level 10 (resolution index 10 = 256)
+              // We know this tile should be at world coordinates around Helsinki city center
+              const resolutions = options.tileGrid.getResolutions();
+              const level10Resolution = resolutions[10]; // Should be 256
+              const tileSize = options.tileGrid.getTileSize(0) || 256;
+              const worldTileSize = level10Resolution * (typeof tileSize === "number" ? tileSize : 256);
+
+              console.log("Level 10 resolution:", level10Resolution);
+              console.log("Tile size:", tileSize);
+              console.log("World tile size:", worldTileSize);
+
+              // Calculate origin from working tile coordinates
+              // If tile [510, 835] should be at Helsinki center coordinates [25499052, 6675851]
+              const [helsinkiCenterX, helsinkiCenterY] = this.getDefaulViewCenter();
+
+              // Apply manually measured offset correction
+              // Measured offset: WMS [25497614,6675744] vs WMTS [25500763,6673067]
+              // Difference: X: +3149m (too far east), Y: -2677m (too far south)
+              // Correction: subtract from X, add to Y
+              const offsetCorrectionX = -3149;
+              const offsetCorrectionY = +2677;
+
+              // Calculate origin that would make tile [510, 835] contain Helsinki center
+              const originX = helsinkiCenterX - 510 * worldTileSize + offsetCorrectionX;
+              const originY = helsinkiCenterY + 835 * worldTileSize + offsetCorrectionY;
+
+              console.log("Calculated origin with offset correction:", [originX, originY]);
+              console.log("Applied correction: X", offsetCorrectionX, "Y", offsetCorrectionY);
+
+              // Create new tile grid with corrected origin
+              const newTileGrid = new WMTSTileGrid({
+                origin: [originX, originY],
+                resolutions: options.tileGrid.getResolutions(),
+                matrixIds: options.tileGrid.getMatrixIds(),
+                tileSize: options.tileGrid.getTileSize(0),
+                // No extent property = full coverage
+              });
+
+              options.tileGrid = newTileGrid;
+            }
+
+            // Create WMTS source with parsed options
+            const wmtsSource = new WMTS({
+              ...options,
+              projection: this.getProjection(),
+              crossOrigin: "anonymous",
+            });
+
+            const layer = new TileLayer({
+              source: wmtsSource,
+              visible: index === 0,
+            });
+
+            if (index === 0) {
+              this.visibleBasemap = identifier;
+            }
+            this.basemapLayers[identifier] = layer;
+            return layer;
+          } catch (error) {
+            console.error(`WMTS setup failed for ${identifier}:`, error);
+            throw error; // Don't fallback, let's see the error
+          }
+        }
+
+        // If no wmtsUrl, throw error
+        throw new Error("WMTS URL required but not provided");
+      }),
+    );
 
     return new LayerGroup({
       layers: basemapLayers,
