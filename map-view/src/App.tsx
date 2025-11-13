@@ -50,9 +50,9 @@ const App = () => {
 
   useEffect(() => {
     const mapId = "map";
-    MapConfigAPI.getMapConfig().then((config: MapConfig) => {
+    MapConfigAPI.getMapConfig().then(async (config: MapConfig) => {
       setMapConfig(config);
-      Map.initialize(mapId, config);
+      await Map.initialize(mapId, config);
       Map.registerFeatureInfoCallback((newFeatures: Feature[]) => setFeatures(newFeatures));
       Map.registerOngoingFeatureFetchesCallback((fetches: Set<string>) => {
         setOngoingFeatureFetches(new Set(fetches));
