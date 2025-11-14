@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.26.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.25.0...city-infrastructure-platform-v1.26.0) (2025-11-14)
+
+
+### Features
+
+* Fetch background image from wmts instead of wms ([d1c4a24](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d1c4a24d7d319ab416688b96b444c9b91c8a28a6))
+* Update views to display icon previews where applicable ([de224ca](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/de224ca5cdf2ede122ec3b03aca3676a355f1736))
+
 ## [1.25.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.24.0...city-infrastructure-platform-v1.25.0) (2025-11-10)
 
 
