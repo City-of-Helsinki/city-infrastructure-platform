@@ -275,6 +275,8 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
             "location": self.test_point.ewkt,
             "lifecycle": self.test_lifecycle_2.value,
             "owner": self.test_owner.pk,
+            "peak_fastened": True,
+            "double_sided": True,
         }
         response = self.client.put(
             reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
@@ -287,6 +289,8 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(traffic_sign_plan.device_type.id, data["device_type"])
         self.assertEqual(traffic_sign_plan.location.ewkt, data["location"])
         self.assertEqual(traffic_sign_plan.lifecycle.value, data["lifecycle"])
+        self.assertTrue(traffic_sign_plan.peak_fastened)
+        self.assertTrue(traffic_sign_plan.double_sided)
 
     def test_delete_traffic_sign_plan_detail(self):
         """
@@ -316,13 +320,15 @@ class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def __create_test_traffic_sign_plan(self):
-        return TrafficSignPlan.objects.create(
+        return TrafficSignPlanFactory(
             device_type=self.test_device_type,
             location=self.test_point,
             lifecycle=self.test_lifecycle,
             owner=self.test_owner,
             created_by=self.user,
             updated_by=self.user,
+            peak_fastened=False,
+            double_sided=False,
         )
 
 
@@ -574,6 +580,8 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             "installation_id": 123,
             "permit_decision_id": 456,
             "owner": self.test_owner.pk,
+            "peak_fastened": True,
+            "double_sided": True,
         }
         response = self.client.put(
             reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
@@ -590,6 +598,8 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
             data["installation_date"],
         )
         self.assertEqual(traffic_sign_real.lifecycle.value, data["lifecycle"])
+        self.assertTrue(traffic_sign_real.peak_fastened)
+        self.assertTrue(traffic_sign_real.double_sided)
 
     def test_delete_traffic_sign_real_detail(self):
         """
@@ -651,18 +661,20 @@ class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
 
     def __create_test_traffic_sign_real(self, traffic_sign_plan=None):
         traffic_sign_plan = (
-            TrafficSignPlan.objects.create(
+            TrafficSignPlanFactory(
                 device_type=self.test_device_type,
                 location=self.test_point,
                 lifecycle=self.test_lifecycle,
                 owner=self.test_owner,
                 created_by=self.user,
                 updated_by=self.user,
+                peak_fastened=False,
+                double_sided=False,
             )
             if not traffic_sign_plan
             else traffic_sign_plan
         )
-        return TrafficSignReal.objects.create(
+        return TrafficSignRealFactory(
             traffic_sign_plan=traffic_sign_plan,
             device_type=self.test_device_type,
             location=self.test_point,
