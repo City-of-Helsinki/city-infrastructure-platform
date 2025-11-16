@@ -12965,6 +12965,10 @@ paths:
           type: string
           format: uuid
       - in: query
+        name: peak_fastened
+        schema:
+          type: boolean
+      - in: query
         name: plan
         schema:
           type: string
@@ -13611,6 +13615,10 @@ paths:
         schema:
           type: string
           format: uuid
+      - in: query
+        name: peak_fastened
+        schema:
+          type: boolean
       - in: query
         name: permit_decision_id
         schema:
@@ -25154,6 +25162,9 @@ components:
         double_sided:
           type: boolean
           description: Indicates if this object is double sided
+        peak_fastened:
+          type: boolean
+          description: Indicates if this object is peak fastened
         owner:
           type: string
           format: uuid
@@ -25432,6 +25443,9 @@ components:
         double_sided:
           type: boolean
           description: Indicates if this object is double sided
+        peak_fastened:
+          type: boolean
+          description: Indicates if this object is peak fastened
         installation_id:
           type: string
           nullable: true
@@ -30976,6 +30990,9 @@ components:
         double_sided:
           type: boolean
           description: Indicates if this object is double sided
+        peak_fastened:
+          type: boolean
+          description: Indicates if this object is peak fastened
         created_by:
           type: string
           format: uuid
@@ -31235,6 +31252,9 @@ components:
         double_sided:
           type: boolean
           description: Indicates if this object is double sided
+        peak_fastened:
+          type: boolean
+          description: Indicates if this object is peak fastened
         owner:
           type: string
           format: uuid
@@ -31506,6 +31526,9 @@ components:
         double_sided:
           type: boolean
           description: Indicates if this object is double sided
+        peak_fastened:
+          type: boolean
+          description: Indicates if this object is peak fastened
         created_by:
           type: string
           format: uuid
@@ -31824,6 +31847,9 @@ components:
         double_sided:
           type: boolean
           description: Indicates if this object is double sided
+        peak_fastened:
+          type: boolean
+          description: Indicates if this object is peak fastened
         installation_id:
           type: string
           nullable: true
@@ -32222,6 +32248,9 @@ components:
         double_sided:
           type: boolean
           description: Indicates if this object is double sided
+        peak_fastened:
+          type: boolean
+          description: Indicates if this object is peak fastened
         installation_id:
           type: string
           nullable: true

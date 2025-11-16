@@ -187,6 +187,11 @@ class AbstractTrafficSign(
         default=False,
         help_text=_("Indicates if this object is double sided"),
     )
+    peak_fastened = models.BooleanField(
+        _("Peak fastened"),
+        default=False,
+        help_text=_("Indicates if this object is peak fastened"),
+    )
 
     class Meta:
         abstract = True

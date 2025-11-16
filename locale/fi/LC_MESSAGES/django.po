@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 13:12+0200\n"
+"POT-Creation-Date: 2025-11-18 12:18+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2212,6 +2212,12 @@ msgstr "Merkin numeerinen arvo"
 
 msgid "Text written on the sign."
 msgstr "Kilpeen kirjoitettu teksti."
+
+msgid "Peak fastened"
+msgstr "Huippukiinnitetty"
+
+msgid "Indicates if this object is peak fastened"
+msgstr "Onko merkki huippukiinnitetty"
 
 msgid "Affect area (2D)"
 msgstr "Vaikutusalue (2D)"

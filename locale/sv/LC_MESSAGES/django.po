@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 13:12+0200\n"
+"POT-Creation-Date: 2025-11-18 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2224,6 +2224,12 @@ msgstr "Kodvärde för trafikskylt"
 
 msgid "Text written on the sign."
 msgstr "Text som är skriven på skylten."
+
+msgid "Peak fastened"
+msgstr ""
+
+msgid "Indicates if this object is peak fastened"
+msgstr ""
 
 msgid "Affect area (2D)"
 msgstr "Påverkansområde (2D)"
