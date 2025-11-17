@@ -11,7 +11,6 @@ from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignPlanReplacement,
     AdditionalSignReal,
-    CoverageArea,
     MountPlan,
     MountReal,
     MountType,
@@ -387,11 +386,6 @@ class AdditionalSignRealResource(AbstractAdditionalSignResource):
         column_name="mount_real__id",
         widget=ForeignKeyWidget(MountReal, "id"),
     )
-    coverage_area__id = Field(
-        attribute="coverage_area",
-        column_name="coverage_area__id",
-        widget=ForeignKeyWidget(CoverageArea, "id"),
-    )
 
     class Meta(AbstractAdditionalSignResource.Meta):
         model = AdditionalSignReal
@@ -410,7 +404,6 @@ class AdditionalSignRealResource(AbstractAdditionalSignResource):
             "permit_decision_id",
             "operation",
             "attachment_url",
-            "coverage_area__id",
         )
         export_order = fields
         clean_model_instances = True

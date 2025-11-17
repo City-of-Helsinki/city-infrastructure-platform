@@ -369,7 +369,6 @@ class TrafficSignRealAdmin(
                     "lane_number",
                     "lane_type",
                     "location_specifier",
-                    "coverage_area",
                 )
             },
         ),

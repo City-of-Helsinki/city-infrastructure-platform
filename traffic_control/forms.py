@@ -18,7 +18,6 @@ from traffic_control.models import (
     AdditionalSignReal,
     BarrierPlan,
     BarrierReal,
-    CoverageArea,
     MountPlan,
     MountReal,
     OperationalArea,
@@ -349,12 +348,6 @@ class BarrierRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
         widgets = {
             "device_type": AdminTrafficDeviceTypeSelectWithIcon,
         }
-
-
-class CoverageAreaModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
-    class Meta:
-        model = CoverageArea
-        fields = "__all__"
 
 
 class MountPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):

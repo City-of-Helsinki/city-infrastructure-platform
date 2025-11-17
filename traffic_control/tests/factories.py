@@ -694,7 +694,6 @@ class TrafficSignRealFactory(factory.django.DjangoModelFactory):
     installation_id = factory.sequence(lambda n: f"installation_id{n}")
     installation_details = "Installaation details"
     permit_decision_id = factory.sequence(lambda n: f"permit_decision{n}")
-    coverage_area = None
     scanned_at = None
     manufacturer = factory.sequence(lambda n: f"Manufacturer{n}")
     rfid = factory.sequence(lambda n: f"rfid{n}")
@@ -828,7 +827,6 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
     operation = None
     scanned_at = None
     attachment_url = factory.sequence(lambda n: f"https://attachment{n}.url")
-    coverage_area = None
 
 
 def get_additional_sign_real(

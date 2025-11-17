@@ -6,7 +6,6 @@ from traffic_control.models.additional_sign import (
     AdditionalSignRealFile,
     AdditionalSignRealOperation,
 )
-from traffic_control.models.affect_area import CoverageArea, CoverageAreaCategory
 from traffic_control.models.barrier import (
     BarrierPlan,
     BarrierPlanFile,

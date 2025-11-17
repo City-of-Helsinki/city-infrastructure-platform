@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-18 12:18+0200\n"
+"POT-Creation-Date: 2025-11-18 12:23+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1267,12 +1267,6 @@ msgstr "Liite (url)"
 msgid "URL to a file attachment related to this sign."
 msgstr "Tähän kilpeen liittyvän tiedostoliitteen URL-osoite."
 
-msgid "Coverage area"
-msgstr "Vaikutusalue"
-
-msgid "Coverage area that this sign belongs to."
-msgstr "Vaikutusalue, johon tämä kilpi kuuluu."
-
 msgid "additional sign real"
 msgstr "Lisäkilpi (toteuma)"
 
@@ -1293,45 +1287,6 @@ msgstr "Lisäkilpi toteuman tiedosto"
 
 msgid "Additional Sign Real Files"
 msgstr "Lisäkilpi toteuman tiedostot"
-
-msgid "Coverage area category"
-msgstr "Vaikutusalueen luokka"
-
-msgid "Coverage area categories"
-msgstr "Vaikutusalueen luokat"
-
-msgid "Category"
-msgstr "Luokka"
-
-msgid "Area type"
-msgstr "Aluetyyppi"
-
-msgid "Season"
-msgstr "Kausi"
-
-msgid "Resident parking id"
-msgstr "Asukaspysäköintitunnus"
-
-msgid "Position"
-msgstr "Sijainti"
-
-msgid "Duration"
-msgstr "Kesto"
-
-msgid "Surface area"
-msgstr "Pinta-ala"
-
-msgid "Parking slots"
-msgstr "Pysäköintipaikat"
-
-msgid "Additional info"
-msgstr "Lisätieto"
-
-msgid "Stopping prohibited"
-msgstr "Pysäköinti kielletty"
-
-msgid "Coverage areas"
-msgstr "Vaikutusalueet"
 
 msgid "Closed"
 msgstr "Suljettu yhteys"
@@ -1682,6 +1637,9 @@ msgstr "Ryhmien toiminta-alueet"
 msgid "Name short"
 msgstr "Nimi (lyhyt)"
 
+msgid "Area type"
+msgstr "Aluetyyppi"
+
 msgid "Contractor"
 msgstr "Urakoitsija"
 
@@ -1883,6 +1841,9 @@ msgstr "Koholla"
 
 msgid "Is grinded"
 msgstr "Rouhittu"
+
+msgid "Additional info"
+msgstr "Lisätieto"
 
 msgid "Amount"
 msgstr "Määrä"
@@ -2236,9 +2197,6 @@ msgstr "Tämän liikennemerkin suunnitelma."
 
 msgid "The device type code of the sign in the old Finnish road traffic law."
 msgstr "Kilven laitetyyppikoodi Suomen vanhassa tieliikennelaissa."
-
-msgid "Coverage area that this traffic sign belongs to."
-msgstr "Vaikutusalue, johon tämä liikennemerkki kuuluu."
 
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"

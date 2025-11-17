@@ -21,7 +21,6 @@ from traffic_control.mixins.models import (
     UserControlModel,
     ValidityPeriodModel,
 )
-from traffic_control.models.affect_area import CoverageArea
 from traffic_control.models.common import (
     OperationBase,
     OperationType,
@@ -342,14 +341,6 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         blank=True,
         null=True,
         help_text=_("URL to a file attachment related to this sign."),
-    )
-    coverage_area = models.ForeignKey(
-        CoverageArea,
-        verbose_name=_("Coverage area"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-        help_text=_("Coverage area that this sign belongs to."),
     )
 
     class Meta:

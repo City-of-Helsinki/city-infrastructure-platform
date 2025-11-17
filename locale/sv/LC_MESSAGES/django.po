@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-18 12:18+0200\n"
+"POT-Creation-Date: 2025-11-18 12:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1275,12 +1275,6 @@ msgstr "Bilagas URL"
 msgid "URL to a file attachment related to this sign."
 msgstr "URL för filbilagan om denna skylt."
 
-msgid "Coverage area"
-msgstr "Täckningsområde"
-
-msgid "Coverage area that this sign belongs to."
-msgstr "Verkningsområde som skylten ingår i."
-
 msgid "additional sign real"
 msgstr "Tilläggsskylt (implementering)"
 
@@ -1301,45 +1295,6 @@ msgstr "Tilläggsskylt utfallsfil"
 
 msgid "Additional Sign Real Files"
 msgstr "Tilläggsskylt utfallsfiler"
-
-msgid "Coverage area category"
-msgstr "Kategori av täckningsområde"
-
-msgid "Coverage area categories"
-msgstr "Kategorier av täckningsområden"
-
-msgid "Category"
-msgstr "Kategori"
-
-msgid "Area type"
-msgstr "Områdestyp"
-
-msgid "Season"
-msgstr "Säsong"
-
-msgid "Resident parking id"
-msgstr "Boendeparkerings-id"
-
-msgid "Position"
-msgstr "Position"
-
-msgid "Duration"
-msgstr "Varaktighet"
-
-msgid "Surface area"
-msgstr "Ytarea"
-
-msgid "Parking slots"
-msgstr "Parkeringsplatser"
-
-msgid "Additional info"
-msgstr "Ytterligare info"
-
-msgid "Stopping prohibited"
-msgstr "Förbud mot att stanna"
-
-msgid "Coverage areas"
-msgstr "Täckningsområden"
 
 msgid "Closed"
 msgstr "Stängd"
@@ -1691,6 +1646,9 @@ msgstr "Grupp (åtgärdsområden)"
 msgid "Name short"
 msgstr "Namn (kort)"
 
+msgid "Area type"
+msgstr "Områdestyp"
+
 msgid "Contractor"
 msgstr "Entreprenör"
 
@@ -1891,6 +1849,9 @@ msgstr "Upphöjd"
 
 msgid "Is grinded"
 msgstr "Urtag"
+
+msgid "Additional info"
+msgstr "Ytterligare info"
 
 msgid "Amount"
 msgstr "Mängd"
@@ -2248,9 +2209,6 @@ msgstr "Plan för detta vägmärke."
 
 msgid "The device type code of the sign in the old Finnish road traffic law."
 msgstr "Anordningstypkoden för skylten i den äldre finska väglagstiftningen."
-
-msgid "Coverage area that this traffic sign belongs to."
-msgstr "Verkningsområde som vägmärket ingår i."
 
 msgid "Traffic Sign Reals"
 msgstr "Trafikskylt (implementeringar)"
