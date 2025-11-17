@@ -31,7 +31,6 @@ from traffic_control.mixins.models import (
     UserControlModel,
     ValidityPeriodModel,
 )
-from traffic_control.models.affect_area import CoverageArea
 from traffic_control.models.common import (
     OperationBase,
     OperationType,
@@ -325,14 +324,6 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         blank=True,
         null=True,
         help_text=_("The id number of the installation permit."),
-    )
-    coverage_area = models.ForeignKey(
-        CoverageArea,
-        verbose_name=_("Coverage area"),
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT,
-        help_text=_("Coverage area that this traffic sign belongs to."),
     )
     scanned_at = models.DateTimeField(
         _("Scanned at"),

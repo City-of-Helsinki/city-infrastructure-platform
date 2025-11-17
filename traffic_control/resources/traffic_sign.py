@@ -3,7 +3,6 @@ from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget
 
 from traffic_control.models import (
-    CoverageArea,
     MountPlan,
     MountReal,
     MountType,
@@ -119,11 +118,6 @@ class TrafficSignRealResource(AbstractTrafficSignResource):
         column_name="mount_real__id",
         widget=ForeignKeyWidget(MountReal, "id"),
     )
-    coverage_area__id = Field(
-        attribute="coverage_area",
-        column_name="coverage_area__id",
-        widget=ForeignKeyWidget(CoverageArea, "id"),
-    )
 
     class Meta(AbstractTrafficSignResource.Meta):
         model = TrafficSignReal
@@ -136,7 +130,6 @@ class TrafficSignRealResource(AbstractTrafficSignResource):
             "installation_id",
             "installation_details",
             "permit_decision_id",
-            "coverage_area__id",
             "manufacturer",
             "rfid",
             "operation",

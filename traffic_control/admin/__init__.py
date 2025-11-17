@@ -2,7 +2,6 @@ from django.contrib import admin
 from social_django.admin import UserSocialAuth
 
 from traffic_control.admin.additional_sign import AdditionalSignPlanAdmin, AdditionalSignRealAdmin
-from traffic_control.admin.affect_area import CoverageAreaAdmin, CoverageAreaCategoryAdmin
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.barrier import (
     BarrierPlanAdmin,

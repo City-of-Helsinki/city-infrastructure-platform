@@ -661,11 +661,6 @@ paths:
           * `4` - Good
           * `5` - Very good
       - in: query
-        name: coverage_area
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: created_at
         schema:
           type: string
@@ -13359,11 +13354,6 @@ paths:
           * `4` - Good
           * `5` - Very good
       - in: query
-        name: coverage_area
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: created_at
         schema:
           type: string
@@ -15473,11 +15463,6 @@ components:
           format: uuid
           nullable: true
           description: Mount that this sign is mounted on.
-        coverage_area:
-          type: string
-          format: uuid
-          nullable: true
-          description: Coverage area that this sign belongs to.
       required:
       - created_at
       - created_by
@@ -15879,11 +15864,6 @@ components:
           format: uuid
           nullable: true
           description: Mount that this sign is mounted on.
-        coverage_area:
-          type: string
-          format: uuid
-          nullable: true
-          description: Coverage area that this sign belongs to.
       required:
       - location
       - owner
@@ -21485,11 +21465,6 @@ components:
           format: uuid
           nullable: true
           description: Mount that this sign is mounted on.
-        coverage_area:
-          type: string
-          format: uuid
-          nullable: true
-          description: Coverage area that this sign belongs to.
     PatchedBarrierPlanInputRequest:
       type: object
       properties:
@@ -25508,11 +25483,6 @@ components:
           format: uuid
           nullable: true
           description: Mount that this sign is mounted on.
-        coverage_area:
-          type: string
-          format: uuid
-          nullable: true
-          description: Coverage area that this traffic sign belongs to.
     Plan:
       type: object
       properties:
@@ -31922,11 +31892,6 @@ components:
           format: uuid
           nullable: true
           description: Mount that this sign is mounted on.
-        coverage_area:
-          type: string
-          format: uuid
-          nullable: true
-          description: Coverage area that this traffic sign belongs to.
       required:
       - created_at
       - created_by
@@ -32313,11 +32278,6 @@ components:
           format: uuid
           nullable: true
           description: Mount that this sign is mounted on.
-        coverage_area:
-          type: string
-          format: uuid
-          nullable: true
-          description: Coverage area that this traffic sign belongs to.
       required:
       - location
       - owner
