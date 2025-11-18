@@ -3,10 +3,14 @@ import itertools
 from django.conf import settings
 from django.contrib.gis import geos
 from django.db import models
+from django.db.models import Q
+from django.utils import timezone
 from gisserver import queries
 from gisserver.geometries import BoundingBox
 from gisserver.output import GML32Renderer
 from gisserver.types import XsdElement
+
+from traffic_control.enums import Lifecycle
 
 # Non-exhausting list of CRSs with axis order of (latitude longitude)
 _YX_CRS = (
@@ -154,3 +158,31 @@ class IconXsdElement(XsdElement):
         if instance.device_type and instance.device_type.icon_file:
             return instance.device_type.icon_name
         return None
+
+
+def get_lifecycle_queryset(base_queryset):
+    """
+    Returns a queryset filtered by lifecycle:
+    - lifecycle is ACTIVE or TEMPORARILY_ACTIVE
+    """
+    return base_queryset.filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
+
+
+def get_validity_period_queryset(base_queryset):
+    """
+    Returns a queryset filtered by validity period:
+    - validity_period_start is null or in the past
+    - validity_period_end is null or in the future
+    """
+    now = timezone.now()
+    return base_queryset.filter(
+        Q(validity_period_start__isnull=True) | Q(validity_period_start__lte=now),
+        Q(validity_period_end__isnull=True) | Q(validity_period_end__gte=now),
+    )
+
+
+def get_lifecycle_and_validity_period_queryset(base_queryset):
+    """
+    Returns a queryset filtered by lifecycle and validity period.
+    """
+    return get_lifecycle_queryset(get_validity_period_queryset(base_queryset))

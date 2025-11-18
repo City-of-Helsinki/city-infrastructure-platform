@@ -1,10 +1,7 @@
 from copy import deepcopy
 
-from django.db.models import Q
-from django.utils import timezone
 from gisserver.features import FeatureField, FeatureType
 
-from traffic_control.enums import Lifecycle
 from traffic_control.models import TrafficSignReal
 from traffic_control.services.traffic_sign import traffic_sign_plan_get_current
 from traffic_control.views.wfs.common import (
@@ -17,6 +14,7 @@ from traffic_control.views.wfs.common import (
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
+from traffic_control.views.wfs.utils import get_lifecycle_and_validity_period_queryset
 
 _base_fields = (
     [
@@ -64,13 +62,7 @@ _base_fields = (
 TrafficSignRealFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=TrafficSignReal.objects.active()
-    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(
-        Q(validity_period_start__isnull=True)
-        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-    )
-    .select_related("device_type"),
+    queryset=get_lifecycle_and_validity_period_queryset(TrafficSignReal.objects.active()).select_related("device_type"),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("manufacturer", abstract="Manufacturer of the sign."),
@@ -94,13 +86,7 @@ TrafficSignRealFeatureType = FeatureType(
 TrafficSignPlanFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=traffic_sign_plan_get_current()
-    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(
-        Q(validity_period_start__isnull=True)
-        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-    )
-    .select_related("device_type"),
+    queryset=get_lifecycle_and_validity_period_queryset(traffic_sign_plan_get_current()).select_related("device_type"),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("plan_id", abstract="ID of the Plan that this Traffic Sign Plan belongs to."),
