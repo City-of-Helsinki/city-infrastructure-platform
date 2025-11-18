@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.gis.geos import Point
+from django.utils import timezone
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
@@ -9,6 +10,7 @@ from traffic_control.tests.factories import (
     get_additional_sign_plan_and_replace,
     get_traffic_sign_plan,
     PlanFactory,
+    TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
@@ -130,3 +132,42 @@ def test__wfs__replaced_device_plans_are_not_listed(model, model_name: str, fact
         feature_id = geojson_feature_id(feature)
 
     assert feature_id == f"{model_name}.{replacing_device.id}"
+
+
+@pytest.mark.parametrize(
+    "model, model_name, factory",
+    (
+        (AdditionalSignPlan, "additionalsignplan", get_additional_sign_plan_and_replace),
+        (AdditionalSignReal, "additionalsignreal", AdditionalSignRealFactory),
+        (TrafficSignPlan, "trafficsignplan", TrafficSignPlanFactory),
+        (TrafficSignReal, "trafficsignreal", TrafficSignRealFactory),
+        # Add other models here if they use the same validity period queryset logic
+    ),
+)
+@pytest.mark.parametrize(
+    "start_delta, end_delta, expect_included",
+    [
+        (None, None, True),  # start=None, end=None
+        (-1, None, True),  # start in past, end=None
+        (1, None, False),  # start in future, end=None
+        (None, -1, False),  # start=None, end in past
+        (None, 1, True),  # start=None, end in future
+        (-1, -1, False),  # start in past, end in past
+        (-1, 1, True),  # start in past, end in future
+        (1, -1, False),  # start in future, end in past
+        (1, 1, False),  # start in future, end in future
+    ],
+)
+@pytest.mark.django_db
+def test__wfs__validity_period_combinations(model, model_name, factory, start_delta, end_delta, expect_included):
+    """
+    WFS API should include/exclude objects based on all combinations of validity_period_start and validity_period_end.
+    """
+    now = timezone.now()
+    validity_period_start = now + timezone.timedelta(days=start_delta) if start_delta is not None else None
+    validity_period_end = now + timezone.timedelta(days=end_delta) if end_delta is not None else None
+    obj = factory(validity_period_start=validity_period_start, validity_period_end=validity_period_end)
+    response = wfs_get_features_geojson(model_name)
+    features = geojson_get_features(response)
+    included = any(f["id"] == f"{model_name}.{obj.id}" for f in features)
+    assert included == expect_included

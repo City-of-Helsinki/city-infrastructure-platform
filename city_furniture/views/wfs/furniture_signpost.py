@@ -1,11 +1,8 @@
 from copy import deepcopy
 
-from django.db.models import Q
-from django.utils import timezone
 from gisserver.features import FeatureField, FeatureType
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
-from traffic_control.enums import Lifecycle
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
     EnumNameXsdElement,
@@ -14,6 +11,7 @@ from traffic_control.views.wfs.common import (
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
+from traffic_control.views.wfs.utils import get_lifecycle_and_validity_period_queryset
 
 _base_fields = (
     [
@@ -88,12 +86,7 @@ _base_fields = (
 FurnitureSignpostRealFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=FurnitureSignpostReal.objects.active()
-    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(
-        Q(validity_period_start__isnull=True)
-        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-    ),
+    queryset=get_lifecycle_and_validity_period_queryset(FurnitureSignpostReal.objects.active()),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("installation_date", abstract="Date that the signpost was installed on."),
@@ -109,12 +102,7 @@ FurnitureSignpostRealFeatureType = FeatureType(
 FurnitureSignpostPlanFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=FurnitureSignpostPlan.objects.active()
-    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(
-        Q(validity_period_start__isnull=True)
-        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-    ),
+    queryset=get_lifecycle_and_validity_period_queryset(FurnitureSignpostPlan.objects.active()),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("plan_id", abstract="ID of the Plan that this signpost belongs to."),
