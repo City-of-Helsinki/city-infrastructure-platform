@@ -24,6 +24,11 @@
 .DS_Store
 .eggs/
 .env
+.env.prod
+.env.stag
+.prepare-azure-scripts.prod
+.prepare-azure-scripts.stag
+.prepare-azure-scripts.test
 .grunt
 .hypothesis/
 .idea
