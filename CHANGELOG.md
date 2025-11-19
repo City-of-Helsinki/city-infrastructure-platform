@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.26.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.25.0...city-infrastructure-platform-v1.26.0) (2025-11-19)
+
+
+### Features
+
+* Add field for peak fastened traffic signs ([27b15d8](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/27b15d8267a1310c18c517577cb4c9f69672ea7f))
+* Django-helusers version to 0.14.2 ([19afec3](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/19afec37021dc42085779f63a3df2d6057c65481))
+* Fetch background image from wmts instead of wms ([d1c4a24](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d1c4a24d7d319ab416688b96b444c9b91c8a28a6))
+* Remove coverage area and all related source codes ([ba228b7](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ba228b79bde10ce3d2b7ef4ca798250e5fc6c1f1))
+* Update django-helusers version ([2a8f8e5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/2a8f8e559fe0d6a2e19b0262908baf35957d0d92))
+* Update views to display icon previews where applicable ([de224ca](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/de224ca5cdf2ede122ec3b03aca3676a355f1736))
+
+
+### Bug Fixes
+
+* All WFS features with validity_period where filtered incorrectly ([ba9fde5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ba9fde55109a3d1e3d563580dee1be71ed4a57d5))
+
 ## [1.25.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.24.0...city-infrastructure-platform-v1.25.0) (2025-11-10)
 
 
