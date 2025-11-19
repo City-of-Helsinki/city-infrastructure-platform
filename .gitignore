@@ -29,6 +29,9 @@
 .prepare-azure-scripts.prod
 .prepare-azure-scripts.stag
 .prepare-azure-scripts.test
+download-batch-icons/
+download-batch-planfiles/
+download-batch-realfiles/
 .grunt
 .hypothesis/
 .idea
