@@ -840,14 +840,14 @@ test = ["boto3", "celery", "django-storages", "pytest", "pytest-cov", "pytest-dj
 
 [[package]]
 name = "django-helusers"
-version = "0.14.3"
+version = "0.14.2"
 description = "Django app for the user infrastructure of the City of Helsinki"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "django_helusers-0.14.3-py3-none-any.whl", hash = "sha256:078b2fc3bd0516c97b87e493fb44ddeac915619965d7311538451a9d76dbbf09"},
-    {file = "django_helusers-0.14.3.tar.gz", hash = "sha256:0614f035ff079cada0672e6e0ef7107240db5f5194ab9536bc59d3496a9a44a0"},
+    {file = "django_helusers-0.14.2-py3-none-any.whl", hash = "sha256:9773f38a843fe2faf31a7579f67378a0d529345519ba984be0b88cbca7e1490d"},
+    {file = "django_helusers-0.14.2.tar.gz", hash = "sha256:4cbbd8b42f3b418e4e3964e5380c8751cd39596f83e4728ecf2e0b496c408fc0"},
 ]
 
 [package.dependencies]
@@ -2918,4 +2918,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11.9"
-content-hash = "334e4e24b9578306fe29d5d4b18f2976ffbd036733f6bd24f7c75e0ca61f4e47"
+content-hash = "694a24a17741c60339f3d3ce4f0cd6889c2e26adf7af9c72b05ff93a3b12aab6"
