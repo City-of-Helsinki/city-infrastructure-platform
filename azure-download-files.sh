@@ -12,13 +12,7 @@ set -eu
 DOWNLOAD_DIR="./download-batch-planfiles"
 mkdir -p "$DOWNLOAD_DIR"
 
-# PRE-STORAGE-MIGRATION WORKAROUNDS
-export AZURE_BLOBSTORAGE_CONTAINER_UPLOADS="$AZURE_BLOBSTORAGE_CONTAINER_OLD"
-export AZURE_SAS_TOKEN_UPLOADS="$AZURE_SAS_TOKEN_OLD"
-
-
 az storage blob download-batch \
-    --dryrun \
     --account-name="$AZURE_ACCOUNT_NAME" \
     --source="$AZURE_BLOBSTORAGE_CONTAINER_UPLOADS" \
     --sas-token="$AZURE_SAS_TOKEN_UPLOADS" \
@@ -29,7 +23,6 @@ DOWNLOAD_DIR="./download-batch-realfiles"
 mkdir -p "$DOWNLOAD_DIR"
 
 az storage blob download-batch \
-    --dryrun \
     --account-name="$AZURE_ACCOUNT_NAME" \
     --source="$AZURE_BLOBSTORAGE_CONTAINER_UPLOADS" \
     --sas-token="$AZURE_SAS_TOKEN_UPLOADS" \
