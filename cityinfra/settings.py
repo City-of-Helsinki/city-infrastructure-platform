@@ -407,9 +407,9 @@ if OPENSHIFT_DEPLOYMENT:
     STORAGES["default"] = {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
-            "account_key": env.str("AZURE_ACCOUNT_KEY"),
             "account_name": env.str("AZURE_ACCOUNT_NAME"),
             "azure_container": env.str("AZURE_CONTAINER"),
+            "sas_token": env.str("AZURE_PRIVATE_SAS_TOKEN"),
         },
     }
 
@@ -417,9 +417,9 @@ if OPENSHIFT_DEPLOYMENT:
     STORAGES["icons"] = {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
-            "account_key": env.str("AZURE_ACCOUNT_KEY"),
             "account_name": env.str("AZURE_ACCOUNT_NAME"),
             "azure_container": env.str("AZURE_ICON_CONTAINER"),
+            "sas_token": env.str("AZURE_PUBLIC_SAS_TOKEN"),
             "overwrite_files": True,
         },
     }
