@@ -67,6 +67,16 @@ class PreviewIconFileRelationMixin:
             return None
 
 
+class UploadsFileProxyMixin:
+    @staticmethod
+    def file_proxy(obj):
+        """Returns the permission-controlled proxy link to the file."""
+        if obj.file:
+            return format_html('<a href="/uploads/{url}" target="_blank">{url}</a>', url=obj.file.name)
+        else:
+            return "-"
+
+
 class PreviewDeviceTypeRelationMixin:
     """
     Use this if your admin class is for a model that has a device_type field. Remember to add device_type_preview to the
