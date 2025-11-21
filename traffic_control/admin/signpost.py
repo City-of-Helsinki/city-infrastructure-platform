@@ -19,7 +19,7 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size
 from traffic_control.forms import (
-    AdminFileWidget,
+    AdminFileWidgetWithProxy,
     CityInfraFileUploadFormset,
     SignpostPlanModelForm,
     SignpostRealModelForm,
@@ -31,6 +31,7 @@ from traffic_control.mixins import (
     PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
+    UploadsFileProxyMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -61,20 +62,26 @@ shared_initial_values = {
 
 
 @admin.register(SignpostPlanFile)
-class SignpostPlanFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class SignpostPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("signpost_plan",)
 
 
 @admin.register(SignpostRealFile)
-class SignpostRealFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class SignpostRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("signpost_real",)
 
 
 class SignpostPlanFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = SignpostPlanFile
     formset = CityInfraFileUploadFormset
@@ -195,7 +202,7 @@ class SignpostPlanAdmin(
 
 class SignpostRealFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = SignpostRealFile
     formset = CityInfraFileUploadFormset

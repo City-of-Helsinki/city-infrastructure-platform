@@ -19,7 +19,7 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
-    AdminFileWidget,
+    AdminFileWidgetWithProxy,
     CityInfraFileUploadFormset,
     TrafficLightPlanModelForm,
     TrafficLightRealModelForm,
@@ -31,6 +31,7 @@ from traffic_control.mixins import (
     PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
+    UploadsFileProxyMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -60,20 +61,26 @@ shared_initial_values = {
 
 
 @admin.register(TrafficLightPlanFile)
-class TrafficSignPlanFileAdmin(GuardedModelAdmin):
+class TrafficSignPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
     list_display = ("id", "file", "is_public")
     raw_id_fields = ("traffic_light_plan",)
 
 
 @admin.register(TrafficLightRealFile)
-class TrafficSignRealFileAdmin(GuardedModelAdmin):
+class TrafficSignRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
     list_display = ("id", "file", "is_public")
     raw_id_fields = ("traffic_light_real",)
 
 
 class TrafficLightPlanFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = TrafficLightPlanFile
     formset = CityInfraFileUploadFormset
@@ -187,7 +194,7 @@ class TrafficLightPlanAdmin(
 
 class TrafficLightRealFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = TrafficLightRealFile
     formset = CityInfraFileUploadFormset

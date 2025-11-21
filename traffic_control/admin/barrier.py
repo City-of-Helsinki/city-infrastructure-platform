@@ -19,7 +19,7 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
-    AdminFileWidget,
+    AdminFileWidgetWithProxy,
     BarrierPlanModelForm,
     BarrierRealModelForm,
     CityInfraFileUploadFormset,
@@ -31,6 +31,7 @@ from traffic_control.mixins import (
     PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
+    UploadsFileProxyMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -59,20 +60,26 @@ shared_initial_values = {
 
 
 @admin.register(BarrierPlanFile)
-class BarrierPlanFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class BarrierPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("barrier_plan",)
 
 
 @admin.register(BarrierRealFile)
-class BarrierRealFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class BarrierRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("barrier_real",)
 
 
 class BarrierPlanFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = BarrierPlanFile
     formset = CityInfraFileUploadFormset
@@ -189,7 +196,7 @@ class BarrierPlanAdmin(
 
 class BarrierRealFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = BarrierRealFile
     formset = CityInfraFileUploadFormset

@@ -22,7 +22,7 @@ from traffic_control.enums import Condition, InstallationStatus, LaneNumber, Lan
 from traffic_control.forms import (
     AdditionalSignPlanModelForm,
     AdditionalSignRealModelForm,
-    AdminFileWidget,
+    AdminFileWidgetWithProxy,
     CityInfraFileUploadFormset,
 )
 from traffic_control.mixins import (
@@ -32,6 +32,7 @@ from traffic_control.mixins import (
     PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
+    UploadsFileProxyMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -66,20 +67,26 @@ shared_initial_values = {
 
 
 @admin.register(AdditionalSignPlanFile)
-class AdditionalSignPlanFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class AdditionalSignPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("additional_sign_plan",)
 
 
 @admin.register(AdditionalSignRealFile)
-class AdditionalSignRealFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class AdditionalSignRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("additional_sign_real",)
 
 
 class AdditionalSignPlanFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = AdditionalSignPlanFile
     formset = CityInfraFileUploadFormset
@@ -87,7 +94,7 @@ class AdditionalSignPlanFileInline(admin.TabularInline):
 
 class AdditionalSignRealFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = AdditionalSignRealFile
     formset = CityInfraFileUploadFormset

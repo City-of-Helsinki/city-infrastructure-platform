@@ -29,13 +29,14 @@ from traffic_control.admin.utils import (
     TreeModelFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus
-from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset
+from traffic_control.forms import AdminFileWidgetWithProxy, CityInfraFileUploadFormset
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
     PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
+    UploadsFileProxyMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -50,25 +51,31 @@ __all__ = (
 
 
 @admin.register(FurnitureSignpostPlanFile)
-class TrafficSignPlanFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class FurnitureSignpostPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("furniture_signpost_plan",)
 
 
 @admin.register(FurnitureSignpostRealFile)
-class TrafficSignRealFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class FurnitureSignpostRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("furniture_signpost_real",)
 
 
 class FurnitureSignpostPlanFileInline(admin.TabularInline):
-    formfield_overrides = {models.FileField: {"widget": AdminFileWidget}}
+    formfield_overrides = {models.FileField: {"widget": AdminFileWidgetWithProxy}}
     model = FurnitureSignpostPlanFile
     formset = CityInfraFileUploadFormset
 
 
 class FurnitureSignpostRealFileInline(admin.TabularInline):
-    formfield_overrides = {models.FileField: {"widget": AdminFileWidget}}
+    formfield_overrides = {models.FileField: {"widget": AdminFileWidgetWithProxy}}
     model = FurnitureSignpostRealFile
     formset = CityInfraFileUploadFormset
 
