@@ -38,12 +38,20 @@ from traffic_control.utils import get_file_upload_obstacles, get_icon_upload_obs
 from traffic_control.validators import validate_location_ewkt, validate_structured_content
 
 
-class AdminFileWidget(widgets.AdminFileWidget):
+class AdminFileWidgetWithProxy(widgets.AdminFileWidget):
     """
     File widget that opens the uploaded file in a new tab.
     """
 
     template_name = "admin/traffic_control/widgets/clearable_file_input.html"
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+
+        if value and hasattr(value, "name"):
+            context["widget"]["file_proxy"] = f"/uploads/{value.name}"
+
+        return context
 
 
 class AbstractAdminDeviceTypeIconSelectWidget(Select):

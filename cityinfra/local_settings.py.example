@@ -6,7 +6,7 @@ EMULATE_AZURE_BLOBSTORAGE = True
 if EMULATE_AZURE_BLOBSTORAGE:
     print("Using azurite (azure emulator)")
     STORAGES["default"] = {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "BACKEND": "cityinfra.storages.backends.non_leaky_azure_storage.NonLeakyAzureStorage",
         "OPTIONS": {
             "azure_container": "uploads",
             # NOTE (2025-10-08 thiago): This is public info
@@ -28,7 +28,7 @@ if EMULATE_AZURE_BLOBSTORAGE:
     }
 
     STORAGES["icons"] = {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "BACKEND": "cityinfra.storages.backends.non_leaky_azure_storage.NonLeakyAzureStorage",
         "OPTIONS": {
             "azure_container": "media",
             # NOTE (2025-09-11 thiago): This is public info

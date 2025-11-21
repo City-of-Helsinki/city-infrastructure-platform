@@ -74,6 +74,16 @@ TEST_CASES = [
         {"account_name": "test"},
         "",
     ),
+    # 10. Authentication through SAS key
+    (
+        "authentication_with_sas_key",
+        {
+            "account_name": "sas-key-user",
+            "azure_container": "private-container",
+            "sas_token": "https://sas-key-user.blob.core.windows.net/private-container/?se=2023-01-01&sp=r&sv=2018-11-09&sr=b&sig=secret_signature",
+        },
+        "https://sas-key-user.blob.core.windows.net/private-container/",
+    ),
 ]
 
 

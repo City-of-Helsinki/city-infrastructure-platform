@@ -19,12 +19,18 @@ from traffic_control.admin.utils import (
     MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus
-from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset, MountPlanModelForm, MountRealModelForm
+from traffic_control.forms import (
+    AdminFileWidgetWithProxy,
+    CityInfraFileUploadFormset,
+    MountPlanModelForm,
+    MountRealModelForm,
+)
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
     Geometry3DFieldAdminMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
+    UploadsFileProxyMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -52,20 +58,26 @@ from traffic_control.models.mount import MountRealOperation
 
 
 @admin.register(MountPlanFile)
-class MountPlanFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class MountPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("mount_plan",)
 
 
 @admin.register(MountRealFile)
-class MountRealFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class MountRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("mount_real",)
 
 
 class MountPlanFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = MountPlanFile
     formset = CityInfraFileUploadFormset
@@ -181,7 +193,7 @@ class MountPlanAdmin(
 
 class MountRealFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = MountRealFile
     formset = CityInfraFileUploadFormset
