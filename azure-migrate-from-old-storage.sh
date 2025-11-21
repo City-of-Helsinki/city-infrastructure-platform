@@ -22,7 +22,6 @@ transfer_storage_contents() {
   AZURE_BLOBSTORAGE_CONTAINER_DESTINATION="${2}"
   AZURE_SAS_TOKEN_DESTINATION="${3}"
   az storage blob copy start-batch \
-      --dryrun \
       --source-account-name "$AZURE_ACCOUNT_NAME" \
       --source-container "$AZURE_BLOBSTORAGE_CONTAINER_OLD" \
       --pattern "$FOLDER_PATH/*" \
