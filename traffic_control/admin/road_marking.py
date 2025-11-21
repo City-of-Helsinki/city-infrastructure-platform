@@ -22,7 +22,7 @@ from traffic_control.admin.utils import (
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
-    AdminFileWidget,
+    AdminFileWidgetWithProxy,
     CityInfraFileUploadFormset,
     RoadMarkingPlanModelForm,
     RoadMarkingRealModelForm,
@@ -34,6 +34,7 @@ from traffic_control.mixins import (
     PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
     UpdatePlanLocationAdminMixin,
+    UploadsFileProxyMixin,
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
@@ -70,20 +71,26 @@ shared_initial_values = {
 
 
 @admin.register(RoadMarkingPlanFile)
-class RoadMarkingPlanFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class RoadMarkingPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("road_marking_plan",)
 
 
 @admin.register(RoadMarkingRealFile)
-class RoadMarkingRealFileAdmin(GuardedModelAdmin):
-    list_display = ("id", "file", "is_public")
+class RoadMarkingRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
+    formfield_overrides = {
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
+    }
+    list_display = ("id", "file_proxy", "is_public")
     raw_id_fields = ("road_marking_real",)
 
 
 class RoadMarkingPlanFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = RoadMarkingPlanFile
     formset = CityInfraFileUploadFormset
@@ -222,7 +229,7 @@ class RoadMarkingPlanAdmin(
 
 class RoadMarkingRealFileInline(admin.TabularInline):
     formfield_overrides = {
-        models.FileField: {"widget": AdminFileWidget},
+        models.FileField: {"widget": AdminFileWidgetWithProxy},
     }
     model = RoadMarkingRealFile
     formset = CityInfraFileUploadFormset

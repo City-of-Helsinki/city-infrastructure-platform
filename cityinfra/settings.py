@@ -52,8 +52,8 @@ env = environ.Env(
     VERSION=(str, ""),
     OPENSHIFT_DEPLOYMENT=(bool, False),
     AZURE_ACCOUNT_KEY=(str, False),
-    AZURE_CONTAINER=(str, False),
-    AZURE_ICON_CONTAINER=(str, False),
+    AZURE_PRIVATE_CONTAINER=(str, False),
+    AZURE_PUBLIC_CONTAINER=(str, False),
     AZURE_ACCOUNT_NAME=(str, False),
     OIDC_AUTHENTICATION_ENABLED=(bool, True),
     SOCIAL_AUTH_TUNNISTAMO_KEY=(str, None),
@@ -368,7 +368,7 @@ EMULATE_AZURE_BLOBSTORAGE = env.bool("EMULATE_AZURE_BLOBSTORAGE")
 if EMULATE_AZURE_BLOBSTORAGE:
     print("Using azurite (azure emulator)")
     STORAGES["default"] = {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "BACKEND": "cityinfra.storages.backends.non_leaky_azure_storage.NonLeakyAzureStorage",
         "OPTIONS": {
             "azure_container": "uploads",
             # NOTE (2025-10-08 thiago): This is public info
@@ -390,7 +390,7 @@ if EMULATE_AZURE_BLOBSTORAGE:
     }
 
     STORAGES["icons"] = {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "BACKEND": "cityinfra.storages.backends.non_leaky_azure_storage.NonLeakyAzureStorage",
         "OPTIONS": {
             "azure_container": "media",
             # NOTE (2025-09-11 thiago): This is public info
@@ -405,21 +405,21 @@ OPENSHIFT_DEPLOYMENT = env.bool("OPENSHIFT_DEPLOYMENT")
 if OPENSHIFT_DEPLOYMENT:
     # Use Azure Storage Container as file storage in OpenShift deployment
     STORAGES["default"] = {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "BACKEND": "cityinfra.storages.backends.non_leaky_azure_storage.NonLeakyAzureStorage",
         "OPTIONS": {
-            "account_key": env.str("AZURE_ACCOUNT_KEY"),
             "account_name": env.str("AZURE_ACCOUNT_NAME"),
-            "azure_container": env.str("AZURE_CONTAINER"),
+            "azure_container": env.str("AZURE_PRIVATE_CONTAINER"),
+            "sas_token": env.str("AZURE_PRIVATE_SAS_TOKEN"),
         },
     }
 
     # Icons storage
     STORAGES["icons"] = {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "BACKEND": "cityinfra.storages.backends.non_leaky_azure_storage.NonLeakyAzureStorage",
         "OPTIONS": {
-            "account_key": env.str("AZURE_ACCOUNT_KEY"),
             "account_name": env.str("AZURE_ACCOUNT_NAME"),
-            "azure_container": env.str("AZURE_ICON_CONTAINER"),
+            "azure_container": env.str("AZURE_PUBLIC_CONTAINER"),
+            "sas_token": env.str("AZURE_PUBLIC_SAS_TOKEN"),
             "overwrite_files": True,
         },
     }
