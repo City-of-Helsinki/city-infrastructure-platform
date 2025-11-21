@@ -29,6 +29,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    UUIDModel,
     ValidityPeriodModel,
 )
 from traffic_control.models.common import (
@@ -80,6 +81,7 @@ class AbstractTrafficSign(
     UserControlModel,
     OwnedDeviceModel,
     ValidityPeriodModel,
+    UUIDModel,
 ):
     ALLOWED_TARGET_MODELS = TRAFFIC_SIGN_ALLOWED_TARGET_MODELS
     """There exists some special codes that are signposts or barriers but we want to have them in trafficsign tables"""

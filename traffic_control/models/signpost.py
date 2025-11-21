@@ -20,6 +20,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    UUIDModel,
     ValidityPeriodModel,
 )
 from traffic_control.models.common import (
@@ -41,6 +42,7 @@ class AbstractSignpost(
     SoftDeleteModel,
     UserControlModel,
     OwnedDeviceModel,
+    UUIDModel,
     ValidityPeriodModel,
 ):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)

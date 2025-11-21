@@ -19,6 +19,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    UUIDModel,
 )
 from traffic_control.models.common import (
     OperationBase,
@@ -68,7 +69,7 @@ class PushButton(models.IntegerChoices):
 
 
 class AbstractTrafficLight(
-    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel, UUIDModel
 ):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(

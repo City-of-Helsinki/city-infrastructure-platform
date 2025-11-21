@@ -49,7 +49,6 @@ from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
     prefetch_replacements,
-    ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
 
@@ -71,7 +70,6 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelM
         "input": MountPlanInputSerializer,
         "input_geojson": MountPlanGeoJSONInputSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = prefetch_replacements(mount_plan_get_active().prefetch_related("files"))
     filterset_class = MountPlanFilterSet
     file_queryset = MountPlanFile.objects.all()
@@ -141,7 +139,6 @@ class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": MountRealSerializer,
         "geojson": MountRealGeoJSONSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     serializer_class = MountRealSerializer
     queryset = (
         MountReal.objects.active()

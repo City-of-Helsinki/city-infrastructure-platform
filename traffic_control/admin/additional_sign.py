@@ -17,9 +17,6 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
-    ResponsibleEntityPermissionFilter,
-    TreeModelFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.forms import (
@@ -115,7 +112,6 @@ class AdditionalSignReplacementListFilter(PlanReplacementListFilterMixin, Simple
 @admin.register(AdditionalSignPlan)
 class AdditionalSignPlanAdmin(
     DeviceTypeSearchAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -138,7 +134,6 @@ class AdditionalSignPlanAdmin(
             {
                 "fields": (
                     "owner",
-                    "responsible_entity",
                     "device_type",
                     "content_s",
                     "missing_content",
@@ -200,8 +195,6 @@ class AdditionalSignPlanAdmin(
     raw_id_fields = ("parent", "plan", "mount_plan")
 
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ResponsibleEntityPermissionFilter,
-        ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         "owner",
         AdditionalSignReplacementListFilter,
@@ -223,7 +216,6 @@ class AdditionalSignPlanAdmin(
 @admin.register(AdditionalSignReal)
 class AdditionalSignRealAdmin(
     DeviceTypeSearchAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
     DeviceComparisonAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
@@ -245,7 +237,6 @@ class AdditionalSignRealAdmin(
             {
                 "fields": (
                     "owner",
-                    "responsible_entity",
                     "device_type",
                     "content_s",
                     "missing_content",
@@ -371,8 +362,6 @@ class AdditionalSignRealAdmin(
     raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ResponsibleEntityPermissionFilter,
-        ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         ("installation_status", EnumFieldListFilter),
         ("condition", EnumFieldListFilter),

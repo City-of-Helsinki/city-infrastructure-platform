@@ -42,7 +42,6 @@ from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
     prefetch_replacements,
-    ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
 
@@ -64,7 +63,6 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews, Replaceable
         "input": RoadMarkingPlanInputSerializer,
         "input_geojson": RoadMarkingPlanGeoJSONInputSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = prefetch_replacements(road_marking_plan_get_active().prefetch_related("files"))
 
     filterset_class = RoadMarkingPlanFilterSet
@@ -135,7 +133,6 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": RoadMarkingRealSerializer,
         "geojson": RoadMarkingRealGeoJSONSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = (
         RoadMarkingReal.objects.active()
         .prefetch_related("files")

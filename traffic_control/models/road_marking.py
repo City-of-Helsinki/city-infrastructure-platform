@@ -19,6 +19,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    UUIDModel,
     ValidityPeriodModel,
 )
 from traffic_control.models.common import (
@@ -70,6 +71,7 @@ class AbstractRoadMarking(
     UserControlModel,
     OwnedDeviceModel,
     ValidityPeriodModel,
+    UUIDModel,
 ):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
