@@ -10,28 +10,21 @@ from traffic_control.models import (
     Owner,
     Plan,
     PortalType,
-    ResponsibleEntity,
 )
 from traffic_control.resources.common import (
     GenericDeviceBaseResource,
     ReplacementField,
     ReplacementWidget,
-    ResponsibleEntityPermissionImportMixin,
     SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.mount import mount_plan_replace, mount_plan_unreplace
 
 
-class AbstractMountResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
+class AbstractMountResource(GenericDeviceBaseResource):
     owner__name_fi = Field(
         attribute="owner",
         column_name="owner__name_fi",
         widget=ForeignKeyWidget(Owner, "name_fi"),
-    )
-    responsible_entity__name = Field(
-        attribute="responsible_entity",
-        column_name="responsible_entity__name",
-        widget=ForeignKeyWidget(ResponsibleEntity, "name"),
     )
     mount_type__code = Field(
         attribute="mount_type",
@@ -49,7 +42,6 @@ class AbstractMountResource(ResponsibleEntityPermissionImportMixin, GenericDevic
         common_fields = (
             "id",
             "owner__name_fi",
-            "responsible_entity__name",
             "lifecycle",
             "location",
             "height",

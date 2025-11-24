@@ -18,9 +18,6 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
-    ResponsibleEntityPermissionFilter,
-    TreeModelFieldListFilter,
 )
 from traffic_control.enums import (
     Condition,
@@ -185,7 +182,6 @@ class TrafficSignPlanReplacementListFilter(PlanReplacementListFilterMixin, Simpl
 @admin.register(TrafficSignPlan)
 class TrafficSignPlanAdmin(
     DeviceTypeSearchAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -207,7 +203,6 @@ class TrafficSignPlanAdmin(
             {
                 "fields": (
                     "owner",
-                    "responsible_entity",
                     "device_type",
                     "mount_type",
                     "value",
@@ -270,8 +265,6 @@ class TrafficSignPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ResponsibleEntityPermissionFilter,
-        ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         "owner",
         TrafficSignPlanReplacementListFilter,
@@ -319,7 +312,6 @@ class TrafficSignRealOperationInline(TrafficControlOperationInlineBase):
 class TrafficSignRealAdmin(
     DeviceTypeSearchAdminMixin,
     DeviceComparisonAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -340,7 +332,6 @@ class TrafficSignRealAdmin(
             {
                 "fields": (
                     "owner",
-                    "responsible_entity",
                     "device_type",
                     "mount_type",
                     "permit_decision_id",
@@ -466,8 +457,6 @@ class TrafficSignRealAdmin(
     raw_id_fields = ("traffic_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ResponsibleEntityPermissionFilter,
-        ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         ("installation_status", EnumFieldListFilter),
         ("condition", EnumFieldListFilter),

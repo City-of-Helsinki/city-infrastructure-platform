@@ -30,7 +30,6 @@ from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
     prefetch_replacements,
-    ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
 
@@ -52,7 +51,6 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableMode
         "input": BarrierPlanInputSerializer,
         "input_geojson": BarrierPlanGeoJSONInputSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = prefetch_replacements(barrier_plan_get_active()).prefetch_related("files")
     filterset_class = BarrierPlanFilterSet
     file_queryset = BarrierPlanFile.objects.all()
@@ -122,7 +120,6 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": BarrierRealSerializer,
         "geojson": BarrierRealGeoJSONSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = (
         BarrierReal.objects.active()
         .prefetch_related("files")

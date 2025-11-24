@@ -43,7 +43,6 @@ class TrafficSignEmbed(DetailView):
                 "device_type",
                 "mount_type",
                 "owner",
-                "responsible_entity",
             )
         )
 
@@ -63,11 +62,7 @@ class TrafficSignEmbed(DetailView):
         return self.get_fields_and_values(object, self.traffic_sign_fields)
 
     def get_additional_signs(self, traffic_sign):
-        objects = (
-            traffic_sign.additional_signs.active()
-            .order_by("height")
-            .select_related("device_type", "owner", "responsible_entity")
-        )
+        objects = traffic_sign.additional_signs.active().order_by("height").select_related("device_type", "owner")
 
         additional_signs = []
         for object in objects:
@@ -137,7 +132,6 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "seasonal_validity_period_information",
         #
         "owner",
-        "responsible_entity",
         "mount_type",
         #
         "txt",
@@ -175,7 +169,6 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "additional_information",
         #
         "owner",
-        "responsible_entity",
         "mount_type",
         #
         "parent",
@@ -208,7 +201,6 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "validity_period_end",
         #
         "owner",
-        "responsible_entity",
         "electric_accountable",
         #
         "txt",
@@ -263,7 +255,6 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         "attachment_url",
         #
         "owner",
-        "responsible_entity",
         "mount_type",
         #
         "txt",
@@ -314,7 +305,6 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         "attachment_url",
         #
         "owner",
-        "responsible_entity",
         "mount_type",
         #
         "parent",
@@ -353,7 +343,6 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         "diameter",
         #
         "owner",
-        "responsible_entity",
         "electric_accountable",
         #
         "txt",

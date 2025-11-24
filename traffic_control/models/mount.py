@@ -19,6 +19,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    UUIDModel,
 )
 from traffic_control.models.common import OperationBase, OperationType, VERBOSE_NAME_NEW, VERBOSE_NAME_OLD
 from traffic_control.models.plan import Plan
@@ -99,7 +100,7 @@ class PortalType(models.Model):
 
 
 class AbstractMount(
-    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel, UUIDModel
 ):
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     height = models.DecimalField(

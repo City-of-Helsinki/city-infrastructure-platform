@@ -8,29 +8,22 @@ from traffic_control.models import (
     BarrierReal,
     Owner,
     Plan,
-    ResponsibleEntity,
     TrafficControlDeviceType,
 )
 from traffic_control.resources.common import (
     GenericDeviceBaseResource,
     ReplacementField,
     ReplacementWidget,
-    ResponsibleEntityPermissionImportMixin,
     SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.barrier import barrier_plan_replace, barrier_plan_unreplace
 
 
-class AbstractBarrierResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
+class AbstractBarrierResource(GenericDeviceBaseResource):
     owner__name_fi = Field(
         attribute="owner",
         column_name="owner__name_fi",
         widget=ForeignKeyWidget(Owner, "name_fi"),
-    )
-    responsible_entity__name = Field(
-        attribute="responsible_entity",
-        column_name="responsible_entity__name",
-        widget=ForeignKeyWidget(ResponsibleEntity, "name"),
     )
     device_type__code = Field(
         attribute="device_type",
@@ -42,7 +35,6 @@ class AbstractBarrierResource(ResponsibleEntityPermissionImportMixin, GenericDev
         common_fields = (
             "id",
             "owner__name_fi",
-            "responsible_entity__name",
             "lifecycle",
             "location",
             "road_name",

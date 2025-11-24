@@ -8,7 +8,6 @@ from traffic_control.models import (
     MountType,
     Owner,
     Plan,
-    ResponsibleEntity,
     TrafficControlDeviceType,
     TrafficLightPlan,
     TrafficLightPlanReplacement,
@@ -18,22 +17,16 @@ from traffic_control.resources.common import (
     GenericDeviceBaseResource,
     ReplacementField,
     ReplacementWidget,
-    ResponsibleEntityPermissionImportMixin,
     SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.traffic_light import traffic_light_plan_replace, traffic_light_plan_unreplace
 
 
-class AbstractTrafficLightResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
+class AbstractTrafficLightResource(GenericDeviceBaseResource):
     owner__name_fi = Field(
         attribute="owner",
         column_name="owner__name_fi",
         widget=ForeignKeyWidget(Owner, "name_fi"),
-    )
-    responsible_entity__name = Field(
-        attribute="responsible_entity",
-        column_name="responsible_entity__name",
-        widget=ForeignKeyWidget(ResponsibleEntity, "name"),
     )
     device_type__code = Field(
         attribute="device_type",
@@ -50,7 +43,6 @@ class AbstractTrafficLightResource(ResponsibleEntityPermissionImportMixin, Gener
         common_fields = (
             "id",
             "owner__name_fi",
-            "responsible_entity__name",
             "lifecycle",
             "location",
             "road_name",

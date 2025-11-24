@@ -3,17 +3,10 @@ from django.contrib.auth.models import Permission
 from django.urls import reverse
 from rest_framework import status
 
-from traffic_control import models
+from city_furniture import models
+from city_furniture.tests.factories import CityFurnitureDeviceTypeFactory
 from traffic_control.enums import Lifecycle
-from traffic_control.tests.factories import (
-    get_api_client,
-    get_owner,
-    get_responsible_entity_project,
-    get_user,
-    TrafficControlDeviceTypeFactory,
-    TrafficSignPlanFactory,
-    TrafficSignRealFactory,
-)
+from traffic_control.tests.factories import get_api_client, get_owner, get_responsible_entity_project, get_user
 from traffic_control.tests.test_base_api_3d import test_point_3d
 
 
@@ -21,20 +14,8 @@ from traffic_control.tests.test_base_api_3d import test_point_3d
 @pytest.mark.parametrize(
     "model",
     (
-        "AdditionalSignPlan",
-        "AdditionalSignReal",
-        "BarrierPlan",
-        "BarrierReal",
-        "MountPlan",
-        "MountReal",
-        "RoadMarkingPlan",
-        "RoadMarkingReal",
-        "SignpostPlan",
-        "SignpostReal",
-        "TrafficLightPlan",
-        "TrafficLightReal",
-        "TrafficSignPlan",
-        "TrafficSignReal",
+        "FurnitureSignpostPlan",
+        "FurnitureSignpostReal",
     ),
 )
 @pytest.mark.parametrize(
@@ -50,18 +31,11 @@ def test__api_responsible_area_permission__create(model, add_to_responsible_enti
 
     data = {
         "location": str(test_point_3d),
-        "device_type": TrafficControlDeviceTypeFactory().pk,
+        "device_type": CityFurnitureDeviceTypeFactory().pk,
         "lifecycle": Lifecycle.ACTIVE.value,
         "owner": get_owner().pk,
         "responsible_entity": responsible_entity.pk,
     }
-
-    if model in ["BarrierPlan", "BarrierReal"]:
-        data["road_name"] = "testroad"
-    elif model == "AdditionalSignReal":
-        data["parent"] = TrafficSignRealFactory().pk
-    elif model == "AdditionalSignPlan":
-        data["parent"] = TrafficSignPlanFactory().pk
 
     client = get_api_client(user=user)
     model_class = getattr(models, model)
