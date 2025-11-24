@@ -1,5 +1,3 @@
-from django import forms
-
 from city_furniture.models import CityFurnitureDeviceType, FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.models.common import CityFurnitureDeviceTypeIcon
 from traffic_control.admin.utils import ResponsibleEntityPermissionAdminFormMixin
@@ -8,6 +6,7 @@ from traffic_control.forms import (
     AbstractAdminDeviceTypeSelectWithIcon,
     AbstractDeviceTypeIconForm,
     Geometry3DFieldForm,
+    OrderedByIconFileFieldForm,
     SRIDBoundGeometryFormMixin,
 )
 
@@ -26,7 +25,7 @@ class CityFurnitureDeviceTypeIconForm(AbstractDeviceTypeIconForm):
         fields = "__all__"
 
 
-class CityFurnitureDeviceTypeForm(forms.ModelForm):
+class CityFurnitureDeviceTypeForm(OrderedByIconFileFieldForm):
     class Meta:
         model = CityFurnitureDeviceType
         widgets = {

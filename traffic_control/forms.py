@@ -410,7 +410,17 @@ class SignpostRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
         }
 
 
-class TrafficControlDeviceTypeForm(forms.ModelForm):
+class OrderedByIconFileFieldForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if "icon_file" in self.fields:
+            self.fields["icon_file"].queryset = self.fields["icon_file"].queryset.order_by("file")
+
+    class Meta:
+        abstract = True
+
+
+class TrafficControlDeviceTypeForm(OrderedByIconFileFieldForm):
     class Meta:
         model = TrafficControlDeviceType
         widgets = {
