@@ -12,12 +12,7 @@ set -eu
 DOWNLOAD_DIR="./download-batch-icons"
 mkdir -p "$DOWNLOAD_DIR"
 
-# PRE-STORAGE-MIGRATION WORKAROUNDS
-export AZURE_BLOBSTORAGE_CONTAINER_ICONS="$AZURE_BLOBSTORAGE_CONTAINER_OLD"
-export AZURE_SAS_TOKEN_ICON="$AZURE_SAS_TOKEN_OLD"
-
 az storage blob download-batch \
-    --dryrun \
     --account-name="$AZURE_ACCOUNT_NAME" \
     --source="$AZURE_BLOBSTORAGE_CONTAINER_ICONS" \
     --sas-token="$AZURE_SAS_TOKEN_ICON" \
