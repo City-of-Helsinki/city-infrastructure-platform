@@ -278,11 +278,6 @@ paths:
           * `R2` - r2
           * `R3` - r3
       - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: road_name
         schema:
           type: string
@@ -934,11 +929,6 @@ paths:
           * `R1` - r1
           * `R2` - r2
           * `R3` - r3
-      - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
       - in: query
         name: rfid
         schema:
@@ -1786,11 +1776,6 @@ paths:
           * `NO` - No
           * `RED_YELLOW` - Red-yellow
       - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: road_name
         schema:
           type: string
@@ -2364,11 +2349,6 @@ paths:
           * `YES` - Yes
           * `NO` - No
           * `RED_YELLOW` - Red-yellow
-      - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
       - in: query
         name: road_name
         schema:
@@ -5233,11 +5213,6 @@ paths:
           type: string
           format: uuid
       - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: road_name
         schema:
           type: string
@@ -5749,11 +5724,6 @@ paths:
           format: uuid
       - in: query
         name: portal_type
-        schema:
-          type: string
-          format: uuid
-      - in: query
-        name: responsible_entity
         schema:
           type: string
           format: uuid
@@ -8214,11 +8184,6 @@ paths:
           type: string
           format: uuid
       - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: road_name
         schema:
           type: string
@@ -8849,11 +8814,6 @@ paths:
           type: string
       - in: query
         name: owner
-        schema:
-          type: string
-          format: uuid
-      - in: query
-        name: responsible_entity
         schema:
           type: string
           format: uuid
@@ -9701,11 +9661,6 @@ paths:
           * `R2` - r2
           * `R3` - r3
       - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: road_name
         schema:
           type: string
@@ -10342,11 +10297,6 @@ paths:
           * `R1` - r1
           * `R2` - r2
           * `R3` - r3
-      - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
       - in: query
         name: road_name
         schema:
@@ -11473,11 +11423,6 @@ paths:
           * `1` - No
           * `2` - Yes
       - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: road_name
         schema:
           type: string
@@ -12093,11 +12038,6 @@ paths:
 
           * `1` - No
           * `2` - Yes
-      - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
       - in: query
         name: road_name
         schema:
@@ -12983,11 +12923,6 @@ paths:
           * `R2` - r2
           * `R3` - r3
       - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
-      - in: query
         name: road_name
         schema:
           type: string
@@ -13627,11 +13562,6 @@ paths:
           * `R1` - r1
           * `R2` - r2
           * `R3` - r3
-      - in: query
-        name: responsible_entity
-        schema:
-          type: string
-          format: uuid
       - in: query
         name: rfid
         schema:
@@ -14526,11 +14456,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         parent:
           type: string
           format: uuid
@@ -14781,11 +14706,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         parent:
           type: string
           format: uuid
@@ -15069,11 +14989,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         parent:
           type: string
           format: uuid
@@ -15443,11 +15358,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         parent:
           type: string
           format: uuid
@@ -15844,11 +15754,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         parent:
           type: string
           format: uuid
@@ -16106,11 +16011,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         plan:
           type: string
           format: uuid
@@ -16313,11 +16213,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         plan:
           type: string
           format: uuid
@@ -16552,11 +16447,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         plan:
           type: string
           format: uuid
@@ -16835,11 +16725,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         barrier_plan:
           type: string
           format: uuid
@@ -17142,11 +17027,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         barrier_plan:
           type: string
           format: uuid
@@ -17828,16 +17708,16 @@ components:
           format: uuid
           readOnly: true
           nullable: true
-        owner:
-          type: string
-          format: uuid
-          description: Owner who orders and is responsible for the maintenance of
-            the device.
         responsible_entity:
           type: string
           format: uuid
           nullable: true
           description: Organization or project that this device is assigned to.
+        owner:
+          type: string
+          format: uuid
+          description: Owner who orders and is responsible for the maintenance of
+            the device.
         color:
           type: string
           format: uuid
@@ -18063,16 +17943,16 @@ components:
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
-        owner:
-          type: string
-          format: uuid
-          description: Owner who orders and is responsible for the maintenance of
-            the device.
         responsible_entity:
           type: string
           format: uuid
           nullable: true
           description: Organization or project that this device is assigned to.
+        owner:
+          type: string
+          format: uuid
+          description: Owner who orders and is responsible for the maintenance of
+            the device.
         color:
           type: string
           format: uuid
@@ -18344,16 +18224,16 @@ components:
           format: uuid
           readOnly: true
           nullable: true
-        owner:
-          type: string
-          format: uuid
-          description: Owner who orders and is responsible for the maintenance of
-            the device.
         responsible_entity:
           type: string
           format: uuid
           nullable: true
           description: Organization or project that this device is assigned to.
+        owner:
+          type: string
+          format: uuid
+          description: Owner who orders and is responsible for the maintenance of
+            the device.
         color:
           type: string
           format: uuid
@@ -18653,16 +18533,16 @@ components:
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
-        owner:
-          type: string
-          format: uuid
-          description: Owner who orders and is responsible for the maintenance of
-            the device.
         responsible_entity:
           type: string
           format: uuid
           nullable: true
           description: Organization or project that this device is assigned to.
+        owner:
+          type: string
+          format: uuid
+          description: Owner who orders and is responsible for the maintenance of
+            the device.
         color:
           type: string
           format: uuid
@@ -18889,11 +18769,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_type:
           type: string
           format: uuid
@@ -19029,11 +18904,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_type:
           type: string
           format: uuid
@@ -19202,11 +19072,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_type:
           type: string
           format: uuid
@@ -19447,11 +19312,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_type:
           type: string
           format: uuid
@@ -19710,11 +19570,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_type:
           type: string
           format: uuid
@@ -21107,11 +20962,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         parent:
           type: string
           format: uuid
@@ -21445,11 +21295,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         parent:
           type: string
           format: uuid
@@ -21653,11 +21498,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         plan:
           type: string
           format: uuid
@@ -21896,11 +21736,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         barrier_plan:
           type: string
           format: uuid
@@ -22301,16 +22136,16 @@ components:
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
-        owner:
-          type: string
-          format: uuid
-          description: Owner who orders and is responsible for the maintenance of
-            the device.
         responsible_entity:
           type: string
           format: uuid
           nullable: true
           description: Organization or project that this device is assigned to.
+        owner:
+          type: string
+          format: uuid
+          description: Owner who orders and is responsible for the maintenance of
+            the device.
         color:
           type: string
           format: uuid
@@ -22544,16 +22379,16 @@ components:
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
-        owner:
-          type: string
-          format: uuid
-          description: Owner who orders and is responsible for the maintenance of
-            the device.
         responsible_entity:
           type: string
           format: uuid
           nullable: true
           description: Organization or project that this device is assigned to.
+        owner:
+          type: string
+          format: uuid
+          description: Owner who orders and is responsible for the maintenance of
+            the device.
         color:
           type: string
           format: uuid
@@ -22693,11 +22528,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_type:
           type: string
           format: uuid
@@ -22892,11 +22722,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_type:
           type: string
           format: uuid
@@ -23415,11 +23240,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_sign_plan:
           type: string
           format: uuid
@@ -23730,11 +23550,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         road_marking_plan:
           type: string
           format: uuid
@@ -23974,11 +23789,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -24289,11 +24099,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         signpost_plan:
           type: string
           format: uuid
@@ -24614,11 +24419,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -24901,11 +24701,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_light_plan:
           type: string
           format: uuid
@@ -25145,11 +24940,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -25468,11 +25258,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_sign_plan:
           type: string
           format: uuid
@@ -26109,11 +25894,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_sign_plan:
           type: string
           format: uuid
@@ -26380,11 +26160,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_sign_plan:
           type: string
           format: uuid
@@ -26684,11 +26459,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_sign_plan:
           type: string
           format: uuid
@@ -27039,11 +26809,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         road_marking_plan:
           type: string
           format: uuid
@@ -27417,11 +27182,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         road_marking_plan:
           type: string
           format: uuid
@@ -27715,11 +27475,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -27973,11 +27728,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -28264,11 +28014,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -28619,11 +28364,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         signpost_plan:
           type: string
           format: uuid
@@ -28997,11 +28737,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         signpost_plan:
           type: string
           format: uuid
@@ -29471,11 +29206,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -29721,11 +29451,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -30004,11 +29729,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -30331,11 +30051,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_light_plan:
           type: string
           format: uuid
@@ -30681,11 +30396,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_light_plan:
           type: string
           format: uuid
@@ -30978,11 +30688,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -31230,11 +30935,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -31514,11 +31214,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         mount_plan:
           type: string
           format: uuid
@@ -31877,11 +31572,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_sign_plan:
           type: string
           format: uuid
@@ -32263,11 +31953,6 @@ components:
           format: uuid
           description: Owner who orders and is responsible for the maintenance of
             the device.
-        responsible_entity:
-          type: string
-          format: uuid
-          nullable: true
-          description: Organization or project that this device is assigned to.
         traffic_sign_plan:
           type: string
           format: uuid

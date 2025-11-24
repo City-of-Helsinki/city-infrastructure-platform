@@ -69,16 +69,7 @@ class UserControlModel(models.Model):
         abstract = True
 
 
-class OwnedDeviceModel(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    owner = models.ForeignKey(
-        "traffic_control.Owner",
-        verbose_name=_("Owner"),
-        blank=False,
-        null=False,
-        on_delete=models.PROTECT,
-        help_text=_("Owner who orders and is responsible for the maintenance of the device."),
-    )
+class ResponsibleEntityModel(models.Model):
     responsible_entity = models.ForeignKey(
         "traffic_control.ResponsibleEntity",
         verbose_name=_("Responsible entity"),
@@ -86,6 +77,27 @@ class OwnedDeviceModel(models.Model):
         null=True,
         on_delete=models.PROTECT,
         help_text=_("Organization or project that this device is assigned to."),
+    )
+
+    class Meta:
+        abstract = True
+
+
+class UUIDModel(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+
+    class Meta:
+        abstract = True
+
+
+class OwnedDeviceModel(models.Model):
+    owner = models.ForeignKey(
+        "traffic_control.Owner",
+        verbose_name=_("Owner"),
+        blank=False,
+        null=False,
+        on_delete=models.PROTECT,
+        help_text=_("Owner who orders and is responsible for the maintenance of the device."),
     )
     lifecycle = EnumIntegerField(
         Lifecycle,

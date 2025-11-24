@@ -33,7 +33,6 @@ from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
     prefetch_replacements,
-    ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
 
@@ -55,7 +54,6 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableMod
         "input": SignpostPlanInputSerializer,
         "input_geojson": SignpostPlanGeoJSONInputSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = prefetch_replacements(signpost_plan_get_active()).prefetch_related("files")
     filterset_class = SignpostPlanFilterSet
     file_queryset = SignpostPlanFile.objects.all()
@@ -125,7 +123,6 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": SignpostRealSerializer,
         "geojson": SignpostRealGeoJSONSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = (
         SignpostReal.objects.active()
         .prefetch_related("files")

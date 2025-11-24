@@ -8,7 +8,6 @@ from traffic_control.models import (
     MountType,
     Owner,
     Plan,
-    ResponsibleEntity,
     SignpostPlan,
     SignpostPlanReplacement,
     SignpostReal,
@@ -20,14 +19,12 @@ from traffic_control.resources.common import (
     ParentChildReplacementPlanToRealExportMixin,
     ReplacementField,
     ReplacementWidget,
-    ResponsibleEntityPermissionImportMixin,
     SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.signpost import signpost_plan_replace, signpost_plan_unreplace
 
 
 class AbstractSignpostResource(
-    ResponsibleEntityPermissionImportMixin,
     ParentChildReplacementImportMixin,
     GenericDeviceBaseResource,
 ):
@@ -35,11 +32,6 @@ class AbstractSignpostResource(
         attribute="owner",
         column_name="owner__name_fi",
         widget=ForeignKeyWidget(Owner, "name_fi"),
-    )
-    responsible_entity__name = Field(
-        attribute="responsible_entity",
-        column_name="responsible_entity__name",
-        widget=ForeignKeyWidget(ResponsibleEntity, "name"),
     )
     device_type__code = Field(
         attribute="device_type",
@@ -59,7 +51,6 @@ class AbstractSignpostResource(
         common_fields = (
             "id",
             "owner__name_fi",
-            "responsible_entity__name",
             "lifecycle",
             "location",
             "road_name",

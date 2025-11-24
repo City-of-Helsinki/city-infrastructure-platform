@@ -77,6 +77,11 @@ _base_fields = (
             abstract="Ending date for period that the signpost is temporarily valid/invalid.",
         ),
         FeatureField("additional_material_url", abstract="URL for additional material bout the signpost."),
+        FeatureField(
+            "responsible_entity_name",
+            model_attribute="responsible_entity.name",
+            abstract="Name of the responsible of the device.",
+        ),
     ]
     + deepcopy(SOURCE_CONTROLLED_MODEL_FIELDS)
     + deepcopy(USER_CONTROLLED_MODEL_FIELDS)

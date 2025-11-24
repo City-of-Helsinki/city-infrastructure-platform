@@ -16,7 +16,6 @@ from traffic_control.models import (
     MountType,
     Owner,
     Plan,
-    ResponsibleEntity,
 )
 from traffic_control.models.common import TrafficControlDeviceType
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
@@ -24,7 +23,6 @@ from traffic_control.resources.common import (
     GenericDeviceBaseResource,
     ReplacementField,
     ReplacementWidget,
-    ResponsibleEntityPermissionImportMixin,
     SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.additional_sign import additional_sign_plan_replace, additional_sign_plan_unreplace
@@ -135,16 +133,11 @@ class StructuredContentWidget(Widget):
         return value
 
 
-class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
+class AbstractAdditionalSignResource(GenericDeviceBaseResource):
     owner__name_fi = Field(
         attribute="owner",
         column_name="owner__name_fi",
         widget=ForeignKeyWidget(Owner, "name_fi"),
-    )
-    responsible_entity__name = Field(
-        attribute="responsible_entity",
-        column_name="responsible_entity__name",
-        widget=ForeignKeyWidget(ResponsibleEntity, "name"),
     )
     device_type__code = Field(
         attribute="device_type",
@@ -167,7 +160,6 @@ class AbstractAdditionalSignResource(ResponsibleEntityPermissionImportMixin, Gen
         common_fields = (
             "id",
             "owner__name_fi",
-            "responsible_entity__name",
             "device_type__code",
             "lifecycle",
             "location",

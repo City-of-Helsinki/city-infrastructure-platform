@@ -17,9 +17,6 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
-    ResponsibleEntityPermissionFilter,
-    TreeModelFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import AdminFileWidget, CityInfraFileUploadFormset, MountPlanModelForm, MountRealModelForm
@@ -88,7 +85,6 @@ class MountPlanReplacementListFilter(PlanReplacementListFilterMixin, SimpleListF
 
 @admin.register(MountPlan)
 class MountPlanAdmin(
-    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -109,7 +105,6 @@ class MountPlanAdmin(
             {
                 "fields": (
                     "owner",
-                    "responsible_entity",
                     "electric_accountable",
                     "txt",
                     "source_id",
@@ -158,8 +153,6 @@ class MountPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ResponsibleEntityPermissionFilter,
-        ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         "owner",
         MountPlanReplacementListFilter,
@@ -201,7 +194,6 @@ class MountRealOperationInline(TrafficControlOperationInlineBase):
 @admin.register(MountReal)
 class MountRealAdmin(
     DeviceComparisonAdminMixin,
-    ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
@@ -221,7 +213,6 @@ class MountRealAdmin(
             {
                 "fields": (
                     "owner",
-                    "responsible_entity",
                     "electric_accountable",
                     "inspected_at",
                     "txt",
@@ -275,8 +266,6 @@ class MountRealAdmin(
         "attachment_url",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ResponsibleEntityPermissionFilter,
-        ("responsible_entity", TreeModelFieldListFilter),
         ("lifecycle", EnumFieldListFilter),
         "owner",
         "mount_type",

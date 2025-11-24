@@ -42,7 +42,6 @@ from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
     prefetch_replacements,
-    ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
 
@@ -64,7 +63,6 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews, Replaceabl
         "input": TrafficLightPlanInputSerializer,
         "input_geojson": TrafficLightPlanGeoJSONInputSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = prefetch_replacements(traffic_light_plan_get_active()).prefetch_related("files")
     filterset_class = TrafficLightPlanFilterSet
     file_queryset = TrafficLightPlanFile.objects.all()
@@ -134,7 +132,6 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": TrafficLightRealSerializer,
         "geojson": TrafficLightRealGeoJSONSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = (
         TrafficLightReal.objects.active()
         .prefetch_related("files")

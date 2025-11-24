@@ -19,6 +19,7 @@ from traffic_control.mixins.models import (
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    UUIDModel,
     ValidityPeriodModel,
 )
 from traffic_control.models.common import (
@@ -47,6 +48,7 @@ class AbstractAdditionalSign(
     UserControlModel,
     OwnedDeviceModel,
     ValidityPeriodModel,
+    UUIDModel,
 ):
     device_type = models.ForeignKey(
         TrafficControlDeviceType,

@@ -42,7 +42,6 @@ from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
     prefetch_replacements,
-    ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
 
@@ -62,7 +61,7 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews, Replacea
         "input": AdditionalSignPlanInputSerializer,
         "input_geojson": AdditionalSignPlanGeoJSONInputSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
+    permission_classes = [*TrafficControlViewSet.permission_classes]
     queryset = prefetch_replacements(additional_sign_plan_get_active())
     filterset_class = AdditionalSignPlanFilterSet
     file_queryset = AdditionalSignPlanFile.objects.all()
@@ -132,7 +131,6 @@ class AdditionalSignRealViewSet(TrafficControlViewSet, FileUploadViews):
         "default": AdditionalSignRealSerializer,
         "geojson": AdditionalSignRealGeoJSONSerializer,
     }
-    permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
     queryset = (
         AdditionalSignReal.objects.active()
         .prefetch_related("operations")

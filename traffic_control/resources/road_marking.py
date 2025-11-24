@@ -5,7 +5,6 @@ from import_export.widgets import ForeignKeyWidget
 from traffic_control.models import (
     Owner,
     Plan,
-    ResponsibleEntity,
     RoadMarkingPlan,
     RoadMarkingPlanReplacement,
     RoadMarkingReal,
@@ -17,22 +16,16 @@ from traffic_control.resources.common import (
     GenericDeviceBaseResource,
     ReplacementField,
     ReplacementWidget,
-    ResponsibleEntityPermissionImportMixin,
     SOURCE_NAME_ID_FIELDS,
 )
 from traffic_control.services.road_marking import road_marking_plan_replace, road_marking_plan_unreplace
 
 
-class AbstractRoadMarkingResource(ResponsibleEntityPermissionImportMixin, GenericDeviceBaseResource):
+class AbstractRoadMarkingResource(GenericDeviceBaseResource):
     owner__name_fi = Field(
         attribute="owner",
         column_name="owner__name_fi",
         widget=ForeignKeyWidget(Owner, "name_fi"),
-    )
-    responsible_entity__name = Field(
-        attribute="responsible_entity",
-        column_name="responsible_entity__name",
-        widget=ForeignKeyWidget(ResponsibleEntity, "name"),
     )
     device_type__code = Field(
         attribute="device_type",
@@ -44,7 +37,6 @@ class AbstractRoadMarkingResource(ResponsibleEntityPermissionImportMixin, Generi
         common_fields = (
             "id",
             "owner__name_fi",
-            "responsible_entity__name",
             "lifecycle",
             "location",
             "road_name",

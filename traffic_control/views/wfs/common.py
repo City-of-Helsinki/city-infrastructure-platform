@@ -36,11 +36,6 @@ USER_CONTROLLED_MODEL_FIELDS = [
 
 OWNED_DEVICE_MODEL_FIELDS = [
     FeatureField("owner_name_fi", model_attribute="owner.name_fi", abstract="Name of the owner of the device."),
-    FeatureField(
-        "responsible_entity_name",
-        model_attribute="responsible_entity.name",
-        abstract="Name of the responsible of the device.",
-    ),
     FeatureField("lifecycle", xsd_class=EnumNameXsdElement, abstract="Lifecycle of the device."),
 ]
 

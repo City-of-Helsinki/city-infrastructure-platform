@@ -13,10 +13,12 @@ from traffic_control.mixins.models import (
     BoundaryCheckedLocationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
+    ResponsibleEntityModel,
     SoftDeleteModel,
     SourceControlModel,
     UpdatePlanLocationMixin,
     UserControlModel,
+    UUIDModel,
 )
 from traffic_control.models.common import OperationBase, OperationType
 from traffic_control.models.mount import MountPlan, MountReal, MountType
@@ -36,7 +38,13 @@ class ArrowDirection(models.IntegerChoices):
 
 
 class FurnitureAbstractSignpost(
-    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel
+    BoundaryCheckedLocationMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
+    ResponsibleEntityModel,
+    OwnedDeviceModel,
+    UUIDModel,
 ):
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     location_name_fi = models.CharField(

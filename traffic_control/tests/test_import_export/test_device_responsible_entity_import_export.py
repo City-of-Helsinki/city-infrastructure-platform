@@ -4,75 +4,12 @@ from django.core.exceptions import ValidationError
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.resources import FurnitureSignpostPlanResource, FurnitureSignpostRealResource
 from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
-from traffic_control.models import (
-    AdditionalSignPlan,
-    AdditionalSignReal,
-    BarrierPlan,
-    BarrierReal,
-    MountPlan,
-    MountReal,
-    RoadMarkingPlan,
-    RoadMarkingReal,
-    SignpostPlan,
-    SignpostReal,
-    TrafficLightPlan,
-    TrafficLightReal,
-    TrafficSignPlan,
-    TrafficSignReal,
-)
-from traffic_control.resources import (
-    AdditionalSignPlanResource,
-    AdditionalSignRealResource,
-    BarrierPlanResource,
-    BarrierRealResource,
-    MountPlanResource,
-    MountRealResource,
-    RoadMarkingPlanResource,
-    RoadMarkingRealResource,
-    SignpostPlanResource,
-    SignpostRealResource,
-    TrafficLightPlanResource,
-    TrafficLightRealResource,
-    TrafficSignPlanResource,
-    TrafficSignRealResource,
-)
-from traffic_control.tests.factories import (
-    AdditionalSignPlanFactory,
-    AdditionalSignRealFactory,
-    get_barrier_plan,
-    get_barrier_real,
-    get_mount_plan,
-    get_mount_real,
-    get_responsible_entity_project,
-    get_road_marking_plan,
-    get_road_marking_real,
-    get_signpost_plan,
-    get_signpost_real,
-    get_traffic_light_plan,
-    get_traffic_light_real,
-    get_traffic_sign_plan,
-    get_traffic_sign_real,
-    get_user,
-)
+from traffic_control.tests.factories import get_responsible_entity_project, get_user
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
 _models_resources_factories = (
     (FurnitureSignpostPlan, FurnitureSignpostPlanResource, get_furniture_signpost_plan),
     (FurnitureSignpostReal, FurnitureSignpostRealResource, get_furniture_signpost_real),
-    (AdditionalSignPlan, AdditionalSignPlanResource, AdditionalSignPlanFactory),
-    (AdditionalSignReal, AdditionalSignRealResource, AdditionalSignRealFactory),
-    (BarrierPlan, BarrierPlanResource, get_barrier_plan),
-    (BarrierReal, BarrierRealResource, get_barrier_real),
-    (MountPlan, MountPlanResource, get_mount_plan),
-    (MountReal, MountRealResource, get_mount_real),
-    (RoadMarkingPlan, RoadMarkingPlanResource, get_road_marking_plan),
-    (RoadMarkingReal, RoadMarkingRealResource, get_road_marking_real),
-    (SignpostPlan, SignpostPlanResource, get_signpost_plan),
-    (SignpostReal, SignpostRealResource, get_signpost_real),
-    (TrafficLightPlan, TrafficLightPlanResource, get_traffic_light_plan),
-    (TrafficLightReal, TrafficLightRealResource, get_traffic_light_real),
-    (TrafficSignPlan, TrafficSignPlanResource, get_traffic_sign_plan),
-    (TrafficSignReal, TrafficSignRealResource, get_traffic_sign_real),
 )
 
 
