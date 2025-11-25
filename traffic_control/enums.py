@@ -54,20 +54,20 @@ class LaneNumber(models.TextChoices):
 
 
 class LaneType(models.TextChoices):
-    MAIN = 1, _("Main lane")
-    FAST = 2, _("Fast lane")
-    TURN_RIGHT = 3, _("Turn right lane")
-    TURN_LEFT = 4, _("Turn left lane")
-    AUXILIARY = 5, _("Auxiliary straight lane")
-    MERGE = 6, _("Merge lane")
-    EXIT = 7, _("Exit lane")
-    WEAVE = 8, _("Weaving lane")
-    PUBLIC = 9, _("Public transport lane / taxi lane")
-    HEAVY = 10, _("Heavy vehicle lane")
-    REVERSIBLE = 11, _("Reversible lane")
-    LIGHT = 20, _("Pedestrian and bike lane")
-    PEDESTRIAN = 21, _("Pedestrian lane")
-    BIKE = 22, _("Bike lane")
+    MAIN = "1", _("Main lane")
+    FAST = "2", _("Fast lane")
+    TURN_RIGHT = "3", _("Turn right lane")
+    TURN_LEFT = "4", _("Turn left lane")
+    AUXILIARY = "5", _("Auxiliary straight lane")
+    MERGE = "6", _("Merge lane")
+    EXIT = "7", _("Exit lane")
+    WEAVE = "8", _("Weaving lane")
+    PUBLIC = "9", _("Public transport lane / taxi lane")
+    HEAVY = "10", _("Heavy vehicle lane")
+    REVERSIBLE = "11", _("Reversible lane")
+    LIGHT = "20", _("Pedestrian and bike lane")
+    PEDESTRIAN = "21", _("Pedestrian lane")
+    BIKE = "22", _("Bike lane")
 
 
 class Lifecycle(models.IntegerChoices):
