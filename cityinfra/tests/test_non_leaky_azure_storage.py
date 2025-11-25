@@ -37,6 +37,7 @@ LEAKY_STORAGE_SETTINGS_OVERRIDE = {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": AZURE_OPTIONS,
     },
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
 
 
@@ -65,6 +66,7 @@ NON_LEAKY_STORAGE_SETTINGS_OVERRIDE = {
         "BACKEND": "cityinfra.storages.backends.non_leaky_azure_storage.NonLeakyAzureStorage",
         "OPTIONS": AZURE_OPTIONS,
     },
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
 
 

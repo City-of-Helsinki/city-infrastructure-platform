@@ -249,6 +249,11 @@ if env("DATABASE_PASSWORD"):
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
+# Forms - Transitional setting for Django 6.0 URLField default scheme change
+# This will be removed when upgrading to Django 6.0
+FORMS_URLFIELD_ASSUME_HTTPS = True
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
