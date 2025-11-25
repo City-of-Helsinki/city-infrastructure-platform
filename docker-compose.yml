@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgis/postgis:13-3.4
+    image: postgis/postgis:17-master
     environment:
       POSTGRES_USER: city-infrastructure-platform
       POSTGRES_PASSWORD: city-infrastructure-platform
