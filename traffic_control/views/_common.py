@@ -2,7 +2,7 @@ from django.core import exceptions
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
-from rest_framework import permissions, status
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.filters import OrderingFilter
@@ -195,25 +195,3 @@ class OperationViewSet(ModelViewSet, AuditLoggingMixin):
         DjangoModelPermissionsOrAnonReadOnly,
     ]
     serializer_classes = {}
-
-
-class ResponsibleEntityPermission(permissions.BasePermission):
-    message = "You do not have permissions to this Responsible Entity set"
-
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        if request.user.is_authenticated and (
-            request.user.has_bypass_responsible_entity_permission()
-            or request.user.can_create_responsible_entity_devices()
-        ):
-            return True
-
-        return False
-
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return request.user.has_responsible_entity_permission(obj.responsible_entity)
