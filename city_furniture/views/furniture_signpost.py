@@ -23,6 +23,7 @@ from city_furniture.serializers.furniture_signpost import (
     FurnitureSignpostRealOperationSerializer,
     FurnitureSignpostRealSerializer,
 )
+from traffic_control.permissions import ResponsibleEntityPermission
 from traffic_control.schema import (
     file_create_serializer,
     file_uuid_parameter,
@@ -33,7 +34,6 @@ from traffic_control.schema import (
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
-    ResponsibleEntityPermission,
     TrafficControlViewSet,
 )
 
