@@ -5,21 +5,21 @@ from django.urls import reverse
 
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
-    get_additional_sign_plan,
-    get_additional_sign_real,
-    get_mount_plan,
-    get_mount_real,
-    get_traffic_sign_plan,
-    get_traffic_sign_real,
+    AdditionalSignPlanFactory,
+    AdditionalSignRealFactory,
+    MountPlanFactory,
+    MountRealFactory,
     TrafficControlDeviceTypeFactory,
+    TrafficSignPlanFactory,
+    TrafficSignRealFactory,
 )
 
 
 @pytest.mark.parametrize(
     ("ts_factory", "as_factory", "mount_factory", "mount_parameter", "url_name"),
     (
-        (get_traffic_sign_plan, get_additional_sign_plan, get_mount_plan, "mount_plan", "traffic-sign-plan-embed"),
-        (get_traffic_sign_real, get_additional_sign_real, get_mount_real, "mount_real", "traffic-sign-real-embed"),
+        (TrafficSignPlanFactory, AdditionalSignPlanFactory, MountPlanFactory, "mount_plan", "traffic-sign-plan-embed"),
+        (TrafficSignRealFactory, AdditionalSignRealFactory, MountRealFactory, "mount_real", "traffic-sign-real-embed"),
     ),
 )
 @pytest.mark.parametrize("has_device_type", (False, True))
@@ -73,11 +73,13 @@ def test__embed__traffic_sign__context(
         additional_sign_1 = as_factory(
             device_type=additional_sign_type_1,
             parent=traffic_sign,
+            height=2,
             **{mount_parameter: mount},
         )
         additional_sign_2 = as_factory(
             device_type=additional_sign_type_2,
             parent=traffic_sign,
+            height=1,
             **{mount_parameter: mount},
         )
     else:
