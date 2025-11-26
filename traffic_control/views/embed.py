@@ -62,7 +62,7 @@ class TrafficSignEmbed(DetailView):
         return self.get_fields_and_values(object, self.traffic_sign_fields)
 
     def get_additional_signs(self, traffic_sign):
-        objects = traffic_sign.additional_signs.active().order_by("height").select_related("device_type", "owner")
+        objects = traffic_sign.additional_signs.active().order_by("-height").select_related("device_type", "owner")
 
         additional_signs = []
         for object in objects:
