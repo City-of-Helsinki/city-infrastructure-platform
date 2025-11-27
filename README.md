@@ -11,6 +11,19 @@ City Infrastructure Platform REST-API backend application.
 
 There are multiple ways to prepare the project for development. Described here is a method to run the auxiliary services using docker containers and a method to run these services directly using system packages. For both paths you should go through the common dependencies and setting up the python environment first.
 
+### Cloning the repository
+
+```bash
+git clone git@github.com:City-of-Helsinki/city-infrastructure-platform.git
+```
+
+### Setup git hooks
+
+```bash
+cd city-infrastructure-platform
+./setup-git-hooks.sh
+```
+
 ### Common dependencies
 
 Install required system packages, some of these are needed to build some of the python project dependencies and some of these are used in runtime.
