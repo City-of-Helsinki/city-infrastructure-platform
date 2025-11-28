@@ -4,8 +4,10 @@ from uuid import UUID
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.db.models import Model
+from django.db.models import Model, Q
+from django.utils import timezone
 
+from traffic_control.enums import Lifecycle
 from traffic_control.mixins.models import SoftDeleteModel
 from users.models import User
 
@@ -203,3 +205,31 @@ def get_all_replaced_plans(plan_model):
 
 def get_all_not_replaced_plans(plan_model):
     return plan_model.objects.filter(replacement_to_new__isnull=True)
+
+
+def get_lifecycle_queryset(base_queryset):
+    """
+    Returns a queryset filtered by lifecycle:
+    - lifecycle is ACTIVE or TEMPORARILY_ACTIVE
+    """
+    return base_queryset.filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
+
+
+def get_validity_period_queryset(base_queryset):
+    """
+    Returns a queryset filtered by validity period:
+    - validity_period_start is null or in the past
+    - validity_period_end is null or in the future
+    """
+    now = timezone.now()
+    return base_queryset.filter(
+        Q(validity_period_start__isnull=True) | Q(validity_period_start__lte=now),
+        Q(validity_period_end__isnull=True) | Q(validity_period_end__gte=now),
+    )
+
+
+def get_lifecycle_and_validity_period_queryset(base_queryset):
+    """
+    Returns a queryset filtered by lifecycle and validity period.
+    """
+    return get_lifecycle_queryset(get_validity_period_queryset(base_queryset))

@@ -49,8 +49,6 @@ class AbstractMountResource(GenericDeviceBaseResource):
             "base",
             "portal_type__id",
             "material",
-            "validity_period_start",
-            "validity_period_end",
             "txt",
             "electric_accountable",
             "is_foldable",

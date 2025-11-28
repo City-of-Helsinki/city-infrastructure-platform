@@ -5238,16 +5238,6 @@ paths:
         schema:
           type: string
           format: uuid
-      - in: query
-        name: validity_period_end
-        schema:
-          type: string
-          format: date
-      - in: query
-        name: validity_period_start
-        schema:
-          type: string
-          format: date
       tags:
       - mount-plans
       security:
@@ -5758,16 +5748,6 @@ paths:
         schema:
           type: string
           format: uuid
-      - in: query
-        name: validity_period_end
-        schema:
-          type: string
-          format: date
-      - in: query
-        name: validity_period_start
-        schema:
-          type: string
-          format: date
       tags:
       - mount-reals
       security:
@@ -18702,16 +18682,6 @@ components:
           nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this mount becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this mount becomes inactive.
         txt:
           type: string
           nullable: true
@@ -18847,16 +18817,6 @@ components:
           nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this mount becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this mount becomes inactive.
         txt:
           type: string
           nullable: true
@@ -19005,16 +18965,6 @@ components:
           nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this mount becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this mount becomes inactive.
         txt:
           type: string
           nullable: true
@@ -19223,16 +19173,6 @@ components:
           nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this mount becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this mount becomes inactive.
         txt:
           type: string
           nullable: true
@@ -19491,16 +19431,6 @@ components:
           nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this mount becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this mount becomes inactive.
         txt:
           type: string
           nullable: true
@@ -22471,16 +22401,6 @@ components:
           nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this mount becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this mount becomes inactive.
         txt:
           type: string
           nullable: true
@@ -22643,16 +22563,6 @@ components:
           nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
-        validity_period_start:
-          type: string
-          format: date
-          nullable: true
-          description: Date on which this mount becomes active.
-        validity_period_end:
-          type: string
-          format: date
-          nullable: true
-          description: Date after which this mount becomes inactive.
         txt:
           type: string
           nullable: true

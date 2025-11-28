@@ -197,8 +197,6 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "portal_type",
         "material",
         "is_foldable",
-        "validity_period_start",
-        "validity_period_end",
         #
         "owner",
         "electric_accountable",
@@ -333,8 +331,6 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         "portal_type",
         "material",
         "is_foldable",
-        "validity_period_start",
-        "validity_period_end",
         #
         "condition",
         "installation_date",
