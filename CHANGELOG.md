@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.27.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.26.0...city-infrastructure-platform-v1.27.0) (2025-11-28)
+
+
+### Features
+
+* Add pre commit hook ([e0c2e04](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e0c2e04d630e005c0cfc8ae39802c2cffbeade66))
+* Alphabetical order for icon_file when creating a new devicetype ([a939a52](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a939a52cb0428f5bd2fb674736e3c9d09dd15b35))
+* Remove responsible_entity support from traffic_control models ([c0b58be](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c0b58bea58442438d336cc0e5613bad2535b5763))
+
+
+### Bug Fixes
+
+* Add peak_fastened to traffic sign plan and real admin pages ([23ce6e5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/23ce6e5e46a5344380eaa914e3d31e7861af6861))
+* Flaky tests in embed view and wrong order ([60f1a01](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/60f1a01a84cdb85ddc600e4e22272ca75bfe0384))
+
 ## [1.26.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.25.0...city-infrastructure-platform-v1.26.0) (2025-11-19)
 
 
