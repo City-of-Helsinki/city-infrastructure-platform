@@ -202,7 +202,7 @@ class FurnitureSignpostPlanAdmin(
         AbstractFurnitureSignpostAdmin._fieldset_validity,
         AbstractFurnitureSignpostAdmin._fieldset_metadata,
     )
-    raw_id_fields = ("plan", "mount_plan")
+    raw_id_fields = ("plan", "mount_plan", "parent")
     list_filter = AbstractFurnitureSignpostAdmin.list_filter
     inlines = (FurnitureSignpostPlanFileInline,)
     search_fields = (
@@ -238,7 +238,7 @@ class FurnitureSignpostRealAdmin(
         AbstractFurnitureSignpostAdmin._fieldset_validity,
         AbstractFurnitureSignpostAdmin._fieldset_metadata,
     )
-    raw_id_fields = ("furniture_signpost_plan", "mount_real")
+    raw_id_fields = ("furniture_signpost_plan", "mount_real", "parent")
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
         ("condition", EnumFieldListFilter),
         "installation_date",
