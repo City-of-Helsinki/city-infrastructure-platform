@@ -1,7 +1,6 @@
 from copy import deepcopy
 
 from django.db.models import Q
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from gisserver.features import FeatureField, FeatureType, field
 
@@ -28,8 +27,6 @@ _base_fields = (
         FeatureField("base", abstract="Base of the Mount."),
         field("portal_type", fields=["structure", "build_type", "model"], abstract="Portal type for the mount."),
         FeatureField("material", abstract="Material of the Mount."),
-        FeatureField("validity_period_start", abstract="Date on which this mount becomes active."),
-        FeatureField("validity_period_end", abstract="Date after which this mount becomes inactive."),
         FeatureField("txt", abstract="Text written on the mount."),
         FeatureField("electric_accountable", abstract="The entity responsible for the mount (if electric)."),
         FeatureField("is_foldable", abstract="Is the mount foldable"),
@@ -55,11 +52,8 @@ _mount_centroid_fields = deepcopy(_base_fields) + [
 MountRealFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=MountReal.objects.active()
-    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(
-        Q(validity_period_start__isnull=True)
-        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
+    queryset=MountReal.objects.active().filter(
+        Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE)
     ),
     fields=deepcopy(_mount_fields)
     + [
@@ -79,11 +73,8 @@ MountRealCentroidFeatureType = FeatureType(
     name="mountrealcentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=MountReal.objects.active()
-    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(
-        Q(validity_period_start__isnull=True)
-        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
+    queryset=MountReal.objects.active().filter(
+        Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE)
     ),
     fields=deepcopy(_mount_centroid_fields)
     + [
@@ -101,12 +92,7 @@ MountRealCentroidFeatureType = FeatureType(
 MountPlanFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=mount_plan_get_current()
-    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(
-        Q(validity_period_start__isnull=True)
-        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-    ),
+    queryset=mount_plan_get_current().filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE)),
     fields=deepcopy(_mount_fields)
     + [
         FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
@@ -120,12 +106,7 @@ MountPlanCentroidFeatureType = FeatureType(
     name="mountplancentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=mount_plan_get_current()
-    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .filter(
-        Q(validity_period_start__isnull=True)
-        | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-    ),
+    queryset=mount_plan_get_current().filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE)),
     fields=deepcopy(_mount_centroid_fields)
     + [
         FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),

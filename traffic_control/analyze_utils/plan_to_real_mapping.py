@@ -12,7 +12,6 @@ from operator import countOf
 
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import F, Q, Value
-from django.utils import timezone
 
 from traffic_control.db_utils import SplitPart
 from traffic_control.enums import Lifecycle
@@ -25,6 +24,7 @@ from traffic_control.models import (
     TrafficSignReal,
 )
 from traffic_control.services.additional_sign import additional_sign_plan_get_current
+from traffic_control.services.common import get_lifecycle_and_validity_period_queryset
 from traffic_control.services.mount import mount_plan_get_current
 from traffic_control.services.traffic_sign import traffic_sign_plan_get_current
 
@@ -34,10 +34,6 @@ def get_mountreal_to_mountplan_mapping(max_distance: float):
     mr_qset = (
         MountReal.objects.active()
         .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-        .filter(
-            Q(validity_period_start__isnull=True)
-            | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-        )
         .filter(mount_type__isnull=False)
         .filter(mount_plan__isnull=True)
         .select_related("mount_type")
@@ -61,12 +57,7 @@ def get_mountreal_to_mountplan_mapping(max_distance: float):
 def get_additionalsignreal_to_additionalsignplan_mapping(max_distance: float):
     """Get a list of possible matching AdditionalSignPlans for a AdditionalSignReal within given distance"""
     adsr_qset = (
-        AdditionalSignReal.objects.active()
-        .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-        .filter(
-            Q(validity_period_start__isnull=True)
-            | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-        )
+        get_lifecycle_and_validity_period_queryset(AdditionalSignReal.objects.active())
         .filter(additional_sign_plan__isnull=True)
         .select_related("device_type", "parent__device_type")
     )
@@ -91,12 +82,7 @@ def get_additionalsignreal_to_additionalsignplan_mapping(max_distance: float):
 def get_trafficsignreal_to_trafficsignplan_mapping(max_distance: float):
     """Get a list of possible matching TrafficSignPlans for a TrafficSignReal within given distance"""
     tsr_qset = (
-        TrafficSignReal.objects.active()
-        .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-        .filter(
-            Q(validity_period_start__isnull=True)
-            | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-        )
+        get_lifecycle_and_validity_period_queryset(TrafficSignReal.objects.active())
         .filter(traffic_sign_plan__isnull=True)
         .select_related("device_type")
     )
@@ -322,38 +308,18 @@ def _get_mount_plan_queryset():
     return (
         mount_plan_get_current()
         .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-        .filter(
-            Q(validity_period_start__isnull=True)
-            | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-        )
         .select_related("mount_type")
     )
 
 
 def _get_additional_sign_plan_queryset():
     """Helper function for find_duplicate_plan_instances"""
-    return (
-        additional_sign_plan_get_current()
-        .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-        .filter(
-            Q(validity_period_start__isnull=True)
-            | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-        )
-        .select_related("device_type")
-    )
+    return get_lifecycle_and_validity_period_queryset(additional_sign_plan_get_current()).select_related("device_type")
 
 
 def _get_traffic_sign_plan_queryset():
     """Helper function for find_duplicate_plan_instances"""
-    return (
-        traffic_sign_plan_get_current()
-        .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-        .filter(
-            Q(validity_period_start__isnull=True)
-            | (Q(validity_period_end__gte=timezone.now()) & Q(validity_period_start__lte=timezone.now()))
-        )
-        .select_related("device_type")
-    )
+    return get_lifecycle_and_validity_period_queryset(traffic_sign_plan_get_current()).select_related("device_type")
 
 
 def _get_match_params(plan_instance_obj):

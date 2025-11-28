@@ -3,6 +3,7 @@ from copy import deepcopy
 from gisserver.features import FeatureField, FeatureType
 
 from traffic_control.models import TrafficSignReal
+from traffic_control.services.common import get_lifecycle_and_validity_period_queryset
 from traffic_control.services.traffic_sign import traffic_sign_plan_get_current
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
@@ -14,7 +15,6 @@ from traffic_control.views.wfs.common import (
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
-from traffic_control.views.wfs.utils import get_lifecycle_and_validity_period_queryset
 
 _base_fields = (
     [
