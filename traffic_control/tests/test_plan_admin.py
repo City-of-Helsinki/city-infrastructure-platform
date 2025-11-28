@@ -182,7 +182,6 @@ def test_plan_relation_admin_view_form_submit(admin_client, redirect_after_save)
     "factory, field_name",
     (
         (get_barrier_plan, "barrier_plans"),
-        (get_mount_plan, "mount_plans"),
         (get_road_marking_plan, "road_marking_plans"),
         (get_signpost_plan, "signpost_plans"),
         (get_traffic_light_plan, "traffic_light_plans"),
@@ -209,7 +208,6 @@ def test_plan_relation_admin_view_updates_validity_period(admin_client, factory,
     url = reverse("admin:traffic_control_plan_set-plans", kwargs={"object_id": plan.pk})
     post_data = {
         "barrier_plans": [],
-        "mount_plans": [],
         "road_marking_plans": [],
         "signpost_plans": [],
         "traffic_light_plans": [],

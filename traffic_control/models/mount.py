@@ -134,18 +134,6 @@ class AbstractMount(
         null=True,
         help_text=_("Describes the material that the mount is made of."),
     )
-    validity_period_start = models.DateField(
-        _("Validity period start"),
-        blank=True,
-        null=True,
-        help_text=_("Date on which this mount becomes active."),
-    )
-    validity_period_end = models.DateField(
-        _("Validity period end"),
-        blank=True,
-        null=True,
-        help_text=_("Date after which this mount becomes inactive."),
-    )
     txt = models.CharField(
         _("Txt"),
         max_length=254,

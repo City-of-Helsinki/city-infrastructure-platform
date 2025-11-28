@@ -322,8 +322,6 @@ class MountRealFactory(factory.django.DjangoModelFactory):
     portal_type = factory.SubFactory(PortalTypeFactory)
     mount_type = factory.SubFactory(MountTypeFactory)
     material = "test material"
-    validity_period_start = None
-    validity_period_end = None
     txt = None
     electric_accountable = None
     is_foldable = None
