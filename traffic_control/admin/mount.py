@@ -83,6 +83,20 @@ class MountPlanFileInline(admin.TabularInline):
     formset = CityInfraFileUploadFormset
 
 
+class MountRealInline(admin.TabularInline):
+    model = MountReal
+    verbose_name = _("Mount Real")
+    verbose_name_plural = _("Mount Reals")
+    fields = ("id", "mount_type")
+    readonly_fields = ("id", "mount_type")
+    show_change_link = True
+    can_delete = False
+    extra = 0
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
 class MountPlanReplacesInline(ReplacesInline):
     model = MountPlanReplacement
 
@@ -180,6 +194,7 @@ class MountPlanAdmin(
     raw_id_fields = ("plan",)
     ordering = ("-created_at",)
     inlines = (
+        MountRealInline,
         MountPlanFileInline,
         MountPlanReplacesInline,
         MountPlanReplacedByInline,

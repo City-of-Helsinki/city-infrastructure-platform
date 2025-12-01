@@ -78,6 +78,17 @@ class TrafficSignRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
     raw_id_fields = ("traffic_light_real",)
 
 
+class TrafficLightRealInline(admin.TabularInline):
+    model = TrafficLightReal
+    verbose_name = _("Traffic Light Real")
+    verbose_name_plural = _("Traffic Light Reals")
+    fields = ("id", "device_type", "type")
+    readonly_fields = ("id", "device_type", "type")
+    show_change_link = True
+    can_delete = False
+    extra = 0
+
+
 class TrafficLightPlanFileInline(admin.TabularInline):
     formfield_overrides = {
         models.FileField: {"widget": AdminFileWidgetWithProxy},
@@ -186,6 +197,7 @@ class TrafficLightPlanAdmin(
     ordering = ("-created_at",)
     inlines = (
         TrafficLightPlanFileInline,
+        TrafficLightRealInline,
         TrafficLightPlanReplacesInline,
         TrafficLightPlanReplacedByInline,
     )

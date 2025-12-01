@@ -84,6 +84,20 @@ class FurnitureSignpostRealOperationInline(TrafficControlOperationInlineBase):
     model = FurnitureSignpostRealOperation
 
 
+class FurnitureSignpostRealInline(admin.TabularInline):
+    model = FurnitureSignpostReal
+    verbose_name = _("Furniture Signpost Real")
+    verbose_name_plural = _("Furniture Signpost Real")
+    fields = ("id", "device_type")
+    readonly_fields = ("id", "device_type")
+    show_change_link = True
+    can_delete = False
+    extra = 0
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
 class AbstractFurnitureSignpostAdmin(
     ResponsibleEntityPermissionAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
@@ -204,7 +218,7 @@ class FurnitureSignpostPlanAdmin(
     )
     raw_id_fields = ("plan", "mount_plan")
     list_filter = AbstractFurnitureSignpostAdmin.list_filter
-    inlines = (FurnitureSignpostPlanFileInline,)
+    inlines = (FurnitureSignpostPlanFileInline, FurnitureSignpostRealInline)
     search_fields = (
         "device_type__code",
         "id",

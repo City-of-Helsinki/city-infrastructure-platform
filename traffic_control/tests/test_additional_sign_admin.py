@@ -55,6 +55,8 @@ def test__additional_sign__create_missing_content(client: Client, model, url_nam
         "replacement_to_new-INITIAL_FORMS": 0,
         "files-TOTAL_FORMS": 0,
         "files-INITIAL_FORMS": 0,
+        "additionalsignreal_set-TOTAL_FORMS": 0,
+        "additionalsignreal_set-INITIAL_FORMS": 0,
     }
     if parent_factory:
         data.update({"parent": parent_factory().id})
@@ -111,6 +113,8 @@ def test__additional_sign__update_device_with_content_to_missing_content(
         "replacement_to_new-INITIAL_FORMS": 0,
         "files-TOTAL_FORMS": 0,
         "files-INITIAL_FORMS": 0,
+        "additionalsignreal_set-TOTAL_FORMS": 0,
+        "additionalsignreal_set-INITIAL_FORMS": 0,
     }
     if parent_factory:
         data.update({"parent": parent_factory().id})
@@ -170,6 +174,8 @@ def test__additional_sign__update_device_with_missing_content_to_have_content(
         "replacement_to_new-INITIAL_FORMS": 0,
         "files-TOTAL_FORMS": 0,
         "files-INITIAL_FORMS": 0,
+        "additionalsignreal_set-TOTAL_FORMS": 0,
+        "additionalsignreal_set-INITIAL_FORMS": 0,
     }
     if parent_factory:
         data.update({"parent": parent_factory().id})
@@ -290,6 +296,8 @@ def test_additional_sign_illegal_location(client: Client, model, factory, url_na
         "replacement_to_new-INITIAL_FORMS": 0,
         "files-TOTAL_FORMS": 0,
         "files-INITIAL_FORMS": 0,
+        "additionalsignreal_set-TOTAL_FORMS": 0,
+        "additionalsignreal_set-INITIAL_FORMS": 0,
     }
     if parent_factory:
         data.update({"parent": parent_factory().id})
@@ -329,6 +337,8 @@ def test__additional_sign_create_with_location_ewkt(client: Client, model, url_n
         "replacement_to_new-INITIAL_FORMS": 0,
         "files-TOTAL_FORMS": 0,
         "files-INITIAL_FORMS": 0,
+        "additionalsignreal_set-TOTAL_FORMS": 0,
+        "additionalsignreal_set-INITIAL_FORMS": 0,
     }
     if parent_factory:
         data.update({"parent": parent_factory().id})

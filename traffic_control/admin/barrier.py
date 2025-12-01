@@ -85,6 +85,20 @@ class BarrierPlanFileInline(admin.TabularInline):
     formset = CityInfraFileUploadFormset
 
 
+class BarrierRealInline(admin.TabularInline):
+    model = BarrierReal
+    verbose_name = _("Barrier real")
+    verbose_name_plural = _("Barrier reals")
+    fields = ("id", "connection_type", "device_type")
+    readonly_fields = ("id", "connection_type", "device_type")
+    show_change_link = True
+    can_delete = False
+    extra = 0
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
 class BarrierPlanReplacesInline(ReplacesInline):
     model = BarrierPlanReplacement
 
@@ -184,6 +198,7 @@ class BarrierPlanAdmin(
     ordering = ("-created_at",)
     inlines = (
         BarrierPlanFileInline,
+        BarrierRealInline,
         BarrierPlanReplacesInline,
         BarrierPlanReplacedByInline,
     )

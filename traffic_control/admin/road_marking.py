@@ -93,6 +93,20 @@ class RoadMarkingPlanFileInline(admin.TabularInline):
     formset = CityInfraFileUploadFormset
 
 
+class RoadMarkinRealInline(admin.TabularInline):
+    model = RoadMarkingReal
+    verbose_name = _("Road Marking Real")
+    verbose_name_plural = _("Road Marking Real")
+    fields = ("id", "device_type", "color")
+    readonly_fields = ("id", "device_type", "color")
+    show_change_link = True
+    can_delete = False
+    extra = 0
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
 class RoadMarkingPlanReplacesInline(ReplacesInline):
     model = RoadMarkingPlanReplacement
 
@@ -210,6 +224,7 @@ class RoadMarkingPlanAdmin(
     ordering = ("-created_at",)
     inlines = (
         RoadMarkingPlanFileInline,
+        RoadMarkinRealInline,
         RoadMarkingPlanReplacesInline,
         RoadMarkingPlanReplacedByInline,
     )

@@ -174,6 +174,28 @@ class TrafficSignPlanFileInline(admin.TabularInline):
     formset = CityInfraFileUploadFormset
 
 
+class OrderedTrafficSignRealInline(admin.TabularInline):
+    model = TrafficSignReal
+    fields = ("id", "z_coord")
+    readonly_fields = ("id", "z_coord")
+    show_change_link = True
+    can_delete = False
+    verbose_name = _("Ordered traffic sign")
+    verbose_name_plural = _("Ordered traffic signs")
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return order_queryset_by_z_coord_desc(qs)
+
+    def z_coord(self, obj):
+        return obj.location.z
+
+    z_coord.short_description = _("Location (z)")
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 class TrafficSignPlanReplacesInline(ReplacesInline):
     model = TrafficSignPlanReplacement
 
@@ -289,6 +311,7 @@ class TrafficSignPlanAdmin(
     inlines = (
         TrafficSignPlanFileInline,
         AdditionalSignPlanInline,
+        OrderedTrafficSignRealInline,
         TrafficSignPlanReplacesInline,
         TrafficSignPlanReplacedByInline,
     )
@@ -310,6 +333,17 @@ class TrafficSignRealFileInline(admin.TabularInline):
     }
     model = TrafficSignRealFile
     formset = CityInfraFileUploadFormset
+
+
+class TrafficSignRealInline(admin.TabularInline):
+    model = TrafficSignReal
+    verbose_name = _("Traffic Sign Real")
+    verbose_name_plural = _("Traffic Sign Reals")
+    fields = ("id", "device_type", "mount_type")
+    readonly_fields = ("id", "device_type", "mount_type")
+    show_change_link = True
+    can_delete = False
+    extra = 0
 
 
 class TrafficSignRealOperationInline(TrafficControlOperationInlineBase):
@@ -507,25 +541,3 @@ class TrafficSignRealAdmin(
         return (_("No"), _("Yes"))[obj.has_additional_signs()]
 
     has_additional_signs.short_description = _("has additional signs")
-
-
-class OrderedTrafficSignRealInline(admin.TabularInline):
-    model = TrafficSignReal
-    fields = ("id", "z_coord")
-    readonly_fields = ("id", "z_coord")
-    show_change_link = True
-    can_delete = False
-    verbose_name = _("Ordered traffic sign")
-    verbose_name_plural = _("Ordered traffic signs")
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return order_queryset_by_z_coord_desc(qs)
-
-    def z_coord(self, obj):
-        return obj.location.z
-
-    z_coord.short_description = _("Location (z)")
-
-    def has_add_permission(self, request, obj=None):
-        return False
