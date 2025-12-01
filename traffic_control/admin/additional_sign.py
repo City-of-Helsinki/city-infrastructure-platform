@@ -66,6 +66,35 @@ shared_initial_values = {
 }
 
 
+class BaseAdditionalSignInline(admin.TabularInline):
+    model = None
+    fields = (
+        "height",
+        "id",
+        "device_type",
+        "content_s",
+    )
+    readonly_fields = (
+        "id",
+        "device_type",
+        "content_s",
+        "height",
+    )
+    extra = 0
+    ordering = ("height",)
+    show_change_link = True
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
+
+class AdditionalSignRealInline(BaseAdditionalSignInline):
+    model = AdditionalSignReal
+    verbose_name = _("Additional Sign Real")
+    verbose_name_plural = _("Additional Sign Reals")
+
+
 @admin.register(AdditionalSignPlanFile)
 class AdditionalSignPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
     formfield_overrides = {
@@ -210,6 +239,7 @@ class AdditionalSignPlanAdmin(
     ordering = ("-created_at",)
     inlines = (
         AdditionalSignPlanFileInline,
+        AdditionalSignRealInline,
         AdditionalSignPlanReplacesInline,
         AdditionalSignPlanReplacedByInline,
     )
@@ -413,36 +443,7 @@ class AdditionalSignRealAdmin(
         )
 
 
-class BaseAdditionalSignInline(admin.TabularInline):
-    model = None
-    fields = (
-        "height",
-        "id",
-        "device_type",
-        "content_s",
-    )
-    readonly_fields = (
-        "id",
-        "device_type",
-        "content_s",
-        "height",
-    )
-    extra = 0
-    ordering = ("height",)
-    show_change_link = True
-    can_delete = False
-
-    def has_add_permission(self, request, obj):
-        return False
-
-
 class AdditionalSignPlanInline(BaseAdditionalSignInline):
     model = AdditionalSignPlan
     verbose_name = _("Additional Sign Plan")
     verbose_name_plural = _("Additional Sign Plans")
-
-
-class AdditionalSignRealInline(BaseAdditionalSignInline):
-    model = AdditionalSignReal
-    verbose_name = _("Additional Sign Real")
-    verbose_name_plural = _("Additional Sign Reals")

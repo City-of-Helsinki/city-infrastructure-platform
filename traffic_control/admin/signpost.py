@@ -87,6 +87,17 @@ class SignpostPlanFileInline(admin.TabularInline):
     formset = CityInfraFileUploadFormset
 
 
+class SignpostRealInline(admin.TabularInline):
+    model = SignpostReal
+    verbose_name = _("Signpost Real")
+    verbose_name_plural = _("Signpost Reals")
+    fields = ("id", "device_type", "mount_type")
+    readonly_fields = ("id", "device_type", "mount_type")
+    show_change_link = True
+    can_delete = False
+    extra = 0
+
+
 class SignpostPlanReplacesInline(ReplacesInline):
     model = SignpostPlanReplacement
 
@@ -190,6 +201,7 @@ class SignpostPlanAdmin(
     ordering = ("-created_at",)
     inlines = (
         SignpostPlanFileInline,
+        SignpostRealInline,
         SignpostPlanReplacesInline,
         SignpostPlanReplacedByInline,
     )
