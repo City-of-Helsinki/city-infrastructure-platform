@@ -85,34 +85,40 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
     child_model_name = child_model._meta.verbose_name.capitalize()
 
     def cache_old_parent(sender, instance, **kwargs):
-        # Only cache if this is an update (instance has pk and is being loaded from DB)
+        # Only cache if this is an update (instance has pk and exists in DB)
         if instance.pk and not instance._state.adding:
-            # Use get_deferred_fields to check if we need to refresh from DB
-            # In multi-backend environments, we use the tracker if available
             try:
-                # Try to get the original value from the database state
-                # This works better in multi-backend setups as it uses the instance's
-                # loaded state rather than making a new query
-                if hasattr(instance, "_loaded_values") and parent_field_name in instance._loaded_values:
-                    setattr(instance, cache_attr, instance._loaded_values[parent_field_name])
-                else:
-                    # Fallback: get from current instance state (before save)
-                    # This avoids an additional DB query which can cause issues
-                    # in multi-backend environments with replication lag
-                    db_instance = sender._default_manager.using(instance._state.db).get(pk=instance.pk)
-                    setattr(instance, cache_attr, getattr(db_instance, parent_field_name))
+                # Get the current database being used for this instance
+                using = kwargs.get("using") or instance._state.db or "default"
+                # Fetch the old instance from the database to get the original parent value
+                # Use only() to fetch just the field we need for efficiency
+                db_instance = sender._default_manager.using(using).only("pk", parent_field_name).get(pk=instance.pk)
+                old_parent_value = getattr(db_instance, parent_field_name)
+                setattr(instance, cache_attr, old_parent_value)
+                logger.info(
+                    f"Cached old {parent_field_name} for {sender.__name__} pk={instance.pk}: {old_parent_value}"
+                )
             except sender.DoesNotExist:
+                # Instance doesn't exist in DB yet (shouldn't happen, but handle gracefully)
                 setattr(instance, cache_attr, None)
+                logger.warning(f"Could not find {sender.__name__} pk={instance.pk} in database during pre_save")
         else:
+            # New instance, no old parent
             setattr(instance, cache_attr, None)
 
     def log_parent_change(sender, instance, created, **kwargs):
         old_parent = getattr(instance, cache_attr, None)
         new_parent = getattr(instance, parent_field_name)
 
+        logger.info(
+            f"log_parent_change for {sender.__name__} pk={instance.pk}: "
+            f"created={created}, old_parent={old_parent}, new_parent={new_parent}"
+        )
+
         # Log removal from the old parent if the parent has changed
         if not created and old_parent and old_parent != new_parent:
             message = f"{child_model_name} '{instance}' was removed."
+            logger.info(f"Creating removal log entry: {message} for {old_parent}")
             LogEntry.objects.log_create(
                 instance=old_parent,
                 action=LogEntry.Action.UPDATE,
@@ -129,6 +135,7 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
                 message = f"{child_model_name} '{instance}' was updated."
                 changes = {"relations": [message, message]}
 
+            logger.info(f"Creating log entry for parent {new_parent}: {message}")
             LogEntry.objects.log_create(
                 instance=new_parent,
                 action=LogEntry.Action.UPDATE,
