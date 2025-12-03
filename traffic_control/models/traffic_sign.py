@@ -1,4 +1,3 @@
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
@@ -42,7 +41,6 @@ from traffic_control.models.common import (
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import SoftDeleteQuerySet
-from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class LocationSpecifier(models.IntegerChoices):
@@ -421,13 +419,3 @@ class TrafficSignRealFile(AbstractFileModel):
         db_table = "traffic_sign_real_file"
         verbose_name = _("Traffic Sign Real File")
         verbose_name_plural = _("Traffic Sign Real Files")
-
-
-auditlog.register(TrafficSignPlan)
-auditlog.register(TrafficSignPlanFile)
-auditlog.register(TrafficSignReal)
-auditlog.register(TrafficSignRealFile)
-
-# Create signals for parent models
-create_auditlog_signals_for_parent_model(TrafficSignRealFile, "traffic_sign_real")
-create_auditlog_signals_for_parent_model(TrafficSignPlanFile, "traffic_sign_plan")

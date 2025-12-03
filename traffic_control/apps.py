@@ -19,6 +19,11 @@ class TrafficControlConfig(AppConfig):
         import traffic_control.signals  # noqa: F401
         from traffic_control.mixins.models import AbstractFileModel  # noqa: F401
 
+        # Register audit log signals after all models are loaded
+        from traffic_control.signals import register_auditlog_signals
+
+        register_auditlog_signals()
+
         for model in apps.get_models():
             if not issubclass(model, AbstractFileModel) or model._meta.abstract:
                 continue

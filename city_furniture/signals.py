@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.conf import settings
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
@@ -24,3 +25,38 @@ def delete_city_furniture_device_type_icon_files(instance, **_kwargs):
     delete_icon_files_on_row_delete(
         instance=instance, png_folder=settings.CITY_FURNITURE_DEVICE_TYPE_PNG_ICON_DESTINATION
     )
+
+
+# ============================================================================
+# Audit log signal registration
+# This must happen here in signals.py, not at module level in models files,
+# to ensure proper initialization in multi-backend environments
+# ============================================================================
+
+
+def register_auditlog_signals():
+    """
+    Register custom audit log signals and auditlog models.
+    Called during app initialization in apps.py ready() method.
+    """
+    from city_furniture.models.furniture_signpost import (
+        FurnitureSignpostPlan,
+        FurnitureSignpostPlanFile,
+        FurnitureSignpostReal,
+        FurnitureSignpostRealFile,
+    )
+    from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
+
+    # Register custom signals BEFORE auditlog.register()
+    create_auditlog_signals_for_parent_model(FurnitureSignpostPlanFile, "furniture_signpost_plan")
+    create_auditlog_signals_for_parent_model(FurnitureSignpostRealFile, "furniture_signpost_real")
+
+    # Register models with auditlog AFTER our custom signals
+    auditlog.register(FurnitureSignpostPlan)
+    auditlog.register(FurnitureSignpostPlanFile)
+    auditlog.register(FurnitureSignpostReal)
+    auditlog.register(FurnitureSignpostRealFile)
+
+
+# NOTE: Do NOT call register_auditlog_signals() here at module level!
+# It will be called from apps.py ready() method after all models are loaded.

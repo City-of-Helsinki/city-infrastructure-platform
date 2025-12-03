@@ -10,3 +10,8 @@ class CityFurnitureConfig(AppConfig):
         # Implicitly connect signal handlers decorated with @receiver.
         # https://docs.djangoproject.com/en/4.2/topics/signals/#connecting-receiver-functions
         import city_furniture.signals  # noqa: F401
+
+        # Register audit log signals after all models are loaded
+        from city_furniture.signals import register_auditlog_signals
+
+        register_auditlog_signals()

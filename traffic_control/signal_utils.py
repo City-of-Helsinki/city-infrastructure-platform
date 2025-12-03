@@ -5,7 +5,7 @@ import cairosvg
 from auditlog.models import LogEntry
 from django.conf import settings
 from django.core.files.base import ContentFile
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_delete, post_save, pre_save
 
 logger = logging.getLogger("django")
 
@@ -72,6 +72,36 @@ def delete_icon_files_on_row_delete(*, instance, png_folder):
         logger.error(f"Error deleting files for instance {instance.pk}: {e}")
 
 
+def _create_parent_log_entry(parent, message, action=None):
+    """Helper to create an audit log entry for a parent model."""
+    if action is None:
+        action = LogEntry.Action.UPDATE
+
+    changes = {"relations": [message, None]} if "removed" in message else {"relations": [None, message]}
+    if "updated" in message:
+        changes = {"relations": [message, message]}
+
+    try:
+        LogEntry.objects.log_create(
+            instance=parent,
+            action=action,
+            changes=changes,
+        )
+        logger.info(f"Successfully created log entry for {parent}: {message}")
+    except Exception as e:
+        logger.error(f"Failed to create log entry for {parent}: {e}", exc_info=True)
+
+
+def _fetch_old_parent_value(sender, instance, parent_field_name, using):
+    """Helper to fetch the old parent value from the database."""
+    try:
+        db_instance = sender._default_manager.using(using).only("pk", parent_field_name).get(pk=instance.pk)
+        return getattr(db_instance, parent_field_name)
+    except sender.DoesNotExist:
+        logger.warning(f"Could not find {sender.__name__} pk={instance.pk} in database during pre_save")
+        return None
+
+
 def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
     """
     A factory that creates and connects pre_save and post_save signal handlers
@@ -87,21 +117,13 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
     def cache_old_parent(sender, instance, **kwargs):
         # Only cache if this is an update (instance has pk and exists in DB)
         if instance.pk and not instance._state.adding:
-            try:
-                # Get the current database being used for this instance
-                using = kwargs.get("using") or instance._state.db or "default"
-                # Fetch the old instance from the database to get the original parent value
-                # Use only() to fetch just the field we need for efficiency
-                db_instance = sender._default_manager.using(using).only("pk", parent_field_name).get(pk=instance.pk)
-                old_parent_value = getattr(db_instance, parent_field_name)
-                setattr(instance, cache_attr, old_parent_value)
+            using = kwargs.get("using") or instance._state.db or "default"
+            old_parent_value = _fetch_old_parent_value(sender, instance, parent_field_name, using)
+            setattr(instance, cache_attr, old_parent_value)
+            if old_parent_value:
                 logger.info(
                     f"Cached old {parent_field_name} for {sender.__name__} pk={instance.pk}: {old_parent_value}"
                 )
-            except sender.DoesNotExist:
-                # Instance doesn't exist in DB yet (shouldn't happen, but handle gracefully)
-                setattr(instance, cache_attr, None)
-                logger.warning(f"Could not find {sender.__name__} pk={instance.pk} in database during pre_save")
         else:
             # New instance, no old parent
             setattr(instance, cache_attr, None)
@@ -119,36 +141,43 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
         if not created and old_parent and old_parent != new_parent:
             message = f"{child_model_name} '{instance}' was removed."
             logger.info(f"Creating removal log entry: {message} for {old_parent}")
-            LogEntry.objects.log_create(
-                instance=old_parent,
-                action=LogEntry.Action.UPDATE,
-                changes={"relations": [message, None]},
-            )
+            _create_parent_log_entry(old_parent, message)
 
         # Log addition or update to the new parent
         if new_parent:
             is_new_relation = created or old_parent != new_parent
-            if is_new_relation:
-                message = f"{child_model_name} '{instance}' was added."
-                changes = {"relations": [None, message]}
-            else:
-                message = f"{child_model_name} '{instance}' was updated."
-                changes = {"relations": [message, message]}
-
-            logger.info(f"Creating log entry for parent {new_parent}: {message}")
-            LogEntry.objects.log_create(
-                instance=new_parent,
-                action=LogEntry.Action.UPDATE,
-                changes=changes,
+            message = (
+                f"{child_model_name} '{instance}' was added."
+                if is_new_relation
+                else f"{child_model_name} '{instance}' was updated."
             )
+            logger.info(f"Creating log entry for parent {new_parent}: {message}")
+            _create_parent_log_entry(new_parent, message)
+
+    def log_parent_deletion(sender, instance, **kwargs):
+        """Log when a child is deleted from its parent."""
+        parent = getattr(instance, parent_field_name, None)
+
+        if parent:
+            message = f"{child_model_name} '{instance}' was removed."
+            logger.info(f"Creating deletion log entry: {message} for {parent}")
+            _create_parent_log_entry(parent, message)
 
     pre_save.connect(
         cache_old_parent,
         sender=child_model,
         dispatch_uid=f"cache_old_parent_{child_model.__name__}_{parent_field_name}",
+        weak=False,  # Don't use weak references for local functions
     )
     post_save.connect(
         log_parent_change,
         sender=child_model,
         dispatch_uid=f"log_parent_change_{child_model.__name__}_{parent_field_name}",
+        weak=False,  # Don't use weak references for local functions
+    )
+    post_delete.connect(
+        log_parent_deletion,
+        sender=child_model,
+        dispatch_uid=f"log_parent_deletion_{child_model.__name__}_{parent_field_name}",
+        weak=False,  # Don't use weak references for local functions
     )

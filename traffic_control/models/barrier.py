@@ -1,4 +1,3 @@
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
@@ -29,7 +28,6 @@ from traffic_control.models.common import (
     VERBOSE_NAME_OLD,
 )
 from traffic_control.models.plan import Plan
-from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class ConnectionType(models.IntegerChoices):
@@ -268,14 +266,3 @@ class BarrierRealFile(AbstractFileModel):
         db_table = "barrier_real_file"
         verbose_name = _("Barrier Real File")
         verbose_name_plural = _("Barrier Real Files")
-
-
-auditlog.register(BarrierPlan)
-auditlog.register(BarrierPlanFile)
-auditlog.register(BarrierReal)
-auditlog.register(BarrierRealFile)
-auditlog.register(BarrierPlanReplacement)
-
-# Create signals for parent models
-create_auditlog_signals_for_parent_model(BarrierRealFile, "barrier_real")
-create_auditlog_signals_for_parent_model(BarrierPlanFile, "barrier_plan")

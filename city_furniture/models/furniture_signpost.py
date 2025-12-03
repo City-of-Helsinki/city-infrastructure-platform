@@ -1,4 +1,3 @@
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
@@ -23,7 +22,6 @@ from traffic_control.mixins.models import (
 from traffic_control.models.common import OperationBase, OperationType
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
-from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class ArrowDirection(models.IntegerChoices):
@@ -341,13 +339,3 @@ class FurnitureSignpostRealFile(AbstractFileModel):
         db_table = "furniture_signpost_real_file"
         verbose_name = _("Furniture Signpost Real File")
         verbose_name_plural = _("Furniture Signpost Real Files")
-
-
-auditlog.register(FurnitureSignpostPlan)
-auditlog.register(FurnitureSignpostPlanFile)
-auditlog.register(FurnitureSignpostReal)
-auditlog.register(FurnitureSignpostRealFile)
-
-# Create signals for parent models
-create_auditlog_signals_for_parent_model(FurnitureSignpostPlanFile, "furniture_signpost_plan")
-create_auditlog_signals_for_parent_model(FurnitureSignpostRealFile, "furniture_signpost_real")

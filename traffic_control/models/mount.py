@@ -1,6 +1,5 @@
 import uuid
 
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
@@ -24,7 +23,6 @@ from traffic_control.mixins.models import (
 from traffic_control.models.common import OperationBase, OperationType, VERBOSE_NAME_NEW, VERBOSE_NAME_OLD
 from traffic_control.models.plan import Plan
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
-from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class LocationSpecifier(models.IntegerChoices):
@@ -339,15 +337,3 @@ class MountRealFile(AbstractFileModel):
         db_table = "mount_real_file"
         verbose_name = _("Mount Real File")
         verbose_name_plural = _("Mount Real Files")
-
-
-auditlog.register(MountType)
-auditlog.register(MountPlan)
-auditlog.register(MountPlanFile)
-auditlog.register(MountReal)
-auditlog.register(MountRealFile)
-auditlog.register(MountPlanReplacement)
-
-# Create signals for parent models
-create_auditlog_signals_for_parent_model(MountRealFile, "mount_real")
-create_auditlog_signals_for_parent_model(MountPlanFile, "mount_plan")
