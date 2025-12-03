@@ -1,4 +1,3 @@
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
@@ -31,7 +30,6 @@ from traffic_control.models.common import (
 )
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
-from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class LineDirection(models.TextChoices):
@@ -345,14 +343,3 @@ class RoadMarkingRealFile(AbstractFileModel):
         db_table = "road_marking_real_file"
         verbose_name = _("RoadMarking Real File")
         verbose_name_plural = _("RoadMarking Real Files")
-
-
-auditlog.register(RoadMarkingPlan)
-auditlog.register(RoadMarkingPlanFile)
-auditlog.register(RoadMarkingReal)
-auditlog.register(RoadMarkingRealFile)
-auditlog.register(RoadMarkingPlanReplacement)
-
-# Create signals for parent models
-create_auditlog_signals_for_parent_model(RoadMarkingRealFile, "road_marking_real")
-create_auditlog_signals_for_parent_model(RoadMarkingPlanFile, "road_marking_plan")

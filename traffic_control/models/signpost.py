@@ -1,4 +1,3 @@
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
@@ -33,7 +32,6 @@ from traffic_control.models.common import (
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import LocationSpecifier
-from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class AbstractSignpost(
@@ -366,14 +364,3 @@ class SignpostRealFile(AbstractFileModel):
         db_table = "signpost_real_file"
         verbose_name = _("Signpost Real File")
         verbose_name_plural = _("Signpost Real Files")
-
-
-auditlog.register(SignpostPlan)
-auditlog.register(SignpostPlanFile)
-auditlog.register(SignpostReal)
-auditlog.register(SignpostRealFile)
-auditlog.register(SignpostPlanReplacement)
-
-# Create signals for parent models
-create_auditlog_signals_for_parent_model(SignpostRealFile, "signpost_real")
-create_auditlog_signals_for_parent_model(SignpostPlanFile, "signpost_plan")

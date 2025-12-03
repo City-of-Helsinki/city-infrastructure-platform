@@ -1,4 +1,3 @@
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
@@ -30,7 +29,6 @@ from traffic_control.models.common import (
 )
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
-from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
 
 class TrafficLightSoundBeaconValue(models.IntegerChoices):
@@ -327,14 +325,3 @@ class TrafficLightRealFile(AbstractFileModel):
         db_table = "traffic_light_real_file"
         verbose_name = _("Traffic Light Real File")
         verbose_name_plural = _("Traffic Light Real Files")
-
-
-auditlog.register(TrafficLightPlan)
-auditlog.register(TrafficLightPlanFile)
-auditlog.register(TrafficLightReal)
-auditlog.register(TrafficLightRealFile)
-auditlog.register(TrafficLightPlanReplacement)
-
-# Create signals for parent models
-create_auditlog_signals_for_parent_model(TrafficLightRealFile, "traffic_light_real")
-create_auditlog_signals_for_parent_model(TrafficLightPlanFile, "traffic_light_plan")

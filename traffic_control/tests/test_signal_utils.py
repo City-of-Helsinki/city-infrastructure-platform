@@ -12,9 +12,9 @@ from traffic_control.tests.factories import AdditionalSignRealFactory, TrafficSi
 # using real, migrated models instead of ad-hoc dynamic test models. This
 # avoids interfering with Django's test database setup.
 #
-# Signals are registered in model modules at import time. We assume the
-# project settings ensure models are imported during test collection.
-# If a signal registration changes, update expectations accordingly.
+# Signals are registered in the app's ready() method (traffic_control/apps.py)
+# during Django initialization, ensuring all models are loaded before signal
+# registration. If a signal registration changes, update expectations accordingly.
 
 
 @pytest.mark.django_db
@@ -123,3 +123,31 @@ def test_additional_sign_real_update_without_parent_change_logs_update_on_parent
     assert log, "Expected an update log entry on parent after child update"
     rel = log.changes_dict.get("relations")
     assert rel and rel[0] == rel[1] and "was updated" in rel[0]
+
+
+@pytest.mark.django_db
+def test_additional_sign_real_file_deletion_logs_removal_on_parent():
+    parent = AdditionalSignRealFactory()
+    LogEntry.objects.filter(object_pk=str(parent.pk)).delete()
+
+    test_file = SimpleUploadedFile("delete_test.txt", b"content", content_type="text/plain")
+    file_obj = AdditionalSignRealFile.objects.create(file=test_file, additional_sign_real=parent)
+
+    # Clear creation log for isolation
+    LogEntry.objects.filter(object_pk=str(parent.pk)).delete()
+
+    # Delete the file object
+    file_obj.delete()
+
+    # Fetch the deletion log entry for the parent
+    log = (
+        LogEntry.objects.filter(object_pk=str(parent.pk), content_type__model=parent._meta.model_name)
+        .order_by("-id")
+        .first()
+    )
+
+    assert log, "Expected a log entry for parent on file deletion"
+    assert log.action == LogEntry.Action.UPDATE
+    relations = log.changes_dict.get("relations")
+    assert relations and "was removed" in relations[0] and relations[1] is None
+    assert str(parent.pk) == log.object_pk
