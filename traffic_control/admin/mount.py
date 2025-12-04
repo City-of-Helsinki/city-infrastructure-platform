@@ -159,12 +159,7 @@ class MountPlanAdmin(
         (_("Related models"), {"fields": ("plan",)}),
         (
             _("Validity"),
-            {
-                "fields": (
-                    ("validity_period_start", "validity_period_end"),
-                    "lifecycle",
-                )
-            },
+            {"fields": ("lifecycle",)},
         ),
         (
             _("Metadata"),
@@ -273,12 +268,7 @@ class MountRealAdmin(
         ),
         (
             _("Validity"),
-            {
-                "fields": (
-                    ("validity_period_start", "validity_period_end"),
-                    "lifecycle",
-                )
-            },
+            {"fields": ("lifecycle",)},
         ),
         (
             _("Metadata"),
