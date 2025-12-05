@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-18 12:23+0200\n"
+"POT-Creation-Date: 2025-12-05 12:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Furniture Signpost Real"
+msgstr "Lokaliseringsmärke (implementering)"
 
 msgid "General information"
 msgstr "Allmän information"
@@ -379,15 +382,6 @@ msgid ""
 "park or island."
 msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
 
-msgid "Direction"
-msgstr "Riktning"
-
-msgid ""
-"The direction a person is facing when looking perpendicular to the sign. The "
-"value is in degrees from 0 to 359, where 0 is north, 90 is east, etc."
-msgstr ""
-"Riktningen i vilken en person vänder sig när hen tittar direkt på skylten."
-
 msgid "Additional location info"
 msgstr "Ytterligare platsinfo"
 
@@ -525,9 +519,6 @@ msgstr "Överordnat lokaliseringsmärke (implementering)"
 
 msgid "Mount Real"
 msgstr "Montering (implementering)"
-
-msgid "Furniture Signpost Real"
-msgstr "Lokaliseringsmärke (implementering)"
 
 msgid "Furniture Signpost Reals"
 msgstr "Lokaliseringsmärke (implementeringar)"
@@ -694,6 +685,12 @@ msgstr "Grundkartor"
 msgid "Overlays"
 msgstr "Överlägg"
 
+msgid "Additional Sign Real"
+msgstr "Tilläggsskylt (implementering)"
+
+msgid "Additional Sign Reals"
+msgstr "Tilläggsskylt (implementeringar)"
+
 msgid "Physical properties"
 msgstr "Fysiska egenskaper"
 
@@ -703,11 +700,11 @@ msgstr "Tilläggsskylt (plan)"
 msgid "Additional Sign Plans"
 msgstr "Tilläggsskylt (planer)"
 
-msgid "Additional Sign Real"
-msgstr "Tilläggsskylt (implementering)"
+msgid "Barrier real"
+msgstr "Bom (implementering)"
 
-msgid "Additional Sign Reals"
-msgstr "Tilläggsskylt (implementeringar)"
+msgid "Barrier reals"
+msgstr "Bom (implementeringar)"
 
 msgid "Operational area"
 msgstr "Åtgärdsområde"
@@ -727,6 +724,9 @@ msgstr "Nej"
 msgid "Yes"
 msgstr "Ja"
 
+msgid "Mount Reals"
+msgstr "Montering (implementeringar)"
+
 msgid "Operational areas"
 msgstr "Åtgärdsområden"
 
@@ -737,11 +737,23 @@ msgstr "Ange relaterade planer för planen %s"
 msgid "Responsible entities"
 msgstr "Ansvariga enheter"
 
+msgid "Road Marking Real"
+msgstr "Vägmarkering (implementering)"
+
+msgid "Signpost Real"
+msgstr "Vägvisare (implementering)"
+
+msgid "Signpost Reals"
+msgstr "Vägvisare (implementeringar)"
+
+msgid "Traffic Light Real"
+msgstr "Trafiksignal (implementering)"
+
+msgid "Traffic Light Reals"
+msgstr "Trafiksignal (implementeringar)"
+
 msgid "Traffic sign type"
 msgstr "Typ av trafikskylt"
-
-msgid "has additional signs"
-msgstr "har tilläggsskyltar"
 
 msgid "Ordered traffic sign"
 msgstr "Ordnad trafikskylt"
@@ -751,6 +763,15 @@ msgstr "Ordnade trafikskyltar"
 
 msgid "Location (z)"
 msgstr "Plats (z)"
+
+msgid "has additional signs"
+msgstr "har tilläggsskyltar"
+
+msgid "Traffic Sign Real"
+msgstr "Trafikskylt (implementering)"
+
+msgid "Traffic Sign Reals"
+msgstr "Trafikskylt (implementeringar)"
 
 msgid "Any date"
 msgstr "Valfritt datum"
@@ -787,6 +808,17 @@ msgstr "Utförseltyp"
 
 msgid "Traffic control"
 msgstr "Trafikstyrning"
+
+msgid "Direction"
+msgstr "Riktning"
+
+msgid ""
+"The orientation of the device’s front side in degrees (0–359): 0 = north, 90 "
+"= east, 180 = south, 270 = west. The direction indicates from which side the "
+"device is correctly visible."
+msgstr ""
+"Anordningens framsidas riktning i grader (0–359): 0 = norr, 90 = öster, 180 = söder, 270 = väster. "
+"Riktningen anger från vilken sida anordningen syns rättvänd."
 
 msgid "Warning sign"
 msgstr "Varningsmärke"
@@ -1054,17 +1086,17 @@ msgstr "Skapades av"
 msgid "Updated by"
 msgstr "Uppdaterades av"
 
-msgid "Owner"
-msgstr "Ägare"
-
-msgid "Owner who orders and is responsible for the maintenance of the device."
-msgstr "Ägare som beställer och ansvarar för underhåll av anordningen."
-
 msgid "Responsible entity"
 msgstr "Ansvarig enhet"
 
 msgid "Organization or project that this device is assigned to."
 msgstr "Organisation eller projekt som denna anordning är tilldelad."
+
+msgid "Owner"
+msgstr "Ägare"
+
+msgid "Owner who orders and is responsible for the maintenance of the device."
+msgstr "Ägare som beställer och ansvarar för underhåll av anordningen."
 
 msgid "Lifecycle"
 msgstr "Livscykel"
@@ -1380,12 +1412,6 @@ msgstr "Ersättningar för körhinderplaner"
 msgid "The plan for this barrier."
 msgstr "Plan för detta körhinder."
 
-msgid "Barrier real"
-msgstr "Bom (implementering)"
-
-msgid "Barrier reals"
-msgstr "Bom (implementeringar)"
-
 msgid "barrier real"
 msgstr "bom (implementering)"
 
@@ -1550,12 +1576,6 @@ msgstr "Id-nummer för portaltypen i portaltyptabellen."
 msgid "Describes the material that the mount is made of."
 msgstr "Anger det material av vilket fästpunkten är tillverkad."
 
-msgid "Date on which this mount becomes active."
-msgstr "Datum då fästpunkten tas i bruk."
-
-msgid "Date after which this mount becomes inactive."
-msgstr "Datum efter vilket fästpunkten inte är i bruk."
-
 msgid "Text written on the mount."
 msgstr "Text som är skriven på fästpunkten."
 
@@ -1609,9 +1629,6 @@ msgstr "Datum och klockslag för föregående skanning av denna fästpunkt."
 
 msgid "URL to a file attachment related to this mount."
 msgstr "URL för filbilagan om denna fästpunkt."
-
-msgid "Mount Reals"
-msgstr "Montering (implementeringar)"
 
 msgid "mount real"
 msgstr "montering (implementering)"
@@ -1877,9 +1894,6 @@ msgstr "Ersättningar för vägmarkeringsplaner"
 msgid "The plan for this road marking."
 msgstr "Plan för denna vägmarkering."
 
-msgid "Traffic Sign Real"
-msgstr "Trafikskylt (implementering)"
-
 msgid "Missing Traffic Sign Real txt"
 msgstr "Trafikskylt saknas (implementering-txt)"
 
@@ -1889,9 +1903,6 @@ msgid ""
 msgstr ""
 "Fritextbeskrivning av trafikskylten som vägmarkeringen hör till om "
 "trafikskylten inte har något id för trafikskyltimplementering."
-
-msgid "Road Marking Real"
-msgstr "Vägmarkering (implementering)"
 
 msgid "Road Marking Reals"
 msgstr "Vägmarkering (implementeringar)"
@@ -2004,12 +2015,6 @@ msgstr "Namn på organisationen som tillverkade denna anordning."
 msgid "Date and time on which this signpost was last scanned at."
 msgstr "Datum och klockslag för föregående skanning av denna skyltplan."
 
-msgid "Signpost Real"
-msgstr "Vägvisare (implementering)"
-
-msgid "Signpost Reals"
-msgstr "Vägvisare (implementeringar)"
-
 msgid "signpost real"
 msgstr "vägvisare (implementering)"
 
@@ -2085,14 +2090,6 @@ msgstr "Anger vilken fil på vägen trafikljuset inverkar på."
 msgid "The type of lane which this traffic light affects."
 msgstr "Typ av den fil som trafikljuset inverkar på."
 
-msgid ""
-"The direction a person is facing when looking perpendicular to the traffic "
-"light. The value is in degrees from 0 to 359, where 0 is north, 90 is east, "
-"etc."
-msgstr ""
-"Riktning i vilken en person tittar när hen tittar rakt på trafikljuset. I "
-"grader är värdet 0-359, där 0 är norr, 90 öster osv."
-
 msgid "Type of the mount this traffic light is attached to."
 msgstr "Typen av den fästpunkt som trafikljuset är kopplat till."
 
@@ -2146,12 +2143,6 @@ msgstr "Ersättningar för trafikljusplaner"
 
 msgid "The plan for this traffic light."
 msgstr "Plan för detta trafikljus."
-
-msgid "Traffic Light Real"
-msgstr "Trafiksignal (implementering)"
-
-msgid "Traffic Light Reals"
-msgstr "Trafiksignal (implementeringar)"
 
 msgid "traffic light real"
 msgstr "trafiksignal (implementering)"
@@ -2209,9 +2200,6 @@ msgstr "Plan för detta vägmärke."
 
 msgid "The device type code of the sign in the old Finnish road traffic law."
 msgstr "Anordningstypkoden för skylten i den äldre finska väglagstiftningen."
-
-msgid "Traffic Sign Reals"
-msgstr "Trafikskylt (implementeringar)"
 
 msgid "traffic sign real"
 msgstr "trafikskylt (implementering)"

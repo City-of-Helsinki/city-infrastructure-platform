@@ -14293,9 +14293,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         reflection_class:
           enum:
           - R1
@@ -14553,9 +14553,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         reflection_class:
           enum:
           - R1
@@ -14826,9 +14826,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         reflection_class:
           enum:
           - R1
@@ -15148,9 +15148,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         reflection_class:
           enum:
           - R1
@@ -15554,9 +15554,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         reflection_class:
           enum:
           - R1
@@ -17583,9 +17583,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         location_additional_info:
           type: string
           nullable: true
@@ -17828,9 +17828,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         location_additional_info:
           type: string
           nullable: true
@@ -18099,9 +18099,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         location_additional_info:
           type: string
           nullable: true
@@ -18418,9 +18418,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         location_additional_info:
           type: string
           nullable: true
@@ -20759,9 +20759,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         reflection_class:
           enum:
           - R1
@@ -21045,9 +21045,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         reflection_class:
           enum:
           - R1
@@ -21971,9 +21971,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         location_additional_info:
           type: string
           nullable: true
@@ -22214,9 +22214,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         location_additional_info:
           type: string
           nullable: true
@@ -23599,9 +23599,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -23889,9 +23889,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -24218,9 +24218,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the traffic light. The value is in degrees from 0 to 359, where 0 is
-            north, 90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -24500,9 +24500,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the traffic light. The value is in degrees from 0 to 359, where 0 is
-            north, 90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -24758,9 +24758,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: integer
           maximum: 2147483647
@@ -25034,9 +25034,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: integer
           maximum: 2147483647
@@ -27275,9 +27275,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -27538,9 +27538,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -27814,9 +27814,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -28144,9 +28144,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -28527,9 +28527,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -28995,9 +28995,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the traffic light. The value is in degrees from 0 to 359, where 0 is
-            north, 90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -29250,9 +29250,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the traffic light. The value is in degrees from 0 to 359, where 0 is
-            north, 90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -29518,9 +29518,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the traffic light. The value is in degrees from 0 to 359, where 0 is
-            north, 90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -29840,9 +29840,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the traffic light. The value is in degrees from 0 to 359, where 0 is
-            north, 90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -30195,9 +30195,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the traffic light. The value is in degrees from 0 to 359, where 0 is
-            north, 90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: string
           format: decimal
@@ -30496,9 +30496,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: integer
           maximum: 2147483647
@@ -30753,9 +30753,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: integer
           maximum: 2147483647
@@ -31022,9 +31022,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: integer
           maximum: 2147483647
@@ -31338,9 +31338,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: integer
           maximum: 2147483647
@@ -31729,9 +31729,9 @@ components:
           maximum: 2147483647
           minimum: -2147483648
           nullable: true
-          description: The direction a person is facing when looking perpendicular
-            to the sign. The value is in degrees from 0 to 359, where 0 is north,
-            90 is east, etc.
+          description: 'The orientation of the device’s front side in degrees (0–359):
+            0 = north, 90 = east, 180 = south, 270 = west. The direction indicates
+            from which side the device is correctly visible.'
         height:
           type: integer
           maximum: 2147483647

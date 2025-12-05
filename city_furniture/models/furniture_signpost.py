@@ -7,6 +7,7 @@ from enumfields import EnumIntegerField
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from traffic_control.common_strings import direction_field_verbose_name, direction_help_text
 from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
@@ -67,13 +68,10 @@ class FurnitureAbstractSignpost(
         help_text=_("Verbose name for the furniture signposts location in English, e.g. street, park or island."),
     )
     direction = models.IntegerField(
-        _("Direction"),
+        direction_field_verbose_name,
         blank=True,
         null=True,
-        help_text=_(
-            "The direction a person is facing when looking perpendicular to the sign. "
-            "The value is in degrees from 0 to 359, where 0 is north, 90 is east, etc."
-        ),
+        help_text=direction_help_text,
     )
     location_additional_info = models.CharField(
         _("Additional location info"),
