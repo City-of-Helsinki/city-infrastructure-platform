@@ -1,13 +1,10 @@
 # Global settings
-export AZURE_ACCOUNT_NAME="account-name"
-export AZURE_ACCOUNT_KEY="account-key"
+export AZURE_ACCOUNT_NAME="storage-account-name"
 
-# Containers
-export AZURE_BLOBSTORAGE_CONTAINER_ICONS="icon-container-name"
-export AZURE_BLOBSTORAGE_CONTAINER_UPLOADS="uploads-storage-name"
-export AZURE_BLOBSTORAGE_CONTAINER_OLD="old-container-name"
+# Storage containers
+export AZURE_BLOBSTORAGE_CONTAINER_PUBLIC="public-container-name"
+export AZURE_BLOBSTORAGE_CONTAINER_PRIVATE="private-storage-name"
 
 # SAS tokens
-export AZURE_SAS_TOKEN_ICON="icon-container-sas-token"
-export AZURE_SAS_TOKEN_UPLOADS="uploads-container-sas-token"
-export AZURE_SAS_TOKEN_OLD="old-sas-token"
+export AZURE_SAS_TOKEN_PUBLIC="public-container-sas-token"
+export AZURE_SAS_TOKEN_PRIVATE="private-container-sas-token"
