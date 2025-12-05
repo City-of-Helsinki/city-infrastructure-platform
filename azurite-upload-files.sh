@@ -11,7 +11,6 @@ CONN_STRING="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountK
 DOWNLOAD_DIR="./download-batch-planfiles"
 
 az storage blob upload-batch \
-    --dryrun \
     --connection-string="$CONN_STRING" \
     --source="$DOWNLOAD_DIR" \
     --destination="uploads" \
@@ -20,7 +19,6 @@ az storage blob upload-batch \
 DOWNLOAD_DIR="./download-batch-realfiles"
 
 az storage blob upload-batch \
-    --dryrun \
     --connection-string="$CONN_STRING" \
     --source="$DOWNLOAD_DIR" \
     --destination="uploads" \
