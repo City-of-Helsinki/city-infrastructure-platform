@@ -51,7 +51,6 @@ env = environ.Env(
     SENTRY_DEBUG=(bool, False),
     VERSION=(str, ""),
     OPENSHIFT_DEPLOYMENT=(bool, False),
-    AZURE_ACCOUNT_KEY=(str, False),
     AZURE_PRIVATE_CONTAINER=(str, False),
     AZURE_PUBLIC_CONTAINER=(str, False),
     AZURE_ACCOUNT_NAME=(str, False),
