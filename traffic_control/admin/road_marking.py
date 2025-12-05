@@ -93,12 +93,12 @@ class RoadMarkingPlanFileInline(admin.TabularInline):
     formset = CityInfraFileUploadFormset
 
 
-class RoadMarkinRealInline(admin.TabularInline):
+class RoadMarkinRealInline(admin.TabularInline, PreviewDeviceTypeRelationMixin):
     model = RoadMarkingReal
     verbose_name = _("Road Marking Real")
     verbose_name_plural = _("Road Marking Real")
-    fields = ("id", "device_type", "color")
-    readonly_fields = ("id", "device_type", "color")
+    fields = ("id", "device_type_preview", "color")
+    readonly_fields = ("id", "device_type_preview", "color")
     show_change_link = True
     can_delete = False
     extra = 0
@@ -145,6 +145,7 @@ class RoadMarkingPlanAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "type_specifier",
                     "value",
                     "symbol",
@@ -215,6 +216,7 @@ class RoadMarkingPlanAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",
@@ -273,6 +275,7 @@ class RoadMarkingRealAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "type_specifier",
                     "value",
                     "symbol",
@@ -348,6 +351,7 @@ class RoadMarkingRealAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",

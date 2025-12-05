@@ -123,6 +123,7 @@ class AbstractFurnitureSignpostAdmin(
         "validity_period_start",
     ]
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",
@@ -141,6 +142,7 @@ class AbstractFurnitureSignpostAdmin(
                 "owner",
                 "responsible_entity",
                 "device_type",
+                "device_type_preview",
                 "target",
                 "mount_type",
                 "additional_material_url",
