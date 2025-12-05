@@ -61,11 +61,4 @@ def test_preview_device_type_relation_mixin__detail_view(admin_client):
     traffic_sign = TrafficSignPlanFactory()
     detail_url = reverse("admin:traffic_control_trafficsignplan_change", args=[traffic_sign.pk])
     response = admin_client.get(detail_url)
-    # NOTE (2025-11-13 thiago)
-    # This is a weaker test of image previews. Device type dropdown selectors render the images as a side effect of
-    # rendering the dropdown, so we check that the device_type object is referenced in a dropdown's options. To test
-    # this properly we'd need to run JavaScript, and I'm not feeling like checking this little detail is enough reason
-    # to bring selenium, playwright or some other beefy full-browser test framework to the project, but maybe the test
-    # warrants an update if some other feature brings it.
-    assertContains(response, '<img class="traffic-sign-icon"')
-    assertContains(response, f'<option value="{traffic_sign.device_type.pk}"')
+    assertContains(response, f'src="{traffic_sign.device_type.icon_file.file.url}"')

@@ -3,7 +3,6 @@ from city_furniture.models.common import CityFurnitureDeviceTypeIcon
 from traffic_control.admin.utils import ResponsibleEntityPermissionAdminFormMixin
 from traffic_control.forms import (
     AbstractAdminDeviceTypeIconSelectWidget,
-    AbstractAdminDeviceTypeSelectWithIcon,
     AbstractDeviceTypeIconForm,
     Geometry3DFieldForm,
     OrderedByIconFileFieldForm,
@@ -13,10 +12,6 @@ from traffic_control.forms import (
 
 class AdminCityFurnitureDeviceTypeIconSelectWidget(AbstractAdminDeviceTypeIconSelectWidget):
     device_type_icon_model = CityFurnitureDeviceTypeIcon
-
-
-class AdminFurnitureDeviceTypeSelectWithIcon(AbstractAdminDeviceTypeSelectWithIcon):
-    device_type_model = CityFurnitureDeviceType
 
 
 class CityFurnitureDeviceTypeIconForm(AbstractDeviceTypeIconForm):
@@ -40,9 +35,6 @@ class FurnitureSignpostRealModelForm(
     class Meta:
         model = FurnitureSignpostReal
         fields = "__all__"
-        widgets = {
-            "device_type": AdminFurnitureDeviceTypeSelectWithIcon,
-        }
 
 
 class FurnitureSignpostPlanModelForm(
@@ -51,6 +43,3 @@ class FurnitureSignpostPlanModelForm(
     class Meta:
         model = FurnitureSignpostPlan
         fields = "__all__"
-        widgets = {
-            "device_type": AdminFurnitureDeviceTypeSelectWithIcon,
-        }
