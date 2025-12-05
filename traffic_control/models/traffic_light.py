@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
+from traffic_control.common_strings import direction_field_verbose_name, direction_help_text
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType
 from traffic_control.mixins.models import (
     AbstractFileModel,
@@ -92,13 +93,10 @@ class AbstractTrafficLight(
         help_text=_("The type of lane which this traffic light affects."),
     )
     direction = models.IntegerField(
-        _("Direction"),
+        direction_field_verbose_name,
         blank=True,
         null=True,
-        help_text=_(
-            "The direction a person is facing when looking perpendicular to the traffic light. "
-            "The value is in degrees from 0 to 359, where 0 is north, 90 is east, etc."
-        ),
+        help_text=direction_help_text,
     )
     height = models.DecimalField(
         _("Height"),
