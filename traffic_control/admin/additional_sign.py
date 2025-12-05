@@ -66,17 +66,19 @@ shared_initial_values = {
 }
 
 
-class BaseAdditionalSignInline(admin.TabularInline):
+class BaseAdditionalSignInline(admin.TabularInline, PreviewDeviceTypeRelationMixin):
     model = None
     fields = (
         "height",
         "id",
         "device_type",
+        "device_type_preview",
         "content_s",
     )
     readonly_fields = (
         "id",
         "device_type",
+        "device_type_preview",
         "content_s",
         "height",
     )
@@ -171,6 +173,7 @@ class AdditionalSignPlanAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "content_s",
                     "missing_content",
                     "additional_information",
@@ -223,6 +226,7 @@ class AdditionalSignPlanAdmin(
         "is_replaced_as_str",
     )
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",
@@ -275,6 +279,7 @@ class AdditionalSignRealAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "content_s",
                     "missing_content",
                     "additional_information",
@@ -391,6 +396,7 @@ class AdditionalSignRealAdmin(
         "source_name",
     )
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",

@@ -233,6 +233,7 @@ class TrafficSignPlanAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "mount_type",
                     "value",
                     "txt",
@@ -301,6 +302,7 @@ class TrafficSignPlanAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",
@@ -339,8 +341,8 @@ class TrafficSignRealInline(admin.TabularInline):
     model = TrafficSignReal
     verbose_name = _("Traffic Sign Real")
     verbose_name_plural = _("Traffic Sign Reals")
-    fields = ("id", "device_type", "mount_type")
-    readonly_fields = ("id", "device_type", "mount_type")
+    fields = ("id", "device_type", "device_type_preview", "mount_type")
+    readonly_fields = ("id", "device_type", "device_type_preview", "mount_type")
     show_change_link = True
     can_delete = False
     extra = 0
@@ -375,6 +377,7 @@ class TrafficSignRealAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "mount_type",
                     "permit_decision_id",
                     "attachment_url",
@@ -489,6 +492,7 @@ class TrafficSignRealAdmin(
         "source_name",
     )
     readonly_fields = (
+        "device_type_preview",
         "has_additional_signs",
         "created_at",
         "updated_at",

@@ -87,12 +87,12 @@ class SignpostPlanFileInline(admin.TabularInline):
     formset = CityInfraFileUploadFormset
 
 
-class SignpostRealInline(admin.TabularInline):
+class SignpostRealInline(admin.TabularInline, PreviewDeviceTypeRelationMixin):
     model = SignpostReal
     verbose_name = _("Signpost Real")
     verbose_name_plural = _("Signpost Reals")
-    fields = ("id", "device_type", "mount_type")
-    readonly_fields = ("id", "device_type", "mount_type")
+    fields = ("id", "device_type", "device_type_preview", "mount_type")
+    readonly_fields = ("id", "device_type", "device_type_preview", "mount_type")
     show_change_link = True
     can_delete = False
     extra = 0
@@ -136,6 +136,7 @@ class SignpostPlanAdmin(
                     "owner",
                     "electric_maintainer",
                     "device_type",
+                    "device_type_preview",
                     "mount_type",
                     "attachment_class",
                     "value",
@@ -192,6 +193,7 @@ class SignpostPlanAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",
@@ -250,6 +252,7 @@ class SignpostRealAdmin(
                     "owner",
                     "electric_maintainer",
                     "device_type",
+                    "device_type_preview",
                     "mount_type",
                     "attachment_class",
                     "value",
@@ -323,6 +326,7 @@ class SignpostRealAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",

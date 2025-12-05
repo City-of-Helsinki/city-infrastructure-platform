@@ -136,6 +136,7 @@ class BarrierPlanAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "is_electric",
                     "connection_type",
                     "count",
@@ -189,6 +190,7 @@ class BarrierPlanAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",
@@ -246,6 +248,7 @@ class BarrierRealAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "is_electric",
                     "connection_type",
                     "count",
@@ -305,6 +308,7 @@ class BarrierRealAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",

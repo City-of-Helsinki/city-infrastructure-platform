@@ -78,12 +78,12 @@ class TrafficSignRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
     raw_id_fields = ("traffic_light_real",)
 
 
-class TrafficLightRealInline(admin.TabularInline):
+class TrafficLightRealInline(admin.TabularInline, PreviewDeviceTypeRelationMixin):
     model = TrafficLightReal
     verbose_name = _("Traffic Light Real")
     verbose_name_plural = _("Traffic Light Reals")
-    fields = ("id", "device_type", "type")
-    readonly_fields = ("id", "device_type", "type")
+    fields = ("id", "device_type", "device_type_preview", "type")
+    readonly_fields = ("id", "device_type", "device_type_preview", "type")
     show_change_link = True
     can_delete = False
     extra = 0
@@ -134,6 +134,7 @@ class TrafficLightPlanAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "type",
                     "vehicle_recognition",
                     "push_button",
@@ -188,6 +189,7 @@ class TrafficLightPlanAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",
@@ -241,6 +243,7 @@ class TrafficLightRealAdmin(
                 "fields": (
                     "owner",
                     "device_type",
+                    "device_type_preview",
                     "type",
                     "vehicle_recognition",
                     "push_button",
@@ -298,6 +301,7 @@ class TrafficLightRealAdmin(
     ]
     search_fields = ("id",)
     readonly_fields = (
+        "device_type_preview",
         "created_at",
         "updated_at",
         "created_by",
