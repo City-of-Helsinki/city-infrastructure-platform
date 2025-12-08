@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.27.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.26.0...city-infrastructure-platform-v1.27.0) (2025-12-08)
+
+
+### Features
+
+* Add pre commit hook ([e0c2e04](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e0c2e04d630e005c0cfc8ae39802c2cffbeade66))
+* Alphabetical order for icon_file when creating a new devicetype ([a939a52](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a939a52cb0428f5bd2fb674736e3c9d09dd15b35))
+* Remove responsible_entity support from traffic_control models ([c0b58be](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c0b58bea58442438d336cc0e5613bad2535b5763))
+* Remove validity_period_start and end from MountPlan and MountReal ([c37774b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c37774bf07c4b31a211cb8de293fe5944c6092c9))
+* Show real instances in plan instaces admin pages. ([84a3393](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/84a339321b2c84b754996da39f39b95fc99dbae4))
+
+
+### Bug Fixes
+
+* Add peak_fastened to traffic sign plan and real admin pages ([23ce6e5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/23ce6e5e46a5344380eaa914e3d31e7861af6861))
+* Auditlog related models signal handlers part3 ([bd3ecd4](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/bd3ecd4cd248b633913166905566d69cb9b86cc5))
+* Auditlog related objects entry ([c33df22](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c33df2269f5ffeceec9620c9c9819ae4f01c0a09))
+* Auditlog related objects entry part 2 ([2ab0d15](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/2ab0d15c0d534afb082db0be87c26370123b64be))
+* Flaky tests in embed view and wrong order ([60f1a01](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/60f1a01a84cdb85ddc600e4e22272ca75bfe0384))
+* Help text for all direction fields was incorrect, 180 degrees off ([490cc88](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/490cc8897e01a881c2389732b7e9388af8c6d44a))
+* Remove laggy custom device_type select component, replace with adjacent preview widget ([ef44ace](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ef44acefcda00db754b1d56e858a2d6c7f63dde6))
+* Remove validity period fields from mount real and plan admin models ([ecad454](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ecad454a3d2488d86f45c4f7fefdc0d995c6539d))
+* Update slow native dropdown selectors with raw_id_fields ([ee66898](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ee668988ef219ec69c85ce8d4dde09b406f271cc))
+
 ## [1.26.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.25.0...city-infrastructure-platform-v1.26.0) (2025-11-19)
 
 
