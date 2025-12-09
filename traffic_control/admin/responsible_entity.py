@@ -21,6 +21,7 @@ class ResponsibleEntityAdmin(AuditLogHistoryAdmin):
         "organization_level",
         "parent",
     )
+    list_select_related = ("parent",)
     search_fields = ("id",)
     ordering = ("organization_level",)
     actions = None

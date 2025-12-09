@@ -135,6 +135,8 @@ class AbstractFurnitureSignpostAdmin(
         "location_name_fi",
         "lifecycle",
     )
+    list_select_related = ("device_type", "device_type__icon_file")
+
     _fieldset_general_information = (
         _("General information"),
         {

@@ -198,7 +198,7 @@ class MountPlanAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("mount_type")
+        return qs.prefetch_related("mount_type").prefetch_related("replacement_to_new")
 
 
 class MountRealFileInline(admin.TabularInline):

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.gis.geos import Point
 from django.test import RequestFactory, TestCase
+from django.urls import reverse
 
 from traffic_control.admin import BarrierRealAdmin, TrafficSignRealAdmin
 from traffic_control.enums import Lifecycle
@@ -49,11 +50,27 @@ class TrafficSignRealAdminTestCase(TestCase):
     def test_has_additional_signs_return_yes(self):
         get_additional_sign_real(parent=self.traffic_sign_real)
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
-        self.assertEqual(ma.has_additional_signs(self.traffic_sign_real), "Yes")
+
+        # NOTE: Since the admin class has_additional_signs method operates over annotated objects, we need to make use
+        # of the queries produced by its admin page to evaluate if the function is behaving as expected.
+        list_url = reverse("admin:traffic_control_trafficsignreal_changelist")
+        request = RequestFactory().get(list_url)
+        qs = ma.get_queryset(request)
+        obj_with_annotation = qs.get(pk=self.traffic_sign_real.pk)
+
+        self.assertEqual(ma.has_additional_signs(obj_with_annotation), "Yes")
 
     def test_has_additional_signs_return_no(self):
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
-        self.assertEqual(ma.has_additional_signs(self.traffic_sign_real), "No")
+
+        # NOTE: Since the admin class has_additional_signs method operates over annotated objects, we need to make use
+        # of the queries produced by its admin page to evaluate if the function is behaving as expected.
+        list_url = reverse("admin:traffic_control_trafficsignreal_changelist")
+        request = RequestFactory().get(list_url)
+        qs = ma.get_queryset(request)
+        obj_with_annotation = qs.get(pk=self.traffic_sign_real.pk)
+
+        self.assertEqual(ma.has_additional_signs(obj_with_annotation), "No")
 
     def test_save_model_set_created_by_and_updated_by_for_creating(self):
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
