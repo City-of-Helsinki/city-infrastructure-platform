@@ -1,6 +1,7 @@
 from django.contrib.admin import SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
+from django.db.models import Exists, OuterRef
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
@@ -51,6 +52,8 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import (
+    AdditionalSignPlan,
+    AdditionalSignReal,
     TrafficControlDeviceType,
     TrafficSignPlan,
     TrafficSignPlanFile,
@@ -153,6 +156,7 @@ class TrafficControlDeviceTypeAdmin(
         "legacy_description",
         "target_model",
     )
+    list_select_related = ("icon_file",)
     list_filter = (TrafficSignTypeListFilter,)
     search_fields = (
         "code",
@@ -321,10 +325,22 @@ class TrafficSignPlanAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("device_type")
+        additional_signs_query = AdditionalSignPlan.objects.filter(
+            parent=OuterRef("pk"),
+            is_active=True,
+        )
+        return (
+            qs.prefetch_related("device_type")
+            .prefetch_related("device_type__icon_file")
+            .prefetch_related("replacement_to_new")
+            .annotate(_has_additional_signs=Exists(additional_signs_query))
+        )
 
     def has_additional_signs(self, obj):
-        return (_("No"), _("Yes"))[obj.has_additional_signs()]
+        # Don't call obj.has_additional_signs() directly, because it will cause an explosion in query count
+        # and lag the list view.
+        is_active = getattr(obj, "_has_additional_signs", False)
+        return _("Yes") if is_active else _("No")
 
     has_additional_signs.short_description = _("has additional signs")
 
@@ -539,9 +555,27 @@ class TrafficSignRealAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("device_type")
+        additional_signs_query = AdditionalSignReal.objects.filter(
+            parent=OuterRef("pk"),
+            is_active=True,
+        )
+        return qs.select_related(
+            "device_type",
+            "device_type__icon_file",
+            "mount_real",
+            "mount_real__mount_type",
+            "mount_type",
+            "traffic_sign_plan",
+            "traffic_sign_plan__device_type",
+            "created_by",
+            "updated_by",
+            "owner",
+        ).annotate(_has_additional_signs=Exists(additional_signs_query))
 
     def has_additional_signs(self, obj):
-        return (_("No"), _("Yes"))[obj.has_additional_signs()]
+        # Don't call obj.has_additional_signs() directly, because it will cause an explosion in query count
+        # and lag the list view.
+        is_active = getattr(obj, "_has_additional_signs", False)
+        return _("Yes") if is_active else _("No")
 
     has_additional_signs.short_description = _("has additional signs")

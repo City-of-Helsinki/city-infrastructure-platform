@@ -182,6 +182,11 @@ class TrafficLightPlanAdmin(
         "location",
         "is_replaced_as_str",
     )
+    list_select_related = (
+        "device_type",
+        "device_type__icon_file",
+        "replacement_to_new",
+    )
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", EnumFieldListFilter),
         "owner",
@@ -295,6 +300,7 @@ class TrafficLightRealAdmin(
         "location",
         "installation_date",
     )
+    list_select_related = ("device_type", "device_type__icon_file")
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", EnumFieldListFilter),
         "owner",

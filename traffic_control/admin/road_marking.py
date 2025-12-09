@@ -234,7 +234,11 @@ class RoadMarkingPlanAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("device_type")
+        return (
+            qs.prefetch_related("device_type")
+            .prefetch_related("device_type__icon_file")
+            .prefetch_related("replacement_to_new")
+        )
 
 
 class RoadMarkingRealFileInline(admin.TabularInline):
@@ -345,6 +349,7 @@ class RoadMarkingRealAdmin(
         "location",
         "installation_date",
     )
+    list_select_related = ("device_type", "device_type__icon_file")
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", EnumFieldListFilter),
         "owner",

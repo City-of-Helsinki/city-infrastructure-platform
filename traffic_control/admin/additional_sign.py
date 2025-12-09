@@ -251,7 +251,11 @@ class AdditionalSignPlanAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("device_type")
+        return (
+            qs.prefetch_related("device_type")
+            .prefetch_related("device_type__icon_file")
+            .prefetch_related("replacement_to_new")
+        )
 
 
 @admin.register(AdditionalSignReal)
@@ -439,13 +443,20 @@ class AdditionalSignRealAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return (
-            qs.prefetch_related("device_type")
-            .prefetch_related("created_by")
-            .prefetch_related("updated_by")
-            .prefetch_related("additional_sign_plan")
-            .prefetch_related("mount_real")
-            .prefetch_related("mount_type")
+        return qs.select_related(
+            "device_type",
+            "device_type__icon_file",
+            "created_by",
+            "updated_by",
+            "owner",
+            "additional_sign_plan",
+            "mount_real",
+            # NOTE (2025-12-09 thiago)
+            # Both mount_real__mount_type and mount_type need to be prefetched independently, since we have visible
+            # columns that access the "mount_type.__str__" through different routes. Removing either prefetch will
+            # drastically increase the query count
+            "mount_real__mount_type",
+            "mount_type",
         )
 
 

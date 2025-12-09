@@ -211,7 +211,11 @@ class SignpostPlanAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("device_type")
+        return (
+            qs.prefetch_related("device_type")
+            .prefetch_related("device_type__icon_file")
+            .prefetch_related("replacement_to_new")
+        )
 
 
 class SignpostRealFileInline(admin.TabularInline):

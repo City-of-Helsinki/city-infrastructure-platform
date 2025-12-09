@@ -30,11 +30,11 @@ class CityFurnitureDeviceTypeAdmin(
         "class_type",
         "function_type",
         "icon_preview",
-        "icon_file",
         "description_fi",
         "size",
         "target_model",
     )
+    list_select_related = ("icon_file",)
     search_fields = ("id", "description_fi", "description_sw", "description_en")
     ordering = ("code", "class_type", "function_type")
     actions = None
