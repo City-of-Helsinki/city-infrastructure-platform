@@ -45,6 +45,7 @@ env = environ.Env(
         str,
         "postgis:///city-infrastructure-platform",
     ),
+    DATABASE_PASSWORD=(str, ""),
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
     SENTRY_DSN=(str, ""),
@@ -243,6 +244,9 @@ WSGI_APPLICATION = "cityinfra.wsgi.application"
 
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+if env("DATABASE_PASSWORD"):
+    DATABASES["default"]["PASSWORD"] = env("DATABASE_PASSWORD")
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
