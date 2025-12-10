@@ -1,8 +1,15 @@
 import mimetypes
 
+from azure.core.exceptions import ResourceNotFoundError
 from django.conf import settings
 from django.core.files.storage import storages
-from django.http import FileResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
+from django.http import (
+    FileResponse,
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponseServerError,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -54,9 +61,16 @@ class FileProxyView(View):
             if not user.has_perm(permission_name) and not user.has_perm(permission_name, file_obj):
                 return HttpResponseForbidden("You do not have permission to view this file.")
 
-        file_handle = self.get_storage().open(file_path)
-        content_type, _ = mimetypes.guess_type(file_path)
-        content_type = content_type or "application/octet-stream"
-        response = FileResponse(file_handle, content_type=content_type)
-        response["Content-Disposition"] = f'inline; filename="{file_id}"'
-        return response
+        try:
+            # The storage might throw a *NotFoundError at some point later than open(file_path), so we just try the
+            # whole block
+            file_handle = self.get_storage().open(file_path)
+            content_type, _ = mimetypes.guess_type(file_path)
+            content_type = content_type or "application/octet-stream"
+            response = FileResponse(file_handle, content_type=content_type)
+            response["Content-Disposition"] = f'inline; filename="{file_id}"'
+            return response
+        except (ResourceNotFoundError, FileNotFoundError):
+            return HttpResponseServerError(
+                f"File {file_path} is referenced in the database, but was not found in the storage"
+            )

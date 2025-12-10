@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from django.urls import reverse
 from guardian.shortcuts import assign_perm
@@ -87,7 +89,7 @@ def test__file_proxy_view_anonymous_user(client, is_public):
 
 
 @pytest.mark.django_db
-def test__file_proxy_view_bogus_file(client):
+def test__file_proxy_view_no_file_row(client):
     """
     Tests that the file proxy view returns 404 for non-existent files
     """
@@ -101,3 +103,28 @@ def test__file_proxy_view_bogus_file(client):
 
     response = client.get(url)
     assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test__file_proxy_view_file_row_but_not_in_storage(client):
+    """
+    Tests that the file proxy view returns 500 and an informative message for cases where a file is supposed to exist
+    according to the database, but has been wiped from the storage
+    """
+    barrier_plan = BarrierPlanFactory()
+
+    file = BarrierPlanFileFactory(
+        barrier_plan=barrier_plan, is_public=True, file__filename="bogus.txt", file__data=b"Some content"
+    )
+    url = reverse(
+        "planfiles_proxy",
+        kwargs={
+            "model_name": "barrier",
+            "file_id": file.file.name.split("/")[-1],
+        },
+    )
+    os.remove(file.file.path)
+    response = client.get(url)
+
+    assert response.status_code == 500
+    assert "is referenced in the database, but was not found in the storage" in response.content.decode()
