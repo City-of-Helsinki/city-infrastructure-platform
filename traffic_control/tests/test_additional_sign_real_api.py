@@ -24,6 +24,7 @@ from traffic_control.tests.factories import (
     add_additional_sign_real_operation,
     AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
+    AdditionalSignRealFileFactory,
     get_api_client,
     get_operation_type,
     get_owner,
@@ -108,6 +109,7 @@ def test__additional_sign_real__detail(geo_format, plan_decision_id):
     plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
     ads_plan = AdditionalSignPlanFactory(plan=plan) if plan else None
     asr = AdditionalSignRealFactory(parent=get_traffic_sign_real(), additional_sign_plan=ads_plan)
+    file = AdditionalSignRealFileFactory(additional_sign_real=asr, file__filename="test-file.txt")
     operation_1 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 5))
     operation_2 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 15))
     operation_3 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 10))
@@ -121,6 +123,9 @@ def test__additional_sign_real__detail(geo_format, plan_decision_id):
     assert response.status_code == status.HTTP_200_OK
     assert response_data["id"] == str(asr.pk)
     assert response_data["parent"] == str(asr.parent.pk)
+    files = response_data["files"]
+    assert len(files) == 1
+    assert files[0]["file"].endswith(file.file.name)
     # verify operations are ordered by operation_date
     operation_ids = [operation["id"] for operation in response_data["operations"]]
     assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]

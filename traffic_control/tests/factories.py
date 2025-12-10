@@ -11,6 +11,7 @@ from traffic_control.enums import Lifecycle, OrganizationLevel
 from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignReal,
+    AdditionalSignRealFile,
     AdditionalSignRealOperation,
     BarrierPlan,
     BarrierPlanFile,
@@ -670,7 +671,7 @@ class TrafficSignRealFactory(factory.django.DjangoModelFactory):
     legacy_code = "TestLegacyCode"
     mount_real = factory.SubFactory(MountRealFactory)
     installation_id = factory.sequence(lambda n: f"installation_id{n}")
-    installation_details = "Installaation details"
+    installation_details = "Installation details"
     permit_decision_id = factory.sequence(lambda n: f"permit_decision{n}")
     scanned_at = None
     manufacturer = factory.sequence(lambda n: f"Manufacturer{n}")
@@ -791,7 +792,7 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
     additional_sign_plan = None
     mount_real = factory.SubFactory(MountRealFactory)
     installation_id = factory.sequence(lambda n: f"installation_id{n}")
-    installation_details = "Installaation details"
+    installation_details = "Installation details"
     installed_by = None
     manufacturer = factory.sequence(lambda n: f"Manufacturer{n}")
     rfid = factory.sequence(lambda n: f"rfid{n}")
@@ -800,6 +801,17 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
     operation = None
     scanned_at = None
     attachment_url = factory.sequence(lambda n: f"https://attachment{n}.url")
+
+
+class AdditionalSignRealFileFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = AdditionalSignRealFile
+        django_get_or_create = ["file"]
+
+    file = factory.django.FileField(
+        filename=factory.Sequence(lambda n: f"test_additional_sign_real_file_{n}.txt"),
+        data=b"Additional Sign Real File Content",
+    )
 
 
 def get_additional_sign_real(

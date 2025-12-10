@@ -15008,6 +15008,11 @@ components:
           type: string
           format: EWKT
           example: SRID=3879;POINT Z (25496751.5 6673129.5 1.5)
+        files:
+          type: string
+          readOnly: true
+          description: List of public and private attached files that the user has
+            permission to view.
         device_type:
           type: string
           format: uuid
@@ -15356,6 +15361,7 @@ components:
       required:
       - created_at
       - created_by
+      - files
       - id
       - location
       - operations
