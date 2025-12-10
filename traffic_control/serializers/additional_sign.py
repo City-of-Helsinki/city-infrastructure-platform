@@ -133,6 +133,10 @@ class AdditionalSignRealSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
+    files = PermissionFilteredRelatedField(
+        permission_codename="traffic_control.view_additionalsignrealfile",
+        serializer_class=AdditionalSignRealFileSerializer,
+    )
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.ADDITIONAL_SIGN),
         allow_null=True,
