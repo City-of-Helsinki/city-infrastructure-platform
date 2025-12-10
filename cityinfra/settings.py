@@ -494,6 +494,7 @@ AXES_RESET_ON_SUCCESS = True
 AXES_CLIENT_IP_CALLABLE = "traffic_control.utils.get_client_ip"
 
 DEBUG_TOOLBAR = False
+SILK_AVAILABLE = False
 if DEBUG:
     try:
         import debug_toolbar  # noqa
@@ -513,3 +514,18 @@ if DEBUG:
             INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1"]
         except Exception:
             INTERNAL_IPS = ["127.0.0.1", "localhost"]
+
+    try:
+        import silk  # noqa
+
+        SILK_AVAILABLE = True
+    except ImportError:
+        pass
+
+    if SILK_AVAILABLE:
+        INSTALLED_APPS.append("silk")
+        MIDDLEWARE.append("silk.middleware.SilkyMiddleware")
+        SILKY_PYTHON_PROFILER = True
+        STORAGES["SILKY_STORAGE"] = {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        }

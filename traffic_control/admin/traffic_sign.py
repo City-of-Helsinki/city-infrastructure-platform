@@ -5,6 +5,7 @@ from django.db.models import Exists, OuterRef
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
+from silk.profiling.profiler import silk_profile
 
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
@@ -552,6 +553,10 @@ class TrafficSignRealAdmin(
         "condition": Condition.VERY_GOOD,
         "installation_status": InstallationStatus.IN_USE,
     }
+
+    @silk_profile(name="TrafficSignRealAdmin (list)")
+    def changelist_view(self, request, extra_context=None):
+        return super().changelist_view(request, extra_context=extra_context)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
