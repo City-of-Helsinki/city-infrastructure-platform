@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.27.0...city-infrastructure-platform-v1.28.0) (2025-12-12)
+
+
+### Features
+
+* Management commands to create dummy device types, both for traffic_conrol and city_furniture apps. ([a5254c9](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a5254c9c04f4836d04d430526ec9c08aecca07e7))
+
 ## [1.27.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.26.0...city-infrastructure-platform-v1.27.0) (2025-12-08)
 
 
