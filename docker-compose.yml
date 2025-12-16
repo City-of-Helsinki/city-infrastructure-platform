@@ -9,6 +9,21 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - "127.0.0.1:5432:5432"
+  db-admin:
+      image: dpage/pgadmin4
+      container_name: pgadmin4_city_infra
+      ports:
+        - "127.0.0.1:8080:80"
+      environment:
+        PGADMIN_DEFAULT_EMAIL: user@cityinfra.com
+        PGADMIN_DEFAULT_PASSWORD: SuperSecurePassword123
+        PGADMIN_CONFIG_SERVER_MODE: 'False'
+        PGADMIN_LISTEN_PORT: 80
+      volumes:
+        # Persist pgAdmin configuration and server settings
+        - pgadmin_data:/var/lib/pgadmin
+      depends_on:
+        - db
   api:
     build:
       target: development
@@ -55,3 +70,4 @@ networks:
 
 volumes:
   db_data:
+  pgadmin_data:

@@ -234,7 +234,11 @@ docker-compose up
 
 ```bash
 # Run just the DB
-docker-compose up db
+docker compose up db
+
+# Run the DB admin graphical interface on http://localhost:8080/browser/
+# The master password can be found on the docker-compose.yml file
+docker compose up db-admin
 
 # Run ClamAV locally (initialize clamd and then launch clamv-api)
 docker compose up clamd
