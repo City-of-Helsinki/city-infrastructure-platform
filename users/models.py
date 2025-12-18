@@ -8,6 +8,8 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from helusers.models import AbstractUser
 
+from traffic_control.decorators import requires_fields
+
 if TYPE_CHECKING:
     from traffic_control.models import ResponsibleEntity
 
@@ -93,6 +95,10 @@ class User(AbstractUser):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+
+    @requires_fields("first_name", "last_name", "email")
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.email})"
 
 
 auditlog.register(

@@ -5,6 +5,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumIntegerField
 
+from traffic_control.decorators import requires_fields
 from traffic_control.geometry_utils import get_3d_geometry
 from traffic_control.mixins.models import (
     AbstractFileModel,
@@ -77,6 +78,7 @@ class MountType(models.Model):
         verbose_name = _("Mount type")
         verbose_name_plural = _("Mount types")
 
+    @requires_fields("description", "code")
     def __str__(self):
         return f"{self.description} ({self.code})"
 
@@ -179,6 +181,7 @@ class AbstractMount(
     class Meta:
         abstract = True
 
+    @requires_fields("mount_type")
     def __str__(self):
         return f"{self.id} {self.mount_type}"
 

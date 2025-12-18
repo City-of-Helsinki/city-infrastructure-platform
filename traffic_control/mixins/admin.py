@@ -3,6 +3,7 @@ from django.contrib.gis.forms import OSMWidget
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from traffic_control.decorators import requires_fields
 from traffic_control.models.plan import Plan
 
 
@@ -59,6 +60,7 @@ class PreviewIconFileRelationMixin:
     """
 
     @staticmethod
+    @requires_fields("icon_file__file")
     def icon_preview(obj):
         if obj.icon_file and obj.icon_file.file and obj.icon_file.file.url:
             icon_url = obj.icon_file.file.url
@@ -84,6 +86,7 @@ class PreviewDeviceTypeRelationMixin:
     """
 
     @staticmethod
+    @requires_fields("device_type__code", "device_type__description", "device_type__icon_file__file")
     def device_type_preview(obj):
         device_type = obj.device_type
         if device_type and device_type.icon_file and device_type.icon_file.file and device_type.icon_file.file.url:
@@ -96,7 +99,7 @@ class PreviewDeviceTypeRelationMixin:
             </div>
             """,
                 icon_url=icon_url,
-                name=str(device_type),
+                name="%s - %s" % (device_type.code, device_type.description),
             )
         else:
             return device_type

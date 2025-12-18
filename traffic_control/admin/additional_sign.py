@@ -251,11 +251,26 @@ class AdditionalSignPlanAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return (
-            qs.prefetch_related("device_type")
-            .prefetch_related("device_type__icon_file")
-            .prefetch_related("replacement_to_new")
+
+        # Optimizing Forward Relations (Joins)
+        qs = qs.select_related(
+            "device_type",
+            "device_type__icon_file",
+            "replacement_to_new",
         )
+
+        # Limiting Columns (Projection)
+        qs = qs.only(
+            "device_type__code",
+            "device_type__description",
+            "device_type__icon_file__file",
+            "id",
+            "lifecycle",
+            "location",
+            "replacement_to_new",
+        )
+
+        return qs
 
 
 @admin.register(AdditionalSignReal)
@@ -443,21 +458,78 @@ class AdditionalSignRealAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related(
+
+        # Optimizing Forward Relations (Joins)
+        qs = qs.select_related(
+            "additional_sign_plan",
+            "created_by",
             "device_type",
             "device_type__icon_file",
-            "created_by",
-            "updated_by",
-            "owner",
-            "additional_sign_plan",
             "mount_real",
-            # NOTE (2025-12-09 thiago)
-            # Both mount_real__mount_type and mount_type need to be prefetched independently, since we have visible
-            # columns that access the "mount_type.__str__" through different routes. Removing either prefetch will
-            # drastically increase the query count
             "mount_real__mount_type",
             "mount_type",
+            "owner",
+            "updated_by",
         )
+
+        # Limiting Columns (Projection)
+        qs = qs.only(
+            "additional_sign_plan",
+            "attachment_url",
+            "color",
+            "condition",
+            "created_at",
+            "created_by",
+            "created_by__email",
+            "created_by__first_name",
+            "created_by__last_name",
+            "device_type__code",
+            "device_type__description",
+            "device_type__icon_file__file",
+            "direction",
+            "height",
+            "id",
+            "installation_date",
+            "installation_details",
+            "installation_id",
+            "installation_status",
+            "lane_number",
+            "lane_type",
+            "legacy_code",
+            "lifecycle",
+            "location_specifier",
+            "manufacturer",
+            "mount_real",
+            "mount_real__mount_type",
+            "mount_real__mount_type__code",
+            "mount_real__mount_type__description",
+            "mount_type",
+            "mount_type__code",
+            "mount_type__description",
+            "operation",
+            "owner",
+            "owner__name_en",
+            "owner__name_fi",
+            "permit_decision_id",
+            "reflection_class",
+            "rfid",
+            "road_name",
+            "scanned_at",
+            "seasonal_validity_period_information",
+            "size",
+            "source_id",
+            "source_name",
+            "surface_class",
+            "updated_at",
+            "updated_by",
+            "updated_by__email",
+            "updated_by__first_name",
+            "updated_by__last_name",
+            "validity_period_end",
+            "validity_period_start",
+        )
+
+        return qs
 
 
 class AdditionalSignPlanInline(BaseAdditionalSignInline):

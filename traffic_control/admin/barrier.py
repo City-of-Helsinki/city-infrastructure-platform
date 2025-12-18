@@ -208,11 +208,26 @@ class BarrierPlanAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return (
-            qs.prefetch_related("device_type")
-            .prefetch_related("device_type__icon_file")
-            .prefetch_related("replacement_to_new")
+
+        # Optimizing Forward Relations (Joins)
+        qs = qs.select_related(
+            "device_type",
+            "device_type__icon_file",
+            "replacement_to_new",
         )
+
+        # Limiting Columns (Projection)
+        qs = qs.only(
+            "device_type__code",
+            "device_type__description",
+            "device_type__icon_file__file",
+            "id",
+            "lifecycle",
+            "location",
+            "replacement_to_new",
+        )
+
+        return qs
 
 
 class BarrierRealFileInline(admin.TabularInline):
@@ -329,4 +344,22 @@ class BarrierRealAdmin(
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("device_type").prefetch_related("device_type__icon_file")
+
+        # Optimizing Forward Relations (Joins)
+        qs = qs.select_related(
+            "device_type",
+            "device_type__icon_file",
+        )
+
+        # Limiting Columns (Projection)
+        qs = qs.only(
+            "device_type__code",
+            "device_type__description",
+            "device_type__icon_file__file",
+            "id",
+            "installation_date",
+            "lifecycle",
+            "location",
+        )
+
+        return qs
