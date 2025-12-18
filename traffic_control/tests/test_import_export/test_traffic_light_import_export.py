@@ -3,10 +3,9 @@ import pytest
 from traffic_control.models import TrafficLightReal
 from traffic_control.resources.traffic_light import TrafficLightPlanToRealTemplateResource, TrafficLightRealResource
 from traffic_control.tests.factories import (
-    get_mount_plan,
-    get_mount_real,
-    get_traffic_light_plan,
-    get_traffic_light_real,
+    MountPlanFactory,
+    MountRealFactory,
+    TrafficLightPlanFactory,
     TrafficLightRealFactory,
 )
 
@@ -46,11 +45,11 @@ def test__traffic_light_real__import():
 def test__traffic_light_plan_export_real_import(has_mount_plan, has_mount_real, real_preexists):
     """Test that a plan object can be exported as its real object (referencing to the plan)"""
 
-    mount_plan = get_mount_plan() if has_mount_plan else None
-    mount_real = get_mount_real() if has_mount_real else None
+    mount_plan = MountPlanFactory() if has_mount_plan else None
+    mount_real = MountRealFactory(mount_plan=mount_plan) if has_mount_real else None
 
-    plan_obj = get_traffic_light_plan(mount_plan=mount_plan)
-    real_obj = get_traffic_light_real(traffic_light_plan=plan_obj) if real_preexists else None
+    plan_obj = TrafficLightPlanFactory(mount_plan=mount_plan)
+    real_obj = TrafficLightRealFactory(traffic_light_plan=plan_obj) if real_preexists else None
 
     exported_dataset = TrafficLightPlanToRealTemplateResource().export()
     assert len(exported_dataset) == 1

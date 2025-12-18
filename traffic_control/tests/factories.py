@@ -163,7 +163,8 @@ class BarrierPlanFactory(factory.django.DjangoModelFactory):
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
-
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
+    road_name = "Testingroad"
 
 class BarrierPlanFileFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -180,25 +181,22 @@ class BarrierPlanFileFactory(factory.django.DjangoModelFactory):
 def get_barrier_plan(
     location="",
     plan=None,
-    device_type=None,
     replaces=None,
     **kwargs,
-) -> BarrierPlan:
+) -> BarrierPlanFactory:
     user = get_user("test_user")
-    barrier_plan = BarrierPlan.objects.get_or_create(
-        device_type=device_type,
+    barrier_plan = BarrierPlanFactory(
         location=location or test_point,
         lifecycle=Lifecycle.ACTIVE,
         material="Betoni",
         reflective=Reflective.YES,
         connection_type=ConnectionType.OPEN_OUT,
-        road_name="Testingroad",
         plan=plan,
         owner=get_owner(),
         created_by=user,
         updated_by=user,
         **kwargs,
-    )[0]
+    )
 
     if replaces:
         barrier_plan_replace(old=replaces, new=barrier_plan)
@@ -215,6 +213,7 @@ class BarrierRealFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
 
 
 def get_barrier_real(
@@ -292,10 +291,10 @@ class MountPlanFactory(factory.django.DjangoModelFactory):
     mount_type = factory.SubFactory(MountTypeFactory)
 
 
-def get_mount_plan(location="", plan=None, replaces=None, **kwargs) -> MountPlan:
+def get_mount_plan(location="", plan=None, replaces=None, **kwargs) -> MountPlanFactory:
     user = get_user("test_user")
 
-    mount_plan = MountPlan.objects.get_or_create(
+    mount_plan = MountPlanFactory(
         mount_type=get_mount_type(code="PORTAL", description="Portal"),
         location=location or test_point,
         lifecycle=Lifecycle.ACTIVE,
@@ -304,7 +303,7 @@ def get_mount_plan(location="", plan=None, replaces=None, **kwargs) -> MountPlan
         created_by=user,
         updated_by=user,
         **kwargs,
-    )[0]
+    )
 
     if replaces:
         mount_plan_replace(old=replaces, new=mount_plan)
@@ -365,20 +364,19 @@ class RoadMarkingPlanFactory(factory.django.DjangoModelFactory):
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
 
 
 def get_road_marking_plan(
     location="",
     plan=None,
-    device_type=None,
     traffic_sign_plan=None,
     replaces=None,
     **kwargs,
-) -> RoadMarkingPlan:
+) -> RoadMarkingPlanFactory:
     user = get_user("test_user")
 
-    road_marking_plan = RoadMarkingPlan.objects.get_or_create(
-        device_type=device_type,
+    road_marking_plan = RoadMarkingPlanFactory(
         value="30",
         color=RoadMarkingColor.WHITE,
         location=location or test_point,
@@ -393,7 +391,7 @@ def get_road_marking_plan(
         created_by=user,
         updated_by=user,
         **kwargs,
-    )[0]
+    )
 
     if replaces:
         road_marking_plan_replace(old=replaces, new=road_marking_plan)
@@ -410,6 +408,7 @@ class RoadMarkingRealFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
 
 
 def get_road_marking_real(
@@ -449,22 +448,21 @@ class SignpostPlanFactory(factory.django.DjangoModelFactory):
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
 
 
 def get_signpost_plan(
     location="",
     plan=None,
-    device_type=None,
     parent=None,
     mount_plan=None,
     txt=None,
     replaces=None,
     **kwargs,
-) -> SignpostPlan:
+) -> SignpostPlanFactory:
     user = get_user("test_user")
 
-    signpost_plan = SignpostPlan.objects.get_or_create(
-        device_type=device_type,
+    signpost_plan = SignpostPlanFactory(
         location=location or test_point,
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
@@ -475,7 +473,7 @@ def get_signpost_plan(
         created_by=user,
         updated_by=user,
         **kwargs,
-    )[0]
+    )
 
     if replaces:
         signpost_plan_replace(old=replaces, new=signpost_plan)
@@ -532,20 +530,19 @@ class TrafficLightPlanFactory(factory.django.DjangoModelFactory):
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
 
 
 def get_traffic_light_plan(
     location="",
     plan=None,
-    device_type=None,
     mount_plan=None,
     replaces=None,
     **kwargs,
 ) -> TrafficLightPlan:
     user = get_user("test_user")
 
-    traffic_light_plan = TrafficLightPlan.objects.get_or_create(
-        device_type=device_type,
+    traffic_light_plan = TrafficLightPlanFactory(
         location=location or test_point,
         type=TrafficLightType.SIGNAL,
         lifecycle=Lifecycle.ACTIVE,
@@ -558,7 +555,7 @@ def get_traffic_light_plan(
         created_by=user,
         updated_by=user,
         **kwargs,
-    )[0]
+    )
 
     if replaces:
         traffic_light_plan_replace(old=replaces, new=traffic_light_plan)
@@ -575,6 +572,7 @@ class TrafficLightRealFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
+    device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
 
 
 def get_traffic_light_real(
@@ -618,15 +616,13 @@ class TrafficSignPlanFactory(factory.django.DjangoModelFactory):
 def get_traffic_sign_plan(
     location="",
     plan=None,
-    device_type=None,
     mount_plan=None,
     replaces=None,
     **kwargs,
-) -> TrafficSignPlan:
+) -> TrafficSignPlanFactory:
     user = get_user("test_user")
 
-    traffic_sign_plan = TrafficSignPlan.objects.get_or_create(
-        device_type=device_type,
+    traffic_sign_plan = TrafficSignPlanFactory(
         location=location or test_point_3d,
         lifecycle=Lifecycle.ACTIVE,
         plan=plan,
@@ -635,7 +631,7 @@ def get_traffic_sign_plan(
         created_by=user,
         updated_by=user,
         **kwargs,
-    )[0]
+    )
     if replaces:
         traffic_sign_plan_replace(old=replaces, new=traffic_sign_plan)
 

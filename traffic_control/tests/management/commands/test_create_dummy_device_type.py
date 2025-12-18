@@ -24,6 +24,9 @@ from traffic_control.tests.factories import (
 @pytest.mark.django_db
 def test_creates_dummy_device_type_when_not_exists():
     """Test that the command creates a dummy device type if it doesn't exist."""
+    # Delete DummyDT if it exists from migrations
+    TrafficControlDeviceType.objects.filter(code="DummyDT").delete()
+
     assert not TrafficControlDeviceType.objects.filter(code="DummyDT").exists()
 
     call_command("create_dummy_device_type")
@@ -37,6 +40,9 @@ def test_creates_dummy_device_type_when_not_exists():
 @pytest.mark.django_db
 def test_does_not_duplicate_dummy_device_type():
     """Test that running the command twice doesn't create duplicates."""
+    # Delete DummyDT if it exists from migrations
+    TrafficControlDeviceType.objects.filter(code="DummyDT").delete()
+
     call_command("create_dummy_device_type")
     first_count = TrafficControlDeviceType.objects.filter(code="DummyDT").count()
 
@@ -111,6 +117,9 @@ def test_updates_multiple_models_at_once():
 @pytest.mark.django_db
 def test_dry_run_does_not_create_device_type():
     """Test that dry-run mode doesn't create the device type."""
+    # Delete DummyDT if it exists from migrations
+    TrafficControlDeviceType.objects.filter(code="DummyDT").delete()
+
     call_command("create_dummy_device_type", "--dry-run")
 
     assert not TrafficControlDeviceType.objects.filter(code="DummyDT").exists()

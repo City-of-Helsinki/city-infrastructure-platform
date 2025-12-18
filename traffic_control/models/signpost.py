@@ -91,8 +91,8 @@ class AbstractSignpost(
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.SIGNPOST)),
         help_text=_("Type of the device from Helsinki Design Manual."),
