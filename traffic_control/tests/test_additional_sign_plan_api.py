@@ -109,11 +109,12 @@ def test__additional_sign_plan__create_without_content(admin_user):
     successfully
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_plan()
+    tsp = TrafficSignPlanFactory()
     data = {
         "parent": tsp.pk,
         "location": str(tsp.location),
         "owner": get_owner().pk,
+        "device_type": tsp.device_type.pk,
     }
 
     response = client.post(reverse("v1:additionalsignplan-list"), data=data)
@@ -139,7 +140,7 @@ def test__additional_sign_plan__create_with_content(admin_user):
     an AdditionalSignPlan with content_s.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_plan()
+    tsp = TrafficSignPlanFactory()
     dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
@@ -184,7 +185,7 @@ def test__additional_sign_plan__create_with_content_invalid(schema, content, adm
     an AdditionalSignPlan when content_s is invalid to device type's content_schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_plan()
+    tsp = TrafficSignPlanFactory()
     dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=schema)
 
     data = {
@@ -209,10 +210,12 @@ def test__additional_sign_plan__create_with_content_invalid(schema, content, adm
 
 @pytest.mark.django_db
 def test__additional_sign_plan__create_with_invalid_geometry():
+    parent = TrafficSignPlanFactory()
     data = {
         "location": illegal_test_point.ewkt,
         "owner": str(get_owner().pk),
-        "parent": TrafficSignPlanFactory().pk,
+        "parent": parent.pk,
+        "device_type": parent.device_type.pk,
     }
     do_illegal_geometry_test(
         "v1:additionalsignplan-list",
@@ -256,7 +259,7 @@ def test__additional_sign_plan__update_device_type_and_content(
     client = get_api_client(user=get_user(admin=admin_user))
     old_dt = TrafficControlDeviceTypeFactory(code="A1234", content_schema=old_schema)
     new_dt = TrafficControlDeviceTypeFactory(code="new_code", content_schema=new_schema)
-    tsp = get_traffic_sign_plan()
+    tsp = TrafficSignPlanFactory()
     asp = AdditionalSignPlanFactory(content_s=old_content, device_type=old_dt)
 
     data = {
@@ -441,7 +444,7 @@ def test__additional_sign_plan__create_with_missing_content(admin_user):
     an AdditionalSignPlan without content_s when missing_content is set.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_plan()
+    tsp = TrafficSignPlanFactory()
     dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
@@ -477,7 +480,7 @@ def test__additional_sign_plan__create_dont_accept_content_when_missing_content_
     Test that AdditionalSignPlan API endpoint POST request doesn't accept content when missing_content is enabled.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_plan()
+    tsp = TrafficSignPlanFactory()
     dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {

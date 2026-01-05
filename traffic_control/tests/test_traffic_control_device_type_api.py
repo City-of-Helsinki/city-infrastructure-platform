@@ -7,6 +7,7 @@ from rest_framework.test import APITestCase
 
 from traffic_control.enums import DeviceTypeTargetModel, TrafficControlDeviceTypeType
 from traffic_control.models import TrafficControlDeviceType
+from traffic_control.tests import DEVICE_TYPE_COUNT_OFFSET
 from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import (
     get_api_client,
@@ -47,7 +48,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
             )
         response = self.client.get(reverse("v1:trafficcontroldevicetype-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+        self.assertEqual(response.data.get("count"), count + DEVICE_TYPE_COUNT_OFFSET)
 
     def test__list__as_admin__ok(self):
         """
@@ -62,7 +63,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
             )
         response = self.client.get(reverse("v1:trafficcontroldevicetype-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+        self.assertEqual(response.data.get("count"), count + DEVICE_TYPE_COUNT_OFFSET)
 
     def test__retrieve__as_user__ok(self):
         """
@@ -95,7 +96,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
         }
         response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 0)
+        self.assertEqual(TrafficControlDeviceType.objects.count(), 0 + DEVICE_TYPE_COUNT_OFFSET)
 
     def test__create__as_admin__created(self):
         """
@@ -109,8 +110,8 @@ class TrafficControlDeviceTypeTests(APITestCase):
         }
         response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1)
-        device_type = TrafficControlDeviceType.objects.first()
+        self.assertEqual(TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET)
+        device_type = TrafficControlDeviceType.objects.get(code="L3")
         self.assertEqual(device_type.code, data["code"])
         self.assertEqual(device_type.description, data["description"])
 
@@ -127,8 +128,8 @@ class TrafficControlDeviceTypeTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1)
-        device_type = TrafficControlDeviceType.objects.first()
+        self.assertEqual(TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET)
+        device_type = TrafficControlDeviceType.objects.get(code="L3")
         self.assertEqual(device_type.code, data["code"])
         self.assertEqual(device_type.description, data["description"])
 
@@ -148,7 +149,9 @@ class TrafficControlDeviceTypeTests(APITestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1)
+        self.assertEqual(
+            TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET
+        )  # One device type is created to database in migrations
 
     def test__update__as_admin__ok(self):
         """
@@ -166,8 +169,8 @@ class TrafficControlDeviceTypeTests(APITestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1)
-        device_type = TrafficControlDeviceType.objects.first()
+        self.assertEqual(TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET)
+        device_type = TrafficControlDeviceType.objects.get(code="L3")
         self.assertEqual(device_type.code, data["code"])
         self.assertEqual(device_type.description, data["description"])
 
@@ -181,7 +184,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
             reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1)
+        self.assertEqual(TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET)
 
     def test__destroy__as_admin__success(self):
         """
@@ -193,7 +196,7 @@ class TrafficControlDeviceTypeTests(APITestCase):
             reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 0)
+        self.assertEqual(TrafficControlDeviceType.objects.count(), 0 + DEVICE_TYPE_COUNT_OFFSET)
 
     def test__traffic_sign_type__filtering(self):
         dt_1 = TrafficControlDeviceTypeFactory(code="A1")
@@ -363,8 +366,8 @@ def test__device_type__anonymous_user(method, expected_status, view_type):
 
     response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
 
-    assert TrafficControlDeviceType.objects.count() == 1
-    assert TrafficControlDeviceType.objects.first().code == "TYPE-1"
+    assert TrafficControlDeviceType.objects.count() == 1 + DEVICE_TYPE_COUNT_OFFSET
+    assert TrafficControlDeviceType.objects.get(code="TYPE-1").code == "TYPE-1"
     assert response.status_code == expected_status
 
 
@@ -383,4 +386,5 @@ def test__device_type_filtering__list(field_name, value, second_value):
         field_name,
         value,
         second_value,
+        extra_count_for_second=DEVICE_TYPE_COUNT_OFFSET,
     )

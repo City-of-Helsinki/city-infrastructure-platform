@@ -27,7 +27,6 @@ from traffic_control.tests.factories import (
     get_operation_type,
     get_owner,
     get_traffic_sign_plan,
-    get_traffic_sign_real,
     get_user,
     OwnerFactory,
     PlanFactory,
@@ -164,6 +163,7 @@ def test__traffic_sign_plan__create_with_invalid_geometry():
     data = {
         "location": illegal_test_point.ewkt,
         "owner": OwnerFactory().pk,
+        "device_type": TrafficControlDeviceTypeFactory(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN).pk,
     }
     do_illegal_geometry_test(
         "v1:trafficsignplan-list",
@@ -340,7 +340,7 @@ def test_filter_traffic_sign_reals_location(location, location_query, expected):
     """
     api_client = get_api_client()
 
-    traffic_sign_real = get_traffic_sign_real(location)
+    traffic_sign_real = TrafficSignRealFactory(location=location)
     response = api_client.get(reverse("v1:trafficsignreal-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
@@ -362,7 +362,7 @@ def test_filter_error_traffic_sign_reals_location(location, location_query, expe
     """
     api_client = get_api_client()
 
-    get_traffic_sign_real(location)
+    TrafficSignRealFactory(location=location)
     response = api_client.get(reverse("v1:trafficsignreal-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -401,7 +401,7 @@ def test__traffic_sign_real__valid_device_type(target_model):
     Ensure that device types with supported target_model value are allowed.
     """
     client = get_api_client(user=get_user(admin=True))
-    traffic_sign_real = get_traffic_sign_real()
+    traffic_sign_real = TrafficSignRealFactory()
     device_type = TrafficControlDeviceTypeFactory(
         code="123", description="test", target_model=target_model, value="12.5"
     )
@@ -434,7 +434,7 @@ def test__traffic_sign_real__invalid_device_type(target_model):
     Ensure that device types with unsupported target_model value are not allowed.
     """
     client = get_api_client(user=get_user(admin=True))
-    traffic_sign_real = get_traffic_sign_real()
+    traffic_sign_real = TrafficSignRealFactory()
     device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
@@ -454,6 +454,7 @@ def test__traffic_sign_real__create_with_invalid_geometry():
     data = {
         "location": illegal_test_point.ewkt,
         "owner": OwnerFactory().pk,
+        "device_type": TrafficControlDeviceTypeFactory(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN).pk,
     }
     do_illegal_geometry_test(
         "v1:trafficsignreal-list",
@@ -741,7 +742,7 @@ def test__traffic_sign_real__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    traffic_sign = get_traffic_sign_real(location=f"SRID=3879;POINT Z ({MIN_X + 1} {MIN_Y + 1} 0)")
+    traffic_sign = TrafficSignRealFactory(location=f"SRID=3879;POINT Z ({MIN_X + 1} {MIN_Y + 1} 0)")
     kwargs = {"pk": traffic_sign.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:trafficsignreal-{view_type}", kwargs=kwargs)
     data = {
@@ -777,7 +778,7 @@ def test__traffic_sign_real_operation__anonymous_user(method, expected_status, v
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    traffic_sign = get_traffic_sign_real()
+    traffic_sign = TrafficSignRealFactory()
     operation_type = get_operation_type()
     operation = add_traffic_sign_real_operation(
         traffic_sign_real=traffic_sign,

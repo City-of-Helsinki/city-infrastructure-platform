@@ -26,7 +26,6 @@ from traffic_control.tests.factories import (
     get_operation_type,
     get_owner,
     get_signpost_plan,
-    get_signpost_real,
     get_user,
     OwnerFactory,
     PlanFactory,
@@ -161,6 +160,7 @@ def test__signpost_plan__create_with_invalid_geometry():
     data = {
         "location": illegal_test_point.ewkt,
         "owner": OwnerFactory().pk,
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
     do_illegal_geometry_test(
         "v1:signpostplan-list",
@@ -296,7 +296,7 @@ class SignpostPlanTests(TrafficControlAPIBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def __create_test_signpost_plan(self):
-        return SignpostPlan.objects.create(
+        return SignpostPlanFactory(
             device_type=self.test_device_type,
             location=self.test_point,
             lifecycle=self.test_lifecycle,
@@ -317,7 +317,7 @@ def test_filter_signpost_reals_location(location, location_query, expected):
     """
     api_client = get_api_client()
 
-    signpost_real = get_signpost_real(location)
+    signpost_real = SignpostRealFactory(location=location)
     response = api_client.get(reverse("v1:signpostreal-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
@@ -339,7 +339,7 @@ def test_filter_error_signpost_reals_location(location, location_query, expected
     """
     api_client = get_api_client()
 
-    get_signpost_real(location)
+    SignpostRealFactory(location=location)
     response = api_client.get(reverse("v1:signpostreal-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -377,7 +377,7 @@ def test__signpost_real__valid_device_type(target_model):
     Ensure that device types with supported target_model value are allowed.
     """
     client = get_api_client(user=get_user(admin=True))
-    signpost_real = get_signpost_real()
+    signpost_real = SignpostRealFactory()
     device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model, value="15")
     data = {"device_type": device_type.id}
 
@@ -408,7 +408,7 @@ def test__signpost_real__invalid_device_type(target_model):
     Ensure that device types with unsupported target_model value are not allowed.
     """
     client = get_api_client(user=get_user(admin=True))
-    signpost_real = get_signpost_real()
+    signpost_real = SignpostRealFactory()
     device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
@@ -428,6 +428,7 @@ def test__signpost_real__create_with_invalid_geometry():
     data = {
         "location": illegal_test_point.ewkt,
         "owner": OwnerFactory().pk,
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
     do_illegal_geometry_test(
         "v1:signpostreal-list",
@@ -721,7 +722,7 @@ def test__signpost_real__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    signpost = get_signpost_real(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
+    signpost = SignpostRealFactory(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": signpost.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:signpostreal-{view_type}", kwargs=kwargs)
     data = {
@@ -757,7 +758,7 @@ def test__signpost_real_operation__anonymous_user(method, expected_status, view_
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    signpost = get_signpost_real()
+    signpost = SignpostRealFactory()
     operation_type = get_operation_type()
     operation = add_signpost_real_operation(
         signpost_real=signpost,

@@ -89,8 +89,8 @@ class AbstractTrafficSign(
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
         on_delete=models.PROTECT,
         limit_choices_to=Q(Q(target_model=None) | Q(target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)),
         help_text=_("Type of the device from Helsinki Design Manual."),

@@ -9,10 +9,9 @@ from traffic_control.resources.signpost import (
     SignpostRealResource,
 )
 from traffic_control.tests.factories import (
-    get_mount_plan,
-    get_mount_real,
     get_signpost_plan,
-    get_signpost_real,
+    MountPlanFactory,
+    MountRealFactory,
     SignpostPlanFactory,
     SignpostRealFactory,
 )
@@ -64,13 +63,13 @@ def test__signpost_plan_export_real_import(
 ):
     """Test that a plan object can be exported as its real object (referencing to the plan)"""
 
-    mount_plan = get_mount_plan() if has_mount_plan else None
-    mount_real = get_mount_real() if has_mount_real else None
-    parent_plan = get_signpost_plan() if has_parent_plan else None
-    parent_real = get_signpost_real() if has_parent_real else None
+    mount_plan = MountPlanFactory() if has_mount_plan else None
+    mount_real = MountRealFactory(mount_plan=mount_plan) if has_mount_real else None
+    parent_plan = SignpostPlanFactory() if has_parent_plan else None
+    parent_real = SignpostRealFactory(signpost_plan=parent_plan) if has_parent_real else None
 
-    plan_obj = get_signpost_plan(location=test_point_2, mount_plan=mount_plan, parent=parent_plan)
-    real_obj = get_signpost_real(location=test_point_2, signpost_plan=plan_obj) if real_preexists else None
+    plan_obj = SignpostPlanFactory(location=test_point_2, mount_plan=mount_plan, parent=parent_plan)
+    real_obj = SignpostRealFactory(location=test_point_2, signpost_plan=plan_obj) if real_preexists else None
 
     exported_dataset = SignpostPlanToRealTemplateResource().export(queryset=SignpostPlan.objects.filter(id=plan_obj.id))
     assert len(exported_dataset) == 1
@@ -133,16 +132,16 @@ def test__signpost_plan_export_real_replacement_importable():
 )
 @pytest.mark.django_db
 def test__signpost_plan_export_real_parent_and_child(parent_real_preexists, child_real_preexists):
-    plan_parent = get_signpost_plan()
-    plan_child = get_signpost_plan(parent=plan_parent)
+    plan_parent = SignpostPlanFactory()
+    plan_child = SignpostPlanFactory(parent=plan_parent)
 
     if parent_real_preexists:
-        real_parent = get_signpost_real(signpost_plan=plan_parent)
+        real_parent = SignpostRealFactory(signpost_plan=plan_parent)
     else:
         real_parent = None
 
     if child_real_preexists:
-        real_child = get_signpost_real(signpost_plan=plan_child)
+        real_child = SignpostRealFactory(signpost_plan=plan_child)
     else:
         real_child = None
 

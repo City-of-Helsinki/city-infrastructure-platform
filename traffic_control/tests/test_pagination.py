@@ -1,6 +1,7 @@
 import pytest
 from django.urls import reverse
 
+from traffic_control.tests import DEVICE_TYPE_COUNT_OFFSET
 from traffic_control.tests.factories import get_api_client, TrafficControlDeviceTypeFactory
 
 
@@ -24,7 +25,7 @@ def test_limit_offset_pagination():
     response = api_client.get(reverse("v1:trafficcontroldevicetype-list"), {"limit": 2, "offset": 2})
 
     result_pks = [r["id"] for r in response.data["results"]]
-    assert response.data["count"] == 5
+    assert response.data["count"] == 5 + DEVICE_TYPE_COUNT_OFFSET  # DummyDT exists by default
     assert len(result_pks) == 2
     assert str(tsc_3.pk) in result_pks
     assert str(tsc_4.pk) in result_pks

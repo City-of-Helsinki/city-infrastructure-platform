@@ -1,5 +1,8 @@
 from django.test import override_settings
 
+DEVICE_TYPE_COUNT_OFFSET = 1  # One device type is created to database in migrations
+
+
 settings_overrides = override_settings(
     STORAGES={
         "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},

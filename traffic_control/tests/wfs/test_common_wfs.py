@@ -3,7 +3,10 @@ from django.contrib.gis.geos import Point
 from django.utils import timezone
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
-from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
+from city_furniture.tests.factories import (
+    FurnitureSignpostPlanFactory,
+    FurnitureSignpostRealFactory,
+)
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, Plan, TrafficSignPlan, TrafficSignReal
 from traffic_control.tests.factories import (
     AdditionalSignRealFactory,
@@ -33,7 +36,7 @@ from traffic_control.tests.wfs.wfs_utils import (
 @pytest.mark.parametrize(
     "model, model_name, factory, geom_outsidebbox, geom_insidebbox",
     (
-        (TrafficSignPlan, "trafficsignplan", get_traffic_sign_plan, point_outside_bbox, point_inside_bbox),
+        (TrafficSignPlan, "trafficsignplan", TrafficSignPlanFactory, point_outside_bbox, point_inside_bbox),
         (TrafficSignReal, "trafficsignreal", TrafficSignRealFactory, point_outside_bbox, point_inside_bbox),
         (
             AdditionalSignPlan,
@@ -46,14 +49,14 @@ from traffic_control.tests.wfs.wfs_utils import (
         (
             FurnitureSignpostPlan,
             "furnituresignpostplan",
-            get_furniture_signpost_plan,
+            FurnitureSignpostPlanFactory,
             point_outside_bbox,
             point_inside_bbox,
         ),
         (
             FurnitureSignpostReal,
             "furnituresignpostreal",
-            get_furniture_signpost_real,
+            FurnitureSignpostRealFactory,
             point_outside_bbox,
             point_inside_bbox,
         ),
