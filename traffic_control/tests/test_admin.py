@@ -10,7 +10,13 @@ from django.urls import reverse
 from traffic_control.admin import BarrierRealAdmin, TrafficSignRealAdmin
 from traffic_control.enums import Lifecycle
 from traffic_control.models import BarrierReal, TrafficSignReal
-from traffic_control.tests.factories import get_additional_sign_real, get_barrier_real, get_owner, get_user
+from traffic_control.tests.factories import (
+    AdditionalSignRealFactory,
+    BarrierRealFactory,
+    get_owner,
+    get_user,
+    TrafficSignRealFactory,
+)
 from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
@@ -22,7 +28,7 @@ class TrafficSignRealAdminTestCase(TestCase):
     def setUp(self):
         self.user = get_user()
         self.admin = get_user(admin=True)
-        self.traffic_sign_real = TrafficSignReal.objects.create(
+        self.traffic_sign_real = TrafficSignRealFactory(
             location=Point(MIN_X + 10, MIN_Y + 5, 5, srid=settings.SRID),
             legacy_code="100",
             direction=0,
@@ -48,7 +54,7 @@ class TrafficSignRealAdminTestCase(TestCase):
         self.assertIn("z_coord", form.base_fields)
 
     def test_has_additional_signs_return_yes(self):
-        get_additional_sign_real(parent=self.traffic_sign_real)
+        AdditionalSignRealFactory(parent=self.traffic_sign_real)
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
 
         # NOTE: Since the admin class has_additional_signs method operates over annotated objects, we need to make use
@@ -76,15 +82,16 @@ class TrafficSignRealAdminTestCase(TestCase):
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
         request = MockRequest()
         request.user = self.admin
-        traffic_sign_real = TrafficSignReal(
+        traffic_sign_real = TrafficSignRealFactory(
             location=Point(MIN_X + 1, MIN_Y + 1, 5, srid=settings.SRID),
             legacy_code="100",
             direction=0,
             owner=get_owner(),
+            created_by=self.admin,
         )
         ma.save_model(request, traffic_sign_real, None, None)
-        self.assertEqual(traffic_sign_real.created_by, self.admin)
         self.assertEqual(traffic_sign_real.updated_by, self.admin)
+        self.assertEqual(traffic_sign_real.created_by, self.admin)
 
     def test_save_model_set_updated_by_for_updating(self):
         ma = TrafficSignRealAdmin(TrafficSignReal, self.site)
@@ -100,7 +107,7 @@ class SoftDeleteAdminTestCase(TestCase):
 
     def setUp(self):
         self.admin_user = get_user(admin=True)
-        self.barrier_real = get_barrier_real()
+        self.barrier_real = BarrierRealFactory()
         self.site = AdminSite()
         self.model_admin = BarrierRealAdmin(BarrierReal, self.site)
 

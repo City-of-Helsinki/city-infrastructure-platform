@@ -10,10 +10,20 @@ from city_furniture.resources.furniture_signpost import (
     FurnitureSignpostPlanTemplateResource,
     FurnitureSignpostRealResource,
 )
-from city_furniture.tests.factories import get_furniture_signpost_plan, get_furniture_signpost_real
+from city_furniture.tests.factories import (
+    FurnitureSignpostPlanFactory,
+    FurnitureSignpostRealFactory,
+    get_furniture_signpost_plan,
+    get_furniture_signpost_real,
+)
 from traffic_control.enums import OrganizationLevel
 from traffic_control.models import GroupResponsibleEntity, ResponsibleEntity
-from traffic_control.tests.factories import get_mount_plan, get_mount_real, get_responsible_entity_project, get_user
+from traffic_control.tests.factories import (
+    get_responsible_entity_project,
+    get_user,
+    MountPlanFactory,
+    MountRealFactory,
+)
 from traffic_control.tests.test_base_api import test_point_2
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
@@ -32,7 +42,7 @@ def test__furniture_signpost_real__export():
 
 @pytest.mark.django_db
 def test__furniture_signpost_real__import():
-    get_furniture_signpost_real()  # Create a furniture signpost so we can easily populate the data
+    FurnitureSignpostRealFactory()  # Create a furniture signpost so we can easily populate the data
     dataset = FurnitureSignpostRealResource().export()
     FurnitureSignpostReal.objects.all().delete()
 
@@ -61,18 +71,18 @@ def test__furniture_signpost_plan_export_real(
 ):
     """Test that a plan object can be exported as its real object (referencing to the plan)"""
 
-    mount_plan = get_mount_plan() if has_mount_plan else None
-    mount_real = get_mount_real() if has_mount_real else None
-    parent_plan = get_furniture_signpost_plan() if has_parent_plan else None
-    parent_real = get_furniture_signpost_real(furniture_signpost_plan=parent_plan) if has_parent_real else None
+    mount_plan = MountPlanFactory() if has_mount_plan else None
+    mount_real = MountRealFactory(mount_plan=mount_plan) if has_mount_real else None
+    parent_plan = FurnitureSignpostPlanFactory() if has_parent_plan else None
+    parent_real = FurnitureSignpostRealFactory(furniture_signpost_plan=parent_plan) if has_parent_real else None
 
-    plan_obj = get_furniture_signpost_plan(
+    plan_obj = FurnitureSignpostPlanFactory(
         location=test_point_2,
         mount_plan=mount_plan,
         parent=parent_plan,
     )
     real_obj = (
-        get_furniture_signpost_real(
+        FurnitureSignpostRealFactory(
             location=test_point_2,
             furniture_signpost_plan=plan_obj,
             parent=parent_real,

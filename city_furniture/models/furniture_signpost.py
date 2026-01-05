@@ -88,6 +88,8 @@ class FurnitureAbstractSignpost(
             Q(target_model=None) | Q(target_model=CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
         ),
         help_text=_("Type of the device from Helsinki Design Manual."),
+        blank=False,
+        null=False,
     )
     # Size should be required if device type is non-standard
     size = models.CharField(

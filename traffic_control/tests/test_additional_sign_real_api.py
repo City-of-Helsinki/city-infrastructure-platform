@@ -28,7 +28,6 @@ from traffic_control.tests.factories import (
     get_api_client,
     get_operation_type,
     get_owner,
-    get_traffic_sign_real,
     get_user,
     PlanFactory,
     TrafficControlDeviceTypeFactory,
@@ -108,7 +107,7 @@ def test__additional_sign_real__detail(geo_format, plan_decision_id):
     client = get_api_client()
     plan = PlanFactory(decision_id=plan_decision_id) if plan_decision_id else None
     ads_plan = AdditionalSignPlanFactory(plan=plan) if plan else None
-    asr = AdditionalSignRealFactory(parent=get_traffic_sign_real(), additional_sign_plan=ads_plan)
+    asr = AdditionalSignRealFactory(parent=TrafficSignRealFactory(), additional_sign_plan=ads_plan)
     file = AdditionalSignRealFileFactory(additional_sign_real=asr, file__filename="test-file.txt")
     operation_1 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 5))
     operation_2 = add_additional_sign_real_operation(asr, operation_date=datetime.date(2020, 11, 15))
@@ -146,11 +145,12 @@ def test__additional_sign_real__create_without_content(admin_user):
     successfully
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    traffic_sign_real = get_traffic_sign_real()
+    traffic_sign_real = TrafficSignRealFactory()
     data = {
         "parent": traffic_sign_real.pk,
         "location": str(traffic_sign_real.location),
         "owner": get_owner().pk,
+        "device_type": traffic_sign_real.device_type.pk,
     }
 
     response = client.post(reverse("v1:additionalsignreal-list"), data=data)
@@ -178,11 +178,13 @@ def test__additional_sign_real__create_with_existing_plan(admin_user):
     client = get_api_client(user=get_user(admin=admin_user))
     ads_plan = AdditionalSignPlanFactory()
     existing_ads = AdditionalSignRealFactory(additional_sign_plan=ads_plan)
+    parent = TrafficSignRealFactory()
     data = {
         "location": str(existing_ads.location),
         "owner": str(get_owner().pk),
         "additional_sign_plan": str(ads_plan.pk),
-        "parent": TrafficSignRealFactory().pk,
+        "parent": parent.pk,
+        "device_type": parent.device_type.pk,
     }
 
     response = client.post(reverse("v1:additionalsignreal-list"), data=data)
@@ -205,7 +207,7 @@ def test__additional_sign_real__create_with_content(admin_user):
     an AdditionalSignReal with content_s.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_real()
+    tsp = TrafficSignRealFactory()
     dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
@@ -250,7 +252,7 @@ def test__additional_sign_real__create_with_content_invalid(schema, content, adm
     an AdditionalSignReal when content_s is invalid to device type's content_schema.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_real()
+    tsp = TrafficSignRealFactory()
     dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=schema)
 
     data = {
@@ -275,7 +277,13 @@ def test__additional_sign_real__create_with_content_invalid(schema, content, adm
 
 @pytest.mark.django_db
 def test__additional_sign_real__create_with_invalid_geometry():
-    data = {"location": illegal_test_point.ewkt, "owner": str(get_owner().pk), "parent": TrafficSignRealFactory().pk}
+    parent = TrafficSignRealFactory()
+    data = {
+        "location": illegal_test_point.ewkt,
+        "owner": str(get_owner().pk),
+        "parent": parent.pk,
+        "device_type": parent.device_type.pk,
+    }
     do_illegal_geometry_test(
         "v1:additionalsignreal-list",
         data,
@@ -503,7 +511,7 @@ def test__additional_sign_real__create_with_missing_content(admin_user):
     an AdditionalSignReal without content_s when missing_content is set.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_real()
+    tsp = TrafficSignRealFactory()
     dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {
@@ -539,7 +547,7 @@ def test__additional_sign_real__create_dont_accept_content_when_missing_content_
     Test that AdditionalSignReal API endpoint POST request doesn't accept content when missing_content is enabled.
     """
     client = get_api_client(user=get_user(admin=admin_user))
-    tsp = get_traffic_sign_real()
+    tsp = TrafficSignRealFactory()
     dt = TrafficControlDeviceTypeFactory(code=get_random_string(length=12), content_schema=simple_schema)
 
     data = {

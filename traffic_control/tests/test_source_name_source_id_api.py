@@ -25,6 +25,7 @@ from traffic_control.tests.factories import (
     get_api_client,
     get_owner,
     get_user,
+    TrafficControlDeviceTypeFactory,
     TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
@@ -37,14 +38,17 @@ def get_data_create_additional_sign():
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
         "parent": parent.id,
+        "device_type": parent.device_type.id,
     }
 
 
 def get_data_create_additional_sign_plan():
+    parent = TrafficSignPlanFactory()
     return {
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
-        "parent": TrafficSignPlanFactory().pk,
+        "parent": parent.pk,
+        "device_type": parent.device_type.pk,
     }
 
 
@@ -53,6 +57,7 @@ def get_data_create_barrier():
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
         "road_name": "Road name",
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
 
 
@@ -74,6 +79,7 @@ def get_data_create_road_marking():
     return {
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
 
 
@@ -81,6 +87,7 @@ def get_data_create_signpost():
     return {
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
 
 
@@ -88,6 +95,7 @@ def get_data_create_traffic_light():
     return {
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
 
 
@@ -95,6 +103,7 @@ def get_data_create_traffic_sign():
     return {
         "location": test_point_3d.ewkt,
         "owner": str(get_owner().id),
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
 
 

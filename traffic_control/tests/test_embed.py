@@ -22,9 +22,7 @@ from traffic_control.tests.factories import (
         (TrafficSignRealFactory, AdditionalSignRealFactory, MountRealFactory, "mount_real", "traffic-sign-real-embed"),
     ),
 )
-@pytest.mark.parametrize("has_device_type", (False, True))
 @pytest.mark.parametrize("has_additional_signs", (False, True))
-@pytest.mark.parametrize("has_additional_sign_device_types", (False, True))
 @pytest.mark.parametrize("has_mount", (False, True))
 @pytest.mark.django_db
 def test__embed__traffic_sign__context(
@@ -34,9 +32,7 @@ def test__embed__traffic_sign__context(
     mount_factory,
     mount_parameter,
     url_name,
-    has_device_type,
     has_additional_signs,
-    has_additional_sign_device_types,
     has_mount,
 ):
     """Test that the embedded view can be built and its context has the objects that it should."""
@@ -46,30 +42,22 @@ def test__embed__traffic_sign__context(
     else:
         mount = None
 
-    if has_device_type:
-        traffic_sign_type = TrafficControlDeviceTypeFactory(
-            code="TS1",
-            target_model=DeviceTypeTargetModel.TRAFFIC_SIGN,
-        )
-    else:
-        traffic_sign_type = None
+    traffic_sign_type = TrafficControlDeviceTypeFactory(
+        code="TS1",
+        target_model=DeviceTypeTargetModel.TRAFFIC_SIGN,
+    )
 
     traffic_sign = ts_factory(device_type=traffic_sign_type, **{mount_parameter: mount})
 
     if has_additional_signs:
-        if has_additional_sign_device_types:
-            additional_sign_type_1 = TrafficControlDeviceTypeFactory(
-                code="AS1",
-                target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
-            )
-            additional_sign_type_2 = TrafficControlDeviceTypeFactory(
-                code="AS2",
-                target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
-            )
-        else:
-            additional_sign_type_1 = None
-            additional_sign_type_2 = None
-
+        additional_sign_type_1 = TrafficControlDeviceTypeFactory(
+            code="AS1",
+            target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        )
+        additional_sign_type_2 = TrafficControlDeviceTypeFactory(
+            code="AS2",
+            target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        )
         additional_sign_1 = as_factory(
             device_type=additional_sign_type_1,
             parent=traffic_sign,
@@ -95,10 +83,7 @@ def test__embed__traffic_sign__context(
     assert context.get("object") == traffic_sign
     assert context.get("traffic_sign_fields")[3][1] == traffic_sign.id
 
-    if has_device_type:
-        assert context.get("traffic_sign_fields")[0][1] == traffic_sign_type.code
-    else:
-        assert context.get("traffic_sign_fields")[0][1] is None
+    assert context.get("traffic_sign_fields")[0][1] == traffic_sign_type.code
 
     if has_additional_signs:
         assert len(context.get("additional_signs")) == 2
@@ -109,12 +94,8 @@ def test__embed__traffic_sign__context(
         assert context.get("additional_signs")[1]["object"] == additional_sign_2
         assert context.get("additional_signs")[1]["fields"][3][1] == additional_sign_2.id
 
-        if has_additional_sign_device_types:
-            assert context.get("additional_signs")[0]["fields"][0][1] == additional_sign_type_1.code
-            assert context.get("additional_signs")[1]["fields"][0][1] == additional_sign_type_2.code
-        else:
-            assert context.get("additional_signs")[0]["fields"][0][1] is None
-            assert context.get("additional_signs")[1]["fields"][0][1] is None
+        assert context.get("additional_signs")[0]["fields"][0][1] == additional_sign_type_1.code
+        assert context.get("additional_signs")[1]["fields"][0][1] == additional_sign_type_2.code
     else:
         assert context.get("additional_signs") == []
 

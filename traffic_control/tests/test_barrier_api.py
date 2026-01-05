@@ -17,7 +17,6 @@ from traffic_control.tests.factories import (
     BarrierRealFactory,
     get_api_client,
     get_barrier_plan,
-    get_barrier_real,
     get_operation_type,
     get_user,
     OwnerFactory,
@@ -46,7 +45,7 @@ def test_filter_barrier_plans_location(location, location_query, expected):
     """
     api_client = get_api_client()
 
-    barrier_plan = get_barrier_plan(location)
+    barrier_plan = BarrierPlanFactory(location=location)
     response = api_client.get(reverse("v1:barrierplan-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
@@ -67,7 +66,7 @@ def test_filter_error_barrier_plans_location(location, location_query, expected)
     """
     api_client = get_api_client()
 
-    get_barrier_plan(location)
+    BarrierPlanFactory(location=location)
     response = api_client.get(reverse("v1:barrierplan-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -103,7 +102,7 @@ def test__barrier_plan__valid_device_type(target_model):
     Ensure that device types with supported target_model value are allowed.
     """
     client = get_api_client(user=get_user(admin=True))
-    barrier_plan = get_barrier_plan()
+    barrier_plan = BarrierPlanFactory()
     device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
@@ -133,7 +132,7 @@ def test__barrier_plan__invalid_device_type(target_model):
     Ensure that device types with unsupported target_model value are not allowed.
     """
     client = get_api_client(user=get_user(admin=True))
-    barrier_plan = get_barrier_plan()
+    barrier_plan = BarrierPlanFactory()
     device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
@@ -154,6 +153,7 @@ def test__barrier_plan__create_with_invalid_geometry():
         "location": illegal_test_point.ewkt,
         "owner": OwnerFactory().pk,
         "road_name": "TestRoad",
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
     do_illegal_geometry_test(
         "v1:barrierplan-list",
@@ -316,7 +316,7 @@ def test_filter_barrier_reals_location(location, location_query, expected):
     """
     api_client = get_api_client()
 
-    barrier_real = get_barrier_real(location)
+    barrier_real = BarrierRealFactory(location=location)
     response = api_client.get(reverse("v1:barrierreal-list"), {"location": location_query.ewkt})
 
     assert response.status_code == status.HTTP_200_OK
@@ -338,7 +338,7 @@ def test_filter_error_barrier_reals_location(location, location_query, expected)
     """
     api_client = get_api_client()
 
-    get_barrier_plan(location)
+    BarrierPlanFactory(location=location)
     response = api_client.get(reverse("v1:barrierreal-list"), {"location": location_query})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -376,7 +376,7 @@ def test__barrier_real__valid_device_type(target_model):
     Ensure that device types with supported target_model value are allowed.
     """
     client = get_api_client(user=get_user(admin=True))
-    barrier_real = get_barrier_real()
+    barrier_real = BarrierRealFactory()
     device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
@@ -406,7 +406,7 @@ def test__barrier_real__invalid_device_type(target_model):
     Ensure that device types with unsupported target_model value are not allowed.
     """
     client = get_api_client(user=get_user(admin=True))
-    barrier_real = get_barrier_real()
+    barrier_real = BarrierRealFactory()
     device_type = TrafficControlDeviceTypeFactory(code="123", description="test", target_model=target_model)
     data = {"device_type": device_type.id}
 
@@ -427,6 +427,7 @@ def test__barrier_real__create_with_invalid_geometry():
         "location": illegal_test_point.ewkt,
         "owner": OwnerFactory().pk,
         "road_name": "TestRoad",
+        "device_type": TrafficControlDeviceTypeFactory().pk,
     }
     do_illegal_geometry_test(
         "v1:barrierreal-list",
@@ -753,7 +754,7 @@ def test__barrier_real__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    barrier = get_barrier_real(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
+    barrier = BarrierRealFactory(location=f"SRID=3879;POINT Z ({MIN_X+1} {MIN_Y+1} 0)")
     kwargs = {"pk": barrier.pk} if view_type == "detail" else None
     resource_path = reverse(f"v1:barrierreal-{view_type}", kwargs=kwargs)
     data = {"location": f"SRID=3879;POINT Z ({MIN_X+2} {MIN_Y+2} 0)"}
@@ -785,7 +786,7 @@ def test__barrier_real_operation__anonymous_user(method, expected_status, view_t
     Test that for unauthorized user the API responses 401 unauthorized, but OK for safe methods.
     """
     client = get_api_client(user=None)
-    barrier = get_barrier_real()
+    barrier = BarrierRealFactory()
     operation_type = get_operation_type()
     operation = add_barrier_real_operation(
         barrier_real=barrier,

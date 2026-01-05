@@ -23,7 +23,8 @@ def test__city_furniture_device_type__list():
     response_data = response.json()
 
     assert response.status_code == status.HTTP_200_OK
-    assert response_data["count"] == 3
+    # DummyDT adds +1 this is coming from migrations
+    assert response_data["count"] == 3 + 1
     for result in response_data["results"]:
         obj = CityFurnitureDeviceType.objects.get(pk=result["id"])
         assert result["code"] == obj.code
@@ -44,6 +45,7 @@ def test__city_furniture_device_type_filtering__list(field_name, value, second_v
         field_name,
         value,
         second_value,
+        extra_count_for_second=1,  # 2nd query does not filter anything so DummyDT is included
     )
 
 
@@ -70,15 +72,16 @@ def test__city_furniture_device_type__create(admin_user):
     response = client.post(reverse("v1:cityfurnituredevicetype-list"), data=data)
     response_data = response.json()
 
+    # DummyDT adds +1 this is coming from migrations
     if admin_user:
         assert response.status_code == status.HTTP_201_CREATED
-        assert CityFurnitureDeviceType.objects.count() == 1
-        obj = CityFurnitureDeviceType.objects.first()
+        assert CityFurnitureDeviceType.objects.count() == 1 + 1
+        obj = CityFurnitureDeviceType.objects.get(code="TEST_CODE")
         assert response_data["id"] == str(obj.pk)
         assert response_data["code"] == data["code"]
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
-        assert CityFurnitureDeviceType.objects.count() == 0
+        assert CityFurnitureDeviceType.objects.count() == 0 + 1
 
 
 @pytest.mark.parametrize("admin_user", (False, True))
@@ -100,7 +103,8 @@ def test__city_furniture_device_type__create_with_incomplete_data(admin_user):
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    assert CityFurnitureDeviceType.objects.count() == 0
+    # DummyDT adds +1 this is coming from migrations
+    assert CityFurnitureDeviceType.objects.count() == 0 + 1
 
 
 # Update
@@ -138,13 +142,14 @@ def test__city_furniture_device_type__delete(admin_user):
 
     response = client.delete(reverse("v1:cityfurnituredevicetype-detail", kwargs={"pk": obj.pk}))
 
+    # DummyDT adds +1 this is coming from migrations
     if admin_user:
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert CityFurnitureDeviceType.objects.count() == 0
+        assert CityFurnitureDeviceType.objects.count() == 0 + 1
 
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
-        assert CityFurnitureDeviceType.objects.count() == 1
+        assert CityFurnitureDeviceType.objects.count() == 1 + 1
 
 
 @pytest.mark.parametrize(
@@ -173,6 +178,7 @@ def test__city_furniture_device_type__anonymous_user(method, expected_status, vi
 
     response = client.generic(method, resource_path, json.dumps(data), content_type="application/json")
 
-    assert CityFurnitureDeviceType.objects.count() == 1
-    assert CityFurnitureDeviceType.objects.first().code == "TYPE-1"
+    # DummyDT adds +1 this is coming from migrations
+    assert CityFurnitureDeviceType.objects.count() == 2
+    assert set(CityFurnitureDeviceType.objects.values_list("code", flat=True)) == {"DummyDT", "TYPE-1"}
     assert response.status_code == expected_status

@@ -10,18 +10,16 @@ from traffic_control.models.traffic_sign import AbstractTrafficSign
 from traffic_control.tests.factories import (
     AdditionalSignPlanFactory,
     AdditionalSignRealFactory,
-    get_barrier_plan,
-    get_barrier_real,
-    get_road_marking_plan,
-    get_road_marking_real,
-    get_signpost_plan,
-    get_signpost_real,
-    get_traffic_light_plan,
-    get_traffic_light_real,
-    get_traffic_sign_plan,
-    get_traffic_sign_real,
+    BarrierPlanFactory,
+    BarrierRealFactory,
+    RoadMarkingPlanFactory,
+    RoadMarkingRealFactory,
+    SignpostPlanFactory,
+    SignpostRealFactory,
     TrafficControlDeviceTypeFactory,
     TrafficControlDeviceTypeIconFactory,
+    TrafficLightPlanFactory,
+    TrafficLightRealFactory,
     TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
@@ -69,16 +67,16 @@ invalid_schema = {"type": "asdf"}
 @pytest.mark.parametrize(
     "allowed_values,factory",
     (
-        ([DeviceTypeTargetModel.BARRIER], get_barrier_plan),
-        ([DeviceTypeTargetModel.BARRIER], get_barrier_real),
-        ([DeviceTypeTargetModel.ROAD_MARKING], get_road_marking_plan),
-        ([DeviceTypeTargetModel.ROAD_MARKING], get_road_marking_real),
-        ([DeviceTypeTargetModel.SIGNPOST], get_signpost_plan),
-        ([DeviceTypeTargetModel.SIGNPOST], get_signpost_real),
-        ([DeviceTypeTargetModel.TRAFFIC_LIGHT], get_traffic_light_plan),
-        ([DeviceTypeTargetModel.TRAFFIC_LIGHT], get_traffic_light_real),
-        (AbstractTrafficSign.ALLOWED_TARGET_MODELS, get_traffic_sign_plan),
-        (AbstractTrafficSign.ALLOWED_TARGET_MODELS, get_traffic_sign_real),
+        ([DeviceTypeTargetModel.BARRIER], BarrierPlanFactory),
+        ([DeviceTypeTargetModel.BARRIER], BarrierRealFactory),
+        ([DeviceTypeTargetModel.ROAD_MARKING], RoadMarkingPlanFactory),
+        ([DeviceTypeTargetModel.ROAD_MARKING], RoadMarkingRealFactory),
+        ([DeviceTypeTargetModel.SIGNPOST], SignpostPlanFactory),
+        ([DeviceTypeTargetModel.SIGNPOST], SignpostRealFactory),
+        ([DeviceTypeTargetModel.TRAFFIC_LIGHT], TrafficLightPlanFactory),
+        ([DeviceTypeTargetModel.TRAFFIC_LIGHT], TrafficLightRealFactory),
+        (AbstractTrafficSign.ALLOWED_TARGET_MODELS, TrafficSignPlanFactory),
+        (AbstractTrafficSign.ALLOWED_TARGET_MODELS, TrafficSignRealFactory),
         ([DeviceTypeTargetModel.ADDITIONAL_SIGN], AdditionalSignPlanFactory),
         ([DeviceTypeTargetModel.ADDITIONAL_SIGN], AdditionalSignRealFactory),
     ),
@@ -102,16 +100,16 @@ def test__traffic_control_device_type__target_model__restricts_relations(allowed
 @pytest.mark.parametrize(
     "new_target_model,factory",
     (
-        (DeviceTypeTargetModel.BARRIER, get_barrier_plan),
-        (DeviceTypeTargetModel.BARRIER, get_barrier_real),
-        (DeviceTypeTargetModel.ROAD_MARKING, get_road_marking_plan),
-        (DeviceTypeTargetModel.ROAD_MARKING, get_road_marking_real),
-        (DeviceTypeTargetModel.SIGNPOST, get_signpost_plan),
-        (DeviceTypeTargetModel.SIGNPOST, get_signpost_real),
-        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_plan),
-        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_traffic_light_real),
-        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_plan),
-        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_sign_real),
+        (DeviceTypeTargetModel.BARRIER, BarrierPlanFactory),
+        (DeviceTypeTargetModel.BARRIER, BarrierRealFactory),
+        (DeviceTypeTargetModel.ROAD_MARKING, RoadMarkingPlanFactory),
+        (DeviceTypeTargetModel.ROAD_MARKING, RoadMarkingRealFactory),
+        (DeviceTypeTargetModel.SIGNPOST, SignpostPlanFactory),
+        (DeviceTypeTargetModel.SIGNPOST, SignpostRealFactory),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, TrafficLightPlanFactory),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, TrafficLightRealFactory),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, TrafficSignPlanFactory),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, TrafficSignRealFactory),
         (DeviceTypeTargetModel.ADDITIONAL_SIGN, AdditionalSignPlanFactory),
         (DeviceTypeTargetModel.ADDITIONAL_SIGN, AdditionalSignRealFactory),
     ),
@@ -131,16 +129,16 @@ def test__traffic_control_device_type__target_model__update_is_valid(new_target_
 @pytest.mark.parametrize(
     "new_target_model,factory",
     (
-        (DeviceTypeTargetModel.ROAD_MARKING, get_barrier_plan),
-        (DeviceTypeTargetModel.ROAD_MARKING, get_barrier_real),
-        (DeviceTypeTargetModel.SIGNPOST, get_road_marking_plan),
-        (DeviceTypeTargetModel.SIGNPOST, get_road_marking_real),
-        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_signpost_plan),
-        (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_signpost_real),
-        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_plan),
-        (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_real),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_plan),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_real),
+        (DeviceTypeTargetModel.ROAD_MARKING, BarrierPlanFactory),
+        (DeviceTypeTargetModel.ROAD_MARKING, BarrierRealFactory),
+        (DeviceTypeTargetModel.SIGNPOST, RoadMarkingPlanFactory),
+        (DeviceTypeTargetModel.SIGNPOST, RoadMarkingRealFactory),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, SignpostPlanFactory),
+        (DeviceTypeTargetModel.TRAFFIC_LIGHT, SignpostRealFactory),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, TrafficLightPlanFactory),
+        (DeviceTypeTargetModel.TRAFFIC_SIGN, TrafficLightRealFactory),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, TrafficSignPlanFactory),
+        (DeviceTypeTargetModel.ADDITIONAL_SIGN, TrafficSignRealFactory),
         (DeviceTypeTargetModel.BARRIER, AdditionalSignPlanFactory),
         (DeviceTypeTargetModel.BARRIER, AdditionalSignRealFactory),
     ),
@@ -161,16 +159,16 @@ def test__traffic_control_device_type__target_model__update_is_invalid(new_targe
 @pytest.mark.django_db
 def test__traffic_control_device_type__target_model__validate_multiple_invalid_relations():
     device_type = TrafficControlDeviceTypeFactory()
-    get_barrier_plan(device_type=device_type)
-    get_barrier_real(device_type=device_type)
-    get_road_marking_plan(device_type=device_type)
-    get_road_marking_real(device_type=device_type)
-    get_signpost_plan(device_type=device_type)
-    get_signpost_real(device_type=device_type)
-    get_traffic_light_plan(device_type=device_type)
-    get_traffic_light_real(device_type=device_type)
-    get_traffic_sign_plan(device_type=device_type)
-    get_traffic_sign_real(device_type=device_type)
+    BarrierPlanFactory(device_type=device_type)
+    BarrierRealFactory(device_type=device_type)
+    RoadMarkingPlanFactory(device_type=device_type)
+    RoadMarkingRealFactory(device_type=device_type)
+    SignpostPlanFactory(device_type=device_type)
+    SignpostRealFactory(device_type=device_type)
+    TrafficLightPlanFactory(device_type=device_type)
+    TrafficLightRealFactory(device_type=device_type)
+    TrafficSignPlanFactory(device_type=device_type)
+    TrafficSignRealFactory(device_type=device_type)
     AdditionalSignPlanFactory(device_type=device_type)
     AdditionalSignRealFactory(device_type=device_type)
 

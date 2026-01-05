@@ -5,6 +5,7 @@ import pytest
 from traffic_control.enums import DeviceTypeTargetModel, TrafficControlDeviceTypeType
 from traffic_control.models import TrafficControlDeviceType
 from traffic_control.resources.device_type import TrafficControlDeviceTypeResource
+from traffic_control.tests import DEVICE_TYPE_COUNT_OFFSET
 from traffic_control.tests.factories import TrafficControlDeviceTypeFactory, TrafficControlDeviceTypeIconFactory
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
@@ -52,8 +53,9 @@ def test__traffic_control_device_type__export(  # noqa: C901
     dt_type,
     content_schema,
 ):
-    """Test simple export of a single traffic control device type with multiple variations"""
-
+    """Test simple export of a single traffic control device type with multiple variations
+    One device type is created to database in migrations, that is why assert len(dataset) == 1 + 1
+    """
     kwargs = {"code": "123", "legacy_code": None, "legacy_description": None, "target_model": None}
     if icon_file:
         kwargs["icon_file"] = TrafficControlDeviceTypeIconFactory(file__filename=icon_file)
@@ -76,41 +78,45 @@ def test__traffic_control_device_type__export(  # noqa: C901
     dt = TrafficControlDeviceTypeFactory(**kwargs)
 
     dataset = TrafficControlDeviceTypeResource().export()
-
-    assert len(dataset) == 1
-    assert dataset.dict[0]["code"] == dt.code
-    assert dataset.dict[0]["icon_file"] == dt.icon_file.file
-    assert dataset.dict[0]["description"] == dt.description
-    assert dataset.dict[0]["value"] == dt.value
-    assert dataset.dict[0]["unit"] == dt.unit
-    assert dataset.dict[0]["size"] == dt.size
-    assert dataset.dict[0]["id"] == str(dt.id)
+    added_data = None
+    # find the added data row, DummyDT is created in migrations
+    for d in dataset.dict:
+        if d["code"] != "DummyDT":
+            added_data = d
+    assert len(dataset) == 1 + DEVICE_TYPE_COUNT_OFFSET
+    assert added_data["code"] == dt.code
+    assert added_data["icon_file"] == dt.icon_file.file
+    assert added_data["description"] == dt.description
+    assert added_data["value"] == dt.value
+    assert added_data["unit"] == dt.unit
+    assert added_data["size"] == dt.size
+    assert added_data["id"] == str(dt.id)
 
     # Nullable fields are "" when value is None
     if legacy_code:
-        assert dataset.dict[0]["legacy_code"] == dt.legacy_code
+        assert added_data["legacy_code"] == dt.legacy_code
     else:
-        assert dataset.dict[0]["legacy_code"] == ""
+        assert added_data["legacy_code"] == ""
 
     if legacy_description:
-        assert dataset.dict[0]["legacy_description"] == dt.legacy_description
+        assert added_data["legacy_description"] == dt.legacy_description
     else:
-        assert dataset.dict[0]["legacy_description"] == ""
+        assert added_data["legacy_description"] == ""
 
     if target_model:
-        assert dataset.dict[0]["target_model"] == dt.target_model.name
+        assert added_data["target_model"] == dt.target_model.name
     else:
-        assert dataset.dict[0]["target_model"] == ""
+        assert added_data["target_model"] == ""
 
     if dt_type:
-        assert dataset.dict[0]["type"] == dt.type.name
+        assert added_data["type"] == dt.type.name
     else:
-        assert dataset.dict[0]["type"] == ""
+        assert added_data["type"] == ""
 
     if content_schema:
-        assert json.loads(dataset.dict[0]["content_schema"]) == dt.content_schema
+        assert json.loads(added_data["content_schema"]) == dt.content_schema
     else:
-        assert dataset.dict[0]["content_schema"] == ""
+        assert added_data["content_schema"] == ""
 
 
 @pytest.mark.parametrize(
@@ -186,9 +192,9 @@ def test__traffic_control_device_type__import(
 
     assert not result.has_validation_errors()
     assert not result.has_errors()
-    assert result.totals["new"] == 1
-    assert TrafficControlDeviceType.objects.count() == 1
-    imported_dt = TrafficControlDeviceType.objects.first()
+    assert result.totals["new"] == 1 + DEVICE_TYPE_COUNT_OFFSET
+    assert TrafficControlDeviceType.objects.count() == 1 + DEVICE_TYPE_COUNT_OFFSET
+    imported_dt = TrafficControlDeviceType.objects.exclude(code="DummyDT").first()
 
     assert imported_dt.code == "123"
     assert imported_dt.icon_file == icon_file_obj
@@ -212,15 +218,16 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
         TrafficControlDeviceTypeResource,
         format=format,
         delete_columns=["content_schema"],
+        queryset=TrafficControlDeviceType.objects.exclude(code="DummyDT"),
     )
     dataset.append_col(['{"invalid", "json}'], header="content_schema")
-    TrafficControlDeviceType.objects.all().delete()
+    TrafficControlDeviceType.objects.exclude(code="DummyDT").delete()
 
     result = TrafficControlDeviceTypeResource().import_data(dataset, raise_errors=False, collect_failed_rows=True)
     assert not result.has_errors()
     assert result.has_validation_errors()
     assert result.invalid_rows[0].field_specific_errors.get("content_schema")
-    assert TrafficControlDeviceType.objects.count() == 0
+    assert TrafficControlDeviceType.objects.count() == DEVICE_TYPE_COUNT_OFFSET
 
 
 @pytest.mark.parametrize(
@@ -308,7 +315,7 @@ def test__traffic_control_device_type__import__update(
     del factory_kwargs["icon_file"]
     device_type = TrafficControlDeviceTypeFactory(icon_file=to_icon, **factory_kwargs)
     dataset = get_import_dataset(TrafficControlDeviceTypeResource, format=format)
-    assert len(dataset) == 1
+    assert len(dataset) == 1 + DEVICE_TYPE_COUNT_OFFSET
 
     device_type.code = from_values["code"]
     device_type.icon_file = from_icon
@@ -327,9 +334,9 @@ def test__traffic_control_device_type__import__update(
 
     assert not result.has_validation_errors()
     assert not result.has_errors()
-    assert result.totals["update"] == 1
-    assert TrafficControlDeviceType.objects.count() == 1
-    imported_dt = TrafficControlDeviceType.objects.first()
+    assert result.totals["update"] == 1 + DEVICE_TYPE_COUNT_OFFSET
+    assert TrafficControlDeviceType.objects.count() == 1 + DEVICE_TYPE_COUNT_OFFSET
+    imported_dt = TrafficControlDeviceType.objects.exclude(code="DummyDT").first()
 
     assert imported_dt.code == to_values["code"]
     assert imported_dt.icon_file == to_icon

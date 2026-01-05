@@ -89,7 +89,7 @@ def test_get_icon_upload_obstacles(
     - Virus scan errors
     - Files that already exist in the database
     """
-    with patch("traffic_control.utils.clam_av_scan", return_value=clam_av_return_value) as mock_clam_av_scan:
+    with patch("traffic_control.utils.common.clam_av_scan", return_value=clam_av_return_value) as mock_clam_av_scan:
         illegal_types, virus_scan_errors, existing_icons = get_icon_upload_obstacles(uploaded_files)
 
         assert illegal_types == expected_illegal_types

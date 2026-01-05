@@ -12,8 +12,8 @@ from traffic_control.permissions import IsAdminUserOrReadOnly, ObjectInsideOpera
 from traffic_control.tests.factories import (
     BarrierPlanFactory,
     BarrierPlanFileFactory,
+    BarrierRealFactory,
     get_api_client,
-    get_barrier_real,
     get_user,
     UserFactory,
 )
@@ -59,7 +59,7 @@ def test__operational_area_permission__point_in_area(method):
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
     request.user = user
-    barrier_real = get_barrier_real(location=Point(MIN_X + 20, MIN_Y + 20.0, 0, srid=settings.SRID))
+    barrier_real = BarrierRealFactory(location=Point(MIN_X + 20, MIN_Y + 20.0, 0, srid=settings.SRID))
 
     has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(request, mock_view, barrier_real)
 
@@ -87,7 +87,7 @@ def test__operational_area_permission__point_not_in_area(method, expected):
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
     request.user = user
-    barrier_real = get_barrier_real(location=Point(MIN_X + 100, MIN_Y + 100.0, 0, srid=settings.SRID))
+    barrier_real = BarrierRealFactory(location=Point(MIN_X + 100, MIN_Y + 100.0, 0, srid=settings.SRID))
 
     has_permission = ObjectInsideOperationalAreaOrAnonReadOnly().has_object_permission(request, mock_view, barrier_real)
 
@@ -105,7 +105,7 @@ def test__operational_area_permission__polygon_in_area(method):
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
     request.user = user
-    barrier_real = get_barrier_real(
+    barrier_real = BarrierRealFactory(
         location=Polygon(
             (
                 (MIN_X + 10, MIN_Y + 10, 0.0),
@@ -144,7 +144,7 @@ def test__operational_area_permission__polygon_partially_not_in_area(method, exp
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
     request.user = user
-    barrier_real = get_barrier_real(
+    barrier_real = BarrierRealFactory(
         location=Polygon(
             (
                 (MIN_X + 10, MIN_Y + 10, 0.0),
@@ -183,7 +183,7 @@ def test__operational_area_permission__polygon_not_in_area(method, expected):
     user.operational_areas.add(operational_area)
     request = RequestFactory().generic(method=method, path="/")
     request.user = user
-    barrier_real = get_barrier_real(
+    barrier_real = BarrierRealFactory(
         location=Polygon(
             (
                 (MIN_X + 140.0, MIN_Y + 140.0, 0),

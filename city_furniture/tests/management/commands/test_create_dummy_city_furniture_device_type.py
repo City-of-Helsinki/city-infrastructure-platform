@@ -7,22 +7,10 @@ from city_furniture.models.common import CityFurnitureDeviceType
 
 
 @pytest.mark.django_db
-def test_creates_dummy_device_type_when_not_exists():
-    """Test that the command creates a dummy device type if it doesn't exist."""
-    assert not CityFurnitureDeviceType.objects.filter(code="DummyDT").exists()
-
-    call_command("create_dummy_city_furniture_device_type")
-
-    assert CityFurnitureDeviceType.objects.filter(code="DummyDT").exists()
-    dummy_dt = CityFurnitureDeviceType.objects.get(code="DummyDT")
-    assert dummy_dt.target_model is None
-    assert dummy_dt.description_en == "Placeholder for devices that have None set to device_type"
-    assert dummy_dt.description_fi == "Paikanpitäjä laitteille, joilla ei ole device_type asetettu"
-
-
-@pytest.mark.django_db
 def test_does_not_duplicate_dummy_device_type():
-    """Test that running the command twice doesn't create duplicates."""
+    """Test that running the command twice doesn't create duplicates.
+    It should exist already as it is created in migrations.
+    """
     call_command("create_dummy_city_furniture_device_type")
     first_count = CityFurnitureDeviceType.objects.filter(code="DummyDT").count()
 
@@ -31,14 +19,6 @@ def test_does_not_duplicate_dummy_device_type():
 
     assert first_count == 1
     assert second_count == 1
-
-
-@pytest.mark.django_db
-def test_dry_run_does_not_create_device_type():
-    """Test that dry-run mode doesn't create the device type."""
-    call_command("create_dummy_city_furniture_device_type", "--dry-run")
-
-    assert not CityFurnitureDeviceType.objects.filter(code="DummyDT").exists()
 
 
 @pytest.mark.django_db
@@ -124,6 +104,9 @@ def test_combined_parameters():
 @pytest.mark.django_db
 def test_command_creates_device_type_with_valid_enums():
     """Test that the created device type has valid enum values."""
+    # Delete DummyDT if it exists from migrations
+    CityFurnitureDeviceType.objects.filter(code="DummyDT").delete()
+
     call_command("create_dummy_city_furniture_device_type")
 
     dummy_dt = CityFurnitureDeviceType.objects.get(code="DummyDT")
