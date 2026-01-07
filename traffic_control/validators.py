@@ -20,8 +20,8 @@ def validate_structured_content(content, device_type: Optional[TrafficControlDev
 
     if schema is not None:
         validator = jsonschema.Draft202012Validator(schema)
-
-        for error in validator.iter_errors(content):
+        payload_to_validate = content if content is not None else {}
+        for error in validator.iter_errors(payload_to_validate):
             message = error.message
             if error.path:
                 # Add property path to the message
