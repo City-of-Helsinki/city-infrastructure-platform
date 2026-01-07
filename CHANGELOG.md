@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.29.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.28.0...city-infrastructure-platform-v1.29.0) (2026-01-07)
+
+
+### Features
+
+* Device_type to non-nullable on every model it exists ([e88f714](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e88f7145f038f683c6bab231296f6f182a0a954b))
+* Remove obsole generate_mount_real_objects command ([e7258ba](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e7258ba76d25d0a3f582f6065d838bba4ce02630))
+
 ## [1.28.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.27.0...city-infrastructure-platform-v1.28.0) (2025-12-12)
 
 
