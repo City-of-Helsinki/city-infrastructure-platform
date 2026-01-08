@@ -15,7 +15,6 @@ def override_settings(settings):
     settings.MEDIA_ROOT = TemporaryDirectory().name
 
 
-@pytest.mark.xfail(reason="Requires azurite storage or django >=5.1+, django 4.2 simply renames the file")
 @pytest.mark.django_db
 def test__city_furniture_device_type_icon__enforces_uniqueness(override_settings):
     """

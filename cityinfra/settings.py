@@ -311,9 +311,9 @@ STORAGES = {
     },
     "icons": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
-        # NOTE (2025-09-10 thiago): For azure/azurite this is configured to enable file overwriting
-        # Such behavior is unavailable to default django storages prior to django 5.1 - so some of
-        # the behaviors regarding file reuploads will be different in non-azure/(non-azurite) setups
+        "OPTIONS": {
+            "allow_overwrite": True,
+        },
     },
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
 }
