@@ -56,7 +56,6 @@ def test__upload_static_svg_icons_to_blobstorage__command_creates_icons(mock_sta
     assert "Icon upload to blobstorage complete." in captured.out
 
 
-@pytest.mark.xfail(reason="Requires azurite storage or django >=5.1+, django 4.2 simply renames file")
 @pytest.mark.django_db
 def test__upload_static_svg_icons_to_blobstorage__command_creates_and_updates_icons(mock_static_dir, capsys):
     """
