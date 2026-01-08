@@ -11,26 +11,39 @@
     </head>
 
     <body>
-        {% if object.device_type.icon %}
+        <div>
+            <b>{% translate "Visual representation" %}</b>
+        </div>
+        {% if object.device_type.icon_file %}
             <img class="traffic-sign-icon"
                  src="{{ object.device_type.get_icons.svg }}"
                  alt="{{ object.device_type.description }}"
                  width="120"
                  height="120" />
-            {% if object.value %}<div>{{ object.value }}</div>{% endif %}
-            {% if object.txt %}<div>{{ object.txt }}</div>{% endif %}
+        {% else %}
+            {% if object.device_type.description %}
+                <div>{% translate "Missing icon graphics. Description: " %}{{ object.device_type.description }}</div>
+            {% endif %}
         {% endif %}
+        {% if object.value %}<div>{{ object.value }}</div>{% endif %}
+        {% if object.txt %}<div>{{ object.txt }}</div>{% endif %}
+
         <ul class="list-related">
             {% for additional_sign in additional_signs %}
                 <li class="additional-sign">
                     <div>
-                        {% if additional_sign.object.device_type.icon %}
+                        {% if additional_sign.object.device_type.icon_file %}
                             <img class="additional-sign-icon"
                                  src="{{ additional_sign.object.device_type.get_icons.svg }}"
                                  alt="{{ additional_sign.object.device_type.description }}"
                                  width="100"
                                  height="100" />
+                        {% else %}
+                            {% if additional_sign.object.device_type.description %}
+                                <div>{% translate "Missing icon graphics. Description: " %}{{ additional_sign.object.device_type.description }}</div>
+                            {% endif %}
                         {% endif %}
+                        <div>{{ additional_sign.object.content_s }}</div>
                         {% if additional_sign.object.additional_information %}
                             <div>{{ additional_sign.object.additional_information }}</div>
                         {% endif %}
@@ -57,12 +70,16 @@
             {% for additional_sign in additional_signs %}
                 <li class="additional-sign">
                     <div>
-                        {% if additional_sign.object.device_type.icon %}
+                        {% if additional_sign.object.device_type.icon_file %}
                             <img class="additional-sign-icon"
                                  src="{{ additional_sign.object.device_type.get_icons.svg }}"
                                  alt="{{ additional_sign.object.device_type.description }}"
                                  width="100"
                                  height="100" />
+                        {% else %}
+                            {% if additional_sign.object.device_type.description %}
+                                <div>{% translate "Missing icon graphics. Description: " %}{{ additional_sign.object.device_type.description }}</div>
+                            {% endif %}
                         {% endif %}
                         <dl>
                             {% for field, value in additional_sign.fields %}

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 12:07+0200\n"
+"POT-Creation-Date: 2026-01-08 17:48+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -809,8 +809,8 @@ msgid ""
 "= east, 180 = south, 270 = west. The direction indicates from which side the "
 "device is correctly visible."
 msgstr ""
-"Laitteen etupuolen suunta asteina (0–359): 0 = pohjoinen, 90 = itä, 180 = etelä, 270 = länsi. "
-"Suunta kertoo, mistä suunnasta laite näkyy oikein päin."
+"Laitteen etupuolen suunta asteina (0–359): 0 = pohjoinen, 90 = itä, 180 = "
+"etelä, 270 = länsi. Suunta kertoo, mistä suunnasta laite näkyy oikein päin."
 
 msgid "Warning sign"
 msgstr "Varoitusmerkki"
@@ -2286,6 +2286,12 @@ msgstr "Tallenna ja poistu"
 
 msgid "Save and continue editing"
 msgstr "Tallenna välillä ja jatka muokkaamista"
+
+msgid "Visual representation"
+msgstr "Visuaalinen esitys"
+
+msgid "Missing icon graphics. Description: "
+msgstr "Merkin grafiikat puuttuvat. Merkin kuvaus: "
 
 msgid "Additional signs"
 msgstr "Lisäkilvet"
