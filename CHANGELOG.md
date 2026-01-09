@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.30.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.29.0...city-infrastructure-platform-v1.30.0) (2026-01-09)
+
+
+### Features
+
+* Remove xfail from icon upload testcases ([27dd961](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/27dd9615bdb1110f8be653704bb16e18167c31cb))
+* Update postgis base image to version 17:master ([cbf11bd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/cbf11bd98ba9d29ff0d64412973f175f5ec851c5))
+* Upgrade django to latest 5.2.x version, includes needed library upgrades ([05016fa](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/05016fac313ae378ad9e55954e3fc59ad9946db1))
+
+
+### Bug Fixes
+
+* Embed view was not showing device type icon ([b11547f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b11547f1177bcab61a5307211f74dad6abe2a34c))
+
 ## [1.29.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.28.0...city-infrastructure-platform-v1.29.0) (2026-01-07)
 
 
