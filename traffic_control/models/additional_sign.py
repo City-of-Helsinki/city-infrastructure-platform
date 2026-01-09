@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
@@ -166,7 +166,9 @@ class AbstractAdditionalSign(
         if not self.missing_content:
             content_s_validation_errors = validate_structured_content(self.content_s, self.device_type)
             if len(content_s_validation_errors) > 0:
-                validation_errors["content_s"] = content_s_validation_errors
+                # This needs to be NON_FIELD_ERRORS or it crashes entire traffic sign admin page when validation of one
+                # of its additional sign plans fails.
+                validation_errors[NON_FIELD_ERRORS] = content_s_validation_errors
 
         if len(validation_errors) > 0:
             raise ValidationError(validation_errors)
