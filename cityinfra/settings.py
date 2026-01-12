@@ -185,6 +185,7 @@ LOCAL_APPS = [
     "city_furniture.apps.CityFurnitureConfig",
     "map.apps.MapConfig",
     "city_infra_instructions.apps.CityInfraInstructionsConfig",
+    "maintenance_mode.apps.MaintenanceModeConfig",
 ]
 INSTALLED_APPS = LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
@@ -208,6 +209,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "maintenance_mode.middleware.MaintenanceModeMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",

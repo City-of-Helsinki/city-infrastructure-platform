@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-08 17:48+0200\n"
+"POT-Creation-Date: 2026-01-13 12:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -613,6 +613,47 @@ msgstr "funktioner"
 msgid "Change password"
 msgstr "Byt lösenord"
 
+msgid "Maintenance Mode"
+msgstr ""
+
+msgid "We apologize for the inconvenience. Please check back soon."
+msgstr ""
+
+msgid "Maintenance mode active"
+msgstr ""
+
+msgid ""
+"When active, all requests (except admin for admin users) will be blocked "
+"with 503 status."
+msgstr ""
+
+msgid "Message (Finnish)"
+msgstr ""
+
+msgid "Message to display on the maintenance page in Finnish."
+msgstr ""
+
+msgid "Message (English)"
+msgstr ""
+
+msgid "Message to display on the maintenance page in English."
+msgstr ""
+
+msgid "Message (Swedish)"
+msgstr ""
+
+msgid "Message to display on the maintenance page in Swedish."
+msgstr ""
+
+msgid "Updated at"
+msgstr "Uppdaterades den"
+
+msgid "Updated by"
+msgstr "Uppdaterades av"
+
+msgid "Maintenance mode configuration cannot be deleted."
+msgstr ""
+
 msgid "Map"
 msgstr "Karta"
 
@@ -1078,14 +1119,8 @@ msgstr "Togs bort av"
 msgid "Created at"
 msgstr "Skapades den"
 
-msgid "Updated at"
-msgstr "Uppdaterades den"
-
 msgid "Created by"
 msgstr "Skapades av"
-
-msgid "Updated by"
-msgstr "Uppdaterades av"
 
 msgid "Responsible entity"
 msgstr "Ansvarig enhet"
