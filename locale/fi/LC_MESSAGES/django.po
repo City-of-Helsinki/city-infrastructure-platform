@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-08 17:48+0200\n"
+"POT-Creation-Date: 2026-01-13 12:27+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -604,6 +604,47 @@ msgstr "toiminnot"
 msgid "Change password"
 msgstr "Vaihda salasana"
 
+msgid "Maintenance Mode"
+msgstr "Huoltotila"
+
+msgid "We apologize for the inconvenience. Please check back soon."
+msgstr "Pahoittelemme häiriötä. Tarkista asia pian uudelleen."
+
+msgid "Maintenance mode active"
+msgstr "Huoltotila käytössä"
+
+msgid ""
+"When active, all requests (except admin for admin users) will be blocked "
+"with 503 status."
+msgstr "Kun aktiivinen, kaikki pyynnöt (paitsi ylläpito ylläpitäjille) estetään 503-tilakoodilla."
+
+msgid "Message (Finnish)"
+msgstr "Viesi (Suomeksi)"
+
+msgid "Message to display on the maintenance page in Finnish."
+msgstr "Suomenkielinen viesti huoltotilasivulla."
+
+msgid "Message (English)"
+msgstr "Viesti (Englanniksi)"
+
+msgid "Message to display on the maintenance page in English."
+msgstr "Englanninkielinen viesti huoltotilasivulla."
+
+msgid "Message (Swedish)"
+msgstr "Viesti (Ruotsiksi)"
+
+msgid "Message to display on the maintenance page in Swedish."
+msgstr "Ruotsinkielinen viesti huoltotilasivulla."
+
+msgid "Updated at"
+msgstr "Päivitetty-aikaleima"
+
+msgid "Updated by"
+msgstr "Päivittäjä"
+
+msgid "Maintenance mode configuration cannot be deleted."
+msgstr "Huoltotila konfigurointia ei voi tuhota."
+
 msgid "Map"
 msgstr "Kartta"
 
@@ -1069,14 +1110,8 @@ msgstr "Poistaja"
 msgid "Created at"
 msgstr "Luotu-aikaleima"
 
-msgid "Updated at"
-msgstr "Päivitetty-aikaleima"
-
 msgid "Created by"
 msgstr "Luoja"
-
-msgid "Updated by"
-msgstr "Päivittäjä"
 
 msgid "Responsible entity"
 msgstr "Vastuutaho"
