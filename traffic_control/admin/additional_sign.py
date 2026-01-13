@@ -90,6 +90,18 @@ class BaseAdditionalSignInline(admin.TabularInline, PreviewDeviceTypeRelationMix
     def has_add_permission(self, request, obj):
         return False
 
+    def has_change_permission(self, request, obj=None):
+        """Prevent changes to related objects."""
+        return False
+
+    def save_model(self, request, obj, form, change):
+        """Override to prevent saving."""
+        pass
+
+    def save_formset(self, request, form, formset, change):
+        """Override to prevent saving formset."""
+        pass
+
 
 class AdditionalSignRealInline(BaseAdditionalSignInline):
     model = AdditionalSignReal
