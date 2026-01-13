@@ -141,7 +141,7 @@ const FeatureInfo = ({
         {direction && (
           <>
             <br />
-            <b>{t("Direction")}</b>: {direction}
+            <b>{t("Direction")}</b>: {direction}°
           </>
         )}
         {additionalInfoText && (
