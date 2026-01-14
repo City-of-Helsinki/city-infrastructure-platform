@@ -186,6 +186,7 @@ LOCAL_APPS = [
     "map.apps.MapConfig",
     "city_infra_instructions.apps.CityInfraInstructionsConfig",
     "maintenance_mode.apps.MaintenanceModeConfig",
+    "site_alert.apps.SiteAlertConfig",
 ]
 INSTALLED_APPS = LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
@@ -233,6 +234,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
                 "cityinfra.context_processors.git_version",
+                "site_alert.context_processors.site_alerts",
             ]
         },
     }
