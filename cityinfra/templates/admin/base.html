@@ -1,5 +1,6 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
+{% load alert_tags %}
 
 {% block welcome-msg %}
     {# Removed welcome message #}
@@ -42,6 +43,7 @@
             border-bottom: none;
         }
     </style>
+    {% render_site_alerts %}
 {% endblock %}
 {% block userlinks %}
     <a href="{% url "map-view" %}">{% trans "View map" %}</a> /

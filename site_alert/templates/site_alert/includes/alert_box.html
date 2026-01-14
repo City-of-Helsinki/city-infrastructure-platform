@@ -1,0 +1,26 @@
+{% load i18n static %}
+<link rel="stylesheet"
+      href="{% static 'site_alert/css/site_alert.css' %}" />
+
+{% load static %}
+
+<script src="{% static 'site_alert/js/site_alert.js' %}"
+        defer></script>
+
+{% if alerts %}
+    <div class="site-alerts-wrapper">
+        {% for alert in alerts %}
+            <div id="site-alert-{{ alert.id }}"
+                 class="site-alert alert-{{ alert.level }}">
+                <span>{{ alert.translated_message }}</span>
+
+                <button type="button"
+                        class="site-alert-close js-dismiss-alert"
+                        data-dismiss-url="{% url 'site_alert:dismiss' alert.id %}"
+                        data-alert-id="{{ alert.id }}"
+                        data-csrf-token="{{ csrf_token }}"
+                        title="{% translate "Dismiss" %}">&#10005;</button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
