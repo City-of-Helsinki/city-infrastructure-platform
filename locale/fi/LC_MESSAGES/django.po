@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 12:27+0200\n"
+"POT-Creation-Date: 2026-01-15 14:12+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -610,13 +610,26 @@ msgstr "Huoltotila"
 msgid "We apologize for the inconvenience. Please check back soon."
 msgstr "Pahoittelemme häiriötä. Tarkista asia pian uudelleen."
 
+msgid "Change"
+msgstr ""
+
+#, fuzzy
+#| msgid "View map"
+msgid "View"
+msgstr "Näytä kartta"
+
+msgid "View on site"
+msgstr ""
+
 msgid "Maintenance mode active"
 msgstr "Huoltotila käytössä"
 
 msgid ""
 "When active, all requests (except admin for admin users) will be blocked "
 "with 503 status."
-msgstr "Kun aktiivinen, kaikki pyynnöt (paitsi ylläpito ylläpitäjille) estetään 503-tilakoodilla."
+msgstr ""
+"Kun aktiivinen, kaikki pyynnöt (paitsi ylläpito ylläpitäjille) estetään 503-"
+"tilakoodilla."
 
 msgid "Message (Finnish)"
 msgstr "Viesi (Suomeksi)"
@@ -717,6 +730,15 @@ msgstr "Pohjakartat"
 
 msgid "Overlays"
 msgstr "Tasot"
+
+msgid "Message active"
+msgstr ""
+
+msgid "When enabled, display this message to users in the admin pages."
+msgstr ""
+
+msgid "Created at"
+msgstr "Luotu-aikaleima"
 
 msgid "Additional Sign Real"
 msgstr "Lisäkilpi (toteuma)"
@@ -1106,9 +1128,6 @@ msgstr "Poistettu-aikaleima"
 
 msgid "Deleted by"
 msgstr "Poistaja"
-
-msgid "Created at"
-msgstr "Luotu-aikaleima"
 
 msgid "Created by"
 msgstr "Luoja"

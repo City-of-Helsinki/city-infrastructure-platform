@@ -172,6 +172,10 @@ urlpatterns += i18n_patterns(
     path("embed/traffic-sign-reals/<uuid:pk>/", TrafficSignRealEmbed.as_view(), name="traffic-sign-real-embed"),
 )
 
+urlpatterns += [
+    path("site_alert/", include("site_alert.urls", namespace="site_alert")),
+]
+
 if settings.DEBUG:
     from django.conf.urls.static import static
 
