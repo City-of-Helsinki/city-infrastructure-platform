@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.31.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.30.0...city-infrastructure-platform-v1.31.0) (2026-01-15)
+
+
+### Features
+
+* Maintenance mode support ([92d56dd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/92d56ddf227630b071e50ed6afeebce43c242044))
+
+
+### Bug Fixes
+
+* Incomplete AdditionalSignPlan prevents saving dummy TrafficSignPlan ([a93dbf2](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a93dbf21ff5f45e0fc39b755b8bd26ace98e1fca))
+* User is unable to logout from site ([711bc24](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/711bc24bd0044fd7bbd0f0fafae477e6b06ea3c3))
+
 ## [1.30.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.29.0...city-infrastructure-platform-v1.30.0) (2026-01-09)
 
 
