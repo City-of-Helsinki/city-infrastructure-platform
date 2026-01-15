@@ -1,0 +1,10 @@
+<dl {% if css_class %}class="{{ css_class }}"{% endif %}>
+    {% for title, display_value in content_s_rows %}
+        <dt>{{ title }}</dt>
+        <dd>
+            {{ display_value|default_if_none:"-" }}
+        </dd>
+    {% empty %}
+        -
+    {% endfor %}
+</dl>

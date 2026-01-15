@@ -43,7 +43,7 @@
                                 <div>{% translate "Missing icon graphics. Description: " %}{{ additional_sign.object.device_type.description }}</div>
                             {% endif %}
                         {% endif %}
-                        <div>{{ additional_sign.object.content_s }}</div>
+                        {% include "embed/_content_s_rows.html" with content_s_rows=additional_sign.object.get_content_s_rows %}
                         {% if additional_sign.object.additional_information %}
                             <div>{{ additional_sign.object.additional_information }}</div>
                         {% endif %}
@@ -83,14 +83,21 @@
                         {% endif %}
                         <dl>
                             {% for field, value in additional_sign.fields %}
-                                <dt>{{ field.verbose_name }}</dt>
-                                <dd>
-                                    {% if value != "" %}
-                                        {{ value|default_if_none:"-" }}
-                                    {% else %}
-                                        &nbsp;
-                                    {% endif %}
-                                </dd>
+                                {% if field.name == 'content_s' %}
+                                    <dt>{{ field.verbose_name }}</dt>
+                                    <dd>
+                                        {% include "embed/_content_s_rows.html" with content_s_rows=additional_sign.object.get_content_s_rows css_class="content-s-nested" %}
+                                    </dd>
+                                {% else %}
+                                    <dt>{{ field.verbose_name }}</dt>
+                                    <dd>
+                                        {% if value != "" %}
+                                            {{ value|default_if_none:"-" }}
+                                        {% else %}
+                                            &nbsp;
+                                        {% endif %}
+                                    </dd>
+                                {% endif %}
                             {% endfor %}
                         </dl>
                     </div>
