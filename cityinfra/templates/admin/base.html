@@ -19,16 +19,45 @@
         .language-select {
           display: inline-block;
         }
+        .logout-form {
+            display: inline-block;
+        }
+        .logout-button {
+            border: inherit;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            background-color: inherit;
+            color: var(--header-link-color);
+            cursor: pointer;
+            display: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            letter-spacing: inherit;
+            line-height: 1.3;
+            text-transform: inherit;
+            margin: 0;
+            padding: 0;
+        }
+        .logout-button:hover {
+            border-bottom: none;
+        }
     </style>
 {% endblock %}
-
 {% block userlinks %}
     <a href="{% url "map-view" %}">{% trans "View map" %}</a> /
     <a href="{% url "django-admindocs-docroot" %}">{% trans "Documentation" %}</a> /
     <a href="{% url "v1:api-root" %}">{% trans "View API" %}</a> /
     <a href="{% url "schema-swagger-ui" %}">{% trans "View API documentation" %}</a> /
     <a href="{% url "my-account" %}">{% trans "My account" %}</a> /
-    <a href="{% url "admin:logout" %}">{% trans "Log out" %}</a> /
+    <form class="logout-form"
+          method="post"
+          action="{% url 'admin:logout' %}">
+        {% csrf_token %}
+        <button class="logout-button"
+                type="submit">{% trans "Log out" %}</button>
+    </form>
+    /
+
     {% get_current_language as LANG %}
     {% if LANG == "sv" %}
         <a href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Dataskyddsbeskrivning%20av%20Helsingfors%20stads%20trafik-%20och%20gatuplanering%20och%20trafikanordningar.pdf"
