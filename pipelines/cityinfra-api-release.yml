@@ -4,8 +4,7 @@ trigger:
   batch: true
   tags:
     include:
-      - city-infrastructure-platform-*
-
+      - city-infrastructure-platform-v*
 
 # Pull request (PR) triggers cause a pipeline to run whenever a pull request is
 # opened with one of the specified target branches, or when updates are made to
@@ -21,13 +20,6 @@ pr: none
 # By default, use self-hosted agents
 pool: Default
 
-# Image tag name for Fuse projects
-#parameters:
-#- name: imagetag
-#  displayName: Image tag to be built and/or deployed
-#  type: string
-#  default: latest
-
 resources:
   repositories:
     # Azure DevOps repository
@@ -37,9 +29,18 @@ resources:
       name: city-infrastructure-platform/city-infrastructure-platform
 
 extends:
-  # Filename in Azure DevOps Repository (note possible -ui or -api)
-  # Django example: azure-pipelines-PROJECTNAME-api-release.yml
-  # Drupal example: azure-pipelines-drupal-release.yml
-  template: azure-pipelines-cityinfra-api-stageprod.yml@city-infrastructure-platform
-  #parameters:
-  #imagetag: ${{ parameters.imagetag }}
+  # Filename in Azure DevOps Repository
+  template: components/cityinfra-api/pipelines/cityinfra-api-release.yml@city-infrastructure-platform
+  # parameters:
+    # Application build arguments and config map values as key value pairs.
+    # Does not contain all buildArguments or configMap values, the rest located in city-infrastructure-platform
+    # The values here will override the values defined in the city-infrastructure-platform repository
+    ## Staging definitions
+    # buildArgsStage:
+    #   DEBUG: 1
+    # configMapStage: # pod environment variables
+    #   DEBUG: 1
+    ## Production definitions
+    ## Production is using staging image
+    # configMap: # pod environment variables
+    #   DEBUG: 1
