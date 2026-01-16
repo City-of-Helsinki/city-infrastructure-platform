@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import get_language, gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
 from traffic_control.common_strings import direction_field_verbose_name, direction_help_text
@@ -154,6 +154,53 @@ class AbstractAdditionalSign(
 
     class Meta:
         abstract = True
+
+    def get_content_s_rows(self):
+        """Returns the content_s as a list of tuples ordered by propertyOrder in schema.
+        Each tuple contains (title, value) where titles are localized according to the current active language.
+
+        Defaults to an empty list if content_s is empty.
+        """
+        dt_schema = self.device_type.content_schema
+        if not self.content_s or not dt_schema:
+            return []
+
+        lang = get_language()
+        schema_properties = dt_schema.get("properties", {})
+
+        # Build list of (propertyOrder, prop_name, value) for sorting
+        rows_to_sort = []
+
+        for prop, value in self.content_s.items():
+            # Get property order from schema, default to a high number if not found
+            property_order = schema_properties.get(prop, {}).get("propertyOrder", 999)
+            rows_to_sort.append((property_order, prop, value))
+
+        # Sort by propertyOrder (first element of tuple)
+        rows_to_sort.sort(key=lambda x: x[0])
+
+        # Build final list of (title, value) tuples
+        content_s_rows = []
+        unit = self.content_s.get("unit", None)
+
+        for property_order_value, prop, value in rows_to_sort:
+            # Skip unit property as it's combined with limit/distance
+            if prop == "unit":
+                continue
+
+            # Get localized title, fallback to property name
+            title = dt_schema.get("propertiesTitles", {}).get(lang, {}).get(prop, prop)
+
+            # Special handling for limit/distance fields with units
+            display_value = value
+            if prop == "limit" and unit is not None:
+                display_value = f"{value} {unit}"
+            elif prop == "distance" and unit is not None:
+                display_value = f"{value} {unit}"
+
+            content_s_rows.append((title, display_value))
+
+        return content_s_rows
 
     def clean(self):
         validation_errors = {}

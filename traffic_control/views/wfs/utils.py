@@ -154,3 +154,11 @@ class IconXsdElement(XsdElement):
         if instance.device_type and instance.device_type.icon_file:
             return instance.device_type.icon_name
         return None
+
+
+class ContentSRowSElement(XsdElement):
+    def get_value(self, instance: models.Model):
+        # instance needs to have content_s_rows attribute
+        if hasattr(instance, "content_s"):
+            return instance.get_content_s_rows()
+        return None

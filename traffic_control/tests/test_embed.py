@@ -2,6 +2,7 @@ import uuid
 
 import pytest
 from django.urls import reverse
+from django.utils.translation import activate
 
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.tests.factories import (
@@ -112,3 +113,275 @@ def test__embed__traffic_sign__not_found(client, url_name):
     """Test that the embedded view returns 404 when the object is not found."""
     response = client.get(reverse(url_name, kwargs={"pk": uuid.uuid4()}))
     assert response.status_code == 404
+
+
+@pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
+@pytest.mark.django_db
+def test__get_content_s_rows__empty_content(as_factory):
+    """Test that get_content_s_rows returns empty list when content_s is None or empty."""
+    device_type = TrafficControlDeviceTypeFactory(
+        code="AS1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema={
+            "type": "object",
+            "properties": {
+                "limit": {"type": "integer", "propertyOrder": 0},
+            },
+        },
+    )
+
+    # Test with None content_s
+    additional_sign = as_factory(device_type=device_type, content_s=None)
+    assert additional_sign.get_content_s_rows() == []
+
+    # Test with empty content_s
+    additional_sign.content_s = {}
+    assert additional_sign.get_content_s_rows() == []
+
+
+@pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
+@pytest.mark.django_db
+def test__get_content_s_rows__no_schema(as_factory):
+    """Test that get_content_s_rows returns empty list when device type has no content_schema."""
+    device_type = TrafficControlDeviceTypeFactory(
+        code="AS1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=None,
+    )
+
+    additional_sign = as_factory(device_type=device_type, content_s={"limit": 2})
+    assert additional_sign.get_content_s_rows() == []
+
+
+@pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
+@pytest.mark.django_db
+def test__get_content_s_rows__ordered_by_property_order(as_factory):
+    """Test that get_content_s_rows returns tuples ordered by propertyOrder field in schema."""
+    schema = {
+        "type": "object",
+        "properties": {
+            "unit": {"type": "string", "propertyOrder": 1},
+            "limit": {"type": "integer", "propertyOrder": 0},
+            "weekday_end": {"type": "integer", "propertyOrder": 3},
+            "weekday_start": {"type": "integer", "propertyOrder": 2},
+        },
+        "propertiesTitles": {
+            "en": {
+                "unit": "Unit",
+                "limit": "Time limit",
+                "weekday_end": "Weekday ending time",
+                "weekday_start": "Weekday start time",
+            },
+        },
+    }
+
+    device_type = TrafficControlDeviceTypeFactory(
+        code="AS1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema,
+    )
+
+    additional_sign = as_factory(
+        device_type=device_type,
+        content_s={
+            "weekday_end": 18,
+            "limit": 2,
+            "unit": "h",
+            "weekday_start": 8,
+        },
+    )
+
+    activate("en")
+    rows = additional_sign.get_content_s_rows()
+
+    # Should be ordered: limit (0), weekday_start (2), weekday_end (3)
+    # unit is combined with limit, not shown separately
+    assert len(rows) == 3
+    assert rows[0] == ("Time limit", "2 h")
+    assert rows[1] == ("Weekday start time", 8)
+    assert rows[2] == ("Weekday ending time", 18)
+
+
+@pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
+@pytest.mark.django_db
+def test__get_content_s_rows__localized_titles(as_factory):
+    """Test that get_content_s_rows uses localized titles based on current language."""
+    schema = {
+        "type": "object",
+        "properties": {
+            "limit": {"type": "integer", "propertyOrder": 0},
+        },
+        "propertiesTitles": {
+            "en": {
+                "limit": "Time limit",
+            },
+            "fi": {
+                "limit": "Aikarajoitus",
+            },
+        },
+    }
+
+    device_type = TrafficControlDeviceTypeFactory(
+        code="AS1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema,
+    )
+
+    additional_sign = as_factory(
+        device_type=device_type,
+        content_s={"limit": 2},
+    )
+
+    # Test English
+    activate("en")
+    rows = additional_sign.get_content_s_rows()
+    assert rows[0] == ("Time limit", 2)
+
+    # Test Finnish
+    activate("fi")
+    rows = additional_sign.get_content_s_rows()
+    assert rows[0] == ("Aikarajoitus", 2)
+
+
+@pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
+@pytest.mark.django_db
+def test__get_content_s_rows__combines_unit_with_limit(as_factory):
+    """Test that get_content_s_rows combines unit with limit field and excludes unit from output."""
+    schema = {
+        "type": "object",
+        "properties": {
+            "limit": {"type": "integer", "propertyOrder": 0},
+            "unit": {"type": "string", "propertyOrder": 1},
+        },
+        "propertiesTitles": {
+            "en": {
+                "limit": "Time limit",
+                "unit": "Unit",
+            },
+        },
+    }
+
+    device_type = TrafficControlDeviceTypeFactory(
+        code="AS1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema,
+    )
+
+    additional_sign = as_factory(
+        device_type=device_type,
+        content_s={"limit": 2, "unit": "h"},
+    )
+
+    activate("en")
+    rows = additional_sign.get_content_s_rows()
+
+    # Should only have one row with unit combined
+    assert len(rows) == 1
+    assert rows[0] == ("Time limit", "2 h")
+
+
+@pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
+@pytest.mark.django_db
+def test__get_content_s_rows__combines_unit_with_distance(as_factory):
+    """Test that get_content_s_rows combines unit with distance field and excludes unit from output."""
+    schema = {
+        "type": "object",
+        "properties": {
+            "distance": {"type": "integer", "propertyOrder": 0},
+            "unit": {"type": "string", "propertyOrder": 1},
+        },
+        "propertiesTitles": {
+            "en": {
+                "distance": "Distance",
+                "unit": "Unit",
+            },
+        },
+    }
+
+    device_type = TrafficControlDeviceTypeFactory(
+        code="AS1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema,
+    )
+
+    additional_sign = as_factory(
+        device_type=device_type,
+        content_s={"distance": 100, "unit": "m"},
+    )
+
+    activate("en")
+    rows = additional_sign.get_content_s_rows()
+
+    # Should only have one row with unit combined
+    assert len(rows) == 1
+    assert rows[0] == ("Distance", "100 m")
+
+
+@pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
+@pytest.mark.django_db
+def test__get_content_s_rows__fallback_to_property_name(as_factory):
+    """Test that get_content_s_rows falls back to property name if no localized title exists."""
+    schema = {
+        "type": "object",
+        "properties": {
+            "custom_field": {"type": "string", "propertyOrder": 0},
+        },
+        "propertiesTitles": {
+            "en": {},
+        },
+    }
+
+    device_type = TrafficControlDeviceTypeFactory(
+        code="AS1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema,
+    )
+
+    additional_sign = as_factory(
+        device_type=device_type,
+        content_s={"custom_field": "test_value"},
+    )
+
+    activate("en")
+    rows = additional_sign.get_content_s_rows()
+
+    assert len(rows) == 1
+    assert rows[0] == ("custom_field", "test_value")
+
+
+@pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
+@pytest.mark.django_db
+def test__get_content_s_rows__returns_tuples(as_factory):
+    """Test that get_content_s_rows returns list of tuples, not dictionaries."""
+    schema = {
+        "type": "object",
+        "properties": {
+            "field1": {"type": "string", "propertyOrder": 0},
+        },
+        "propertiesTitles": {
+            "en": {
+                "field1": "Field 1",
+            },
+        },
+    }
+
+    device_type = TrafficControlDeviceTypeFactory(
+        code="AS1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+        content_schema=schema,
+    )
+
+    additional_sign = as_factory(
+        device_type=device_type,
+        content_s={"field1": "value1"},
+    )
+
+    activate("en")
+    rows = additional_sign.get_content_s_rows()
+
+    assert isinstance(rows, list)
+    assert len(rows) == 1
+    assert isinstance(rows[0], tuple)
+    assert len(rows[0]) == 2
+    assert rows[0][0] == "Field 1"
+    assert rows[0][1] == "value1"

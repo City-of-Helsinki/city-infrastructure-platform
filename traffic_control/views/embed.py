@@ -49,7 +49,6 @@ class TrafficSignEmbed(DetailView):
     def get_context_data(self, **kwargs):
         parent_context = super().get_context_data(**kwargs)
         traffic_sign = parent_context["object"]
-
         return {
             **parent_context,
             "title": self.title,
@@ -63,12 +62,14 @@ class TrafficSignEmbed(DetailView):
 
     def get_additional_signs(self, traffic_sign):
         objects = traffic_sign.additional_signs.active().order_by("-height").select_related("device_type", "owner")
-
         additional_signs = []
         for object in objects:
+            content_s_rows = object.get_content_s_rows()
             additional_signs.append(
                 {
-                    "fields": self.get_fields_and_values(object, self.additional_sign_fields),
+                    "fields": self.get_fields_and_values(
+                        object, self.additional_sign_fields, {"content_s": content_s_rows}
+                    ),
                     "object": object,
                 }
             )
@@ -82,7 +83,7 @@ class TrafficSignEmbed(DetailView):
         else:
             return []
 
-    def get_fields_and_values(self, object, field_names):
+    def get_fields_and_values(self, object, field_names, replace_values=None):
         fields_and_values = []
 
         for field_name in field_names:
@@ -98,9 +99,15 @@ class TrafficSignEmbed(DetailView):
                     # We are at the end of the path, which is the field
                     field = model_pointer._meta.get_field(p)
                     value = getattr(object_pointer, p, None)
-                    fields_and_values.append((field, value))
+                    fields_and_values.append((field, self._get_field_value(field, value, replace_values)))
 
         return fields_and_values
+
+    @staticmethod
+    def _get_field_value(field, value, replace_values):
+        if replace_values and field.name in replace_values:
+            return replace_values[field.name]
+        return value
 
 
 class TrafficSignPlanEmbed(TrafficSignEmbed):
