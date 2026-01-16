@@ -15,6 +15,7 @@ from traffic_control.views.wfs.common import (
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
+from traffic_control.views.wfs.utils import ContentSRowSElement
 
 _base_fields = (
     [
@@ -60,6 +61,14 @@ _base_fields = (
             "location_specifier",
             xsd_class=EnumNameXsdElement,
             abstract="Specifies where the mount is in relation to the road.",
+        ),
+        FeatureField(
+            "content_s_rows",
+            model_attribute="id",
+            # this is a workaround, as django-gisserver check that model attribute is an actual field
+            # property is not enough, needs to be checked if this is needed anymore when we update gisserver version.
+            xsd_class=ContentSRowSElement,
+            abstract="Rows of structured content of the additional sign in priority order.",
         ),
     ]
     + deepcopy(DEVICE_TYPE_FIELDS)

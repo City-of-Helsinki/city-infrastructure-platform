@@ -117,7 +117,7 @@ const FeatureInfo = ({
       device_type_code,
       device_type_description,
       mount_type_description_fi,
-      content_s,
+      content_s_rows,
       additional_information,
     } = feature.getProperties();
     const deviceTypeText = `${device_type_code} - ${device_type_description}${value ? ` (${value})` : ""}`;
@@ -150,10 +150,16 @@ const FeatureInfo = ({
             <b>{t("Additional info")}</b>: {additionalInfoText}
           </>
         )}
-        {content_s && (
+        {Array.isArray(content_s_rows) && content_s_rows.length > 0 && (
           <>
             <br />
-            <b>{t("Content Schema")}</b>: {JSON.stringify(content_s)}
+            <b>{t("Content Schema")}</b>:
+            {content_s_rows.map((row: Record<string, string>, index: number) => (
+              <React.Fragment key={index}>
+                <br />
+                &nbsp;&nbsp;• {row[0]}: {row[1]}
+              </React.Fragment>
+            ))}
           </>
         )}
         {feature.getProperties().device_plan_id && (
