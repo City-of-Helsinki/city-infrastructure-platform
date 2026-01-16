@@ -38,6 +38,7 @@ resources:
     # Azure DevOps repository
     - repository: city-infrastructure-platform
       type: git
+      ref: refs/heads/ansible_automation_update
       # Azure DevOps project/repository
       name: city-infrastructure-platform/city-infrastructure-platform
 
