@@ -48,7 +48,8 @@ export interface FeatureProperties {
   device_type_description: string;
   device_plan_id: string;
   mount_type_description_fi: string;
-  content_s: Object;
+  content_s: object;
+  content_s_rows: Record<string, string>[];
   additional_information: string;
 }
 
