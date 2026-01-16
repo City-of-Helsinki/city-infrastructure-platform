@@ -24,19 +24,19 @@
     border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
-.site-alert.alert-info {
+.site-alert.alert-0 {
     background-color: #e3f2fd; /* Light Blue */
     color: #0d47a1;
     border-bottom-color: #bbdefb;
 }
 
-.site-alert.alert-warning {
+.site-alert.alert-100 {
     background-color: #fff3cd; /* Light Yellow */
     color: #856404;
     border-bottom-color: #ffeeba;
 }
 
-.site-alert.alert-critical {
+.site-alert.alert-10000 {
     background-color: #f8d7da; /* Light Red */
     color: #721c24;
     border-bottom-color: #f5c6cb;

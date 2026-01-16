@@ -1,7 +1,7 @@
-# alerts/admin.py
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
-from .models import SiteAlert
+from site_alert.models import SiteAlert
 
 
 @admin.register(SiteAlert)
@@ -12,16 +12,15 @@ class SiteAlertAdmin(admin.ModelAdmin):
     search_fields = ("message_en", "message_fi", "message_sv")
     readonly_fields = ("created_at", "updated_at")
     fieldsets = (
-        ("Configuration", {"fields": ("is_active", "level")}),
+        (_("Configuration"), {"fields": ("is_active", "level")}),
         (
-            "Content",
+            _("Content"),
             {
-                "description": "Enter the alert text for all supported languages.",
                 "fields": ("message_en", "message_fi", "message_sv"),
             },
         ),
         (
-            "Metadata",
+            _("Metadata"),
             {
                 "classes": ("collapse",),
                 "fields": ("created_at", "updated_at"),
@@ -34,4 +33,4 @@ class SiteAlertAdmin(admin.ModelAdmin):
         msg = obj.translated_message
         return msg[:60] + "..." if len(msg) > 60 else msg
 
-    short_message.short_description = "Message Preview"
+    short_message.short_description = _("Message Preview")

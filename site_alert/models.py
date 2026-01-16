@@ -1,20 +1,26 @@
 from django.db import models
 from django.utils.translation import get_language, gettext_lazy as _
+from enumfields import EnumIntegerField
+
+
+class SiteAlertLevel(models.IntegerChoices):
+    INFO = 0, _("Info")
+    WARNING = 100, _("Warning")
+    CRITICAL = 10000, _("Critical")
 
 
 class SiteAlert(models.Model):
-    LEVEL_CHOICES = [
-        ("info", "Info (Blue)"),
-        ("warning", "Warning (Yellow)"),
-        ("critical", "Critical (Red)"),
-    ]
-
     is_active = models.BooleanField(
         _("Message active"),
         default=True,
         help_text=_("When enabled, display this message to users in the admin pages."),
     )
-    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default="info")
+    level = EnumIntegerField(
+        SiteAlertLevel,
+        verbose_name=_("Alert level"),
+        default=SiteAlertLevel.INFO,
+        help_text=_("Select a style of warning to reflect how critical it is"),
+    )
 
     message_en = models.TextField(_("Message (English)"), blank=False, null=False, help_text="English message")
     message_fi = models.TextField(_("Message (Finnish)"), blank=False, null=False, help_text="Finnish message")

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-15 14:12+0200\n"
+"POT-Creation-Date: 2026-01-16 18:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -622,10 +622,8 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-#, fuzzy
-#| msgid "View map"
 msgid "View"
-msgstr "Visa karta"
+msgstr ""
 
 msgid "View on site"
 msgstr ""
@@ -737,10 +735,34 @@ msgstr "Grundkartor"
 msgid "Overlays"
 msgstr "Överlägg"
 
+msgid "Configuration"
+msgstr ""
+
+msgid "Content"
+msgstr "Innehåll"
+
+msgid "Message Preview"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Critical"
+msgstr ""
+
 msgid "Message active"
 msgstr ""
 
 msgid "When enabled, display this message to users in the admin pages."
+msgstr ""
+
+msgid "Alert level"
+msgstr ""
+
+msgid "Select a style of warning to reflect how critical it is"
 msgstr ""
 
 msgid "Created at"
@@ -1216,9 +1238,6 @@ msgstr "Gul"
 
 msgid "Device type"
 msgstr "Anordningstyp"
-
-msgid "Content"
-msgstr "Innehåll"
 
 msgid "Additional sign content as JSON document"
 msgstr "Innehållet i tilläggsskylten i form av JSON-dokument"
