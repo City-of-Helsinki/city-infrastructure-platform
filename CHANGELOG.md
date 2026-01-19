@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.31.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.30.0...city-infrastructure-platform-v1.31.0) (2026-01-19)
+
+
+### Features
+
+* Add site-wide message app ([dee2924](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/dee2924511eeae67b254ee23ffa1f8a04a09b103))
+* Format content_s row by row for embed view ([9e9d767](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9e9d767725586105bef2d039a8501fcd8b4e4bc6))
+* Maintenance mode support ([92d56dd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/92d56ddf227630b071e50ed6afeebce43c242044))
+* Show content_s in FeatureInfo dialog row by row ([d18f0d0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d18f0d0b0382f1253f42974db55d23d6b7734414))
+
+
+### Bug Fixes
+
+* Incomplete AdditionalSignPlan prevents saving dummy TrafficSignPlan ([a93dbf2](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a93dbf21ff5f45e0fc39b755b8bd26ace98e1fca))
+* User is unable to logout from site ([711bc24](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/711bc24bd0044fd7bbd0f0fafae477e6b06ea3c3))
+
 ## [1.30.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.29.0...city-infrastructure-platform-v1.30.0) (2026-01-09)
 
 
