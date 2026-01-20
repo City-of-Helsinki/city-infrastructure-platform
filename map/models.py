@@ -49,11 +49,16 @@ class FeatureTypeEditMapping(models.Model):
         _("Name"), max_length=200, null=False, blank=False, help_text=_("Name of feature type"), unique=True
     )
     edit_name = models.CharField(
+        _("Edit name"),
         max_length=200,
         null=False,
         blank=False,
         help_text=_("Edit name, used in map-view FeatureInfo component edit link"),
     )
+
+    class Meta:
+        verbose_name = _("Feature Type Edit Mapping")
+        verbose_name_plural = _("Feature Type Edit Mappings")
 
     @staticmethod
     def get_featuretype_edit_name_mapping():
