@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 10:54+0200\n"
+"POT-Creation-Date: 2026-01-20 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -245,6 +245,9 @@ msgstr "Markdetaljer - funktion eller användningstyp"
 
 msgid "OGC CityGML City Furniture Function or Usage type"
 msgstr "Markdetaljer - funktion eller användningstyp"
+
+msgid "Icon file"
+msgstr ""
 
 msgid "Icon of the actual device"
 msgstr "Ikon för egentlig anordning"
@@ -693,7 +696,16 @@ msgstr "Skikt"
 msgid "Name of feature type"
 msgstr ""
 
+msgid "Edit name"
+msgstr ""
+
 msgid "Edit name, used in map-view FeatureInfo component edit link"
+msgstr ""
+
+msgid "Feature Type Edit Mapping"
+msgstr ""
+
+msgid "Feature Type Edit Mappings"
 msgstr ""
 
 msgid "png"
@@ -1149,6 +1161,18 @@ msgstr "Trafiksignal (planer)"
 msgid "Traffic Sign Plans"
 msgstr "Trafikskylt (planer)"
 
+msgid "Image file preview"
+msgstr ""
+
+msgid "Icon preview"
+msgstr ""
+
+msgid "File proxy"
+msgstr ""
+
+msgid "Device type preview"
+msgstr ""
+
 msgid "Marked as deleted (hidden from API)"
 msgstr "Markerad som borttagen (dold från API)"
 
@@ -1534,9 +1558,6 @@ msgstr ""
 
 msgid "Standardised code of the device type."
 msgstr "Standardiserad kod för anordningstypen."
-
-msgid "Icon file"
-msgstr ""
 
 msgid "Value"
 msgstr "Värde"

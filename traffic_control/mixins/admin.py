@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.contrib.gis.forms import OSMWidget
 from django.utils.html import format_html
@@ -44,6 +45,7 @@ class PreviewImageFileFieldMixin:
     """
 
     @staticmethod
+    @admin.display(description=_("Image file preview"))
     def image_file_preview(obj):
         if obj.file and obj.file.url:
             icon_url = obj.file.url
@@ -59,6 +61,7 @@ class PreviewIconFileRelationMixin:
     """
 
     @staticmethod
+    @admin.display(description=_("Icon preview"))
     def icon_preview(obj):
         if obj.icon_file and obj.icon_file.file and obj.icon_file.file.url:
             icon_url = obj.icon_file.file.url
@@ -69,6 +72,7 @@ class PreviewIconFileRelationMixin:
 
 class UploadsFileProxyMixin:
     @staticmethod
+    @admin.display(description=_("File proxy"))
     def file_proxy(obj):
         """Returns the permission-controlled proxy link to the file."""
         if obj.file:
@@ -84,6 +88,7 @@ class PreviewDeviceTypeRelationMixin:
     """
 
     @staticmethod
+    @admin.display(description=_("Device type preview"))
     def device_type_preview(obj):
         device_type = obj.device_type
         if device_type and device_type.icon_file and device_type.icon_file.file and device_type.icon_file.file.url:

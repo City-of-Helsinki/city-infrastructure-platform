@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 10:54+0200\n"
+"POT-Creation-Date: 2026-01-20 12:18+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -239,6 +239,9 @@ msgstr "Kaupunkikalusteen toiminnon tai käytön tyyppi"
 
 msgid "OGC CityGML City Furniture Function or Usage type"
 msgstr "OGC CityGML -kaupunkikalusteen toiminnon tai käytön tyyppi"
+
+msgid "Icon file"
+msgstr "Kuvake-tiedosto"
 
 msgid "Icon of the actual device"
 msgstr "Varsinaisen laitteen kuvake"
@@ -687,7 +690,16 @@ msgstr "tasot"
 msgid "Name of feature type"
 msgstr "Ominaisuuden nimi."
 
+msgid "Edit name"
+msgstr "Muokkaus nimi"
+
 msgid "Edit name, used in map-view FeatureInfo component edit link"
+msgstr ""
+
+msgid "Feature Type Edit Mapping"
+msgstr ""
+
+msgid "Feature Type Edit Mappings"
 msgstr ""
 
 msgid "png"
@@ -1142,6 +1154,18 @@ msgstr "Liikennevalo (suunnitelmat)"
 msgid "Traffic Sign Plans"
 msgstr "Liikennemerkki (suunnitelmat)"
 
+msgid "Image file preview"
+msgstr "Kuvatiedoston esikatselu"
+
+msgid "Icon preview"
+msgstr "Kuvake-tiedosto esikatselu"
+
+msgid "File proxy"
+msgstr "Tiedostoproxy"
+
+msgid "Device type preview"
+msgstr "Laitteen tyyppin esikatselu"
+
 msgid "Marked as deleted (hidden from API)"
 msgstr "Merkitty poistetuksi (piilotettu rajapinnasta)"
 
@@ -1526,9 +1550,6 @@ msgstr "Liikenteenohjauslaitteiden tyyppien kuvakkeet"
 
 msgid "Standardised code of the device type."
 msgstr "Laitetyypin standardoitu koodi."
-
-msgid "Icon file"
-msgstr "Kuvake-tiedosto"
 
 msgid "Value"
 msgstr "Arvo"
