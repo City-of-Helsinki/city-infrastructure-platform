@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 12:18+0200\n"
+"POT-Creation-Date: 2026-01-20 12:53+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -744,6 +744,9 @@ msgstr ""
 msgid "Message Preview"
 msgstr ""
 
+msgid "Site Alerts"
+msgstr "Sivustotiedotteet"
+
 msgid "Info"
 msgstr ""
 
@@ -773,6 +776,9 @@ msgstr ""
 
 msgid "Created at"
 msgstr "Luotu-aikaleima"
+
+msgid "Site Alert"
+msgstr "Sivustotiedoite"
 
 msgid "Dismiss"
 msgstr ""

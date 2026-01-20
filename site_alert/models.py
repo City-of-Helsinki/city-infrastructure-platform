@@ -57,6 +57,10 @@ class SiteAlert(models.Model):
 
     objects = SiteAlertManager()
 
+    class Meta:
+        verbose_name = _("Site Alert")
+        verbose_name_plural = _("Site Alerts")
+
     def __str__(self):
         return f"Alert {self.pk} - {self.level}: {self.message_en}"
 
