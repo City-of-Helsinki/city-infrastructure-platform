@@ -6,7 +6,7 @@ from site_alert.models import SiteAlert
 
 @admin.register(SiteAlert)
 class SiteAlertAdmin(admin.ModelAdmin):
-    list_display = ("short_message", "level", "is_active", "created_at")
+    list_display = ("short_message", "level", "is_active", "start_at", "end_at")
     list_editable = ("is_active",)
     list_filter = ("is_active", "level", "created_at")
     search_fields = ("message_en", "message_fi", "message_sv")
@@ -19,6 +19,7 @@ class SiteAlertAdmin(admin.ModelAdmin):
                 "fields": ("message_en", "message_fi", "message_sv"),
             },
         ),
+        (_("Scheduling"), {"fields": ("start_at", "end_at")}),
         (
             _("Metadata"),
             {

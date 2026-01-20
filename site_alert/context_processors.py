@@ -9,10 +9,9 @@ def site_alerts(request):
         dismissed_ids = request.session.get("dismissed_alerts", [])
 
         # Fetch active alerts that haven't been dismissed
-        active_alerts = SiteAlert.objects.filter(is_active=True).exclude(id__in=dismissed_ids).order_by("-created_at")
-
+        active_alerts = SiteAlert.objects.active().exclude(id__in=dismissed_ids).order_by("-level", "-created_at")
         return {"site_alerts": active_alerts}
     # Don't break non-session requests
     except AttributeError:
-        active_alerts = SiteAlert.objects.filter(is_active=True).order_by("-created_at")
+        active_alerts = SiteAlert.objects.active().order_by("-level", "-created_at")
         return {"site_alerts": active_alerts}

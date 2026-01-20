@@ -1,12 +1,14 @@
+from datetime import timedelta
 from importlib import import_module
 
 import pytest
 from django.conf import settings
 from django.urls import reverse
-from django.utils import translation
+from django.utils import timezone, translation
 
 from site_alert.context_processors import site_alerts as alerts_context_processor
 
+from ..models import SiteAlert
 from .factories import SiteAlertFactory
 
 
@@ -90,3 +92,32 @@ def test_inactive_alerts_hidden(rf):
 
     assert active_alert in context["site_alerts"]
     assert inactive_alert not in context["site_alerts"]
+
+
+@pytest.mark.django_db
+def test_scheduling_logic():
+    """
+    Respect alert scheduling.
+    """
+    now = timezone.now()
+    yesterday = now - timedelta(days=1)
+    tomorrow = now + timedelta(days=1)
+
+    # 1. Should show (No dates)
+    a1 = SiteAlertFactory(is_active=True, start_at=None, end_at=None)
+
+    # 2. Should NOT show (Starts tomorrow)
+    a2 = SiteAlertFactory(is_active=True, start_at=tomorrow, end_at=None)
+
+    # 3. Should NOT show (Ended yesterday)
+    a3 = SiteAlertFactory(is_active=True, start_at=None, end_at=yesterday)
+
+    # 4. Should show (Started yesterday, ends tomorrow)
+    a4 = SiteAlertFactory(is_active=True, start_at=yesterday, end_at=tomorrow)
+
+    active_ids = list(SiteAlert.objects.active().values_list("id", flat=True))
+
+    assert a1.id in active_ids
+    assert a2.id not in active_ids
+    assert a3.id not in active_ids
+    assert a4.id in active_ids
