@@ -1,6 +1,6 @@
 import factory.django
 
-from site_alert.models import SiteAlert
+from site_alert.models import SiteAlert, SiteAlertLevel
 
 
 class SiteAlertFactory(factory.django.DjangoModelFactory):
@@ -8,7 +8,7 @@ class SiteAlertFactory(factory.django.DjangoModelFactory):
         model = SiteAlert
 
     is_active = True
-    level = "info"
+    level = SiteAlertLevel.INFO
     message_en = factory.Faker("sentence")
     message_fi = ""
     message_sv = ""
