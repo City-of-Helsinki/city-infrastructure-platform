@@ -79,6 +79,7 @@ class CityFurnitureDeviceType(models.Model, AbstractDeviceTypeMixin):
     )
     icon_file = models.ForeignKey(
         CityFurnitureDeviceTypeIcon,
+        verbose_name=_("Icon file"),
         on_delete=models.PROTECT,
         blank=True,
         null=True,

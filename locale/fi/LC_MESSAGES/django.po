@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 08:09+0200\n"
+"POT-Creation-Date: 2026-01-20 10:54+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -609,15 +609,6 @@ msgstr "Huoltotila"
 
 msgid "We apologize for the inconvenience. Please check back soon."
 msgstr "Pahoittelemme häiriötä. Tarkista asia pian uudelleen."
-
-msgid "Change"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "View on site"
-msgstr ""
 
 msgid "Maintenance mode active"
 msgstr "Huoltotila käytössä"
@@ -1535,6 +1526,9 @@ msgstr "Liikenteenohjauslaitteiden tyyppien kuvakkeet"
 
 msgid "Standardised code of the device type."
 msgstr "Laitetyypin standardoitu koodi."
+
+msgid "Icon file"
+msgstr "Kuvake-tiedosto"
 
 msgid "Value"
 msgstr "Arvo"
