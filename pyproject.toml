@@ -62,6 +62,17 @@ pytest-watch = "^4.2.0"
 rope = "^1.7.0"
 ruff = "^0.1.9"
 requests-mock = "^1.11.0"
+mypy = "^1.19.1"
+types-setuptools = "^80.9.0.20251223"
+types-requests = "^2.32.4.20260107"
+types-xlrd = "^2.0.0.20251020"
+types-jsonschema = "^4.26.0.20260109"
+types-python-dateutil = "^2.9.0.20251115"
+types-django-import-export = "^4.4.0.20260113"
+types-django-filter = "^25.2.0.20251228"
+types-docutils = "^0.22.3.20251115"
+lxml-stubs = "^0.5.1"
+django-stubs = {extras = ["compatible-mypy"], version = "^5.2.9"}
 
 
 [tool.ruff]
@@ -118,3 +129,31 @@ filterwarnings = [
 [tool.coverage.run]
 branch = true
 omit = ["*/migrations/*", "venv/*", "*/tests/*", "test_*.py"]
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+python_version = "3.11"
+
+# NOTE (2026-01-21 thiago) Too many errors untyped-import errors, but I do not wish to add a 3rd-party  "type hints"
+# library that is not directly suggested by mypy until I understand which are the "good" ones.
+ignore_missing_imports = true
+
+# traffic_control/geometry_utils.py suffers here because of complaints coming from django GIS without type hints
+warn_return_any = false
+
+# NOTE (2026-01-21 thiago) We've gone several years without type declarations. Let's not flip the switch in requiring
+# type declarations for all things right away
+allow_untyped_defs = true
+allow_untyped_calls = true
+disable_error_code = [
+    "attr-defined",
+    "has-type",
+    "misc",
+    "return",
+    "var-annotated",
+]
+
+# warn_unused_configs = true
+
+[tool.django-stubs]
+django_settings_module = "cityinfra.settings"
