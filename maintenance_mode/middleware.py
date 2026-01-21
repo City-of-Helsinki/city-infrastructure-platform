@@ -85,21 +85,28 @@ class MaintenanceModeMiddleware:
 
     def _should_allow_request(self, request, path_parts):
         """Determine if request should be allowed during maintenance mode."""
+        # Always allow health check endpoint, otherwise pods with health checks would be marked unhealthy
+        # and restarted continuously.
+        if request.path.strip("/") == "healthz":
+            return True
+
         # Check if 'admin' is in the first two parts of the path
         is_admin_path = len(path_parts) > 0 and (
             path_parts[0] == "admin" or (len(path_parts) > 1 and path_parts[1] == "admin")
         )
 
+        # Non-admin paths are blocked
         if not is_admin_path:
             return False
 
-        # Authenticated superusers can access all admin pages
-        if request.user.is_authenticated and request.user.is_superuser:
-            return True
-
-        # Only unauthenticated users can access login page; authenticated non-superusers are blocked
+        # For admin paths: allow superusers or unauthenticated users on login page
         admin_index = 0 if path_parts[0] == "admin" else 1
-        return not request.user.is_authenticated and self._is_admin_login_page(path_parts, admin_index)
+        is_superuser = request.user.is_authenticated and request.user.is_superuser
+        is_login_page_anonymous = not request.user.is_authenticated and self._is_admin_login_page(
+            path_parts, admin_index
+        )
+
+        return is_superuser or is_login_page_anonymous
 
     def _detect_language_code(self, request):
         """Detect language code from URL path or settings."""

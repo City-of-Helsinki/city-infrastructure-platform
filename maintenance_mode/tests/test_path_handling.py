@@ -216,3 +216,56 @@ class TestMaintenanceModePathHandling:
 
         # Should return 503 - staff users are not allowed during maintenance
         assert response.status_code == 503
+
+    def test_healthz_accessible_during_maintenance(self, maintenance_mode_active):
+        """Test that /healthz health-check endpoint is always accessible during maintenance"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/healthz")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        # Should not return 503 - health check must always work
+        assert response.status_code != 503
+
+    def test_healthz_with_trailing_slash_accessible(self, maintenance_mode_active):
+        """Test that /healthz/ (with trailing slash) is accessible during maintenance"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/healthz/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        # Should not return 503 - health check must always work
+        assert response.status_code != 503
+
+    def test_healthz_accessible_for_all_users(self, admin_user, staff_user, maintenance_mode_active):
+        """Test that health-check is accessible regardless of user authentication state"""
+        factory = RequestFactory()
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+
+        # Test with superuser
+        request = factory.get("/healthz")
+        request.user = admin_user
+        response = middleware(request)
+        assert response.status_code != 503
+
+        # Test with staff user
+        request = factory.get("/healthz")
+        request.user = staff_user
+        response = middleware(request)
+        assert response.status_code != 503
+
+        # Test with anonymous user
+        from django.contrib.auth.models import AnonymousUser
+
+        request = factory.get("/healthz")
+        request.user = AnonymousUser()
+        response = middleware(request)
+        assert response.status_code != 503
