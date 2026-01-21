@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 12:53+0200\n"
+"POT-Creation-Date: 2026-01-21 12:10+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -271,7 +271,7 @@ msgid "Standard size of the Device Type."
 msgstr "Laitetyypin standardikoko."
 
 msgid "Target data model"
-msgstr "Kohde tietomalli"
+msgstr "Kohdetietomalli"
 
 msgid "City Furniture model that this Device Type is usable for."
 msgstr "Kaupunkikalustemalli, johon tämä laitetyyppi on käytettävissä."
@@ -674,27 +674,27 @@ msgstr "Käytä liikennemerkkikuvia"
 msgid "Clustered"
 msgstr "Ryhmitelty"
 
-msgid "Extra Feature Info"
-msgstr "Ominaisuuden lisätieto"
+msgid "Extra feature info"
+msgstr "Kohteesta esitettävän tiedon lisämääritykset"
 
 msgid "Fields added here need to be included in the corresponding WFS Feature"
 msgstr ""
-"Tänne lisätyt kentät täytyvät olla mukana vastaavassa WFS ominaisuudessa"
+"Tähän määritettyjen kenttien täytyy olla mukana vastaavassa WFS-kohteessa."
 
 msgid "Layer"
 msgstr "Taso"
 
 msgid "Layers"
-msgstr "tasot"
+msgstr "Tasot"
 
 msgid "Name of feature type"
-msgstr "Ominaisuuden nimi."
+msgstr "Kohdetyypin nimi"
 
 msgid "Edit name"
 msgstr "Muokkaus nimi"
 
-msgid "Edit name, used in map-view FeatureInfo component edit link"
-msgstr ""
+msgid "Name used in the edit link of the map's FeatureInfo component "
+msgstr "Nimi, jota käytetään kartan FeatureInfo‑komponentin muokkauslinkissä"
 
 msgid "Feature Type Edit Mapping"
 msgstr ""
@@ -703,28 +703,28 @@ msgid "Feature Type Edit Mappings"
 msgstr ""
 
 msgid "png"
-msgstr ""
+msgstr "png"
 
 msgid "svg"
-msgstr ""
+msgstr "svg"
 
 msgid "Enabled"
-msgstr ""
+msgstr "Käytössä"
 
 msgid "Image Type"
-msgstr ""
+msgstr "Kuvatyyppi"
 
 msgid "PNG Size"
 msgstr "PNG Koko"
 
 msgid "Scale"
-msgstr ""
+msgstr "Skaalauskerroin"
 
 msgid "IconDrawingConfig"
-msgstr ""
+msgstr "Kuvakkeen piirtoasetus"
 
 msgid "IconDrawingConfigs"
-msgstr ""
+msgstr "Kuvakkeiden piirtoasetukset"
 
 msgid "Basemaps"
 msgstr "Pohjakartat"
@@ -1134,13 +1134,14 @@ msgstr ""
 "'%(geometry_type)s'"
 
 msgid "Icon with name '{', '.join(existing_icons)}' already exists."
-msgstr ""
+msgstr "Kuvake nimellä '{', '.join(existing_icons)}' on jo olemassa."
 
 msgid "Illegal file types: {', '.join(illegal_file_types)}"
-msgstr ""
+msgstr "Kielletyt tiedostotyypit: {', '.join(illegal_file_types)}"
 
 msgid "Virus scan failure: {get_error_details_message(virus_scan_errors)}"
 msgstr ""
+"Virustarkistus epäonnistui: {get_error_details_message(virus_scan_errors)}"
 
 msgid "Barrier Plans"
 msgstr "Ajoeste (suunnitelmat)"
@@ -1237,12 +1238,14 @@ msgid "Name of the source for where this device was imported from."
 msgstr "Sen lähteen nimi, josta tämä laite on tuotu."
 
 msgid "Is public"
-msgstr ""
+msgstr "On julkinen"
 
 msgid ""
 "If unchecked, access is restricted to users/groups with appropriate table or "
 "file permissions"
 msgstr ""
+"Jos ei valittuna, pääsy on rajattu käyttäjille/ryhmille, joilla on "
+"asianmukaiset taulu‑ tai tiedosto‑oikeudet"
 
 msgid "Date on which this sign becomes active."
 msgstr "Päivämäärä, josta lähtien tämä kilpi on käytössä."
@@ -2067,10 +2070,10 @@ msgid "Organization in charge of electric maintenance of the device."
 msgstr "Laitteen sähköisestä ylläpidosta vastaava organisaatio."
 
 msgid "Double sided"
-msgstr ""
+msgstr "Kaksipuolinen"
 
 msgid "Indicates if this object is double sided"
-msgstr ""
+msgstr "Kertoo, onko tämä objekti kaksipuolinen"
 
 msgid "Parent Signpost Plan"
 msgstr "Isäntäopaste (suunnitelma)"
@@ -2416,7 +2419,7 @@ msgid "Device type '%(device_type)s' accepts no structured content"
 msgstr "Laitetyyppi '%(device_type)s' ei käytä rakenteista sisältöä"
 
 msgid "Invalid location_ewkt value"
-msgstr "location_ewkt arvo ei kelpaa"
+msgstr "location_ewkt:n arvo ei kelpaa"
 
 msgid "File not found."
 msgstr "Tiedostoa ei löytynyt."
