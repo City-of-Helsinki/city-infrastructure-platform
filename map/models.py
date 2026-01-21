@@ -19,7 +19,7 @@ class Layer(models.Model):
     use_traffic_sign_icons = models.BooleanField(_("Use Traffic Sign Icons"), default=False)
     clustered = models.BooleanField(_("Clustered"), default=True)
     extra_feature_info = models.JSONField(
-        _("Extra Feature Info"),
+        _("Extra feature info"),
         null=True,
         blank=True,
         help_text=_("Fields added here need to be included in the corresponding WFS Feature"),
@@ -53,7 +53,7 @@ class FeatureTypeEditMapping(models.Model):
         max_length=200,
         null=False,
         blank=False,
-        help_text=_("Edit name, used in map-view FeatureInfo component edit link"),
+        help_text=_("Name used in the edit link of the map's FeatureInfo component "),
     )
 
     class Meta:

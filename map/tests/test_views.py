@@ -158,11 +158,11 @@ class MapConfigTestCase(TestCase):
 @pytest.mark.parametrize(
     "extra_feature_info, exception_msg",
     (
-        ({"testfield": None}, "Extra Feature Info field data value cannot be empty for key: testfield"),
+        ({"testfield": None}, "Extra feature info field data value cannot be empty for key: testfield"),
         ({"testfield": {"title_sv": None}}, "Extra field testfield does not have mandatory value title_fi"),
         (
             {"testfield": {"title_fi": None, "empty_list": [], "empty_dict": {}, "emptry_string": ""}},
-            "Extra Feature Info field data cannot be empty:",
+            "Extra feature info field data cannot be empty:",
         ),
     ),
 )

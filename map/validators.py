@@ -8,8 +8,8 @@ def validate_layer_extra_feature_info(value):
     if value:
         for k, v in value.items():
             if v is None:
-                raise ValidationError(f"Extra Feature Info field data value cannot be empty for key: {k}")
+                raise ValidationError(f"Extra feature info field data value cannot be empty for key: {k}")
             if "title_fi" not in list(v.keys()):
                 raise ValidationError(f"Extra field {k} does not have mandatory value title_fi")
             if not all(v.values()):
-                raise ValidationError(f"Extra Feature Info field data cannot be empty: {v}")
+                raise ValidationError(f"Extra feature info field data cannot be empty: {v}")

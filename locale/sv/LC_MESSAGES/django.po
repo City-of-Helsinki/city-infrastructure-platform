@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 12:53+0200\n"
+"POT-Creation-Date: 2026-01-21 12:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgid "Installation information"
 msgstr "Information om installation"
 
 msgid "City furniture"
-msgstr "Markdetaljer"
+msgstr "Stadsmöbler"
 
 msgid "Furniture signpost"
 msgstr "Lokaliseringsmärke"
@@ -223,10 +223,10 @@ msgid "File"
 msgstr "Fil"
 
 msgid "City Furniture Device Type Icon"
-msgstr ""
+msgstr "Ikon för stadsmöbelns typ"
 
 msgid "City Furniture Device Type Icons"
-msgstr ""
+msgstr "Ikon för stadsmöblernas typer"
 
 msgid "Code"
 msgstr "Kod"
@@ -235,16 +235,16 @@ msgid "Code of the Device Type in the Helsinki Design Manual."
 msgstr "Kod för anordningstypen i Helsingfors designmanual."
 
 msgid "City Furniture Class type"
-msgstr "Markdetaljer - klasstyp"
+msgstr "Stadsmöbler - klasstyp"
 
 msgid "OGC CityGML City Furniture Class"
 msgstr "OGC CityGML-kategori för stadsmöbel"
 
 msgid "City Furniture Function or Usage type"
-msgstr "Markdetaljer - funktion eller användningstyp"
+msgstr "Stadsmöbler - funktion eller användningstyp"
 
 msgid "OGC CityGML City Furniture Function or Usage type"
-msgstr "Markdetaljer - funktion eller användningstyp"
+msgstr "Stadsmöbler - funktion eller användningstyp"
 
 msgid "Icon file"
 msgstr ""
@@ -283,10 +283,10 @@ msgid "City Furniture model that this Device Type is usable for."
 msgstr "Stadsmöbelmodell som denna anordningstyp kan användas för."
 
 msgid "City Furniture Device Type"
-msgstr "Markdetaljer - anordningstyp"
+msgstr "Stadsmöbler - anordningstyp"
 
 msgid "City Furniture Device Types"
-msgstr "Markdetaljer- anordningstyper"
+msgstr "Stadsmöbler - anordningstyper"
 
 msgid "Name"
 msgstr "Namn"
@@ -299,10 +299,10 @@ msgid "RGB Hex value of the color"
 msgstr "Färgens RGB Hex-värde"
 
 msgid "City Furniture Color"
-msgstr "Markdetaljer - färg"
+msgstr "Stadsmöbler - färg"
 
 msgid "City Furniture Colors"
-msgstr "Markdetaljer - färger"
+msgstr "Stadsmöbler - färger"
 
 msgid "Finnish name"
 msgstr "Finskt namn"
@@ -329,10 +329,10 @@ msgid "Description of the target."
 msgstr "Beskrivning av objektet."
 
 msgid "City Furniture Target"
-msgstr "Markdetaljer - mål"
+msgstr "Stadsmöbler - mål"
 
 msgid "City Furniture Targets"
-msgstr "Markdetaljer - mål"
+msgstr "Stadsmöbler - mål"
 
 msgid "Up"
 msgstr "Upp"
@@ -392,7 +392,7 @@ msgid "Additional information about the install location."
 msgstr "Ytterligare information om installationsplatsen."
 
 msgid "City Furniture Device type"
-msgstr "Markdetaljer - anordningstyp"
+msgstr "Stadsmöbler - anordningstyp"
 
 msgid "Type of the device from Helsinki Design Manual."
 msgstr "Anordningstyp i Helsingfors designmanual."
@@ -679,13 +679,13 @@ msgid "Use Traffic Sign Icons"
 msgstr "Använd trafikskyltsymboler"
 
 msgid "Clustered"
-msgstr ""
+msgstr "Klustrad"
 
-msgid "Extra Feature Info"
-msgstr ""
+msgid "Extra feature info"
+msgstr "Extra objektinformation"
 
 msgid "Fields added here need to be included in the corresponding WFS Feature"
-msgstr ""
+msgstr "Fält som läggs till här måste ingå i motsvarande WFS‑objekt."
 
 msgid "Layer"
 msgstr "Skikt"
@@ -694,13 +694,13 @@ msgid "Layers"
 msgstr "Skikt"
 
 msgid "Name of feature type"
-msgstr ""
+msgstr "Objekttypens namn"
 
 msgid "Edit name"
 msgstr ""
 
-msgid "Edit name, used in map-view FeatureInfo component edit link"
-msgstr ""
+msgid "Name used in the edit link of the map's FeatureInfo component "
+msgstr "Namn som används i kartans FeatureInfo‑komponentens redigeringslänk"
 
 msgid "Feature Type Edit Mapping"
 msgstr ""
@@ -709,28 +709,28 @@ msgid "Feature Type Edit Mappings"
 msgstr ""
 
 msgid "png"
-msgstr ""
+msgstr "png"
 
 msgid "svg"
-msgstr ""
+msgstr "svg"
 
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiverad"
 
 msgid "Image Type"
-msgstr ""
+msgstr "Bildtyp"
 
 msgid "PNG Size"
 msgstr "PNG Storlek"
 
 msgid "Scale"
-msgstr ""
+msgstr "Skala"
 
 msgid "IconDrawingConfig"
-msgstr ""
+msgstr "Ikonens ritningskonfiguration"
 
 msgid "IconDrawingConfigs"
-msgstr ""
+msgstr "Ikonernas ritningskonfigurationer"
 
 msgid "Basemaps"
 msgstr "Grundkartor"
@@ -1141,13 +1141,14 @@ msgstr ""
 "'%(geometry_type)s'"
 
 msgid "Icon with name '{', '.join(existing_icons)}' already exists."
-msgstr ""
+msgstr "Ikon med namnet '{', '.join(existing_icons)}' finns redan."
 
 msgid "Illegal file types: {', '.join(illegal_file_types)}"
-msgstr ""
+msgstr "Otillåtna filtyper: {', '.join(illegal_file_types)}"
 
 msgid "Virus scan failure: {get_error_details_message(virus_scan_errors)}"
 msgstr ""
+"Viruskontroll misslyckades: {get_error_details_message(virus_scan_errors)}"
 
 msgid "Barrier Plans"
 msgstr "Bom (planer)"
@@ -1244,12 +1245,14 @@ msgid "Name of the source for where this device was imported from."
 msgstr "Namn på källan varifrån denna anordning importerades."
 
 msgid "Is public"
-msgstr ""
+msgstr "Är offentlig"
 
 msgid ""
 "If unchecked, access is restricted to users/groups with appropriate table or "
 "file permissions"
 msgstr ""
+"Om ej markerad begränsas åtkomsten till användare/grupper med lämpliga "
+"tabell‑ eller filbehörigheter"
 
 msgid "Date on which this sign becomes active."
 msgstr "Datum då skylten tas i bruk."
@@ -1258,10 +1261,10 @@ msgid "Date after which this sign becomes inactive."
 msgstr "Datum efter vilket skylten inte är i bruk."
 
 msgid "Seasonal validity period information"
-msgstr ""
+msgstr "Säsongsbunden giltighetsinformation"
 
 msgid "Seasonal validity period information related to this device."
-msgstr ""
+msgstr "Säsongsbunden giltighetsinformation för denna anordning"
 
 msgid "Blue"
 msgstr "Blå"
@@ -1557,10 +1560,10 @@ msgid "Owners"
 msgstr "Ägare"
 
 msgid "Traffic Control Device Type Icon"
-msgstr ""
+msgstr "Ikon för trafikstyrningsanordningstypen"
 
 msgid "Traffic Control Device Type Icons"
-msgstr ""
+msgstr "Ikoner för trafikstyrningsanordningstyperna"
 
 msgid "Standardised code of the device type."
 msgstr "Standardiserad kod för anordningstypen."
@@ -2079,10 +2082,10 @@ msgid "Organization in charge of electric maintenance of the device."
 msgstr "Organisation som ansvarar för elektriskt underhåll av anordningen."
 
 msgid "Double sided"
-msgstr ""
+msgstr "Dubbelsidig"
 
 msgid "Indicates if this object is double sided"
-msgstr ""
+msgstr "Anger om objektet är dubbelsidigt"
 
 msgid "Parent Signpost Plan"
 msgstr "Överordnad vägvisare (plan)"
@@ -2283,10 +2286,10 @@ msgid "Text written on the sign."
 msgstr "Text som är skriven på skylten."
 
 msgid "Peak fastened"
-msgstr ""
+msgstr "Toppmonterad"
 
 msgid "Indicates if this object is peak fastened"
-msgstr ""
+msgstr "Anger om objektet är toppmonterat"
 
 msgid "Affect area (2D)"
 msgstr "Påverkansområde (2D)"
@@ -2406,10 +2409,10 @@ msgid "Save and continue editing"
 msgstr "Spara och fortsätt redigera"
 
 msgid "Visual representation"
-msgstr ""
+msgstr "Visuell presentation"
 
 msgid "Missing icon graphics. Description: "
-msgstr ""
+msgstr "Märkets grafik saknas. Märkets beskrivning:"
 
 msgid "Additional signs"
 msgstr "Tilläggsskyltar"
@@ -2428,7 +2431,7 @@ msgid "Device type '%(device_type)s' accepts no structured content"
 msgstr "Anordningstypen '%(device_type)s' använder inte strukturerat innehåll"
 
 msgid "Invalid location_ewkt value"
-msgstr ""
+msgstr "Ogiltigt värde för location_ewkt"
 
 msgid "File not found."
 msgstr "Fil hittades inte."
