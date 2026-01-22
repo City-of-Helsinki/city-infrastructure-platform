@@ -195,6 +195,7 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
                 srid=settings.SRID,
             )
             area = location_polygons.convex_hull
+            assert isinstance(area, Polygon)
             coords_3d = [(*pt, 0) for pt in area.coords[0]]
             area_3d = Polygon(coords_3d, srid=settings.SRID)
             self.location = MultiPolygon(area_3d, srid=settings.SRID)
