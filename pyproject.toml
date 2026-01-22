@@ -147,11 +147,11 @@ warn_return_any = false
 allow_untyped_defs = true
 allow_untyped_calls = true
 disable_error_code = [
-    "attr-defined",
-    "has-type",
-    "misc",
-    "return",
-    "var-annotated",
+#    "attr-defined",
+#    "has-type",
+#    "misc",
+#    "return",
+#    "var-annotated",
 ]
 
 # warn_unused_configs = true
