@@ -47,6 +47,7 @@ def get_3d_multipolygon(multipolygon: MultiPolygon, z_coord: float) -> MultiPoly
     """Get 3d multipolygon of given point with given z-coordinate."""
     new_polygons = []
     for p in multipolygon:
+        assert isinstance(p, Polygon)
         new_polygons.append(get_3d_polygon(p, z_coord))
     return MultiPolygon(*new_polygons, srid=multipolygon.srid)
 
