@@ -8,34 +8,6 @@ from django.utils.translation import gettext_lazy as _
 from traffic_control.mixins.models import BoundaryCheckedLocationMixin, SourceControlModel
 
 
-class GroupOperationalArea(models.Model):
-    """
-    Model to link OperationalAreas to django.contrib.auth.Group model
-    """
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    group = models.OneToOneField(
-        Group,
-        unique=True,
-        related_name="operational_area",
-        verbose_name=_("Group"),
-        on_delete=models.CASCADE,
-    )
-    areas = models.ManyToManyField(
-        "OperationalArea",
-        related_name="groups",
-        verbose_name=_("Operational areas"),
-        blank=True,
-    )
-
-    class Meta:
-        verbose_name = _("Group operational area")
-        verbose_name_plural = _("Group operational areas")
-
-    def __str__(self):
-        return f"GroupOperationalArea {self.group.name}"
-
-
 class OperationalArea(BoundaryCheckedLocationMixin, SourceControlModel):
     """
     Model containing operational area polygon used to check location based
@@ -61,3 +33,31 @@ class OperationalArea(BoundaryCheckedLocationMixin, SourceControlModel):
 
     def __str__(self):
         return f"OperationalArea {self.name}"
+
+
+class GroupOperationalArea(models.Model):
+    """
+    Model to link OperationalAreas to django.contrib.auth.Group model
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    group = models.OneToOneField(
+        Group,
+        unique=True,
+        related_name="operational_area",
+        verbose_name=_("Group"),
+        on_delete=models.CASCADE,
+    )
+    areas = models.ManyToManyField(
+        OperationalArea,
+        related_name="groups",
+        verbose_name=_("Operational areas"),
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = _("Group operational area")
+        verbose_name_plural = _("Group operational areas")
+
+    def __str__(self):
+        return f"GroupOperationalArea {self.group.name}"
