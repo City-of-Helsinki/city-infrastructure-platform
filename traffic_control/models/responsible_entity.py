@@ -12,7 +12,7 @@ from mptt.models import MPTTModel
 from traffic_control.enums import OrganizationLevel
 
 
-class ResponsibleEntity(MPTTModel): # type: ignore[misc]
+class ResponsibleEntity(MPTTModel):
     """
     Responsible Entity for a City Furniture Device
 
@@ -82,7 +82,7 @@ class GroupResponsibleEntity(models.Model):
         on_delete=models.CASCADE,
     )
     responsible_entities = models.ManyToManyField(
-        "ResponsibleEntity",
+        ResponsibleEntity,
         related_name="groups",
         verbose_name=_("Responsible Entities"),
         blank=True,

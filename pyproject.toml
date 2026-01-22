@@ -133,6 +133,7 @@ omit = ["*/migrations/*", "venv/*", "*/tests/*", "test_*.py"]
 [tool.mypy]
 plugins = ["mypy_django_plugin.main"]
 python_version = "3.11"
+mypy_path = "stubs"
 
 # NOTE (2026-01-21 thiago) Too many errors untyped-import errors, but I do not wish to add a 3rd-party  "type hints"
 # library that is not directly suggested by mypy until I understand which are the "good" ones.
