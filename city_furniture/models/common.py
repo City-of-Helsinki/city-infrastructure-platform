@@ -154,12 +154,8 @@ class CityFurnitureDeviceType(models.Model, AbstractDeviceTypeMixin):
         ignore_prefix = target_type.value.replace("_", "")
         relevant_relations = [relation for relation in relations if not relation.startswith(ignore_prefix)]
 
-        related_pks = []
-        if relevant_relations:
-            queryset = CityFurnitureDeviceType.objects.filter(pk=self.pk).values_list(*relevant_relations)
-            if queryset.exists():
-                related_pks = queryset.first()
-
+        queryset = CityFurnitureDeviceType.objects.filter(pk=self.pk).values_list(*relevant_relations)
+        related_pks = queryset.first() or []
         return any(related_pks)
 
     def validate_change_target_model(
