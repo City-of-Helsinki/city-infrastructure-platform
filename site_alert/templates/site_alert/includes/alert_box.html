@@ -12,7 +12,7 @@
         {% for alert in site_alerts %}
             <div id="site-alert-{{ alert.id }}"
                  class="site-alert alert-{{ alert.level }}">
-                <span>{{ alert.translated_message }}</span>
+                <span class="site-alert-text">{{ alert.translated_message }}</span>
 
                 <button type="button"
                         class="site-alert-close js-dismiss-alert"
