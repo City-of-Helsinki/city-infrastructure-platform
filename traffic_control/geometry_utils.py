@@ -25,17 +25,17 @@ def get_3d_geometry(
     geometry: Union[Point, LinearRing, Polygon, MultiPolygon, LineString], z_coord: float
 ) -> GEOSGeometry:
     """Get 3d geometry of given geometry with given z-coordinate. Existing z-coord will be overwritten."""
-    geom_to_func = {
-        Point: get_3d_point,
-        LinearRing: get_3d_linearring,
-        Polygon: get_3d_polygon,
-        MultiPolygon: get_3d_multipolygon,
-        LineString: get_3d_linestring,
-    }
-    if geometry.__class__ not in geom_to_func:
-        raise NotImplementedError(f"Could not get 3d geometry from given geometry type: {type(geometry)}")
-
-    return geom_to_func[geometry.__class__](geometry, z_coord)
+    if type(geometry) is Point:
+        return get_3d_point(geometry, z_coord)
+    if type(geometry) is LinearRing:
+        return get_3d_linearring(geometry, z_coord)
+    if type(geometry) is Polygon:
+        return get_3d_polygon(geometry, z_coord)
+    if type(geometry) is MultiPolygon:
+        return get_3d_multipolygon(geometry, z_coord)
+    if type(geometry) is LineString:
+        return get_3d_linestring(geometry, z_coord)
+    raise NotImplementedError(f"Could not get 3d geometry from given geometry type: {type(geometry)}")
 
 
 def get_3d_point(point: Point, z_coord: float) -> Point:
