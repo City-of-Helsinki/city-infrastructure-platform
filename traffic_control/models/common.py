@@ -106,8 +106,8 @@ auditlog.register(TrafficControlDeviceTypeIcon)
 
 
 class AbstractDeviceTypeMixin:
-    SVG_ICON_DESTINATION = None
-    PNG_ICON_DESTINATION = None
+    SVG_ICON_DESTINATION: None | str = None
+    PNG_ICON_DESTINATION: None | str = None
 
     def get_icons(self):
         """
