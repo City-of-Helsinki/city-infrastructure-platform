@@ -26,7 +26,7 @@ class AbstractTrafficSignResource(GenericDeviceBaseResource):
     owner__name_fi = Field(
         attribute="owner",
         column_name="owner__name_fi",
-        widget=ForeignKeyWidget(Owner, "name_fi"),
+        widget=ForeignKeyWidget(Owner, "name_fi"),  # type: ignore[type-var]
     )
     device_type__code = Field(
         attribute="device_type",

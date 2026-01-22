@@ -66,8 +66,8 @@ class FeatureTypeEditMapping(models.Model):
 
 
 class IconDrawingConfig(models.Model):
-    DEFAULT_ICON_URL = settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION
-    DEFAULT_ICON_SCALE = 0.075
+    DEFAULT_ICON_URL: str = settings.TRAFFIC_CONTROL_DEVICE_TYPE_SVG_ICON_DESTINATION
+    DEFAULT_ICON_SCALE: float = 0.075
 
     class ImageType(models.TextChoices):
         PNG = "png", _("png")

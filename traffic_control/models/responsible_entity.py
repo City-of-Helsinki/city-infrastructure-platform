@@ -12,7 +12,7 @@ from mptt.models import MPTTModel
 from traffic_control.enums import OrganizationLevel
 
 
-class ResponsibleEntity(MPTTModel):
+class ResponsibleEntity(MPTTModel): # type: ignore[misc]
     """
     Responsible Entity for a City Furniture Device
 

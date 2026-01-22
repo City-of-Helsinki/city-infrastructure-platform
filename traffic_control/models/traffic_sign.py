@@ -240,7 +240,7 @@ class TrafficSignPlan(
         help_text=_("Plan which this traffic sign plan is a part of."),
     )
 
-    objects = TrafficSignPlanQuerySet.as_manager()
+    objects = TrafficSignPlanQuerySet.as_manager()  # type: ignore[misc]
 
     class Meta:
         db_table = "traffic_sign_plan"
@@ -358,7 +358,7 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         help_text=_("URL to a file attachment related to this sign."),
     )
 
-    objects = TrafficSignRealQuerySet.as_manager()
+    objects = TrafficSignRealQuerySet.as_manager()  # type: ignore[misc]
 
     class Meta:
         db_table = "traffic_sign_real"

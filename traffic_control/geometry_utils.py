@@ -17,7 +17,7 @@ def geometry_is_legit(geometry: GEOSGeometry) -> bool:
 
 
 def geometry_within_projection_boundary(geometry: GEOSGeometry) -> bool:
-    boundary_polygon = Polygon.from_bbox(settings.SRID_BOUNDARIES.get(settings.SRID))
+    boundary_polygon = Polygon.from_bbox(settings.SRID_BOUNDARIES[settings.SRID])
     return geometry.within(boundary_polygon) if geometry else True
 
 
@@ -95,7 +95,7 @@ def get_z_for_geometry(geometry):
 
 
 def get_z_for_point(point: Point) -> float:
-    return point.z
+    return point.z  # type: ignore[return-value]
 
 
 def get_z_for_polygon(polygon: Polygon) -> float:
