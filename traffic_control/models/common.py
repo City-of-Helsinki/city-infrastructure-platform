@@ -276,10 +276,8 @@ class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
             relations_to_remove = {"trafficsignplan", "trafficsignreal"}
             relevant_relations = [relation for relation in relevant_relations if relation not in relations_to_remove]
 
-        related_pks = []
         queryset = TrafficControlDeviceType.objects.filter(pk=self.pk).values_list(*relevant_relations)
-        if queryset.exists():
-            related_pks = queryset.first()
+        related_pks = queryset.first() or []
         return any(related_pks)
 
     def validate_change_target_model(
