@@ -730,13 +730,13 @@ class TrafficSignImporter:
             )
 
     @staticmethod
-    def _check_ticket_machine(row) -> Union[ImportResult, None]:
+    def _check_ticket_machine(row) -> bool:
         """Parentless ticket machines are not to be imported as an additional sign.
         This is not an error but processing should be stopped anyways. These are imported as trafficsigns."""
         if not row[CSVHeaders.parent_sign_id].strip():
             # these are "lippuautomaatit"
-            if row[CSVHeaders.code] in TICKET_MACHINE_CODES:
-                return True
+            return row[CSVHeaders.code] in TICKET_MACHINE_CODES
+        return False
 
     def _check_additional_sign_location(self, row) -> Union[ImportResult, None]:
         source_id = row[CSVHeaders.id]
