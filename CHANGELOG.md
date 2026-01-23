@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.32.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.31.0...city-infrastructure-platform-v1.32.0) (2026-01-23)
+
+
+### Features
+
+* Site alert scheduling ([7ec6ccf](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7ec6ccf6f9a6aba8aed9c6156af610c4af77d3cd))
+* Update localizations ([4aed75c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4aed75c0b689ea519d395df147c2cc08c4fbec18))
+
+
+### Bug Fixes
+
+* Add internationalization for icon_file field for CityFurnitureDeviceType and TrafficControlDeviceType ([ab74b11](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ab74b111a3da35b9e4c6a7f8b788d9db07a48a49))
+* Add internationalization for preview strings and FeatureTypeEditMapping ([99f267c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/99f267c8c2fab3d500a7d24bb3de1295d5dadc51))
+* MaintenanceMode application name was not localizable ([f5557dc](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f5557dc0499cfe51ee71a65f6dc541ceb3da090a))
+* Refactor pipelines ([9da4742](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9da4742385e73137a9d8eabaa4f8c037a67bad38))
+* Respect site alert line breaks ([53d1613](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/53d1613d494f3043b9a091728345915565fdb0d4))
+* SiteAlert application and model was missing internationalization ([5a488e6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5a488e6fe67c6c556c0973a66e36ca9df5a2481a))
+* Whitelist for healt-check api ([849c722](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/849c722bb8708d4ad5ff7f018561a8bf8681afd8))
+
 ## [1.31.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.30.0...city-infrastructure-platform-v1.31.0) (2026-01-19)
 
 
