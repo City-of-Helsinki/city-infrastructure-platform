@@ -38,7 +38,7 @@ resources:
 
 extends:
   # Filename in Azure DevOps Repository
-  template: components/cityinfra-api/pipelines/cityinfra-api-dev.yml@city-infrastructure-platform
+  template: components/cityinfra-api/pipelines/cityinfra-api-devtest.yml@city-infrastructure-platform
   # parameters:
     # Application build arguments and config map values as key value pairs.
     # Does not contain all buildArguments or configMap values, the rest located in city-infrastructure-platform
