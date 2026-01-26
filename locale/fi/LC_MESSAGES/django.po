@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-21 12:10+0200\n"
+"POT-Creation-Date: 2026-01-27 13:08+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -831,6 +831,60 @@ msgstr "Toiminta-alue"
 #, python-format
 msgid "Set related plans for plan %s"
 msgstr "Aseta liittyviä suunnitelmia suunnitelmalle %s"
+
+msgid "Import Information"
+msgstr ""
+
+msgid "Results Summary"
+msgstr "Tulosteen yhteenveto"
+
+msgid "Successful Imports"
+msgstr "Onnistuneet tuonnit"
+
+msgid "Data Validation Errors"
+msgstr "Validointivirheet"
+
+msgid "Geometry Errors"
+msgstr "Geometriavirheet"
+
+msgid "Raw JSON Results"
+msgstr "Raaka JSON-tulokset"
+
+msgid "Successfully Imported Plans"
+msgstr "Onnistuneesti tuodut suunnitelmat"
+
+msgid "Skipped (No Changes Needed)"
+msgstr "Ohitettu (muutoksia ei tarvita)"
+
+msgid "Missing Diary Numbers"
+msgstr "Diaarinumerot puuttuvat"
+
+msgid "Duplicate Diary Numbers"
+msgstr "Diaarinumerot kaksoiskappaleina"
+
+msgid "Invalid WKT Geometry"
+msgstr "Virheellinen WKT-geometria"
+
+msgid "Invalid Geometry Type"
+msgstr "Virheellinen geometriatyyppi"
+
+msgid "Invalid Geometry Topology"
+msgstr "Virheellinen geometriatopologia"
+
+msgid "Out of Bounds Geometries"
+msgstr "Geometriat kartta-alueen ulkopuolella"
+
+msgid "Empty Geometries"
+msgstr "Tyhjät geometriat"
+
+msgid "Plans Not Found"
+msgstr "Suunnitelmia ei löydetty"
+
+msgid "Decision ID Mismatches"
+msgstr "Päätös-ID-epäyhtenäisyydet"
+
+msgid "Drawing Number Mismatches"
+msgstr "Piirustusnumerot epäyhtenäisyydet"
 
 msgid "Responsible entities"
 msgstr "Vastuutahot"
@@ -1826,6 +1880,27 @@ msgstr "Linkki päätöksen verkkosivulle"
 
 msgid "Plans"
 msgstr "Suunnitelmat"
+
+msgid "File path"
+msgstr "Tiedostopolku"
+
+msgid "Output directory"
+msgstr "Ulostulohakemisto"
+
+msgid "Dry run"
+msgstr "Testiajo"
+
+msgid "Results"
+msgstr "Tulokset"
+
+msgid "List of import results for each CSV row"
+msgstr "Lista tuontituloksista jokaiselle CSV-riville"
+
+msgid "Plan Geometry Import Log"
+msgstr "Sunnitelman geometrian tuontiloki"
+
+msgid "Plan Geometry Import Logs"
+msgstr "Suunnitelman geometrian tuontilogit"
 
 msgid "External ID"
 msgstr "Ulkoinen ID"

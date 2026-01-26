@@ -202,3 +202,79 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
 
 
 auditlog.register(Plan)
+
+
+class PlanGeometryImportLog(models.Model):
+    """Log of plan geometry imports from CSV files with WKT geometries.
+
+    Stores audit trail of import operations including timing, file paths,
+    command options, and detailed results for each processed row.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    start_time = models.DateTimeField(verbose_name=_("Start time"))
+    end_time = models.DateTimeField(verbose_name=_("End time"), null=True, blank=True)
+    file_path = models.CharField(verbose_name=_("File path"), max_length=500)
+    output_dir = models.CharField(verbose_name=_("Output directory"), max_length=500)
+    dry_run = models.BooleanField(verbose_name=_("Dry run"), default=False)
+    results = models.JSONField(
+        verbose_name=_("Results"),
+        null=True,
+        blank=True,
+        help_text=_("List of import results for each CSV row"),
+    )
+
+    class Meta:
+        verbose_name = _("Plan Geometry Import Log")
+        verbose_name_plural = _("Plan Geometry Import Logs")
+        ordering = ["-start_time"]
+
+    def __str__(self) -> str:
+        """Return string representation of the log entry.
+
+        Returns:
+            str: Formatted string with import timestamp.
+        """
+        return f"Plan Geometry Import {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}"
+
+    @property
+    def total_rows(self) -> int:
+        """Get total number of rows processed.
+
+        Returns:
+            int: Total number of rows in results, or 0 if results is None.
+        """
+        return len(self.results) if self.results else 0
+
+    @property
+    def success_count(self) -> int:
+        """Get number of successfully updated plans.
+
+        Returns:
+            int: Count of results with result_type='success'.
+        """
+        if not self.results:
+            return 0
+        return sum(1 for r in self.results if r.get("result_type") == "success")
+
+    @property
+    def skipped_count(self) -> int:
+        """Get number of skipped rows (no changes needed).
+
+        Returns:
+            int: Count of results with result_type='skipped_no_changes'.
+        """
+        if not self.results:
+            return 0
+        return sum(1 for r in self.results if r.get("result_type") == "skipped_no_changes")
+
+    @property
+    def error_count(self) -> int:
+        """Get number of rows with errors.
+
+        Returns:
+            int: Count of results with result_type != 'success' and != 'skipped_no_changes'.
+        """
+        if not self.results:
+            return 0
+        return sum(1 for r in self.results if r.get("result_type") not in ("success", "skipped_no_changes"))

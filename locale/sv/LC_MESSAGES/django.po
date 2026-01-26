@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-21 12:10+0200\n"
+"POT-Creation-Date: 2026-01-27 13:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -837,6 +837,60 @@ msgstr "Åtgärdsområden"
 #, python-format
 msgid "Set related plans for plan %s"
 msgstr "Ange relaterade planer för planen %s"
+
+msgid "Import Information"
+msgstr ""
+
+msgid "Results Summary"
+msgstr ""
+
+msgid "Successful Imports"
+msgstr ""
+
+msgid "Data Validation Errors"
+msgstr ""
+
+msgid "Geometry Errors"
+msgstr ""
+
+msgid "Raw JSON Results"
+msgstr ""
+
+msgid "Successfully Imported Plans"
+msgstr ""
+
+msgid "Skipped (No Changes Needed)"
+msgstr ""
+
+msgid "Missing Diary Numbers"
+msgstr ""
+
+msgid "Duplicate Diary Numbers"
+msgstr ""
+
+msgid "Invalid WKT Geometry"
+msgstr ""
+
+msgid "Invalid Geometry Type"
+msgstr ""
+
+msgid "Invalid Geometry Topology"
+msgstr ""
+
+msgid "Out of Bounds Geometries"
+msgstr ""
+
+msgid "Empty Geometries"
+msgstr ""
+
+msgid "Plans Not Found"
+msgstr ""
+
+msgid "Decision ID Mismatches"
+msgstr ""
+
+msgid "Drawing Number Mismatches"
+msgstr ""
 
 msgid "Responsible entities"
 msgstr "Ansvariga enheter"
@@ -1834,6 +1888,27 @@ msgstr "Länk till webbplatsen för beslutet"
 
 msgid "Plans"
 msgstr "Planer"
+
+msgid "File path"
+msgstr ""
+
+msgid "Output directory"
+msgstr ""
+
+msgid "Dry run"
+msgstr ""
+
+msgid "Results"
+msgstr ""
+
+msgid "List of import results for each CSV row"
+msgstr ""
+
+msgid "Plan Geometry Import Log"
+msgstr ""
+
+msgid "Plan Geometry Import Logs"
+msgstr ""
 
 msgid "External ID"
 msgstr "Externt id"
