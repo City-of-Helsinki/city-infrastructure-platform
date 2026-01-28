@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import sys
 
 import environ
 import sentry_sdk
@@ -48,6 +49,11 @@ env = environ.Env(
     DATABASE_PASSWORD=(str, ""),
     CACHE_URL=(str, "locmemcache://"),
     EMAIL_URL=(str, "consolemail://"),
+    EMAIL_HOST=(str, "localhost"),
+    EMAIL_PORT=(int, 587),
+    EMAIL_USE_TLS=(bool, True),
+    EMAIL_HOST_USER=(str, ""),
+    EMAIL_HOST_PASSWORD=(str, ""),
     SENTRY_DSN=(str, ""),
     SENTRY_DEBUG=(bool, False),
     VERSION=(str, ""),
@@ -116,7 +122,28 @@ if OIDC_AUTHENTICATION_ENABLED and (
     raise ImproperlyConfigured("Authentication not configured properly")
 
 CACHES = {"default": env.cache()}
-vars().update(env.email_url())  # EMAIL_BACKEND etc.
+
+# Email configuration
+# Use explicit EMAIL_* variables for production SMTP
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = "cityinfra@hel.fi"
+
+# Determine which email backend to use based on environment
+TESTING = "test" in sys.argv or "pytest" in sys.argv[0] if sys.argv else False
+
+if TESTING:
+    # Use locmem backend for tests (emails stored in django.core.mail.outbox)
+    EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+elif DEBUG:
+    # Use console backend for development (emails printed to console)
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    # Use SMTP backend for production
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # Logging
 LOGGING = {
