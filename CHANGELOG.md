@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.33.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.32.0...city-infrastructure-platform-v1.33.0) (2026-01-28)
+
+
+### Features
+
+* Add plan geometry import from CSV with comprehensive validation ([83660b8](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/83660b82c99bd9ec2918d25cd70cdc770cce57ca))
+
 ## [1.32.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.31.0...city-infrastructure-platform-v1.32.0) (2026-01-23)
 
 
