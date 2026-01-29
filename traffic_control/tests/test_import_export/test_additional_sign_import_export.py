@@ -205,35 +205,41 @@ def test__additional_sign__export_with_content(resource, factory):
 
     assert len(dataset) == 3
 
-    assert dataset.dict[0]["device_type__code"] == additional_sign_0.device_type.code
-    assert dataset.dict[0]["content_s.bool"] is additional_sign_0.content_s["bool"]
-    assert dataset.dict[0]["content_s.num"] == additional_sign_0.content_s["num"]
-    assert dataset.dict[0]["content_s.int"] == additional_sign_0.content_s["int"]
-    assert dataset.dict[0]["content_s.str"] == additional_sign_0.content_s["str"]
-    assert dataset.dict[0]["content_s.enum"] == additional_sign_0.content_s["enum"]
-    assert dataset.dict[0]["content_s.another_int"] is None
-    assert dataset.dict[0]["source_name"] == additional_sign_0.source_name
-    assert dataset.dict[0]["source_id"] == additional_sign_0.source_id
+    # Create a mapping by source_id to ensure stable test regardless of export order
+    data_by_source_id = {row["source_id"]: row for row in dataset.dict}
 
-    assert dataset.dict[1]["device_type__code"] == additional_sign_1.device_type.code
-    assert dataset.dict[1]["content_s.bool"] is None
-    assert dataset.dict[1]["content_s.num"] is None
-    assert dataset.dict[1]["content_s.int"] == additional_sign_1.content_s["int"]
-    assert dataset.dict[1]["content_s.str"] is None
-    assert dataset.dict[1]["content_s.enum"] is None
-    assert dataset.dict[1]["content_s.another_int"] == additional_sign_1.content_s["another_int"]
-    assert dataset.dict[1]["source_name"] == additional_sign_1.source_name
-    assert dataset.dict[1]["source_id"] == additional_sign_1.source_id
+    # Verify additional_sign_0
+    data_0 = data_by_source_id[additional_sign_0.source_id]
+    assert data_0["device_type__code"] == additional_sign_0.device_type.code
+    assert data_0["content_s.bool"] is additional_sign_0.content_s["bool"]
+    assert data_0["content_s.num"] == additional_sign_0.content_s["num"]
+    assert data_0["content_s.int"] == additional_sign_0.content_s["int"]
+    assert data_0["content_s.str"] == additional_sign_0.content_s["str"]
+    assert data_0["content_s.enum"] == additional_sign_0.content_s["enum"]
+    assert data_0["content_s.another_int"] is None
+    assert data_0["source_name"] == additional_sign_0.source_name
 
-    assert dataset.dict[2]["device_type__code"] == additional_sign_2.device_type.code
-    assert dataset.dict[2]["content_s.bool"] is None
-    assert dataset.dict[2]["content_s.num"] is None
-    assert dataset.dict[2]["content_s.int"] is None
-    assert dataset.dict[2]["content_s.str"] is None
-    assert dataset.dict[2]["content_s.enum"] is None
-    assert dataset.dict[2]["content_s.another_int"] is None
-    assert dataset.dict[2]["source_name"] == additional_sign_2.source_name
-    assert dataset.dict[2]["source_id"] == additional_sign_2.source_id
+    # Verify additional_sign_1
+    data_1 = data_by_source_id[additional_sign_1.source_id]
+    assert data_1["device_type__code"] == additional_sign_1.device_type.code
+    assert data_1["content_s.bool"] is None
+    assert data_1["content_s.num"] is None
+    assert data_1["content_s.int"] == additional_sign_1.content_s["int"]
+    assert data_1["content_s.str"] is None
+    assert data_1["content_s.enum"] is None
+    assert data_1["content_s.another_int"] == additional_sign_1.content_s["another_int"]
+    assert data_1["source_name"] == additional_sign_1.source_name
+
+    # Verify additional_sign_2
+    data_2 = data_by_source_id[additional_sign_2.source_id]
+    assert data_2["device_type__code"] == additional_sign_2.device_type.code
+    assert data_2["content_s.bool"] is None
+    assert data_2["content_s.num"] is None
+    assert data_2["content_s.int"] is None
+    assert data_2["content_s.str"] is None
+    assert data_2["content_s.enum"] is None
+    assert data_2["content_s.another_int"] is None
+    assert data_2["source_name"] == additional_sign_2.source_name
 
 
 @pytest.mark.parametrize(
