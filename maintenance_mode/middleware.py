@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.template import loader
 from django.utils.translation import activate
 
@@ -7,12 +7,26 @@ from django.utils.translation import activate
 class MaintenanceModeMiddleware:
     """
     Middleware that blocks all requests when maintenance mode is active.
-    Returns 503 Service Unavailable with a maintenance page.
 
-    Exceptions:
-    - Unauthenticated users can access admin login page (so superusers can log in)
-    - Authenticated superusers can access all admin pages
-    - Authenticated non-superusers (staff, regular users) are blocked from all pages
+    Returns 503 Service Unavailable with a maintenance page for blocked requests.
+
+    Whitelisted paths (configured via MAINTENANCE_MODE_WHITELIST setting):
+    - Health check endpoints (healthz, readiness) - prevents Kubernetes pod restarts
+    - Authentication URLs (ha/, auth/) - enables OIDC login/logout via helusers/Tunnistamo
+    - Admin JavaScript i18n (admin/jsi18n) - supports login page translations
+    - Admin login pages - allows superusers to access admin during maintenance
+
+    Environment variables (override defaults via ConfigMap):
+    - MAINTENANCE_MODE_HEALTH_CHECKS: Health/readiness probe endpoints
+    - MAINTENANCE_MODE_AUTH_PREFIXES: Authentication URL prefixes (includes login and logout)
+    - MAINTENANCE_MODE_ADMIN_PATHS: Admin-related paths
+    - MAINTENANCE_MODE_LANGUAGES: Supported language codes
+
+    Access rules:
+    - Whitelisted paths: accessible to all users (including logout URLs)
+    - Admin login page: accessible to unauthenticated users
+    - Admin pages: accessible only to authenticated superusers
+    - All other pages: blocked with 503
     """
 
     def __init__(self, get_response=None):
@@ -41,11 +55,18 @@ class MaintenanceModeMiddleware:
 
         return self._maintenance_mode and self._maintenance_mode.is_active
 
-    def _get_maintenance_message(self, request):
-        """Get the maintenance message in the current language.
+    def _get_maintenance_message(self, request: HttpRequest) -> str:
+        """
+        Get the maintenance message in the current language.
 
         Detects language from URL path (e.g., /fi/... or /en/...) since this middleware
         runs before LocaleMiddleware sets the language.
+
+        Args:
+            request (HttpRequest): The incoming HTTP request.
+
+        Returns:
+            str: The maintenance message in the detected language.
         """
         if not self._maintenance_mode:
             return "System is under maintenance. Please try again later."
@@ -56,7 +77,7 @@ class MaintenanceModeMiddleware:
         if len(path_parts) > 0 and len(path_parts[0]) == 2:
             # Check if first part looks like a language code (2 characters)
             potential_lang = path_parts[0].lower()
-            if potential_lang in ["fi", "sv", "en"]:
+            if potential_lang in settings.MAINTENANCE_MODE_WHITELIST["supported_languages"]:
                 language = potential_lang
 
         # Fallback to Django's default language from settings
@@ -83,11 +104,40 @@ class MaintenanceModeMiddleware:
             )  # /admin/login/ or /en/admin/login/
         )
 
-    def _should_allow_request(self, request, path_parts):
-        """Determine if request should be allowed during maintenance mode."""
-        # Always allow health check endpoint, otherwise pods with health checks would be marked unhealthy
-        # and restarted continuously.
-        if request.path.strip("/") == "healthz":
+    def _should_allow_request(self, request: HttpRequest, path_parts: list[str]) -> bool:
+        """
+        Determine if request should be allowed during maintenance mode.
+
+        Args:
+            request (HttpRequest): The incoming HTTP request.
+            path_parts (list[str]): URL path split into parts.
+
+        Returns:
+            bool: True if request should be allowed, False if it should be blocked with 503.
+        """
+        path_stripped = request.path.strip("/")
+
+        # Allow health check endpoints (configured via MAINTENANCE_MODE_HEALTH_CHECKS)
+        if path_stripped in settings.MAINTENANCE_MODE_WHITELIST["health_checks"]:
+            return True
+
+        # Allow authentication URLs for OIDC/OAuth login and logout flows
+        # This includes login, logout, OAuth callbacks, and disconnect endpoints
+        # Accessible to ALL users (authenticated and unauthenticated) during maintenance
+        # Supports both direct paths (/ha/, /auth/) and language-prefixed (/fi/ha/, /en/auth/)
+        if len(path_parts) > 0:
+            first_part = path_parts[0]
+            auth_prefixes = settings.MAINTENANCE_MODE_WHITELIST["auth_prefixes"]
+            supported_languages = settings.MAINTENANCE_MODE_WHITELIST["supported_languages"]
+
+            # Check if first part is auth prefix or language code followed by auth prefix
+            if first_part in auth_prefixes:
+                return True
+            if len(path_parts) > 1 and first_part in supported_languages and path_parts[1] in auth_prefixes:
+                return True
+
+        # Allow admin JavaScript i18n catalog for login page translations
+        if any(admin_path in request.path for admin_path in settings.MAINTENANCE_MODE_WHITELIST["admin_paths"]):
             return True
 
         # Check if 'admin' is in the first two parts of the path
@@ -108,12 +158,20 @@ class MaintenanceModeMiddleware:
 
         return is_superuser or is_login_page_anonymous
 
-    def _detect_language_code(self, request):
-        """Detect language code from URL path or settings."""
+    def _detect_language_code(self, request: HttpRequest) -> str:
+        """
+        Detect language code from URL path or settings.
+
+        Args:
+            request (HttpRequest): The incoming HTTP request.
+
+        Returns:
+            str: The detected language code (e.g., 'fi', 'en', 'sv').
+        """
         path_parts = request.path.strip("/").split("/")
         if len(path_parts) > 0 and len(path_parts[0]) == 2:
             potential_lang = path_parts[0].lower()
-            if potential_lang in ["fi", "sv", "en"]:
+            if potential_lang in settings.MAINTENANCE_MODE_WHITELIST["supported_languages"]:
                 return potential_lang
         return settings.LANGUAGE_CODE
 

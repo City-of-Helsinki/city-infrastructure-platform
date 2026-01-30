@@ -81,6 +81,11 @@ env = environ.Env(
     SESSION_COOKIE_SAMESITE=(str, "Lax"),
     CITYINFRA_MAXIMUM_RESULTS_PER_PAGE=(int, 10000),
     EMULATE_AZURE_BLOBSTORAGE=(bool, False),
+    # Maintenance mode whitelist configuration - can be overridden via environment variables
+    MAINTENANCE_MODE_HEALTH_CHECKS=(list, ["healthz", "readiness"]),
+    MAINTENANCE_MODE_AUTH_PREFIXES=(list, ["ha", "auth"]),
+    MAINTENANCE_MODE_ADMIN_PATHS=(list, ["admin/jsi18n"]),
+    MAINTENANCE_MODE_LANGUAGES=(list, ["fi", "sv", "en"]),
 )
 
 if os.path.exists(env_file):
@@ -229,6 +234,20 @@ LOGIN_REDIRECT_URL = "/admin/"
 LOGOUT_REDIRECT_URL = "/admin/login/"
 SOCIAL_AUTH_TUNNISTAMO_AUTH_EXTRA_ARGUMENTS = {"ui_locales": "fi"}
 WAGTAIL_SITE_NAME = _("City Infrastructure Platform")
+
+# Maintenance Mode Whitelist Configuration
+# These paths remain accessible during maintenance mode to ensure:
+# - Kubernetes health/readiness probes don't fail (preventing pod restarts)
+# - OIDC authentication flow completes (admin users can log in via helusers/Tunnistamo)
+# - Django admin i18n catalog loads (login page translations work)
+# - Language prefix detection works consistently
+# Can be customized per environment via ConfigMap (see maintenance_mode/README.md)
+MAINTENANCE_MODE_WHITELIST = {
+    "health_checks": env.list("MAINTENANCE_MODE_HEALTH_CHECKS"),
+    "auth_prefixes": env.list("MAINTENANCE_MODE_AUTH_PREFIXES"),
+    "admin_paths": env.list("MAINTENANCE_MODE_ADMIN_PATHS"),
+    "supported_languages": env.list("MAINTENANCE_MODE_LANGUAGES"),
+}
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
