@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.33.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.32.0...city-infrastructure-platform-v1.33.0) (2026-01-30)
+
+
+### Features
+
+* Add plan geometry import from CSV with comprehensive validation ([83660b8](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/83660b82c99bd9ec2918d25cd70cdc770cce57ca))
+* Management command for testing email sending from django context ([b3f29a4](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b3f29a440eabc38d6b9e690282bf8d472d904125))
+
+
+### Bug Fixes
+
+* AD callbac urls where not whitelisted ([e94054b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e94054ba677ec7212517c68dc8f9a2cf3ca805bf))
+* Flaky import export test for additional signs ([0333f5c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0333f5cb20b68b8518445cfc0032260952ab22bd))
+* Maintenance mode message did not respect line breaks ([8d2f54a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8d2f54aceb2f86fcd3e4c6376da3c1767cdc0e06))
+
 ## [1.32.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.31.0...city-infrastructure-platform-v1.32.0) (2026-01-23)
 
 
