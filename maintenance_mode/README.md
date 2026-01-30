@@ -132,3 +132,92 @@ To test the maintenance mode:
 - Superusers can always access admin pages, even when maintenance mode is active
 - The maintenance message is displayed based on the user's language preference (fi/en/sv)
 
+## Deployment Configuration
+
+The maintenance mode whitelist can be customized per environment using Kubernetes ConfigMaps or environment variables.
+
+### Environment Variables
+
+The following environment variables control which paths remain accessible during maintenance mode:
+
+- **MAINTENANCE_MODE_HEALTH_CHECKS**: Comma-separated list of health check endpoints (default: `healthz,readiness`)
+- **MAINTENANCE_MODE_AUTH_PREFIXES**: Comma-separated list of authentication path prefixes (default: `ha,auth`)
+- **MAINTENANCE_MODE_ADMIN_PATHS**: Comma-separated list of admin-related paths (default: `admin/jsi18n`)
+- **MAINTENANCE_MODE_LANGUAGES**: Comma-separated list of supported language codes (default: `fi,sv,en`)
+
+### Kubernetes ConfigMap Example
+
+#### Production Environment (Minimal Whitelist)
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: city-infrastructure-platform-config
+  namespace: production
+data:
+  # Use defaults - only essential paths accessible during maintenance
+  MAINTENANCE_MODE_HEALTH_CHECKS: ${MAINTENANCE_MODE_HEALTH_CHECKS:-healthz,readiness}
+  MAINTENANCE_MODE_AUTH_PREFIXES: ${MAINTENANCE_MODE_AUTH_PREFIXES:-ha,auth}
+  MAINTENANCE_MODE_ADMIN_PATHS: ${MAINTENANCE_MODE_ADMIN_PATHS:-admin/jsi18n}
+  MAINTENANCE_MODE_LANGUAGES: ${MAINTENANCE_MODE_LANGUAGES:-fi,sv,en}
+```
+
+#### Development/Test Environment (Extended Whitelist)
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: city-infrastructure-platform-config
+  namespace: dev
+data:
+  # Allow additional paths for API debugging during maintenance
+  MAINTENANCE_MODE_HEALTH_CHECKS: ${MAINTENANCE_MODE_HEALTH_CHECKS:-healthz,readiness}
+  MAINTENANCE_MODE_AUTH_PREFIXES: ${MAINTENANCE_MODE_AUTH_PREFIXES:-ha,auth,swagger,redoc,openapi.yaml}
+  MAINTENANCE_MODE_ADMIN_PATHS: ${MAINTENANCE_MODE_ADMIN_PATHS:-admin/jsi18n}
+  MAINTENANCE_MODE_LANGUAGES: ${MAINTENANCE_MODE_LANGUAGES:-fi,sv,en}
+```
+
+### Why Each Whitelist Category Exists
+
+**Health Checks** (`healthz`, `readiness`):
+- Required for Kubernetes liveness and readiness probes
+- Without these, pods would be marked unhealthy and continuously restarted during maintenance
+- Must always be accessible for production stability
+
+**Authentication Prefixes** (`ha`, `auth`):
+- `ha/`: Helsinki Users (helusers) authentication endpoints
+- `auth/`: Social auth (social-auth-app-django) OIDC/OAuth flow
+- Critical for admin users to log in via Tunnistamo during maintenance mode
+- Includes login initiation, OAuth callbacks, and logout endpoints
+
+**Admin Paths** (`admin/jsi18n`):
+- Django admin JavaScript internationalization catalog
+- Required for translated UI text on admin login page
+- Without this, login page may not display properly
+
+**Supported Languages** (`fi`, `sv`, `en`):
+- Determines which language prefixes are recognized in URLs
+- Used for both path whitelisting and language detection
+- Must match Django's LANGUAGES setting
+
+### Use Cases
+
+**Adding API documentation access in staging:**
+```bash
+# In staging ConfigMap
+MAINTENANCE_MODE_AUTH_PREFIXES: "ha,auth,swagger,redoc"
+```
+
+**Allowing specific monitoring endpoints:**
+```bash
+# Custom health check paths
+MAINTENANCE_MODE_HEALTH_CHECKS: "healthz,readiness,metrics,status"
+```
+
+**Restricting languages in region-specific deployment:**
+```bash
+# Finland-only deployment
+MAINTENANCE_MODE_LANGUAGES: "fi"
+```

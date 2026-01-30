@@ -269,3 +269,166 @@ class TestMaintenanceModePathHandling:
         request.user = AnonymousUser()
         response = middleware(request)
         assert response.status_code != 503
+
+    def test_readiness_endpoint_accessible_during_maintenance(self, maintenance_mode_active):
+        """Test that /readiness endpoint is accessible during maintenance for Kubernetes probes"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/readiness")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_ha_login_accessible_during_maintenance(self, maintenance_mode_active):
+        """Test that /ha/login/ (helusers login) is accessible during maintenance"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/ha/login/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_ha_logout_accessible_during_maintenance(self, maintenance_mode_active):
+        """Test that /ha/logout/ (helusers logout) is accessible during maintenance"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/ha/logout/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_auth_login_tunnistamo_accessible(self, maintenance_mode_active):
+        """Test that /auth/login/tunnistamo/ (social-auth OIDC start) is accessible"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/auth/login/tunnistamo/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_auth_complete_tunnistamo_accessible(self, maintenance_mode_active):
+        """Test that /auth/complete/tunnistamo/ (OAuth callback) is accessible - critical for login"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/auth/complete/tunnistamo/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_auth_disconnect_tunnistamo_accessible(self, maintenance_mode_active):
+        """Test that /auth/disconnect/tunnistamo/ is accessible during maintenance"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/auth/disconnect/tunnistamo/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_language_prefixed_ha_login_accessible(self, maintenance_mode_active):
+        """Test that /fi/ha/login/ (language-prefixed helusers) is accessible"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/fi/ha/login/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_language_prefixed_auth_complete_accessible(self, maintenance_mode_active):
+        """Test that /en/auth/complete/tunnistamo/ (language-prefixed OAuth callback) is accessible"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/en/auth/complete/tunnistamo/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_sv_ha_logout_accessible(self, maintenance_mode_active):
+        """Test that /sv/ha/logout/ (Swedish language prefix) is accessible"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/sv/ha/logout/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_admin_jsi18n_accessible(self, maintenance_mode_active):
+        """Test that /admin/jsi18n/ (Django admin JavaScript i18n) is accessible"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/admin/jsi18n/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_language_prefixed_admin_jsi18n_accessible(self, maintenance_mode_active):
+        """Test that /fi/admin/jsi18n/ (language-prefixed admin i18n) is accessible"""
+        from django.contrib.auth.models import AnonymousUser
+
+        factory = RequestFactory()
+        request = factory.get("/fi/admin/jsi18n/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        assert response.status_code != 503
+
+    def test_auth_paths_accessible_for_all_user_types(self, admin_user, staff_user, maintenance_mode_active):
+        """Test that authentication paths work for all user authentication states"""
+        factory = RequestFactory()
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+
+        # Test /ha/login/ with different user types
+        for user in [admin_user, staff_user]:
+            request = factory.get("/ha/login/")
+            request.user = user
+            response = middleware(request)
+            assert response.status_code != 503
+
+        # Test with anonymous user
+        from django.contrib.auth.models import AnonymousUser
+
+        request = factory.get("/auth/complete/tunnistamo/")
+        request.user = AnonymousUser()
+        response = middleware(request)
+        assert response.status_code != 503
