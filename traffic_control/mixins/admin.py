@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.contrib.gis.forms import OSMWidget
-from django.utils.html import format_html
+from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.models.plan import Plan
@@ -105,6 +106,45 @@ class PreviewDeviceTypeRelationMixin:
             )
         else:
             return device_type
+
+
+class FormattedContentsAdminMixin:
+    """
+    A mixin class for model admin that shows formatted HTML contents in the admin change view.
+
+    Returns nicely formatted HTML similar to the _content_s_rows.html template.
+    """
+
+    @admin.display(description=_("Content"))
+    def content(self, obj):
+        """
+        Returns formatted HTML representation of content_s rows.
+
+        Args:
+            obj: The model instance with get_content_s_rows method.
+
+        Returns:
+            str: HTML formatted content or "-" if no content exists.
+        """
+        if not obj or not hasattr(obj, "get_content_s_rows"):
+            return "-"
+
+        content_s_rows = obj.get_content_s_rows()
+
+        if not content_s_rows:
+            return "-"
+
+        # Build HTML parts with proper escaping
+        html_parts = ["<dl>"]
+        for title, display_value in content_s_rows:
+            # Escape and handle None values
+            safe_value = escape(display_value) if display_value is not None else "-"
+            safe_title = escape(title)
+            html_parts.append(f"<dt>{safe_title}</dt><dd>{safe_value}</dd>")
+        html_parts.append("</dl>")
+
+        # Mark as safe since we've manually escaped the content
+        return mark_safe("".join(html_parts))
 
 
 class UserStampedAdminMixin:
