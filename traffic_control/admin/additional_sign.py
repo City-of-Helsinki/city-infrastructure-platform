@@ -28,6 +28,7 @@ from traffic_control.forms import (
 from traffic_control.mixins import (
     DeviceTypeSearchAdminMixin,
     EnumChoiceValueDisplayAdminMixin,
+    FormattedContentsAdminMixin,
     Geometry3DFieldAdminMixin,
     PreviewDeviceTypeRelationMixin,
     SoftDeleteAdminMixin,
@@ -66,21 +67,19 @@ shared_initial_values = {
 }
 
 
-class BaseAdditionalSignInline(admin.TabularInline, PreviewDeviceTypeRelationMixin):
+class BaseAdditionalSignInline(admin.TabularInline, PreviewDeviceTypeRelationMixin, FormattedContentsAdminMixin):
     model = None
     fields = (
-        "height",
         "id",
-        "device_type",
         "device_type_preview",
-        "content_s",
+        "content",
+        "additional_information",
     )
     readonly_fields = (
         "id",
-        "device_type",
         "device_type_preview",
-        "content_s",
-        "height",
+        "content",
+        "additional_information",
     )
     extra = 0
     ordering = ("height",)
@@ -174,6 +173,7 @@ class AdditionalSignPlanAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
     PreviewDeviceTypeRelationMixin,
+    FormattedContentsAdminMixin,
 ):
     resource_class = AdditionalSignPlanResource
     extra_export_resource_classes = [AdditionalSignPlanToRealTemplateResource]
@@ -233,8 +233,8 @@ class AdditionalSignPlanAdmin(
     list_display = (
         "id",
         "device_type_preview",
-        "lifecycle",
-        "location",
+        "content",
+        "additional_information",
         "is_replaced_as_str",
     )
     readonly_fields = (
@@ -284,6 +284,7 @@ class AdditionalSignRealAdmin(
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
     PreviewDeviceTypeRelationMixin,
+    FormattedContentsAdminMixin,
 ):
     plan_model_field_name = "additional_sign_plan"
     resource_class = AdditionalSignRealResource
@@ -374,42 +375,8 @@ class AdditionalSignRealAdmin(
     list_display = (
         "id",
         "device_type_preview",
-        "additional_sign_plan",
-        "legacy_code",
-        "installation_id",
-        "installation_details",
-        "installation_date",
-        "size",
-        "mount_real",
-        "mount_type",
-        "height",
-        "installation_status",
-        "validity_period_start",
-        "validity_period_end",
-        "condition",
-        "reflection_class",
-        "surface_class",
-        "seasonal_validity_period_information",
-        "owner",
-        "lifecycle",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "location_specifier",
-        "rfid",
-        "direction",
-        "operation",
-        "manufacturer",
-        "permit_decision_id",
-        "color",
-        "attachment_url",
-        "scanned_at",
-        "created_at",
-        "created_by",
-        "updated_at",
-        "updated_by",
-        "source_id",
-        "source_name",
+        "content",
+        "additional_information",
     )
     readonly_fields = (
         "device_type_preview",
