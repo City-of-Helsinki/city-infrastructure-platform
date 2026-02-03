@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-27 13:08+0200\n"
+"POT-Creation-Date: 2026-02-03 11:01+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -708,6 +708,18 @@ msgstr "png"
 msgid "svg"
 msgstr "svg"
 
+msgid "Small"
+msgstr "Pieni"
+
+msgid "Medium"
+msgstr "Normaali"
+
+msgid "Large"
+msgstr "Suuri"
+
+msgid "Extra Large"
+msgstr "Erittän suuri"
+
 msgid "Enabled"
 msgstr "Käytössä"
 
@@ -1127,15 +1139,6 @@ msgstr "r2"
 
 msgid "r3"
 msgstr "r3"
-
-msgid "Small"
-msgstr "Pieni"
-
-msgid "Medium"
-msgstr "Normaali"
-
-msgid "Large"
-msgstr "Suuri"
 
 msgid "Convex"
 msgstr "Kupera"

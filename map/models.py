@@ -74,10 +74,10 @@ class IconDrawingConfig(models.Model):
         SVG = "svg", _("svg")
 
     class PngSize(models.IntegerChoices):
-        SMALL = 32
-        MEDIUM = 64
-        LARGE = 128
-        EXTRA_LARGE = 256
+        SMALL = 32, _("Small")
+        MEDIUM = 64, _("Medium")
+        LARGE = 128, _("Large")
+        EXTRA_LARGE = 256, _("Extra Large")
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     name = models.CharField(_("Name"), max_length=200, unique=True)

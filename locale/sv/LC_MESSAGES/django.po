@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-27 13:08+0200\n"
+"POT-Creation-Date: 2026-02-03 11:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -714,6 +714,18 @@ msgstr "png"
 msgid "svg"
 msgstr "svg"
 
+msgid "Small"
+msgstr "Liten"
+
+msgid "Medium"
+msgstr "Medelstor"
+
+msgid "Large"
+msgstr "Stor"
+
+msgid "Extra Large"
+msgstr "Extrastor"
+
 msgid "Enabled"
 msgstr "Aktiverad"
 
@@ -1134,15 +1146,6 @@ msgstr "r2"
 
 msgid "r3"
 msgstr "r3"
-
-msgid "Small"
-msgstr "Liten"
-
-msgid "Medium"
-msgstr "Medelstor"
-
-msgid "Large"
-msgstr "Stor"
 
 msgid "Convex"
 msgstr "Konvex"
