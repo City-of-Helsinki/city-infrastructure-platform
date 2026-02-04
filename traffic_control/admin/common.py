@@ -3,8 +3,20 @@ from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.utils import PermissionInlineMixin
+from traffic_control.enums import TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.models import OperationalArea, OperationType
 from traffic_control.services.common import get_all_not_replaced_plans, get_all_replaced_plans
+
+__all__ = (
+    "TrafficControlOperationInlineBase",
+    "OperationalAreaListFilter",
+    "ReplacesInline",
+    "ReplacedByInline",
+    "PlanReplacementListFilterMixin",
+    "TrafficSignTypeListFilterBase",
+    "TrafficSignTypeCodeFilter",
+    "DeviceTypeSignTypeListFilter",
+)
 
 
 @admin.register(OperationType)
@@ -71,3 +83,63 @@ class PlanReplacementListFilterMixin:
             return queryset.filter(id__in=get_all_replaced_plans(self.plan_model))
         if value == "False":
             return queryset.filter(id__in=get_all_not_replaced_plans(self.plan_model))
+
+
+class TrafficSignTypeListFilterBase(SimpleListFilter):
+    """Base filter for traffic sign type filtering by device type code prefix."""
+
+    title = _("Traffic sign type")
+    parameter_name = "traffic_sign_type"
+
+    def lookups(self, request, model_admin):
+        """
+        Returns traffic sign type choices.
+
+        Args:
+            request: The HTTP request object.
+            model_admin: The model admin instance.
+
+        Returns:
+            tuple: Traffic sign type choices (code prefix, description).
+        """
+        return TRAFFIC_SIGN_TYPE_CHOICES
+
+
+class TrafficSignTypeCodeFilter(TrafficSignTypeListFilterBase):
+    """Filter for TrafficControlDeviceType admin filtering directly on code field."""
+
+    def queryset(self, request, queryset):
+        """
+        Filters queryset by device type code prefix.
+
+        Args:
+            request: The HTTP request object.
+            queryset: The queryset to filter.
+
+        Returns:
+            QuerySet: Filtered queryset or original if no filter value.
+        """
+        value = self.value()
+        if value:
+            return queryset.filter(code__startswith=value)
+        return queryset
+
+
+class DeviceTypeSignTypeListFilter(TrafficSignTypeListFilterBase):
+    """Filter for models with device_type FK filtering on device_type__code field."""
+
+    def queryset(self, request, queryset):
+        """
+        Filters queryset by device type code prefix through FK relationship.
+
+        Args:
+            request: The HTTP request object.
+            queryset: The queryset to filter.
+
+        Returns:
+            QuerySet: Filtered queryset or original if no filter value.
+        """
+        value = self.value()
+        if value:
+            return queryset.filter(device_type__code__startswith=value)
+        return queryset
