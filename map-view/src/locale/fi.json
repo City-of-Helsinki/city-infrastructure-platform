@@ -16,6 +16,16 @@
     "No active data fetches": "Ei aktiivisia tietojen hakuja",
     "Address": "Osoite",
     "e.g. Vaasankatu 20": "esim. Vaasankatu 20",
-    "Address search": "Osoitehaku"
+    "Address search": "Osoitehaku",
+    "Icon Settings": "Kuvakeasetukset",
+    "Icon Scale": "Kuvakkeen koko",
+    "Range: 0.01 - 2.0": "Alue: 0.01 - 2.0",
+    "Icon Type": "Kuvaketyyppi",
+    "Icon Size (PNG)": "Kuvakekoko (PNG)",
+    "Reset to Defaults": "Palauta oletusarvot",
+    "Reset Icon Settings": "Palauta kuvakeasetukset",
+    "Are you sure you want to reset all icon settings to their default values from the server?": "Haluatko varmasti palauttaa kaikki kuvakeasetukset palvelimen oletusarvoihin?",
+    "Cancel": "Peruuta",
+    "Reset": "Palauta"
   }
 }

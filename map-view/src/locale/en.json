@@ -16,6 +16,16 @@
     "No active data fetches": "No active data fetches",
     "Address": "Address",
     "e.g. Vaasankatu 20": "e.g. Vaasankatu 20",
-    "Address search": "Address search"
+    "Address search": "Address search",
+    "Icon Settings": "Icon Settings",
+    "Icon Scale": "Icon Scale",
+    "Range: 0.01 - 2.0": "Range: 0.01 - 2.0",
+    "Icon Type": "Icon Type",
+    "Icon Size (PNG)": "Icon Size (PNG)",
+    "Reset to Defaults": "Reset to Defaults",
+    "Reset Icon Settings": "Reset Icon Settings",
+    "Are you sure you want to reset all icon settings to their default values from the server?": "Are you sure you want to reset all icon settings to their default values from the server?",
+    "Cancel": "Cancel",
+    "Reset": "Reset"
   }
 }

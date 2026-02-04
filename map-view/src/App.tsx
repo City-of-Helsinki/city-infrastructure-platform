@@ -9,7 +9,7 @@ import "./App.css";
 import LayerSwitcher from "./components/LayerSwitcher";
 import FeatureInfo from "./components/FeatureInfo";
 import Map from "./common/Map";
-import { Feature, MapConfig } from "./models";
+import { Feature, IconSize, MapConfig } from "./models";
 import OngoingFetchInfo from "./components/OngoingFetchInfo";
 import AddressInput from "./components/AddressInput";
 import { Address, convertToEPSG3879OL, getAddressSearchResults, getNameFromAddress } from "./common/AddressSearchUtils";
@@ -47,12 +47,39 @@ const App = () => {
   const [features, setFeatures] = useState<Feature[]>([]);
   const [ongoingFeatureFetches, setOngoingFeatureFetches] = useState<Set<string>>(new Set());
   const [addressSearchResults, setAddressSearchResults] = useState<Address[]>([]);
+  const [iconScale, setIconScale] = useState<number>(0.1);
+  const [iconType, setIconType] = useState<string>("svg");
+  const [iconSize, setIconSize] = useState<IconSize>(128);
 
   useEffect(() => {
     const mapId = "map";
     MapConfigAPI.getMapConfig().then(async (config: MapConfig) => {
       setMapConfig(config);
+
+      // Try to load icon settings from localStorage
+      const savedScale = localStorage.getItem("mapview_icon_scale");
+      const savedType = localStorage.getItem("mapview_icon_type");
+      const savedSize = localStorage.getItem("mapview_icon_size");
+
+      // Parse and validate saved values
+      const scale = savedScale ? Number.parseFloat(savedScale) : config.icon_scale;
+      const type = savedType || config.icon_type;
+      const size = savedSize ? Number.parseInt(savedSize, 10) : config.icon_size;
+
+      // Validate ranges and allowed values
+      const validScale = !Number.isNaN(scale) && scale >= 0.01 && scale <= 2 ? scale : config.icon_scale;
+      const validType = type === "svg" || type === "png" ? type : config.icon_type;
+      const validSize = [32, 64, 128, 256].includes(size) ? (size as IconSize) : (config.icon_size as IconSize);
+
+      setIconScale(validScale);
+      setIconType(validType);
+      setIconSize(validSize);
+
       await Map.initialize(mapId, config);
+
+      // Apply loaded settings to map after initialization
+      Map.updateIconSettings(validScale, validType, validSize);
+
       Map.registerFeatureInfoCallback((newFeatures: Feature[]) => setFeatures(newFeatures));
       Map.registerOngoingFeatureFetchesCallback((fetches: Set<string>) => {
         setOngoingFeatureFetches(new Set(fetches));
@@ -87,6 +114,35 @@ const App = () => {
       return;
     }
     setFeatures(features.filter((feature) => getFeatureType(feature) !== removeLayerIdentifier));
+  };
+
+  const handleIconScaleChange = (scale: number) => {
+    setIconScale(scale);
+    localStorage.setItem("mapview_icon_scale", scale.toString());
+    Map.updateIconSettings(scale, iconType, iconSize);
+  };
+
+  const handleIconTypeChange = (type: string) => {
+    setIconType(type);
+    localStorage.setItem("mapview_icon_type", type);
+    Map.updateIconSettings(iconScale, type, iconSize);
+  };
+
+  const handleIconSizeChange = (size: IconSize) => {
+    setIconSize(size);
+    localStorage.setItem("mapview_icon_size", size.toString());
+    Map.updateIconSettings(iconScale, iconType, size);
+  };
+
+  const handleResetIconSettings = () => {
+    if (!mapConfig) return;
+    localStorage.removeItem("mapview_icon_scale");
+    localStorage.removeItem("mapview_icon_type");
+    localStorage.removeItem("mapview_icon_size");
+    setIconScale(mapConfig.icon_scale);
+    setIconType(mapConfig.icon_type);
+    setIconSize(mapConfig.icon_size as IconSize);
+    Map.updateIconSettings(mapConfig.icon_scale, mapConfig.icon_type, mapConfig.icon_size as IconSize);
   };
 
   return (
@@ -151,6 +207,13 @@ const App = () => {
                   }
                 }
               }}
+              iconScale={iconScale}
+              iconType={iconType}
+              iconSize={iconSize}
+              onIconScaleChange={handleIconScaleChange}
+              onIconTypeChange={handleIconTypeChange}
+              onIconSizeChange={handleIconSizeChange}
+              onResetIconSettings={handleResetIconSettings}
             />
           )}
         </StyledDrawer>

@@ -23,3 +23,8 @@ def get_icons_scale():
 def get_icons_type():
     config = get_active_icon_drawing_config()
     return get_active_icon_drawing_config().image_type if config else "svg"
+
+
+def get_icons_size():
+    config = get_active_icon_drawing_config()
+    return get_active_icon_drawing_config().png_size if config else IconDrawingConfig.DEFAULT_ICON_SIZE

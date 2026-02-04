@@ -16,6 +16,16 @@
     "No active data fetches.": "Inga aktiva datahämtningar.",
     "Address": "Adress",
     "e.g. Vaasankatu 20": "t.ex Gustav Vasas väg 20",
-    "Address search": "Adresssök"
+    "Address search": "Adresssök",
+    "Icon Settings": "Ikoninställningar",
+    "Icon Scale": "Ikonstorlek",
+    "Range: 0.01 - 2.0": "Intervall: 0.01 - 2.0",
+    "Icon Type": "Ikontyp",
+    "Icon Size (PNG)": "Ikonstorlek (PNG)",
+    "Reset to Defaults": "Återställ till standard",
+    "Reset Icon Settings": "Återställ ikoninställningar",
+    "Are you sure you want to reset all icon settings to their default values from the server?": "Är du säker på att du vill återställa alla ikoninställningar till deras standardvärden från servern?",
+    "Cancel": "Avbryt",
+    "Reset": "Återställ"
   }
 }

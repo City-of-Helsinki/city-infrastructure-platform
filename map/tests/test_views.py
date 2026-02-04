@@ -59,6 +59,7 @@ class MapConfigTestCase(TestCase):
         response_data = json.loads(response.content)
         self.assertEqual(response_data["icon_scale"], IconDrawingConfig.DEFAULT_ICON_SCALE)
         self.assertEqual(response_data["icon_type"], "svg")
+        self.assertEqual(response_data["icon_size"], IconDrawingConfig.DEFAULT_ICON_SIZE)
         self.assertEqual(
             response_data["traffic_sign_icons_url"],
             f"{get_azure_storage_base_url(icon_options)}icons/traffic_control_device_type/svg/",
@@ -67,7 +68,9 @@ class MapConfigTestCase(TestCase):
     @override_settings(EMULATE_AZURE_BLOBSTORAGE=True)
     def test_with_icon_draw_config(self):
         """Test that with an active IconDrawingConfig the values are actually used."""
-        idc = IconDrawingConfigFactory(enabled=True, scale=IconDrawingConfig.DEFAULT_ICON_SCALE + 0.1, image_type="png")
+        idc = IconDrawingConfigFactory(
+            enabled=True, scale=IconDrawingConfig.DEFAULT_ICON_SCALE + 0.1, image_type="png", png_size=128
+        )
         request = self.factory.get(reverse("map-config"))
         request.LANGUAGE_CODE = "en"
 
@@ -78,6 +81,7 @@ class MapConfigTestCase(TestCase):
 
         self.assertEqual(response_data["icon_scale"], idc.scale)
         self.assertEqual(response_data["icon_type"], idc.image_type)
+        self.assertEqual(response_data["icon_size"], idc.png_size)
         self.assertEqual(
             response_data["traffic_sign_icons_url"],
             f"{get_azure_storage_base_url(icon_options)}icons/traffic_control_device_type/png/{idc.png_size}/",
