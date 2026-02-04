@@ -52,4 +52,5 @@ export const mockMapConfig: MapConfig = {
   featureTypeEditNameMapping: {},
   icon_scale: 0.1,
   icon_type: "svg",
+  icon_size: 128,
 };

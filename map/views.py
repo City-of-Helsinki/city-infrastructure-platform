@@ -8,7 +8,12 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from traffic_control.services.azure import get_azure_storage_base_url
-from traffic_control.services.icon_draw_config import get_icons_relative_url, get_icons_scale, get_icons_type
+from traffic_control.services.icon_draw_config import (
+    get_icons_relative_url,
+    get_icons_scale,
+    get_icons_size,
+    get_icons_type,
+)
 
 from .models import FeatureTypeEditMapping, Layer
 
@@ -69,6 +74,7 @@ def map_config(request):
         "traffic_sign_icons_url": traffic_sign_icons_url,
         "icon_scale": get_icons_scale(),
         "icon_type": get_icons_type(),
+        "icon_size": get_icons_size(),
         "featureTypeEditNameMapping": FeatureTypeEditMapping.get_featuretype_edit_name_mapping(),
         "address_search_base_url": settings.ADDRESS_SEARCH_BASE_URL,
     }

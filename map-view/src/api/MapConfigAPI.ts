@@ -10,10 +10,24 @@ class MapConfigAPI {
     } else {
       const url = `${APIBaseUrl}/map-config`;
       return fetch(url)
-        .then((response) => response.text())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
         .then((responseText) => {
-          this.mapConfig = JSON.parse(responseText);
-          return this.mapConfig;
+          try {
+            this.mapConfig = JSON.parse(responseText);
+            return this.mapConfig;
+          } catch (error) {
+            console.error("Failed to parse MapConfig JSON. Response was:", responseText.substring(0, 500));
+            throw new Error(`Invalid JSON response from server: ${error}`);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching MapConfig:", error);
+          throw error;
         });
     }
   }

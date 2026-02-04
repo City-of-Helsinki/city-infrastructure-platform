@@ -1,5 +1,7 @@
 import { Point } from "ol/geom";
 
+export type IconSize = 32 | 64 | 128 | 256;
+
 interface ExtraFeatureInfo {
   title: string;
   order: number;
@@ -35,6 +37,7 @@ export interface MapConfig {
   featureTypeEditNameMapping: Record<string, string>;
   icon_scale: number;
   icon_type: string;
+  icon_size: number;
 }
 
 export interface FeatureProperties {
@@ -60,4 +63,24 @@ export interface Feature {
   type: string;
   app_name?: string;
   getProperties(): FeatureProperties;
+}
+
+/**
+ * Builds a traffic sign icons URL with the specified icon type and size.
+ * Replaces /svg/ or /png/{size}/ path segments in the base URL.
+ *
+ * @param baseUrl - The base traffic_sign_icons_url from MapConfig
+ * @param iconType - Either 'svg' or 'png'
+ * @param iconSize - The PNG icon size (32, 64, 128, 256)
+ * @returns Modified URL with correct icon type and size path
+ */
+export function buildIconUrl(baseUrl: string, iconType: string, iconSize: IconSize): string {
+  // Replace /svg/ or /png/{any number}/ with the appropriate path
+  if (iconType === "png") {
+    // Replace /svg/ with /png/{size}/ or replace /png/{oldSize}/ with /png/{newSize}/
+    return baseUrl.replace(/\/svg\//, `/png/${iconSize}/`).replace(/\/png\/\d+\//, `/png/${iconSize}/`);
+  } else {
+    // Replace /png/{size}/ with /svg/
+    return baseUrl.replace(/\/png\/\d+\//, `/svg/`);
+  }
 }

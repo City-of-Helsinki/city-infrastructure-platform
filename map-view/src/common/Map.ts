@@ -7,7 +7,7 @@ import { createStringXY } from "ol/coordinate";
 import ScaleLine from "ol/control/ScaleLine";
 import { defaults as defaultControls, OverviewMap } from "ol/control";
 import View from "ol/View";
-import { Feature, LayerConfig, MapConfig } from "../models";
+import { Feature, IconSize, LayerConfig, MapConfig, buildIconUrl } from "../models";
 import ImageLayer from "ol/layer/Image";
 import TileLayer from "ol/layer/Tile";
 import LayerGroup from "ol/layer/Group";
@@ -133,6 +133,13 @@ class Map {
   private mapConfig: MapConfig;
 
   /**
+   * Icon settings overrides (null means use mapConfig defaults)
+   */
+  private iconScaleOverride: number | null = null;
+  private iconTypeOverride: string | null = null;
+  private iconSizeOverride: IconSize | null = null;
+
+  /**
    * Stores bounding box polygons from areas from which data has already been fetched.
    * This array might grow as the user explores the map, intersecting area will be merged.
    */
@@ -152,6 +159,7 @@ class Map {
   async initialize(target: string, mapConfig: MapConfig) {
     const { basemapConfig, overlayConfig, overviewConfig } = mapConfig;
     this.mapConfig = mapConfig;
+
     const basemapLayerGroup = await this.createBasemapLayerGroup(basemapConfig);
     const clusteredOverlayLayerGroup = this.createClusteredOverlayLayerGroup(mapConfig);
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
@@ -205,6 +213,15 @@ class Map {
     });
     this.map.addControl(this.overViewMap);
 
+    this.setupMapClickHandlers(overlayConfig);
+    // for fetching data on all layers after move or zoom
+    this.map.on("moveend", debounce(this.updateVisibleLayers.bind(this), this.getFeaturesDebounceTime));
+  }
+
+  /**
+   * Setup map click handlers for feature selection
+   */
+  private setupMapClickHandlers(overlayConfig: any) {
     /**
      * Return all features that exist in the position that user clicked the map
      * This is ran once per visible layer
@@ -223,7 +240,7 @@ class Map {
               "features",
               clusterFeatures.map((feature: Feature) => {
                 const featureType: string = feature["id_"].split(".")[0];
-                const feature_layer = overlayConfig["layers"].find((l) => l.identifier === featureType);
+                const feature_layer = overlayConfig["layers"].find((l: any) => l.identifier === featureType);
                 feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
                 return feature;
               }),
@@ -281,8 +298,6 @@ class Map {
         });
       }
     });
-    // for fetching data on all layers after move or zoom
-    this.map.on("moveend", debounce(this.updateVisibleLayers.bind(this), this.getFeaturesDebounceTime));
   }
 
   /**
@@ -370,7 +385,7 @@ class Map {
       featureType: getFeatureType(feature),
     });
 
-    this.highLightedFeatureLayer.setStyle(getHighlightStyle(feature, mapConfig));
+    this.highLightedFeatureLayer.setStyle(getHighlightStyle(feature, this.getCurrentMapConfig()));
     this.highLightedFeatureLayer.getSource()?.addFeature(olFeature);
   }
 
@@ -564,50 +579,91 @@ class Map {
     const tempSource = isClustered ? this.createClusterSource(wfsUrl) : this.createNonClusteredSource(wfsUrl);
     const tempVectorSource = isClustered ? (tempSource as Cluster).getSource() : tempSource;
     if (!tempVectorSource) {
-      console.log("No vector source, skipping getting new features");
       return;
     }
 
     this.ongoingFeatureFetches.add(overlayIdentifier);
     this.ongoingFeatureFetchesCallback(this.ongoingFeatureFetches);
-    // create a temporary layer and add it to the map
-    // to initialize data fetch
-    const tempLayer = new VectorLayer({
-      source: tempVectorSource,
+
+    const tempLayer = this.createTemporaryFetchLayer(tempVectorSource);
+    this.map.addLayer(tempLayer);
+
+    tempVectorSource.once("featuresloadend", (featureEvent: any) => {
+      this.handleFeaturesLoaded(featureEvent.features, overlayIdentifier, isClustered);
+      this.map.removeLayer(tempLayer);
+      this.ongoingFeatureFetches.delete(overlayIdentifier);
+      this.ongoingFeatureFetchesCallback(this.ongoingFeatureFetches);
+    });
+  }
+
+  /**
+   * Create a temporary invisible layer for fetching features
+   */
+  private createTemporaryFetchLayer(source: VectorSource): VectorLayer<VectorSource> {
+    return new VectorLayer({
+      source: source,
       visible: true,
       style: new Style({
         fill: new Fill({ color: "rgba(0, 0, 0, 0)" }),
         stroke: new Stroke({ color: "rgba(0, 0, 0, 0)" }),
       }),
     });
-    this.map.addLayer(tempLayer);
-    tempVectorSource.once("featuresloadend", (featureEvent: any) => {
-      const features = featureEvent.features;
-      if (features && features.length > 0) {
-        const layer = isClustered
-          ? this.clusteredOverlayLayers[overlayIdentifier]
-          : this.nonClusteredOverlayLayers[overlayIdentifier];
-        layer.once("postrender", () => {
-          this.handleShowAllPlanAndRealDifferences();
-        });
+  }
 
-        const existingSource = layer.getSource();
-        if (existingSource) {
-          const targetVectorSource = isClustered ? (existingSource as Cluster).getSource() : existingSource;
-          if (!targetVectorSource) {
-            console.log("No vector source, skipping add of new features");
-            return;
-          }
-          targetVectorSource.addFeatures(features);
-        } else {
-          layer.setSource(tempSource);
-        }
-        this.addFetchedArea(overlayIdentifier, this.getCurrentBoundingBox());
-      }
-      this.map.removeLayer(tempLayer);
-      this.ongoingFeatureFetches.delete(overlayIdentifier);
-      this.ongoingFeatureFetchesCallback(this.ongoingFeatureFetches);
+  /**
+   * Handle loaded features and add them to the appropriate layer
+   */
+  private handleFeaturesLoaded(features: any[], overlayIdentifier: string, isClustered: boolean) {
+    if (!features || features.length === 0) {
+      return;
+    }
+
+    const layer = isClustered
+      ? this.clusteredOverlayLayers[overlayIdentifier]
+      : this.nonClusteredOverlayLayers[overlayIdentifier];
+
+    layer.once("postrender", () => {
+      this.handleShowAllPlanAndRealDifferences();
     });
+
+    const existingSource = layer.getSource();
+    if (existingSource) {
+      this.addFeaturesToExistingSource(existingSource, features, isClustered);
+    } else {
+      this.setNewSourceWithFeatures(layer, features, isClustered);
+    }
+
+    this.addFetchedArea(overlayIdentifier, this.getCurrentBoundingBox());
+  }
+
+  /**
+   * Add features to an existing layer source
+   */
+  private addFeaturesToExistingSource(existingSource: any, features: any[], isClustered: boolean) {
+    const targetVectorSource = isClustered ? (existingSource as Cluster).getSource() : existingSource;
+    if (targetVectorSource) {
+      targetVectorSource.addFeatures(features);
+    }
+  }
+
+  /**
+   * Set a new source with features on a layer
+   */
+  private setNewSourceWithFeatures(layer: VectorLayer<VectorSource>, features: any[], isClustered: boolean) {
+    if (isClustered) {
+      const newVectorSource = new VectorSource({ features: features });
+      const newClusterSource = new Cluster({
+        distance: 40,
+        source: newVectorSource,
+        geometryFunction: this.clusterGeometryFunction,
+        createCluster: this.createCluster,
+      });
+      layer.setSource(newClusterSource);
+    } else {
+      const newSource = new VectorSource({ features: features });
+      layer.setSource(newSource);
+    }
+    layer.changed();
   }
 
   /**
@@ -775,6 +831,67 @@ class Map {
     return `${this.mapConfig.address_search_base_url}?${searchUrlWithParams}`;
   }
 
+  /**
+   * Get the current icon scale (override or mapConfig default)
+   */
+  private getCurrentIconScale(): number {
+    return this.iconScaleOverride ?? this.mapConfig.icon_scale;
+  }
+
+  /**
+   * Get the current icon type (override or mapConfig default)
+   */
+  private getCurrentIconType(): string {
+    return this.iconTypeOverride ?? this.mapConfig.icon_type;
+  }
+
+  /**
+   * Get the current icon size (override or mapConfig default)
+   */
+  private getCurrentIconSize(): IconSize {
+    return this.iconSizeOverride ?? (this.mapConfig.icon_size as IconSize);
+  }
+
+  /**
+   * Get the current icon URL with current settings applied
+   */
+  private getCurrentIconUrl(): string {
+    return buildIconUrl(this.mapConfig.traffic_sign_icons_url, this.getCurrentIconType(), this.getCurrentIconSize());
+  }
+
+  /**
+   * Get a MapConfig with current icon setting overrides applied
+   */
+  private getCurrentMapConfig(): MapConfig {
+    return {
+      ...this.mapConfig,
+      traffic_sign_icons_url: this.getCurrentIconUrl(),
+      icon_scale: this.getCurrentIconScale(),
+      icon_type: this.getCurrentIconType(),
+      icon_size: this.getCurrentIconSize(),
+    };
+  }
+
+  /**
+   * Update icon settings and refresh all layers
+   */
+  updateIconSettings(iconScale: number, iconType: string, iconSize: IconSize) {
+    this.iconScaleOverride = iconScale;
+    this.iconTypeOverride = iconType;
+    this.iconSizeOverride = iconSize;
+
+    // Clear all style caches and force re-render
+    const allLayers = { ...this.clusteredOverlayLayers, ...this.nonClusteredOverlayLayers };
+    Object.values(allLayers).forEach((layer) => {
+      layer.changed();
+    });
+
+    // Also update highlighted feature layer if it has features
+    if (this.highLightedFeatureLayer?.getSource()?.getFeatures().length) {
+      this.highLightedFeatureLayer.changed();
+    }
+  }
+
   private async createBasemapLayerGroup(basemapConfig: LayerConfig) {
     const { layers, sourceUrl } = basemapConfig;
 
@@ -918,14 +1035,18 @@ class Map {
   }
 
   private createNonClusteredOverlayLayerGroup(mapConfig: MapConfig) {
-    const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
+    const { overlayConfig } = mapConfig;
     const { layers } = overlayConfig;
     const overlayLayers = layers
       .filter(({ clustered }) => !clustered)
       .map(({ identifier, use_traffic_sign_icons }) => {
         const vectorLayer = new VectorLayer({
-          style: (feature: FeatureLike) =>
-            getSinglePointStyle(feature, use_traffic_sign_icons, traffic_sign_icons_url, icon_scale, icon_type),
+          style: (feature: FeatureLike) => {
+            const iconUrl = this.getCurrentIconUrl();
+            const iconScale = this.getCurrentIconScale();
+            const iconType = this.getCurrentIconType();
+            return getSinglePointStyle(feature, use_traffic_sign_icons, iconUrl, iconScale, iconType);
+          },
           visible: false,
           opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
         });
@@ -940,16 +1061,22 @@ class Map {
   }
 
   private createClusteredOverlayLayerGroup(mapConfig: MapConfig) {
-    const { overlayConfig, traffic_sign_icons_url, icon_scale, icon_type } = mapConfig;
+    const { overlayConfig } = mapConfig;
     const { layers } = overlayConfig;
     // Fetch device layers
     const overlayLayers = layers
       .filter(({ clustered }) => clustered)
       .map(({ identifier, use_traffic_sign_icons }) => {
         const styleCache: { [key: string]: Style | Style[] | undefined } = {};
+
         const getStyleCacheKey = (clusterFeature: FeatureLike, size: number): string | undefined => {
+          const iconUrl = this.getCurrentIconUrl();
+          const iconScale = this.getCurrentIconScale();
+          const iconType = this.getCurrentIconType();
+          const settingsKey = `${iconUrl}::${iconScale}::${iconType}`;
+
           if (size > 1) {
-            return size.toString();
+            return `${size}::${settingsKey}`;
           }
 
           const features = clusterFeature.get("features");
@@ -958,8 +1085,8 @@ class Map {
             const deviceCode = feature.get("device_type_code");
             const direction = feature.getProperties()["direction"];
             if (deviceCode) {
-              // The key now reflects both base style and rotation:
-              return `${deviceCode}::${direction || "0"}`;
+              // The key now reflects device, direction, and icon settings:
+              return `${deviceCode}::${direction || "0"}::${settingsKey}`;
             }
           }
           return undefined;
@@ -982,7 +1109,9 @@ class Map {
         };
         const getImageStyle = (clusterFeature: FeatureLike) => {
           const features = clusterFeature.get("features");
-          if (!features || features.length === 0) return;
+          if (!features || features.length === 0) {
+            return;
+          }
 
           const size: number = features.length;
           const cacheKey = getStyleCacheKey(clusterFeature, size);
@@ -991,19 +1120,16 @@ class Map {
           if (styleResult) {
             return styleResult;
           }
+          const iconUrl = this.getCurrentIconUrl();
+          const iconScale = this.getCurrentIconScale();
+          const iconType = this.getCurrentIconType();
           if (size > 1) {
             // Cluster style
             styleResult = getClusterStyle(clusterFeature);
           } else {
             // Single feature style: getSinglePointStyle already includes the arrow.
             const feature = features[0];
-            styleResult = getSinglePointStyle(
-              feature,
-              use_traffic_sign_icons,
-              traffic_sign_icons_url,
-              icon_scale,
-              icon_type,
-            );
+            styleResult = getSinglePointStyle(feature, use_traffic_sign_icons, iconUrl, iconScale, iconType);
           }
           if (cacheKey && styleResult) {
             styleCache[cacheKey] = styleResult;
@@ -1012,7 +1138,9 @@ class Map {
         };
 
         const vectorLayer = new VectorLayer({
-          style: (clusterFeature: FeatureLike) => getImageStyle(clusterFeature),
+          style: (clusterFeature: FeatureLike) => {
+            return getImageStyle(clusterFeature);
+          },
           visible: false,
           opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
         });
