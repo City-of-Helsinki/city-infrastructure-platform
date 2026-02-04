@@ -9,11 +9,13 @@ from guardian.admin import GuardedModelAdmin
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
+    DeviceTypeSignTypeListFilter,
     OperationalAreaListFilter,
     PlanReplacementListFilterMixin,
     ReplacedByInline,
     ReplacesInline,
     TrafficControlOperationInlineBase,
+    TrafficSignTypeCodeFilter,
 )
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
@@ -28,7 +30,6 @@ from traffic_control.enums import (
     Reflection,
     Size,
     Surface,
-    TRAFFIC_SIGN_TYPE_CHOICES,
 )
 from traffic_control.forms import (
     AdminFileWidgetWithProxy,
@@ -112,20 +113,6 @@ class TrafficSignRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
     raw_id_fields = ("traffic_sign_real",)
 
 
-class TrafficSignTypeListFilter(SimpleListFilter):
-    title = _("Traffic sign type")
-    parameter_name = "traffic_sign_type"
-
-    def lookups(self, request, model_admin):
-        return TRAFFIC_SIGN_TYPE_CHOICES
-
-    def queryset(self, request, queryset):
-        value = self.value()
-        if value:
-            return queryset.filter(code__startswith=value)
-        return queryset
-
-
 @admin.register(TrafficControlDeviceTypeIcon)
 class TrafficControlDeviceTypeIconAdmin(CustomImportExportActionModelAdmin, PreviewImageFileFieldMixin):
     resource_class = TrafficControlDeviceTypeIconResource
@@ -157,7 +144,7 @@ class TrafficControlDeviceTypeAdmin(
         "target_model",
     )
     list_select_related = ("icon_file",)
-    list_filter = (TrafficSignTypeListFilter,)
+    list_filter = (TrafficSignTypeCodeFilter,)
     search_fields = (
         "code",
         "legacy_code",
@@ -303,6 +290,7 @@ class TrafficSignPlanAdmin(
         ("lifecycle", EnumFieldListFilter),
         "owner",
         TrafficSignPlanReplacementListFilter,
+        DeviceTypeSignTypeListFilter,
     ]
     search_fields = ("id",)
     readonly_fields = (
@@ -528,6 +516,7 @@ class TrafficSignRealAdmin(
         ("location_specifier", EnumFieldListFilter),
         "owner",
         OperationalAreaListFilter,
+        DeviceTypeSignTypeListFilter,
     ]
     search_fields = (
         "value",
