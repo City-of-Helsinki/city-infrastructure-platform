@@ -1,32 +1,52 @@
-"""Tests for send_test_email management command."""
-
 import pytest
 from django.core import mail
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from django.test import override_settings
 
 
+@pytest.mark.parametrize(
+    "from_email",
+    [
+        "cityinfra@hel.fi",
+        "custom@example.com",
+        "another@test.org",
+    ],
+)
 @pytest.mark.django_db
-def test_send_test_email_single_recipient() -> None:
+def test_send_test_email_single_recipient(from_email: str) -> None:
     """Test sending email to a single recipient.
 
     Verifies that the command successfully sends an email with correct
     sender, subject, and recipient information.
+
+    Args:
+        from_email: The email address to use as the sender.
     """
+
     recipient = "test@example.com"
 
-    call_command("send_test_email", "--recipient", recipient)
+    with override_settings(DEFAULT_FROM_EMAIL=from_email):
+        call_command("send_test_email", "--recipient", recipient)
 
     assert len(mail.outbox) == 1
     email = mail.outbox[0]
     assert email.subject == "Cityinfra email test"
     assert email.body == "Test message"
-    assert email.from_email == "cityinfra@hel.fi"
+    assert email.from_email == from_email
     assert email.to == [recipient]
 
 
+@pytest.mark.parametrize(
+    "from_email",
+    [
+        "cityinfra@hel.fi",
+        "custom@example.com",
+        "another@test.org",
+    ],
+)
 @pytest.mark.django_db
-def test_send_test_email_multiple_recipients() -> None:
+def test_send_test_email_multiple_recipients(from_email: str) -> None:
     """Test sending email to multiple comma-separated recipients.
 
     Verifies that the command correctly parses comma-separated email
@@ -35,12 +55,13 @@ def test_send_test_email_multiple_recipients() -> None:
     recipients = "test1@example.com,test2@example.com,test3@example.com"
     expected_recipients = ["test1@example.com", "test2@example.com", "test3@example.com"]
 
-    call_command("send_test_email", "--recipient", recipients)
+    with override_settings(DEFAULT_FROM_EMAIL=from_email):
+        call_command("send_test_email", "--recipient", recipients)
 
     assert len(mail.outbox) == 1
     email = mail.outbox[0]
     assert email.subject == "Cityinfra email test"
-    assert email.from_email == "cityinfra@hel.fi"
+    assert email.from_email == from_email
     assert email.to == expected_recipients
 
 
@@ -111,5 +132,5 @@ def test_send_test_email_empty_recipients() -> None:
 
     Verifies that the command rejects empty or whitespace-only recipient strings.
     """
-    with pytest.raises(CommandError, match="No valid recipient email addresses"):
+    with pytest.raises(CommandError, match="No recipient email addresses provided"):
         call_command("send_test_email", "--recipient", "  ,  ,  ")
