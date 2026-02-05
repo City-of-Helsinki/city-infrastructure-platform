@@ -54,6 +54,7 @@ env = environ.Env(
     EMAIL_USE_TLS=(bool, True),
     EMAIL_HOST_USER=(str, ""),
     EMAIL_HOST_PASSWORD=(str, ""),
+    DEFAULT_FROM_EMAIL=(str, "cityinfra@hel.fi"),
     SENTRY_DSN=(str, ""),
     SENTRY_DEBUG=(bool, False),
     VERSION=(str, ""),
@@ -135,7 +136,7 @@ EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = "cityinfra@hel.fi"
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
 # Determine which email backend to use based on environment
 TESTING = "test" in sys.argv or "pytest" in sys.argv[0] if sys.argv else False
