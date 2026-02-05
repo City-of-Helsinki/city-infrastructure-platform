@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.34.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.33.0...city-infrastructure-platform-v1.34.0) (2026-02-05)
+
+
+### Features
+
+* Device type filter to traffic sign plans and reals admin pages ([aa1dad8](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/aa1dad864e3f2dd448d4c2a1d668ebb026e16fee))
+* Remove unnecessary columns for additional sign reals and plans ([eeceb6e](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/eeceb6e599bee23a685eb65c833fb122e1215685))
+* UI override to mapconfig icon settings ([4b12629](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4b126293b3af4bb6368e199b834731fd2371e42b))
+* Use DEFAULT_FROM_EMAIL instead of hardcoding to management command ([ae6ac08](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ae6ac0845a224810e0db130413bfbff0a39df31e))
+
+
+### Bug Fixes
+
+* Translations for icon sizes ([ff217e9](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ff217e9daf1d5075d22168bc12eebb52b6e62c36))
+
 ## [1.33.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.32.0...city-infrastructure-platform-v1.33.0) (2026-01-30)
 
 
