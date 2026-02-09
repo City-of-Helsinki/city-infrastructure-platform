@@ -16,21 +16,27 @@ COPY poetry.lock pyproject.toml /city-infrastructure-platform/
 RUN apt-get update && \
     mkdir -p /usr/share/man/man1/ /usr/share/man/man3/ /usr/share/man/man7/ && \
     apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        gnupg && \
+    curl -fsSL --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/postgresql-archive-keyring.gpg] https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
         libcairo2 \
         libpcre3-dev \
         libpq-dev \
         build-essential \
         gdal-bin \
-        postgresql-client \
+        postgresql-client-17 \
         gettext \
-        mime-support \
-        curl && \
+        mime-support && \
     curl -sSL --retry 5 https://install.python-poetry.org --output install-poetry.py && \
     python install-poetry.py --version=1.7.1 && \
     rm install-poetry.py && \
     /root/.local/bin/poetry config virtualenvs.create false && \
     /root/.local/bin/poetry install --only main --no-interaction && \
-    apt-get remove -y build-essential libpq-dev && \
+    apt-get remove -y build-essential libpq-dev gnupg && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives && \
