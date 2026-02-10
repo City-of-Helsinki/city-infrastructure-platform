@@ -22,6 +22,7 @@ RUN apt-get update && \
     curl -fsSL --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/postgresql-archive-keyring.gpg] https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     apt-get update && \
+    apt-get install -y --only-upgrade --no-install-recommends openssl libssl3 && \
     apt-get install -y --no-install-recommends \
         libcairo2 \
         libpcre3-dev \
