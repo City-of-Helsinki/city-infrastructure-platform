@@ -36,6 +36,7 @@ RUN apt-get update && \
     rm install-poetry.py && \
     /root/.local/bin/poetry config virtualenvs.create false && \
     /root/.local/bin/poetry install --only main --no-interaction && \
+    pip install --no-cache-dir --upgrade "wheel>=0.46.2" && \
     apt-get remove -y build-essential libpq-dev gnupg && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
