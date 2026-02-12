@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.34.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.34.0...city-infrastructure-platform-v1.34.1) (2026-02-12)
+
+
+### Bug Fixes
+
+* Update openssl and libssl3 versions ([8b3a875](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8b3a875ed05eb639a8fa9ccf4c630ba1512b1b09))
+* Update postgre client version in Docker file ([afc4da1](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/afc4da1230f9e9d65e7d1c9f3b8460c8d460616b))
+* Update used wheel package ([c9c0e42](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c9c0e42805e8350a662b5451a4f31c8f90a75520))
+
 ## [1.34.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.33.0...city-infrastructure-platform-v1.34.0) (2026-02-05)
 
 
