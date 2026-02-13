@@ -13,6 +13,7 @@ import sys
 
 import environ
 import sentry_sdk
+from django.conf.global_settings import MIGRATION_MODULES
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 from helusers.defaults import SOCIAL_AUTH_PIPELINE  # noqa: F401
@@ -220,8 +221,11 @@ LOCAL_APPS = [
     "city_infra_instructions.apps.CityInfraInstructionsConfig",
     "maintenance_mode.apps.MaintenanceModeConfig",
     "site_alert.apps.SiteAlertConfig",
+    "admin_helper.apps.AdminHelperConfig",
 ]
 INSTALLED_APPS = LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
+
+MIGRATION_MODULES["admin_helper"] = None  # Explicitly tell django that this app needs no migrations
 
 AUTHENTICATION_BACKENDS = (
     "axes.backends.AxesBackend",
