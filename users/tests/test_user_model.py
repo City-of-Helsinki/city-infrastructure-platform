@@ -94,3 +94,101 @@ def test__user_permissions_changed_to_auditlog():
     permission = Permission.objects.get(codename="change_user")
     user.user_permissions.add(permission)
     assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).count() == 1
+
+
+# Authentication type tests
+
+
+@pytest.mark.django_db
+def test__user_is_local_user__with_password():
+    """Test that user with usable password is identified as local user."""
+    user = get_user()
+    user.set_password("SecureP@ssw0rd123")
+    user.save()
+    assert user.is_local_user() is True
+
+
+@pytest.mark.django_db
+def test__user_is_local_user__without_password():
+    """Test that user without usable password is not identified as local user."""
+    user = get_user()
+    user.set_unusable_password()
+    user.save()
+    assert user.is_local_user() is False
+
+
+@pytest.mark.django_db
+def test__user_is_oidc_user__with_social_auth():
+    """Test that user with Tunnistamo social auth is identified as OIDC user."""
+    from social_django.models import UserSocialAuth
+
+    user = get_user()
+    UserSocialAuth.objects.create(user=user, provider="tunnistamo", uid="test-uid-123")
+    assert user.is_oidc_user() is True
+
+
+@pytest.mark.django_db
+def test__user_is_oidc_user__without_social_auth():
+    """Test that user without social auth is not identified as OIDC user."""
+    user = get_user()
+    assert user.is_oidc_user() is False
+
+
+@pytest.mark.django_db
+def test__user_is_oidc_user__with_different_provider():
+    """Test that user with non-Tunnistamo social auth is not identified as OIDC user."""
+    from social_django.models import UserSocialAuth
+
+    user = get_user()
+    UserSocialAuth.objects.create(user=user, provider="other-provider", uid="test-uid-456")
+    assert user.is_oidc_user() is False
+
+
+@pytest.mark.django_db
+def test__user_get_auth_type__password_only():
+    """Test get_auth_type returns correct values for password-only user."""
+    user = get_user()
+    user.set_password("SecureP@ssw0rd123")
+    user.save()
+    text, color = user.get_auth_type()
+    assert text == "Local"
+    assert color == "red"
+
+
+@pytest.mark.django_db
+def test__user_get_auth_type__oidc_only():
+    """Test get_auth_type returns correct values for OIDC-only user."""
+    from social_django.models import UserSocialAuth
+
+    user = get_user()
+    user.set_unusable_password()
+    user.save()
+    UserSocialAuth.objects.create(user=user, provider="tunnistamo", uid="test-uid-789")
+    text, color = user.get_auth_type()
+    assert text == "Azure AD"
+    assert color == "green"
+
+
+@pytest.mark.django_db
+def test__user_get_auth_type__both():
+    """Test get_auth_type returns correct values for user with both auth methods."""
+    from social_django.models import UserSocialAuth
+
+    user = get_user()
+    user.set_password("SecureP@ssw0rd123")
+    user.save()
+    UserSocialAuth.objects.create(user=user, provider="tunnistamo", uid="test-uid-101112")
+    text, color = user.get_auth_type()
+    assert text == "Both"
+    assert color == "chocolate"
+
+
+@pytest.mark.django_db
+def test__user_get_auth_type__none():
+    """Test get_auth_type returns correct values for user with no auth methods."""
+    user = get_user()
+    user.set_unusable_password()
+    user.save()
+    text, color = user.get_auth_type()
+    assert text == "None"
+    assert color is None
