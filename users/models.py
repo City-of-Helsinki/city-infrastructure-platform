@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, Tuple, TYPE_CHECKING
 
 from auditlog.registry import auditlog
 from django.contrib.auth.models import Group
@@ -89,6 +89,46 @@ class User(AbstractUser):
             .filter(Q(users=self) | Q(groups__group__in=self.groups.all()))
             .exists()
         )
+
+    def is_oidc_user(self) -> bool:
+        """
+        Check if user can authenticate via Azure AD (OIDC through Tunnistamo).
+
+        Returns:
+            bool: True if user has a social auth association with Tunnistamo provider.
+        """
+        return self.social_auth.filter(provider="tunnistamo").exists()
+
+    def is_local_user(self) -> bool:
+        """
+        Check if user can authenticate via local password.
+
+        Returns:
+            bool: True if user has a usable password set.
+        """
+        return self.has_usable_password()
+
+    def get_auth_type(self) -> Tuple[str, Optional[str]]:
+        """
+        Get user's authentication type with display color.
+
+        Returns:
+            Tuple[str, Optional[str]]: Display text and color code.
+                - ("Local", "red") for password-only authentication
+                - ("Azure AD", "green") for OIDC-only authentication
+                - ("Both", "chocolate") for both authentication methods
+                - ("None", None) for no authentication method
+        """
+        has_local = self.is_local_user()
+        has_oidc = self.is_oidc_user()
+
+        if has_local and has_oidc:
+            return ("Both", "chocolate")
+        if has_local:
+            return ("Local", "red")
+        if has_oidc:
+            return ("Azure AD", "green")
+        return ("None", None)
 
     class Meta:
         verbose_name = _("User")
