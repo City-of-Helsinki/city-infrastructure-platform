@@ -1,5 +1,6 @@
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
+from rangefilter.filters import DateRangeFilterBuilder
 
 from traffic_control.forms import OperationalModelForm
 from traffic_control.mixins import Geometry3DFieldAdminMixin
@@ -22,7 +23,14 @@ class OperationalAreaAdmin(Geometry3DFieldAdminMixin, admin.GISModelAdmin):
         "contractor",
         "status",
     ]
-    list_filter = ("area_type", "contractor", "status")
+    list_filter = (
+        "area_type",
+        "contractor",
+        "status",
+        ("start_date", DateRangeFilterBuilder()),
+        ("end_date", DateRangeFilterBuilder()),
+        ("updated_date", DateRangeFilterBuilder()),
+    )
     search_fields = ("id",)
 
 

@@ -1,9 +1,16 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import (
+    ChoicesFieldListFilter,
+    EmptyFieldListFilter,
+    RelatedOnlyFieldListFilter,
+    SimpleListFilter,
+)
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     PlanReplacementListFilterMixin,
@@ -167,18 +174,34 @@ class MountPlanAdmin(
     )
     list_display = (
         "id",
+        "plan",
         "mount_type",
         "lifecycle",
+        "txt",
         "location",
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        MountPlanReplacementListFilter,
-        "mount_type",
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(MountPlanReplacementListFilter),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
     ]
-    search_fields = ("id",)
+    search_fields = (
+        "id",
+        "mount_type__code",
+        "plan__id",
+        "plan__name",
+        "road_name",
+        "source_name",
+    )
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -195,7 +218,7 @@ class MountPlanAdmin(
     )
     initial_values = {}
 
-    # Generated for MountPlanAdmin at 2026-02-18 13:04:24+00:00
+    # Generated for MountPlanAdmin at 2026-02-19 14:44:10+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)
@@ -205,6 +228,7 @@ class MountPlanAdmin(
         if resolver_match.url_name.endswith("_changelist"):
             return qs.select_related(
                 "mount_type",  # n:1 relation in list_display, list_display (via MountType.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
                 "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
             )
         elif resolver_match.url_name.endswith("_change"):
@@ -302,9 +326,17 @@ class MountRealAdmin(
         "attachment_url",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        "mount_type",
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
     ]
     search_fields = ("id",)
     readonly_fields = (

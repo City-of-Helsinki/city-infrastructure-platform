@@ -2,12 +2,15 @@ from copy import copy
 from typing import Dict
 
 from admin_confirm import AdminConfirmMixin
+from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
+from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.forms import PlanModelForm, PlanRelationsForm
 from traffic_control.mixins import (
@@ -72,7 +75,15 @@ class PlanAdmin(
         "drawing_numbers",
         "id",
         "name",
+        "source_name",
     )
+    list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("decision_date", DateRangeFilterBuilder()),
+    ]
 
     confirm_change = True
     confirmation_fields = ["location"]
@@ -172,7 +183,10 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
         "error_count",
         "end_time",
     )
-    list_filter = ("dry_run", "start_time")
+    list_filter = (
+        "dry_run",
+        ("start_time", DateRangeFilterBuilder()),
+    )
     readonly_fields = (
         "id",
         "start_time",

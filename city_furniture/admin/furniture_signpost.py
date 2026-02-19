@@ -1,8 +1,9 @@
-from django.contrib.admin import ChoicesFieldListFilter
+from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
@@ -17,6 +18,12 @@ from city_furniture.resources.furniture_signpost import (
     FurnitureSignpostPlanTemplateResource,
     FurnitureSignpostRealResource,
 )
+from traffic_control.admin.admin_filters import (
+    as_dropdown,
+    HeightFilter,
+    ResponsibleEntityPermissionFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
@@ -24,9 +31,6 @@ from traffic_control.admin.utils import (
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
-    ResponsibleEntityPermissionFilter,
-    SimplifiedRelatedFieldListFilter,
-    TreeModelFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import AdminFileWidgetWithProxy, CityInfraFileUploadFormset
@@ -113,14 +117,23 @@ class AbstractFurnitureSignpostAdmin(
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
-        ("responsible_entity", TreeModelFieldListFilter),
-        ("owner", SimplifiedRelatedFieldListFilter),
-        ("target", SimplifiedRelatedFieldListFilter),
-        ("device_type", SimplifiedRelatedFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        OperationalAreaListFilter,
-        ("created_by", SimplifiedRelatedFieldListFilter),
-        "validity_period_start",
+        ("responsible_entity", as_dropdown(TreeModelFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("parent", as_dropdown(EmptyFieldListFilter)),
+        ("target", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("device_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        as_dropdown(OperationalAreaListFilter),
+        ("size", as_dropdown(EmptyFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
     readonly_fields = (
         "device_type_preview",
@@ -128,12 +141,6 @@ class AbstractFurnitureSignpostAdmin(
         "updated_at",
         "created_by",
         "updated_by",
-    )
-    list_display = (
-        "id",
-        "device_type_preview",
-        "location_name_fi",
-        "lifecycle",
     )
     list_select_related = ("device_type", "device_type__icon_file")
 
@@ -221,14 +228,36 @@ class FurnitureSignpostPlanAdmin(
         AbstractFurnitureSignpostAdmin._fieldset_metadata,
     )
     raw_id_fields = ("plan", "mount_plan", "parent")
-    list_filter = AbstractFurnitureSignpostAdmin.list_filter
+    list_display = (
+        "id",
+        "plan",
+        "device_type_preview",
+        "text_content_fi",
+        "location_name_fi",
+        "lifecycle",
+        "height",
+    )
+    list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
+    ]
     inlines = (FurnitureSignpostPlanFileInline, FurnitureSignpostRealInline)
     search_fields = (
         "device_type__code",
         "id",
+        "location_name_en",
+        "location_name_fi",
+        "location_name_sw",
+        "mount_plan__id",
+        "mount_type__code",
+        "parent__id",
+        "plan__id",
+        "plan__name",
+        "source_name",
+        "value",
     )
 
-    # Generated for FurnitureSignpostPlanAdmin at 2026-02-18 11:40:31+00:00
+    # Generated for FurnitureSignpostPlanAdmin at 2026-02-20 07:47:59+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)
@@ -239,6 +268,7 @@ class FurnitureSignpostPlanAdmin(
             return qs.select_related(
                 "device_type",  # n:1 relation in list_display (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
                 "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
             )
         elif resolver_match.url_name.endswith("_change"):
             return qs.select_related(
@@ -289,24 +319,31 @@ class FurnitureSignpostRealAdmin(
         AbstractFurnitureSignpostAdmin._fieldset_metadata,
     )
     raw_id_fields = ("furniture_signpost_plan", "mount_real", "parent")
+    list_display = (
+        "id",
+        "device_type_preview",
+        "text_content_fi",
+        "location_name_fi",
+        "lifecycle",
+        "height",
+    )
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
-        ("condition", ChoicesFieldListFilter),
-        "installation_date",
+        ("furniture_signpost_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_real", as_dropdown(EmptyFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("installation_date", DateRangeFilterBuilder()),
     ]
     search_fields = (
-        "value",
-        "size",
-        "height",
-        "source_id",
-        "source_name",
-        "text_content_fi",
-        "text_content_sw",
-        "text_content_en",
-        "location_name_fi",
-        "location_name_en",
-        "location_name_sw",
         "device_type__code",
+        "furniture_signpost_plan__id",
         "id",
+        "location_name_en",
+        "location_name_fi",
+        "location_name_sw",
+        "mount_type__code",
+        "parent__id",
+        "source_name",
+        "value",
     )
     inlines = (FurnitureSignpostRealFileInline, FurnitureSignpostRealOperationInline)
     initial_values = {
@@ -314,7 +351,7 @@ class FurnitureSignpostRealAdmin(
         "condition": Condition.VERY_GOOD,
     }
 
-    # Generated for FurnitureSignpostRealAdmin at 2026-02-18 11:40:01+00:00
+    # Generated for FurnitureSignpostRealAdmin at 2026-02-20 07:48:15+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)
