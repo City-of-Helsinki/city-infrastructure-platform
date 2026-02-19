@@ -232,9 +232,11 @@ class AdditionalSignPlanAdmin(
     )
     list_display = (
         "id",
+        "plan",
         "device_type_preview",
         "content",
         "additional_information",
+        "height",
         "is_replaced_as_str",
     )
     readonly_fields = (
@@ -261,7 +263,7 @@ class AdditionalSignPlanAdmin(
     )
     initial_values = shared_initial_values
 
-    # Generated for AdditionalSignPlanAdmin at 2026-02-18 13:02:09+00:00
+    # Generated for AdditionalSignPlanAdmin at 2026-02-20 07:29:44+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)
@@ -272,6 +274,7 @@ class AdditionalSignPlanAdmin(
             return qs.select_related(
                 "device_type",  # n:1 relation in list_display (via content -> get_content_s_rows), list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
                 "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
                 "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
             )
         elif resolver_match.url_name.endswith("_change"):
