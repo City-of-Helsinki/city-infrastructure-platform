@@ -179,10 +179,12 @@ class SignpostPlanAdmin(
     )
     list_display = (
         "id",
+        "plan",
         "device_type_preview",
         "txt",
         "lifecycle",
         "location",
+        "height",
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
@@ -190,7 +192,25 @@ class SignpostPlanAdmin(
         "owner",
         SignpostPlanReplacementListFilter,
     ]
-    search_fields = ("id",)
+    search_fields = (
+        "created_by__email",
+        "created_by__first_name",
+        "created_by__last_name",
+        "created_by__username",
+        "device_type__code",
+        "mount_plan__id",
+        "mount_type__code",
+        "id",
+        "parent__id",
+        "plan__id",
+        "plan__name",
+        "road_name",
+        "source_name",
+        "updated_by__email",
+        "updated_by__first_name",
+        "updated_by__last_name",
+        "updated_by__username",
+    )
     readonly_fields = (
         "device_type_preview",
         "created_at",
@@ -208,13 +228,36 @@ class SignpostPlanAdmin(
     )
     initial_values = shared_initial_values
 
+    # Generated for SignpostPlanAdmin at 2026-02-19 12:44:25+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return (
-            qs.prefetch_related("device_type")
-            .prefetch_related("device_type__icon_file")
-            .prefetch_related("replacement_to_new")
-        )
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
+
+        if resolver_match.url_name.endswith("_changelist"):
+            return qs.select_related(
+                "device_type",  # n:1 relation in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
+                "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            return qs.select_related(
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "device_type",  # n:1 relation in fieldsets, readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "mount_plan",  # n:1 relation in fieldsets, fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_plan__mount_type",  # n:1 relation chain in fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in fieldsets, fieldsets (via MountType.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "parent",  # n:1 relation in fieldsets, fieldsets (via SignpostPlan.__str__) # noqa: E501
+                "parent__device_type",  # n:1 relation chain in fieldsets (via SignpostPlan.__str__) # noqa: E501
+                "plan",  # n:1 relation in fieldsets, fieldsets (via Plan.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs
 
 
 class SignpostRealFileInline(admin.TabularInline):

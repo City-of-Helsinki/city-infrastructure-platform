@@ -203,7 +203,9 @@ class RoadMarkingPlanAdmin(
     )
     list_display = (
         "id",
+        "plan",
         "device_type_preview",
+        "additional_info",
         "lifecycle",
         "location",
         "is_replaced_as_str",
@@ -213,7 +215,24 @@ class RoadMarkingPlanAdmin(
         "owner",
         RoadMarkingPlanReplacementListFilter,
     ]
-    search_fields = ("id",)
+    search_fields = (
+        "additional_info",
+        "created_by__email",
+        "created_by__first_name",
+        "created_by__last_name",
+        "created_by__username",
+        "device_type__code",
+        "id",
+        "plan__id",
+        "plan__name",
+        "road_name",
+        "source_name",
+        "traffic_sign_plan__id",
+        "updated_by__email",
+        "updated_by__first_name",
+        "updated_by__last_name",
+        "updated_by__username",
+    )
     readonly_fields = (
         "device_type_preview",
         "created_at",
@@ -231,13 +250,33 @@ class RoadMarkingPlanAdmin(
     )
     initial_values = shared_initial_values
 
+    # Generated for RoadMarkingPlanAdmin at 2026-02-19 14:19:41+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return (
-            qs.prefetch_related("device_type")
-            .prefetch_related("device_type__icon_file")
-            .prefetch_related("replacement_to_new")
-        )
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
+
+        if resolver_match.url_name.endswith("_changelist"):
+            return qs.select_related(
+                "device_type",  # n:1 relation in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
+                "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            return qs.select_related(
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "device_type",  # n:1 relation in fieldsets, readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "plan",  # n:1 relation in fieldsets, fieldsets (via Plan.__str__) # noqa: E501
+                "traffic_sign_plan",  # n:1 relation in fieldsets, fieldsets (via TrafficSignPlan.__str__) # noqa: E501
+                "traffic_sign_plan__device_type",  # n:1 relation chain in fieldsets (via TrafficSignPlan.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs
 
 
 class RoadMarkingRealFileInline(admin.TabularInline):

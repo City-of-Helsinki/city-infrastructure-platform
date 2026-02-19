@@ -129,12 +129,6 @@ class AbstractFurnitureSignpostAdmin(
         "created_by",
         "updated_by",
     )
-    list_display = (
-        "id",
-        "device_type_preview",
-        "location_name_fi",
-        "lifecycle",
-    )
     list_select_related = ("device_type", "device_type__icon_file")
 
     _fieldset_general_information = (
@@ -221,14 +215,37 @@ class FurnitureSignpostPlanAdmin(
         AbstractFurnitureSignpostAdmin._fieldset_metadata,
     )
     raw_id_fields = ("plan", "mount_plan", "parent")
+    list_display = (
+        "id",
+        "plan",
+        "device_type_preview",
+        "text_content_fi",
+        "location_name_fi",
+        "lifecycle",
+        "height",
+    )
     list_filter = AbstractFurnitureSignpostAdmin.list_filter
     inlines = (FurnitureSignpostPlanFileInline, FurnitureSignpostRealInline)
     search_fields = (
+        "created_by__email",
+        "created_by__first_name",
+        "created_by__last_name",
+        "created_by__username",
         "device_type__code",
         "id",
+        "mount_plan__id",
+        "mount_type__code",
+        "parent__id",
+        "plan__id",
+        "plan__name",
+        "source_name",
+        "updated_by__email",
+        "updated_by__first_name",
+        "updated_by__last_name",
+        "updated_by__username",
     )
 
-    # Generated for FurnitureSignpostPlanAdmin at 2026-02-18 11:40:31+00:00
+    # Generated for FurnitureSignpostPlanAdmin at 2026-02-20 07:47:59+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)
@@ -239,6 +256,7 @@ class FurnitureSignpostPlanAdmin(
             return qs.select_related(
                 "device_type",  # n:1 relation in list_display (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
                 "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
             )
         elif resolver_match.url_name.endswith("_change"):
             return qs.select_related(
@@ -289,6 +307,14 @@ class FurnitureSignpostRealAdmin(
         AbstractFurnitureSignpostAdmin._fieldset_metadata,
     )
     raw_id_fields = ("furniture_signpost_plan", "mount_real", "parent")
+    list_display = (
+        "id",
+        "device_type_preview",
+        "text_content_fi",
+        "location_name_fi",
+        "lifecycle",
+        "height",
+    )
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
         ("condition", ChoicesFieldListFilter),
         "installation_date",
@@ -314,7 +340,7 @@ class FurnitureSignpostRealAdmin(
         "condition": Condition.VERY_GOOD,
     }
 
-    # Generated for FurnitureSignpostRealAdmin at 2026-02-18 11:40:01+00:00
+    # Generated for FurnitureSignpostRealAdmin at 2026-02-20 07:48:15+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)

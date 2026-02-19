@@ -177,9 +177,12 @@ class BarrierPlanAdmin(
     )
     list_display = (
         "id",
+        "plan",
         "device_type_preview",
+        "txt",
         "lifecycle",
         "location",
+        "length",
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
@@ -187,7 +190,22 @@ class BarrierPlanAdmin(
         "owner",
         BarrierPlanReplacementListFilter,
     ]
-    search_fields = ("id",)
+    search_fields = (
+        "created_by__email",
+        "created_by__first_name",
+        "created_by__last_name",
+        "created_by__username",
+        "device_type__code",
+        "id",
+        "plan__id",
+        "plan__name",
+        "road_name",
+        "source_name",
+        "updated_by__email",
+        "updated_by__first_name",
+        "updated_by__last_name",
+        "updated_by__username",
+    )
     readonly_fields = (
         "device_type_preview",
         "created_at",
@@ -205,7 +223,7 @@ class BarrierPlanAdmin(
     )
     initial_values = shared_initial_values
 
-    # Generated for BarrierPlanAdmin at 2026-02-18 13:03:52+00:00
+    # Generated for BarrierPlanAdmin at 2026-02-20 07:31:11+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)
@@ -216,6 +234,7 @@ class BarrierPlanAdmin(
             return qs.select_related(
                 "device_type",  # n:1 relation in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
                 "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
                 "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
             )
         elif resolver_match.url_name.endswith("_change"):
