@@ -1,11 +1,12 @@
 from django.contrib.admin import SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, QuerySet
 from django.utils.translation import gettext_lazy as _
 from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 
+from admin_helper.decorators import requires_annotation
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
@@ -53,7 +54,6 @@ from traffic_control.mixins import (
     UserStampedInlineAdminMixin,
 )
 from traffic_control.models import (
-    AdditionalSignPlan,
     AdditionalSignReal,
     TrafficControlDeviceType,
     TrafficSignPlan,
@@ -311,19 +311,41 @@ class TrafficSignPlanAdmin(
     )
     initial_values = shared_initial_values
 
+    # Generated for TrafficSignPlanAdmin at 2026-02-18 13:04:48+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        additional_signs_query = AdditionalSignPlan.objects.filter(
-            parent=OuterRef("pk"),
-            is_active=True,
-        )
-        return (
-            qs.prefetch_related("device_type")
-            .prefetch_related("device_type__icon_file")
-            .prefetch_related("replacement_to_new")
-            .annotate(_has_additional_signs=Exists(additional_signs_query))
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
+
+        if resolver_match.url_name.endswith("_changelist"):
+            qs = self.annotate_has_additional_signs(qs)  # from list_display (via has_additional_signs)
+            return qs.select_related(
+                "device_type",  # n:1 relation in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            return qs.select_related(
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "device_type",  # n:1 relation in fieldsets, readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "mount_plan",  # n:1 relation in fieldsets, fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_plan__mount_type",  # n:1 relation chain in fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in fieldsets, fieldsets (via MountType.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "plan",  # n:1 relation in fieldsets, fieldsets (via Plan.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs
+
+    def annotate_has_additional_signs(self, qs):
+        return qs.annotate(
+            _has_additional_signs=Exists(AdditionalSignReal.objects.filter(parent=OuterRef("pk"), is_active=True))
         )
 
+    @requires_annotation(annotate_has_additional_signs)
     def has_additional_signs(self, obj):
         # Don't call obj.has_additional_signs() directly, because it will cause an explosion in query count
         # and lag the list view.
@@ -542,25 +564,50 @@ class TrafficSignRealAdmin(
         "installation_status": InstallationStatus.IN_USE,
     }
 
+    # Generated for TrafficSignRealAdmin at 2026-02-18T11:28:04+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        additional_signs_query = AdditionalSignReal.objects.filter(
-            parent=OuterRef("pk"),
-            is_active=True,
-        )
-        return qs.select_related(
-            "device_type",
-            "device_type__icon_file",
-            "mount_real",
-            "mount_real__mount_type",
-            "mount_type",
-            "traffic_sign_plan",
-            "traffic_sign_plan__device_type",
-            "created_by",
-            "updated_by",
-            "owner",
-        ).annotate(_has_additional_signs=Exists(additional_signs_query))
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
 
+        if resolver_match.url_name.endswith("_changelist"):
+            qs = self.annotate_has_additional_signs(qs)  # from list_display (via has_additional_signs)
+            return qs.select_related(
+                "created_by",  # n:1 relation in list_display, list_display (via User.__str__) # noqa: E501
+                "device_type",  # n:1 relation in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "mount_real",  # n:1 relation in list_display, list_display (via MountReal.__str__ -> MountType.__str__) # noqa: E501
+                "mount_real__mount_type",  # n:1 relation chain in list_display (via MountReal.__str__ -> MountType.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in list_display # noqa: E501
+                "owner",  # n:1 relation in list_display, list_display (via Owner.__str__) # noqa: E501
+                "traffic_sign_plan",  # n:1 relation in list_display, list_display (via TrafficSignPlan.__str__ -> TrafficControlDeviceType.__str__) # noqa: E501
+                "traffic_sign_plan__device_type",  # n:1 relation chain in list_display (via TrafficSignPlan.__str__ -> TrafficControlDeviceType.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in list_display # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            qs = self.annotate_has_additional_signs(qs)  # from readonly_fields (via has_additional_signs)
+            return qs.select_related(
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "device_type",  # n:1 relation in fieldsets, readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "mount_real",  # n:1 relation in fieldsets, fieldsets (via MountReal.__str__) # noqa: E501
+                "mount_real__mount_type",  # n:1 relation chain in fieldsets (via MountReal.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in fieldsets, fieldsets (via MountType.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "traffic_sign_plan",  # n:1 relation in fieldsets, fieldsets (via TrafficSignPlan.__str__) # noqa: E501
+                "traffic_sign_plan__device_type",  # n:1 relation chain in fieldsets (via TrafficSignPlan.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs
+
+    def annotate_has_additional_signs(self, qs: QuerySet) -> QuerySet:
+        return qs.annotate(
+            _has_additional_signs=Exists(AdditionalSignReal.objects.filter(parent=OuterRef("pk"), is_active=True))
+        )
+
+    @requires_annotation(annotate_has_additional_signs)
     def has_additional_signs(self, obj):
         # Don't call obj.has_additional_signs() directly, because it will cause an explosion in query count
         # and lag the list view.

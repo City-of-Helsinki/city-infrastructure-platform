@@ -11,6 +11,7 @@ from django.core.validators import RegexValidator
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+from admin_helper.decorators import requires_fields
 from traffic_control.geometry_utils import get_3d_geometry
 from traffic_control.mixins.models import (
     BoundaryCheckedLocationMixin,
@@ -102,6 +103,7 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
             ),
         ]
 
+    @requires_fields("decision_id", "name")
     def __str__(self):
         return f"{self.decision_id} {self.name}"
 

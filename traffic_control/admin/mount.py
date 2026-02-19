@@ -196,9 +196,29 @@ class MountPlanAdmin(
     )
     initial_values = {}
 
+    # Generated for MountPlanAdmin at 2026-02-18 13:04:24+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("mount_type").prefetch_related("replacement_to_new")
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
+
+        if resolver_match.url_name.endswith("_changelist"):
+            return qs.select_related(
+                "mount_type",  # n:1 relation in list_display, list_display (via MountType.__str__) # noqa: E501
+                "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            return qs.select_related(
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in fieldsets, fieldsets (via MountType.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "plan",  # n:1 relation in fieldsets, fieldsets (via Plan.__str__) # noqa: E501
+                "portal_type",  # n:1 relation in fieldsets, fieldsets (via PortalType.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs
 
 
 class MountRealFileInline(admin.TabularInline):
@@ -306,9 +326,29 @@ class MountRealAdmin(
         "condition": Condition.VERY_GOOD,
     }
 
+    # Generated for MountRealAdmin at 2026-02-18 11:57:40+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("mount_type")
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
+
+        if resolver_match.url_name.endswith("_changelist"):
+            return qs.select_related(
+                "mount_type",  # n:1 relation in list_display, list_display (via MountType.__str__) # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            return qs.select_related(
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "mount_plan",  # n:1 relation in fieldsets, fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_plan__mount_type",  # n:1 relation chain in fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in fieldsets, fieldsets (via MountType.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "portal_type",  # n:1 relation in fieldsets, fieldsets (via PortalType.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs
 
 
 @admin.register(MountType)

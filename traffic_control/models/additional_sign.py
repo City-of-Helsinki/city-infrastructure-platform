@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils.translation import get_language, gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
+from admin_helper.decorators import requires_fields
 from traffic_control.common_strings import direction_field_verbose_name, direction_help_text
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
@@ -155,6 +156,7 @@ class AbstractAdditionalSign(
     class Meta:
         abstract = True
 
+    @requires_fields("content_s", "device_type", "device_type__content_schema")
     def get_content_s_rows(self):
         """Returns the content_s as a list of tuples ordered by propertyOrder in schema.
         Each tuple contains (title, value) where titles are localized according to the current active language.
@@ -224,6 +226,7 @@ class AbstractAdditionalSign(
 
         super().save(*args, **kwargs)
 
+    @requires_fields("id")
     def __str__(self):
         return f"{self.__class__.__name__} {self.id}"
 

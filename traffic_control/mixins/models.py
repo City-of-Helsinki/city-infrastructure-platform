@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
+from admin_helper.decorators import requires_fields
 from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.geometry_utils import geometry_is_legit
 from traffic_control.models.utils import SoftDeleteQuerySet
@@ -130,10 +131,10 @@ class ReplaceableDevicePlanMixin:
         """Return `True` if this device plan has been replaced by another device plan"""
         return hasattr(self, REPLACEMENT_TO_NEW)
 
-    @property
     @admin.display(description=_("Replaced"))
+    @requires_fields(REPLACEMENT_TO_NEW)
     def is_replaced_as_str(self):
-        return _("Yes") if self.is_replaced else _("No")
+        return _("Yes") if hasattr(self, REPLACEMENT_TO_NEW) else _("No")
 
 
 class InstalledDeviceModel(models.Model):
@@ -241,6 +242,7 @@ class AbstractFileModel(models.Model):
     class Meta:
         abstract = True
 
+    @requires_fields("file", "is_public")
     def __str__(self):
         if not self.is_public:
             return f"{self.file} (restricted)"

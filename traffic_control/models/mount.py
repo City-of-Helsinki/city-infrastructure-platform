@@ -5,6 +5,7 @@ from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumIntegerField
 
+from admin_helper.decorators import requires_fields
 from traffic_control.geometry_utils import get_3d_geometry
 from traffic_control.mixins.models import (
     AbstractFileModel,
@@ -77,6 +78,7 @@ class MountType(models.Model):
         verbose_name = _("Mount type")
         verbose_name_plural = _("Mount types")
 
+    @requires_fields("code", "description")
     def __str__(self):
         return f"{self.description} ({self.code})"
 
@@ -93,6 +95,7 @@ class PortalType(models.Model):
         verbose_name_plural = _("Portal types")
         unique_together = ("structure", "build_type", "model")
 
+    @requires_fields("build_type", "model", "structure")
     def __str__(self):
         return "%s - %s - %s" % (self.structure, self.build_type, self.model)
 
@@ -179,6 +182,7 @@ class AbstractMount(
     class Meta:
         abstract = True
 
+    @requires_fields("id", "mount_type")
     def __str__(self):
         return f"{self.id} {self.mount_type}"
 
