@@ -1,9 +1,16 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import (
+    ChoicesFieldListFilter,
+    EmptyFieldListFilter,
+    RelatedOnlyFieldListFilter,
+    SimpleListFilter,
+)
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     PlanReplacementListFilterMixin,
@@ -179,18 +186,44 @@ class SignpostPlanAdmin(
     )
     list_display = (
         "id",
+        "plan",
         "device_type_preview",
         "txt",
         "lifecycle",
         "location",
+        "height",
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        SignpostPlanReplacementListFilter,
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("parent", as_dropdown(EmptyFieldListFilter)),
+        as_dropdown(SignpostPlanReplacementListFilter),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(ChoicesFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
-    search_fields = ("id",)
+    search_fields = (
+        "device_type__code",
+        "mount_plan__id",
+        "mount_type__code",
+        "id",
+        "parent__id",
+        "plan__id",
+        "plan__name",
+        "road_name",
+        "source_name",
+    )
     readonly_fields = (
         "device_type_preview",
         "created_at",
@@ -208,13 +241,36 @@ class SignpostPlanAdmin(
     )
     initial_values = shared_initial_values
 
+    # Generated for SignpostPlanAdmin at 2026-02-19 12:44:25+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return (
-            qs.prefetch_related("device_type")
-            .prefetch_related("device_type__icon_file")
-            .prefetch_related("replacement_to_new")
-        )
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
+
+        if resolver_match.url_name.endswith("_changelist"):
+            return qs.select_related(
+                "device_type",  # n:1 relation in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
+                "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            return qs.select_related(
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "device_type",  # n:1 relation in fieldsets, readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "mount_plan",  # n:1 relation in fieldsets, fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_plan__mount_type",  # n:1 relation chain in fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in fieldsets, fieldsets (via MountType.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "parent",  # n:1 relation in fieldsets, fieldsets (via SignpostPlan.__str__) # noqa: E501
+                "parent__device_type",  # n:1 relation chain in fieldsets (via SignpostPlan.__str__) # noqa: E501
+                "plan",  # n:1 relation in fieldsets, fieldsets (via Plan.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs
 
 
 class SignpostRealFileInline(admin.TabularInline):
@@ -324,8 +380,23 @@ class SignpostRealAdmin(
         "installation_date",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
+        ("signpost_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_real", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("parent", as_dropdown(EmptyFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(ChoicesFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
     search_fields = ("id",)
     readonly_fields = (

@@ -217,6 +217,7 @@ THIRD_PARTY_APPS = [
     "django_advanced_password_validation",
     "axes",
     "guardian",
+    "rangefilter",
 ]
 LOCAL_APPS = [
     "users.apps.UsersConfig",
