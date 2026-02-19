@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.gis.geos import Point
 from django.test import RequestFactory, TestCase
-from django.urls import reverse
+from django.urls import resolve, reverse
 
 from traffic_control.admin import BarrierRealAdmin, TrafficSignRealAdmin
 from traffic_control.enums import Lifecycle
@@ -61,8 +61,13 @@ class TrafficSignRealAdminTestCase(TestCase):
         # of the queries produced by its admin page to evaluate if the function is behaving as expected.
         list_url = reverse("admin:traffic_control_trafficsignreal_changelist")
         request = RequestFactory().get(list_url)
+        request.resolver_match = resolve(list_url)
+
         qs = ma.get_queryset(request)
         obj_with_annotation = qs.get(pk=self.traffic_sign_real.pk)
+
+        print(obj_with_annotation)
+        print(dir(obj_with_annotation))
 
         self.assertEqual(ma.has_additional_signs(obj_with_annotation), "Yes")
 

@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField
 
+from admin_helper.decorators import requires_fields
 from traffic_control.enums import (
     DeviceTypeTargetModel,
     TRAFFIC_SIGN_ALLOWED_TARGET_MODELS,
@@ -67,6 +68,7 @@ class Owner(models.Model):
         verbose_name = _("Owner")
         verbose_name_plural = _("Owners")
 
+    @requires_fields("name_en", "name_fi")
     def __str__(self):
         return f"{self.name_en} ({self.name_fi})"
 
@@ -215,6 +217,7 @@ class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
         verbose_name = _("Traffic Control Device Type")
         verbose_name_plural = _("Traffic Control Device Types")
 
+    @requires_fields("code", "description")
     def __str__(self):
         return "%s - %s" % (self.code, self.description)
 

@@ -11,6 +11,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
+from admin_helper.decorators import requires_fields
 from city_furniture.enums import CityFurnitureClassType, CityFurnitureDeviceTypeTargetModel, CityFurnitureFunctionType
 from cityinfra import settings
 from traffic_control.mixins.models import AbstractFileModel, SourceControlModel
@@ -128,6 +129,7 @@ class CityFurnitureDeviceType(models.Model, AbstractDeviceTypeMixin):
         verbose_name = _("City Furniture Device Type")
         verbose_name_plural = _("City Furniture Device Types")
 
+    @requires_fields("code", "description_fi")
     def __str__(self) -> str:
         return f"{self.code} - {self.description_fi}"
 
@@ -219,6 +221,7 @@ class CityFurnitureColor(models.Model):
         verbose_name = _("City Furniture Color")
         verbose_name_plural = _("City Furniture Colors")
 
+    @requires_fields("name")
     def __str__(self):
         return self.name
 
@@ -259,6 +262,7 @@ class CityFurnitureTarget(SourceControlModel):
         verbose_name = _("City Furniture Target")
         verbose_name_plural = _("City Furniture Targets")
 
+    @requires_fields("name_fi")
     def __str__(self):
         return self.name_fi
 

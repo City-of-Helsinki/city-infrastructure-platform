@@ -228,6 +228,38 @@ class FurnitureSignpostPlanAdmin(
         "id",
     )
 
+    # Generated for FurnitureSignpostPlanAdmin at 2026-02-18 11:40:31+00:00
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
+
+        if resolver_match.url_name.endswith("_changelist"):
+            return qs.select_related(
+                "device_type",  # n:1 relation in list_display (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            return qs.select_related(
+                "color",  # n:1 relation in fieldsets, fieldsets (via CityFurnitureColor.__str__) # noqa: E501
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "device_type",  # n:1 relation in fieldsets, readonly_fields (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+                "mount_plan",  # n:1 relation in fieldsets, fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_plan__mount_type",  # n:1 relation chain in fieldsets (via MountPlan.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in fieldsets, fieldsets (via MountType.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "parent",  # n:1 relation in fieldsets, fieldsets (via FurnitureSignpostPlan.__str__) # noqa: E501
+                "parent__device_type",  # n:1 relation chain in fieldsets (via FurnitureSignpostPlan.__str__) # noqa: E501
+                "plan",  # n:1 relation in fieldsets, fieldsets (via Plan.__str__) # noqa: E501
+                "responsible_entity",  # n:1 relation in fieldsets # noqa: E501
+                "target",  # n:1 relation in fieldsets, fieldsets (via CityFurnitureTarget.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs
+
 
 @admin.register(FurnitureSignpostReal)
 class FurnitureSignpostRealAdmin(
@@ -281,3 +313,35 @@ class FurnitureSignpostRealAdmin(
         "installation_status": InstallationStatus.IN_USE,
         "condition": Condition.VERY_GOOD,
     }
+
+    # Generated for FurnitureSignpostRealAdmin at 2026-02-18 11:40:01+00:00
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        resolver_match = getattr(request, "resolver_match", None)
+        if not resolver_match or not resolver_match.url_name:
+            return qs
+
+        if resolver_match.url_name.endswith("_changelist"):
+            return qs.select_related(
+                "device_type",  # n:1 relation in list_display (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+            )
+        elif resolver_match.url_name.endswith("_change"):
+            return qs.select_related(
+                "color",  # n:1 relation in fieldsets, fieldsets (via CityFurnitureColor.__str__) # noqa: E501
+                "created_by",  # n:1 relation in fieldsets, readonly_fields, readonly_fields (via User.__str__) # noqa: E501
+                "device_type",  # n:1 relation in fieldsets, readonly_fields (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+                "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> CityFurnitureDeviceTypeIcon.__str__) # noqa: E501
+                "furniture_signpost_plan",  # n:1 relation in fieldsets, fieldsets (via FurnitureSignpostPlan.__str__) # noqa: E501
+                "furniture_signpost_plan__device_type",  # n:1 relation chain in fieldsets (via FurnitureSignpostPlan.__str__) # noqa: E501
+                "mount_real",  # n:1 relation in fieldsets, fieldsets (via MountReal.__str__) # noqa: E501
+                "mount_real__mount_type",  # n:1 relation chain in fieldsets (via MountReal.__str__) # noqa: E501
+                "mount_type",  # n:1 relation in fieldsets, fieldsets (via MountType.__str__) # noqa: E501
+                "owner",  # n:1 relation in fieldsets, fieldsets (via Owner.__str__) # noqa: E501
+                "parent",  # n:1 relation in fieldsets # noqa: E501
+                "responsible_entity",  # n:1 relation in fieldsets # noqa: E501
+                "target",  # n:1 relation in fieldsets, fieldsets (via CityFurnitureTarget.__str__) # noqa: E501
+                "updated_by",  # n:1 relation in fieldsets, readonly_fields # noqa: E501
+            )
+
+        return qs

@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumIntegerField
 
+from admin_helper.decorators import requires_fields
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
 from traffic_control.common_strings import direction_field_verbose_name, direction_help_text
@@ -206,6 +207,7 @@ class FurnitureAbstractSignpost(
     class Meta:
         abstract = True
 
+    @requires_fields("id", "device_type", "text_content_fi")
     def __str__(self) -> str:
         return f"{self.id} {self.device_type} {self.text_content_fi}"
 

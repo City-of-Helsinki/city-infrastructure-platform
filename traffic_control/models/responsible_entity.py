@@ -9,6 +9,7 @@ from enumfields import EnumIntegerField
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
+from admin_helper.decorators import requires_fields
 from traffic_control.enums import OrganizationLevel
 
 
@@ -66,6 +67,7 @@ class ResponsibleEntity(MPTTModel):
         super(ResponsibleEntity, self).clean_fields()
         self.clean_parent()
 
+    @requires_fields()  # NOTE (2026-02-18 thiago) It's tricky to declare dependencies for this one
     def __str__(self):
         return self.get_full_path()
 

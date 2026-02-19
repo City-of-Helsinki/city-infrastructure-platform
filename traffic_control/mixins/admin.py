@@ -5,6 +5,7 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from admin_helper.decorators import requires_fields
 from traffic_control.models.plan import Plan
 
 
@@ -90,6 +91,7 @@ class PreviewDeviceTypeRelationMixin:
 
     @staticmethod
     @admin.display(description=_("Device type preview"))
+    @requires_fields("device_type", "device_type__icon_file", "device_type__icon_file__file")
     def device_type_preview(obj):
         device_type = obj.device_type
         if device_type and device_type.icon_file and device_type.icon_file.file and device_type.icon_file.file.url:
@@ -115,6 +117,7 @@ class FormattedContentsAdminMixin:
     Returns nicely formatted HTML similar to the _content_s_rows.html template.
     """
 
+    @requires_fields("get_content_s_rows")
     @admin.display(description=_("Content"))
     def content(self, obj):
         """
