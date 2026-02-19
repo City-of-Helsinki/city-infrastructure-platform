@@ -167,8 +167,10 @@ class MountPlanAdmin(
     )
     list_display = (
         "id",
+        "plan",
         "mount_type",
         "lifecycle",
+        "txt",
         "location",
         "is_replaced_as_str",
     )
@@ -178,7 +180,22 @@ class MountPlanAdmin(
         MountPlanReplacementListFilter,
         "mount_type",
     ]
-    search_fields = ("id",)
+    search_fields = (
+        "created_by__email",
+        "created_by__first_name",
+        "created_by__last_name",
+        "created_by__username",
+        "id",
+        "mount_type__code",
+        "plan__id",
+        "plan__name",
+        "road_name",
+        "source_name",
+        "updated_by__email",
+        "updated_by__first_name",
+        "updated_by__last_name",
+        "updated_by__username",
+    )
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -195,7 +212,7 @@ class MountPlanAdmin(
     )
     initial_values = {}
 
-    # Generated for MountPlanAdmin at 2026-02-18 13:04:24+00:00
+    # Generated for MountPlanAdmin at 2026-02-19 14:44:10+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)
@@ -205,6 +222,7 @@ class MountPlanAdmin(
         if resolver_match.url_name.endswith("_changelist"):
             return qs.select_related(
                 "mount_type",  # n:1 relation in list_display, list_display (via MountType.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
                 "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
             )
         elif resolver_match.url_name.endswith("_change"):

@@ -67,11 +67,20 @@ class PlanAdmin(
     )
     ordering = ("-created_at",)
     search_fields = (
+        "created_by__email",
+        "created_by__first_name",
+        "created_by__last_name",
+        "created_by__username",
         "decision_id",
         "diary_number",
         "drawing_numbers",
         "id",
         "name",
+        "source_name",
+        "updated_by__email",
+        "updated_by__first_name",
+        "updated_by__last_name",
+        "updated_by__username",
     )
 
     confirm_change = True

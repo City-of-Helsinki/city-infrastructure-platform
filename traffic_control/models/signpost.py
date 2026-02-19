@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
+from admin_helper.decorators import requires_fields
 from traffic_control.common_strings import direction_field_verbose_name, direction_help_text
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size
 from traffic_control.mixins.models import (
@@ -173,6 +174,7 @@ class AbstractSignpost(
     class Meta:
         abstract = True
 
+    @requires_fields("device_type", "id", "txt")
     def __str__(self):
         return f"{self.id} {self.device_type} {self.txt}"
 
