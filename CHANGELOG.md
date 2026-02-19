@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.35.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.34.0...city-infrastructure-platform-v1.35.0) (2026-02-19)
+
+
+### Features
+
+* Show in admin if user is AD user or local user ([a6a78ad](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a6a78aded7217ec6836febcbd2b11721ad0d1c3b))
+
+
+### Bug Fixes
+
+* Update openssl and libssl3 versions ([8b3a875](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8b3a875ed05eb639a8fa9ccf4c630ba1512b1b09))
+* Update postgre client version in Docker file ([afc4da1](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/afc4da1230f9e9d65e7d1c9f3b8460c8d460616b))
+* Update used wheel package ([c9c0e42](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c9c0e42805e8350a662b5451a4f31c8f90a75520))
+
 ## [1.34.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.33.0...city-infrastructure-platform-v1.34.0) (2026-02-05)
 
 
