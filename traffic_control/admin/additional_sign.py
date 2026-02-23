@@ -107,6 +107,14 @@ class AdditionalSignRealInline(BaseAdditionalSignInline):
     verbose_name = _("Additional Sign Real")
     verbose_name_plural = _("Additional Sign Reals")
 
+    # Generated for AdditionalSignRealInline at 2026-02-23 08:28:59+00:00
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related(
+            "device_type",  # n:1 relation in readonly_fields (via content -> get_content_s_rows), readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+            "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+        )
+
 
 @admin.register(AdditionalSignPlanFile)
 class AdditionalSignPlanFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
@@ -476,3 +484,11 @@ class AdditionalSignPlanInline(BaseAdditionalSignInline):
     model = AdditionalSignPlan
     verbose_name = _("Additional Sign Plan")
     verbose_name_plural = _("Additional Sign Plans")
+
+    # Generated for AdditionalSignPlanInline at 2026-02-23 08:25:03+00:00
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related(
+            "device_type",  # n:1 relation in readonly_fields (via content -> get_content_s_rows), readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+            "device_type__icon_file",  # n:1 relation chain in readonly_fields (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+        )
