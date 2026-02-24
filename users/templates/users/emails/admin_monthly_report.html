@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Monthly Deactivated Users Report</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;
+                 max-width: 800px;
+                 margin: 0 auto;
+                 padding: 20px">
+        <h2>Monthly Deactivated Users Report - {{ month_name }} {{ year }}</h2>
+        <p>
+            <strong>Total deactivated users:</strong> {{ user_count }}
+        </p>
+        {% if user_count > 0 %}
+            <table border="1"
+                   cellpadding="10"
+                   style="width: 100%;
+                          border-collapse: collapse">
+                <tr style="background-color: #f0f0f0">
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Deactivated</th>
+                </tr>
+                {% for status in deactivated_users %}
+                    <tr>
+                        <td>{{ status.user.username }}</td>
+                        <td>{{ status.user.first_name }} {{ status.user.last_name }}</td>
+                        <td>{{ status.user.email|default:"No email" }}</td>
+                        <td>{{ status.deactivated_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        <p style="color: #666;
+                  margin-top: 30px">City Infrastructure Platform - Automated Report</p>
+    </body>
+</html>
