@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Account Inactivity Warning - 1 Day</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;
+                 max-width: 600px;
+                 margin: 0 auto;
+                 padding: 20px">
+        <div style="background-color: #dc3545;
+                    color: white;
+                    padding: 20px;
+                    text-align: center">
+            <h2>⚠️ KIIREELLINEN / BRÅDSKANDE / URGENT ⚠️</h2>
+        </div>
+        <h3>SUOMEKSI</h3>
+        <p>Hei {{ user.first_name }} {{ user.last_name }},</p>
+        <p>
+            <strong>KIIREELLINEN:</strong> Cityinfra-tilisi on ollut käyttämättömänä 6 kuukautta. Tilisi poistetaan käytöstä <strong>HUOMENNA</strong>, jos et kirjaudu sisään tänään.
+        </p>
+        <p>Tämä on viimeinen mahdollisuutesi säilyttää pääsysi järjestelmään kirjautumalla sisään.</p>
+        <p>
+            <a href="{{ base_url }}/admin/"
+               style="display: inline-block;
+                      padding: 10px 20px;
+                      background-color: #dc3545;
+                      color: white;
+                      text-decoration: none;
+                      border-radius: 4px;
+                      font-weight: bold">Kirjaudu sisään nyt</a>
+        </p>
+        <p>
+            <em>Jos tilisi poistetaan käytöstä, järjestelmän ylläpitäjän on aktivoitava se uudelleen manuaalisesti.</em>
+        </p>
+        <hr />
+        <h3>PÅ SVENSKA</h3>
+        <p>Hej {{ user.first_name }} {{ user.last_name }},</p>
+        <p>
+            <strong>BRÅDSKANDE:</strong> Ditt Cityinfra-konto har varit inaktivt i 6 månader. Ditt konto kommer att inaktiveras <strong>IMORGON</strong> om du inte loggar in idag.
+        </p>
+        <p>Detta är din sista chans att behålla din åtkomst till systemet genom att logga in.</p>
+        <p>
+            <a href="{{ base_url }}/admin/"
+               style="display: inline-block;
+                      padding: 10px 20px;
+                      background-color: #dc3545;
+                      color: white;
+                      text-decoration: none;
+                      border-radius: 4px;
+                      font-weight: bold">Logga in nu</a>
+        </p>
+        <p>
+            <em>Om ditt konto inaktiveras måste en systemadministratör återaktivera det manuellt.</em>
+        </p>
+        <hr />
+        <h3>IN ENGLISH</h3>
+        <p>Hello {{ user.first_name }} {{ user.last_name }},</p>
+        <p>
+            <strong>URGENT:</strong> Your City Infrastructure account has been inactive for 6 months. Your account will be deactivated <strong>TOMORROW</strong> if you do not log in today.
+        </p>
+        <p>This is your last chance to maintain your access to the system by logging in.</p>
+        <p>
+            <a href="{{ base_url }}/admin/"
+               style="display: inline-block;
+                      padding: 10px 20px;
+                      background-color: #dc3545;
+                      color: white;
+                      text-decoration: none;
+                      border-radius: 4px;
+                      font-weight: bold">Log In Now</a>
+        </p>
+        <p>
+            <em>If your account is deactivated, a system administrator must manually reactivate it.</em>
+        </p>
+        <hr />
+        <p style="color: #666">
+            Ystävällisin terveisin / Vänliga hälsningar / Best regards,
+            <br />
+            <strong>City Infrastructure Platform</strong>
+        </p>
+    </body>
+</html>

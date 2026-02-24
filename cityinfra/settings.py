@@ -83,6 +83,7 @@ env = environ.Env(
     SESSION_COOKIE_SAMESITE=(str, "Lax"),
     CITYINFRA_MAXIMUM_RESULTS_PER_PAGE=(int, 10000),
     EMULATE_AZURE_BLOBSTORAGE=(bool, False),
+    BASE_URL=(str, "http://127.0.0.1:8000"),
     # Maintenance mode whitelist configuration - can be overridden via environment variables
     MAINTENANCE_MODE_HEALTH_CHECKS=(list, ["healthz", "readiness"]),
     MAINTENANCE_MODE_AUTH_PREFIXES=(list, ["ha", "auth"]),
@@ -151,6 +152,10 @@ elif DEBUG:
 else:
     # Use SMTP backend for production
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+# Base URL for the application (used in emails, management commands, etc.)
+BASE_URL = env("BASE_URL")
+
 
 # Logging
 LOGGING = {
