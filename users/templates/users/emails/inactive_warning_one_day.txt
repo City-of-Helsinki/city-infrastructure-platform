@@ -1,0 +1,32 @@
+Hei {{ user.first_name }} {{ user.last_name }},
+
+KIIREELLINEN: Tilisi on ollut käyttämättömänä 6 kuukautta. Tilisi poistetaan käytöstä HUOMENNA, jos et kirjaudu sisään tänään.
+
+Tämä on viimeinen mahdollisuutesi säilyttää pääsysi järjestelmään kirjautumalla sisään.
+
+Jos tilisi poistetaan käytöstä, järjestelmän ylläpitäjän on aktivoitava se uudelleen manuaalisesti.
+
+---
+
+Hej {{ user.first_name }} {{ user.last_name }},
+
+BRÅDSKANDE: Ditt konto har varit inaktivt i 6 månader. Ditt konto kommer att inaktiveras IMORGON om du inte loggar in idag.
+
+Detta är din sista chans att behålla din åtkomst till systemet genom att logga in.
+
+Om ditt konto inaktiveras måste en systemadministratör återaktivera det manuellt.
+
+---
+
+Hello {{ user.first_name }} {{ user.last_name }},
+
+URGENT: Your account has been inactive for 6 months. Your account will be deactivated TOMORROW if you do not log in today.
+
+This is your last chance to maintain your access to the system by logging in.
+
+If your account is deactivated, a system administrator must manually reactivate it.
+
+---
+
+Ystävällisin terveisin / Vänliga hälsningar / Best regards,
+City Infrastructure Platform

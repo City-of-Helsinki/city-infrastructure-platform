@@ -51,6 +51,12 @@ class User(AbstractUser):
         default="",
         help_text=_("Additional information related to this user."),
     )
+    reactivated_at = models.DateTimeField(
+        verbose_name=_("Reactivated at"),
+        null=True,
+        blank=True,
+        help_text=_("Timestamp when admin manually reactivated this user account. Prevents automatic deactivation."),
+    )
 
     def location_is_in_operational_area(self, location):
         """
@@ -140,6 +146,62 @@ class User(AbstractUser):
     @requires_fields("email", "first_name", "last_name")
     def __str__(self):
         return super().__str__()
+
+
+class UserDeactivationStatus(models.Model):
+    """
+    Tracks the deactivation status and email notification history for inactive users.
+
+    This model maintains the state of the user deactivation workflow, including
+    timestamps for when warning emails were sent and when the user was deactivated.
+    """
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name="deactivation_status",
+        verbose_name=_("User"),
+    )
+    one_month_email_sent_at = models.DateTimeField(
+        verbose_name=_("One month warning email sent at"),
+        null=True,
+        blank=True,
+        help_text=_("Timestamp when the 30-day warning email was sent."),
+    )
+    one_week_email_sent_at = models.DateTimeField(
+        verbose_name=_("One week warning email sent at"),
+        null=True,
+        blank=True,
+        help_text=_("Timestamp when the 7-day warning email was sent."),
+    )
+    one_day_email_sent_at = models.DateTimeField(
+        verbose_name=_("One day warning email sent at"),
+        null=True,
+        blank=True,
+        help_text=_("Timestamp when the 1-day warning email was sent."),
+    )
+    deactivated_at = models.DateTimeField(
+        verbose_name=_("Deactivated at"),
+        null=True,
+        blank=True,
+        help_text=_("Timestamp when the user was deactivated."),
+    )
+
+    class Meta:
+        verbose_name = _("User Deactivation Status")
+        verbose_name_plural = _("User Deactivation Statuses")
+        db_table = "user_deactivation_status"
+
+    def __str__(self) -> str:
+        """
+        String representation of the deactivation status.
+
+        Returns:
+            str: User's username with deactivation status.
+        """
+        status = "deactivated" if self.deactivated_at else "pending"
+        return f"{self.user.username} - {status}"
 
 
 auditlog.register(

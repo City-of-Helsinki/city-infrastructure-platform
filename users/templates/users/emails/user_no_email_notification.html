@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>User Without Email Notification</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;
+                 max-width: 600px;
+                 margin: 0 auto;
+                 padding: 20px">
+        <div style="background-color: #ffc107;
+                    padding: 15px">
+            <h2>USER WITHOUT EMAIL / KÄYTTÄJÄLLÄ EI SÄHKÖPOSTIA</h2>
+        </div>
+        <p>
+            <strong>Username:</strong> {{ user.username }}
+            <br />
+            <strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}
+            <br />
+            <strong>Days inactive:</strong> {{ days_inactive }}
+            <br />
+            <strong>Days until deactivation:</strong> {{ days_until_deactivation }}
+        </p>
+        <p>This user has no email address. Please contact them through other means.</p>
+        <p>Käyttäjällä ei ole sähköpostiosoitetta. Ota yhteyttä muulla tavalla.</p>
+        <p>Användaren har ingen e-postadress. Kontakta användaren på annat sätt.</p>
+    </body>
+</html>

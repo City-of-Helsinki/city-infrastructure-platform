@@ -1,0 +1,21 @@
+KUUKAUSIRAPORTTI POISTETUISTA KÄYTTÄJÄTILEISTÄ / MÅNADSRAPPORT OM INAKTIVERADE KONTON / MONTHLY DEACTIVATED USERS REPORT
+Kuukausi / Månad / Month: {{ month_name }} {{ year }}
+Poistettujen käyttäjien määrä / Antal inaktiverade användare / Number of deactivated users: {{ user_count }}
+---
+{% if user_count > 0 %}
+Poistetut käyttäjätilit / Inaktiverade användarkonton / Deactivated User Accounts:
+{% for status in deactivated_users %}
+- Käyttäjätunnus / Användarnamn / Username: {{ status.user.username }}
+  Nimi / Namn / Name: {{ status.user.first_name }} {{ status.user.last_name }}
+  Sähköposti / E-post / Email: {{ status.user.email|default:"Ei sähköpostia / Ingen e-post / No email" }}
+  Poistettu / Inaktiverad / Deactivated: {{ status.deactivated_at|date:"d.m.Y H:i" }}
+{% endfor %}
+{% else %}
+Ei poistettuja käyttäjiä tänä kuukautena.
+Inga inaktiverade användare denna månad.
+No deactivated users this month.
+{% endif %}
+---
+Tämä on automaattinen raportti City Infrastructure Platform -järjestelmästä.
+Detta är en automatisk rapport från City Infrastructure Platform-systemet.
+This is an automated report from the City Infrastructure Platform system.

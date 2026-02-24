@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Account Deactivation Notice</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;
+                 max-width: 600px;
+                 margin: 0 auto;
+                 padding: 20px">
+        <div style="background-color: #6c757d;
+                    color: white;
+                    padding: 15px">
+            <h2>Tili poistettu käytöstä / Konto inaktiverat / Account Deactivated</h2>
+        </div>
+        <h3>SUOMEKSI</h3>
+        <p>
+            Hei {{ user.first_name }} {{ user.last_name }}, tilisi on poistettu käytöstä {{ deactivation_date|date:"d.m.Y" }}. Järjestelmän ylläpitäjän on aktivoitava tilisi uudelleen manuaalisesti.
+        </p>
+        <hr />
+        <h3>PÅ SVENSKA</h3>
+        <p>
+            Hej {{ user.first_name }} {{ user.last_name }}, ditt konto har inaktiverats {{ deactivation_date|date:"d.m.Y" }}. En systemadministratör måste återaktivera ditt konto manuellt.
+        </p>
+        <hr />
+        <h3>IN ENGLISH</h3>
+        <p>
+            Hello {{ user.first_name }} {{ user.last_name }}, your account has been deactivated on {{ deactivation_date|date:"d.m.Y" }}. A system administrator must manually reactivate your account.
+        </p>
+        <hr />
+        <p style="color: #666">City Infrastructure Platform</p>
+    </body>
+</html>

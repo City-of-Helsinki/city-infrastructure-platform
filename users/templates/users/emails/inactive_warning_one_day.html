@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Account Inactivity Warning - 1 Day</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;
+                 max-width: 600px;
+                 margin: 0 auto;
+                 padding: 20px">
+        <div style="background-color: #dc3545;
+                    color: white;
+                    padding: 20px;
+                    text-align: center">
+            <h2>⚠️ KIIREELLINEN / BRÅDSKANDE / URGENT ⚠️</h2>
+        </div>
+        <h3>SUOMEKSI</h3>
+        <p>
+            Hei {{ user.first_name }} {{ user.last_name }}, tilisi poistetaan käytöstä <strong>HUOMENNA</strong>!
+        </p>
+        <hr />
+        <h3>PÅ SVENSKA</h3>
+        <p>
+            Hej {{ user.first_name }} {{ user.last_name }}, ditt konto inaktiveras <strong>IMORGON</strong>!
+        </p>
+        <hr />
+        <h3>IN ENGLISH</h3>
+        <p>
+            Hello {{ user.first_name }} {{ user.last_name }}, your account will be deactivated <strong>TOMORROW</strong>!
+        </p>
+        <hr />
+        <p style="color: #666">City Infrastructure Platform</p>
+    </body>
+</html>

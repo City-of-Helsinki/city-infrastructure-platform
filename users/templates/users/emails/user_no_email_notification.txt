@@ -1,0 +1,19 @@
+ILMOITUS KÄYTTÄJÄSTÄ ILMAN SÄHKÖPOSTIOSOITETTA / MEDDELANDE OM ANVÄNDARE UTAN E-POST / USER WITHOUT EMAIL NOTIFICATION
+Käyttäjätunnus / Användarnamn / Username: {{ user.username }}
+Nimi / Namn / Name: {{ user.first_name }} {{ user.last_name }}
+Käyttäjätunnus poistetaan käytöstä / Kontot inaktiveras / Account will be deactivated in: {{ days_until_deactivation }} päivää / dagar / days
+---
+SUOMEKSI:
+Yllä mainitulla käyttäjällä ei ole sähköpostiosoitetta järjestelmässä, joten automaattista varoitusta ei voitu lähettää.
+Käyttäjätili on ollut käyttämättömänä {{ days_inactive }} päivää ja se poistetaan käytöstä {{ days_until_deactivation }} päivän kuluttua, jos toimenpiteitä ei tehdä.
+Ota yhteyttä käyttäjään muulla tavalla tai poista tili käytöstä manuaalisesti.
+---
+PÅ SVENSKA:
+Användaren ovan har ingen e-postadress i systemet, så automatisk varning kunde inte skickas.
+Användarkontot har varit inaktivt i {{ days_inactive }} dagar och kommer att inaktiveras om {{ days_until_deactivation }} dagar om inga åtgärder vidtas.
+Kontakta användaren på annat sätt eller inaktivera kontot manuellt.
+---
+IN ENGLISH:
+The user above does not have an email address in the system, so an automatic warning could not be sent.
+The user account has been inactive for {{ days_inactive }} days and will be deactivated in {{ days_until_deactivation }} days if no action is taken.
+Please contact the user through other means or manually deactivate the account.
