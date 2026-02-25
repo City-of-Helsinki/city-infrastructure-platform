@@ -87,3 +87,4 @@ target/
 var/
 venv/
 *.xml
+agent_docs/
