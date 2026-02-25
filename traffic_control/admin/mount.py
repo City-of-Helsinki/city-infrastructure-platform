@@ -3,6 +3,7 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
@@ -179,6 +180,8 @@ class MountPlanAdmin(
         "owner",
         MountPlanReplacementListFilter,
         "mount_type",
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
     ]
     search_fields = (
         "created_by__email",
@@ -323,6 +326,8 @@ class MountRealAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         "mount_type",
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
     ]
     search_fields = ("id",)
     readonly_fields = (

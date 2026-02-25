@@ -3,6 +3,7 @@ from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
@@ -259,6 +260,10 @@ class AdditionalSignPlanAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         AdditionalSignReplacementListFilter,
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
     search_fields = (
         "additional_information",
@@ -448,6 +453,10 @@ class AdditionalSignRealAdmin(
         ("color", ChoicesFieldListFilter),
         "owner",
         OperationalAreaListFilter,
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
     search_fields = (
         "size",

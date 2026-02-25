@@ -1,8 +1,9 @@
-from django.contrib.admin import ChoicesFieldListFilter
+from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
 from city_furniture.models import (
@@ -120,7 +121,11 @@ class AbstractFurnitureSignpostAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         OperationalAreaListFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
-        "validity_period_start",
+        ("direction", EmptyFieldListFilter),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
     readonly_fields = (
         "device_type_preview",

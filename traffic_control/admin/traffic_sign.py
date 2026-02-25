@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Exists, OuterRef, QuerySet
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
 from admin_helper.decorators import requires_annotation
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
@@ -293,6 +294,10 @@ class TrafficSignPlanAdmin(
         "owner",
         TrafficSignPlanReplacementListFilter,
         DeviceTypeSignTypeListFilter,
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
     search_fields = (
         "created_by__email",
@@ -559,6 +564,10 @@ class TrafficSignRealAdmin(
         "owner",
         OperationalAreaListFilter,
         DeviceTypeSignTypeListFilter,
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
     search_fields = (
         "value",
