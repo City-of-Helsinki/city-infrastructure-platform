@@ -110,12 +110,19 @@ class TreeModelFieldListFilter(RelatedFieldListFilter):
         Remove old filter and replace it with a filter that includes children of selected object.
         This way when a parent is selected, objects belonging to a descendant are also included.
         """
-
         filter_used = self.used_parameters.pop(f"{self.field_path}__id__exact", None)
+
         if filter_used is not None:
-            selected_object = self.field.related_model.objects.get(id=self.lookup_val)
-            descendant_ids = selected_object.get_descendants(include_self=True).values_list("id", flat=True).distinct()
-            self.used_parameters.update({f"{self.field_path}__id__in": descendant_ids})
+            if isinstance(filter_used, list):
+                filter_used = filter_used[0]
+
+            # Retrieve the selected node and its descendants
+            selected_object = self.field.related_model.objects.get(id=filter_used)
+            descendant_ids = selected_object.get_descendants(include_self=True).values_list("id", flat=True)
+
+            # Apply the filter directly to the queryset
+            queryset = queryset.filter(**{f"{self.field_path}__id__in": descendant_ids})
+
         return super().queryset(request, queryset)
 
 
