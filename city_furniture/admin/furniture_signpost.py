@@ -1,7 +1,7 @@
+from django.contrib.admin import ChoicesFieldListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 
 from city_furniture.forms import FurnitureSignpostPlanModelForm, FurnitureSignpostRealModelForm
@@ -117,7 +117,7 @@ class AbstractFurnitureSignpostAdmin(
         ("owner", SimplifiedRelatedFieldListFilter),
         ("target", SimplifiedRelatedFieldListFilter),
         ("device_type", SimplifiedRelatedFieldListFilter),
-        ("lifecycle", EnumFieldListFilter),
+        ("lifecycle", ChoicesFieldListFilter),
         OperationalAreaListFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         "validity_period_start",
@@ -290,7 +290,7 @@ class FurnitureSignpostRealAdmin(
     )
     raw_id_fields = ("furniture_signpost_plan", "mount_real", "parent")
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
-        ("condition", EnumFieldListFilter),
+        ("condition", ChoicesFieldListFilter),
         "installation_date",
     ]
     search_fields = (

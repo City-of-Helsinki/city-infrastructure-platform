@@ -1,8 +1,7 @@
-from django.contrib.admin import SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
@@ -174,7 +173,7 @@ class MountPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", EnumFieldListFilter),
+        ("lifecycle", ChoicesFieldListFilter),
         "owner",
         MountPlanReplacementListFilter,
         "mount_type",
@@ -303,7 +302,7 @@ class MountRealAdmin(
         "attachment_url",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", EnumFieldListFilter),
+        ("lifecycle", ChoicesFieldListFilter),
         "owner",
         "mount_type",
     ]
