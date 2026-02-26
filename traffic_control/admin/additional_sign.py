@@ -1,8 +1,7 @@
-from django.contrib.admin import SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
@@ -255,7 +254,7 @@ class AdditionalSignPlanAdmin(
     raw_id_fields = ("parent", "plan", "mount_plan")
 
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", EnumFieldListFilter),
+        ("lifecycle", ChoicesFieldListFilter),
         "owner",
         AdditionalSignReplacementListFilter,
     ]
@@ -418,13 +417,13 @@ class AdditionalSignRealAdmin(
     raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", EnumFieldListFilter),
-        ("installation_status", EnumFieldListFilter),
-        ("condition", EnumFieldListFilter),
-        ("reflection_class", EnumFieldListFilter),
-        ("surface_class", EnumFieldListFilter),
-        ("location_specifier", EnumFieldListFilter),
-        ("color", EnumFieldListFilter),
+        ("lifecycle", ChoicesFieldListFilter),
+        ("installation_status", ChoicesFieldListFilter),
+        ("condition", ChoicesFieldListFilter),
+        ("reflection_class", ChoicesFieldListFilter),
+        ("surface_class", ChoicesFieldListFilter),
+        ("location_specifier", ChoicesFieldListFilter),
+        ("color", ChoicesFieldListFilter),
         "owner",
         OperationalAreaListFilter,
     ]

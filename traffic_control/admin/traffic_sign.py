@@ -1,9 +1,8 @@
-from django.contrib.admin import SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.db.models import Exists, OuterRef, QuerySet
 from django.utils.translation import gettext_lazy as _
-from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 
 from admin_helper.decorators import requires_annotation
@@ -287,7 +286,7 @@ class TrafficSignPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", EnumFieldListFilter),
+        ("lifecycle", ChoicesFieldListFilter),
         "owner",
         TrafficSignPlanReplacementListFilter,
         DeviceTypeSignTypeListFilter,
@@ -530,12 +529,12 @@ class TrafficSignRealAdmin(
     raw_id_fields = ("traffic_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", EnumFieldListFilter),
-        ("installation_status", EnumFieldListFilter),
-        ("condition", EnumFieldListFilter),
-        ("reflection_class", EnumFieldListFilter),
-        ("surface_class", EnumFieldListFilter),
-        ("location_specifier", EnumFieldListFilter),
+        ("lifecycle", ChoicesFieldListFilter),
+        ("installation_status", ChoicesFieldListFilter),
+        ("condition", ChoicesFieldListFilter),
+        ("reflection_class", ChoicesFieldListFilter),
+        ("surface_class", ChoicesFieldListFilter),
+        ("location_specifier", ChoicesFieldListFilter),
         "owner",
         OperationalAreaListFilter,
         DeviceTypeSignTypeListFilter,
