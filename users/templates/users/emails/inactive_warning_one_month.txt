@@ -1,0 +1,17 @@
+Hei {{ user.first_name }} {{ user.last_name }},
+Tilisi on ollut käyttämättömänä yli 5 kuukautta. Tilisi poistetaan käytöstä {{ days_until_deactivation }} päivän kuluttua, jos et kirjaudu sisään.
+Kirjaudu sisään säilyttääksesi pääsysi järjestelmään.
+Jos tilisi poistetaan käytöstä, järjestelmän ylläpitäjän on aktivoitava se uudelleen manuaalisesti.
+---
+Hej {{ user.first_name }} {{ user.last_name }},
+Ditt konto har varit inaktivt i över 5 månader. Ditt konto kommer att inaktiveras om {{ days_until_deactivation }} dagar om du inte loggar in.
+Logga in för att behålla din åtkomst till systemet.
+Om ditt konto inaktiveras måste en systemadministratör återaktivera det manuellt.
+---
+Hello {{ user.first_name }} {{ user.last_name }},
+Your account has been inactive for over 5 months. Your account will be deactivated in {{ days_until_deactivation }} days if you do not log in.
+Please log in to maintain your access to the system.
+If your account is deactivated, a system administrator must manually reactivate it.
+---
+Ystävällisin terveisin / Vänliga hälsningar / Best regards,
+City Infrastructure Platform

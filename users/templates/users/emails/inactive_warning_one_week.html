@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Account Inactivity Warning - 7 Days</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;
+                 line-height: 1.6;
+                 max-width: 600px;
+                 margin: 0 auto;
+                 padding: 20px">
+        <div style="background-color: #ff6b6b;
+                    color: white;
+                    padding: 15px;
+                    margin-bottom: 20px">
+            <h2>🚨 VIIMEINEN VIIKON VAROITUS / SISTA VECKAN VARNING / FINAL ONE-WEEK WARNING</h2>
+        </div>
+        <h3>SUOMEKSI</h3>
+        <p>
+            Hei {{ user.first_name }} {{ user.last_name }}, tilisi poistetaan käytöstä <strong>{{ days_until_deactivation }} päivän kuluttua</strong>. HUOMIO: Tämä on viimeinen viikon varoitus!
+        </p>
+        <hr />
+        <h3>PÅ SVENSKA</h3>
+        <p>
+            Hej {{ user.first_name }} {{ user.last_name }}, ditt konto inaktiveras om <strong>{{ days_until_deactivation }} dagar</strong>. OBS: Detta är din sista varning en vecka!
+        </p>
+        <hr />
+        <h3>IN ENGLISH</h3>
+        <p>
+            Hello {{ user.first_name }} {{ user.last_name }}, your account will be deactivated in <strong>{{ days_until_deactivation }} days</strong>. ATTENTION: This is your final one-week warning!
+        </p>
+        <hr />
+        <p style="color: #666">City Infrastructure Platform</p>
+    </body>
+</html>

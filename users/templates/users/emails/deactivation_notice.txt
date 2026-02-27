@@ -1,0 +1,32 @@
+Hei {{ user.first_name }} {{ user.last_name }},
+
+Tilisi on poistettu käytöstä {{ deactivation_date|date:"d.m.Y" }} johtuen 6 kuukauden käyttämättömyydestä.
+
+Järjestelmän ylläpitäjän on aktivoitava tilisi uudelleen manuaalisesti, jotta voit jatkaa järjestelmän käyttöä.
+
+Ota yhteyttä järjestelmän ylläpitäjiin ({{ admin_emails }}), jos tarvitset pääsyn takaisin järjestelmään.
+
+---
+
+Hej {{ user.first_name }} {{ user.last_name }},
+
+Ditt konto har inaktiverats {{ deactivation_date|date:"d.m.Y" }} på grund av 6 månaders inaktivitet.
+
+En systemadministratör måste manuellt återaktivera ditt konto för att du ska kunna fortsätta använda systemet.
+
+Kontakta systemadministratörerna ({{ admin_emails }}) om du behöver få åtkomst till systemet igen.
+
+---
+
+Hello {{ user.first_name }} {{ user.last_name }},
+
+Your account has been deactivated on {{ deactivation_date|date:"d.m.Y" }} due to 6 months of inactivity.
+
+A system administrator must manually reactivate your account for you to continue using the system.
+
+Please contact the system administrators ({{ admin_emails }}) if you need access to the system again.
+
+---
+
+Ystävällisin terveisin / Vänliga hälsningar / Best regards,
+City Infrastructure Platform

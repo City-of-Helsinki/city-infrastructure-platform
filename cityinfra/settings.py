@@ -152,6 +152,7 @@ else:
     # Use SMTP backend for production
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
+
 # Logging
 LOGGING = {
     "version": 1,

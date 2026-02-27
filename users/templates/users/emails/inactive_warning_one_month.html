@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0" />
+        <title>Account Inactivity Warning</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;
+                 line-height: 1.6;
+                 color: #333;
+                 max-width: 600px;
+                 margin: 0 auto;
+                 padding: 20px">
+        <div style="background-color: #fff3cd;
+                    border-left: 4px solid #ffc107;
+                    padding: 15px;
+                    margin-bottom: 20px">
+            <h2 style="margin-top: 0;
+                       color: #856404">
+                ⚠️ Tilin käyttämättömyysvaroitus / Varning för inaktivt konto / Account Inactivity Warning
+            </h2>
+        </div>
+        <div style="margin-bottom: 30px">
+            <h3 style="color: #0056b3">SUOMEKSI</h3>
+            <p>Hei {{ user.first_name }} {{ user.last_name }},</p>
+            <p>
+                Tilisi on ollut käyttämättömänä yli 5 kuukautta. <strong>Tilisi poistetaan käytöstä {{ days_until_deactivation }} päivän kuluttua</strong>, jos et kirjaudu sisään.
+            </p>
+            <p>Kirjaudu sisään säilyttääksesi pääsysi järjestelmään.</p>
+            <p>
+                <em>Jos tilisi poistetaan käytöstä, järjestelmän ylläpitäjän on aktivoitava se uudelleen manuaalisesti.</em>
+            </p>
+        </div>
+        <hr style="border: none;
+                   border-top: 1px solid #ddd;
+                   margin: 30px 0" />
+        <div style="margin-bottom: 30px">
+            <h3 style="color: #0056b3">PÅ SVENSKA</h3>
+            <p>Hej {{ user.first_name }} {{ user.last_name }},</p>
+            <p>
+                Ditt konto har varit inaktivt i över 5 månader. <strong>Ditt konto kommer att inaktiveras om {{ days_until_deactivation }} dagar</strong> om du inte loggar in.
+            </p>
+            <p>Logga in för att behålla din åtkomst till systemet.</p>
+            <p>
+                <em>Om ditt konto inaktiveras måste en systemadministratör återaktivera det manuellt.</em>
+            </p>
+        </div>
+        <hr style="border: none;
+                   border-top: 1px solid #ddd;
+                   margin: 30px 0" />
+        <div style="margin-bottom: 30px">
+            <h3 style="color: #0056b3">IN ENGLISH</h3>
+            <p>Hello {{ user.first_name }} {{ user.last_name }},</p>
+            <p>
+                Your account has been inactive for over 5 months. <strong>Your account will be deactivated in {{ days_until_deactivation }} days</strong> if you do not log in.
+            </p>
+            <p>Please log in to maintain your access to the system.</p>
+            <p>
+                <em>If your account is deactivated, a system administrator must manually reactivate it.</em>
+            </p>
+        </div>
+        <hr style="border: none;
+                   border-top: 1px solid #ddd;
+                   margin: 30px 0" />
+        <p style="color: #666;
+                  font-size: 0.9em">
+            Ystävällisin terveisin / Vänliga hälsningar / Best regards,
+            <br />
+            <strong>City Infrastructure Platform</strong>
+        </p>
+    </body>
+</html>

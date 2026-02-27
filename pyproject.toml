@@ -87,7 +87,12 @@ order-by-type = false
 
 
 [tool.djlint]
-ignore = "T003,H023,H030,H031"
+# T003: Endblock should have name
+# H023: Entity references must end with a semicolon
+# H030: Consider adding meta tag to viewport
+# H031: Consider adding meta tag to cache-control
+# H021: Inline styles should be avoided - necessary for email client compatibility
+ignore = "T003,H023,H030,H031,H021"
 use_gitignore = true
 extend_exclude = "map-view"
 profile = "django"
