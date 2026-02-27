@@ -19,6 +19,11 @@ def create_user_with_activity(db):
         user = User.objects.create_user(username=username, email=email)
         now = timezone.now()
 
+        # Set date_joined to a fixed old date (2 years ago) to ensure it doesn't interfere
+        # with inactivity calculations. This allows tests to freely manipulate last_login
+        # without worrying about date_joined being more recent.
+        user.date_joined = now - timedelta(days=730)  # 2 years ago
+
         if days_ago_login is not None:
             user.last_login = now - timedelta(days=days_ago_login)
 
@@ -184,6 +189,8 @@ def test_use_most_recent_activity_timestamp(create_user_with_activity):
     user.refresh_from_db()
     assert user.is_active is True
     assert not UserDeactivationStatus.objects.filter(user=user).exists()
+    # Verify no emails sent
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
@@ -214,6 +221,61 @@ def test_skip_user_with_no_activity_timestamps(db):
 
 
 @pytest.mark.django_db
+def test_never_logged_in_user_uses_date_joined():
+    """Test user who never logged in uses date_joined for activity calculation."""
+    now = timezone.now()
+
+    # Create user who never logged in, account created 160 days ago
+    user = User.objects.create_user(username="neverloggedin", email="neverloggedin@example.com")
+    user.date_joined = now - timedelta(days=160)
+    user.last_login = None  # Never logged in
+    user.last_api_use = None
+    user.reactivated_at = None
+    user.save()
+
+    call_command("notify_inactive_users")
+
+    # User should receive 30-day warning (160 days > 150 threshold)
+    user.refresh_from_db()
+    assert user.is_active is True
+
+    status = UserDeactivationStatus.objects.get(user=user)
+    assert status.one_month_email_sent_at is not None
+    assert status.deactivated_at is None
+
+    # Verify email was sent
+    assert len(mail.outbox) == 1
+    assert user.email in mail.outbox[0].to
+
+
+@pytest.mark.django_db
+def test_never_logged_in_user_gets_deactivated_after_180_days():
+    """Test user who never logged in gets deactivated after 180 days from account creation."""
+    now = timezone.now()
+
+    # Create user who never logged in, account created 185 days ago
+    user = User.objects.create_user(username="oldneverloggedin", email="old@example.com")
+    user.date_joined = now - timedelta(days=185)
+    user.last_login = None  # Never logged in
+    user.last_api_use = None
+    user.reactivated_at = None
+    user.save()
+
+    call_command("notify_inactive_users")
+
+    # User should be deactivated (185 days >= 180 threshold)
+    user.refresh_from_db()
+    assert user.is_active is False
+
+    status = UserDeactivationStatus.objects.get(user=user)
+    assert status.deactivated_at is not None
+
+    # Verify deactivation email was sent
+    assert len(mail.outbox) == 1
+    assert user.email in mail.outbox[0].to
+
+
+@pytest.mark.django_db
 def test_idempotency_do_not_resend_emails(create_user_with_activity):
     """Test emails are not resent if already sent."""
     create_user_with_activity("user_150", "user150@example.com", days_ago_login=150)
@@ -231,9 +293,10 @@ def test_idempotency_do_not_resend_emails(create_user_with_activity):
 
 
 @pytest.mark.django_db
-def test_user_without_email_notifies_admins(create_user_with_activity, settings):
+def test_user_without_email_notifies_admins(create_user_with_activity):
     """Test users without email trigger admin notifications."""
-    settings.DEACTIVATION_ADMIN_EMAILS = ["admin@example.com"]
+    # Create admin user who receives notifications
+    User.objects.create_user(username="admin", email="admin@example.com", receives_admin_notification_emails=True)
 
     user = create_user_with_activity("noemail", "", days_ago_login=150)
 
@@ -243,6 +306,138 @@ def test_user_without_email_notifies_admins(create_user_with_activity, settings)
     assert len(mail.outbox) == 1
     assert "admin@example.com" in mail.outbox[0].to
     assert user.username in mail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_user_without_email_7day_warning_to_admins(create_user_with_activity):
+    """Test user without email sends 7-day warning to admins."""
+    # Create admin user who receives notifications
+    User.objects.create_user(username="admin", email="admin@example.com", receives_admin_notification_emails=True)
+
+    user = create_user_with_activity("noemail_7day", "", days_ago_login=173)
+
+    call_command("notify_inactive_users")
+
+    # Email should be sent to admin
+    assert len(mail.outbox) == 1
+    assert "admin@example.com" in mail.outbox[0].to
+    assert user.username in mail.outbox[0].body
+
+    # Verify status was created
+    status = UserDeactivationStatus.objects.get(user=user)
+    assert status.one_week_email_sent_at is not None
+
+
+@pytest.mark.django_db
+def test_user_without_email_1day_warning_to_admins(create_user_with_activity):
+    """Test user without email sends 1-day warning to admins."""
+    # Create admin user who receives notifications
+    User.objects.create_user(username="admin", email="admin@example.com", receives_admin_notification_emails=True)
+
+    user = create_user_with_activity("noemail_1day", "", days_ago_login=179)
+
+    call_command("notify_inactive_users")
+
+    # Email should be sent to admin
+    assert len(mail.outbox) == 1
+    assert "admin@example.com" in mail.outbox[0].to
+    assert user.username in mail.outbox[0].body
+
+    # Verify status was created
+    status = UserDeactivationStatus.objects.get(user=user)
+    assert status.one_day_email_sent_at is not None
+
+
+@pytest.mark.django_db
+def test_user_without_email_deactivation_notice_to_admins(create_user_with_activity):
+    """Test user without email sends deactivation notice to admins."""
+    # Create admin user who receives notifications
+    User.objects.create_user(username="admin", email="admin@example.com", receives_admin_notification_emails=True)
+
+    user = create_user_with_activity("noemail_deactivate", "", days_ago_login=185)
+
+    call_command("notify_inactive_users")
+
+    # Email should be sent to admin
+    assert len(mail.outbox) == 1
+    assert "admin@example.com" in mail.outbox[0].to
+    assert user.username in mail.outbox[0].body
+
+    # User should be deactivated
+    user.refresh_from_db()
+    assert user.is_active is False
+
+    # Verify status was created
+    status = UserDeactivationStatus.objects.get(user=user)
+    assert status.deactivated_at is not None
+
+
+@pytest.mark.django_db
+def test_user_without_email_multiple_admins(create_user_with_activity):
+    """Test user without email notifies multiple admin recipients."""
+    # Create multiple admin users who receive notifications
+    User.objects.create_user(username="admin1", email="admin1@example.com", receives_admin_notification_emails=True)
+    User.objects.create_user(username="admin2", email="admin2@example.com", receives_admin_notification_emails=True)
+
+    user = create_user_with_activity("noemail", "", days_ago_login=150)
+
+    call_command("notify_inactive_users")
+
+    # Email should be sent to all admins
+    assert len(mail.outbox) == 1
+    assert "admin1@example.com" in mail.outbox[0].to
+    assert "admin2@example.com" in mail.outbox[0].to
+    assert user.username in mail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_user_without_email_no_admins_configured(create_user_with_activity):
+    """Test user without email shows warning when no admin recipients configured."""
+    # Don't create any admin users
+    user = create_user_with_activity("noemail", "", days_ago_login=150)
+
+    out = StringIO()
+    call_command("notify_inactive_users", stdout=out)
+
+    # No email should be sent
+    assert len(mail.outbox) == 0
+
+    # Warning message should appear in output
+    output = out.getvalue()
+    assert "No admin notification recipients configured" in output
+    assert user.username in output
+
+
+@pytest.mark.django_db
+def test_old_user_without_email_never_logged_in():
+    """Test 2-year-old user without email who never logged in gets admin notified and deactivated."""
+    now = timezone.now()
+
+    # Create admin user who receives notifications
+    User.objects.create_user(username="admin", email="admin@example.com", receives_admin_notification_emails=True)
+
+    # Create user without email, 2 years old, never logged in
+    user = User.objects.create_user(username="oldnoemail", email="")
+    user.date_joined = now - timedelta(days=730)  # 2 years ago
+    user.last_login = None  # Never logged in
+    user.last_api_use = None
+    user.reactivated_at = None
+    user.save()
+
+    call_command("notify_inactive_users")
+
+    # User should be deactivated (730 days >= 180 threshold)
+    user.refresh_from_db()
+    assert user.is_active is False
+
+    # Admin should receive deactivation notice
+    assert len(mail.outbox) == 1
+    assert "admin@example.com" in mail.outbox[0].to
+    assert user.username in mail.outbox[0].body
+
+    # Verify status was created
+    status = UserDeactivationStatus.objects.get(user=user)
+    assert status.deactivated_at is not None
 
 
 @pytest.mark.django_db

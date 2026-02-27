@@ -210,9 +210,28 @@ class UserAdmin(BaseUserAdmin):
         ),
         (_("Additional user information"), {"fields": ("additional_information",)}),
         (
+            _("Activity Tracking"),
+            {
+                "fields": ("last_api_use",),
+                "description": _(
+                    "Track user's API usage activity. This field is automatically updated when the user uses the API."
+                ),
+            },
+        ),
+        (
             _("Reactivation"),
             {
                 "fields": ("reactivated_at",),
+            },
+        ),
+        (
+            _("Admin Notifications"),
+            {
+                "fields": ("receives_admin_notification_emails",),
+                "description": _(
+                    "Configure whether this user receives admin notification emails about "
+                    "user deactivations and system events."
+                ),
             },
         ),
         (
@@ -234,7 +253,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-    readonly_fields = ("auth_type_display", "reactivated_at")
+    readonly_fields = ("auth_type_display", "last_api_use", "reactivated_at")
     filter_horizontal = BaseUserAdmin.filter_horizontal + (
         "operational_areas",
         "responsible_entities",
@@ -246,7 +265,9 @@ class UserAdmin(BaseUserAdmin):
         "first_name",
         "last_name",
         "last_login_highlighted",
+        "last_api_use",
         "reactivated_at",
+        "receives_admin_notification_emails",
         "is_active",
         "is_staff",
         "is_superuser",

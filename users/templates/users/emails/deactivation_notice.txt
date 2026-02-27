@@ -4,7 +4,7 @@ Tilisi on poistettu käytöstä {{ deactivation_date|date:"d.m.Y" }} johtuen 6 k
 
 Järjestelmän ylläpitäjän on aktivoitava tilisi uudelleen manuaalisesti, jotta voit jatkaa järjestelmän käyttöä.
 
-Ota yhteyttä järjestelmän ylläpitäjään, jos tarvitset pääsyn takaisin järjestelmään.
+Ota yhteyttä järjestelmän ylläpitäjiin ({{ admin_emails }}), jos tarvitset pääsyn takaisin järjestelmään.
 
 ---
 
@@ -14,7 +14,7 @@ Ditt konto har inaktiverats {{ deactivation_date|date:"d.m.Y" }} på grund av 6 
 
 En systemadministratör måste manuellt återaktivera ditt konto för att du ska kunna fortsätta använda systemet.
 
-Kontakta systemadministratören om du behöver få åtkomst till systemet igen.
+Kontakta systemadministratörerna ({{ admin_emails }}) om du behöver få åtkomst till systemet igen.
 
 ---
 
@@ -24,7 +24,7 @@ Your account has been deactivated on {{ deactivation_date|date:"d.m.Y" }} due to
 
 A system administrator must manually reactivate your account for you to continue using the system.
 
-Please contact the system administrator if you need access to the system again.
+Please contact the system administrators ({{ admin_emails }}) if you need access to the system again.
 
 ---
 

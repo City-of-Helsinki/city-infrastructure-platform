@@ -5,13 +5,13 @@ from calendar import month_name
 from datetime import timedelta
 from typing import Any
 
-from django.conf import settings
 from django.core.management.base import BaseCommand, CommandParser
 from django.template.loader import render_to_string
 from django.utils import timezone
 
 from traffic_control.services.email import send_email
 from users.models import UserDeactivationStatus
+from users.utils import get_admin_notification_recipients
 
 
 class Command(BaseCommand):
@@ -180,11 +180,18 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Failed to render email templates: {e}"))
             return
-        # Get admin email recipients
-        recipients = settings.DEACTIVATION_ADMIN_EMAILS
+
+        # Get admin email recipients from database
+        recipients = get_admin_notification_recipients()
         if not recipients:
-            self.stdout.write(self.style.ERROR("No admin emails configured in DEACTIVATION_ADMIN_EMAILS"))
+            self.stdout.write(
+                self.style.ERROR(
+                    "No admin notification recipients configured. "
+                    "Set 'Receives admin notification emails' flag on admin users."
+                )
+            )
             return
+
         if dry_run:
             self.stdout.write(
                 self.style.WARNING(

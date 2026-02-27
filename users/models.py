@@ -57,6 +57,14 @@ class User(AbstractUser):
         blank=True,
         help_text=_("Timestamp when admin manually reactivated this user account. Prevents automatic deactivation."),
     )
+    receives_admin_notification_emails = models.BooleanField(
+        verbose_name=_("Receives admin notification emails"),
+        default=False,
+        help_text=_(
+            "If enabled, this user will receive admin notification emails about user deactivations "
+            "and system events. Only users with valid email addresses will receive notifications."
+        ),
+    )
 
     def location_is_in_operational_area(self, location):
         """

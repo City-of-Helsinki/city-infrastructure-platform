@@ -1,38 +1,38 @@
 Hei {{ user.first_name }} {{ user.last_name }},
-City Infrastructure Platform
-Ystävällisin terveisin / Vänliga hälsningar / Best regards,
-
----
-
-If your account is deactivated, a system administrator must manually reactivate it.
-
-Please log in to maintain your access to the system.
-
-ATTENTION: This is your final one-week warning!
-
-Your account has been inactive for almost 6 months. Your account will be deactivated in {{ days_until_deactivation }} days if you do not log in.
-
-Hello {{ user.first_name }} {{ user.last_name }},
-
----
-
-Om ditt konto inaktiveras måste en systemadministratör återaktivera det manuellt.
-
-Logga in för att behålla din åtkomst till systemet.
-
-OBS: Detta är din sista varning en vecka!
-
-Ditt konto har varit inaktivt i nästan 6 månader. Ditt konto kommer att inaktiveras om {{ days_until_deactivation }} dagar om du inte loggar in.
-
-Hej {{ user.first_name }} {{ user.last_name }},
-
----
-
-Jos tilisi poistetaan käytöstä, järjestelmän ylläpitäjän on aktivoitava se uudelleen manuaalisesti.
-
-Kirjaudu sisään säilyttääksesi pääsysi järjestelmään.
-
-HUOMIO: Tämä on viimeinen viikon varoitus!
 
 Tilisi on ollut käyttämättömänä lähes 6 kuukautta. Tilisi poistetaan käytöstä {{ days_until_deactivation }} päivän kuluttua, jos et kirjaudu sisään.
 
+HUOMIO: Tämä on viimeinen viikon varoitus!
+
+Kirjaudu sisään säilyttääksesi pääsysi järjestelmään.
+
+Jos tilisi poistetaan käytöstä, järjestelmän ylläpitäjän on aktivoitava se uudelleen manuaalisesti.
+
+---
+
+Hej {{ user.first_name }} {{ user.last_name }},
+
+Ditt konto har varit inaktivt i nästan 6 månader. Ditt konto kommer att inaktiveras om {{ days_until_deactivation }} dagar om du inte loggar in.
+
+OBS: Detta är din sista varning en vecka!
+
+Logga in för att behålla din åtkomst till systemet.
+
+Om ditt konto inaktiveras måste en systemadministratör återaktivera det manuellt.
+
+---
+
+Hello {{ user.first_name }} {{ user.last_name }},
+
+Your account has been inactive for almost 6 months. Your account will be deactivated in {{ days_until_deactivation }} days if you do not log in.
+
+ATTENTION: This is your final one-week warning!
+
+Please log in to maintain your access to the system.
+
+If your account is deactivated, a system administrator must manually reactivate it.
+
+---
+
+Ystävällisin terveisin / Vänliga hälsningar / Best regards,
+City Infrastructure Platform

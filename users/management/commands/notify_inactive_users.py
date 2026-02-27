@@ -6,13 +6,13 @@ Suggested cron schedule: Daily at 2 AM via cron: 0 2 * * *
 from datetime import timedelta
 from typing import Any
 
-from django.conf import settings
 from django.core.management.base import BaseCommand, CommandParser
 from django.template.loader import render_to_string
 from django.utils import timezone
 
 from traffic_control.services.email import send_email
 from users.models import User, UserDeactivationStatus
+from users.utils import get_admin_notification_recipients
 
 
 class Command(BaseCommand):
@@ -116,6 +116,9 @@ class Command(BaseCommand):
 
         if user.reactivated_at is not None:
             activity_timestamps.append(user.reactivated_at)
+
+        if user.date_joined is not None:
+            activity_timestamps.append(user.date_joined)
 
         if not activity_timestamps:
             return None
@@ -255,6 +258,40 @@ class Command(BaseCommand):
         timestamp = getattr(status, field_name, None)
         return timestamp is None
 
+    def _render_email_templates(
+        self, template_name: str, context: dict, user_has_email: bool
+    ) -> tuple[str, str, str] | None:
+        """
+        Render email templates based on whether user has email.
+
+        Args:
+            template_name (str): Base name of the email template.
+            context (dict): Template context.
+            user_has_email (bool): Whether user has email (False = use admin notification template).
+
+        Returns:
+            tuple[str, str, str] | None: (subject, text_body, html_body) or None if rendering fails.
+        """
+        if user_has_email:
+            # Use regular user notification templates
+            subject_template = f"users/emails/{template_name}_subject.txt"
+            text_template = f"users/emails/{template_name}.txt"
+            html_template = f"users/emails/{template_name}.html"
+        else:
+            # Use admin notification templates for users without email
+            subject_template = "users/emails/user_no_email_notification_subject.txt"
+            text_template = "users/emails/user_no_email_notification.txt"
+            html_template = "users/emails/user_no_email_notification.html"
+
+        try:
+            subject = render_to_string(subject_template, context).strip()
+            text_body = render_to_string(text_template, context)
+            html_body = render_to_string(html_template, context)
+            return subject, text_body, html_body
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f"Failed to render templates: {e}"))
+            return None
+
     def _send_notification(
         self,
         user: User,
@@ -278,43 +315,35 @@ class Command(BaseCommand):
             "days_until_deactivation": days_until_deactivation,
             "days_inactive": days_inactive,
             "deactivation_date": timezone.now() + timedelta(days=days_until_deactivation),
+            "admin_emails": ", ".join(get_admin_notification_recipients()),
         }
-
-        # Render email templates
-        subject_template = f"users/emails/{template_name}_subject.txt"
-        text_template = f"users/emails/{template_name}.txt"
-        html_template = f"users/emails/{template_name}.html"
-
-        try:
-            subject = render_to_string(subject_template, context).strip()
-            text_body = render_to_string(text_template, context)
-            html_body = render_to_string(html_template, context)
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f"Failed to render templates for {user.username}: {e}"))
-            return
 
         # Determine recipients
         if user.email:
             recipients = [user.email]
             recipient_type = "user"
+            user_has_email = True
         else:
             # User has no email, notify admins
-            recipients = settings.DEACTIVATION_ADMIN_EMAILS
-            recipient_type = "admin"
-            # Use different template for admin notifications
-            try:
-                admin_subject_template = "users/emails/user_no_email_notification_subject.txt"
-                admin_text_template = "users/emails/user_no_email_notification.txt"
-                admin_html_template = "users/emails/user_no_email_notification.html"
-
-                subject = render_to_string(admin_subject_template, context).strip()
-                text_body = render_to_string(admin_text_template, context)
-                html_body = render_to_string(admin_html_template, context)
-            except Exception as e:
+            recipients = get_admin_notification_recipients()
+            if not recipients:
                 self.stdout.write(
-                    self.style.ERROR(f"Failed to render admin notification templates for {user.username}: {e}")
+                    self.style.WARNING(
+                        f"No admin notification recipients configured for user {user.username} without email. "
+                        "Set 'Receives admin notification emails' flag on admin users."
+                    )
                 )
                 return
+            recipient_type = "admin"
+            user_has_email = False
+
+        # Render email templates
+        templates = self._render_email_templates(template_name, context, user_has_email)
+        if templates is None:
+            # Error already logged in _render_email_templates
+            return
+
+        subject, text_body, html_body = templates
 
         if dry_run:
             # Make it clear what type of notification this is

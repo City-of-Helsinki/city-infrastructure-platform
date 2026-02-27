@@ -7,7 +7,6 @@ from io import StringIO
 import pytest
 from django.core import mail
 from django.core.management import call_command
-from django.test import override_settings
 from django.utils import timezone
 
 from users.models import User, UserDeactivationStatus
@@ -58,10 +57,23 @@ def deactivated_user_in_month(db):
     return _create
 
 
+@pytest.fixture
+def admin_notification_recipient(db):
+    """Create a user who receives admin notifications."""
+
+    def _create(username="admin", email="admin@example.com"):
+        return User.objects.create_user(
+            username=username, email=email, receives_admin_notification_emails=True, is_active=True
+        )
+
+    return _create
+
+
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_previous_month_deactivations(deactivated_user_in_month):
+def test_report_previous_month_deactivations(deactivated_user_in_month, admin_notification_recipient):
     """Test report includes users deactivated in previous month."""
+    admin_notification_recipient()
+
     # Create user deactivated last month
     user, status = deactivated_user_in_month("lastmonth", "last@example.com", month_offset=-1)
 
@@ -78,9 +90,10 @@ def test_report_previous_month_deactivations(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_dry_run_mode(deactivated_user_in_month):
+def test_report_dry_run_mode(deactivated_user_in_month, admin_notification_recipient):
     """Test dry-run mode doesn't send emails."""
+    admin_notification_recipient()
+
     deactivated_user_in_month("test", "test@example.com", month_offset=-1)
 
     out = StringIO()
@@ -95,9 +108,10 @@ def test_report_dry_run_mode(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_empty_report_no_deactivations(db):
+def test_empty_report_no_deactivations(db, admin_notification_recipient):
     """Test report handles no deactivations gracefully."""
+    admin_notification_recipient()
+
     out = StringIO()
     call_command("report_deactivated_users", stdout=out)
 
@@ -110,9 +124,10 @@ def test_empty_report_no_deactivations(db):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_exclude_current_month_deactivations(deactivated_user_in_month):
+def test_exclude_current_month_deactivations(deactivated_user_in_month, admin_notification_recipient):
     """Test current month deactivations are excluded from report."""
+    admin_notification_recipient()
+
     # Create user deactivated this month
     deactivated_user_in_month("thismonth", "this@example.com", month_offset=0)
 
@@ -126,9 +141,10 @@ def test_exclude_current_month_deactivations(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_exclude_older_month_deactivations(deactivated_user_in_month):
+def test_exclude_older_month_deactivations(deactivated_user_in_month, admin_notification_recipient):
     """Test deactivations from 2+ months ago are excluded."""
+    admin_notification_recipient()
+
     # Create user deactivated 2 months ago
     deactivated_user_in_month("twomonthsago", "two@example.com", month_offset=-2)
 
@@ -142,9 +158,12 @@ def test_exclude_older_month_deactivations(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin1@example.com", "admin2@example.com"])
-def test_send_to_multiple_admins(deactivated_user_in_month):
+def test_send_to_multiple_admins(deactivated_user_in_month, admin_notification_recipient):
     """Test report is sent to all configured admin emails."""
+    # Create two admins who receive notifications
+    admin_notification_recipient("admin1", "admin1@example.com")
+    admin_notification_recipient("admin2", "admin2@example.com")
+
     deactivated_user_in_month("test", "test@example.com", month_offset=-1)
 
     call_command("report_deactivated_users")
@@ -155,23 +174,23 @@ def test_send_to_multiple_admins(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEBUG=False, DEACTIVATION_ADMIN_EMAILS=[])
-def test_error_when_no_admins_configured(deactivated_user_in_month, settings):
-    """Test command shows error when no admin emails configured."""
+def test_error_when_no_admins_configured(deactivated_user_in_month):
+    """Test command shows error when no admin notification recipients configured."""
+    # Don't create any admin recipients
     deactivated_user_in_month("test", "test@example.com", month_offset=-1)
 
     out = StringIO()
-    err = StringIO()
-    call_command("report_deactivated_users", stdout=out, stderr=err)
+    call_command("report_deactivated_users", stdout=out)
 
     output = out.getvalue()
-    assert "No admin emails configured" in output
+    assert "No admin notification recipients configured" in output
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_contains_month_and_year(deactivated_user_in_month):
+def test_report_contains_month_and_year(deactivated_user_in_month, admin_notification_recipient):
     """Test report includes correct month name and year."""
+    admin_notification_recipient()
+
     deactivated_user_in_month("test", "test@example.com", month_offset=-1)
 
     out = StringIO()
@@ -189,9 +208,10 @@ def test_report_contains_month_and_year(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_email_contains_table(deactivated_user_in_month):
+def test_report_email_contains_table(deactivated_user_in_month, admin_notification_recipient):
     """Test report email contains user details in table format."""
+    admin_notification_recipient()
+
     user1, _ = deactivated_user_in_month("user1", "user1@example.com", month_offset=-1)
     user2, _ = deactivated_user_in_month("user2", "user2@example.com", month_offset=-1)
 
@@ -210,9 +230,10 @@ def test_report_email_contains_table(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_email_subject_in_english(deactivated_user_in_month):
+def test_report_email_subject_in_english(deactivated_user_in_month, admin_notification_recipient):
     """Test report email subject is in English."""
+    admin_notification_recipient()
+
     deactivated_user_in_month("test", "test@example.com", month_offset=-1)
 
     call_command("report_deactivated_users")
@@ -224,9 +245,10 @@ def test_report_email_subject_in_english(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_user_count_in_output(deactivated_user_in_month):
+def test_report_user_count_in_output(deactivated_user_in_month, admin_notification_recipient):
     """Test report shows correct count of deactivated users."""
+    admin_notification_recipient()
+
     # Create 3 deactivated users
     for i in range(3):
         deactivated_user_in_month(f"user{i}", f"user{i}@example.com", month_offset=-1)
@@ -240,9 +262,10 @@ def test_report_user_count_in_output(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_only_includes_users_with_deactivated_at(db):
+def test_report_only_includes_users_with_deactivated_at(db, admin_notification_recipient):
     """Test report only includes users with deactivated_at timestamp."""
+    admin_notification_recipient()
+
     # Create user with status but no deactivated_at
     user = User.objects.create_user(username="pending", email="pending@example.com")
     UserDeactivationStatus.objects.create(
@@ -260,9 +283,10 @@ def test_report_only_includes_users_with_deactivated_at(db):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_html_and_text_versions(deactivated_user_in_month):
+def test_report_html_and_text_versions(deactivated_user_in_month, admin_notification_recipient):
     """Test report email has both HTML and text versions."""
+    admin_notification_recipient()
+
     deactivated_user_in_month("test", "test@example.com", month_offset=-1)
 
     call_command("report_deactivated_users")
@@ -277,9 +301,10 @@ def test_report_html_and_text_versions(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_trilingual_content(deactivated_user_in_month):
+def test_report_trilingual_content(deactivated_user_in_month, admin_notification_recipient):
     """Test report contains Finnish, Swedish, and English text."""
+    admin_notification_recipient()
+
     deactivated_user_in_month("test", "test@example.com", month_offset=-1)
 
     call_command("report_deactivated_users")
@@ -297,9 +322,10 @@ def test_report_trilingual_content(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_success_message(deactivated_user_in_month):
+def test_report_success_message(deactivated_user_in_month, admin_notification_recipient):
     """Test command outputs success message after sending report."""
+    admin_notification_recipient()
+
     deactivated_user_in_month("test", "test@example.com", month_offset=-1)
 
     out = StringIO()
@@ -311,9 +337,10 @@ def test_report_success_message(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_orders_by_deactivation_date(deactivated_user_in_month):
+def test_report_orders_by_deactivation_date(deactivated_user_in_month, admin_notification_recipient):
     """Test report orders users by deactivation date."""
+    admin_notification_recipient()
+
     now = timezone.now()
 
     # Create users deactivated on different days last month
@@ -337,9 +364,10 @@ def test_report_orders_by_deactivation_date(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_custom_month_parameter(deactivated_user_in_month):
+def test_report_custom_month_parameter(deactivated_user_in_month, admin_notification_recipient):
     """Test report with custom --month parameter."""
+    admin_notification_recipient()
+
     now = timezone.now()
 
     # Create user deactivated 2 months ago
@@ -363,9 +391,12 @@ def test_report_custom_month_parameter(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_custom_month_uses_current_year_if_not_specified(deactivated_user_in_month):
+def test_report_custom_month_uses_current_year_if_not_specified(
+    deactivated_user_in_month, admin_notification_recipient
+):
     """Test that custom --month uses current year if --year not specified."""
+    admin_notification_recipient()
+
     now = timezone.now()
 
     # Create user deactivated in January of current year
@@ -383,9 +414,10 @@ def test_report_custom_month_uses_current_year_if_not_specified(deactivated_user
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_invalid_month_parameter():
+def test_report_invalid_month_parameter(admin_notification_recipient):
     """Test that invalid --month parameter shows error."""
+    admin_notification_recipient()
+
     out = StringIO()
     call_command("report_deactivated_users", month=13, stdout=out)  # Invalid month
 
@@ -398,9 +430,10 @@ def test_report_invalid_month_parameter():
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_invalid_month_zero():
+def test_report_invalid_month_zero(admin_notification_recipient):
     """Test that month=0 shows error."""
+    admin_notification_recipient()
+
     out = StringIO()
     call_command("report_deactivated_users", month=0, stdout=out)
 
@@ -412,9 +445,10 @@ def test_report_invalid_month_zero():
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_custom_month_and_year(deactivated_user_in_month):
+def test_report_custom_month_and_year(deactivated_user_in_month, admin_notification_recipient):
     """Test report with both --month and --year parameters."""
+    admin_notification_recipient()
+
     # Create user deactivated in December 2025
     user = User.objects.create_user(username="dec_2025_user", email="dec2025@example.com", is_active=False)
     dec_2025_date = timezone.datetime(2025, 12, 20, 10, 0, 0, 0)
@@ -440,9 +474,10 @@ def test_report_custom_month_and_year(deactivated_user_in_month):
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_custom_month_no_users():
+def test_report_custom_month_no_users(admin_notification_recipient):
     """Test report for custom month with no deactivated users."""
+    admin_notification_recipient()
+
     out = StringIO()
     # Report for January 2020 (no users deactivated then)
     call_command("report_deactivated_users", month=1, year=2020, stdout=out)
@@ -456,9 +491,10 @@ def test_report_custom_month_no_users():
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_custom_month_december_handles_year_boundary():
+def test_report_custom_month_december_handles_year_boundary(admin_notification_recipient):
     """Test that December custom month correctly handles year boundary."""
+    admin_notification_recipient()
+
     # Create user deactivated in December 2025
     user = User.objects.create_user(username="dec_user", email="dec@example.com", is_active=False)
     dec_date = timezone.datetime(2025, 12, 31, 23, 59, 0, 0)
@@ -487,9 +523,10 @@ def test_report_custom_month_december_handles_year_boundary():
 
 
 @pytest.mark.django_db
-@override_settings(DEACTIVATION_ADMIN_EMAILS=["admin@example.com"])
-def test_report_dry_run_with_custom_month():
+def test_report_dry_run_with_custom_month(admin_notification_recipient):
     """Test dry-run mode with custom month parameter."""
+    admin_notification_recipient()
+
     # Create user deactivated in a specific month
     user = User.objects.create_user(username="test_user", email="test@example.com", is_active=False)
     test_date = timezone.datetime(2025, 6, 15, 10, 0, 0, 0)

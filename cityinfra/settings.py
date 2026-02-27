@@ -88,8 +88,6 @@ env = environ.Env(
     MAINTENANCE_MODE_AUTH_PREFIXES=(list, ["ha", "auth"]),
     MAINTENANCE_MODE_ADMIN_PATHS=(list, ["admin/jsi18n"]),
     MAINTENANCE_MODE_LANGUAGES=(list, ["fi", "sv", "en"]),
-    # User deactivation notification configuration
-    DEACTIVATION_ADMIN_EMAILS=(list, []),
 )
 
 if os.path.exists(env_file):
@@ -154,11 +152,6 @@ else:
     # Use SMTP backend for production
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-# User deactivation notification emails
-DEACTIVATION_ADMIN_EMAILS = env("DEACTIVATION_ADMIN_EMAILS")
-
-if not DEBUG and not DEACTIVATION_ADMIN_EMAILS:
-    raise ImproperlyConfigured("User deactivation admin emails not configured")
 
 # Logging
 LOGGING = {

@@ -123,6 +123,3 @@ filterwarnings = [
 [tool.coverage.run]
 branch = true
 omit = ["*/migrations/*", "venv/*", "*/tests/*", "test_*.py"]
-
-
-
