@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.35.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.35.0...city-infrastructure-platform-v1.35.1) (2026-02-27)
+
+
+### Bug Fixes
+
+* Replace uses of EnumFieldListFilter with ChoicesFieldListFilter ([a926303](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a92630318269d297e29cfe6402b19b1ea935b082))
+* TreeModelFieldListFilter crashes the page ([8bd5d8d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8bd5d8ddb9954e8b774e7da8feee8af8d9fa0a29))
+
 ## [1.35.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.34.0...city-infrastructure-platform-v1.35.0) (2026-02-19)
 
 
