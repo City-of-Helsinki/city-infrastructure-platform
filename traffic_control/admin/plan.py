@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from rangefilter.filters import DateRangeFilterBuilder
 
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
+from traffic_control.admin.utils import SimplifiedRelatedFieldListFilter
 from traffic_control.forms import PlanModelForm, PlanRelationsForm
 from traffic_control.mixins import (
     EnumChoiceValueDisplayAdminMixin,
@@ -68,22 +69,16 @@ class PlanAdmin(
     )
     ordering = ("-created_at",)
     search_fields = (
-        "created_by__email",
-        "created_by__first_name",
-        "created_by__last_name",
-        "created_by__username",
         "decision_id",
         "diary_number",
         "drawing_numbers",
         "id",
         "name",
         "source_name",
-        "updated_by__email",
-        "updated_by__first_name",
-        "updated_by__last_name",
-        "updated_by__username",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("decision_date", DateRangeFilterBuilder()),

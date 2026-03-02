@@ -17,6 +17,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    SimplifiedRelatedFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import (
@@ -180,24 +181,18 @@ class MountPlanAdmin(
         "owner",
         MountPlanReplacementListFilter,
         "mount_type",
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
     ]
     search_fields = (
-        "created_by__email",
-        "created_by__first_name",
-        "created_by__last_name",
-        "created_by__username",
         "id",
         "mount_type__code",
         "plan__id",
         "plan__name",
         "road_name",
         "source_name",
-        "updated_by__email",
-        "updated_by__first_name",
-        "updated_by__last_name",
-        "updated_by__username",
     )
     readonly_fields = (
         "created_at",
@@ -326,6 +321,8 @@ class MountRealAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         "mount_type",
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
     ]

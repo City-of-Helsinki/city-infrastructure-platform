@@ -16,6 +16,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    SimplifiedRelatedFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
@@ -215,6 +216,8 @@ class RoadMarkingPlanAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         RoadMarkingPlanReplacementListFilter,
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -222,10 +225,6 @@ class RoadMarkingPlanAdmin(
     ]
     search_fields = (
         "additional_info",
-        "created_by__email",
-        "created_by__first_name",
-        "created_by__last_name",
-        "created_by__username",
         "device_type__code",
         "id",
         "plan__id",
@@ -233,10 +232,6 @@ class RoadMarkingPlanAdmin(
         "road_name",
         "source_name",
         "traffic_sign_plan__id",
-        "updated_by__email",
-        "updated_by__first_name",
-        "updated_by__last_name",
-        "updated_by__username",
     )
     readonly_fields = (
         "device_type_preview",
@@ -396,6 +391,8 @@ class RoadMarkingRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),

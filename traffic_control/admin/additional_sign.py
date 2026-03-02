@@ -17,6 +17,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    SimplifiedRelatedFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.forms import (
@@ -260,6 +261,8 @@ class AdditionalSignPlanAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         AdditionalSignReplacementListFilter,
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -267,10 +270,6 @@ class AdditionalSignPlanAdmin(
     ]
     search_fields = (
         "additional_information",
-        "created_by__email",
-        "created_by__first_name",
-        "created_by__last_name",
-        "created_by__username",
         "device_type__code",
         "id",
         "mount_plan__id",
@@ -280,10 +279,6 @@ class AdditionalSignPlanAdmin(
         "plan__name",
         "road_name",
         "source_name",
-        "updated_by__email",
-        "updated_by__first_name",
-        "updated_by__last_name",
-        "updated_by__username",
     )
     ordering = ("-created_at",)
     inlines = (
@@ -453,6 +448,8 @@ class AdditionalSignRealAdmin(
         ("color", ChoicesFieldListFilter),
         "owner",
         OperationalAreaListFilter,
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),

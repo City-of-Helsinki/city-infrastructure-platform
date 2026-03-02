@@ -120,8 +120,9 @@ class AbstractFurnitureSignpostAdmin(
         ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         OperationalAreaListFilter,
-        ("created_by", SimplifiedRelatedFieldListFilter),
         ("direction", EmptyFieldListFilter),
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -232,10 +233,6 @@ class FurnitureSignpostPlanAdmin(
     list_filter = AbstractFurnitureSignpostAdmin.list_filter
     inlines = (FurnitureSignpostPlanFileInline, FurnitureSignpostRealInline)
     search_fields = (
-        "created_by__email",
-        "created_by__first_name",
-        "created_by__last_name",
-        "created_by__username",
         "device_type__code",
         "id",
         "mount_plan__id",
@@ -244,10 +241,6 @@ class FurnitureSignpostPlanAdmin(
         "plan__id",
         "plan__name",
         "source_name",
-        "updated_by__email",
-        "updated_by__first_name",
-        "updated_by__last_name",
-        "updated_by__username",
     )
 
     # Generated for FurnitureSignpostPlanAdmin at 2026-02-20 07:47:59+00:00

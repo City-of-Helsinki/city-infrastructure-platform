@@ -22,6 +22,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    SimplifiedRelatedFieldListFilter,
 )
 from traffic_control.enums import (
     Condition,
@@ -294,16 +295,14 @@ class TrafficSignPlanAdmin(
         "owner",
         TrafficSignPlanReplacementListFilter,
         DeviceTypeSignTypeListFilter,
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
         ("validity_period_end", DateRangeFilterBuilder()),
     ]
     search_fields = (
-        "created_by__email",
-        "created_by__first_name",
-        "created_by__last_name",
-        "created_by__username",
         "device_type__code",
         "id",
         "mount_plan__id",
@@ -312,10 +311,6 @@ class TrafficSignPlanAdmin(
         "plan__name",
         "road_name",
         "source_name",
-        "updated_by__email",
-        "updated_by__first_name",
-        "updated_by__last_name",
-        "updated_by__username",
     )
     readonly_fields = (
         "device_type_preview",
@@ -564,6 +559,8 @@ class TrafficSignRealAdmin(
         "owner",
         OperationalAreaListFilter,
         DeviceTypeSignTypeListFilter,
+        ("created_by", SimplifiedRelatedFieldListFilter),
+        ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
