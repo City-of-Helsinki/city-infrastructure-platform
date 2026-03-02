@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.36.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.35.0...city-infrastructure-platform-v1.36.0) (2026-03-02)
+
+
+### Features
+
+* Implement user deactivation system with progressive email notifications ([5cefed5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5cefed50e94faeedd88ef35255fec5750e6bae28))
+
+
+### Bug Fixes
+
+* Replace uses of EnumFieldListFilter with ChoicesFieldListFilter ([a926303](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a92630318269d297e29cfe6402b19b1ea935b082))
+* TreeModelFieldListFilter crashes the page ([8bd5d8d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8bd5d8ddb9954e8b774e7da8feee8af8d9fa0a29))
+
 ## [1.35.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.34.0...city-infrastructure-platform-v1.35.0) (2026-02-19)
 
 
