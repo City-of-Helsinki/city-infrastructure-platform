@@ -372,6 +372,7 @@ class SignpostRealAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         HeightFilter,
+        ("condition", ChoicesFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

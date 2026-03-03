@@ -391,6 +391,7 @@ class RoadMarkingRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
+        ("condition", ChoicesFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

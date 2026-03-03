@@ -324,6 +324,7 @@ class MountRealAdmin(
         "owner",
         "mount_type",
         HeightFilter,
+        ("condition", ChoicesFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

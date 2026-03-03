@@ -554,7 +554,6 @@ class TrafficSignRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", ChoicesFieldListFilter),
         ("installation_status", ChoicesFieldListFilter),
-        ("condition", ChoicesFieldListFilter),
         ("reflection_class", ChoicesFieldListFilter),
         ("surface_class", ChoicesFieldListFilter),
         ("location_specifier", ChoicesFieldListFilter),
@@ -562,6 +561,7 @@ class TrafficSignRealAdmin(
         OperationalAreaListFilter,
         DeviceTypeSignTypeListFilter,
         HeightFilter,
+        ("condition", ChoicesFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
