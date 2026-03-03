@@ -556,6 +556,7 @@ class TrafficSignRealAdmin(
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("traffic_sign_plan", EmptyFieldListFilter),
+        ("mount_real", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         ("installation_status", ChoicesFieldListFilter),
         ("reflection_class", ChoicesFieldListFilter),

@@ -445,6 +445,7 @@ class AdditionalSignRealAdmin(
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("additional_sign_plan", EmptyFieldListFilter),
+        ("mount_real", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         ("installation_status", ChoicesFieldListFilter),
         HeightFilter,

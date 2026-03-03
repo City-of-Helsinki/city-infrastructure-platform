@@ -373,6 +373,7 @@ class SignpostRealAdmin(
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("signpost_plan", EmptyFieldListFilter),
+        ("mount_real", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         HeightFilter,

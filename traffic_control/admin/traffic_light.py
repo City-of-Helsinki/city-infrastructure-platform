@@ -349,6 +349,7 @@ class TrafficLightRealAdmin(
     list_select_related = ("device_type", "device_type__icon_file")
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("traffic_light_plan", EmptyFieldListFilter),
+        ("mount_real", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         HeightFilter,

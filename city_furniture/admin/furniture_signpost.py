@@ -324,6 +324,7 @@ class FurnitureSignpostRealAdmin(
     )
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
         ("furniture_signpost_plan", EmptyFieldListFilter),
+        ("mount_real", EmptyFieldListFilter),
         ("condition", ChoicesFieldListFilter),
         "installation_date",
     ]

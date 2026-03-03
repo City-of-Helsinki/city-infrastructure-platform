@@ -393,6 +393,7 @@ class RoadMarkingRealAdmin(
     list_select_related = ("device_type", "device_type__icon_file")
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("road_marking_plan", EmptyFieldListFilter),
+        ("traffic_sign_real", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         ("condition", ChoicesFieldListFilter),
