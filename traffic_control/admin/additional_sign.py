@@ -1,4 +1,5 @@
 from django.contrib.admin import (
+    BooleanFieldListFilter,
     ChoicesFieldListFilter,
     EmptyFieldListFilter,
     RelatedOnlyFieldListFilter,
@@ -272,6 +273,7 @@ class AdditionalSignPlanAdmin(
         AdditionalSignReplacementListFilter,
         HeightFilter,
         ("direction", EmptyFieldListFilter),
+        ("missing_content", BooleanFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -464,6 +466,7 @@ class AdditionalSignRealAdmin(
         ("color", ChoicesFieldListFilter),
         "owner",
         OperationalAreaListFilter,
+        ("missing_content", BooleanFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
