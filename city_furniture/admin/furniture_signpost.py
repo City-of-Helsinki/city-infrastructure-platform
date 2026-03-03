@@ -117,6 +117,7 @@ class AbstractFurnitureSignpostAdmin(
         ResponsibleEntityPermissionFilter,
         ("responsible_entity", TreeModelFieldListFilter),
         ("owner", SimplifiedRelatedFieldListFilter),
+        ("parent", EmptyFieldListFilter),
         ("target", SimplifiedRelatedFieldListFilter),
         ("mount_type", RelatedOnlyFieldListFilter),
         HeightFilter,
