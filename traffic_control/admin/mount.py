@@ -16,6 +16,7 @@ from traffic_control.admin.traffic_sign import OrderedTrafficSignRealInline
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
+    HeightFilter,
     MultiResourceExportActionAdminMixin,
     SimplifiedRelatedFieldListFilter,
 )
@@ -181,6 +182,7 @@ class MountPlanAdmin(
         "owner",
         MountPlanReplacementListFilter,
         "mount_type",
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -321,6 +323,7 @@ class MountRealAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         "mount_type",
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

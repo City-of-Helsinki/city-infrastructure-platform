@@ -23,6 +23,7 @@ from traffic_control.admin.common import OperationalAreaListFilter, TrafficContr
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
+    HeightFilter,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
     ResponsibleEntityPermissionFilter,
@@ -117,6 +118,7 @@ class AbstractFurnitureSignpostAdmin(
         ("responsible_entity", TreeModelFieldListFilter),
         ("owner", SimplifiedRelatedFieldListFilter),
         ("target", SimplifiedRelatedFieldListFilter),
+        HeightFilter,
         ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         OperationalAreaListFilter,
@@ -235,12 +237,16 @@ class FurnitureSignpostPlanAdmin(
     search_fields = (
         "device_type__code",
         "id",
+        "location_name_en",
+        "location_name_fi",
+        "location_name_sw",
         "mount_plan__id",
         "mount_type__code",
         "parent__id",
         "plan__id",
         "plan__name",
         "source_name",
+        "value",
     )
 
     # Generated for FurnitureSignpostPlanAdmin at 2026-02-20 07:47:59+00:00
@@ -318,19 +324,16 @@ class FurnitureSignpostRealAdmin(
         "installation_date",
     ]
     search_fields = (
-        "value",
-        "size",
-        "height",
-        "source_id",
-        "source_name",
-        "text_content_fi",
-        "text_content_sw",
-        "text_content_en",
-        "location_name_fi",
-        "location_name_en",
-        "location_name_sw",
         "device_type__code",
+        "furniture_signpost_plan__id",
         "id",
+        "location_name_en",
+        "location_name_fi",
+        "location_name_sw",
+        "mount_type__code",
+        "parent__id",
+        "source_name",
+        "value",
     )
     inlines = (FurnitureSignpostRealFileInline, FurnitureSignpostRealOperationInline)
     initial_values = {

@@ -15,6 +15,7 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
+    HeightFilter,
     MultiResourceExportActionAdminMixin,
     SimplifiedRelatedFieldListFilter,
 )
@@ -189,6 +190,7 @@ class TrafficLightPlanAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         TrafficLightPlanReplacementListFilter,
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -345,6 +347,7 @@ class TrafficLightRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

@@ -15,6 +15,7 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
+    HeightFilter,
     MultiResourceExportActionAdminMixin,
     SimplifiedRelatedFieldListFilter,
 )
@@ -193,6 +194,7 @@ class SignpostPlanAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         SignpostPlanReplacementListFilter,
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -369,6 +371,7 @@ class SignpostRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

@@ -80,6 +80,33 @@ class CustomDateFieldListFilter(DateFieldListFilter):
             )
 
 
+class HeightFilter(SimpleListFilter):
+    title = _("Height")
+    parameter_name = "height_filter"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("null", _("Height is null")),
+            ("zero", _("Height = 0m")),
+            ("under_1_5", _("Height < 1.5m")),
+            ("over_1_5", _("Height >= 1.5m")),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+
+        if value == "null":
+            return queryset.filter(height__isnull=True)
+        elif value == "zero":
+            return queryset.filter(height=0)
+        elif value == "under_1_5":
+            return queryset.filter(height__lt=150)
+        elif value == "over_1_5":
+            return queryset.filter(height__gte=150)
+
+        return queryset
+
+
 class SimplifiedRelatedFieldListFilter(RelatedFieldListFilter):
     def field_choices(self, field, request, model_admin):
         """Return only choices, which are actually used."""

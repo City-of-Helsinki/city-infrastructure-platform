@@ -21,6 +21,7 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
+    HeightFilter,
     MultiResourceExportActionAdminMixin,
     SimplifiedRelatedFieldListFilter,
 )
@@ -295,6 +296,7 @@ class TrafficSignPlanAdmin(
         "owner",
         TrafficSignPlanReplacementListFilter,
         DeviceTypeSignTypeListFilter,
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -559,6 +561,7 @@ class TrafficSignRealAdmin(
         "owner",
         OperationalAreaListFilter,
         DeviceTypeSignTypeListFilter,
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

@@ -16,6 +16,7 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
+    HeightFilter,
     MultiResourceExportActionAdminMixin,
     SimplifiedRelatedFieldListFilter,
 )
@@ -261,6 +262,7 @@ class AdditionalSignPlanAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         AdditionalSignReplacementListFilter,
+        HeightFilter,
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -441,6 +443,7 @@ class AdditionalSignRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("lifecycle", ChoicesFieldListFilter),
         ("installation_status", ChoicesFieldListFilter),
+        HeightFilter,
         ("condition", ChoicesFieldListFilter),
         ("reflection_class", ChoicesFieldListFilter),
         ("surface_class", ChoicesFieldListFilter),
