@@ -1,4 +1,9 @@
-from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
+from django.contrib.admin import (
+    ChoicesFieldListFilter,
+    EmptyFieldListFilter,
+    RelatedOnlyFieldListFilter,
+    SimpleListFilter,
+)
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -193,6 +198,7 @@ class SignpostPlanAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("plan", EmptyFieldListFilter),
         ("mount_plan", EmptyFieldListFilter),
+        ("mount_type", RelatedOnlyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         SignpostPlanReplacementListFilter,
@@ -374,6 +380,7 @@ class SignpostRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("signpost_plan", EmptyFieldListFilter),
         ("mount_real", EmptyFieldListFilter),
+        ("mount_type", RelatedOnlyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         HeightFilter,

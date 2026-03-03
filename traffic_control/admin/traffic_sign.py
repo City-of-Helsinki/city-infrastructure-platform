@@ -1,4 +1,9 @@
-from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
+from django.contrib.admin import (
+    ChoicesFieldListFilter,
+    EmptyFieldListFilter,
+    RelatedOnlyFieldListFilter,
+    SimpleListFilter,
+)
 from django.contrib.gis import admin
 from django.db import models
 from django.db.models import Exists, OuterRef, QuerySet
@@ -294,6 +299,7 @@ class TrafficSignPlanAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("plan", EmptyFieldListFilter),
         ("mount_plan", EmptyFieldListFilter),
+        ("mount_type", RelatedOnlyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         TrafficSignPlanReplacementListFilter,
@@ -557,6 +563,7 @@ class TrafficSignRealAdmin(
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("traffic_sign_plan", EmptyFieldListFilter),
         ("mount_real", EmptyFieldListFilter),
+        ("mount_type", RelatedOnlyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         ("installation_status", ChoicesFieldListFilter),
         ("reflection_class", ChoicesFieldListFilter),
