@@ -1,4 +1,4 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -263,6 +263,7 @@ class AdditionalSignPlanAdmin(
         "owner",
         AdditionalSignReplacementListFilter,
         HeightFilter,
+        ("direction", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -445,6 +446,7 @@ class AdditionalSignRealAdmin(
         ("installation_status", ChoicesFieldListFilter),
         HeightFilter,
         ("condition", ChoicesFieldListFilter),
+        ("direction", EmptyFieldListFilter),
         ("reflection_class", ChoicesFieldListFilter),
         ("surface_class", ChoicesFieldListFilter),
         ("location_specifier", ChoicesFieldListFilter),

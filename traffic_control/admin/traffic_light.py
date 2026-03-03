@@ -1,4 +1,4 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -191,6 +191,7 @@ class TrafficLightPlanAdmin(
         "owner",
         TrafficLightPlanReplacementListFilter,
         HeightFilter,
+        ("direction", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -349,6 +350,7 @@ class TrafficLightRealAdmin(
         "owner",
         HeightFilter,
         ("condition", ChoicesFieldListFilter),
+        ("direction", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

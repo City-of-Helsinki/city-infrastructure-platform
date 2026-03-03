@@ -1,4 +1,4 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.db.models import Exists, OuterRef, QuerySet
@@ -297,6 +297,7 @@ class TrafficSignPlanAdmin(
         TrafficSignPlanReplacementListFilter,
         DeviceTypeSignTypeListFilter,
         HeightFilter,
+        ("direction", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -562,6 +563,7 @@ class TrafficSignRealAdmin(
         DeviceTypeSignTypeListFilter,
         HeightFilter,
         ("condition", ChoicesFieldListFilter),
+        ("direction", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),

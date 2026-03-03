@@ -1,4 +1,4 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -216,6 +216,7 @@ class RoadMarkingPlanAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         RoadMarkingPlanReplacementListFilter,
+        ("direction", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
@@ -392,6 +393,7 @@ class RoadMarkingRealAdmin(
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         ("condition", ChoicesFieldListFilter),
+        ("direction", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
