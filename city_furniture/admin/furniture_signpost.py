@@ -124,6 +124,7 @@ class AbstractFurnitureSignpostAdmin(
         ("device_type", SimplifiedRelatedFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         OperationalAreaListFilter,
+        ("size", EmptyFieldListFilter),
         ("direction", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
         ("updated_by", SimplifiedRelatedFieldListFilter),

@@ -8,6 +8,7 @@ from django.contrib.gis import admin
 from django.db import models
 from django.db.models import Exists, OuterRef, QuerySet
 from django.utils.translation import gettext_lazy as _
+from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
 
@@ -305,6 +306,7 @@ class TrafficSignPlanAdmin(
         TrafficSignPlanReplacementListFilter,
         DeviceTypeSignTypeListFilter,
         HeightFilter,
+        ("size", EnumFieldListFilter),
         ("direction", EmptyFieldListFilter),
         ("seasonal_validity_period_information", EmptyFieldListFilter),
         ("created_by", SimplifiedRelatedFieldListFilter),
@@ -574,6 +576,7 @@ class TrafficSignRealAdmin(
         OperationalAreaListFilter,
         DeviceTypeSignTypeListFilter,
         HeightFilter,
+        ("size", EnumFieldListFilter),
         ("condition", ChoicesFieldListFilter),
         ("direction", EmptyFieldListFilter),
         ("seasonal_validity_period_information", EmptyFieldListFilter),
