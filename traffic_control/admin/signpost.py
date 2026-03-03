@@ -191,6 +191,8 @@ class SignpostPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("plan", EmptyFieldListFilter),
+        ("mount_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         SignpostPlanReplacementListFilter,
@@ -370,6 +372,7 @@ class SignpostRealAdmin(
         "installation_date",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("signpost_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         HeightFilter,

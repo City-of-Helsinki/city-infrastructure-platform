@@ -1,4 +1,4 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -188,6 +188,7 @@ class BarrierPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         BarrierPlanReplacementListFilter,
@@ -342,6 +343,7 @@ class BarrierRealAdmin(
         "installation_date",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("barrier_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         ("condition", ChoicesFieldListFilter),

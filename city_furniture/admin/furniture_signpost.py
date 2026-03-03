@@ -232,7 +232,10 @@ class FurnitureSignpostPlanAdmin(
         "lifecycle",
         "height",
     )
-    list_filter = AbstractFurnitureSignpostAdmin.list_filter
+    list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
+        ("plan", EmptyFieldListFilter),
+        ("mount_plan", EmptyFieldListFilter),
+    ]
     inlines = (FurnitureSignpostPlanFileInline, FurnitureSignpostRealInline)
     search_fields = (
         "device_type__code",
@@ -320,6 +323,7 @@ class FurnitureSignpostRealAdmin(
         "height",
     )
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
+        ("furniture_signpost_plan", EmptyFieldListFilter),
         ("condition", ChoicesFieldListFilter),
         "installation_date",
     ]

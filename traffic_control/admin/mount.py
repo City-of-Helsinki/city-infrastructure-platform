@@ -1,4 +1,4 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -178,6 +178,7 @@ class MountPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         MountPlanReplacementListFilter,
@@ -320,6 +321,7 @@ class MountRealAdmin(
         "attachment_url",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("mount_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         "mount_type",

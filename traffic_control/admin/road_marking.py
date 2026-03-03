@@ -213,6 +213,8 @@ class RoadMarkingPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("plan", EmptyFieldListFilter),
+        ("traffic_sign_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         RoadMarkingPlanReplacementListFilter,
@@ -390,6 +392,7 @@ class RoadMarkingRealAdmin(
     )
     list_select_related = ("device_type", "device_type__icon_file")
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("road_marking_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         ("condition", ChoicesFieldListFilter),

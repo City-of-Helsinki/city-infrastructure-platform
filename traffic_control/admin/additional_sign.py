@@ -259,6 +259,8 @@ class AdditionalSignPlanAdmin(
     raw_id_fields = ("parent", "plan", "mount_plan")
 
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("plan", EmptyFieldListFilter),
+        ("mount_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         "owner",
         AdditionalSignReplacementListFilter,
@@ -442,6 +444,7 @@ class AdditionalSignRealAdmin(
     raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
+        ("additional_sign_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
         ("installation_status", ChoicesFieldListFilter),
         HeightFilter,
