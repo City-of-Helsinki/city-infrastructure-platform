@@ -1,0 +1,7 @@
+OBJECTID,id,x,y,z,stdx,stdy,stdz,status,tyyppi,tallennusajankohta,ssurl
+3,mount_pylvas1,25497188.8384,6673461.8389,5.27,0.014,0.009,0.022,Unchanged,Pylväs,2023-08-15T12:28:00+00:00,https://dummy
+4,mount_orphan,25497188.8384,6673461.8389,5.27,0.014,0.009,0.022,New,Pylväs,2023-08-15T12:28:00+00:00,https://dummy
+5,mount_outside_srid,10,10.8389,5.27,0.014,0.009,0.022,Removed,Pylväs,2023-08-15T12:28:00+00:00,https://dummy
+6,mount_changed,25497188.8384,6673461.8389,5.27,0.014,0.009,0.022,Changed,Pylväs,2023-08-15T12:28:00+00:00,https://dummy
+7,mount_invalid_status,25497188.8384,6673461.8389,5.27,0.014,0.009,0.022,InvalidStatus,Pylväs,2023-08-15T12:28:00+00:00,https://dummy
+8,mount_zebra_double,25497190.0000,6673465.0000,5.30,0.014,0.009,0.022,New,Pylväs,2023-08-15T12:28:00+00:00,https://dummy

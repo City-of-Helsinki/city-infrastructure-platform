@@ -175,12 +175,12 @@ class TrafficSignAnalyzer:
 
     def get_signless_additional_signs(self):
         return {
-            "REPORT_TYPE": "SIGNLESSLESS ADDITIONAL SIGNS",
+            "REPORT_TYPE": "SIGNLESS ADDITIONAL SIGNS",
             "results": list(
                 map(
                     lambda x: {CSVHeaders.id: x.get(CSVHeaders.id)},
                     filter(lambda x: not x[CSVHeaders.parent_sign_id].strip(), self.additional_signs_by_id.values()),
-                ),
+                )
             ),
         }
 
@@ -729,14 +729,14 @@ class TrafficSignImporter:
                 reason=f"device type code not found: {row[CSVHeaders.code]}",
             )
 
-    @staticmethod
-    def _check_ticket_machine(row) -> Union[ImportResult, None]:
+    def _check_ticket_machine(self, row) -> bool:
         """Parentless ticket machines are not to be imported as an additional sign.
         This is not an error but processing should be stopped anyways. These are imported as trafficsigns."""
         if not row[CSVHeaders.parent_sign_id].strip():
             # these are "lippuautomaatit"
             if row[CSVHeaders.code] in TICKET_MACHINE_CODES:
                 return True
+        return False
 
     def _check_additional_sign_location(self, row) -> Union[ImportResult, None]:
         source_id = row[CSVHeaders.id]
@@ -1050,3 +1050,4 @@ def get_additional_sign_color(sign_data):
             return None
 
     return None
+
