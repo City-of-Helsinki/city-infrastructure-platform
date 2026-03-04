@@ -23,7 +23,6 @@ from traffic_control.admin.utils import (
     DeviceComparisonAdminMixin,
     HeightFilter,
     MultiResourceExportActionAdminMixin,
-    SimplifiedRelatedFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import (
@@ -190,8 +189,8 @@ class MountPlanAdmin(
         MountPlanReplacementListFilter,
         "mount_type",
         HeightFilter,
-        ("created_by", SimplifiedRelatedFieldListFilter),
-        ("updated_by", SimplifiedRelatedFieldListFilter),
+        ("created_by", RelatedOnlyFieldListFilter),
+        ("updated_by", RelatedOnlyFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
     ]
@@ -330,12 +329,12 @@ class MountRealAdmin(
         ("mount_plan", EmptyFieldListFilter),
         ("mount_type", RelatedOnlyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
-        "owner",
+        ("owner", RelatedOnlyFieldListFilter),
         "mount_type",
         HeightFilter,
         ("condition", ChoicesFieldListFilter),
-        ("created_by", SimplifiedRelatedFieldListFilter),
-        ("updated_by", SimplifiedRelatedFieldListFilter),
+        ("created_by", RelatedOnlyFieldListFilter),
+        ("updated_by", RelatedOnlyFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
     ]

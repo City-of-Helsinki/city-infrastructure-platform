@@ -1,4 +1,9 @@
-from django.contrib.admin import ChoicesFieldListFilter, EmptyFieldListFilter, SimpleListFilter
+from django.contrib.admin import (
+    ChoicesFieldListFilter,
+    EmptyFieldListFilter,
+    RelatedOnlyFieldListFilter,
+    SimpleListFilter,
+)
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -16,7 +21,6 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
-    SimplifiedRelatedFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
@@ -216,12 +220,12 @@ class RoadMarkingPlanAdmin(
         ("plan", EmptyFieldListFilter),
         ("traffic_sign_plan", EmptyFieldListFilter),
         ("lifecycle", ChoicesFieldListFilter),
-        "owner",
+        ("owner", RelatedOnlyFieldListFilter),
         RoadMarkingPlanReplacementListFilter,
         ("size", EmptyFieldListFilter),
         ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", SimplifiedRelatedFieldListFilter),
-        ("updated_by", SimplifiedRelatedFieldListFilter),
+        ("created_by", RelatedOnlyFieldListFilter),
+        ("updated_by", RelatedOnlyFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -400,8 +404,8 @@ class RoadMarkingRealAdmin(
         ("condition", ChoicesFieldListFilter),
         ("size", EmptyFieldListFilter),
         ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", SimplifiedRelatedFieldListFilter),
-        ("updated_by", SimplifiedRelatedFieldListFilter),
+        ("created_by", RelatedOnlyFieldListFilter),
+        ("updated_by", RelatedOnlyFieldListFilter),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),

@@ -107,14 +107,6 @@ class HeightFilter(SimpleListFilter):
         return queryset
 
 
-class SimplifiedRelatedFieldListFilter(RelatedFieldListFilter):
-    def field_choices(self, field, request, model_admin):
-        """Return only choices, which are actually used."""
-        ordering = self.field_admin_ordering(field, request, model_admin)
-        used_ids = model_admin.model.objects.values_list(field.attname, flat=True).distinct()
-        return field.get_choices(include_blank=False, ordering=ordering, limit_choices_to={"id__in": used_ids})
-
-
 class TreeModelFieldListFilter(RelatedFieldListFilter):
     def field_choices(self, field, request, model_admin):
         """Return only choices, which are actually used. Include children of selected object in the results"""
