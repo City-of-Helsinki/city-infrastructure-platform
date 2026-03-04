@@ -47,6 +47,30 @@ class CSVHeaders:
     txt = "teksti"
 
 
+class CSVHeadersV2:
+    """CSV headers for new traffic sign data format with status field"""
+
+    id = "id"
+    attachment_url = "ssurl"
+    code = "merkkikoodi"
+    color = "taustaväri"
+    condition = "merkin_ehto"
+    coord_x = "x"
+    coord_y = "y"
+    coord_z = "z"
+    direction = "atsimuutti"
+    height = "korkeus"
+    mount_id = "kiinnityskohta_id"
+    mount_type = "tyyppi"
+    number_code = "numerokoodi"
+    parent_sign_id = "lisäkilven_päämerkin_id"
+    scanned_at = "tallennusajankohta"
+    sign_mount_type = "kiinnitys"
+    status = "status"  # New field
+    txt = "teksti"
+    # Note: location_specifier removed for mounts in new format
+
+
 class TrafficSignAnalyzer:
     def __init__(self, mount_file, sign_file):
         self.mount_file = mount_file
@@ -175,12 +199,12 @@ class TrafficSignAnalyzer:
 
     def get_signless_additional_signs(self):
         return {
-            "REPORT_TYPE": "SIGNLESSLESS ADDITIONAL SIGNS",
+            "REPORT_TYPE": "SIGNLESS ADDITIONAL SIGNS",
             "results": list(
                 map(
                     lambda x: {CSVHeaders.id: x.get(CSVHeaders.id)},
                     filter(lambda x: not x[CSVHeaders.parent_sign_id].strip(), self.additional_signs_by_id.values()),
-                ),
+                )
             ),
         }
 
@@ -729,14 +753,14 @@ class TrafficSignImporter:
                 reason=f"device type code not found: {row[CSVHeaders.code]}",
             )
 
-    @staticmethod
-    def _check_ticket_machine(row) -> Union[ImportResult, None]:
+    def _check_ticket_machine(self, row) -> bool:
         """Parentless ticket machines are not to be imported as an additional sign.
         This is not an error but processing should be stopped anyways. These are imported as trafficsigns."""
         if not row[CSVHeaders.parent_sign_id].strip():
             # these are "lippuautomaatit"
             if row[CSVHeaders.code] in TICKET_MACHINE_CODES:
                 return True
+        return False
 
     def _check_additional_sign_location(self, row) -> Union[ImportResult, None]:
         source_id = row[CSVHeaders.id]
@@ -1050,3 +1074,1015 @@ def get_additional_sign_color(sign_data):
             return None
 
     return None
+
+
+# Constants for V2 analyzer
+VALID_STATUS_VALUES = ["new", "unchanged", "changed", "removed"]  # Lowercase for case-insensitive comparison
+ZEBRA_CROSSING_LEFT_CODES = ["511", "5112", "E1_2"]
+ZEBRA_CROSSING_RIGHT_CODES = ["5111", "E1"]
+ZEBRA_CROSSING_ALL_CODES = ZEBRA_CROSSING_LEFT_CODES + ZEBRA_CROSSING_RIGHT_CODES
+DIRECTION_TOLERANCE = 20  # degrees tolerance for 180° difference
+
+
+class TrafficSignAnalyzerV2:
+    """Analyzer for new traffic sign CSV format with status field.
+
+    This analyzer processes CSV files containing traffic sign data in V2 format
+    with status tracking (New/unchanged/Change/Remove) and generates comprehensive
+    analysis reports including status distribution, duplicate detection, and
+    double-sided zebra crossing identification.
+    """
+
+    def __init__(self, mount_file: str, sign_file: str, delimiter: str = ",") -> None:
+        """Initialize TrafficSignAnalyzerV2 with CSV files.
+
+        Args:
+            mount_file (str): Path to the mount CSV file.
+            sign_file (str): Path to the sign CSV file (contains both traffic signs and additional signs).
+            delimiter (str): CSV delimiter character. Defaults to ",".
+        """
+        self.mount_file = mount_file
+        self.sign_file = sign_file
+        self.delimiter = delimiter
+
+        # Query device types once at initialization for performance
+        self.code_to_device_type_id = self._build_code_to_device_type_mapping()
+
+        # Load CSV data
+        self.mounts_by_id = self._get_objects_by_id(mount_file, CSVHeadersV2.id, None, flat=True)
+        self.all_signs_by_id = self._get_objects_by_id(sign_file, CSVHeadersV2.id, None, flat=True)
+        self.signs_by_id = self._get_signs_by_id(sign_file, CSVHeadersV2.id, flat=True)
+        self.signs_by_mount_id = self._get_signs_by_mount_id()
+        self.additional_signs_by_id = self._get_additional_signs_by_id(sign_file, CSVHeadersV2.id, flat=True)
+        self.additional_signs_by_mount_id = self._get_additional_signs_by_mount_id()
+
+        # Combine mounts with signs (reuse existing logic)
+        self._combine_mounts_with_signs(self.mounts_by_id, self.additional_signs_by_mount_id, self.signs_by_mount_id)
+
+        # Calculate non-existing mounts
+        self.no_mounts_per_sign_id = self._get_non_existing_mounts_by_sign_id()
+        self.no_mounts_per_additional_sign_id = self._get_non_existing_mounts_by_additional_sign_id()
+
+        # Segregate objects by status
+        self.mounts_by_status = self._segregate_by_status(self.mounts_by_id.values())
+        self.signs_by_status = self._segregate_by_status(self.signs_by_id.values())
+        self.additional_signs_by_status = self._segregate_by_status(self.additional_signs_by_id.values())
+
+        # Build DB source_id -> device_type.code maps for change record comparison
+        self.mount_reals_by_source_id_set = self._build_mount_reals_by_source_id()
+        self.sign_reals_by_source_id = self._build_sign_reals_by_source_id()
+        self.additional_sign_reals_by_source_id = self._build_additional_sign_reals_by_source_id()
+
+        # Build DB source_id -> db_id maps for sanity check reports
+        self.mount_source_id_to_db_id = self._build_mount_source_id_to_db_id()
+        self.sign_source_id_to_db_id = self._build_sign_source_id_to_db_id()
+        self.additional_sign_source_id_to_db_id = self._build_additional_sign_source_id_to_db_id()
+
+    def analyze(self) -> list[dict]:
+        """Generate all analysis reports.
+
+        Returns:
+            list[dict]: List of report dictionaries, each containing 'REPORT_TYPE' and 'results' keys.
+        """
+        reports = [
+            # Existing analysis reports
+            self._get_non_existing_mounts_for_additional_signs(),
+            self._get_non_existing_mounts_for_signs(),
+            self._get_mount_distances(),
+            self._get_additional_sign_distances(),
+            self._get_sign_distances(),
+            self._get_mountless_additional_signs(),
+            self._get_signless_additional_signs(),
+            self._get_mountless_signs(),
+            # New status-based reports
+            self._get_status_distribution_report(),
+            self._get_invalid_status_report(),
+            self._get_change_records_report(),
+            self._get_remove_records_report(),
+            self._get_remove_with_invalid_location_report(),
+            self._get_timestamp_format_validation_report(),
+            self._get_missing_mounts_from_database_report(),
+            self._get_missing_traffic_signs_from_database_report(),
+            self._get_missing_additional_signs_from_database_report(),
+            # New duplicate detection reports
+            self._get_duplicate_signs_on_same_mount(),
+            self._get_added_double_sided_zebra_crossings(),
+            # New sanity check reports
+            self._get_mounts_found_in_database_report(),
+            self._get_traffic_signs_found_in_database_report(),
+            self._get_additional_signs_found_in_database_report(),
+        ]
+        return reports
+
+    @staticmethod
+    def _build_code_to_device_type_mapping() -> dict[str, Any]:
+        """Build mapping from both code and legacy_code to device type ID.
+
+        Returns:
+            dict[str, Any]: Dictionary mapping device codes (both current and legacy) to device type IDs.
+        """
+        code_to_id = {}
+        for dt in TrafficControlDeviceType.objects.all():
+            code_to_id[dt.code] = dt.id
+            if dt.legacy_code:
+                code_to_id[dt.legacy_code] = dt.id
+        return code_to_id
+
+    @staticmethod
+    def _build_mount_reals_by_source_id() -> set[str]:
+        """Build set of source_ids for active MountReal objects in the database.
+
+        Returns:
+            set[str]: Set of source_ids for active mounts.
+        """
+        return {
+            obj.source_id
+            for obj in MountReal.objects.filter(
+                source_name__startswith=TrafficSignImporter.SOURCE_NAME,
+                is_active=True,
+            ).only("source_id")
+        }
+
+    @staticmethod
+    def _build_sign_reals_by_source_id() -> dict[str, str | None]:
+        """Build mapping from source_id to device_type.code for active TrafficSignReal objects.
+
+        Returns:
+            dict[str, str | None]: Dictionary mapping source_id to device_type code.
+        """
+        return {
+            obj.source_id: obj.device_type.code
+            for obj in TrafficSignReal.objects.filter(
+                source_name__startswith=TrafficSignImporter.SOURCE_NAME,
+                is_active=True,
+            ).select_related("device_type")
+        }
+
+    @staticmethod
+    def _build_additional_sign_reals_by_source_id() -> dict[str, str | None]:
+        """Build mapping from source_id to device_type.code for active AdditionalSignReal objects.
+
+        Returns:
+            dict[str, str | None]: Dictionary mapping source_id to device_type code.
+        """
+        return {
+            obj.source_id: obj.device_type.code
+            for obj in AdditionalSignReal.objects.filter(
+                source_name__startswith=TrafficSignImporter.SOURCE_NAME,
+                is_active=True,
+            ).select_related("device_type")
+        }
+
+    @staticmethod
+    def _build_mount_source_id_to_db_id() -> dict[str, str]:
+        """Build mapping from source_id to db_id for active MountReal objects.
+
+        Returns:
+            dict[str, str]: Dictionary mapping source_id to db_id.
+        """
+        return {
+            obj.source_id: obj.id
+            for obj in MountReal.objects.filter(source_name__startswith=TrafficSignImporter.SOURCE_NAME)
+        }
+
+    @staticmethod
+    def _build_sign_source_id_to_db_id() -> dict[str, str]:
+        """Build mapping from source_id to db_id for active TrafficSignReal objects.
+
+        Returns:
+            dict[str, str]: Dictionary mapping source_id to db_id.
+        """
+        return {
+            obj.source_id: obj.id
+            for obj in TrafficSignReal.objects.filter(source_name__startswith=TrafficSignImporter.SOURCE_NAME)
+        }
+
+    @staticmethod
+    def _build_additional_sign_source_id_to_db_id() -> dict[str, str]:
+        """Build mapping from source_id to db_id for active AdditionalSignReal objects.
+
+        Returns:
+            dict[str, str]: Dictionary mapping source_id to db_id.
+        """
+        return {obj.source_id: obj.id for obj in AdditionalSignReal.objects.filter(source_name=TrafficSignImporter.SOURCE_NAME)}
+
+    def _get_objects_by_id(
+        self, csv_file: str, id_field_name: str = CSVHeadersV2.id, filter_f=None, flat: bool = False
+    ) -> dict:
+        """Load objects from CSV file with configurable delimiter.
+
+        Args:
+            csv_file (str): Path to CSV file.
+            id_field_name (str): Name of the ID field in CSV. Defaults to CSVHeadersV2.id.
+            filter_f: Optional filter function to apply to rows.
+            flat (bool): If True, store single object per ID; if False, store list. Defaults to False.
+
+        Returns:
+            dict: Dictionary of objects indexed by ID.
+        """
+        objects_by_id = {}
+
+        with open(csv_file) as f:
+            reader = csv.DictReader(f, delimiter=self.delimiter)
+            for row in reader:
+                if filter_f is None or filter_f(row):
+                    if not flat:
+                        objects_by_id.setdefault(row[id_field_name], []).append(row)
+                    else:
+                        objects_by_id[row[id_field_name]] = row
+
+        return objects_by_id
+
+    def _get_signs_by_id(self, csv_file: str, id_field_name: str = CSVHeadersV2.id, flat: bool = False) -> dict:
+        """Get traffic signs (not additional signs) with distance calculations.
+
+        Args:
+            csv_file (str): Path to CSV file.
+            id_field_name (str): Name of the ID field in CSV. Defaults to CSVHeadersV2.id.
+            flat (bool): If True, store single object per ID; if False, store list. Defaults to False.
+
+        Returns:
+            dict: Dictionary of traffic signs indexed by ID with calculated distances to mounts.
+        """
+        signs = self._get_objects_by_id(
+            csv_file, id_field_name=id_field_name, filter_f=lambda x: not self._is_additional_sign(x), flat=flat
+        )
+        for k, data in signs.items():
+            mount_data = self.mounts_by_id.get(data.get(CSVHeadersV2.mount_id), None)
+            if mount_data:
+                mount_point = Point(
+                    float(mount_data[CSVHeadersV2.coord_x]), float(mount_data[CSVHeadersV2.coord_y]), 0.0
+                )
+                data["distance_to_mount"] = mount_point.distance(
+                    Point(float(data[CSVHeadersV2.coord_x]), float(data[CSVHeadersV2.coord_y]), 0.0)
+                )
+            else:
+                data["distance_to_mount"] = None
+        return signs
+
+    def _get_signs_by_mount_id(self) -> dict:
+        """Group signs by mount ID.
+
+        Returns:
+            dict: Dictionary mapping mount IDs to lists of signs.
+        """
+        signs = {}
+        for k, v in self.signs_by_id.items():
+            signs.setdefault(v[CSVHeadersV2.mount_id], []).append(v)
+        return signs
+
+    def _get_additional_signs_by_id(
+        self, csv_file: str, id_field_name: str = CSVHeadersV2.id, flat: bool = False
+    ) -> dict:
+        """Get additional signs with distance calculations.
+
+        Args:
+            csv_file (str): Path to CSV file.
+            id_field_name (str): Name of the ID field in CSV. Defaults to CSVHeadersV2.id.
+            flat (bool): If True, store single object per ID; if False, store list. Defaults to False.
+
+        Returns:
+            dict: Dictionary of additional signs indexed by ID with calculated distances.
+        """
+        additional_signs = self._get_objects_by_id(
+            csv_file, id_field_name=id_field_name, filter_f=self._is_additional_sign, flat=flat
+        )
+        for k, data in additional_signs.items():
+            # Distance to mount
+            mount_data = self.mounts_by_id.get(data.get(CSVHeadersV2.mount_id), None)
+            if mount_data:
+                mount_point = Point(
+                    float(mount_data[CSVHeadersV2.coord_x]), float(mount_data[CSVHeadersV2.coord_y]), 0.0
+                )
+                data["distance_to_mount"] = mount_point.distance(
+                    Point(float(data[CSVHeadersV2.coord_x]), float(data[CSVHeadersV2.coord_y]), 0.0)
+                )
+            else:
+                data["distance_to_mount"] = None
+
+            # Distance to parent sign
+            parent_data = self.signs_by_id.get(data.get(CSVHeadersV2.parent_sign_id), None)
+            if parent_data:
+                parent_point = Point(
+                    float(parent_data[CSVHeadersV2.coord_x]), float(parent_data[CSVHeadersV2.coord_y]), 0.0
+                )
+                data["distance_to_parent"] = parent_point.distance(
+                    Point(float(data[CSVHeadersV2.coord_x]), float(data[CSVHeadersV2.coord_y]), 0.0)
+                )
+                data["parent_is_additional_sign"] = "No"
+                data["parent_code"] = parent_data.get(CSVHeadersV2.code)
+            else:
+                parent_data = self.all_signs_by_id.get(data.get(CSVHeadersV2.parent_sign_id), None)
+                if parent_data:
+                    parent_point = Point(
+                        float(parent_data[CSVHeadersV2.coord_x]), float(parent_data[CSVHeadersV2.coord_y]), 0.0
+                    )
+                    data["distance_to_parent"] = parent_point.distance(
+                        Point(float(data[CSVHeadersV2.coord_x]), float(data[CSVHeadersV2.coord_y]), 0.0)
+                    )
+                    data["parent_is_additional_sign"] = "Yes"
+                    data["parent_code"] = parent_data.get(CSVHeadersV2.code)
+                else:
+                    data["distance_to_parent"] = None
+                    data["parent_is_additional_sign"] = None
+                    data["parent_code"] = None
+        return additional_signs
+
+    def _get_additional_signs_by_mount_id(self):
+        """Group additional signs by mount ID"""
+        additional_signs = {}
+        for k, v in self.additional_signs_by_id.items():
+            additional_signs.setdefault(v[CSVHeadersV2.mount_id], []).append(v)
+        return additional_signs
+
+    @staticmethod
+    def _combine_mounts_with_signs(mounts_by_id, additional_signs_by_mount_id, signs_by_mount_id):
+        """Combine mounts with their attached signs"""
+        for mount_id, data_d in mounts_by_id.items():
+            data_d["additional_signs"] = []
+            data_d["signs"] = []
+
+            for entry in additional_signs_by_mount_id.get(mount_id, []):
+                data_d["additional_signs"].append(entry)
+            for entry in signs_by_mount_id.get(mount_id, []):
+                data_d["signs"].append(entry)
+
+    def _get_non_existing_mounts_by_sign_id(self):
+        """Find signs with non-existing mount references"""
+        return {
+            x.get(CSVHeadersV2.id): x.get(CSVHeadersV2.mount_id)
+            for x in filter(
+                lambda x: x.get(CSVHeadersV2.mount_id).strip() not in self.mounts_by_id.keys(),
+                self.signs_by_id.values(),
+            )
+        }
+
+    def _get_non_existing_mounts_by_additional_sign_id(self):
+        """Find additional signs with non-existing mount references"""
+        return {
+            x.get(CSVHeadersV2.id): x.get(CSVHeadersV2.mount_id)
+            for x in filter(
+                lambda x: x.get(CSVHeadersV2.mount_id).strip() not in self.mounts_by_id.keys(),
+                self.additional_signs_by_id.values(),
+            )
+        }
+
+    @staticmethod
+    def _is_additional_sign(row):
+        """Check if row represents an additional sign"""
+        code = row[CSVHeadersV2.code]
+        return code and code[0] in ["H", "8"]
+
+    @staticmethod
+    def _segregate_by_status(objects) -> dict[str, list]:
+        """Segregate objects by status field.
+
+        Args:
+            objects: Iterable of objects with status field.
+
+        Returns:
+            dict[str, list]: Dictionary with status values as keys and lists of objects as values.
+                Keys: 'New', 'Unchanged', 'Changed', 'Removed', 'invalid'.
+        """
+        by_status = {
+            "New": [],
+            "Unchanged": [],
+            "Changed": [],
+            "Removed": [],
+            "invalid": [],
+        }
+        for obj in objects:
+            status = obj.get(CSVHeadersV2.status, "").strip().lower()
+            if status in VALID_STATUS_VALUES:
+                # Capitalize first letter for consistent key naming
+                status_key = status.capitalize()
+                by_status[status_key].append(obj)
+            else:
+                by_status["invalid"].append(obj)
+        return by_status
+
+    # ==================== Existing Analysis Reports ====================
+
+    def _get_non_existing_mounts_for_signs(self):
+        """Report signs with non-existing mount references"""
+        return {
+            "REPORT_TYPE": "NON EXISTING MOUNTS FOR SIGNS",
+            "results": list(
+                map(lambda x: {"sign_source_id": x[0], "mount_source_id": x[1]}, self.no_mounts_per_sign_id.items())
+            ),
+        }
+
+    def _get_non_existing_mounts_for_additional_signs(self):
+        """Report additional signs with non-existing mount references"""
+        return {
+            "REPORT_TYPE": "NON EXISTING MOUNTS FOR ADDITIONAL SIGNS",
+            "results": list(
+                map(
+                    lambda x: {"additional_sign_source_id": x[0], "mount_source_id": x[1]},
+                    self.no_mounts_per_additional_sign_id.items(),
+                )
+            ),
+        }
+
+    def _get_mount_distances(self):
+        """Report distances from mounts to attached signs"""
+        distances = {}
+        results = []
+        for mount_id, data_d in self.mounts_by_id.items():
+            distances[mount_id] = {}
+            distances[mount_id]["additional_signs"] = self._get_distances_for_mount(data_d, "additional_signs")
+            distances[mount_id]["signs"] = self._get_distances_for_mount(data_d, "signs")
+            results.append({"mount_source_id": mount_id, "distance": distances[mount_id]})
+
+        return {"REPORT_TYPE": "MOUNT DISTANCES", "results": results}
+
+    @staticmethod
+    def _get_distances_for_mount(mount_data, objects_field_name):
+        """Helper to calculate distances for mount"""
+        distances = {}
+        for entry in mount_data[objects_field_name]:
+            distances.setdefault(entry[CSVHeadersV2.id], []).append(entry["distance_to_mount"])
+        return [{"mount_source_id": mount_data[CSVHeadersV2.id], "distances": distances}]
+
+    def _get_sign_distances(self):
+        """Report distances from signs to mounts"""
+        results = map(
+            lambda x: {
+                "sign_source_id": x.get(CSVHeadersV2.id),
+                "sign_code": x.get(CSVHeadersV2.code),
+                "mount_source_id": x.get(CSVHeadersV2.mount_id),
+                "mount_type": self._get_mount_type(x.get(CSVHeadersV2.mount_id)),
+                "distance_to_mount": x.get("distance_to_mount"),
+                "status": x.get(CSVHeadersV2.status),
+                "link": x.get(CSVHeadersV2.attachment_url),
+            },
+            filter(lambda x: x.get(CSVHeadersV2.id) not in self.no_mounts_per_sign_id, self.signs_by_id.values()),
+        )
+        return {"REPORT_TYPE": "SIGN DISTANCES", "results": list(results)}
+
+    def _get_additional_sign_distances(self):
+        """Report distances from additional signs to mounts and parent signs"""
+        results = map(
+            lambda x: {
+                "additional_sign_source_id": x.get(CSVHeadersV2.id),
+                "sign_code": x.get(CSVHeadersV2.code),
+                "mount_source_id": x.get(CSVHeadersV2.mount_id),
+                "mount_type": self._get_mount_type(x.get(CSVHeadersV2.mount_id)),
+                "distance_to_mount": x.get("distance_to_mount"),
+                "parent_source_id": x.get(CSVHeadersV2.parent_sign_id),
+                "distance_to_parent": x.get("distance_to_parent"),
+                "parent_is_additional_sign": x.get("parent_is_additional_sign"),
+                "parent_code": x.get("parent_code"),
+                "status": x.get(CSVHeadersV2.status),
+                "link": x.get(CSVHeadersV2.attachment_url),
+            },
+            filter(
+                lambda x: x.get(CSVHeadersV2.id) not in self.no_mounts_per_additional_sign_id,
+                self.additional_signs_by_id.values(),
+            ),
+        )
+        return {"REPORT_TYPE": "ADDITIONAL SIGN DISTANCES", "results": list(results)}
+
+    def _get_mountless_signs(self):
+        """Report signs without mount references"""
+        return {
+            "REPORT_TYPE": "MOUNTLESS SIGNS",
+            "results": list(
+                map(
+                    lambda x: {"sign_source_id": x.get(CSVHeadersV2.id)},
+                    filter(lambda x: not x[CSVHeadersV2.mount_id].strip(), self.signs_by_id.values()),
+                )
+            ),
+        }
+
+    def _get_mountless_additional_signs(self):
+        """Report additional signs without mount references"""
+        return {
+            "REPORT_TYPE": "MOUNTLESS ADDITIONAL SIGNS",
+            "results": list(
+                map(
+                    lambda x: {"additional_sign_source_id": x.get(CSVHeadersV2.id)},
+                    filter(lambda x: not x[CSVHeadersV2.mount_id].strip(), self.additional_signs_by_id.values()),
+                )
+            ),
+        }
+
+    def _get_signless_additional_signs(self):
+        """Report additional signs without parent sign references"""
+        results = []
+        for obj in filter(lambda x: not x[CSVHeadersV2.parent_sign_id].strip(), self.additional_signs_by_id.values()):
+            source_id = obj.get(CSVHeadersV2.id)
+            results.append(
+                {
+                    "additional_sign_source_id": source_id,
+                    "old_device_code": self.additional_sign_reals_by_source_id.get(source_id),
+                    "new_device_code": obj.get(CSVHeadersV2.code),
+                    "status": obj.get(CSVHeadersV2.status),
+                }
+            )
+        return {
+            "REPORT_TYPE": "SIGNLESS ADDITIONAL SIGNS",
+            "results": results,
+        }
+
+    def _get_mount_type(self, mount_id):
+        """Get mount type for a given mount ID"""
+        mount = self.mounts_by_id.get(mount_id)
+        return mount.get(CSVHeadersV2.mount_type) if mount else None
+
+    # ==================== New Status-Based Reports ====================
+
+    def _get_status_distribution_report(self):
+        """Report count and percentage of objects by status"""
+
+        def get_stats(objects_by_status, object_type):
+            total = sum(len(objects) for objects in objects_by_status.values())
+            stats = []
+            for status, objects in objects_by_status.items():
+                count = len(objects)
+                percentage = (count / total * 100) if total > 0 else 0
+
+                # Breakdown by device type code for signs
+                code_breakdown = {}
+                if object_type in ["traffic_sign", "additional_sign"]:
+                    for obj in objects:
+                        code = obj.get(CSVHeadersV2.code, "unknown")
+                        code_breakdown[code] = code_breakdown.get(code, 0) + 1
+
+                stats.append(
+                    {
+                        "object_type": object_type,
+                        "status": status,
+                        "count": count,
+                        "percentage": f"{percentage:.2f}%",
+                        "code_breakdown": code_breakdown if code_breakdown else None,
+                    }
+                )
+            return stats
+
+        results = []
+        results.extend(get_stats(self.mounts_by_status, "mount"))
+        results.extend(get_stats(self.signs_by_status, "traffic_sign"))
+        results.extend(get_stats(self.additional_signs_by_status, "additional_sign"))
+
+        return {"REPORT_TYPE": "STATUS DISTRIBUTION", "results": results}
+
+    def _get_invalid_status_report(self):
+        """Report objects with invalid status values"""
+        results = []
+
+        for obj in self.mounts_by_status["invalid"]:
+            results.append(
+                {
+                    "object_type": "mount",
+                    "mount_source_id": obj.get(CSVHeadersV2.id),
+                    "invalid_status": obj.get(CSVHeadersV2.status, ""),
+                }
+            )
+
+        for obj in self.signs_by_status["invalid"]:
+            results.append(
+                {
+                    "object_type": "traffic_sign",
+                    "sign_source_id": obj.get(CSVHeadersV2.id),
+                    "invalid_status": obj.get(CSVHeadersV2.status, ""),
+                }
+            )
+
+        for obj in self.additional_signs_by_status["invalid"]:
+            results.append(
+                {
+                    "object_type": "additional_sign",
+                    "additional_sign_source_id": obj.get(CSVHeadersV2.id),
+                    "invalid_status": obj.get(CSVHeadersV2.status, ""),
+                }
+            )
+
+        return {"REPORT_TYPE": "INVALID STATUS VALUES", "results": results}
+
+    def _get_change_records_report(self):
+        """Report all records with status=Changed"""
+        results = []
+
+        for obj in self.mounts_by_status["Changed"]:
+            results.append(
+                {
+                    "object_type": "mount",
+                    "mount_source_id": obj.get(CSVHeadersV2.id),
+                    "mount_type": obj.get(CSVHeadersV2.mount_type),
+                }
+            )
+
+        for obj in self.signs_by_status["Changed"]:
+            source_id = obj.get(CSVHeadersV2.id)
+            results.append(
+                {
+                    "object_type": "traffic_sign",
+                    "sign_source_id": source_id,
+                    "old_device_code": self.sign_reals_by_source_id.get(source_id),
+                    "new_device_code": obj.get(CSVHeadersV2.code),
+                }
+            )
+
+        for obj in self.additional_signs_by_status["Changed"]:
+            source_id = obj.get(CSVHeadersV2.id)
+            results.append(
+                {
+                    "object_type": "additional_sign",
+                    "additional_sign_source_id": source_id,
+                    "old_device_code": self.additional_sign_reals_by_source_id.get(source_id),
+                    "new_device_code": obj.get(CSVHeadersV2.code),
+                }
+            )
+
+        return {"REPORT_TYPE": "CHANGE RECORDS", "results": results}
+
+    def _get_remove_records_report(self):
+        """Report all records with status=Removed"""
+        results = []
+
+        for obj in self.mounts_by_status["Removed"]:
+            results.append(
+                {
+                    "object_type": "mount",
+                    "mount_source_id": obj.get(CSVHeadersV2.id),
+                }
+            )
+
+        for obj in self.signs_by_status["Removed"]:
+            results.append(
+                {
+                    "object_type": "traffic_sign",
+                    "sign_source_id": obj.get(CSVHeadersV2.id),
+                    "device_code": obj.get(CSVHeadersV2.code),
+                }
+            )
+
+        for obj in self.additional_signs_by_status["Removed"]:
+            results.append(
+                {
+                    "object_type": "additional_sign",
+                    "additional_sign_source_id": obj.get(CSVHeadersV2.id),
+                    "device_code": obj.get(CSVHeadersV2.code),
+                }
+            )
+
+        return {"REPORT_TYPE": "REMOVE RECORDS", "results": results}
+
+    def _get_remove_with_invalid_location_report(self):
+        """Report Removed status records with invalid locations"""
+        results = []
+
+        for obj in self.mounts_by_status["Removed"]:
+            location = Point(
+                float(obj[CSVHeadersV2.coord_x]),
+                float(obj[CSVHeadersV2.coord_y]),
+                float(obj[CSVHeadersV2.coord_z]),
+                srid=settings.SRID,
+            )
+            if not geometry_is_legit(location):
+                results.append(
+                    {
+                        "object_type": "mount",
+                        "mount_source_id": obj.get(CSVHeadersV2.id),
+                        "location": location.ewkt,
+                    }
+                )
+
+        for obj in self.signs_by_status["Removed"]:
+            location = Point(
+                float(obj[CSVHeadersV2.coord_x]),
+                float(obj[CSVHeadersV2.coord_y]),
+                float(obj[CSVHeadersV2.coord_z]),
+                srid=settings.SRID,
+            )
+            if not geometry_is_legit(location):
+                results.append(
+                    {
+                        "object_type": "traffic_sign",
+                        "sign_source_id": obj.get(CSVHeadersV2.id),
+                        "device_code": obj.get(CSVHeadersV2.code),
+                        "location": location.ewkt,
+                    }
+                )
+
+        for obj in self.additional_signs_by_status["Removed"]:
+            location = Point(
+                float(obj[CSVHeadersV2.coord_x]),
+                float(obj[CSVHeadersV2.coord_y]),
+                float(obj[CSVHeadersV2.coord_z]),
+                srid=settings.SRID,
+            )
+            if not geometry_is_legit(location):
+                results.append(
+                    {
+                        "object_type": "additional_sign",
+                        "additional_sign_source_id": obj.get(CSVHeadersV2.id),
+                        "device_code": obj.get(CSVHeadersV2.code),
+                        "location": location.ewkt,
+                    }
+                )
+
+        return {"REPORT_TYPE": "REMOVE WITH INVALID LOCATION", "results": results}
+
+    @staticmethod
+    def _get_sign_scanned_at(date_str):
+        """Need to add 00 to the end as source date has only +00 as tz marker"""
+        return datetime.strptime(date_str + "00", "%Y/%m/%d %H:%M:%S%z")
+
+    def _get_timestamp_format_validation_report(self):
+        """Report records with invalid timestamp formats"""
+        results = []
+
+        def validate_timestamp(obj, object_type):
+            timestamp_str = obj.get(CSVHeadersV2.scanned_at, "")
+            if not timestamp_str:
+                return None
+
+            try:
+                # Try to parse timestamp (assuming ISO format or similar)
+                self._get_sign_scanned_at(timestamp_str)
+
+            except (ValueError, AttributeError):
+                if object_type == "mount":
+                    id_field = "mount_source_id"
+                elif object_type == "traffic_sign":
+                    id_field = "sign_source_id"
+                else:  # additional_sign
+                    id_field = "additional_sign_source_id"
+
+                return {
+                    "object_type": object_type,
+                    id_field: obj.get(CSVHeadersV2.id),
+                    "invalid_timestamp": timestamp_str,
+                }
+            return None
+
+        # Check all objects
+        for obj in self.mounts_by_id.values():
+            if error := validate_timestamp(obj, "mount"):
+                results.append(error)
+
+        for obj in self.signs_by_id.values():
+            if error := validate_timestamp(obj, "traffic_sign"):
+                results.append(error)
+
+        for obj in self.additional_signs_by_id.values():
+            if error := validate_timestamp(obj, "additional_sign"):
+                results.append(error)
+
+        return {"REPORT_TYPE": "TIMESTAMP FORMAT ERRORS", "results": results}
+
+    def _get_missing_mounts_from_database_report(self) -> dict[str, Any]:
+        """Report mounts with non-New status that don't exist in the database.
+
+        Mounts with status 'Unchanged', 'Changed', or 'Removed' should already exist
+        in the database. This report identifies mounts that violate this expectation.
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        results = []
+        non_new_statuses = ["Unchanged", "Changed", "Removed"]
+
+        for status in non_new_statuses:
+            for obj in self.mounts_by_status[status]:
+                source_id = obj.get(CSVHeadersV2.id)
+                if source_id not in self.mount_reals_by_source_id_set:
+                    results.append(
+                        {
+                            "mount_source_id": source_id,
+                            "status": status,
+                            "mount_type": obj.get(CSVHeadersV2.mount_type),
+                        }
+                    )
+
+        return {"REPORT_TYPE": "MISSING MOUNTS FROM DATABASE", "results": results}
+
+    def _get_missing_traffic_signs_from_database_report(self) -> dict[str, Any]:
+        """Report traffic signs with non-New status that don't exist in the database.
+
+        Traffic signs with status 'Unchanged', 'Changed', or 'Removed' should already exist
+        in the database. This report identifies signs that violate this expectation.
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        results = []
+        non_new_statuses = ["Unchanged", "Changed", "Removed"]
+
+        for status in non_new_statuses:
+            for obj in self.signs_by_status[status]:
+                source_id = obj.get(CSVHeadersV2.id)
+                if source_id not in self.sign_reals_by_source_id:
+                    results.append(
+                        {
+                            "sign_source_id": source_id,
+                            "status": status,
+                            "device_code": obj.get(CSVHeadersV2.code),
+                        }
+                    )
+
+        return {"REPORT_TYPE": "MISSING TRAFFIC SIGNS FROM DATABASE", "results": results}
+
+    def _get_missing_additional_signs_from_database_report(self) -> dict[str, Any]:
+        """Report additional signs with non-New status that don't exist in the database.
+
+        Additional signs with status 'Unchanged', 'Changed', or 'Removed' should already exist
+        in the database. This report identifies signs that violate this expectation.
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        results = []
+        non_new_statuses = ["Unchanged", "Changed", "Removed"]
+
+        for status in non_new_statuses:
+            for obj in self.additional_signs_by_status[status]:
+                source_id = obj.get(CSVHeadersV2.id)
+                if source_id not in self.additional_sign_reals_by_source_id:
+                    results.append(
+                        {
+                            "additional_sign_source_id": source_id,
+                            "status": status,
+                            "device_code": obj.get(CSVHeadersV2.code),
+                        }
+                    )
+
+        return {"REPORT_TYPE": "MISSING ADDITIONAL SIGNS FROM DATABASE", "results": results}
+
+    # ==================== New Duplicate Detection Reports ====================
+
+    def _get_duplicate_signs_on_same_mount(self) -> dict[str, Any]:
+        """Report multiple signs on same mount with same device type (considering legacy codes).
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        results = []
+
+        for mount_id, signs in self.signs_by_mount_id.items():
+            # Group signs by normalized device type ID
+            by_device_type = {}
+            for sign in signs:
+                code = sign.get(CSVHeadersV2.code)
+                device_type_id = self.code_to_device_type_id.get(code)
+
+                if device_type_id:
+                    if device_type_id not in by_device_type:
+                        by_device_type[device_type_id] = {
+                            "codes": set(),
+                            "sign_source_ids": [],
+                        }
+                    by_device_type[device_type_id]["codes"].add(code)
+                    by_device_type[device_type_id]["sign_source_ids"].append(sign.get(CSVHeadersV2.id))
+
+            # Report duplicates
+            for device_type_id, data in by_device_type.items():
+                if len(data["sign_source_ids"]) >= 2:
+                    results.append(
+                        {
+                            "mount_source_id": mount_id,
+                            "device_type_id": str(device_type_id),
+                            "codes_found": list(data["codes"]),
+                            "sign_count": len(data["sign_source_ids"]),
+                            "sign_source_ids": data["sign_source_ids"],
+                            "object_type": "sign",
+                        }
+                    )
+
+        return {"REPORT_TYPE": "DUPLICATE SIGNS ON SAME MOUNT", "results": results}
+
+    def _get_added_double_sided_zebra_crossings(self) -> dict[str, Any]:
+        """Report new zebra crossing signs that are double-sided (180° apart).
+
+        Only analyzes signs with status='New'. Zebra crossing signs are identified by codes:
+        - Left: 511, 5112, E1_2
+        - Right: 5111, E1
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        results = []
+
+        for mount_id, signs in self.signs_by_mount_id.items():
+            # Filter for New status zebra crossing signs
+            zebra_signs = [
+                sign
+                for sign in signs
+                if sign.get(CSVHeadersV2.status) == "New" and sign.get(CSVHeadersV2.code) in ZEBRA_CROSSING_ALL_CODES
+            ]
+
+            # Need at least 2 signs to be double-sided
+            if len(zebra_signs) < 2:
+                continue
+
+            # Check pairs of zebra crossing signs
+            for i, sign1 in enumerate(zebra_signs):
+                for sign2 in zebra_signs[i + 1 :]:
+                    code1 = sign1.get(CSVHeadersV2.code)
+                    code2 = sign2.get(CSVHeadersV2.code)
+
+                    # Check if they have opposing directions
+                    try:
+                        dir1 = int(sign1.get(CSVHeadersV2.direction, 0))
+                        dir2 = int(sign2.get(CSVHeadersV2.direction, 0))
+
+                        # Calculate direction difference
+                        diff = abs(dir1 - dir2)
+                        # Normalize to 0-180 range
+                        if diff > 180:
+                            diff = 360 - diff
+
+                        # Check if approximately 180° apart (within tolerance)
+                        if abs(diff - 180) <= DIRECTION_TOLERANCE:
+                            results.append(
+                                {
+                                    "mount_source_id": mount_id,
+                                    "sign_source_ids": [sign1.get(CSVHeadersV2.id), sign2.get(CSVHeadersV2.id)],
+                                    "codes_found": [code1, code2],
+                                    "directions": [dir1, dir2],
+                                    "direction_difference": diff,
+                                    "status": "New",
+                                }
+                            )
+                    except (ValueError, TypeError):
+                        # Skip if direction values are invalid
+                        pass
+
+        return {"REPORT_TYPE": "ADDED DOUBLE SIDED ZEBRA CROSSINGS", "results": results}
+
+    # ==================== Sanity Check Reports ====================
+
+    def _get_mounts_found_in_database_report(self) -> dict[str, Any]:
+        """Report all mounts from CSV that exist in the database with source_id to db_id mapping.
+
+        This sanity check report lists all mounts that are found in both CSV and database,
+        showing the mapping between source_id (from CSV) and db_id (from database).
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        results = []
+
+        for source_id, mount_data in self.mounts_by_id.items():
+            db_id = self.mount_source_id_to_db_id.get(source_id)
+            if db_id:
+                results.append(
+                    {
+                        "source_id": source_id,
+                        "db_id": str(db_id),
+                        "status": mount_data.get(CSVHeadersV2.status),
+                    }
+                )
+
+        return {"REPORT_TYPE": "MOUNTS FOUND IN DATABASE", "results": results}
+
+    def _get_traffic_signs_found_in_database_report(self) -> dict[str, Any]:
+        """Report all traffic signs from CSV that exist in the database with source_id to db_id mapping.
+
+        This sanity check report lists all traffic signs that are found in both CSV and database,
+        showing the mapping between source_id (from CSV) and db_id (from database).
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        results = []
+
+        for source_id, sign_data in self.signs_by_id.items():
+            db_id = self.sign_source_id_to_db_id.get(source_id)
+            if db_id:
+                results.append(
+                    {
+                        "source_id": source_id,
+                        "db_id": str(db_id),
+                        "status": sign_data.get(CSVHeadersV2.status),
+                    }
+                )
+
+        return {"REPORT_TYPE": "TRAFFIC SIGNS FOUND IN DATABASE", "results": results}
+
+    def _get_additional_signs_found_in_database_report(self) -> dict[str, Any]:
+        """Report all additional signs from CSV that exist in the database with source_id to db_id mapping.
+
+        This sanity check report lists all additional signs that are found in both CSV and database,
+        showing the mapping between source_id (from CSV) and db_id (from database).
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        results = []
+
+        for source_id, sign_data in self.additional_signs_by_id.items():
+            db_id = self.additional_sign_source_id_to_db_id.get(source_id)
+            if db_id:
+                results.append(
+                    {
+                        "source_id": source_id,
+                        "db_id": str(db_id),
+                        "status": sign_data.get(CSVHeadersV2.status),
+                    }
+                )
+
+        return {"REPORT_TYPE": "ADDITIONAL SIGNS FOUND IN DATABASE", "results": results}
+
