@@ -1,0 +1,21 @@
+OBJECTID,id,x,y,z,stdx,stdy,stdz,kiinnityskohta_id,status,merkkikoodi,teksti,teksti_suomeksi,teksti_ruotsiksi,kiinnitys,numerokoodi,merkin_ehto,taustaväri,atsimuutti,lisäkilven_päämerkin_id,tallennusajankohta,korkeus,ssurl
+1657,signpost_no_import,25497188.8384,6673461.8389,8.28,0.014,0.009,0.022,mount_pylvas1,Unchanged,645,Hakaniemi Hannäs,,,Pylväs,,2,1,359,,2023-08-15T12:28:00+00:00,3.01,https://dummy
+1665,basic_sign,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_pylvas1,Unchanged,C39,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+1666,basic_sign_new,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_pylvas1,New,C39,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+1667,basic_sign_changed,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_pylvas1,Changed,C40,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+1668,basic_sign_removed,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_pylvas1,Removed,C39,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+1669,basic_sign_device_type_missing,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_pylvas1,New,notfound,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+44,basic_additional_sign,25498102.0919,6672508.0929,4.31,0.032,0.035,0.04,mount_pylvas1,Unchanged,H24S,Yksityisalue,Yksityisalue,,Pylväs,,4,1,297,basic_sign,2023-08-14T10:14:36+00:00,1.62,https://dummy
+45,signpost_additional_sign,25498102.0919,6672508.0929,4.31,0.032,0.035,0.04,mount_pylvas1,New,645,Yksityisalue,Yksityisalue,,Pylväs,,4,1,297,signpost_no_import,2023-08-14T10:14:36+00:00,1.62,https://dummy
+46,additional_sign_parent_device_type_missing,25498102.0919,6672508.0929,4.31,0.032,0.035,0.04,mount_pylvas1,New,H24,Yksityisalue,Yksityisalue,,Pylväs,,4,1,297,basic_sign_device_type_missing,2023-08-14T10:14:36+00:00,1.62,https://dummy
+47,parentless_additional_sign,25498102.0919,6672508.0929,4.31,0.032,0.035,0.04,mount_pylvas1,New,H24S,Yksityisalue,Yksityisalue,,Pylväs,,4,1,297,,2023-08-14T10:14:36+00:00,1.62,https://dummy
+1670,basic_sign_outside_srid,10,10,7.64,0.014,0.009,0.022,mount_pylvas1,Removed,C39,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+1671,basic_sign_mount_outside,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_outside_srid,New,C39,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+48,basic_additional_sign_parent_outside,25498102.0919,6672508.0929,4.31,0.032,0.035,0.04,mount_pylvas1,Unchanged,H24S,Yksityisalue,Yksityisalue,,Pylväs,,4,1,297,basic_sign_outside_srid,2023-08-14T10:14:36+00:00,1.62,https://dummy
+49,basic_additional_sign_mount_outside,25498102.0919,6672508.0929,4.31,0.032,0.035,0.04,mount_outside_srid,New,H24S,Yksityisalue,Yksityisalue,,Pylväs,,4,1,297,basic_sign_outside_srid,2023-08-14T10:14:36+00:00,1.62,https://dummy
+1672,duplicate_sign_1,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_pylvas1,Unchanged,C39,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+1673,duplicate_sign_2,25497188.8384,6673461.8389,7.65,0.014,0.009,0.022,mount_pylvas1,Unchanged,C39,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.37,https://dummy
+1674,zebra_left_1,25497190.0000,6673465.0000,7.64,0.014,0.009,0.022,mount_zebra_double,New,511,Suojatie,,,Pylväs,,2,2,0,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+1675,zebra_right_1,25497190.0000,6673465.0000,7.64,0.014,0.009,0.022,mount_zebra_double,New,5111,Suojatie,,,Pylväs,,2,2,180,,2023-08-15T12:28:00+00:00,2.36,https://dummy
+1676,sign_invalid_timestamp,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_pylvas1,New,C39,TestiTeksti,,,Pylväs,30,2,2,91,,invalid_timestamp,2.36,https://dummy
+1677,sign_invalid_status,25497188.8384,6673461.8389,7.64,0.014,0.009,0.022,mount_pylvas1,BadStatus,C39,TestiTeksti,,,Pylväs,30,2,2,91,,2023-08-15T12:28:00+00:00,2.36,https://dummy

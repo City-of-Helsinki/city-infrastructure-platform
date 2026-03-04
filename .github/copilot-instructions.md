@@ -9,7 +9,7 @@
 ## Code Style & Quality
 - **Type Hinting**: Always use explicit Type Hinting for all Python function signatures (parameters and return types).
 - **Complexity**: Maintain a maximum cognitive complexity of 10.
-- **Return Statements**: Use a maximum of **4 return statements** per function. If more are needed, refactor the logic.
+- **Return Statements**: Use a maximum of **3 return statements** per function. If more are needed, refactor the logic into helper methods.
 - **PEP 8**: Follow PEP 8 guidelines strictly.
 - **Line Length**: The maximum allowed line length is 120 characters.
 - **Style**: Follow single responsibility principle.
