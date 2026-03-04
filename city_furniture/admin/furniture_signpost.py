@@ -18,16 +18,19 @@ from city_furniture.resources.furniture_signpost import (
     FurnitureSignpostPlanTemplateResource,
     FurnitureSignpostRealResource,
 )
+from traffic_control.admin.admin_filters import (
+    as_dropdown,
+    HeightFilter,
+    ResponsibleEntityPermissionFilter,
+    TreeModelFieldListFilter,
+)
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import OperationalAreaListFilter, TrafficControlOperationInlineBase
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    HeightFilter,
     MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
-    ResponsibleEntityPermissionFilter,
-    TreeModelFieldListFilter,
 )
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import AdminFileWidgetWithProxy, CityInfraFileUploadFormset
@@ -114,19 +117,19 @@ class AbstractFurnitureSignpostAdmin(
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ResponsibleEntityPermissionFilter,
-        ("responsible_entity", TreeModelFieldListFilter),
-        ("owner", RelatedOnlyFieldListFilter),
-        ("parent", EmptyFieldListFilter),
-        ("target", RelatedOnlyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        HeightFilter,
-        ("device_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        OperationalAreaListFilter,
-        ("size", EmptyFieldListFilter),
-        ("direction", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("responsible_entity", as_dropdown(TreeModelFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("parent", as_dropdown(EmptyFieldListFilter)),
+        ("target", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("device_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        as_dropdown(OperationalAreaListFilter),
+        ("size", as_dropdown(EmptyFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -235,8 +238,8 @@ class FurnitureSignpostPlanAdmin(
         "height",
     )
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
-        ("plan", EmptyFieldListFilter),
-        ("mount_plan", EmptyFieldListFilter),
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
     ]
     inlines = (FurnitureSignpostPlanFileInline, FurnitureSignpostRealInline)
     search_fields = (
@@ -325,10 +328,10 @@ class FurnitureSignpostRealAdmin(
         "height",
     )
     list_filter = AbstractFurnitureSignpostAdmin.list_filter + [
-        ("furniture_signpost_plan", EmptyFieldListFilter),
-        ("mount_real", EmptyFieldListFilter),
-        ("condition", ChoicesFieldListFilter),
-        "installation_date",
+        ("furniture_signpost_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_real", as_dropdown(EmptyFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("installation_date", DateRangeFilterBuilder()),
     ]
     search_fields = (
         "device_type__code",

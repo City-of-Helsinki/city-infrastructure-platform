@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     PlanReplacementListFilterMixin,
@@ -192,12 +193,12 @@ class BarrierPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("plan", EmptyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        BarrierPlanReplacementListFilter,
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(BarrierPlanReplacementListFilter),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -347,12 +348,12 @@ class BarrierRealAdmin(
         "installation_date",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("barrier_plan", EmptyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        ("owner", RelatedOnlyFieldListFilter),
-        ("condition", ChoicesFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("barrier_plan", as_dropdown(EmptyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),

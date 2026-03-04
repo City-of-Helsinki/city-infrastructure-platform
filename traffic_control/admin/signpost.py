@@ -11,6 +11,7 @@ from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     PlanReplacementListFilterMixin,
@@ -21,7 +22,6 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    HeightFilter,
     MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size
@@ -196,19 +196,19 @@ class SignpostPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("plan", EmptyFieldListFilter),
-        ("mount_plan", EmptyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        ("parent", EmptyFieldListFilter),
-        SignpostPlanReplacementListFilter,
-        HeightFilter,
-        ("size", EnumFieldListFilter),
-        ("direction", EmptyFieldListFilter),
-        ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("parent", as_dropdown(EmptyFieldListFilter)),
+        as_dropdown(SignpostPlanReplacementListFilter),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(EnumFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -381,19 +381,19 @@ class SignpostRealAdmin(
         "installation_date",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("signpost_plan", EmptyFieldListFilter),
-        ("mount_real", EmptyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        ("owner", RelatedOnlyFieldListFilter),
-        ("parent", EmptyFieldListFilter),
-        HeightFilter,
-        ("size", EnumFieldListFilter),
-        ("condition", ChoicesFieldListFilter),
-        ("direction", EmptyFieldListFilter),
-        ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("signpost_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_real", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("parent", as_dropdown(EmptyFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(EnumFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),

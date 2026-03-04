@@ -10,6 +10,7 @@ from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.forms import PlanModelForm, PlanRelationsForm
 from traffic_control.mixins import (
@@ -77,8 +78,8 @@ class PlanAdmin(
         "source_name",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("decision_date", DateRangeFilterBuilder()),

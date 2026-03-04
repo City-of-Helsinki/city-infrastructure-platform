@@ -12,6 +12,7 @@ from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     OperationalAreaListFilter,
@@ -23,7 +24,6 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    HeightFilter,
     MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size, Surface
@@ -265,19 +265,19 @@ class AdditionalSignPlanAdmin(
     raw_id_fields = ("parent", "plan", "mount_plan")
 
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("plan", EmptyFieldListFilter),
-        ("mount_plan", EmptyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        ("owner", RelatedOnlyFieldListFilter),
-        AdditionalSignReplacementListFilter,
-        HeightFilter,
-        ("size", EnumFieldListFilter),
-        ("direction", EmptyFieldListFilter),
-        ("missing_content", BooleanFieldListFilter),
-        ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(AdditionalSignReplacementListFilter),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(EnumFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("missing_content", as_dropdown(BooleanFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -454,25 +454,25 @@ class AdditionalSignRealAdmin(
     raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("additional_sign_plan", EmptyFieldListFilter),
-        ("mount_real", EmptyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        ("installation_status", ChoicesFieldListFilter),
-        HeightFilter,
-        ("size", EnumFieldListFilter),
-        ("condition", ChoicesFieldListFilter),
-        ("direction", EmptyFieldListFilter),
-        ("reflection_class", ChoicesFieldListFilter),
-        ("surface_class", ChoicesFieldListFilter),
-        ("location_specifier", ChoicesFieldListFilter),
-        ("color", ChoicesFieldListFilter),
-        "owner",
-        OperationalAreaListFilter,
-        ("missing_content", BooleanFieldListFilter),
-        ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("additional_sign_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_real", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("installation_status", as_dropdown(ChoicesFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(EnumFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("reflection_class", as_dropdown(ChoicesFieldListFilter)),
+        ("surface_class", as_dropdown(ChoicesFieldListFilter)),
+        ("location_specifier", as_dropdown(ChoicesFieldListFilter)),
+        ("color", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(OperationalAreaListFilter),
+        ("missing_content", as_dropdown(BooleanFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),

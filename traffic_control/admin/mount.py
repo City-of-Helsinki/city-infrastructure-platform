@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     PlanReplacementListFilterMixin,
@@ -21,7 +22,6 @@ from traffic_control.admin.traffic_sign import OrderedTrafficSignRealInline
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    HeightFilter,
     MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus
@@ -182,15 +182,15 @@ class MountPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("plan", EmptyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        MountPlanReplacementListFilter,
-        "mount_type",
-        HeightFilter,
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(MountPlanReplacementListFilter),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
     ]
@@ -326,15 +326,15 @@ class MountRealAdmin(
         "attachment_url",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("mount_plan", EmptyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        ("owner", RelatedOnlyFieldListFilter),
-        "mount_type",
-        HeightFilter,
-        ("condition", ChoicesFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(HeightFilter),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
     ]

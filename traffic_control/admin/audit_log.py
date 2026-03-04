@@ -6,7 +6,7 @@ from django.contrib.admin.utils import unquote
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from traffic_control.admin.utils import CustomDateFieldListFilter
+from traffic_control.admin.admin_filters import CustomDateFieldListFilter
 
 __all__ = ("AuditLogHistoryAdmin",)
 

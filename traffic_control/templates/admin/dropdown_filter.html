@@ -1,0 +1,13 @@
+{% load i18n %}
+<h3>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h3>
+<ul class="admin-filter-{{ title|cut:' ' }}">
+    <li>
+        <select style="width: 95%; margin-bottom: 10px;" onchange="window.location.href=this.value">
+            {% for choice in choices %}
+                <option value="{{ choice.query_string|iriencode }}" {% if choice.selected %}selected{% endif %}>
+                    {{ choice.display }}
+                </option>
+            {% endfor %}
+        </select>
+    </li>
+</ul>

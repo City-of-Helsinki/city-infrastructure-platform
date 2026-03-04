@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
 
+from traffic_control.admin.admin_filters import as_dropdown
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     PlanReplacementListFilterMixin,
@@ -217,15 +218,15 @@ class RoadMarkingPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("plan", EmptyFieldListFilter),
-        ("traffic_sign_plan", EmptyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        ("owner", RelatedOnlyFieldListFilter),
-        RoadMarkingPlanReplacementListFilter,
-        ("size", EmptyFieldListFilter),
-        ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("traffic_sign_plan", as_dropdown(EmptyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(RoadMarkingPlanReplacementListFilter),
+        ("size", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -397,15 +398,15 @@ class RoadMarkingRealAdmin(
     )
     list_select_related = ("device_type", "device_type__icon_file")
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("road_marking_plan", EmptyFieldListFilter),
-        ("traffic_sign_real", EmptyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        ("condition", ChoicesFieldListFilter),
-        ("size", EmptyFieldListFilter),
-        ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("road_marking_plan", as_dropdown(EmptyFieldListFilter)),
+        ("traffic_sign_real", as_dropdown(EmptyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("size", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),

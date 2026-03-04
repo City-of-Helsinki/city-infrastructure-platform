@@ -8,12 +8,12 @@ from django.contrib.gis import admin
 from django.db import models
 from django.db.models import Exists, OuterRef, QuerySet
 from django.utils.translation import gettext_lazy as _
-from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
 
 from admin_helper.decorators import requires_annotation
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
+from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     DeviceTypeSignTypeListFilter,
@@ -27,7 +27,6 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    HeightFilter,
     MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import (
@@ -297,19 +296,19 @@ class TrafficSignPlanAdmin(
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("plan", EmptyFieldListFilter),
-        ("mount_plan", EmptyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        TrafficSignPlanReplacementListFilter,
-        DeviceTypeSignTypeListFilter,
-        HeightFilter,
-        ("size", EnumFieldListFilter),
-        ("direction", EmptyFieldListFilter),
-        ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(TrafficSignPlanReplacementListFilter),
+        as_dropdown(DeviceTypeSignTypeListFilter),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(ChoicesFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
@@ -563,24 +562,24 @@ class TrafficSignRealAdmin(
     raw_id_fields = ("traffic_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("traffic_sign_plan", EmptyFieldListFilter),
-        ("mount_real", EmptyFieldListFilter),
-        ("mount_type", RelatedOnlyFieldListFilter),
-        ("lifecycle", ChoicesFieldListFilter),
-        ("installation_status", ChoicesFieldListFilter),
-        ("reflection_class", ChoicesFieldListFilter),
-        ("surface_class", ChoicesFieldListFilter),
-        ("location_specifier", ChoicesFieldListFilter),
-        ("owner", RelatedOnlyFieldListFilter),
-        OperationalAreaListFilter,
-        DeviceTypeSignTypeListFilter,
-        HeightFilter,
-        ("size", EnumFieldListFilter),
-        ("condition", ChoicesFieldListFilter),
-        ("direction", EmptyFieldListFilter),
-        ("seasonal_validity_period_information", EmptyFieldListFilter),
-        ("created_by", RelatedOnlyFieldListFilter),
-        ("updated_by", RelatedOnlyFieldListFilter),
+        ("traffic_sign_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_real", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("installation_status", as_dropdown(ChoicesFieldListFilter)),
+        ("reflection_class", as_dropdown(ChoicesFieldListFilter)),
+        ("surface_class", as_dropdown(ChoicesFieldListFilter)),
+        ("location_specifier", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(OperationalAreaListFilter),
+        as_dropdown(DeviceTypeSignTypeListFilter),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(ChoicesFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
         ("created_at", DateRangeFilterBuilder()),
         ("updated_at", DateRangeFilterBuilder()),
         ("validity_period_start", DateRangeFilterBuilder()),
