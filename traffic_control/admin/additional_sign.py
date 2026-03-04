@@ -8,7 +8,6 @@ from django.contrib.admin import (
 from django.contrib.gis import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from enumfields.admin import EnumFieldListFilter
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
 
@@ -272,7 +271,7 @@ class AdditionalSignPlanAdmin(
         ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
         as_dropdown(AdditionalSignReplacementListFilter),
         as_dropdown(HeightFilter),
-        ("size", as_dropdown(EnumFieldListFilter)),
+        ("size", as_dropdown(ChoicesFieldListFilter)),
         ("direction", as_dropdown(EmptyFieldListFilter)),
         ("missing_content", as_dropdown(BooleanFieldListFilter)),
         ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
@@ -460,7 +459,7 @@ class AdditionalSignRealAdmin(
         ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
         ("installation_status", as_dropdown(ChoicesFieldListFilter)),
         as_dropdown(HeightFilter),
-        ("size", as_dropdown(EnumFieldListFilter)),
+        ("size", as_dropdown(ChoicesFieldListFilter)),
         ("condition", as_dropdown(ChoicesFieldListFilter)),
         ("direction", as_dropdown(EmptyFieldListFilter)),
         ("reflection_class", as_dropdown(ChoicesFieldListFilter)),
