@@ -677,6 +677,18 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-admin-rangefilter"
+version = "0.13.5"
+description = "django-admin-rangefilter app, add the filter by a custom date range on the admin UI."
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+groups = ["main"]
+files = [
+    {file = "django_admin_rangefilter-0.13.5-py2.py3-none-any.whl", hash = "sha256:7fdcd1ee9007e2b76a5bd35bc017e785bdc7b17a24b8a36aef4ce80741356c47"},
+    {file = "django_admin_rangefilter-0.13.5.tar.gz", hash = "sha256:3134e9e877f59ccad5949cd25cd2db9bf20d170fd8070be584875fdca96d3a14"},
+]
+
+[[package]]
 name = "django-advanced-password-validation"
 version = "1.2.0"
 description = "Extends Django password validation options in an attempt to keep up with industry standards for strong user passwords."
@@ -2995,4 +3007,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11.9"
-content-hash = "17130fdc3394a98e266a90fc5ccb491a2c3b7c36be28f53f69b4f4312b267f43"
+content-hash = "25af5376951b9e5919e501078c0e0cba1901b6005b5a5320fa1eda2421aac8fb"

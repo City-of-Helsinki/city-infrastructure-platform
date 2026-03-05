@@ -1,0 +1,18 @@
+{% load i18n %}
+<details data-filter-title="{{ title }}"
+         open>
+    <summary>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</summary>
+    <ul>
+        <li>
+            <select style="width: 95%;
+                           margin: 10px 0;
+                           padding: 4px"
+                    onchange="window.location.href=this.value">
+                {% for choice in choices %}
+                    <option value="{{ choice.query_string|iriencode }}"
+                            {% if choice.selected %}selected{% endif %}>{{ choice.display }}</option>
+                {% endfor %}
+            </select>
+        </li>
+    </ul>
+</details>

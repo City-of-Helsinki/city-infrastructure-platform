@@ -1,12 +1,19 @@
-from django.contrib.admin import ChoicesFieldListFilter, SimpleListFilter
+from django.contrib.admin import (
+    ChoicesFieldListFilter,
+    EmptyFieldListFilter,
+    RelatedOnlyFieldListFilter,
+    SimpleListFilter,
+)
 from django.contrib.gis import admin
 from django.db import models
 from django.db.models import Exists, OuterRef, QuerySet
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
 from admin_helper.decorators import requires_annotation
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
+from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     DeviceTypeSignTypeListFilter,
@@ -278,20 +285,45 @@ class TrafficSignPlanAdmin(
     )
     list_display = (
         "id",
+        "plan",
         "device_type_preview",
         "value",
+        "txt",
         "lifecycle",
         "location",
+        "height",
         "has_additional_signs",
         "is_replaced_as_str",
     )
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", ChoicesFieldListFilter),
-        "owner",
-        TrafficSignPlanReplacementListFilter,
-        DeviceTypeSignTypeListFilter,
+        ("plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(TrafficSignPlanReplacementListFilter),
+        as_dropdown(DeviceTypeSignTypeListFilter),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(ChoicesFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
-    search_fields = ("id",)
+    search_fields = (
+        "device_type__code",
+        "id",
+        "mount_plan__id",
+        "mount_type__code",
+        "plan__id",
+        "plan__name",
+        "road_name",
+        "source_name",
+    )
     readonly_fields = (
         "device_type_preview",
         "created_at",
@@ -310,7 +342,7 @@ class TrafficSignPlanAdmin(
     )
     initial_values = shared_initial_values
 
-    # Generated for TrafficSignPlanAdmin at 2026-02-18 13:04:48+00:00
+    # Generated for TrafficSignPlanAdmin at 2026-02-19 11:32:18+00:00
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         resolver_match = getattr(request, "resolver_match", None)
@@ -322,6 +354,7 @@ class TrafficSignPlanAdmin(
             return qs.select_related(
                 "device_type",  # n:1 relation in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
                 "device_type__icon_file",  # n:1 relation chain in list_display (via device_type_preview -> TrafficControlDeviceTypeIcon.__str__) # noqa: E501
+                "plan",  # n:1 relation in list_display, list_display (via Plan.__str__) # noqa: E501
                 "replacement_to_new",  # 1:1 relation in list_display (via is_replaced_as_str) # noqa: E501
             )
         elif resolver_match.url_name.endswith("_change"):
@@ -529,15 +562,28 @@ class TrafficSignRealAdmin(
     raw_id_fields = ("traffic_sign_plan", "mount_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
-        ("lifecycle", ChoicesFieldListFilter),
-        ("installation_status", ChoicesFieldListFilter),
-        ("condition", ChoicesFieldListFilter),
-        ("reflection_class", ChoicesFieldListFilter),
-        ("surface_class", ChoicesFieldListFilter),
-        ("location_specifier", ChoicesFieldListFilter),
-        "owner",
-        OperationalAreaListFilter,
-        DeviceTypeSignTypeListFilter,
+        ("traffic_sign_plan", as_dropdown(EmptyFieldListFilter)),
+        ("mount_real", as_dropdown(EmptyFieldListFilter)),
+        ("mount_type", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("lifecycle", as_dropdown(ChoicesFieldListFilter)),
+        ("installation_status", as_dropdown(ChoicesFieldListFilter)),
+        ("reflection_class", as_dropdown(ChoicesFieldListFilter)),
+        ("surface_class", as_dropdown(ChoicesFieldListFilter)),
+        ("location_specifier", as_dropdown(ChoicesFieldListFilter)),
+        ("owner", as_dropdown(RelatedOnlyFieldListFilter)),
+        as_dropdown(OperationalAreaListFilter),
+        as_dropdown(DeviceTypeSignTypeListFilter),
+        as_dropdown(HeightFilter),
+        ("size", as_dropdown(ChoicesFieldListFilter)),
+        ("condition", as_dropdown(ChoicesFieldListFilter)),
+        ("direction", as_dropdown(EmptyFieldListFilter)),
+        ("seasonal_validity_period_information", as_dropdown(EmptyFieldListFilter)),
+        ("created_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("updated_by", as_dropdown(RelatedOnlyFieldListFilter)),
+        ("created_at", DateRangeFilterBuilder()),
+        ("updated_at", DateRangeFilterBuilder()),
+        ("validity_period_start", DateRangeFilterBuilder()),
+        ("validity_period_end", DateRangeFilterBuilder()),
     ]
     search_fields = (
         "value",
