@@ -1,14 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Swedish translation of City Infrastructure Platform
+# Copyright (C) 2026 City of Helsinki
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-03 11:01+0200\n"
+"POT-Creation-Date: 2026-03-05 10:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -622,6 +620,15 @@ msgstr ""
 msgid "We apologize for the inconvenience. Please check back soon."
 msgstr ""
 
+msgid "Change"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "View on site"
+msgstr ""
+
 msgid "Maintenance mode active"
 msgstr ""
 
@@ -816,6 +823,45 @@ msgstr "Tilläggsskylt (plan)"
 msgid "Additional Sign Plans"
 msgstr "Tilläggsskylt (planer)"
 
+msgid "Any date"
+msgstr "Valfritt datum"
+
+msgid "Today"
+msgstr "Idag"
+
+msgid "Last 7 days"
+msgstr "Senaste 7 dagarna"
+
+msgid "Last month"
+msgstr "Förra månaden"
+
+msgid "Last 6 months"
+msgstr "Senaste 6 månaderna"
+
+msgid "Last year"
+msgstr "Förra året"
+
+msgid "No date"
+msgstr "Inget datum"
+
+msgid "Has date"
+msgstr "Har datum"
+
+msgid "Responsible Entity Permission"
+msgstr "Tillstånd från ansvarig enhet"
+
+msgid "Height is null"
+msgstr ""
+
+msgid "Height = 0m"
+msgstr "Höjd = 0m"
+
+msgid "Height < 1.5m"
+msgstr "Höjd < 1.5m"
+
+msgid "Height >= 1.5m"
+msgstr "Höjd >= 1.5m"
+
 msgid "Barrier real"
 msgstr "Bom (implementering)"
 
@@ -839,6 +885,9 @@ msgstr "Nej"
 
 msgid "Yes"
 msgstr "Ja"
+
+msgid "Traffic sign type"
+msgstr "Typ av trafikskylt"
 
 msgid "Mount Reals"
 msgstr "Montering (implementeringar)"
@@ -922,9 +971,6 @@ msgstr "Trafiksignal (implementering)"
 msgid "Traffic Light Reals"
 msgstr "Trafiksignal (implementeringar)"
 
-msgid "Traffic sign type"
-msgstr "Typ av trafikskylt"
-
 msgid "Ordered traffic sign"
 msgstr "Ordnad trafikskylt"
 
@@ -942,33 +988,6 @@ msgstr "Trafikskylt (implementering)"
 
 msgid "Traffic Sign Reals"
 msgstr "Trafikskylt (implementeringar)"
-
-msgid "Any date"
-msgstr "Valfritt datum"
-
-msgid "Today"
-msgstr "Idag"
-
-msgid "Last 7 days"
-msgstr "Senaste 7 dagarna"
-
-msgid "Last month"
-msgstr "Förra månaden"
-
-msgid "Last 6 months"
-msgstr "Senaste 6 månaderna"
-
-msgid "Last year"
-msgstr "Förra året"
-
-msgid "No date"
-msgstr "Inget datum"
-
-msgid "Has date"
-msgstr "Har datum"
-
-msgid "Responsible Entity Permission"
-msgstr "Tillstånd från ansvarig enhet"
 
 msgid "Format"
 msgstr "Format"
@@ -2442,6 +2461,10 @@ msgstr ""
 "Du har inte rätt att skapa och redigera anordningar med den angivna "
 "ansvariga parten (%(responsible_entity)s)."
 
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
 msgid "Export template"
 msgstr "Exportmall"
 
@@ -2527,8 +2550,72 @@ msgstr "Montering_medelpunkt (plan)"
 msgid "Traffic Control Plan"
 msgstr "Trafikledningsplan"
 
+msgid "authentication type"
+msgstr ""
+
+msgid "Local"
+msgstr ""
+
+msgid "Azure AD"
+msgstr ""
+
+msgid "Both"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "reactivated"
+msgstr ""
+
+msgid "Last 30 days"
+msgstr "Senaste 30 dagarna"
+
+msgid "Last 90 days"
+msgstr "Senaste 90 dagarna"
+
+msgid "Last 180 days"
+msgstr "Senaste 180 dagarna"
+
+msgid "deactivation stage"
+msgstr ""
+
+msgid "30-day warning sent"
+msgstr ""
+
+msgid "7-day warning sent"
+msgstr ""
+
+msgid "1-day warning sent"
+msgstr ""
+
+msgid "Deactivated"
+msgstr "Inaktiv"
+
+msgid "Authentication Type"
+msgstr ""
+
 msgid "Additional user information"
 msgstr "Ytterligare information om användaren"
+
+msgid "Activity Tracking"
+msgstr ""
+
+msgid ""
+"Track user's API usage activity. This field is automatically updated when "
+"the user uses the API."
+msgstr ""
+
+msgid "Reactivation"
+msgstr ""
+
+msgid "Admin Notifications"
+msgstr ""
+
+msgid ""
+"Configure whether this user receives admin notification emails about user "
+"deactivations and system events."
+msgstr ""
 
 msgid "last login"
 msgstr "senast inloggad"
@@ -2538,6 +2625,16 @@ msgid "User is active, but last login was %(days)d days ago"
 msgstr ""
 "Användarnamnet är gällande, men den senaste inloggningen skedde för %(days)d "
 "dagar sedan"
+
+msgid "Reactivate selected users"
+msgstr ""
+
+msgid "Only superusers can reactivate users."
+msgstr ""
+
+#, python-format
+msgid "Successfully reactivated %(count)d user(s)."
+msgstr ""
 
 msgid "Users"
 msgstr "Användare"
@@ -2573,5 +2670,52 @@ msgstr ""
 msgid "Additional information related to this user."
 msgstr "Mer information om denna användare."
 
+msgid "Reactivated at"
+msgstr ""
+
+msgid ""
+"Timestamp when admin manually reactivated this user account. Prevents "
+"automatic deactivation."
+msgstr ""
+
+msgid "Receives admin notification emails"
+msgstr ""
+
+msgid ""
+"If enabled, this user will receive admin notification emails about user "
+"deactivations and system events. Only users with valid email addresses will "
+"receive notifications."
+msgstr ""
+
 msgid "User"
 msgstr "Användare"
+
+msgid "One month warning email sent at"
+msgstr ""
+
+msgid "Timestamp when the 30-day warning email was sent."
+msgstr ""
+
+msgid "One week warning email sent at"
+msgstr ""
+
+msgid "Timestamp when the 7-day warning email was sent."
+msgstr ""
+
+msgid "One day warning email sent at"
+msgstr ""
+
+msgid "Timestamp when the 1-day warning email was sent."
+msgstr ""
+
+msgid "Deactivated at"
+msgstr ""
+
+msgid "Timestamp when the user was deactivated."
+msgstr ""
+
+msgid "User Deactivation Status"
+msgstr ""
+
+msgid "User Deactivation Statuses"
+msgstr ""

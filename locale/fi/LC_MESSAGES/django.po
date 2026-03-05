@@ -1,11 +1,11 @@
 # Finnish translation of City Infrastructure Platform
-# Copyright (C) 2023 City of Helsinki
+# Copyright (C) 2026 City of Helsinki
 # This file is distributed under the same license as the PACKAGE package.
 #
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-03 11:01+0200\n"
+"POT-Creation-Date: 2026-03-05 10:26+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -613,6 +613,15 @@ msgstr "Huoltotila"
 msgid "We apologize for the inconvenience. Please check back soon."
 msgstr "Pahoittelemme häiriötä. Tarkista asia pian uudelleen."
 
+msgid "Change"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "View on site"
+msgstr ""
+
 msgid "Maintenance mode active"
 msgstr "Huoltotila käytössä"
 
@@ -810,6 +819,45 @@ msgstr "Lisäkilpi (suunnitelma)"
 msgid "Additional Sign Plans"
 msgstr "Lisäkilpi (suunnitelmat)"
 
+msgid "Any date"
+msgstr "Mikä tahansa päivä"
+
+msgid "Today"
+msgstr "Tänään"
+
+msgid "Last 7 days"
+msgstr "Edelliset 7 päivää"
+
+msgid "Last month"
+msgstr "Edellinen kuukausi"
+
+msgid "Last 6 months"
+msgstr "Edelliset 6 kuukautta"
+
+msgid "Last year"
+msgstr "Edellinen vuosi"
+
+msgid "No date"
+msgstr "Ei päivämäärää"
+
+msgid "Has date"
+msgstr "On päivämäärä"
+
+msgid "Responsible Entity Permission"
+msgstr "Vastuutahon oikeus"
+
+msgid "Height is null"
+msgstr ""
+
+msgid "Height = 0m"
+msgstr "Korkeus = 0m"
+
+msgid "Height < 1.5m"
+msgstr "Korkeus < 1.5m"
+
+msgid "Height >= 1.5m"
+msgstr "Korkeus >= 1.5m"
+
 msgid "Barrier real"
 msgstr "Ajoeste (toteuma)"
 
@@ -833,6 +881,9 @@ msgstr "Ei"
 
 msgid "Yes"
 msgstr "Kyllä"
+
+msgid "Traffic sign type"
+msgstr "Liikennemerkkityyppi"
 
 msgid "Mount Reals"
 msgstr "Kiinnityskohde (toteumat)"
@@ -916,9 +967,6 @@ msgstr "Liikennevalo (toteuma)"
 msgid "Traffic Light Reals"
 msgstr "Liikennevalo (toteumat)"
 
-msgid "Traffic sign type"
-msgstr "Liikennemerkkityyppi"
-
 msgid "Ordered traffic sign"
 msgstr "Järjestetty liikennemerkki"
 
@@ -936,33 +984,6 @@ msgstr "Liikennemerkki (toteuma)"
 
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
-
-msgid "Any date"
-msgstr "Mikä tahansa päivä"
-
-msgid "Today"
-msgstr "Tänään"
-
-msgid "Last 7 days"
-msgstr "Edelliset 7 päivää"
-
-msgid "Last month"
-msgstr "Edellinen kuukausi"
-
-msgid "Last 6 months"
-msgstr "Edelliset 6 kuukautta"
-
-msgid "Last year"
-msgstr "Edellinen vuosi"
-
-msgid "No date"
-msgstr "Ei päivämäärää"
-
-msgid "Has date"
-msgstr "On päivämäärä"
-
-msgid "Responsible Entity Permission"
-msgstr "Vastuutahon oikeus"
 
 msgid "Format"
 msgstr "Tiedostomuoto"
@@ -2430,6 +2451,10 @@ msgstr ""
 "Sinulla ei ole oikeutta luoda tai muokata laitteita annetulla vastuutaholla "
 "(%(responsible_entity)s)."
 
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
 msgid "Export template"
 msgstr "Vie malli"
 
@@ -2515,8 +2540,72 @@ msgstr "Kiinnityskohta_keskipiste (suunnitelma)"
 msgid "Traffic Control Plan"
 msgstr "Liikenteenohjaussuunnitelma"
 
+msgid "authentication type"
+msgstr ""
+
+msgid "Local"
+msgstr ""
+
+msgid "Azure AD"
+msgstr ""
+
+msgid "Both"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "reactivated"
+msgstr ""
+
+msgid "Last 30 days"
+msgstr "Edelliset 30 päivää"
+
+msgid "Last 90 days"
+msgstr "Edelliset 90 päivää"
+
+msgid "Last 180 days"
+msgstr "Edelliset 180 päivää"
+
+msgid "deactivation stage"
+msgstr ""
+
+msgid "30-day warning sent"
+msgstr ""
+
+msgid "7-day warning sent"
+msgstr ""
+
+msgid "1-day warning sent"
+msgstr ""
+
+msgid "Deactivated"
+msgstr "Pysyvästi poissa käytöstä"
+
+msgid "Authentication Type"
+msgstr ""
+
 msgid "Additional user information"
 msgstr "Lisätiedot käyttäjästä"
+
+msgid "Activity Tracking"
+msgstr ""
+
+msgid ""
+"Track user's API usage activity. This field is automatically updated when "
+"the user uses the API."
+msgstr ""
+
+msgid "Reactivation"
+msgstr ""
+
+msgid "Admin Notifications"
+msgstr ""
+
+msgid ""
+"Configure whether this user receives admin notification emails about user "
+"deactivations and system events."
+msgstr ""
 
 msgid "last login"
 msgstr "kirjautunut viimeksi"
@@ -2526,6 +2615,16 @@ msgid "User is active, but last login was %(days)d days ago"
 msgstr ""
 "Käyttäjätunnus on voimassa, mutta viimeisin kirjautuminen on %(days)d päivää "
 "sitten"
+
+msgid "Reactivate selected users"
+msgstr ""
+
+msgid "Only superusers can reactivate users."
+msgstr ""
+
+#, python-format
+msgid "Successfully reactivated %(count)d user(s)."
+msgstr ""
 
 msgid "Users"
 msgstr "Käyttäjät"
@@ -2558,5 +2657,52 @@ msgstr ""
 msgid "Additional information related to this user."
 msgstr "Lisätietoa tästä käyttäjästä."
 
+msgid "Reactivated at"
+msgstr ""
+
+msgid ""
+"Timestamp when admin manually reactivated this user account. Prevents "
+"automatic deactivation."
+msgstr ""
+
+msgid "Receives admin notification emails"
+msgstr ""
+
+msgid ""
+"If enabled, this user will receive admin notification emails about user "
+"deactivations and system events. Only users with valid email addresses will "
+"receive notifications."
+msgstr ""
+
 msgid "User"
 msgstr "Käyttäjä"
+
+msgid "One month warning email sent at"
+msgstr ""
+
+msgid "Timestamp when the 30-day warning email was sent."
+msgstr ""
+
+msgid "One week warning email sent at"
+msgstr ""
+
+msgid "Timestamp when the 7-day warning email was sent."
+msgstr ""
+
+msgid "One day warning email sent at"
+msgstr ""
+
+msgid "Timestamp when the 1-day warning email was sent."
+msgstr ""
+
+msgid "Deactivated at"
+msgstr ""
+
+msgid "Timestamp when the user was deactivated."
+msgstr ""
+
+msgid "User Deactivation Status"
+msgstr ""
+
+msgid "User Deactivation Statuses"
+msgstr ""
