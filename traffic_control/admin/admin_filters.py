@@ -145,6 +145,7 @@ class ResponsibleEntityPermissionFilter(SimpleListFilter):
             return queryset.filter(responsible_entity__pk__in=choice_ids)
         elif self.value() == "False":
             return queryset.exclude(responsible_entity__pk__in=choice_ids)
+        raise ValueError(f"Unexpected value '{self.value()}' in ResponsibleEntityPermissionFilter")
 
 
 class HeightFilter(SimpleListFilter):
