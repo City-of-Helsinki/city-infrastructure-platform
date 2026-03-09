@@ -266,8 +266,8 @@ def test__device_type__target_model__valid(target_model, factory):
         (DeviceTypeTargetModel.TRAFFIC_LIGHT, get_signpost_real),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_plan),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, get_traffic_light_real),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_plan),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, get_traffic_sign_real),
+        # TODO remember to bring back checks that additional sign device type can not be set to
+        #  traffic sign plan or real if allowed models are changed.
     ),
 )
 @pytest.mark.django_db

@@ -114,4 +114,7 @@ TRAFFIC_SIGN_ALLOWED_TARGET_MODELS = [
     DeviceTypeTargetModel.TRAFFIC_SIGN,
     DeviceTypeTargetModel.SIGNPOST,
     DeviceTypeTargetModel.BARRIER,
+    # Temporary change to allow additional signs to target model for traffic signs.
+    # makes moving H20.9x signs to additional signs easier, as they are currently modeled as traffic signs.
+    DeviceTypeTargetModel.ADDITIONAL_SIGN,
 ]

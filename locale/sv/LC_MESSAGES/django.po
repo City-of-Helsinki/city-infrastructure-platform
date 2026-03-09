@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-05 10:11+0200\n"
+"POT-Creation-Date: 2026-03-10 14:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -620,15 +620,6 @@ msgstr ""
 msgid "We apologize for the inconvenience. Please check back soon."
 msgstr ""
 
-msgid "Change"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "View on site"
-msgstr ""
-
 msgid "Maintenance mode active"
 msgstr ""
 
@@ -964,6 +955,117 @@ msgstr "Vägvisare (implementering)"
 
 msgid "Signpost Reals"
 msgstr "Vägvisare (implementeringar)"
+
+#, fuzzy
+#| msgid "Information sign"
+msgid "Run Information"
+msgstr "Upplysningsskylt"
+
+msgid "Plan Migration Statistics"
+msgstr ""
+
+msgid "Real Migration Statistics"
+msgstr ""
+
+#, fuzzy
+#| msgid "Device type"
+msgid "Device Types"
+msgstr "Anordningstyp"
+
+msgid "Lost Data"
+msgstr ""
+
+#, fuzzy
+#| msgid "Information sign"
+msgid "Error Information"
+msgstr "Upplysningsskylt"
+
+msgid "Mode"
+msgstr ""
+
+msgid "Status"
+msgstr "Status"
+
+#, fuzzy
+#| msgid "Operation"
+msgid "Duration"
+msgstr "Åtgärd"
+
+msgid "Plans"
+msgstr "Planer"
+
+#, fuzzy
+#| msgid "Mount Reals"
+msgid "Reals"
+msgstr "Montering (implementeringar)"
+
+msgid "Plan Records"
+msgstr ""
+
+msgid "Real Records"
+msgstr ""
+
+msgid "Lost Field Values"
+msgstr ""
+
+#, fuzzy
+#| msgid "Location information"
+msgid "Migration Information"
+msgstr "Platsinformation"
+
+msgid "Object IDs"
+msgstr ""
+
+#, fuzzy
+#| msgid "Parent Responsible Entity"
+msgid "Parent Assignment"
+msgstr "Överordnad ansvarig enhet"
+
+msgid "Field Population - Basic"
+msgstr ""
+
+msgid "Field Population - Appearance"
+msgstr ""
+
+msgid "Field Population - Location"
+msgstr ""
+
+msgid "Field Population - Other"
+msgstr ""
+
+msgid "Lost Fields"
+msgstr ""
+
+msgid "Default Values Set"
+msgstr ""
+
+#, fuzzy
+#| msgid "File"
+msgid "Files"
+msgstr "Fil"
+
+msgid "Migration Run"
+msgstr ""
+
+#, fuzzy
+#| msgid "External ID"
+msgid "Original ID"
+msgstr "Externt id"
+
+msgid "New ID"
+msgstr ""
+
+msgid "Parent"
+msgstr ""
+
+msgid "Fields Populated"
+msgstr ""
+
+msgid "Plan Mapping"
+msgstr ""
+
+msgid "Field Population - Installation"
+msgstr ""
 
 msgid "Traffic Light Real"
 msgstr "Trafiksignal (implementering)"
@@ -1865,9 +1967,6 @@ msgstr "Uppdateringsdatum"
 msgid "Task"
 msgstr "Arbetsuppgift"
 
-msgid "Status"
-msgstr "Status"
-
 msgid "Decision id"
 msgstr "Beslutsnummer"
 
@@ -1907,9 +2006,6 @@ msgstr "Beslutslänk"
 
 msgid "URL to decision web page"
 msgstr "Länk till webbplatsen för beslutet"
-
-msgid "Plans"
-msgstr "Planer"
 
 msgid "File path"
 msgstr ""
@@ -2240,6 +2336,436 @@ msgstr "Vägvisare (implementeringsfil)"
 
 msgid "Signpost Real Files"
 msgstr "Vägvisare (implementeringsfiler)"
+
+#, fuzzy
+#| msgid "Start date"
+msgid "Started at"
+msgstr "Startdatum"
+
+msgid "Timestamp when the migration command started."
+msgstr ""
+
+#, fuzzy
+#| msgid "Deleted at"
+msgid "Completed at"
+msgstr "Togs bort den"
+
+msgid "Timestamp when the migration command completed successfully."
+msgstr ""
+
+#, fuzzy
+#| msgid "Deleted by"
+msgid "Executed by"
+msgstr "Togs bort av"
+
+msgid "User who executed the migration command."
+msgstr ""
+
+msgid "Whether this was a dry run (no actual changes made)."
+msgstr ""
+
+msgid "Hard delete"
+msgstr ""
+
+msgid "Whether hard-delete mode was used (true) or soft-delete (false)."
+msgstr ""
+
+msgid "Plans processed"
+msgstr ""
+
+msgid "Total number of TrafficSignPlan objects processed."
+msgstr ""
+
+msgid "Plans migrated"
+msgstr ""
+
+msgid "Number of TrafficSignPlan objects successfully migrated."
+msgstr ""
+
+msgid "Plans with parent"
+msgstr ""
+
+msgid "Number of plans that were assigned a parent sign (E2/521)."
+msgstr ""
+
+msgid "Plans without parent"
+msgstr ""
+
+msgid "Number of plans that had no parent sign found."
+msgstr ""
+
+msgid "Reals processed"
+msgstr ""
+
+msgid "Total number of TrafficSignReal objects processed."
+msgstr ""
+
+msgid "Reals migrated"
+msgstr ""
+
+msgid "Number of TrafficSignReal objects successfully migrated."
+msgstr ""
+
+msgid "Reals with parent"
+msgstr ""
+
+msgid "Number of reals that were assigned a parent sign (E2/521)."
+msgstr ""
+
+msgid "Reals without parent"
+msgstr ""
+
+msgid "Number of reals that had no parent sign found."
+msgstr ""
+
+#, fuzzy
+#| msgid "Device type"
+msgid "Device types updated"
+msgstr "Anordningstyp"
+
+msgid "Number of device types with target_model updated."
+msgstr ""
+
+msgid "Error message"
+msgstr ""
+
+msgid "Error message if the migration failed."
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Whether the migration completed successfully."
+msgstr ""
+
+msgid "Lost field values"
+msgstr ""
+
+msgid ""
+"Dictionary of field names to sets of unique values that were lost during "
+"migration. Example: {'value': ['10', '20'], 'txt': ['Info text'], "
+"'affect_area': ['had_polygon']}"
+msgstr ""
+
+msgid "Ticket Machine Migration Run"
+msgstr ""
+
+msgid "Ticket Machine Migration Runs"
+msgstr ""
+
+msgid "Migration run"
+msgstr ""
+
+msgid "The migration run this record belongs to."
+msgstr ""
+
+#, fuzzy
+#| msgid "Parent Traffic Sign Plan"
+msgid "Original TrafficSignPlan"
+msgstr "Överordnad trafikskylt (plan)"
+
+msgid "The original TrafficSignPlan that was migrated."
+msgstr ""
+
+#, fuzzy
+#| msgid "Additional Sign Plan"
+msgid "New AdditionalSignPlan"
+msgstr "Tilläggsskylt (plan)"
+
+#, fuzzy
+#| msgid "The plan for this Additional Sign."
+msgid "The newly created AdditionalSignPlan."
+msgstr "Plan för denna tilläggsskyltplan."
+
+msgid "UUID of the original TrafficSignPlan (preserved even if deleted)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Additional Sign Plan"
+msgid "UUID of the new AdditionalSignPlan."
+msgstr "Tilläggsskylt (plan)"
+
+#, fuzzy
+#| msgid "Device type"
+msgid "Device type code"
+msgstr "Anordningstyp"
+
+msgid "Device type code of the ticket machine."
+msgstr ""
+
+#, fuzzy
+#| msgid "File not found."
+msgid "Parent found"
+msgstr "Fil hittades inte."
+
+msgid "Whether a parent sign (E2/521) was found and assigned."
+msgstr ""
+
+#, fuzzy
+#| msgid "Parent Signpost Plan"
+msgid "Parent sign ID"
+msgstr "Överordnad vägvisare (plan)"
+
+#, fuzzy
+#| msgid "Parent Traffic Sign Plan"
+msgid "UUID of the parent TrafficSignPlan if found."
+msgstr "Överordnad trafikskylt (plan)"
+
+#, fuzzy
+#| msgid "Parent Signpost Real"
+msgid "Parent sign code"
+msgstr "Överordnad vägvisare (implementering)"
+
+msgid "Device type code of the parent sign (E2 or 521)."
+msgstr ""
+
+#, fuzzy
+#| msgid "File not found."
+msgid "Multiple parents found"
+msgstr "Fil hittades inte."
+
+msgid "Whether multiple E2/521 signs were found on the same mount."
+msgstr ""
+
+msgid "Had mount_plan"
+msgstr ""
+
+msgid "Had plan"
+msgstr ""
+
+#, fuzzy
+#| msgid "Height"
+msgid "Had height"
+msgstr "Höjd"
+
+msgid "Had size"
+msgstr ""
+
+#, fuzzy
+#| msgid "Line direction"
+msgid "Had direction"
+msgstr "Linjeriktning"
+
+#, fuzzy
+#| msgid "Reflection"
+msgid "Had reflection_class"
+msgstr "Reflex"
+
+msgid "Had surface_class"
+msgstr ""
+
+#, fuzzy
+#| msgid "Mount type"
+msgid "Had mount_type"
+msgstr "Monteringstyp"
+
+#, fuzzy
+#| msgid "Road name"
+msgid "Had road_name"
+msgstr "Vägnamn"
+
+#, fuzzy
+#| msgid "Lane number"
+msgid "Had lane_number"
+msgstr "Körfält nummer"
+
+#, fuzzy
+#| msgid "Lane type"
+msgid "Had lane_type"
+msgstr "Typ av körfält"
+
+#, fuzzy
+#| msgid "Location specifier"
+msgid "Had location_specifier"
+msgstr "Platsspecifikation"
+
+#, fuzzy
+#| msgid "Validity period start"
+msgid "Had validity_period_start"
+msgstr "Giltighetsperiodens start"
+
+#, fuzzy
+#| msgid "Validity period end"
+msgid "Had validity_period_end"
+msgstr "Giltighetsperiodens slut"
+
+#, fuzzy
+#| msgid "Source name"
+msgid "Had source_name"
+msgstr "Källnamn"
+
+#, fuzzy
+#| msgid "Source id"
+msgid "Had source_id"
+msgstr "Käll-id"
+
+#, fuzzy
+#| msgid "Signpost value"
+msgid "Lost value"
+msgstr "Vägvisarens värde"
+
+#, fuzzy
+#| msgid "Signpost txt"
+msgid "Lost txt"
+msgstr "Vägvisar-txt"
+
+#, fuzzy
+#| msgid "Double sided"
+msgid "Lost double_sided"
+msgstr "Dubbelsidig"
+
+#, fuzzy
+#| msgid "Peak fastened"
+msgid "Lost peak_fastened"
+msgstr "Toppmonterad"
+
+msgid "Had affect_area"
+msgstr ""
+
+msgid "Set color to BLUE"
+msgstr ""
+
+msgid "Set content_s to null"
+msgstr ""
+
+#, fuzzy
+#| msgid "Missing content"
+msgid "Set missing_content to false"
+msgstr "Innehåll saknas"
+
+#, fuzzy
+#| msgid "Additional information"
+msgid "Set additional_information to empty"
+msgstr "Tilläggsuppgifter"
+
+msgid "Files migrated"
+msgstr ""
+
+#, fuzzy
+#| msgid "URL to a file attachment related to this sign."
+msgid "Number of file attachments migrated."
+msgstr "URL för filbilagan om denna skylt."
+
+msgid "Ticket Machine Migration Plan Record"
+msgstr ""
+
+msgid "Ticket Machine Migration Plan Records"
+msgstr ""
+
+#, fuzzy
+#| msgid "Parent Traffic Sign Real"
+msgid "Original TrafficSignReal"
+msgstr "Överordnad trafikskylt (implementering)"
+
+msgid "The original TrafficSignReal that was migrated."
+msgstr ""
+
+#, fuzzy
+#| msgid "Additional Sign Real"
+msgid "New AdditionalSignReal"
+msgstr "Tilläggsskylt (implementering)"
+
+#, fuzzy
+#| msgid "The plan for this Additional Sign."
+msgid "The newly created AdditionalSignReal."
+msgstr "Plan för denna tilläggsskyltplan."
+
+msgid "UUID of the original TrafficSignReal (preserved even if deleted)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Additional Sign Real"
+msgid "UUID of the new AdditionalSignReal."
+msgstr "Tilläggsskylt (implementering)"
+
+#, fuzzy
+#| msgid "Parent Traffic Sign Real"
+msgid "UUID of the parent TrafficSignReal if found."
+msgstr "Överordnad trafikskylt (implementering)"
+
+msgid "Plan mapping found"
+msgstr ""
+
+msgid ""
+"Whether a corresponding AdditionalSignPlan was found for traffic_sign_plan."
+msgstr ""
+
+#, fuzzy
+#| msgid "mount real"
+msgid "Had mount_real"
+msgstr "montering (implementering)"
+
+#, fuzzy
+#| msgid "Ordered traffic sign"
+msgid "Had traffic_sign_plan"
+msgstr "Ordnad trafikskylt"
+
+#, fuzzy
+#| msgid "Legacy code"
+msgid "Had legacy_code"
+msgstr "Äldre kod"
+
+#, fuzzy
+#| msgid "Installation id"
+msgid "Had installation_id"
+msgstr "Installations-id"
+
+#, fuzzy
+#| msgid "Installation details"
+msgid "Had installation_details"
+msgstr "Installationsdetaljer"
+
+#, fuzzy
+#| msgid "Permit decision id"
+msgid "Had permit_decision_id"
+msgstr "Tillståndsbeslut-id"
+
+#, fuzzy
+#| msgid "Scanned at"
+msgid "Had scanned_at"
+msgstr "Skannades den"
+
+#, fuzzy
+#| msgid "Manufacturer"
+msgid "Had manufacturer"
+msgstr "Tillverkare"
+
+msgid "Had rfid"
+msgstr ""
+
+#, fuzzy
+#| msgid "Operation"
+msgid "Had operation"
+msgstr "Åtgärd"
+
+#, fuzzy
+#| msgid "Attachment url"
+msgid "Had attachment_url"
+msgstr "Bilagas URL"
+
+#, fuzzy
+#| msgid "Installation status"
+msgid "Had installation_status"
+msgstr "Installationsstatus"
+
+#, fuzzy
+#| msgid "Installation date"
+msgid "Had installation_date"
+msgstr "Installationsdatum"
+
+#, fuzzy
+#| msgid "Installation status"
+msgid "Had installation_status_note"
+msgstr "Installationsstatus"
+
+msgid "Set installed_by to null"
+msgstr ""
+
+msgid "Ticket Machine Migration Real Record"
+msgstr ""
+
+msgid "Ticket Machine Migration Real Records"
+msgstr ""
 
 msgid "Right side of the road (relative to traffic direction)"
 msgstr "Höger sida av vägen (i trafikriktningen)"
