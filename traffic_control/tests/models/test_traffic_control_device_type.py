@@ -137,8 +137,8 @@ def test__traffic_control_device_type__target_model__update_is_valid(new_target_
         (DeviceTypeTargetModel.TRAFFIC_LIGHT, SignpostRealFactory),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, TrafficLightPlanFactory),
         (DeviceTypeTargetModel.TRAFFIC_SIGN, TrafficLightRealFactory),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, TrafficSignPlanFactory),
-        (DeviceTypeTargetModel.ADDITIONAL_SIGN, TrafficSignRealFactory),
+        # TODO remember bring back test for additional_sign if traffic sign real/plan allowed target models
+        #  are not expanded to include additional_sign in the future
         (DeviceTypeTargetModel.BARRIER, AdditionalSignPlanFactory),
         (DeviceTypeTargetModel.BARRIER, AdditionalSignRealFactory),
     ),

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-05 10:26+0200\n"
+"POT-Creation-Date: 2026-03-10 14:31+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -613,15 +613,6 @@ msgstr "Huoltotila"
 msgid "We apologize for the inconvenience. Please check back soon."
 msgstr "Pahoittelemme häiriötä. Tarkista asia pian uudelleen."
 
-msgid "Change"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "View on site"
-msgstr ""
-
 msgid "Maintenance mode active"
 msgstr "Huoltotila käytössä"
 
@@ -960,6 +951,117 @@ msgstr "Opaste (toteuma)"
 
 msgid "Signpost Reals"
 msgstr "Opaste (toteumat)"
+
+#, fuzzy
+#| msgid "Information sign"
+msgid "Run Information"
+msgstr "Opastusmerkki"
+
+msgid "Plan Migration Statistics"
+msgstr ""
+
+msgid "Real Migration Statistics"
+msgstr ""
+
+#, fuzzy
+#| msgid "Device type"
+msgid "Device Types"
+msgstr "Laitteen tyyppi"
+
+msgid "Lost Data"
+msgstr ""
+
+#, fuzzy
+#| msgid "Information sign"
+msgid "Error Information"
+msgstr "Opastusmerkki"
+
+msgid "Mode"
+msgstr ""
+
+msgid "Status"
+msgstr "Tila"
+
+#, fuzzy
+#| msgid "Operation"
+msgid "Duration"
+msgstr "Toimenpide"
+
+msgid "Plans"
+msgstr "Suunnitelmat"
+
+#, fuzzy
+#| msgid "Mount Reals"
+msgid "Reals"
+msgstr "Kiinnityskohde (toteumat)"
+
+msgid "Plan Records"
+msgstr ""
+
+msgid "Real Records"
+msgstr ""
+
+msgid "Lost Field Values"
+msgstr ""
+
+#, fuzzy
+#| msgid "Location information"
+msgid "Migration Information"
+msgstr "Sijaintitiedot"
+
+msgid "Object IDs"
+msgstr ""
+
+#, fuzzy
+#| msgid "Parent Responsible Entity"
+msgid "Parent Assignment"
+msgstr "Isäntävastuutaho"
+
+msgid "Field Population - Basic"
+msgstr ""
+
+msgid "Field Population - Appearance"
+msgstr ""
+
+msgid "Field Population - Location"
+msgstr ""
+
+msgid "Field Population - Other"
+msgstr ""
+
+msgid "Lost Fields"
+msgstr ""
+
+msgid "Default Values Set"
+msgstr ""
+
+#, fuzzy
+#| msgid "File"
+msgid "Files"
+msgstr "Tiedosto"
+
+msgid "Migration Run"
+msgstr ""
+
+#, fuzzy
+#| msgid "External ID"
+msgid "Original ID"
+msgstr "Ulkoinen ID"
+
+msgid "New ID"
+msgstr ""
+
+msgid "Parent"
+msgstr ""
+
+msgid "Fields Populated"
+msgstr ""
+
+msgid "Plan Mapping"
+msgstr ""
+
+msgid "Field Population - Installation"
+msgstr ""
 
 msgid "Traffic Light Real"
 msgstr "Liikennevalo (toteuma)"
@@ -1858,9 +1960,6 @@ msgstr "Päivitetty-aikaleima"
 msgid "Task"
 msgstr "Tehtävä"
 
-msgid "Status"
-msgstr "Tila"
-
 msgid "Decision id"
 msgstr "Päätösnumero"
 
@@ -1901,9 +2000,6 @@ msgstr "Päätöslinkki"
 
 msgid "URL to decision web page"
 msgstr "Linkki päätöksen verkkosivulle"
-
-msgid "Plans"
-msgstr "Suunnitelmat"
 
 msgid "File path"
 msgstr "Tiedostopolku"
@@ -2230,6 +2326,440 @@ msgstr "Toteumadokumentti (opaste)"
 
 msgid "Signpost Real Files"
 msgstr "Toteumadokumentit (opaste)"
+
+#, fuzzy
+#| msgid "Start date"
+msgid "Started at"
+msgstr "Aloitus pvm"
+
+msgid "Timestamp when the migration command started."
+msgstr ""
+
+#, fuzzy
+#| msgid "Deleted at"
+msgid "Completed at"
+msgstr "Poistettu-aikaleima"
+
+msgid "Timestamp when the migration command completed successfully."
+msgstr ""
+
+#, fuzzy
+#| msgid "Deleted by"
+msgid "Executed by"
+msgstr "Poistaja"
+
+msgid "User who executed the migration command."
+msgstr ""
+
+msgid "Whether this was a dry run (no actual changes made)."
+msgstr ""
+
+msgid "Hard delete"
+msgstr ""
+
+msgid "Whether hard-delete mode was used (true) or soft-delete (false)."
+msgstr ""
+
+msgid "Plans processed"
+msgstr ""
+
+msgid "Total number of TrafficSignPlan objects processed."
+msgstr ""
+
+msgid "Plans migrated"
+msgstr ""
+
+msgid "Number of TrafficSignPlan objects successfully migrated."
+msgstr ""
+
+msgid "Plans with parent"
+msgstr ""
+
+msgid "Number of plans that were assigned a parent sign (E2/521)."
+msgstr ""
+
+msgid "Plans without parent"
+msgstr ""
+
+msgid "Number of plans that had no parent sign found."
+msgstr ""
+
+msgid "Reals processed"
+msgstr ""
+
+msgid "Total number of TrafficSignReal objects processed."
+msgstr ""
+
+msgid "Reals migrated"
+msgstr ""
+
+msgid "Number of TrafficSignReal objects successfully migrated."
+msgstr ""
+
+msgid "Reals with parent"
+msgstr ""
+
+msgid "Number of reals that were assigned a parent sign (E2/521)."
+msgstr ""
+
+msgid "Reals without parent"
+msgstr ""
+
+msgid "Number of reals that had no parent sign found."
+msgstr ""
+
+#, fuzzy
+#| msgid "Device type preview"
+msgid "Device types updated"
+msgstr "Laitteen tyyppin esikatselu"
+
+msgid "Number of device types with target_model updated."
+msgstr ""
+
+msgid "Error message"
+msgstr ""
+
+msgid "Error message if the migration failed."
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Whether the migration completed successfully."
+msgstr ""
+
+msgid "Lost field values"
+msgstr ""
+
+msgid ""
+"Dictionary of field names to sets of unique values that were lost during "
+"migration. Example: {'value': ['10', '20'], 'txt': ['Info text'], "
+"'affect_area': ['had_polygon']}"
+msgstr ""
+
+msgid "Ticket Machine Migration Run"
+msgstr ""
+
+msgid "Ticket Machine Migration Runs"
+msgstr ""
+
+msgid "Migration run"
+msgstr ""
+
+msgid "The migration run this record belongs to."
+msgstr ""
+
+#, fuzzy
+#| msgid "Parent Traffic Sign Plan"
+msgid "Original TrafficSignPlan"
+msgstr "Isäntäkilpi (suunnitelma)"
+
+msgid "The original TrafficSignPlan that was migrated."
+msgstr ""
+
+#, fuzzy
+#| msgid "Additional Sign Plan"
+msgid "New AdditionalSignPlan"
+msgstr "Lisäkilpi (suunnitelma)"
+
+#, fuzzy
+#| msgid "The plan for this Additional Sign."
+msgid "The newly created AdditionalSignPlan."
+msgstr "Tämän lisäkilpisuunnitelman suunnitelma."
+
+msgid "UUID of the original TrafficSignPlan (preserved even if deleted)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Additional Sign Plan"
+msgid "UUID of the new AdditionalSignPlan."
+msgstr "Lisäkilpi (suunnitelma)"
+
+#, fuzzy
+#| msgid "Device type"
+msgid "Device type code"
+msgstr "Laitteen tyyppi"
+
+msgid "Device type code of the ticket machine."
+msgstr ""
+
+#, fuzzy
+#| msgid "File not found."
+msgid "Parent found"
+msgstr "Tiedostoa ei löytynyt."
+
+msgid "Whether a parent sign (E2/521) was found and assigned."
+msgstr ""
+
+#, fuzzy
+#| msgid "Parent Signpost Plan"
+msgid "Parent sign ID"
+msgstr "Isäntäopaste (suunnitelma)"
+
+#, fuzzy
+#| msgid "Parent Traffic Sign Plan"
+msgid "UUID of the parent TrafficSignPlan if found."
+msgstr "Isäntäkilpi (suunnitelma)"
+
+#, fuzzy
+#| msgid "Parent Signpost Real"
+msgid "Parent sign code"
+msgstr "Isäntäopaste (toteuma)"
+
+msgid "Device type code of the parent sign (E2 or 521)."
+msgstr ""
+
+#, fuzzy
+#| msgid "File not found."
+msgid "Multiple parents found"
+msgstr "Tiedostoa ei löytynyt."
+
+msgid "Whether multiple E2/521 signs were found on the same mount."
+msgstr ""
+
+msgid "Had mount_plan"
+msgstr ""
+
+msgid "Had plan"
+msgstr ""
+
+#, fuzzy
+#| msgid "Height"
+msgid "Had height"
+msgstr "Korkeus"
+
+msgid "Had size"
+msgstr ""
+
+#, fuzzy
+#| msgid "Line direction"
+msgid "Had direction"
+msgstr "Viivan piirtosuunta"
+
+#, fuzzy
+#| msgid "Reflection"
+msgid "Had reflection_class"
+msgstr "Kalvo"
+
+msgid "Had surface_class"
+msgstr ""
+
+#, fuzzy
+#| msgid "Mount type"
+msgid "Had mount_type"
+msgstr "Kiinnityskohteen tyyppi"
+
+#, fuzzy
+#| msgid "Road name"
+msgid "Had road_name"
+msgstr "Kadun/tien nimi"
+
+#, fuzzy
+#| msgid "Lane number"
+msgid "Had lane_number"
+msgstr "Kaistanumero"
+
+#, fuzzy
+#| msgid "Lane type"
+msgid "Had lane_type"
+msgstr "Kaistatyyppi"
+
+#, fuzzy
+#| msgid "Location specifier"
+msgid "Had location_specifier"
+msgstr "Sijaintitarkenne"
+
+#, fuzzy
+#| msgid "Validity period start"
+msgid "Had validity_period_start"
+msgstr "Voimassaoloaika alkaa"
+
+#, fuzzy
+#| msgid "Validity period end"
+msgid "Had validity_period_end"
+msgstr "Voimassaoloaika loppuu"
+
+#, fuzzy
+#| msgid "Source name"
+msgid "Had source_name"
+msgstr "Lähteen nimi"
+
+#, fuzzy
+#| msgid "Source id"
+msgid "Had source_id"
+msgstr "Lähde-id"
+
+#, fuzzy
+#| msgid "Signpost value"
+msgid "Lost value"
+msgstr "Arvo"
+
+#, fuzzy
+#| msgid "Signpost txt"
+msgid "Lost txt"
+msgstr "Opasteen sisältö"
+
+#, fuzzy
+#| msgid "Double sided"
+msgid "Lost double_sided"
+msgstr "Kaksipuolinen"
+
+#, fuzzy
+#| msgid "Peak fastened"
+msgid "Lost peak_fastened"
+msgstr "Huippukiinnitetty"
+
+msgid "Had affect_area"
+msgstr ""
+
+msgid "Set color to BLUE"
+msgstr ""
+
+msgid "Set content_s to null"
+msgstr ""
+
+#, fuzzy
+#| msgid "Missing content"
+msgid "Set missing_content to false"
+msgstr "Sisältö puuttuu"
+
+#, fuzzy
+#| msgid "Additional information"
+msgid "Set additional_information to empty"
+msgstr "Lisätiedot"
+
+#, fuzzy
+#| msgid "File path"
+msgid "Files migrated"
+msgstr "Tiedostopolku"
+
+#, fuzzy
+#| msgid "URL to a file attachment related to this sign."
+msgid "Number of file attachments migrated."
+msgstr "Tähän kilpeen liittyvän tiedostoliitteen URL-osoite."
+
+msgid "Ticket Machine Migration Plan Record"
+msgstr ""
+
+msgid "Ticket Machine Migration Plan Records"
+msgstr ""
+
+#, fuzzy
+#| msgid "Parent Traffic Sign Real"
+msgid "Original TrafficSignReal"
+msgstr "Isäntäkilpi (toteuma)"
+
+msgid "The original TrafficSignReal that was migrated."
+msgstr ""
+
+#, fuzzy
+#| msgid "Additional Sign Real"
+msgid "New AdditionalSignReal"
+msgstr "Lisäkilpi (toteuma)"
+
+#, fuzzy
+#| msgid "The plan for this Additional Sign."
+msgid "The newly created AdditionalSignReal."
+msgstr "Tämän lisäkilpisuunnitelman suunnitelma."
+
+msgid "UUID of the original TrafficSignReal (preserved even if deleted)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Additional Sign Real"
+msgid "UUID of the new AdditionalSignReal."
+msgstr "Lisäkilpi (toteuma)"
+
+#, fuzzy
+#| msgid "Parent Traffic Sign Real"
+msgid "UUID of the parent TrafficSignReal if found."
+msgstr "Isäntäkilpi (toteuma)"
+
+#, fuzzy
+#| msgid "Plans Not Found"
+msgid "Plan mapping found"
+msgstr "Suunnitelmia ei löydetty"
+
+msgid ""
+"Whether a corresponding AdditionalSignPlan was found for traffic_sign_plan."
+msgstr ""
+
+#, fuzzy
+#| msgid "mount real"
+msgid "Had mount_real"
+msgstr "Kiinnityskohde (toteuma)"
+
+#, fuzzy
+#| msgid "Ordered traffic sign"
+msgid "Had traffic_sign_plan"
+msgstr "Järjestetty liikennemerkki"
+
+#, fuzzy
+#| msgid "Legacy code"
+msgid "Had legacy_code"
+msgstr "Vanha merkkikoodi"
+
+#, fuzzy
+#| msgid "Installation id"
+msgid "Had installation_id"
+msgstr "Pystytyspöytäkirjan tunnistenumero (Mobilenote)"
+
+#, fuzzy
+#| msgid "Installation details"
+msgid "Had installation_details"
+msgstr "Asennuksen lisätiedot"
+
+#, fuzzy
+#| msgid "Permit decision id"
+msgid "Had permit_decision_id"
+msgstr "Lupapäätöksen tunnistenumero"
+
+#, fuzzy
+#| msgid "Scanned at"
+msgid "Had scanned_at"
+msgstr "Kuvattu-aikaleima"
+
+#, fuzzy
+#| msgid "Manufacturer"
+msgid "Had manufacturer"
+msgstr "Valmistaja"
+
+msgid "Had rfid"
+msgstr ""
+
+#, fuzzy
+#| msgid "Operation"
+msgid "Had operation"
+msgstr "Toimenpide"
+
+#, fuzzy
+#| msgid "Attachment url"
+msgid "Had attachment_url"
+msgstr "Liite (url)"
+
+#, fuzzy
+#| msgid "Installation status"
+msgid "Had installation_status"
+msgstr "Asennuksen tila"
+
+#, fuzzy
+#| msgid "Installation date"
+msgid "Had installation_date"
+msgstr "Asennuspvm"
+
+#, fuzzy
+#| msgid "Installation status"
+msgid "Had installation_status_note"
+msgstr "Asennuksen tila"
+
+msgid "Set installed_by to null"
+msgstr ""
+
+msgid "Ticket Machine Migration Real Record"
+msgstr ""
+
+msgid "Ticket Machine Migration Real Records"
+msgstr ""
 
 msgid "Right side of the road (relative to traffic direction)"
 msgstr "Ajoradan oikea puoli (ajosuuntaan nähden)"
