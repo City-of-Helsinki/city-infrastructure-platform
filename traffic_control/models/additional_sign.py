@@ -237,8 +237,8 @@ class AdditionalSignPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, Ab
         verbose_name=_("Parent Traffic Sign Plan"),
         on_delete=models.PROTECT,
         related_name="additional_signs",
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         help_text=_("The traffic sign to which this additional sign is associated."),
     )
     mount_plan = models.ForeignKey(
@@ -301,8 +301,8 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         verbose_name=_("Parent Traffic Sign Real"),
         on_delete=models.PROTECT,
         related_name="additional_signs",
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         help_text=_("The traffic sign to which this additional sign is associated."),
     )
     additional_sign_plan = models.ForeignKey(
