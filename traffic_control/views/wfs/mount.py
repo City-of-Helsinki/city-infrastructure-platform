@@ -15,7 +15,10 @@ from traffic_control.views.wfs.common import (
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
-from traffic_control.views.wfs.utils import CentroidLocationXsdElement, EnumNameXsdElement
+from traffic_control.views.wfs.utils import (
+    CentroidLocationXsdElement,
+    EnumIntegerNameXsdElement,
+)
 
 _base_fields = (
     [
@@ -34,7 +37,7 @@ _base_fields = (
         FeatureField("road_name", abstract="Name of the road this mount is installed at."),
         FeatureField(
             "location_specifier",
-            xsd_class=EnumNameXsdElement,
+            xsd_class=EnumIntegerNameXsdElement,
             abstract="Specifies where the mount is in relation to the road.",
         ),
     ]

@@ -8,13 +8,13 @@ from traffic_control.services.traffic_sign import traffic_sign_plan_get_current
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
     DEVICE_TYPE_FIELDS,
-    EnumNameXsdElement,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
     REPLACEABLE_MODEL_FIELDS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
+from traffic_control.views.wfs.utils import EnumIntegerNameXsdElement, EnumNameXsdElement
 
 _base_fields = (
     [
@@ -49,7 +49,7 @@ _base_fields = (
         ),
         FeatureField(
             "location_specifier",
-            xsd_class=EnumNameXsdElement,
+            xsd_class=EnumIntegerNameXsdElement,
             abstract="Specifies where the mount is in relation to the road.",
         ),
     ]
@@ -73,7 +73,7 @@ TrafficSignRealFeatureType = FeatureType(
         FeatureField("installation_details", abstract="Additional details about the installation."),
         FeatureField("installation_date", abstract="Date that the sign was installed on."),
         FeatureField("installation_status", abstract="Installation status of the sign."),
-        FeatureField("condition", xsd_class=EnumNameXsdElement, abstract="Condition of the signpost"),
+        FeatureField("condition", xsd_class=EnumIntegerNameXsdElement, abstract="Condition of the signpost"),
         FeatureField(
             "device_plan_id",
             model_attribute="traffic_sign_plan",

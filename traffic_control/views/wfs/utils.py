@@ -6,7 +6,7 @@ from django.db import models
 from gisserver import queries
 from gisserver.geometries import BoundingBox
 from gisserver.output import GML32Renderer
-from gisserver.types import XsdElement
+from gisserver.types import XsdElement, XsdTypes
 
 # Non-exhausting list of CRSs with axis order of (latitude longitude)
 _YX_CRS = (
@@ -133,9 +133,49 @@ class YXGML32Renderer(GML32Renderer):
 
 class EnumNameXsdElement(XsdElement):
     def get_value(self, instance: models.Model):
+        """Return the enum name as a string value.
+
+        Args:
+            instance: The Django model instance.
+
+        Returns:
+            str | None: The enum's name attribute (e.g., "RIGHT", "ACTIVE"), or None if field is empty.
+        """
         if not (enum_value := getattr(instance, self.name)):
             return None
         return enum_value.name
+
+
+class EnumIntegerNameXsdElement(EnumNameXsdElement):
+    """XsdElement for EnumIntegerField that returns the enum's name as a string value.
+
+    This is used for fields that are stored as integers in the database (EnumIntegerField)
+    but should be exposed as string names in WFS responses. It overrides the type to
+    XsdTypes.string to match the returned value format, preventing type mismatches in
+    WFS clients like QGIS.
+
+    The key difference from EnumNameXsdElement is that this explicitly declares the XSD
+    type as string in the schema, whereas EnumNameXsdElement auto-detects based on the
+    database field type (which works fine for EnumField but fails for EnumIntegerField).
+
+    Examples:
+        - location_specifier: stored as 1 (integer), returns "RIGHT" (string), schema declares string
+        - lifecycle: stored as 3 (integer), returns "ACTIVE" (string), schema declares string
+        - condition: stored as 1 (integer), returns "VERY_BAD" (string), schema declares string
+        - color: stored as 1 (integer), returns "BLUE" (string), schema declares string
+        - arrow_direction: stored as 1 (integer), returns "UP" (string), schema declares string
+    """
+
+    def __init__(self, name: str, **kwargs):
+        """Initialize with type forced to XsdTypes.string.
+
+        Args:
+            name: The field name.
+            **kwargs: Additional arguments passed to parent XsdElement.
+        """
+        # Force the type to be string, overriding any auto-detected type
+        kwargs["type"] = XsdTypes.string
+        super().__init__(name, **kwargs)
 
 
 class CentroidLocationXsdElement(XsdElement):
