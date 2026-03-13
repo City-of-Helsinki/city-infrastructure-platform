@@ -9,7 +9,7 @@ authors = []
 python = "^3.11.9"
 django = "^5.2"
 
-cairosvg = "^2.7.1"
+cairosvg = "^2.9.0"
 django-auditlog = "^3.0.0"
 django-colorfield = "^0.11.0"
 django-cors-headers = "^4.3.1"
