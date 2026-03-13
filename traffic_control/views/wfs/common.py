@@ -11,7 +11,12 @@ from gisserver.output import GeoJsonRenderer
 from gisserver.output.utils import ChunkedQuerySetIterator
 from gisserver.types import XsdElement
 
-from traffic_control.views.wfs.utils import EnumNameXsdElement, IconXsdElement, SwapBoundingBoxMixin, YXGML32Renderer
+from traffic_control.views.wfs.utils import (
+    EnumIntegerNameXsdElement,
+    IconXsdElement,
+    SwapBoundingBoxMixin,
+    YXGML32Renderer,
+)
 from traffic_control.views.wfs.workarounds import replace__restore_caches
 
 DEFAULT_CRS = CRS.from_srid(settings.SRID)
@@ -36,7 +41,7 @@ USER_CONTROLLED_MODEL_FIELDS = [
 
 OWNED_DEVICE_MODEL_FIELDS = [
     FeatureField("owner_name_fi", model_attribute="owner.name_fi", abstract="Name of the owner of the device."),
-    FeatureField("lifecycle", xsd_class=EnumNameXsdElement, abstract="Lifecycle of the device."),
+    FeatureField("lifecycle", xsd_class=EnumIntegerNameXsdElement, abstract="Lifecycle of the device."),
 ]
 
 REPLACEABLE_MODEL_FIELDS = [
