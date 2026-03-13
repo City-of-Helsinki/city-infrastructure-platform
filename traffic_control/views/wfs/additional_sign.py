@@ -8,14 +8,13 @@ from traffic_control.services.common import get_lifecycle_and_validity_period_qu
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
     DEVICE_TYPE_FIELDS,
-    EnumNameXsdElement,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
     REPLACEABLE_MODEL_FIELDS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
-from traffic_control.views.wfs.utils import ContentSRowSElement
+from traffic_control.views.wfs.utils import ContentSRowSElement, EnumIntegerNameXsdElement, EnumNameXsdElement
 
 _base_fields = (
     [
@@ -28,7 +27,7 @@ _base_fields = (
         FeatureField("direction", abstract="Direction of the sign. North=0, East=90, South=180 and West=270."),
         FeatureField("size", xsd_class=EnumNameXsdElement, abstract="Size of the additional sign."),
         FeatureField("height", abstract="Sign's height measured from the top in centimeters."),
-        FeatureField("color", xsd_class=EnumNameXsdElement, abstract="Color of the additional sign."),
+        FeatureField("color", xsd_class=EnumIntegerNameXsdElement, abstract="Color of the additional sign."),
         FeatureField(
             "mount_type_description_fi",
             model_attribute="mount_type.description_fi",
@@ -59,7 +58,7 @@ _base_fields = (
         ),
         FeatureField(
             "location_specifier",
-            xsd_class=EnumNameXsdElement,
+            xsd_class=EnumIntegerNameXsdElement,
             abstract="Specifies where the mount is in relation to the road.",
         ),
         FeatureField(
@@ -93,7 +92,7 @@ AdditionalSignRealFeatureType = FeatureType(
         FeatureField("installation_details", abstract="Additional details about the installation."),
         FeatureField("installation_date", abstract="Date that the sign was installed on."),
         FeatureField("installation_status", abstract="Installation status of the sign."),
-        FeatureField("condition", xsd_class=EnumNameXsdElement, abstract="Condition of the signpost"),
+        FeatureField("condition", xsd_class=EnumIntegerNameXsdElement, abstract="Condition of the signpost"),
         FeatureField(
             "device_plan_id",
             model_attribute="additional_sign_plan",
