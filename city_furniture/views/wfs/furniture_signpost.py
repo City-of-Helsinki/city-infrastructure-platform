@@ -6,7 +6,7 @@ from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from traffic_control.services.common import get_lifecycle_and_validity_period_queryset
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
-    EnumNameXsdElement,
+    EnumIntegerNameXsdElement,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
@@ -57,7 +57,7 @@ _base_fields = (
         FeatureField("value", abstract="Value in the signposts, when its numeric."),
         FeatureField("size", abstract="Size of the signpost. Filled only if signpost is of non-standard size."),
         FeatureField(
-            "arrow_direction", xsd_class=EnumNameXsdElement, abstract="Direction of the arrow on the signpost."
+            "arrow_direction", xsd_class=EnumIntegerNameXsdElement, abstract="Direction of the arrow on the signpost."
         ),
         FeatureField(
             "target_name_fi",
