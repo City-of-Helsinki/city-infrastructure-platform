@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
-from traffic_control.analyze_utils.traffic_sign_data import TICKET_MACHINE_CODES
+from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models.additional_sign import (
     AdditionalSignPlan,

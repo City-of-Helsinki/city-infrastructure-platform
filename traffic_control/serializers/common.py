@@ -10,6 +10,7 @@ from guardian.shortcuts import get_objects_for_user
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 
+from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.mixins.models import AbstractFileModel
 from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceType
@@ -97,6 +98,53 @@ class HideFromAnonUserSerializerMixin:
             representation.pop("deleted_by", None)
 
         return representation
+
+
+class AdditionalSignParentValidationMixin:
+    """
+    Mixin that validates parent field is provided for non-ticket-machine additional signs.
+
+    This mixin should be used with AdditionalSign serializers to enforce the business rule
+    that only ticket machine device types can have a null parent.
+    """
+
+    def validate(self, data: dict) -> dict:
+        """
+        Validate that parent is provided for non-ticket-machine device types.
+
+        Args:
+            data: The validated data dictionary.
+
+        Returns:
+            dict: The validated data.
+
+        Raises:
+            ValidationError: If parent is missing for non-ticket-machine device types.
+        """
+        # Only validate parent on create or when parent field is explicitly being updated
+        is_update = hasattr(self, "instance") and self.instance is not None
+        parent_in_data = "parent" in data
+
+        # Skip validation if this is an update and parent is not being changed
+        if is_update and not parent_in_data:
+            return data
+
+        # For create or when parent is being updated, check the requirement
+        parent = data.get("parent")
+        device_type = data.get("device_type")
+
+        # If updating and device_type not in data, use existing device_type
+        if is_update and not device_type:
+            device_type = self.instance.device_type
+
+        # Check if parent is missing and device type is not a ticket machine
+        if not parent and device_type:
+            if device_type.code not in TICKET_MACHINE_CODES:
+                raise serializers.ValidationError(
+                    {"parent": _("Parent is required for additional signs that are not ticket machines.")}
+                )
+
+        return data
 
 
 class ReplaceableDeviceInputSerializerMixin(metaclass=serializers.SerializerMetaclass):

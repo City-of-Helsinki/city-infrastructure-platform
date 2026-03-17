@@ -13,6 +13,7 @@ from traffic_control.models import (
     TrafficControlDeviceType,
 )
 from traffic_control.serializers.common import (
+    AdditionalSignParentValidationMixin,
     EwktPointField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
@@ -31,6 +32,7 @@ class AdditionalSignPlanFileSerializer(FileProxySerializerMixin, serializers.Mod
 
 
 class AdditionalSignPlanInputSerializer(
+    AdditionalSignParentValidationMixin,
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
@@ -128,6 +130,7 @@ class AdditionalSignRealOperationSerializer(serializers.ModelSerializer):
 
 
 class AdditionalSignRealSerializer(
+    AdditionalSignParentValidationMixin,
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     serializers.ModelSerializer,

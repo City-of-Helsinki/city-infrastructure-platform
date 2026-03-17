@@ -6,7 +6,8 @@ from django.utils.crypto import get_random_string
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
-from traffic_control.enums import LaneNumber, LaneType, Lifecycle, Reflection, Size, Surface
+from traffic_control.constants import TICKET_MACHINE_CODES
+from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Lifecycle, Reflection, Size, Surface
 from traffic_control.models import AdditionalSignPlan
 from traffic_control.models.additional_sign import Color, LocationSpecifier
 from traffic_control.tests.api_utils import do_filtering_test, do_illegal_geometry_test
@@ -571,3 +572,72 @@ def test__additional_sign_plan__anonymous_user(method, expected_status, view_typ
     assert AdditionalSignPlan.objects.first().is_active
     assert AdditionalSignPlan.objects.first().owner.name_en == "Old owner"
     assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__create_without_parent_and_regular_device_type_fails(admin_user: bool) -> None:
+    """
+    Test that AdditionalSignPlan API rejects creation without parent for non-ticket-machine device types.
+
+    Args:
+        admin_user: Whether to use admin user or regular user.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    device_type = TrafficControlDeviceTypeFactory(
+        code="H1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+    )
+    data = {
+        "location": "SRID=3879;POINT Z (25500000 6680000 0)",
+        "owner": str(get_owner().pk),
+        "device_type": str(device_type.pk),
+        # No parent field - should fail validation
+    }
+
+    response = client.post(reverse("v1:additionalsignplan-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "parent" in response_data
+        assert AdditionalSignPlan.objects.count() == 0
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert AdditionalSignPlan.objects.count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_plan__create_without_parent_and_ticket_machine_succeeds(admin_user: bool) -> None:
+    """
+    Test that AdditionalSignPlan API allows creation without parent for ticket machine device types.
+
+    Args:
+        admin_user: Whether to use admin user or regular user.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    device_type = TrafficControlDeviceTypeFactory(
+        code=TICKET_MACHINE_CODES[0],  # H20.91
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+    )
+    data = {
+        "location": "SRID=3879;POINT Z (25500000 6680000 0)",
+        "owner": str(get_owner().pk),
+        "device_type": str(device_type.pk),
+        # No parent field - should succeed for ticket machines
+    }
+
+    response = client.post(reverse("v1:additionalsignplan-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_201_CREATED
+        assert AdditionalSignPlan.objects.count() == 1
+        asp = AdditionalSignPlan.objects.first()
+        assert response_data["id"] == str(asp.pk)
+        assert response_data["parent"] is None
+        assert asp.parent is None
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert AdditionalSignPlan.objects.count() == 0

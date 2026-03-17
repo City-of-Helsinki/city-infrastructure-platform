@@ -1555,6 +1555,31 @@ paths:
       responses:
         '204':
           description: No response body
+  /v1/allowed-parentless-additional-sign-codes/:
+    get:
+      operationId: allowed_parentless_additional_sign_codes_retrieve
+      description: Returns a list of device type codes that are allowed to have null
+        parent (ticket machines).
+      summary: Get allowed parentless additional sign device type codes
+      tags:
+      - allowed-parentless-additional-sign-codes
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  codes:
+                    type: array
+                    items:
+                      type: string
+          description: ''
   /v1/barrier-plans/:
     get:
       operationId: barrier_plans_list
@@ -14322,6 +14347,11 @@ components:
       - files
     AdditionalSignPlanInput:
       type: object
+      description: |-
+        Mixin that validates parent field is provided for non-ticket-machine additional signs.
+
+        This mixin should be used with AdditionalSign serializers to enforce the business rule
+        that only ticket machine device types can have a null parent.
       properties:
         id:
           type: string
@@ -14599,6 +14629,11 @@ components:
       - updated_by
     AdditionalSignPlanInputRequest:
       type: object
+      description: |-
+        Mixin that validates parent field is provided for non-ticket-machine additional signs.
+
+        This mixin should be used with AdditionalSign serializers to enforce the business rule
+        that only ticket machine device types can have a null parent.
       properties:
         replaces:
           type: string
@@ -15148,6 +15183,11 @@ components:
       - updated_by
     AdditionalSignReal:
       type: object
+      description: |-
+        Mixin that validates parent field is provided for non-ticket-machine additional signs.
+
+        This mixin should be used with AdditionalSign serializers to enforce the business rule
+        that only ticket machine device types can have a null parent.
       properties:
         id:
           type: string
@@ -15589,6 +15629,11 @@ components:
       - operation_type_id
     AdditionalSignRealRequest:
       type: object
+      description: |-
+        Mixin that validates parent field is provided for non-ticket-machine additional signs.
+
+        This mixin should be used with AdditionalSign serializers to enforce the business rule
+        that only ticket machine device types can have a null parent.
       properties:
         location:
           type: string
@@ -20905,6 +20950,11 @@ components:
             $ref: '#/components/schemas/TrafficSignRealOperation'
     PatchedAdditionalSignPlanInputRequest:
       type: object
+      description: |-
+        Mixin that validates parent field is provided for non-ticket-machine additional signs.
+
+        This mixin should be used with AdditionalSign serializers to enforce the business rule
+        that only ticket machine device types can have a null parent.
       properties:
         replaces:
           type: string
@@ -21161,6 +21211,11 @@ components:
           format: date
     PatchedAdditionalSignRealRequest:
       type: object
+      description: |-
+        Mixin that validates parent field is provided for non-ticket-machine additional signs.
+
+        This mixin should be used with AdditionalSign serializers to enforce the business rule
+        that only ticket machine device types can have a null parent.
       properties:
         location:
           type: string

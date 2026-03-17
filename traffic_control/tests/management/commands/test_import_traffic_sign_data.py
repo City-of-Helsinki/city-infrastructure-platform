@@ -8,9 +8,9 @@ from django.core.management import call_command
 
 from traffic_control.analyze_utils.traffic_sign_data import (
     get_default_installation_status,
-    TICKET_MACHINE_CODES,
     TrafficSignImporter,
 )
+from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import Condition, DeviceTypeTargetModel
 from traffic_control.models import (
     AdditionalSignReal,
