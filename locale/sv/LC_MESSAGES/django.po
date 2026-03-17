@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-10 14:31+0200\n"
+"POT-Creation-Date: 2026-03-18 10:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -956,10 +956,8 @@ msgstr "Vägvisare (implementering)"
 msgid "Signpost Reals"
 msgstr "Vägvisare (implementeringar)"
 
-#, fuzzy
-#| msgid "Information sign"
 msgid "Run Information"
-msgstr "Upplysningsskylt"
+msgstr ""
 
 msgid "Plan Migration Statistics"
 msgstr ""
@@ -967,18 +965,14 @@ msgstr ""
 msgid "Real Migration Statistics"
 msgstr ""
 
-#, fuzzy
-#| msgid "Device type"
 msgid "Device Types"
-msgstr "Anordningstyp"
+msgstr ""
 
 msgid "Lost Data"
 msgstr ""
 
-#, fuzzy
-#| msgid "Information sign"
 msgid "Error Information"
-msgstr "Upplysningsskylt"
+msgstr ""
 
 msgid "Mode"
 msgstr ""
@@ -986,18 +980,14 @@ msgstr ""
 msgid "Status"
 msgstr "Status"
 
-#, fuzzy
-#| msgid "Operation"
 msgid "Duration"
-msgstr "Åtgärd"
+msgstr ""
 
 msgid "Plans"
 msgstr "Planer"
 
-#, fuzzy
-#| msgid "Mount Reals"
 msgid "Reals"
-msgstr "Montering (implementeringar)"
+msgstr ""
 
 msgid "Plan Records"
 msgstr ""
@@ -1008,18 +998,14 @@ msgstr ""
 msgid "Lost Field Values"
 msgstr ""
 
-#, fuzzy
-#| msgid "Location information"
 msgid "Migration Information"
-msgstr "Platsinformation"
+msgstr ""
 
 msgid "Object IDs"
 msgstr ""
 
-#, fuzzy
-#| msgid "Parent Responsible Entity"
 msgid "Parent Assignment"
-msgstr "Överordnad ansvarig enhet"
+msgstr ""
 
 msgid "Field Population - Basic"
 msgstr ""
@@ -1039,18 +1025,14 @@ msgstr ""
 msgid "Default Values Set"
 msgstr ""
 
-#, fuzzy
-#| msgid "File"
 msgid "Files"
-msgstr "Fil"
+msgstr ""
 
 msgid "Migration Run"
 msgstr ""
 
-#, fuzzy
-#| msgid "External ID"
 msgid "Original ID"
-msgstr "Externt id"
+msgstr ""
 
 msgid "New ID"
 msgstr ""
@@ -1504,6 +1486,9 @@ msgstr "Platsspecifikation"
 
 msgid "Specifies where the sign is in relation to the road."
 msgstr "Fastställer skyltens läge i förhållande till vägen."
+
+msgid "Parent is required for additional signs that are not ticket machines."
+msgstr ""
 
 msgid "Parent Traffic Sign Plan"
 msgstr "Överordnad trafikskylt (plan)"
@@ -2337,26 +2322,92 @@ msgstr "Vägvisare (implementeringsfil)"
 msgid "Signpost Real Files"
 msgstr "Vägvisare (implementeringsfiler)"
 
-#, fuzzy
-#| msgid "Start date"
+msgid "Had height"
+msgstr ""
+
+msgid "Had size"
+msgstr ""
+
+msgid "Had direction"
+msgstr ""
+
+msgid "Had reflection_class"
+msgstr ""
+
+msgid "Had surface_class"
+msgstr ""
+
+msgid "Had mount_type"
+msgstr ""
+
+msgid "Had road_name"
+msgstr ""
+
+msgid "Had lane_number"
+msgstr ""
+
+msgid "Had lane_type"
+msgstr ""
+
+msgid "Had location_specifier"
+msgstr ""
+
+msgid "Had validity_period_start"
+msgstr ""
+
+msgid "Had validity_period_end"
+msgstr ""
+
+msgid "Had source_name"
+msgstr ""
+
+msgid "Had source_id"
+msgstr ""
+
+msgid "Lost value"
+msgstr ""
+
+msgid "Lost txt"
+msgstr ""
+
+msgid "Lost double_sided"
+msgstr ""
+
+msgid "Lost peak_fastened"
+msgstr ""
+
+msgid "Set color to BLUE"
+msgstr ""
+
+msgid "Set content_s to null"
+msgstr ""
+
+msgid "Set missing_content to false"
+msgstr ""
+
+msgid "Set additional_information to empty"
+msgstr ""
+
+msgid "Files migrated"
+msgstr ""
+
+msgid "Number of file attachments migrated."
+msgstr ""
+
 msgid "Started at"
-msgstr "Startdatum"
+msgstr ""
 
 msgid "Timestamp when the migration command started."
 msgstr ""
 
-#, fuzzy
-#| msgid "Deleted at"
 msgid "Completed at"
-msgstr "Togs bort den"
+msgstr ""
 
 msgid "Timestamp when the migration command completed successfully."
 msgstr ""
 
-#, fuzzy
-#| msgid "Deleted by"
 msgid "Executed by"
-msgstr "Togs bort av"
+msgstr ""
 
 msgid "User who executed the migration command."
 msgstr ""
@@ -2418,10 +2469,8 @@ msgstr ""
 msgid "Number of reals that had no parent sign found."
 msgstr ""
 
-#, fuzzy
-#| msgid "Device type"
 msgid "Device types updated"
-msgstr "Anordningstyp"
+msgstr ""
 
 msgid "Number of device types with target_model updated."
 msgstr ""
@@ -2459,70 +2508,50 @@ msgstr ""
 msgid "The migration run this record belongs to."
 msgstr ""
 
-#, fuzzy
-#| msgid "Parent Traffic Sign Plan"
 msgid "Original TrafficSignPlan"
-msgstr "Överordnad trafikskylt (plan)"
+msgstr ""
 
 msgid "The original TrafficSignPlan that was migrated."
 msgstr ""
 
-#, fuzzy
-#| msgid "Additional Sign Plan"
 msgid "New AdditionalSignPlan"
-msgstr "Tilläggsskylt (plan)"
+msgstr ""
 
-#, fuzzy
-#| msgid "The plan for this Additional Sign."
 msgid "The newly created AdditionalSignPlan."
-msgstr "Plan för denna tilläggsskyltplan."
+msgstr ""
 
 msgid "UUID of the original TrafficSignPlan (preserved even if deleted)."
 msgstr ""
 
-#, fuzzy
-#| msgid "Additional Sign Plan"
 msgid "UUID of the new AdditionalSignPlan."
-msgstr "Tilläggsskylt (plan)"
+msgstr ""
 
-#, fuzzy
-#| msgid "Device type"
 msgid "Device type code"
-msgstr "Anordningstyp"
+msgstr ""
 
 msgid "Device type code of the ticket machine."
 msgstr ""
 
-#, fuzzy
-#| msgid "File not found."
 msgid "Parent found"
-msgstr "Fil hittades inte."
+msgstr ""
 
 msgid "Whether a parent sign (E2/521) was found and assigned."
 msgstr ""
 
-#, fuzzy
-#| msgid "Parent Signpost Plan"
 msgid "Parent sign ID"
-msgstr "Överordnad vägvisare (plan)"
+msgstr ""
 
-#, fuzzy
-#| msgid "Parent Traffic Sign Plan"
 msgid "UUID of the parent TrafficSignPlan if found."
-msgstr "Överordnad trafikskylt (plan)"
+msgstr ""
 
-#, fuzzy
-#| msgid "Parent Signpost Real"
 msgid "Parent sign code"
-msgstr "Överordnad vägvisare (implementering)"
+msgstr ""
 
 msgid "Device type code of the parent sign (E2 or 521)."
 msgstr ""
 
-#, fuzzy
-#| msgid "File not found."
 msgid "Multiple parents found"
-msgstr "Fil hittades inte."
+msgstr ""
 
 msgid "Whether multiple E2/521 signs were found on the same mount."
 msgstr ""
@@ -2533,118 +2562,8 @@ msgstr ""
 msgid "Had plan"
 msgstr ""
 
-#, fuzzy
-#| msgid "Height"
-msgid "Had height"
-msgstr "Höjd"
-
-msgid "Had size"
-msgstr ""
-
-#, fuzzy
-#| msgid "Line direction"
-msgid "Had direction"
-msgstr "Linjeriktning"
-
-#, fuzzy
-#| msgid "Reflection"
-msgid "Had reflection_class"
-msgstr "Reflex"
-
-msgid "Had surface_class"
-msgstr ""
-
-#, fuzzy
-#| msgid "Mount type"
-msgid "Had mount_type"
-msgstr "Monteringstyp"
-
-#, fuzzy
-#| msgid "Road name"
-msgid "Had road_name"
-msgstr "Vägnamn"
-
-#, fuzzy
-#| msgid "Lane number"
-msgid "Had lane_number"
-msgstr "Körfält nummer"
-
-#, fuzzy
-#| msgid "Lane type"
-msgid "Had lane_type"
-msgstr "Typ av körfält"
-
-#, fuzzy
-#| msgid "Location specifier"
-msgid "Had location_specifier"
-msgstr "Platsspecifikation"
-
-#, fuzzy
-#| msgid "Validity period start"
-msgid "Had validity_period_start"
-msgstr "Giltighetsperiodens start"
-
-#, fuzzy
-#| msgid "Validity period end"
-msgid "Had validity_period_end"
-msgstr "Giltighetsperiodens slut"
-
-#, fuzzy
-#| msgid "Source name"
-msgid "Had source_name"
-msgstr "Källnamn"
-
-#, fuzzy
-#| msgid "Source id"
-msgid "Had source_id"
-msgstr "Käll-id"
-
-#, fuzzy
-#| msgid "Signpost value"
-msgid "Lost value"
-msgstr "Vägvisarens värde"
-
-#, fuzzy
-#| msgid "Signpost txt"
-msgid "Lost txt"
-msgstr "Vägvisar-txt"
-
-#, fuzzy
-#| msgid "Double sided"
-msgid "Lost double_sided"
-msgstr "Dubbelsidig"
-
-#, fuzzy
-#| msgid "Peak fastened"
-msgid "Lost peak_fastened"
-msgstr "Toppmonterad"
-
 msgid "Had affect_area"
 msgstr ""
-
-msgid "Set color to BLUE"
-msgstr ""
-
-msgid "Set content_s to null"
-msgstr ""
-
-#, fuzzy
-#| msgid "Missing content"
-msgid "Set missing_content to false"
-msgstr "Innehåll saknas"
-
-#, fuzzy
-#| msgid "Additional information"
-msgid "Set additional_information to empty"
-msgstr "Tilläggsuppgifter"
-
-msgid "Files migrated"
-msgstr ""
-
-#, fuzzy
-#| msgid "URL to a file attachment related to this sign."
-msgid "Number of file attachments migrated."
-msgstr "URL för filbilagan om denna skylt."
 
 msgid "Ticket Machine Migration Plan Record"
 msgstr ""
@@ -2652,36 +2571,26 @@ msgstr ""
 msgid "Ticket Machine Migration Plan Records"
 msgstr ""
 
-#, fuzzy
-#| msgid "Parent Traffic Sign Real"
 msgid "Original TrafficSignReal"
-msgstr "Överordnad trafikskylt (implementering)"
+msgstr ""
 
 msgid "The original TrafficSignReal that was migrated."
 msgstr ""
 
-#, fuzzy
-#| msgid "Additional Sign Real"
 msgid "New AdditionalSignReal"
-msgstr "Tilläggsskylt (implementering)"
+msgstr ""
 
-#, fuzzy
-#| msgid "The plan for this Additional Sign."
 msgid "The newly created AdditionalSignReal."
-msgstr "Plan för denna tilläggsskyltplan."
+msgstr ""
 
 msgid "UUID of the original TrafficSignReal (preserved even if deleted)."
 msgstr ""
 
-#, fuzzy
-#| msgid "Additional Sign Real"
 msgid "UUID of the new AdditionalSignReal."
-msgstr "Tilläggsskylt (implementering)"
+msgstr ""
 
-#, fuzzy
-#| msgid "Parent Traffic Sign Real"
 msgid "UUID of the parent TrafficSignReal if found."
-msgstr "Överordnad trafikskylt (implementering)"
+msgstr ""
 
 msgid "Plan mapping found"
 msgstr ""
@@ -2690,73 +2599,47 @@ msgid ""
 "Whether a corresponding AdditionalSignPlan was found for traffic_sign_plan."
 msgstr ""
 
-#, fuzzy
-#| msgid "mount real"
 msgid "Had mount_real"
-msgstr "montering (implementering)"
+msgstr ""
 
-#, fuzzy
-#| msgid "Ordered traffic sign"
 msgid "Had traffic_sign_plan"
-msgstr "Ordnad trafikskylt"
+msgstr ""
 
-#, fuzzy
-#| msgid "Legacy code"
 msgid "Had legacy_code"
-msgstr "Äldre kod"
+msgstr ""
 
-#, fuzzy
-#| msgid "Installation id"
 msgid "Had installation_id"
-msgstr "Installations-id"
+msgstr ""
 
-#, fuzzy
-#| msgid "Installation details"
 msgid "Had installation_details"
-msgstr "Installationsdetaljer"
+msgstr ""
 
-#, fuzzy
-#| msgid "Permit decision id"
 msgid "Had permit_decision_id"
-msgstr "Tillståndsbeslut-id"
+msgstr ""
 
-#, fuzzy
-#| msgid "Scanned at"
 msgid "Had scanned_at"
-msgstr "Skannades den"
+msgstr ""
 
-#, fuzzy
-#| msgid "Manufacturer"
 msgid "Had manufacturer"
-msgstr "Tillverkare"
+msgstr ""
 
 msgid "Had rfid"
 msgstr ""
 
-#, fuzzy
-#| msgid "Operation"
 msgid "Had operation"
-msgstr "Åtgärd"
+msgstr ""
 
-#, fuzzy
-#| msgid "Attachment url"
 msgid "Had attachment_url"
-msgstr "Bilagas URL"
+msgstr ""
 
-#, fuzzy
-#| msgid "Installation status"
 msgid "Had installation_status"
-msgstr "Installationsstatus"
+msgstr ""
 
-#, fuzzy
-#| msgid "Installation date"
 msgid "Had installation_date"
-msgstr "Installationsdatum"
+msgstr ""
 
-#, fuzzy
-#| msgid "Installation status"
 msgid "Had installation_status_note"
-msgstr "Installationsstatus"
+msgstr ""
 
 msgid "Set installed_by to null"
 msgstr ""

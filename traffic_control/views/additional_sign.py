@@ -1,9 +1,11 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.filters import (
     AdditionalSignPlanFilterSet,
     AdditionalSignRealFilterSet,
@@ -199,3 +201,29 @@ class AdditionalSignRealOperationViewSet(OperationViewSet):
     serializer_class = AdditionalSignRealOperationSerializer
     queryset = AdditionalSignRealOperation.objects.all()
     filterset_class = AdditionalSignRealOperationFilterSet
+
+
+@extend_schema(
+    summary="Get allowed parentless additional sign device type codes",
+    description="Returns a list of device type codes that are allowed to have null parent (ticket machines).",
+    responses={200: {"type": "object", "properties": {"codes": {"type": "array", "items": {"type": "string"}}}}},
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def allowed_parentless_additional_sign_codes(request) -> Response:
+    """
+    Return the list of device type codes that can have null parent.
+
+    Ticket machine device types are allowed to exist without a parent traffic sign,
+    while all other additional signs require a parent.
+
+    This endpoint requires authentication but is available to all authenticated users
+    regardless of their permissions. It returns non-sensitive reference data used for validation.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        Response: JSON response with list of allowed codes.
+    """
+    return Response({"codes": TICKET_MACHINE_CODES})

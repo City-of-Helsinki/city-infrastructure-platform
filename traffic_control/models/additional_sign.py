@@ -7,6 +7,7 @@ from enumfields import EnumField, EnumIntegerField
 
 from admin_helper.decorators import requires_fields
 from traffic_control.common_strings import direction_field_verbose_name, direction_help_text
+from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.mixins.models import (
     AbstractFileModel,
@@ -217,6 +218,15 @@ class AbstractAdditionalSign(
             if len(content_s_validation_errors) > 0:
                 validation_errors["content_s"] = content_s_validation_errors
 
+        # Validate that parent can only be null for ticket machine device types
+        # Check if parent attribute exists (it's defined in concrete classes)
+        if hasattr(self, "parent") and not self.parent and self.device_type:
+            if self.device_type.code not in TICKET_MACHINE_CODES:
+                validation_errors["parent"] = ValidationError(
+                    _("Parent is required for additional signs that are not ticket machines."),
+                    code="parent_required",
+                )
+
         if len(validation_errors) > 0:
             raise ValidationError(validation_errors)
 
@@ -231,7 +241,11 @@ class AbstractAdditionalSign(
         return f"{self.__class__.__name__} {self.id}"
 
 
-class AdditionalSignPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractAdditionalSign):
+class AdditionalSignPlan(
+    UpdatePlanLocationMixin,
+    ReplaceableDevicePlanMixin,
+    AbstractAdditionalSign,
+):
     parent = models.ForeignKey(
         TrafficSignPlan,
         verbose_name=_("Parent Traffic Sign Plan"),

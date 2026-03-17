@@ -7,8 +7,10 @@ from django.utils.crypto import get_random_string
 from rest_framework import status
 from rest_framework_gis.fields import GeoJsonDict
 
+from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import (
     Condition,
+    DeviceTypeTargetModel,
     InstallationStatus,
     LaneNumber,
     LaneType,
@@ -728,3 +730,72 @@ def test__additional_sign_real_operation__anonymous_user(method, expected_status
     assert asr.operations.all().count() == 1
     assert asr.operations.all().first().operation_date == datetime.date(2020, 1, 1)
     assert response.status_code == expected_status
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_real__create_without_parent_and_regular_device_type_fails(admin_user: bool) -> None:
+    """
+    Test that AdditionalSignReal API rejects creation without parent for non-ticket-machine device types.
+
+    Args:
+        admin_user: Whether to use admin user or regular user.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    device_type = TrafficControlDeviceTypeFactory(
+        code="H1",
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+    )
+    data = {
+        "location": "SRID=3879;POINT Z (25500000 6680000 0)",
+        "owner": str(get_owner().pk),
+        "device_type": str(device_type.pk),
+        # No parent field - should fail validation
+    }
+
+    response = client.post(reverse("v1:additionalsignreal-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "parent" in response_data
+        assert AdditionalSignReal.objects.count() == 0
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert AdditionalSignReal.objects.count() == 0
+
+
+@pytest.mark.parametrize("admin_user", (False, True))
+@pytest.mark.django_db
+def test__additional_sign_real__create_without_parent_and_ticket_machine_succeeds(admin_user: bool) -> None:
+    """
+    Test that AdditionalSignReal API allows creation without parent for ticket machine device types.
+
+    Args:
+        admin_user: Whether to use admin user or regular user.
+    """
+    client = get_api_client(user=get_user(admin=admin_user))
+    device_type = TrafficControlDeviceTypeFactory(
+        code=TICKET_MACHINE_CODES[0],  # H20.91
+        target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN,
+    )
+    data = {
+        "location": "SRID=3879;POINT Z (25500000 6680000 0)",
+        "owner": str(get_owner().pk),
+        "device_type": str(device_type.pk),
+        # No parent field - should succeed for ticket machines
+    }
+
+    response = client.post(reverse("v1:additionalsignreal-list"), data=data)
+    response_data = response.json()
+
+    if admin_user:
+        assert response.status_code == status.HTTP_201_CREATED
+        assert AdditionalSignReal.objects.count() == 1
+        asr = AdditionalSignReal.objects.first()
+        assert response_data["id"] == str(asr.pk)
+        assert response_data["parent"] is None
+        assert asr.parent is None
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert AdditionalSignReal.objects.count() == 0

@@ -122,6 +122,11 @@ urlpatterns = [
     path("v1/", include(signpost_operations_router.urls)),
     path("v1/", include(road_marking_operations_router.urls)),
     path("v1/", include(furniture_signpost_operations_router.urls)),
+    path(
+        "v1/allowed-parentless-additional-sign-codes/",
+        additional_sign_views.allowed_parentless_additional_sign_codes,
+        name="allowed-parentless-additional-sign-codes",
+    ),
     path("auth/", include("social_django.urls", namespace="social")),
     path("wfs/", CityInfrastructureWFSView.as_view(), name="wfs-city-infrastructure"),
     path("i18n/", set_language, name="set_language"),

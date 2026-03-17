@@ -7,6 +7,7 @@ from typing import Any, Tuple, TypedDict, Union
 from django.conf import settings
 from django.contrib.gis.geos import Point
 
+from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.geometry_utils import geometry_is_legit
 from traffic_control.models.additional_sign import AdditionalSignReal, Color
@@ -15,7 +16,6 @@ from traffic_control.models.mount import LocationSpecifier as MountLocationSpeci
 from traffic_control.models.signpost import SignpostReal
 from traffic_control.models.traffic_sign import LocationSpecifier as SignLocationSpecifier, TrafficSignReal
 
-TICKET_MACHINE_CODES = ["H20.91", "H20.92", "H20.93", "8591", "8592", "8593"]
 VALUE_PATTERN = re.compile(r"^\d+(\.\d+)?")
 
 

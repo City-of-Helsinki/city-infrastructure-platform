@@ -5,7 +5,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 
-from traffic_control.analyze_utils.traffic_sign_data import TICKET_MACHINE_CODES
+from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import (
     AdditionalSignPlan,
