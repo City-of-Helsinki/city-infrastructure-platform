@@ -196,45 +196,21 @@ python manage.py runserver
 python manage.py runserver --settings=cityinfra.local_settings
 ```
 
-#### Running the project - Docker services (without compose)
-
-Build Docker image:
-
-```bash
-docker build -t city-infrastructure-platform .
-```
-
-Run container:
-
-```bash
-docker run -d -p 8000:8000 -e DEBUG=1 city-infrastructure-platform
-```
-
-**Available configs (environment variables):**
-
-To set any of the settings below, use the `-e <ENV_VAR>=<VALUE>` flag when running the Docker container.
-
-* DATABASE_HOST: Set to the host address of the PostgreSQL (with PostGIS) database server, default is empty value.
-* DATABASE_PORT: Set to port of the database server, default is 5432.
-* DEV_SERVER: Set to `1` to run `manage.py runserver` instead of `uwsgi`, default is empty value.
-* COLLECT_STATIC: Set to `1` to collect static files on startup, default is empty value.
-* APPLY_MIGRATIONS: Set to `1` to run `manage.py migrate` on startup, default is empty value.
-
 #### Running the project - Docker services (with compose)
 
 The file `docker-compose.yml` contains the environment configuration for the different services that can be executed.
 
-Run the entire application, with all its auxiliary services
+Run the entire application, with all its auxiliary services.
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 ##### Running the project - Docker services - individual services
 
 ```bash
 # Run just the DB
-docker-compose up db
+docker compose up db
 
 # Run ClamAV locally (initialize clamd and then launch clamv-api)
 docker compose up clamd
@@ -249,6 +225,24 @@ docker compose -f docker-compose.azurite.yml up azurite-init
 
 # Wipe the media, upload storage containers on azurite (you will need to re-run azurite-init after this)
 docker compose -f docker-compose.azurite.yml up azurite-delete-storage-containers
+```
+
+##### Running management tasks in the api - Docker services
+
+If you're running the API in docker instead of a local virtual environment, you can prefix the `manage` command with `docker compose run --rm api`, for example:
+
+```bash
+# Create new database migrations
+docker compose run --rm api ./manage.py makemigrations
+
+# Apply database migrations
+docker compose run --rm api ./manage.py migrate
+
+# Create a Django superuser
+docker compose run --rm api ./manage.py createsuperuser
+
+# Open the Django interactive Python shell
+docker compose run --rm api ./manage.py shell_plus
 ```
 
 ## Translations (fi)

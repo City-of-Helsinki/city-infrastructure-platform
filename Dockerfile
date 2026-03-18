@@ -53,7 +53,6 @@ FROM base AS development
 # ==============================
 
 ENV DEBUG=1
-ENV APPLY_MIGRATIONS=1
 ENV COLLECT_STATIC=1
 ENV DEV_SERVER=1
 
@@ -77,7 +76,6 @@ FROM base AS production
 ARG VERSION
 
 ENV VERSION=${VERSION}
-ENV APPLY_MIGRATIONS=0
 ENV COLLECT_STATIC=1
 
 COPY . /city-infrastructure-platform
