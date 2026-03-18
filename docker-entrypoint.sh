@@ -4,21 +4,6 @@ set -e
 
 echo "Version: $VERSION"
 
-# Apply or validate database migrations
-if [[ "$APPLY_MIGRATIONS" = "1" ]]; then
-    echo "Applying database migrations..."
-    ./apply-migrations.sh
-else
-    echo "Checking that migrations are applied..."
-    error_code=0
-    ./check-migrations.sh || error_code=$?
-
-    if [ "$error_code" -ne 0 ]; then
-        echo "Migrations are not applied!"
-        exit $error_code
-    fi
-fi
-
 # Collect static files
 if [[ "$COLLECT_STATIC" = "1" ]]; then
     echo "Collecting static files..."
