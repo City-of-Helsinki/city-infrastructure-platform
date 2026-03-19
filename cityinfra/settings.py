@@ -34,60 +34,79 @@ else:
 BASE_DIR = checkout_dir()
 
 env = environ.Env(
-    DEBUG=(bool, False),
-    ENVIRONMENT_NAME=(str, ""),
-    SECRET_KEY=(str, ""),
-    VAR_ROOT=(str, default_var_root),
-    HOST=(str, "localhost"),
-    HOST_PUBLIC=(str, ""),
-    ALLOWED_HOSTS=(list, []),
+    # --- Core & General ---
+    # https://docs.djangoproject.com/en/5.2/ref/settings/
+    BASE_URL=(str, "http://127.0.0.1:8000"),
+    DEBUG=(bool, False),  # https://docs.djangoproject.com/en/5.2/ref/settings/#debug
+    ENVIRONMENT_NAME=(str, ""),  # e.g., "development", "staging", "production"
+    SECRET_KEY=(str, ""),  # https://docs.djangoproject.com/en/5.2/ref/settings/#secret-key
+    VAR_ROOT=(str, default_var_root),  # Composes Django's STATIC_ROOT and MEDIA_ROOT
+    VERSION=(str, ""),  # Service version
+    # --- Network, Hosts & CORS ---
+    ALLOWED_HOSTS=(list, []),  # https://docs.djangoproject.com/en/5.2/ref/settings/#allowed-hosts
+    # https://github.com/adamchainz/django-cors-headers#cors_allowed_origin_regexes-sequencestr--patternstr
     CORS_ALLOWED_ORIGIN_REGEXES=(list, []),
-    TRUST_X_FORWARDED_HOST=(bool, False),
-    DATABASE_URL=(
-        str,
-        "postgis:///city-infrastructure-platform",
-    ),
-    DATABASE_PASSWORD=(str, ""),
+    HOST=(str, "localhost"),  # Composes custom HOSTNAME fallback
+    HOST_PUBLIC=(str, ""),  # Composes custom HOSTNAME
+    # https://docs.djangoproject.com/en/5.2/ref/settings/#use-x-forwarded-host
+    TRUST_X_FORWARDED_HOST=(bool, False),  # Composes USE_X_FORWARDED_HOST
+    # --- Database & Cache ---
+    # https://django-environ.readthedocs.io/en/latest/types.html#environ-env-db-url
+    DATABASE_URL=(str, "postgis:///city-infrastructure-platform"),
+    DATABASE_PASSWORD=(str, ""),  # Composes Django DATABASES["default"]["PASSWORD"]
+    # https://django-environ.readthedocs.io/en/latest/types.html#environ-env-cache-url
     CACHE_URL=(str, "locmemcache://"),
-    EMAIL_URL=(str, "consolemail://"),
-    EMAIL_HOST=(str, "localhost"),
-    EMAIL_PORT=(int, 587),
-    EMAIL_USE_TLS=(bool, True),
-    EMAIL_HOST_USER=(str, ""),
-    EMAIL_HOST_PASSWORD=(str, ""),
+    # --- Email Configuration ---
+    # https://docs.djangoproject.com/en/5.2/ref/settings/#default-from-email
     DEFAULT_FROM_EMAIL=(str, "cityinfra@hel.fi"),
-    SENTRY_DSN=(str, ""),
-    SENTRY_DEBUG=(bool, False),
-    VERSION=(str, ""),
-    OPENSHIFT_DEPLOYMENT=(bool, False),
-    AZURE_PRIVATE_CONTAINER=(str, False),
-    AZURE_PUBLIC_CONTAINER=(str, False),
-    AZURE_ACCOUNT_NAME=(str, False),
-    OIDC_AUTHENTICATION_ENABLED=(bool, True),
+    EMAIL_URL=(str, "consolemail://"),  # Deprecated / unused
+    EMAIL_HOST=(str, "localhost"),  # https://docs.djangoproject.com/en/5.2/ref/settings/#email-host
+    EMAIL_HOST_USER=(str, ""),  # https://docs.djangoproject.com/en/5.2/ref/settings/#email-host-user
+    EMAIL_HOST_PASSWORD=(str, ""),  # https://docs.djangoproject.com/en/5.2/ref/settings/#email-host-password
+    EMAIL_PORT=(int, 587),  # https://docs.djangoproject.com/en/5.2/ref/settings/#email-port
+    EMAIL_USE_TLS=(bool, True),  # https://docs.djangoproject.com/en/5.2/ref/settings/#email-use-tls
+    # --- Security & Cookies ---
+    # https://docs.djangoproject.com/en/5.2/ref/settings/#sessions
+    CSRF_COOKIE_HTTPONLY=(bool, True),  # https://docs.djangoproject.com/en/5.2/ref/settings/#csrf-cookie-httponly
+    CSRF_COOKIE_SAMESITE=(str, "Strict"),  # https://docs.djangoproject.com/en/5.2/ref/settings/#csrf-cookie-samesite
+    CSRF_COOKIE_SECURE=(bool, True),  # https://docs.djangoproject.com/en/5.2/ref/settings/#csrf-cookie-secure
+    SESSION_COOKIE_SAMESITE=(str, "Lax"),  # https://docs.djangoproject.com/en/5.2/ref/settings/#session-cookie-samesite
+    SESSION_COOKIE_SECURE=(bool, True),  # https://docs.djangoproject.com/en/5.2/ref/settings/#session-cookie-secure
+    # --- Authentication, OIDC & Tunnistamo ---
+    # https://github.com/City-of-Helsinki/django-helusers
+    # https://github.com/ByteInternet/drf-oidc-auth
+    HELUSERS_ADGROUPS_CLAIM=(str, "groups"),
+    OIDC_API_TOKEN_AUTH_AUDIENCE=(str, None),  # Composes OIDC_API_TOKEN_AUTH["AUDIENCE"]
+    OIDC_API_TOKEN_AUTH_ISSUER=(str, None),  # Composes OIDC_API_TOKEN_AUTH["ISSUER"]
+    OIDC_AUTHENTICATION_ENABLED=(bool, True),  # Used to toggle authentication logic checks
+    OIDC_ENDPOINT=(str, None),  # Composes SOCIAL_AUTH_TUNNISTAMO_OIDC_ENDPOINT
     SOCIAL_AUTH_TUNNISTAMO_KEY=(str, None),
     SOCIAL_AUTH_TUNNISTAMO_SECRET=(str, None),
-    OIDC_API_TOKEN_AUTH_AUDIENCE=(str, None),
-    OIDC_API_TOKEN_AUTH_ISSUER=(str, None),
+    # Composes REST_FRAMEWORK["OIDC_LEEWAY"] (https://www.django-rest-framework.org/api-guide/settings/)
     TOKEN_AUTH_MAX_TOKEN_AGE=(int, 600),
-    OIDC_ENDPOINT=(str, None),
-    HELUSERS_ADGROUPS_CLAIM=(str, "groups"),
-    LOGGING_AUTH_DEBUG=(bool, False),
-    BASEMAP_SOURCE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/gwc/service/wmts"),
+    # --- Static Media & Cloud Storage (Azure) ---
+    # Composes django-storages account_name (https://django-storages.readthedocs.io/en/latest/backends/azure.html)
+    AZURE_ACCOUNT_NAME=(str, False),
+    AZURE_PUBLIC_CONTAINER=(str, False),
+    AZURE_PRIVATE_CONTAINER=(str, False),
+    EMULATE_AZURE_BLOBSTORAGE=(bool, False),  # Overrides azure storage backend with local emulation for development
+    OPENSHIFT_DEPLOYMENT=(bool, False),  # Enables azure storage backend for deployment
+    STATIC_URL=(str, "/static/"),  # https://docs.djangoproject.com/en/5.2/ref/settings/#static-url
+    MEDIA_URL=(str, "/media/"),  # https://docs.djangoproject.com/en/5.2/ref/settings/#media-url
+    # --- Sentry & Logging ---
+    # https://docs.sentry.io/platforms/python/integrations/django/#configure
+    LOGGING_AUTH_DEBUG=(bool, False),  # Composes Django LOGGING["loggers"]["helusers"]["level"]
+    SENTRY_DEBUG=(bool, False),  # Enables debug view that fires sentry error
+    SENTRY_DSN=(str, ""),  # Composes sentry-sdk DSN (https://docs.sentry.io/platforms/python/integrations/django/)
+    # --- External APIs & App Settings ---
     ADDRESS_SEARCH_BASE_URL=(str, "https://api.hel.fi/servicemap/v2/search"),
-    STATIC_URL=(str, "/static/"),
-    MEDIA_URL=(str, "/media/"),
-    CSRF_COOKIE_SECURE=(bool, True),
-    SESSION_COOKIE_SECURE=(bool, True),
-    CSRF_COOKIE_HTTPONLY=(bool, True),
-    CSRF_COOKIE_SAMESITE=(str, "Strict"),
-    SESSION_COOKIE_SAMESITE=(str, "Lax"),
+    BASEMAP_SOURCE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/gwc/service/wmts"),
     CITYINFRA_MAXIMUM_RESULTS_PER_PAGE=(int, 10000),
-    EMULATE_AZURE_BLOBSTORAGE=(bool, False),
-    BASE_URL=(str, "http://127.0.0.1:8000"),
-    # Maintenance mode whitelist configuration - can be overridden via environment variables
-    MAINTENANCE_MODE_HEALTH_CHECKS=(list, ["healthz", "readiness"]),
-    MAINTENANCE_MODE_AUTH_PREFIXES=(list, ["ha", "auth"]),
+    # --- Maintenance Mode ---
+    # https://github.com/City-of-Helsinki/city-infrastructure-platform/tree/master/maintenance_mode
     MAINTENANCE_MODE_ADMIN_PATHS=(list, ["admin/jsi18n"]),
+    MAINTENANCE_MODE_AUTH_PREFIXES=(list, ["ha", "auth"]),
+    MAINTENANCE_MODE_HEALTH_CHECKS=(list, ["healthz", "readiness"]),
     MAINTENANCE_MODE_LANGUAGES=(list, ["fi", "sv", "en"]),
 )
 
