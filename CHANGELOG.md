@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.36.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.35.0...city-infrastructure-platform-v1.36.0) (2026-03-19)
+
+
+### Features
+
+* Do not allow additional sign (real and plan) parent to be null for other than ticket machines ([4ad29bd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4ad29bd6f0a94a7db10259a7712732f2d2c4cca7))
+* Implement user deactivation system with progressive email notifications ([5cefed5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5cefed50e94faeedd88ef35255fec5750e6bae28))
+* Move ticket machine from trafficsigns to additionalsigns ([05f7726](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/05f77266530f10be667efcd7c0fe1024891516d8))
+
+
+### Bug Fixes
+
+* Potential unexpected path in ResponsibleEntityPermissionFilter ([b1a0578](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b1a057861fa70cdf57f6a38ae8d7f79a1e64ac4b))
+* Replace uses of EnumFieldListFilter with ChoicesFieldListFilter ([a926303](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a92630318269d297e29cfe6402b19b1ea935b082))
+* TreeModelFieldListFilter crashes the page ([8bd5d8d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/8bd5d8ddb9954e8b774e7da8feee8af8d9fa0a29))
+* **wfs:** Correct XSD type declaration for EnumIntegerField with enum name output ([0c47ab5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0c47ab5aa6b5ace9039b859e9f041f6dd5a2ca9f))
+
 ## [1.35.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.34.0...city-infrastructure-platform-v1.35.0) (2026-02-19)
 
 
