@@ -96,6 +96,58 @@ class ApiTokenAuthenticationScheme(OpenApiAuthenticationExtension):
         )
 
 
+class LastApiUseTokenAuthenticationScheme(OpenApiAuthenticationExtension):
+    """OpenAPI schema extension for LastApiUseTokenAuthentication.
+
+    Maps the custom token authentication class to the standard DRF token
+    security scheme so drf-spectacular generates the correct schema entry.
+    """
+
+    target_class = "drf_custom_auth.authentication.LastApiUseTokenAuthentication"
+    name = "tokenAuth"
+
+    def get_security_definition(self, auto_schema: object) -> dict:
+        """Return the token authentication security scheme definition.
+
+        Args:
+            auto_schema (object): The drf-spectacular auto schema instance.
+
+        Returns:
+            dict: OpenAPI security scheme definition for token authentication.
+        """
+        return {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Authorization",
+            "description": 'Token-based authentication with required prefix "Token"',
+        }
+
+
+class LastApiUseBasicAuthenticationScheme(OpenApiAuthenticationExtension):
+    """OpenAPI schema extension for LastApiUseBasicAuthentication.
+
+    Maps the custom basic authentication class to the standard HTTP basic
+    security scheme so drf-spectacular generates the correct schema entry.
+    """
+
+    target_class = "drf_custom_auth.authentication.LastApiUseBasicAuthentication"
+    name = "basicAuth"
+
+    def get_security_definition(self, auto_schema: object) -> dict:
+        """Return the basic authentication security scheme definition.
+
+        Args:
+            auto_schema (object): The drf-spectacular auto schema instance.
+
+        Returns:
+            dict: OpenAPI security scheme definition for basic authentication.
+        """
+        return {
+            "type": "http",
+            "scheme": "basic",
+        }
+
+
 class TrafficSignType(serializers.Serializer):
     """
     Serializer that is used to generate OpenAPI documentation for

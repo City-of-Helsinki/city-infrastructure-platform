@@ -411,8 +411,8 @@ CITYINFRA_MAXIMUM_RESULTS_PER_PAGE = env("CITYINFRA_MAXIMUM_RESULTS_PER_PAGE")
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "helusers.oidc.ApiTokenAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
+        "drf_custom_auth.authentication.LastApiUseTokenAuthentication",
+        "drf_custom_auth.authentication.LastApiUseBasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "cityinfra.drf_utils.MaxLimitOffsetPagination",
