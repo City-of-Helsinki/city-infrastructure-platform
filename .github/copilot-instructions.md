@@ -2,7 +2,7 @@
 
 ## Testing Standards
 - **Framework**: Always use `pytest` for generating and running tests.
-- **Execution**: When providing commands to run tests, always include the `--reuse-db` flag to optimize performance.
+- **Execution**: Always run tests using `pytest` directly (never `python -m pytest`), always including the `--reuse-db` flag to optimize performance.
 - **Style**: Prefer functional tests and fixtures over class-based unit tests where appropriate.
 - **Factory Pattern**: Always use existing factory classes (e.g., `AdditionalSignPlanFactory`, `TrafficSignRealFactory`) instead of `Model.objects.create()` when creating test data. Only use direct model instantiation (e.g., `Model()` constructor) when testing validation with `full_clean()` before saving.
 

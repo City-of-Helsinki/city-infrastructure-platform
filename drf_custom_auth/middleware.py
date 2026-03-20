@@ -1,7 +1,8 @@
 from django.contrib.auth.middleware import get_user
 from django.utils.functional import SimpleLazyObject
-from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+
+from drf_custom_auth.authentication import LastApiUseBasicAuthentication, LastApiUseTokenAuthentication
 
 
 def _get_user(drf_auth_class, request):
@@ -18,11 +19,11 @@ def _get_user(drf_auth_class, request):
 
 
 def get_user_token(request):
-    return _get_user(TokenAuthentication, request)
+    return _get_user(LastApiUseTokenAuthentication, request)
 
 
 def get_user_basic(request):
-    return _get_user(BasicAuthentication, request)
+    return _get_user(LastApiUseBasicAuthentication, request)
 
 
 def get_basic_or_token_user(request):
