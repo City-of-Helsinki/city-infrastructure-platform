@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "city-infrastructure-platform"
-version = "1.36.1"
+version = "2.0.0"
 description = ""
 authors = []
 
