@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.36.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.36.0...city-infrastructure-platform-v1.36.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* Update user's last_api_use field also whe REST API is used with basic or token authentication ([1259a22](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1259a22b90496a0497cebe4aeda936abaedd327c))
+
 ## [1.36.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.35.0...city-infrastructure-platform-v1.36.0) (2026-03-19)
 
 
