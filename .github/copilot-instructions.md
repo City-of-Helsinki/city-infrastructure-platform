@@ -14,6 +14,15 @@
 - **Line Length**: The maximum allowed line length is 120 characters.
 - **Style**: Follow single responsibility principle.
 
+## Linting (Ruff)
+All generated Python code must comply with the project's ruff configuration (`pyproject.toml`):
+- **Pyflakes (`F`)**: No unused imports, undefined names, or other pyflakes violations. Note: unused imports in `__init__.py` files are allowed (`F401` is ignored there).
+- **Pycodestyle (`E`, `W`)**: Follow pycodestyle error and warning rules (consistent with PEP 8).
+- **McCabe complexity (`C90`)**: Keep function complexity at or below `max-complexity = 10`.
+- **Isort (`I`)**: Imports must be sorted according to isort rules; combine `as`-imports (`combine-as-imports = true`) and do not order by type (`order-by-type = false`).
+- **Migrations excluded**: Ruff rules do not apply to migration files — avoid modifying generated migration code to satisfy linting.
+- **Verification**: After generating or modifying Python code, mentally verify it would pass `ruff check` and `ruff format --check` with the project settings.
+
 ## Documentation
 - **Format**: Always use **Google-style** docstrings for all new functions, classes, and modules.
 - **Structure**:
