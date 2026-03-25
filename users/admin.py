@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 from django.contrib import admin
@@ -5,9 +6,11 @@ from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin, UserAdmin as
 from django.contrib.auth.models import Group
 from django.db import models as django_models, transaction
 from django.db.models import Exists, OuterRef
+from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
 from django.utils.formats import localize
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from social_django.models import UserSocialAuth
 
@@ -252,8 +255,9 @@ class UserAdmin(BaseUserAdmin):
                 )
             },
         ),
+        (_("Relations table"), {"fields": ("show_relations_table",)}),
     )
-    readonly_fields = ("auth_type_display", "last_api_use", "reactivated_at")
+    readonly_fields = ("auth_type_display", "last_api_use", "reactivated_at", "show_relations_table")
     filter_horizontal = BaseUserAdmin.filter_horizontal + (
         "operational_areas",
         "responsible_entities",
@@ -332,6 +336,110 @@ class UserAdmin(BaseUserAdmin):
             )
         else:
             return last_login
+
+    @admin.display(description=_("Relations table"))
+    def show_relations_table(self, obj: User):
+        # Bail out early if the object is unsaved
+        if not obj.pk:
+            return _("Save the user first to view relations.")
+
+        # Add fields we are not interested to list in here
+        excluded_fields = {
+            "auth_token",
+            "deactivation_status",
+            "social_auth",
+            "logentry",
+            "userobjectpermission",
+        }
+
+        groups = defaultdict(list)
+
+        for field in obj._meta.get_fields():
+            # Skip non-relation fields, relations with missing related_model (GenericForeignKey) or excluded_fields
+            if not field.is_relation or not field.related_model or field.name in excluded_fields:
+                continue
+
+            # Skip outgoing relations, these are likely just going to be other fields in the user detail page
+            if field.concrete or not field.auto_created:
+                continue
+
+            # For incoming relations, the query param is the name of the remote ForeignKey field
+            query_param = field.remote_field.name
+
+            # Don't link to relations where the reverse query name is disabled ('+')
+            # Docs: https://docs.djangoproject.com/en/5.2/ref/models/fields/#django.db.models.ForeignKey.related_name
+            skip_link = query_param.endswith("+")
+
+            # Skip models wth no registered model admin
+            related_meta = field.related_model._meta
+            try:
+                query = {query_param: obj.pk}
+                if query_param == "deleted_by":
+                    query["soft_deleted"] = 1
+                url = reverse(f"admin:{related_meta.app_label}_{related_meta.model_name}_changelist", query=query)
+            except NoReverseMatch:
+                url = None
+
+            if skip_link:
+                url = None
+
+            # Grouping
+            app_name = related_meta.app_config.verbose_name.title()
+            model_name = related_meta.verbose_name.title()
+            # soft_deleted has to be omitted from the filter query as it breaks the filter on some models
+            count = field.field.model.objects.filter(**{query_param: obj.pk}).count()
+
+            groups[(app_name, model_name)].append({"text": f"{query_param} ({count})", "url": url})
+
+        # Bail out early if empty state
+        if not groups:
+            return _("No relations found.")
+
+        # Sort groups case-insensitively by App Name, then Model Name
+        sorted_keys = sorted(groups.keys(), key=lambda k: (k[0].lower(), k[1].lower()))
+        max_relations = max(len(groups[k]) for k in sorted_keys)
+
+        # Table rows assembly
+        row_data = []
+        for index, (app_name, mod_name) in enumerate(sorted_keys):
+            columns = sorted(groups[(app_name, mod_name)], key=lambda x: x["text"].lower())
+            td_cells = (
+                format_html('<td><a href="{url}">{text}</a></td>', **e)
+                if e.get("url")
+                else format_html("<td>{text}</td>", **e)
+                for e in columns
+            )
+            td_cells_joined = mark_safe("".join(td_cells))  # risky bits already escaped by format_html
+            missing_cols = max_relations - len(columns)
+            padding_html = format_html('<td colspan="{colspan}"></td>', colspan=missing_cols) if missing_cols else ""
+            row_data.append(
+                {
+                    "row_class": f"row{(index % 2) + 1}",
+                    "app": app_name,
+                    "model": mod_name,
+                    "td_cells": td_cells_joined,
+                    "padding": padding_html,
+                }
+            )
+
+        # Full table Layout & Rendering
+        thead = format_html(
+            "<thead><tr>"
+            "<th>{app_label}</th>"
+            "<th>{model_label}</th>"
+            '<th colspan="{colspan}">{view_related_label}</th>'
+            "</tr></thead>",
+            app_label=_("App"),
+            model_label=_("Model"),
+            colspan=max_relations,
+            view_related_label=_("View related"),
+        )
+        trows = format_html_join(
+            "", '<tr class="{row_class}"><td>{app}</td><td>{model}</td>{td_cells}{padding}</tr>', row_data
+        )
+        return format_html(
+            '<div class="results"><table>{thead}<tbody>{trows}</tbody></table></div>', thead=thead, trows=trows
+        )
 
     @admin.action(permissions=["change"], description=_("Reactivate selected users"))
     def reactivate_selected_users(self, request, queryset) -> None:
