@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.37.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.36.1...city-infrastructure-platform-v1.37.0) (2026-03-27)
+
+
+### Features
+
+* Make agents to follow projects ruff style ([0736f39](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0736f39e89eb4e7767c81d872e4322776ecc85e1))
+
 ## [1.36.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.36.0...city-infrastructure-platform-v1.36.1) (2026-03-23)
 
 
