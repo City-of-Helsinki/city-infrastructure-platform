@@ -1,7 +1,8 @@
+from datetime import date
 from unittest.mock import patch
 
+import pytest
 from django.core.management import call_command
-from django.test import TestCase
 
 from traffic_control.models import OperationalArea
 from traffic_control.tests.management.commands.utils import create_mock_data_source, MockAttribute, MockFeature
@@ -30,24 +31,40 @@ MOCK_FEATURE_2 = MockFeature(
         "nimi_lyhyt": MockAttribute("f2"),
         "urakkamuoto": MockAttribute("area type 2"),
         "urakoitsija": MockAttribute("contractor 2"),
-        "alku_pvm": MockAttribute("2020-01-01"),
-        "loppu_pvm": MockAttribute("2020-12-31"),
-        "paivitetty_tietopalveluun": MockAttribute("2020-08-01"),
+        "alku_pvm": MockAttribute("2020-02-01"),
+        "loppu_pvm": MockAttribute("2020-11-31"),
+        "paivitetty_tietopalveluun": MockAttribute("2020-07-01"),
         "tehtavakokonaisuus": MockAttribute("OTHER-TASK"),
-        "status": MockAttribute("ready"),
+        "status": MockAttribute("not ready"),
     },
     test_multi_polygon.ogr,
 )
 
 
-class ImportOperationalAreasHkiWfsTestCase(TestCase):
-    @patch("urllib.request.urlretrieve", return_value=("dummy-file", {}))
-    @patch(
-        "traffic_control.management.commands.import_operational_areas_hki_wfs.DataSource",
-        create_mock_data_source([MOCK_FEATURE_1, MOCK_FEATURE_2]),
+@pytest.mark.django_db
+def test_importer_created_operational_areas():
+    patch_url = patch(
+        "traffic_control.management.commands.import_operational_areas_hki_wfs.urlretrieve",
+        return_value=("dummy-file", {}),
     )
-    def test_importer_created_operational_areas(self, mock_urlretrieve):
+    patch_ds = patch(
+        "traffic_control.management.commands.import_operational_areas_hki_wfs.DataSource",
+        new=create_mock_data_source([MOCK_FEATURE_1, MOCK_FEATURE_2]),
+    )
+
+    with patch_url, patch_ds:
         call_command("import_operational_areas_hki_wfs")
-        self.assertEqual(OperationalArea.objects.count(), 1)
-        imported_feature = OperationalArea.objects.first()
-        self.assertEqual(imported_feature.source_id, "1")
+
+    assert OperationalArea.objects.count() == 1
+
+    imported_feature = OperationalArea.objects.first()
+    assert imported_feature.source_id == "1"
+    assert imported_feature.name == "feature 1"
+    assert imported_feature.name_short == "f1"
+    assert imported_feature.area_type == "area type 1"
+    assert imported_feature.contractor == "contractor 1"
+    assert imported_feature.start_date == date(2020, 1, 1)
+    assert imported_feature.end_date == date(2020, 12, 31)
+    assert imported_feature.updated_date == date(2020, 8, 1)
+    assert imported_feature.task == "KATU"
+    assert imported_feature.status == "ready"
