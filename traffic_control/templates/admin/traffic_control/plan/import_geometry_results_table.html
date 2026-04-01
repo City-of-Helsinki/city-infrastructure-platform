@@ -1,0 +1,92 @@
+{% load i18n %}
+
+<fieldset class="module collapse-section import-results-container">
+    <h2>
+        <button type="button"
+                class="header-title toggle-btn"
+                onclick="toggleImportGeometryResultsTable('{{ result_type }}')"
+                aria-expanded="false"
+                aria-controls="content_{{ result_type }}">
+            <span class="toggle-icon"
+                  id="toggle_{{ result_type }}"
+                  aria-hidden="true">▶</span>
+            <strong>Count: {{ total_count }}</strong>
+        </button>
+
+        <div class="download-buttons">
+            {% if is_success_type %}
+                <a href="{{ download_url }}?mode=summary"
+                   class="btn-primary"
+                   title="Human-readable format">📊 Summary CSV</a>
+                <a href="{{ download_url }}?mode=detailed"
+                   class="btn-secondary"
+                   title="Full EWKT values">🔬 Detailed CSV</a>
+            {% else %}
+                <a href="{{ download_url }}"
+                   class="btn-primary btn-single">Download as CSV</a>
+            {% endif %}
+        </div>
+    </h2>
+
+    <div id="content_{{ result_type }}"
+         class="content-wrapper"
+         style="display: none">
+        <table>
+            <thead>
+                <tr>
+                    <th>Row</th>
+                    <th>Diary Number</th>
+                    <th>FID</th>
+                    <th>Drawing #</th>
+                    <th>Decision ID</th>
+                    {% if is_success_type %}
+                        <th>Plan ID</th>
+                        <th>Fields Changed</th>
+                    {% else %}
+                        <th>Error</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        <td>{{ row.row_number }}</td>
+                        <td>{{ row.diary_number }}</td>
+                        <td>{{ row.fid }}</td>
+                        <td>{{ row.drawing_number }}</td>
+                        <td>{{ row.decision_id }}</td>
+
+                        {% if is_success_type %}
+                            <td>
+                                <code>{{ row.plan_id }}</code>
+                            </td>
+                            <td>
+                                {% if row.has_changes %}
+                                    {% for fc in row.changes %}
+                                        <div class="change-item">
+                                            <strong>{{ fc.field }}:</strong>
+                                            <span class="old-val">{{ fc.old_value }}</span> →
+                                            <span class="new-val">{{ fc.new_value }}</span>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <em>No changes (geometry matched / dry run)</em>
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td>
+                                <em>{{ row.error_message }}</em>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if total_count > 100 %}
+            <div class="pagination-notice">
+                <em>Showing first 100 of {{ total_count }} results in table. Download CSV for all results.</em>
+            </div>
+        {% endif %}
+    </div>
+</fieldset>
