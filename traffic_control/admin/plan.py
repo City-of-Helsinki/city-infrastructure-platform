@@ -1,11 +1,14 @@
+import csv
+import re
 from copy import copy
-from typing import Dict
+from typing import Any, Dict, List
 
 from admin_confirm import AdminConfirmMixin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 from rangefilter.filters import DateRangeFilterBuilder
@@ -91,9 +94,7 @@ class PlanAdmin(
     only_form_fields = ["location_ewkt"]
 
     def get_confirmation_fields(self, request, obj=None):
-        """This is an overridden function from CityInfraAdminConfirmMixin(AdminConfirmMixin)
-        for getting confirmation fields dynamically.
-        """
+        """This is an overridden function from AdminConfirmMixin for getting confirmation fields dynamically."""
         base_fields = copy(super().get_confirmation_fields(request, obj))
         if request.POST.get("derive_location") != "on":
             # location should always be there
@@ -174,6 +175,10 @@ class PlanAdmin(
 
 @admin.register(PlanGeometryImportLog)
 class PlanGeometryImportLogAdmin(admin.ModelAdmin):
+    class Media:
+        js = ("traffic_control/js/toggle_import_geometry_results_table.js",)
+        css = {"all": ("traffic_control/css/import_geometry_results_table.css",)}
+
     list_display = (
         "start_time",
         "file_path",
@@ -212,6 +217,7 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
         "empty_geometry_details",
         "results",
     )
+
     fieldsets = (
         (
             _("Import Information"),
@@ -276,342 +282,164 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
         ),
     )
 
-    def _generate_csv_download_script(
-        self,
-        result_type: str,
-        csv_data_json: str,
-        summary_mode: bool,
-        obj_id: str,
-        use_mode_suffix: bool = True,
-    ) -> str:
-        """Generate JavaScript for CSV download functionality.
+    def get_urls(self):
+        """Inject custom routing into the admin namespace for this model."""
+        urls = super().get_urls()
+        info = self.model._meta.app_label, self.model._meta.model_name
 
-        Args:
-            result_type (str): Type of results (success, skipped_no_changes, etc.).
-            csv_data_json (str): JSON string of CSV data.
-            summary_mode (bool): If True, generate summary CSV; if False, generate detailed CSV.
-            obj_id (str): ID of the log object for filename.
-            use_mode_suffix (bool): If True, add _summary/_detailed suffix to function name. Defaults to True.
-
-        Returns:
-            str: JavaScript code for CSV download.
-        """
-        if use_mode_suffix:
-            mode_suffix = "_summary" if summary_mode else "_detailed"
-        else:
-            mode_suffix = ""
-        filename_suffix = "" if summary_mode else "_detailed"
-
-        script = f"""
-        <script>
-        var csvData_{result_type}{mode_suffix} = {csv_data_json};
-        function downloadCSV_{result_type}{mode_suffix}() {{
-          var headers = ["Row", "Diary Number", "FID", "Drawing #", "Decision ID"];
-          if ("{result_type}" === "success" || "{result_type}" === "skipped_no_changes") {{
-            headers.push("Plan ID");
-            headers.push("Fields Changed");
-          }} else {{
-            headers.push("Error");
-          }}
-          var csv = headers.join(";") + "\\n";
-          csvData_{result_type}{mode_suffix}.forEach(function(row) {{
-            var line = [
-              row.row_number,
-              "\\"" + (row.diaari || "").replace(/"/g, '\\"') + "\\"",
-              row.fid,
-              row.piirustusnumero,
-              row.decision_id,
-            ];
-            if ("{result_type}" === "success" || "{result_type}" === "skipped_no_changes") {{
-              line.push(row.plan_id);
-              """
-
-        if summary_mode:
-            # Summary mode: Create human-readable fields_changed from update_details
-            script += """
-              // Generate summary from update_details
-              var fieldsChanged = "N/A";
-              if (row.update_details && row.update_details.fields_changed) {{
-                var changes = [];
-                row.update_details.fields_changed.forEach(function(fc) {{
-                  if (fc.field === "location") {{
-                    // Show polygon count instead of full EWKT
-                    var oldVal = fc.old_value;
-                    var newVal = fc.new_value;
-                    var oldSummary = oldVal === "None" ? "None" : (
-                      "MultiPolygon (" + (oldVal.match(/\\(\\(\\(/g) || []).length + " polygons)"
-                    );
-                    var newSummary = (
-                      "MultiPolygon (" + (newVal.match(/\\(\\(\\(/g) || []).length + " polygons)"
-                    );
-                    changes.push(fc.field + ": " + oldSummary + " → " + newSummary);
-                  }} else {{
-                    changes.push(fc.field + ": " + fc.old_value + " → " + fc.new_value);
-                  }}
-                }});
-                fieldsChanged = changes.length > 0 ? changes.join("; ") : "No changes";
-              }}
-              line.push("\\"" + fieldsChanged.replace(/"/g, '\\"') + "\\"");
-            """
-        else:
-            # Detailed mode: Show full EWKT values
-            script += """
-              // Generate detailed from update_details with full EWKT
-              var fieldsChanged = "N/A";
-              if (row.update_details && row.update_details.fields_changed) {{
-                var changes = [];
-                row.update_details.fields_changed.forEach(function(fc) {{
-                  changes.push(fc.field + ": " + fc.old_value + " → " + fc.new_value);
-                }});
-                fieldsChanged = changes.length > 0 ? changes.join(" | ") : "No changes";
-              }}
-              line.push("\\"" + fieldsChanged.replace(/"/g, '\\"') + "\\"");
-            """
-
-        script += f"""
-            }} else {{
-              line.push("\\"" + (row.error_message || "").replace(/"/g, '\\"') + "\\"");
-            }}
-            csv += line.join(";") + "\\n";
-          }});
-          var blob = new Blob([csv], {{ type: "text/csv;charset=utf-8;" }});
-          var link = document.createElement("a");
-          var url = URL.createObjectURL(blob);
-          link.setAttribute("href", url);
-          link.setAttribute("download", "plan_import_{result_type}{filename_suffix}_{obj_id}.csv");
-          link.style.visibility = "hidden";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }}
-        </script>
-        """
-
-        return script
-
-    def _generate_download_buttons_html(self, result_type: str, show_both: bool) -> str:
-        """Generate download button HTML.
-
-        Args:
-            result_type (str): Type of results.
-            show_both (bool): If True, show both summary and detailed buttons.
-
-        Returns:
-            str: HTML string for download buttons.
-        """
-        if show_both:
-            return (
-                f'<div style="display: flex; gap: 5px;">'
-                f'<button type="button" onclick="event.stopPropagation(); '
-                f'downloadCSV_{result_type}_summary();" '
-                f'style="padding: 5px 12px; background-color: #417690; color: white; border: none; '
-                f'border-radius: 4px; cursor: pointer; font-size: 12px;" '
-                f'title="Human-readable format">📊 Summary CSV</button>'
-                f'<button type="button" onclick="event.stopPropagation(); '
-                f'downloadCSV_{result_type}_detailed();" '
-                f'style="padding: 5px 12px; background-color: #5a6c7d; color: white; border: none; '
-                f'border-radius: 4px; cursor: pointer; font-size: 12px;" '
-                f'title="Full EWKT values">🔬 Detailed CSV</button>'
-                f"</div>"
-            )
-        else:
-            return (
-                f'<button type="button" onclick="event.stopPropagation(); '
-                f'downloadCSV_{result_type}();" '
-                f'style="padding: 5px 15px; background-color: #417690; color: white; border: none; '
-                f'border-radius: 4px; cursor: pointer; font-size: 12px;">Download as CSV</button>'
-            )
-
-    def _generate_table_header(self, result_type: str) -> str:
-        """Generate HTML table header based on result type.
-
-        Args:
-            result_type (str): Type of results (success, error types, etc.).
-
-        Returns:
-            str: HTML string for table header.
-        """
-        header_parts = [
-            '<thead><tr style="background-color: #f0f0f0;">'
-            + '<th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Row</th>'
-            + '<th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Diary Number</th>'
-            + '<th style="padding: 8px; border: 1px solid #ddd; text-align: left;">FID</th>'
-            + '<th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Drawing #</th>'
-            + '<th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Decision ID</th>'
+        custom_urls = [
+            path(
+                "<path:object_id>/download-csv/<str:result_type>/",
+                self.admin_site.admin_view(self.download_csv_view),
+                name=f"{info[0]}_{info[1]}_download_csv",
+            ),
         ]
+        return custom_urls + urls
 
-        if result_type == "success":
-            header_parts.append('<th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Plan ID</th>')
-            header_parts.append(
-                '<th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Fields Changed</th>'
-            )
-        else:
-            header_parts.append('<th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Error</th>')
-
-        header_parts.append("</tr></thead><tbody>")
-        return "".join(header_parts)
-
-    def _generate_table_row(self, result: Dict, result_type: str) -> str:
-        """Generate HTML table row for a single result.
-
-        Args:
-            result (Dict): Result dictionary with row data.
-            result_type (str): Type of results (success, error types, etc.).
-
-        Returns:
-            str: HTML string for table row.
+    def _prepare_row_data(self, result: dict, result_type: str) -> dict:
         """
-        cell_style = 'style="padding: 8px; border: 1px solid #ddd;"'
-        row_parts = [
-            '<tr style="border: 1px solid #ddd;">',
-            f'<td {cell_style}>{result.get("row_number", "")}</td>',
-            f'<td {cell_style}>{result.get("diaari", "")}</td>',
-            f'<td {cell_style}>{result.get("fid", "")}</td>',
-            f'<td {cell_style}>{result.get("piirustusnumero", "")}</td>',
-            f'<td {cell_style}>{result.get("decision_id", "")}</td>',
-        ]
+        Normalizes a raw result dict into a standardized dictionary
+        consumable by both the CSV exporter and the HTML template.
+        """
+        is_success = result_type in ("success", "skipped_no_changes")
 
-        if result_type == "success":
-            plan_id = result.get("plan_id", "")
-            row_parts.append(f"<td {cell_style}><code>{plan_id}</code></td>")
+        row_data = {
+            "row_number": result.get("row_number", ""),
+            "diary_number": result.get("diaari", ""),
+            "fid": result.get("fid", ""),
+            "drawing_number": result.get("piirustusnumero", ""),
+            "decision_id": result.get("decision_id", ""),
+            "is_success_type": is_success,
+        }
 
-            # Add fields changed information
-            if "update_details" in result:
-                fields_changed = result["update_details"].get("fields_changed", [])
-                if fields_changed:
-                    changes_html = "".join(
-                        [
-                            f"<div style='margin-bottom: 5px;'>"
-                            f"<strong>{fc['field']}:</strong> "
-                            f"<span style='color: #c00;'>{fc['old_value']}</span> → "
-                            f"<span style='color: #0a0;'>{fc['new_value']}</span>"
-                            f"</div>"
-                            for fc in fields_changed
-                        ]
+        if is_success:
+            row_data["plan_id"] = result.get("plan_id", "")
+            # Extract changes into a structured list of dicts
+            changes = []
+            update_details = result.get("update_details", {})
+            if update_details:
+                changes = update_details.get("fields_changed", [])
+            row_data["changes"] = changes
+            row_data["has_changes"] = bool(changes)
+        else:
+            row_data["error_message"] = result.get("error_message", "")
+
+        return row_data
+
+    def download_csv_view(self, request: HttpRequest, object_id: str, result_type: str) -> HttpResponse:
+        """Main entry point for downloading import results as CSV."""
+        obj = get_object_or_404(PlanGeometryImportLog, pk=object_id)
+
+        is_summary = request.GET.get("mode", "summary") == "summary"
+        is_success_type = result_type in ("success", "skipped_no_changes")
+
+        # 1. Gather and normalize data
+        filtered_results = [r for r in obj.results if r.get("result_type") == result_type] if obj.results else []
+        prepared_rows = [self._prepare_row_data(r, result_type) for r in filtered_results]
+
+        # 2. Setup HTTP Response
+        response = HttpResponse(content_type="text/csv; charset=utf-8")
+        response.write("\ufeff".encode("utf8"))  # BOM for Excel
+
+        filename_suffix = "" if is_summary or not is_success_type else "_detailed"
+        filename = f"plan_import_{result_type}{filename_suffix}_{object_id}.csv"
+        response["Content-Disposition"] = f'attachment; filename="{filename}"'
+
+        writer = csv.writer(response, delimiter=";", quoting=csv.QUOTE_NONNUMERIC)
+
+        # 3. Route to the correct writer
+        if is_success_type:
+            self._write_success_csv(writer, prepared_rows, is_summary)
+        else:
+            self._write_error_csv(writer, prepared_rows)
+
+        return response
+
+    def _write_error_csv(self, writer: Any, rows: List[Dict[str, Any]]) -> None:
+        """Writes the flat, simple error CSV."""
+        writer.writerow(["Row", "Diary Number", "FID", "Drawing #", "Decision ID", "Error"])
+
+        for data in rows:
+            writer.writerow(
+                [
+                    data["row_number"],
+                    data["diary_number"],
+                    data["fid"],
+                    data["drawing_number"],
+                    data["decision_id"],
+                    data.get("error_message", ""),
+                ]
+            )
+
+    @staticmethod
+    def _count_polygons(val: str) -> str:
+        if val == "None":
+            return "None"
+        count = len(re.findall(r"\(\(\(", val))
+        return f"MultiPolygon ({count} polygons)"
+
+    def _write_success_csv(self, writer: Any, rows: List[Dict[str, Any]], is_summary: bool) -> None:
+        """Writes the success/skipped CSV, handling the complex change formatting."""
+        writer.writerow(["Row", "Diary Number", "FID", "Drawing #", "Decision ID", "Plan ID", "Fields Changed"])
+
+        for data in rows:
+            base_columns = [
+                data["row_number"],
+                data["diary_number"],
+                data["fid"],
+                data["drawing_number"],
+                data["decision_id"],
+                data.get("plan_id", ""),
+            ]
+
+            # Early return for no changes
+            if not data.get("has_changes"):
+                fields_changed = "No changes" if "changes" in data else "N/A (dry-run)"
+                writer.writerow(base_columns + [fields_changed])
+                continue
+
+            # Format changes
+            formatted_changes = []
+            for fc in data["changes"]:
+                field = fc.get("field")
+                old_val = str(fc.get("old_value", ""))
+                new_val = str(fc.get("new_value", ""))
+
+                if is_summary and field == "location":
+                    formatted_changes.append(
+                        f"{field}: {self._count_polygons(old_val)} → {self._count_polygons(new_val)}"
                     )
-                    row_parts.append(f"<td {cell_style}>{changes_html}</td>")
                 else:
-                    row_parts.append(f"<td {cell_style}><em>No changes (geometry matched)</em></td>")
-            else:
-                row_parts.append(f"<td {cell_style}><em>N/A (dry-run)</em></td>")
-        else:
-            error_msg = result.get("error_message", "")
-            row_parts.append(f"<td {cell_style}><em>{error_msg}</em></td>")
+                    formatted_changes.append(f"{field}: {old_val} → {new_val}")
 
-        row_parts.append("</tr>")
-        return "".join(row_parts)
+            separator = "; " if is_summary else " | "
+            writer.writerow(base_columns + [separator.join(formatted_changes)])
 
     def _format_results(self, obj: PlanGeometryImportLog, result_type: str) -> str:
-        """Format results of a specific type as HTML table.
-
-        Args:
-            obj (PlanGeometryImportLog): PlanGeometryImportLog instance to format results for.
-            result_type (str): Type of results to display.
-
-        Returns:
-            str: HTML formatted string with table of results.
-        """
-        import json
-
-        from django.utils.safestring import mark_safe
-
+        """Format results of a specific type by passing shared data to a Django template."""
         if not obj.results:
             return "-"
 
         filtered_results = [r for r in obj.results if r.get("result_type") == result_type]
-
         if not filtered_results:
             return "-"
 
-        # Prepare CSV data as JSON for JavaScript
-        csv_data = []
-        for result in filtered_results:
-            is_success_type = result_type in ("success", "skipped_no_changes")
-            csv_row = {
-                "row_number": result.get("row_number", ""),
-                "diaari": result.get("diaari", ""),
-                "fid": result.get("fid", ""),
-                "piirustusnumero": result.get("piirustusnumero", ""),
-                "decision_id": result.get("decision_id", ""),
-                "plan_id": result.get("plan_id", "") if is_success_type else "",
-                "error_message": result.get("error_message", "") if not is_success_type else "",
-            }
-            # Add full update details for JavaScript processing (for both summary and detailed modes)
-            if result_type in ("success", "skipped_no_changes") and "update_details" in result:
-                csv_row["update_details"] = result["update_details"]
-            csv_data.append(csv_row)
+        # Prepare rows using the shared utility (limit to 100 for HTML performance)
+        prepared_rows = [self._prepare_row_data(r, result_type) for r in filtered_results[:100]]
 
-        csv_data_json = json.dumps(csv_data)
+        # Generate the base URL for the download view
+        info = self.model._meta.app_label, self.model._meta.model_name
+        download_url = reverse(f"admin:{info[0]}_{info[1]}_download_csv", args=[obj.id, result_type])
 
-        # Determine if we need both summary and detailed download buttons
-        show_both_downloads = result_type in ("success", "skipped_no_changes")
+        context = {
+            "result_type": result_type,
+            "total_count": len(filtered_results),
+            "rows": prepared_rows,
+            "is_success_type": result_type in ("success", "skipped_no_changes"),
+            "download_url": download_url,
+        }
 
-        # Create collapsible section with Django admin styling
-        html_parts = [
-            f'<fieldset class="module collapse-section" style="margin: 10px 0;">'
-            f'<h2 style="cursor: pointer; user-select: none; background: #f8f8f8; padding: 10px; '
-            f"margin: 0; border: 1px solid #ddd; display: flex; justify-content: space-between; "
-            f'align-items: center;" onclick="toggleSection_{result_type}()">'
-            f'<span style="display: flex; align-items: center; gap: 10px;">'
-            f'<span class="toggle-icon" id="toggle_{result_type}" '
-            f'style="display: inline-block; width: 20px;">▶</span> '
-            f'<strong style="font-size: 16px; color: #333;">Count: {len(filtered_results)}</strong>'
-            f"</span>"
-        ]
-
-        html_parts.append(self._generate_download_buttons_html(result_type, show_both_downloads))
-        html_parts.append("</h2>")
-        html_parts.append(
-            '<div id="content_' + result_type + '" style="display: none; padding: 10px; '
-            'border: 1px solid #ddd; border-top: none;">'
-            "<script>"
-            "function toggleSection_" + result_type + "() {"
-            '  var content = document.getElementById("content_' + result_type + '");'
-            '  var icon = document.getElementById("toggle_' + result_type + '");'
-            '  if (content.style.display === "none") {'
-            '    content.style.display = "block";'
-            '    icon.textContent = "▼";'
-            "  } else {"
-            '    content.style.display = "none";'
-            '    icon.textContent = "▶";'
-            "  }"
-            "}"
-            "</script>"
-        )
-
-        # Generate CSV download script(s)
-        if show_both_downloads:
-            # Generate both summary and detailed download functions (with suffixes)
-            html_parts.append(
-                self._generate_csv_download_script(result_type, csv_data_json, True, str(obj.id), use_mode_suffix=True)
-            )
-            html_parts.append(
-                self._generate_csv_download_script(result_type, csv_data_json, False, str(obj.id), use_mode_suffix=True)
-            )
-        else:
-            # Generate single download function for errors (no suffix)
-            html_parts.append(
-                self._generate_csv_download_script(result_type, csv_data_json, True, str(obj.id), use_mode_suffix=False)
-            )
-
-        html_parts.append('<table style="width: 100%; border-collapse: collapse; font-size: 12px;">')
-        html_parts.append(self._generate_table_header(result_type))
-
-        for result in filtered_results[:100]:  # Limit to 100 rows for performance
-            html_parts.append(self._generate_table_row(result, result_type))
-
-        html_parts.append("</tbody></table>")
-
-        if len(filtered_results) > 100:
-            html_parts.append(
-                f'<div style="margin: 10px 0; color: #666;">'
-                f"<em>Showing first 100 of {len(filtered_results)} results in table. Download CSV for all results.</em>"
-                f"</div>"
-            )
-
-        html_parts.append("</div></fieldset>")  # Close content div and fieldset
-
-        return mark_safe("".join(html_parts))
+        return render_to_string("admin/traffic_control/plan/import_geometry_results_table.html", context)
 
     @admin.display(description=_("Successfully Imported Plans"))
     def success_details(self, obj: PlanGeometryImportLog) -> str:

@@ -1,0 +1,103 @@
+.import-results-container {
+  margin: 10px 0;
+
+  /* Header / Toggle Bar */
+  h2 {
+    cursor: pointer;
+    user-select: none;
+    background: #f8f8f8;
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .toggle-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+      }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .toggle-icon {
+        display: inline-block;
+        width: 20px;
+      }
+
+      strong {
+        font-size: 16px;
+        color: #333;
+      }
+    }
+
+    .download-buttons {
+      display: flex;
+      gap: 5px;
+
+      a {
+        padding: 5px 12px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        text-decoration: none;
+
+        /* Standard Django admin blue */
+        &.btn-primary { background-color: #417690; }
+        /* Secondary muted blue/grey */
+        &.btn-secondary { background-color: #5a6c7d; }
+        &.btn-single { padding: 5px 15px; }
+      }
+    }
+  }
+
+  /* Collapsible Content Area */
+  .content-wrapper {
+    display: none;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-top: none;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+
+      thead tr {
+        background-color: #f0f0f0;
+      }
+
+      th, td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+
+      /* Formatting for the changes list */
+      .change-item {
+        margin-bottom: 5px;
+
+        .old-val { color: #c00; }
+        .new-val { color: #0a0; }
+      }
+    }
+
+    .pagination-notice {
+      margin: 10px 0;
+      color: #666;
+    }
+  }
+}
