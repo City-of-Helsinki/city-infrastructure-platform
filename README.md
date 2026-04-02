@@ -94,14 +94,7 @@ source venv/bin/activate
 poetry install --no-root
 
 # Install project dependencies (production)
-poetry install --no-dev
-```
-
-(optional) You can also use poetry to update the project's python dependencies:
-
-```bash
-# Update python dependencies / lock file
-poetry update
+poetry install --without dev
 ```
 
 ### Development environment with docker
