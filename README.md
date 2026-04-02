@@ -97,13 +97,6 @@ poetry install --no-root
 poetry install --no-dev
 ```
 
-(optional) You can also use poetry to update the project's python dependencies:
-
-```bash
-# Update python dependencies / lock file
-poetry update
-```
-
 ### Development environment with docker
 
 Install [docker](https://docs.docker.com/engine/install/ubuntu/), their provided packages are preferred since system packages are likely to be lagging behind the official distribution.
