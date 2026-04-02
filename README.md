@@ -94,7 +94,7 @@ source venv/bin/activate
 poetry install --no-root
 
 # Install project dependencies (production)
-poetry install --no-dev
+poetry install --without dev
 ```
 
 ### Development environment with docker
