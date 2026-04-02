@@ -11,6 +11,10 @@ from traffic_control.tests.factories import (
 )
 
 
+def strip_indentation(text):
+    return "".join([line.strip() for line in text.split("\n")])
+
+
 class MockAdminWithMixin(FormattedContentsAdminMixin):
     """Mock admin class for testing the mixin."""
 
@@ -60,7 +64,7 @@ def test__content__returns_dash_when_no_get_content_s_rows_method(mock_admin: Mo
 @pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
 @pytest.mark.django_db
 def test__content__returns_dash_when_content_s_rows_empty(mock_admin: MockAdminWithMixin, as_factory) -> None:
-    """Test that content returns '-' when content_s_rows is empty.
+    """Test that content returns '<dl >-</dl>' when content_s_rows is empty.
 
     Args:
         mock_admin (MockAdminWithMixin): Mock admin instance.
@@ -73,8 +77,8 @@ def test__content__returns_dash_when_content_s_rows_empty(mock_admin: MockAdminW
     )
     additional_sign = as_factory(device_type=device_type, content_s=None)
 
-    result = mock_admin.content(additional_sign)
-    assert result == "-"
+    result = strip_indentation(mock_admin.content(additional_sign))
+    assert result == "<dl >-</dl>"
 
 
 @pytest.mark.parametrize("as_factory", (AdditionalSignPlanFactory, AdditionalSignRealFactory))
@@ -105,9 +109,9 @@ def test__content__returns_html_with_single_row(mock_admin: MockAdminWithMixin, 
     additional_sign = as_factory(device_type=device_type, content_s={"limit": 2})
 
     activate("en")
-    result = mock_admin.content(additional_sign)
+    result = strip_indentation(mock_admin.content(additional_sign))
 
-    assert result.startswith("<dl>")
+    assert result.startswith("<dl >")
     assert result.endswith("</dl>")
     assert "<dt>Time limit</dt>" in result
     assert "<dd>2</dd>" in result
@@ -155,9 +159,9 @@ def test__content__returns_html_with_multiple_rows(mock_admin: MockAdminWithMixi
     )
 
     activate("en")
-    result = mock_admin.content(additional_sign)
+    result = strip_indentation(mock_admin.content(additional_sign))
 
-    assert result.startswith("<dl>")
+    assert result.startswith("<dl >")
     assert result.endswith("</dl>")
     # Check that all content is present (unit is combined with limit)
     assert "<dt>Time limit</dt>" in result
@@ -227,7 +231,7 @@ def test__content__handles_none_values(mock_admin: MockAdminWithMixin, as_factor
             """
             return [("Field", None)]
 
-    result = mock_admin.content(MockObj())
+    result = strip_indentation(mock_admin.content(MockObj()))
 
     assert "<dt>Field</dt>" in result
     assert "<dd>-</dd>" in result
@@ -309,7 +313,7 @@ def test__content__handles_special_characters(mock_admin: MockAdminWithMixin, as
     )
 
     activate("en")
-    result = mock_admin.content(additional_sign)
+    result = strip_indentation(mock_admin.content(additional_sign))
 
     # Ensure special characters are escaped
     assert "&amp;" in result
