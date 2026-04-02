@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<div class="results">
+    <table id="result_list">
+        <thead>
+            <tr>
+                <th>{% translate "App" %}</th>
+                <th>{% translate "Model" %}</th>
+                <th colspan="{{ max_relations }}">{% translate "View related" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr class="{% cycle 'row1' 'row2' %}">
+                    <td>{{ row.app }}</td>
+                    <td>{{ row.model }}</td>
+
+                    {% for col in row.columns %}
+                        <td>
+                            {% if col.url %}
+                                <a href="{{ col.url }}">{{ col.text }}</a>
+                            {% else %}
+                                {{ col.text }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+
+                    {% if row.missing_cols %}<td colspan="{{ row.missing_cols }}"></td>{% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
