@@ -1,0 +1,13 @@
+<div class="lost-field-values">
+    {% for field in fields %}
+        <div style="margin-bottom: 4px">
+            <strong>{{ field.name }}</strong>
+
+            {% if field.values %}
+                ({{ field.values|length }} unique): {{ field.values|join:", " }}
+            {% else %}
+                : <span style="color: #28a745">No data lost</span>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
