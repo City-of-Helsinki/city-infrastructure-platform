@@ -50,7 +50,7 @@ bump2version = "^1.0.1"
 coverage = "7.4.0"
 django-debug-toolbar = "^4.1.0"
 djlint = "^1.32.1"
-factory-boy = "^3.2.1"
+factory-boy = "^3.3.3"
 ipython = "^8.10.0"
 jedi = "^0.18.1"
 pyobjc-core = { version = "^8.2", platform = "darwin" }
