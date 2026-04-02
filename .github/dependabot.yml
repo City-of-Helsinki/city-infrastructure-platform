@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # Python / Poetry dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 7
+
+  # JavaScript / Yarn dependencies
+  - package-ecosystem: "npm"
+    directory: "/map-view"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 7
