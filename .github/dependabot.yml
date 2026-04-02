@@ -5,13 +5,13 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    cooldown:
-      default-days: 7
+    # Disable version updates and only allow security updates
+    open-pull-requests-limit: 0
 
   # JavaScript / Yarn dependencies
   - package-ecosystem: "npm"
     directory: "/map-view"
     schedule:
       interval: "daily"
-    cooldown:
-      default-days: 7
+    # Disable version updates and only allow security updates
+    open-pull-requests-limit: 0
