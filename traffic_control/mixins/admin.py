@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.contrib.gis.forms import OSMWidget
-from django.utils.html import escape, format_html
-from django.utils.safestring import mark_safe
+from django.template.loader import render_to_string
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from admin_helper.decorators import requires_fields
@@ -132,22 +132,8 @@ class FormattedContentsAdminMixin:
         if not obj or not hasattr(obj, "get_content_s_rows"):
             return "-"
 
-        content_s_rows = obj.get_content_s_rows()
-
-        if not content_s_rows:
-            return "-"
-
-        # Build HTML parts with proper escaping
-        html_parts = ["<dl>"]
-        for title, display_value in content_s_rows:
-            # Escape and handle None values
-            safe_value = escape(display_value) if display_value is not None else "-"
-            safe_title = escape(title)
-            html_parts.append(f"<dt>{safe_title}</dt><dd>{safe_value}</dd>")
-        html_parts.append("</dl>")
-
-        # Mark as safe since we've manually escaped the content
-        return mark_safe("".join(html_parts))
+        context = {"content_s_rows": obj.get_content_s_rows()}
+        return render_to_string("embed/_content_s_rows.html", context)
 
 
 class UserStampedAdminMixin:
