@@ -1,6 +1,7 @@
 """Django admin configuration for ticket machine migration tracking models."""
 from django.contrib import admin
 from django.db import models
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -379,27 +380,17 @@ class TicketMachineMigrationRunAdmin(admin.ModelAdmin):
     @admin.display(description=_("Lost Field Values"))
     def lost_field_values_display(self, obj: TicketMachineMigrationRun) -> str:
         """Display lost field values in a formatted way."""
-        # Define all possible lost fields
         all_lost_fields = ["value", "txt", "double_sided", "peak_fastened", "affect_area"]
+        lost_data = obj.lost_field_values or {}
 
-        if not obj.lost_field_values:
-            # No data tracked yet, show all fields as empty
-            output = []
-            for field in all_lost_fields:
-                output.append(f'<strong>{field}</strong>: <span style="color: #28a745;">No data lost</span>')
-            return mark_safe("<br/>".join(output))
-
-        output = []
+        field_data = []
         for field in all_lost_fields:
-            values = obj.lost_field_values.get(field, [])
-            if values:
-                value_count = len(values)
-                all_values = ", ".join(str(v) for v in values)
-                output.append(f"<strong>{field}</strong> ({value_count} unique): {all_values}")
-            else:
-                output.append(f'<strong>{field}</strong>: <span style="color: #28a745;">No data lost</span>')
+            values = lost_data.get(field, [])
+            field_data.append({"name": field, "values": values})
 
-        return mark_safe("<br/>".join(output))
+        context = {"fields": field_data}
+
+        return render_to_string("admin/traffic_control/ticketmachinemigrationrun/lost_field_values.html", context)
 
 
 @admin.register(TicketMachineMigrationPlanRecord)

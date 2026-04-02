@@ -6,10 +6,11 @@ from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin, UserAdmin as
 from django.contrib.auth.models import Group
 from django.db import models as django_models, transaction
 from django.db.models import Exists, OuterRef
+from django.template.loader import render_to_string
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
 from django.utils.formats import localize
-from django.utils.html import format_html, format_html_join
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from social_django.models import UserSocialAuth
@@ -386,6 +387,7 @@ class UserAdmin(BaseUserAdmin):
             # Grouping
             app_name = related_meta.app_config.verbose_name.title()
             model_name = related_meta.verbose_name.title()
+
             # soft_deleted has to be omitted from the filter query as it breaks the filter on some models
             count = field.field.model.objects.filter(**{query_param: obj.pk}).count()
 
@@ -401,45 +403,24 @@ class UserAdmin(BaseUserAdmin):
 
         # Table rows assembly
         row_data = []
-        for index, (app_name, mod_name) in enumerate(sorted_keys):
+        for app_name, mod_name in sorted_keys:
             columns = sorted(groups[(app_name, mod_name)], key=lambda x: x["text"].lower())
-            td_cells = (
-                format_html('<td><a href="{url}">{text}</a></td>', **e)
-                if e.get("url")
-                else format_html("<td>{text}</td>", **e)
-                for e in columns
-            )
-            td_cells_joined = mark_safe("".join(td_cells))  # risky bits already escaped by format_html
-            missing_cols = max_relations - len(columns)
-            padding_html = format_html('<td colspan="{colspan}"></td>', colspan=missing_cols) if missing_cols else ""
+
             row_data.append(
                 {
-                    "row_class": f"row{(index % 2) + 1}",
                     "app": app_name,
                     "model": mod_name,
-                    "td_cells": td_cells_joined,
-                    "padding": padding_html,
+                    "columns": columns,
+                    "missing_cols": max_relations - len(columns),
                 }
             )
 
-        # Full table Layout & Rendering
-        thead = format_html(
-            "<thead><tr>"
-            "<th>{app_label}</th>"
-            "<th>{model_label}</th>"
-            '<th colspan="{colspan}">{view_related_label}</th>'
-            "</tr></thead>",
-            app_label=_("App"),
-            model_label=_("Model"),
-            colspan=max_relations,
-            view_related_label=_("View related"),
-        )
-        trows = format_html_join(
-            "", '<tr class="{row_class}"><td>{app}</td><td>{model}</td>{td_cells}{padding}</tr>', row_data
-        )
-        return format_html(
-            '<div class="results"><table>{thead}<tbody>{trows}</tbody></table></div>', thead=thead, trows=trows
-        )
+        context = {
+            "max_relations": max_relations,
+            "rows": row_data,
+        }
+
+        return render_to_string("admin/users/user/relations_table.html", context)
 
     @admin.action(permissions=["change"], description=_("Reactivate selected users"))
     def reactivate_selected_users(self, request, queryset) -> None:
@@ -558,15 +539,15 @@ class UserDeactivationStatusAdmin(admin.ModelAdmin):
             str: HTML formatted status string.
         """
         if obj.deactivated_at:
-            return format_html('<span style="color: red; font-weight: bold;">DEACTIVATED</span>')
+            return mark_safe('<span style="color: red; font-weight: bold;">DEACTIVATED</span>')
         elif obj.one_day_email_sent_at:
-            return format_html('<span style="color: orange; font-weight: bold;">1-DAY WARNING SENT</span>')
+            return mark_safe('<span style="color: orange; font-weight: bold;">1-DAY WARNING SENT</span>')
         elif obj.one_week_email_sent_at:
-            return format_html('<span style="color: #ff9800; font-weight: bold;">7-DAY WARNING SENT</span>')
+            return mark_safe('<span style="color: #ff9800; font-weight: bold;">7-DAY WARNING SENT</span>')
         elif obj.one_month_email_sent_at:
-            return format_html('<span style="color: #ffc107;">30-DAY WARNING SENT</span>')
+            return mark_safe('<span style="color: #ffc107;">30-DAY WARNING SENT</span>')
         else:
-            return format_html('<span style="color: gray;">PENDING</span>')
+            return mark_safe('<span style="color: gray;">PENDING</span>')
 
     def has_add_permission(self, request):
         """
