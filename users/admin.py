@@ -11,6 +11,7 @@ from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
 from django.utils.formats import localize
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from social_django.models import UserSocialAuth
 
@@ -538,15 +539,15 @@ class UserDeactivationStatusAdmin(admin.ModelAdmin):
             str: HTML formatted status string.
         """
         if obj.deactivated_at:
-            return format_html('<span style="color: red; font-weight: bold;">DEACTIVATED</span>')
+            return mark_safe('<span style="color: red; font-weight: bold;">DEACTIVATED</span>')
         elif obj.one_day_email_sent_at:
-            return format_html('<span style="color: orange; font-weight: bold;">1-DAY WARNING SENT</span>')
+            return mark_safe('<span style="color: orange; font-weight: bold;">1-DAY WARNING SENT</span>')
         elif obj.one_week_email_sent_at:
-            return format_html('<span style="color: #ff9800; font-weight: bold;">7-DAY WARNING SENT</span>')
+            return mark_safe('<span style="color: #ff9800; font-weight: bold;">7-DAY WARNING SENT</span>')
         elif obj.one_month_email_sent_at:
-            return format_html('<span style="color: #ffc107;">30-DAY WARNING SENT</span>')
+            return mark_safe('<span style="color: #ffc107;">30-DAY WARNING SENT</span>')
         else:
-            return format_html('<span style="color: gray;">PENDING</span>')
+            return mark_safe('<span style="color: gray;">PENDING</span>')
 
     def has_add_permission(self, request):
         """

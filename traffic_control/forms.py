@@ -7,7 +7,6 @@ from django.forms.models import BaseInlineFormSet, ModelChoiceIteratorValue
 from django.forms.widgets import Select
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
@@ -113,7 +112,7 @@ class AdminStructuredContentWidget(forms.Widget):
             "device_type_name": device_type_name,
             "devices_api_url": reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": "__id__"}),
         }
-        return mark_safe(render_to_string(self.template_name, context))
+        return render_to_string(self.template_name, context)
 
     class Media:
         css = {"all": ("traffic_control/css/structured_content_widget.css",)}
