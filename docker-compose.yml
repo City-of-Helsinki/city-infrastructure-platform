@@ -15,6 +15,7 @@ services:
       context: "."
     volumes:
       - .:/city-infrastructure-platform
+      - /city-infrastructure-platform/.venv
     environment:
       # Database location is controlled above by postgres config. Thus we override
       # any value set in .env

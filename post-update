@@ -1,7 +1,13 @@
 #!/bin/sh
+
+# NOTE (2026-04-07 thiago): is this a dead script? I don't see it mentioned anywhere
+
 set -e
 
-poetry install
-./manage.py compilemessages
-./manage.py collectstatic --noinput
-./manage.py migrate --noinput
+# Sync strictly to the lockfile without relying on a local cache
+uv sync --frozen --no-cache
+
+# Run Django management commands inside the isolated uv environment
+uv run manage.py compilemessages
+uv run manage.py collectstatic --noinput
+uv run manage.py migrate --noinput

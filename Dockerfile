@@ -4,14 +4,24 @@ ARG VERSION=""
 FROM public.ecr.aws/docker/library/python:3.11-slim-bookworm AS base
 # ==============================
 LABEL vendor="City of Helsinki"
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
+
+# https://docs.astral.sh/uv/guides/integration/docker/#installing-uv
+# https://github.com/astral-sh/uv/pkgs/container/uv/772159347?tag=0.11.3
+COPY --from=ghcr.io/astral-sh/uv:0.11.3@sha256:90bbb3c16635e9627f49eec6539f956d70746c409209041800a0280b93152823 /uv /uvx /bin/
+
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_FROZEN=1
+ENV UV_LINK_MODE=copy
+ENV UV_NO_CACHE=1
+ENV PATH="/city-infrastructure-platform/.venv/bin:$PATH"
 
 RUN mkdir /city-infrastructure-platform && \
     groupadd -g 1000 appuser && \
     useradd -u 1000 -g appuser -ms /bin/bash appuser
 WORKDIR /city-infrastructure-platform
 
-COPY poetry.lock pyproject.toml /city-infrastructure-platform/
+COPY uv.lock pyproject.toml /city-infrastructure-platform/
 
 RUN apt-get update && \
     mkdir -p /usr/share/man/man1/ /usr/share/man/man3/ /usr/share/man/man7/ && \
@@ -32,18 +42,12 @@ RUN apt-get update && \
         postgresql-client-17 \
         gettext \
         mime-support && \
-    curl -sSL --retry 5 https://install.python-poetry.org --output install-poetry.py && \
-    python install-poetry.py --version=1.7.1 && \
-    rm install-poetry.py && \
-    /root/.local/bin/poetry config virtualenvs.create false && \
-    /root/.local/bin/poetry install --only main --no-interaction && \
-    pip install --no-cache-dir --upgrade "wheel>=0.46.2" && \
+    uv sync --frozen --no-cache --no-dev && \
+    uv pip install --no-cache "wheel==0.46.2" && \
     apt-get remove -y build-essential libpq-dev gnupg && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/archives && \
-    rm -rf /root/.cache/pypoetry && \
-    rm -rf /root/.cache/pip
+    rm -rf /var/cache/apt/archives
 
 COPY docker-entrypoint.sh /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
@@ -56,9 +60,8 @@ ENV DEBUG=1
 ENV COLLECT_STATIC=1
 ENV DEV_SERVER=1
 
-RUN /root/.local/bin/poetry install
+RUN uv sync --frozen --no-cache
 COPY . /city-infrastructure-platform
-RUN chown -R appuser:appuser /city-infrastructure-platform
 USER appuser
 EXPOSE 8000
 
@@ -80,6 +83,12 @@ ENV COLLECT_STATIC=1
 
 COPY . /city-infrastructure-platform
 COPY --from=build /map-view/build/ /city-infrastructure-platform/map-view/build/
+
+# We override OIDC_AUTHENTICATION_ENABLED for these commands because we don't have the proper settings for OIDC
+# authentication at docker image build time, and this will cause ImproperlyConfigured exceptions to be thrown in
+#the pipelines, even though these commands don't care about the settings
+RUN OIDC_AUTHENTICATION_ENABLED=0 uv run manage.py collectstatic --noinput && \
+    OIDC_AUTHENTICATION_ENABLED=0 ./compilemessages.sh \
 
 # OpenShift runs container in arbitrary user which belongs to group `root` (0)
 RUN chgrp -R 0 /city-infrastructure-platform && \
