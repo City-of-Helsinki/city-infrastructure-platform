@@ -33,14 +33,14 @@ Install required system packages, some of these are needed to build some of the 
 sudo apt install binutils gdal-bin libpq-dev libproj-dev pipx
 ```
 
-Install [Poetry](https://github.com/python-poetry/poetry#installation) for managing python dependencies.
+Install [uv](https://docs.astral.sh/uv/#installation) for managing python dependencies.
 
 ```bash
-# Let pipx handle it (without messing with the project's environment, the x at the end of pipx is important!)
-pipx install poetry
+# Follow the "curl" steps on the site linked above or install latest version available on pypi
+pipx install uv
 
-# Or use the system package (may be less bleeding-edge but good enough for this project)
-sudo apt install python3-poetry
+# Or anchor installation to specific version
+pipx install "uv==0.11.3"
 ```
 
 #### Common dependencies - python environment
@@ -84,17 +84,17 @@ Ensure you are using python 3.11.9 or newer and at the root of this project run
 
 
 ```bash
-# Create the environment
-python -m venv venv
+# Create the environment (optional, if skipped uv will create the .venv environment itself)
+python -m venv .venv
 
-# Activate the environment
-source venv/bin/activate
+# Activate the environment (do this if you want to run python manage.py directly without having to explicitly call uv)
+source .venv/bin/activate
 
 # Install project dependencies (development)
-poetry install --no-root
+uv sync --frozen
 
 # Install project dependencies (production)
-poetry install --without dev
+uv sync --frozen --no-dev
 ```
 
 ### Development environment with docker
@@ -170,13 +170,15 @@ the settings file.
 Another way, easiest with Azurite emulation is to copy cityinfra/local_settings_example.py to cityinfra/local_settings.py and modify the settings there.
 Example already sets AZURE_BLOBSTORAGE settings to use Azurite emulation.
 
-```
+```bash
 # Use example configuration
 cp .env.example .env
 
-
 # Enable debug (optional)
 echo 'DEBUG=True' >> .env
+
+# Activate the python environment (optional, see at the end of this code block)
+source .venv/bin/activate
 
 # Run database migrations
 # (Requires that the database is up and running)
@@ -187,6 +189,10 @@ python manage.py migrate
 python manage.py runserver
 # or with the local_settings
 python manage.py runserver --settings=cityinfra.local_settings
+
+# If you do not wish to activate the python environment you can prepend "uv run" to your commands and uv will
+# automatically make use of the virtual environment
+uv run python manage.py runserver --settings=cityinfra.local_settings
 ```
 
 #### Running the project - Docker services (with compose)
@@ -236,6 +242,16 @@ docker compose run --rm api ./manage.py createsuperuser
 
 # Open the Django interactive Python shell
 docker compose run --rm api ./manage.py shell_plus
+```
+
+**NOTE:** If you're trying to run actions that alter the **volume**, like `collectstatic` or `compilemessages`, you must run these actions as root:
+
+```bash
+# Update static files
+docker compose run --rm --user root api ./manage.py collectstatic
+
+# Compile messages
+docker compose run --rm --user root api ./compilemessages.sh
 ```
 
 ## Translations (fi)

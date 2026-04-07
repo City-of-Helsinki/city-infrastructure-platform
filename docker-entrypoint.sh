@@ -4,16 +4,6 @@ set -e
 
 echo "Version: $VERSION"
 
-# Collect static files
-if [[ "$COLLECT_STATIC" = "1" ]]; then
-    echo "Collecting static files..."
-    ./manage.py collectstatic --noinput
-fi
-
-# Translate messages
-echo "Updating translations..."
-./compilemessages.sh
-
 echo "Checking for odd ENTRYPOINT line in arguments"
 echo "Arguments are:"
 echo $@
@@ -31,7 +21,7 @@ if [[ ! -z "$@" ]]; then
     "$@"
 elif [[ "$DEV_SERVER" = "1" ]]; then
     echo "Starting dev-server..."
-    python ./manage.py runserver 0.0.0.0:8000
+    python manage.py runserver 0.0.0.0:8000
 else
     UWSGI_ARGS="--ini uwsgi/docker.ini"
 

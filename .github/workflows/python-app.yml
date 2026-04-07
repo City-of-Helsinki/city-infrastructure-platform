@@ -17,8 +17,6 @@ jobs:
       OIDC_AUTHENTICATION_ENABLED: 0
       # Database for tests
       DATABASE_URL: postgis://postgres:postgres@localhost/city-infrastructure-platform
-      POETRY_HOME: /opt/poetry
-      POETRY_VIRTUALENVS_CREATE: 0
 
     steps:
       - uses: actions/checkout@v3
@@ -40,18 +38,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install gdal-bin
 
-      - name: Install Poetry
-        run: |
-          curl --silent --show-error https://install.python-poetry.org --output install-poetry.py
-          python3 install-poetry.py --version 1.7.1
-          rm install-poetry.py
-          $POETRY_HOME/bin/poetry --version
+      # https://github.com/astral-sh/setup-uv?tab=readme-ov-file#usage
+      - name: Install uv
+        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
+        with:
+          enable-cache: true
+          # https://github.com/astral-sh/uv/releases/tag/0.11.3 checksum for Linux x64
+          version: "0.11.3"
+          checksum: "c0f3236f146e55472663cfbcc9be3042a9f1092275bbe3fe2a56a6cbfd3da5ce"
 
-      - name: "Check Poetry lockfile consistency"
-        run: $POETRY_HOME/bin/poetry -v lock --check
+      - name: Install test dependencies
+        run: uv sync --frozen
 
-      - name: "Install test dependencies"
-        run: $POETRY_HOME/bin/poetry -v install --no-root
+      - name: Add virtual environment to PATH
+        run: echo "$GITHUB_WORKSPACE/.venv/bin" >> $GITHUB_PATH
 
       - name: Run Python side code neatness tests
         run: |

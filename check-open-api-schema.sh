@@ -12,7 +12,7 @@ function clean()
 }
 
 
-if ! python ./manage.py spectacular --color --file schematest.yaml --validate --lang en
+if ! uv run manage.py spectacular --color --file schematest.yaml --validate --lang en
 then
   echo "schema generation or validation failure"
   clean
