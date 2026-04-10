@@ -62,5 +62,6 @@
     "eslint": "^9.23.0",
     "jsdom": "^26.0.0",
     "vitest": "^3.0.9"
-  }
+  },
+  "packageManager": "yarn@4.13.0"
 }

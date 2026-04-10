@@ -70,7 +70,8 @@ jobs:
 
       - name: Install NodeJS dependencies
         run: |
-          yarn --cwd map-view install --frozen-lockfile
+          corepack enable
+          YARN_ENABLE_SCRIPTS=false yarn --cwd map-view install --immutable --immutable-cache --check-cache
 
       - name: Run NodeJS code neatness tests
         run: |
