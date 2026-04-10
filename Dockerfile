@@ -70,8 +70,9 @@ FROM public.ecr.aws/docker/library/node:20-slim AS build
 # ===================================
 WORKDIR /map-view
 COPY map-view/ .
-RUN yarn install --frozen-lockfile --no-cache --production --ignore-scripts --network-timeout 300000 && \
-    yarn build
+RUN corepack enable
+RUN YARN_ENABLE_SCRIPTS=false yarn install --immutable --immutable-cache --check-cache
+RUN yarn build
 
 # ==============================
 FROM base AS production

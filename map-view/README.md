@@ -1,10 +1,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Install dependencies:
+## Check the integrity of our cache:
 
-### `yarn install --frozen-lockfile`
+### `yarn install --immutable --immutable-cache --check-cache`
 
-Install dependencies in a safe manner.
+Verifies that the cache shipped with the checked out commit hasn't been tampered with.
+
+For more information check https://yarnpkg.com/cli/install
 
 ## Available Scripts
 
