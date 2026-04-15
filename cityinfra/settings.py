@@ -108,6 +108,8 @@ env = environ.Env(
     MAINTENANCE_MODE_AUTH_PREFIXES=(list, ["ha", "auth"]),
     MAINTENANCE_MODE_HEALTH_CHECKS=(list, ["healthz", "readiness"]),
     MAINTENANCE_MODE_LANGUAGES=(list, ["fi", "sv", "en"]),
+    # django-helusers environment banner
+    HELUSERS_ENVIRONMENT=(str, ""),
 )
 
 if os.path.exists(env_file):
@@ -547,6 +549,8 @@ GISSERVER_USE_DB_RENDERING = False
 # Virus scan
 CLAMAV_BASE_URL = env.str("CLAMAV_BASE_URL", "http://localhost:3030")
 
+# django-helusers environment banner
+HELUSERS_ENVIRONMENT = env.str("HELUSERS_ENVIRONMENT", "")
 # fileupload types
 ALLOWED_FILE_UPLOAD_TYPES = [
     ".doc",

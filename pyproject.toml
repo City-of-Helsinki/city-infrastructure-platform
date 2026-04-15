@@ -16,7 +16,7 @@ dependencies = [
     "django-filter>=23.5,<24",
     "django-gisserver>=1.5.0,<2",
     "django-health-check>=3.18.3,<4",
-    "django-helusers==0.14.2",
+    "django-helusers==1.1.0",
     "django-import-export>=3.2.0,<4",
     "django-mptt>=0.18.0,<0.19",
     "django-storages[azure]>=1.13.2,<2",
