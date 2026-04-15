@@ -77,6 +77,10 @@
           method="post"
           action="{% url 'set_language' %}">
         {% csrf_token %}
+        <input type="hidden"
+               name="next"
+               id="language-next"
+               value="{{ request.get_full_path }}">
         <label class="language-select-label"
                for="language-select">{% trans "Language" %}:</label>
         <select class="language-select"
@@ -97,7 +101,19 @@
     <script>
     function changeLanguage(languageCode) {
       const form = document.getElementById('languageSelectForm');
+      const supportedLanguageCodes = [{% for lang_code, lang_name in LANGUAGES %}"{{ lang_code }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+      const currentUrl = new URL(window.location.href);
+      const pathSegments = currentUrl.pathname.split('/');
+
+      if (pathSegments.length > 1 && supportedLanguageCodes.includes(pathSegments[1])) {
+        pathSegments[1] = languageCode;
+      } else {
+        pathSegments.splice(1, 0, languageCode);
+      }
+
+      const targetPath = pathSegments.join('/') || '/';
       form.elements.language.value = languageCode;
+      form.elements.next.value = `${targetPath}${currentUrl.search}${currentUrl.hash}`;
       form.submit();
     }
     </script>
