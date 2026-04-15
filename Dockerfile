@@ -15,6 +15,7 @@ ENV UV_FROZEN=1
 ENV UV_LINK_MODE=copy
 ENV UV_NO_CACHE=1
 ENV PATH="/city-infrastructure-platform/.venv/bin:$PATH"
+ENV IPYTHONDIR="/city-infrastructure-platform/var/ipython"
 
 RUN mkdir /city-infrastructure-platform && \
     groupadd -g 1000 appuser && \
@@ -62,6 +63,8 @@ ENV DEV_SERVER=1
 
 RUN uv sync --frozen --no-cache
 COPY . /city-infrastructure-platform
+RUN mkdir -p /city-infrastructure-platform/var/ipython && \
+    chown -R appuser:appuser /city-infrastructure-platform/var
 USER appuser
 EXPOSE 8000
 
@@ -92,7 +95,9 @@ RUN OIDC_AUTHENTICATION_ENABLED=0 uv run manage.py collectstatic --noinput && \
     OIDC_AUTHENTICATION_ENABLED=0 ./compilemessages.sh \
 
 # OpenShift runs container in arbitrary user which belongs to group `root` (0)
-RUN chgrp -R 0 /city-infrastructure-platform && \
+# Create IPython directory for shell_plus and ensure proper permissions
+RUN mkdir -p /city-infrastructure-platform/var/ipython && \
+    chgrp -R 0 /city-infrastructure-platform && \
     chmod -R g=u /city-infrastructure-platform
 USER appuser:0
 
