@@ -3,7 +3,7 @@ revision = 3
 requires-python = ">=3.11.9, <4"
 
 [options]
-exclude-newer = "2026-04-01T12:44:25.44454119Z"
+exclude-newer = "2026-04-08T09:23:27.791532019Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -321,7 +321,7 @@ requires-dist = [
     { name = "django-gisserver", specifier = ">=1.5.0,<2" },
     { name = "django-guardian", specifier = ">=3.2.0,<4" },
     { name = "django-health-check", specifier = ">=3.18.3,<4" },
-    { name = "django-helusers", specifier = "==0.14.2" },
+    { name = "django-helusers", specifier = "==1.1.0" },
     { name = "django-import-export", specifier = ">=3.2.0,<4" },
     { name = "django-mptt", specifier = ">=0.18.0,<0.19" },
     { name = "django-storages", extras = ["azure"], specifier = ">=1.13.2,<2" },
@@ -729,7 +729,7 @@ wheels = [
 
 [[package]]
 name = "django-helusers"
-version = "0.14.2"
+version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cachetools" },
@@ -738,9 +738,9 @@ dependencies = [
     { name = "python-jose" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8f/74/dd59e19e654c51b260b608129343c02e19d65ded44b6c53fc8876610153c/django_helusers-0.14.2.tar.gz", hash = "sha256:4cbbd8b42f3b418e4e3964e5380c8751cd39596f83e4728ecf2e0b496c408fc0", size = 33585, upload-time = "2025-11-04T11:04:52.818Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fe/65/8a3588eae515a7e6e59c112fcdbf20f137bca2f0f3b169533e763af4b9f7/django_helusers-1.1.0.tar.gz", hash = "sha256:73ef1c9f3050cbb3a4f3a35264f26807f60a00b66eef31d8b07cd1ffd61de965", size = 34722, upload-time = "2026-03-24T13:17:43.964Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/55/56/73cca3a7e60cb4239287ca47845b481bb66e5ad136b24cfab1b874a41f0c/django_helusers-0.14.2-py3-none-any.whl", hash = "sha256:9773f38a843fe2faf31a7579f67378a0d529345519ba984be0b88cbca7e1490d", size = 42492, upload-time = "2025-11-04T11:04:51.679Z" },
+    { url = "https://files.pythonhosted.org/packages/b4/71/d219aa5845162c6bb1b9549912263212251a04cc99e1d0598f2ee8e85c29/django_helusers-1.1.0-py3-none-any.whl", hash = "sha256:5d6c4d0db11db633a031cfdcef6e754fb26c167d3e179d77882c2edecca60830", size = 43750, upload-time = "2026-03-24T13:17:42.207Z" },
 ]
 
 [[package]]
