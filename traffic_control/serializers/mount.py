@@ -18,7 +18,6 @@ from traffic_control.serializers.common import (
     EwktGeometryField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
-    PermissionFilteredRelatedField,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
@@ -79,10 +78,7 @@ class MountPlanOutputSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
-    files = PermissionFilteredRelatedField(
-        permission_codename="traffic_control.view_mountplanfile",
-        serializer_class=MountPlanFileSerializer,
-    )
+    files = MountPlanFileSerializer(many=True, read_only=True)
 
     class Meta:
         model = MountPlan
@@ -141,10 +137,7 @@ class MountRealSerializer(
 ):
     location = EwktGeometryField()
     ordered_traffic_signs = OrderedTrafficSignsField(read_only=True, many=True)
-    files = PermissionFilteredRelatedField(
-        permission_codename="traffic_control.view_mountrealfile",
-        serializer_class=MountRealFileSerializer,
-    )
+    files = MountRealFileSerializer(many=True, read_only=True)
     operations = MountRealOperationSerializer(many=True, required=False, read_only=True)
     plan_decision_id = serializers.ReadOnlyField(source="mount_plan.plan.decision_id", allow_null=True)
 

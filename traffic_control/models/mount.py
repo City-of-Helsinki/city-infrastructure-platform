@@ -298,6 +298,11 @@ class MountReal(AbstractMount, InstalledDeviceModel):
     @property
     def ordered_traffic_signs(self):
         """traffic sign reals ordered by z coordinate from top down"""
+        # NOTE (thiago) 2026-04-20
+        # Check first for the presence of an annotated prefetched & ordered field to avoid hitting the filter + ordering
+        # query repeatedly in our REST API endpoint
+        if hasattr(self, "prefetched_active_trafficsignreal_set"):
+            return self.prefetched_active_trafficsignreal_set
         qs = self.trafficsignreal_set.active()
         return order_queryset_by_z_coord_desc(qs)
 

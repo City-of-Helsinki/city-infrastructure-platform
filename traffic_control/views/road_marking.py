@@ -41,6 +41,7 @@ from traffic_control.services.road_marking import (
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    PermissionFilteredFilePrefetchMixin,
     prefetch_replacements,
     TrafficControlViewSet,
 )
@@ -56,22 +57,21 @@ __all__ = ("RoadMarkingPlanViewSet", "RoadMarkingRealViewSet")
     partial_update=extend_schema(summary="Partially update single RoadMarking Plan"),
     destroy=extend_schema(summary="Soft-delete single RoadMarking Plan"),
 )
-class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
+class RoadMarkingPlanViewSet(
+    PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin
+):
     serializer_classes = {
         "default": RoadMarkingPlanOutputSerializer,
         "geojson": RoadMarkingPlanGeoJSONOutputSerializer,
         "input": RoadMarkingPlanInputSerializer,
         "input_geojson": RoadMarkingPlanGeoJSONInputSerializer,
     }
-    queryset = prefetch_replacements(road_marking_plan_get_active().prefetch_related("files"))
-
+    queryset = prefetch_replacements(road_marking_plan_get_active())
     filterset_class = RoadMarkingPlanFilterSet
     file_queryset = RoadMarkingPlanFile.objects.all()
     file_serializer = RoadMarkingPlanFileSerializer
     file_relation = "road_marking_plan"
-
-    def get_list_queryset(self):
-        return prefetch_replacements(road_marking_plan_get_active()).prefetch_related("files")
+    file_permission_codename = "traffic_control.view_roadmarkingplanfile"
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -128,14 +128,13 @@ class RoadMarkingPlanViewSet(TrafficControlViewSet, FileUploadViews, Replaceable
     partial_update=extend_schema(summary="Partially update single RoadMarking Real"),
     destroy=extend_schema(summary="Soft-delete single RoadMarking Real"),
 )
-class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
+class RoadMarkingRealViewSet(PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": RoadMarkingRealSerializer,
         "geojson": RoadMarkingRealGeoJSONSerializer,
     }
     queryset = (
         RoadMarkingReal.objects.active()
-        .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
         .select_related("road_marking_plan__plan")
@@ -144,6 +143,7 @@ class RoadMarkingRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_queryset = RoadMarkingRealFile.objects.all()
     file_serializer = RoadMarkingRealFileSerializer
     file_relation = "road_marking_real"
+    file_permission_codename = "traffic_control.view_roadmarkingrealfile"
 
     @extend_schema(
         methods=("post",),

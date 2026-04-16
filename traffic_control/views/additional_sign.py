@@ -43,6 +43,7 @@ from traffic_control.services.additional_sign import (
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    PermissionFilteredFilePrefetchMixin,
     prefetch_replacements,
     TrafficControlViewSet,
 )
@@ -56,7 +57,9 @@ from traffic_control.views._common import (
     partial_update=extend_schema(summary="Partially update single AdditionalSign Plan"),
     destroy=extend_schema(summary="Soft-delete single AdditionalSign Plan"),
 )
-class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
+class AdditionalSignPlanViewSet(
+    PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin
+):
     serializer_classes = {
         "default": AdditionalSignPlanOutputSerializer,
         "geojson": AdditionalSignPlanGeoJSONOutputSerializer,
@@ -69,9 +72,7 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews, Replacea
     file_queryset = AdditionalSignPlanFile.objects.all()
     file_serializer = AdditionalSignPlanFileSerializer
     file_relation = "additional_sign_plan"
-
-    def get_list_queryset(self):
-        return prefetch_replacements(additional_sign_plan_get_active())
+    file_permission_codename = "traffic_control.view_additionalsignplanfile"
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -128,7 +129,7 @@ class AdditionalSignPlanViewSet(TrafficControlViewSet, FileUploadViews, Replacea
     partial_update=extend_schema(summary="Partially update single AdditionalSign Real"),
     destroy=extend_schema(summary="Soft-delete single AdditionalSign Real"),
 )
-class AdditionalSignRealViewSet(TrafficControlViewSet, FileUploadViews):
+class AdditionalSignRealViewSet(PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": AdditionalSignRealSerializer,
         "geojson": AdditionalSignRealGeoJSONSerializer,
@@ -143,6 +144,7 @@ class AdditionalSignRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_queryset = AdditionalSignRealFile.objects.all()
     file_serializer = AdditionalSignRealFileSerializer
     file_relation = "additional_sign_real"
+    file_permission_codename = "traffic_control.view_additionalsignrealfile"
 
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
