@@ -38,3 +38,10 @@ if EMULATE_AZURE_BLOBSTORAGE:
         },
     }
 
+# Optional: SQL debug logging
+#
+# LOGGING["loggers"]["django.db.backends"] = {
+#    'handlers': ['console'],
+#    'level': 'DEBUG',
+#    'propagate': False,
+#}

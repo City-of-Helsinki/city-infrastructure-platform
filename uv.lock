@@ -3,7 +3,7 @@ revision = 3
 requires-python = ">=3.11.9, <4"
 
 [options]
-exclude-newer = "2026-04-08T09:23:27.791532019Z"
+exclude-newer = "2026-04-08T14:00:52.487173061Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -287,6 +287,7 @@ dev = [
     { name = "bump2version" },
     { name = "coverage" },
     { name = "django-debug-toolbar" },
+    { name = "django-zeal" },
     { name = "djlint" },
     { name = "factory-boy" },
     { name = "ipython" },
@@ -347,6 +348,7 @@ dev = [
     { name = "bump2version", specifier = ">=1.0.1,<2" },
     { name = "coverage", specifier = "==7.4.0" },
     { name = "django-debug-toolbar", specifier = ">=4.1.0,<5" },
+    { name = "django-zeal", specifier = ">=2.1.0" },
     { name = "djlint", specifier = ">=1.32.1,<2" },
     { name = "factory-boy", specifier = ">=3.2.1,<4" },
     { name = "ipython", specifier = ">=8.10.0,<9" },
@@ -797,6 +799,15 @@ wheels = [
 azure = [
     { name = "azure-core" },
     { name = "azure-storage-blob" },
+]
+
+[[package]]
+name = "django-zeal"
+version = "2.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a8/ef/f15e7576914df0f2a3e6181243bd1d9a733fc091409d3b62ddd194c73a7b/django_zeal-2.1.0.tar.gz", hash = "sha256:56fe4b2360f3baef4f6feec4d49fd074d8828d53a898d169a938c3cb912294fb", size = 17043, upload-time = "2026-03-18T18:53:03.819Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3f/d3/2e750ea3636e63ff210a9f38eb2f72e40a879928efe49186c68ca66a503a/django_zeal-2.1.0-py3-none-any.whl", hash = "sha256:622728184832d4f13503ce9c01ae0c77a98be716011b9036e3baf9ab16cb2c81", size = 13310, upload-time = "2026-03-18T18:53:02.556Z" },
 ]
 
 [[package]]
