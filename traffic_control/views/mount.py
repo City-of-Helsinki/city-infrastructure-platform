@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
@@ -22,7 +23,9 @@ from traffic_control.models import (
     MountRealOperation,
     MountType,
     PortalType,
+    TrafficSignReal,
 )
+from traffic_control.models.utils import order_queryset_by_z_coord_desc
 from traffic_control.permissions import IsAdminUserOrReadOnly
 from traffic_control.schema import (
     file_create_serializer,
@@ -48,6 +51,7 @@ from traffic_control.services.mount import mount_plan_get_active, mount_plan_sof
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    PermissionFilteredFilePrefetchMixin,
     prefetch_replacements,
     TrafficControlViewSet,
 )
@@ -63,21 +67,21 @@ __all__ = ("MountPlanViewSet", "MountRealViewSet", "PortalTypeViewSet")
     partial_update=extend_schema(summary="Partially update single Mount Plan"),
     destroy=extend_schema(summary="Soft-delete single Mount Plan"),
 )
-class MountPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
+class MountPlanViewSet(
+    PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin
+):
     serializer_classes = {
         "default": MountPlanOutputSerializer,
         "geojson": MountPlanGeoJSONOutputSerializer,
         "input": MountPlanInputSerializer,
         "input_geojson": MountPlanGeoJSONInputSerializer,
     }
-    queryset = prefetch_replacements(mount_plan_get_active().prefetch_related("files"))
+    queryset = prefetch_replacements(mount_plan_get_active())
     filterset_class = MountPlanFilterSet
     file_queryset = MountPlanFile.objects.all()
     file_serializer = MountPlanFileSerializer
     file_relation = "mount_plan"
-
-    def get_list_queryset(self):
-        return prefetch_replacements(mount_plan_get_active()).prefetch_related("files")
+    file_permission_codename = "traffic_control.view_mountplanfile"
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -134,23 +138,31 @@ class MountPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelM
     partial_update=extend_schema(summary="Partially update single Mount Real"),
     destroy=extend_schema(summary="Soft-delete single Mount Real"),
 )
-class MountRealViewSet(TrafficControlViewSet, FileUploadViews):
+class MountRealViewSet(PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": MountRealSerializer,
         "geojson": MountRealGeoJSONSerializer,
     }
     serializer_class = MountRealSerializer
+    base_traffic_sign_qs = TrafficSignReal.objects.active()
     queryset = (
         MountReal.objects.active()
-        .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
+        .prefetch_related(
+            Prefetch(
+                "trafficsignreal_set",
+                queryset=order_queryset_by_z_coord_desc(base_traffic_sign_qs),
+                to_attr="prefetched_active_trafficsignreal_set",
+            )
+        )
         .select_related("mount_plan__plan")
     )
     filterset_class = MountRealFilterSet
     file_queryset = MountRealFile.objects.all()
     file_serializer = MountRealFileSerializer
     file_relation = "mount_real"
+    file_permission_codename = "traffic_control.view_mountrealfile"
 
     @extend_schema(
         methods=("post",),

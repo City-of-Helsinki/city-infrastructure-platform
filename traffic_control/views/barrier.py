@@ -29,6 +29,7 @@ from traffic_control.services.barrier import barrier_plan_get_active, barrier_pl
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    PermissionFilteredFilePrefetchMixin,
     prefetch_replacements,
     TrafficControlViewSet,
 )
@@ -44,21 +45,24 @@ __all__ = ("BarrierPlanViewSet", "BarrierRealViewSet")
     partial_update=extend_schema(summary="Partially update single Barrier Plan"),
     destroy=extend_schema(summary="Soft-delete single Barrier Plan"),
 )
-class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
+class BarrierPlanViewSet(
+    PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin
+):
     serializer_classes = {
         "default": BarrierPlanOutputSerializer,
         "geojson": BarrierPlanGeoJSONOutputSerializer,
         "input": BarrierPlanInputSerializer,
         "input_geojson": BarrierPlanGeoJSONInputSerializer,
     }
-    queryset = prefetch_replacements(barrier_plan_get_active()).prefetch_related("files")
+    queryset = prefetch_replacements(barrier_plan_get_active())
     filterset_class = BarrierPlanFilterSet
     file_queryset = BarrierPlanFile.objects.all()
     file_serializer = BarrierPlanFileSerializer
     file_relation = "barrier_plan"
+    file_permission_codename = "traffic_control.view_barrierplanfile"
 
     def get_list_queryset(self):
-        return prefetch_replacements(barrier_plan_get_active()).prefetch_related("files")
+        return prefetch_replacements(barrier_plan_get_active())
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -115,14 +119,13 @@ class BarrierPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableMode
     partial_update=extend_schema(summary="Partially update single Barrier Real"),
     destroy=extend_schema(summary="Soft-delete single Barrier Real"),
 )
-class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
+class BarrierRealViewSet(PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": BarrierRealSerializer,
         "geojson": BarrierRealGeoJSONSerializer,
     }
     queryset = (
         BarrierReal.objects.active()
-        .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
         .select_related("barrier_plan__plan")
@@ -131,6 +134,7 @@ class BarrierRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_queryset = BarrierRealFile.objects.all()
     file_serializer = BarrierRealFileSerializer
     file_relation = "barrier_real"
+    file_permission_codename = "traffic_control.view_barrierrealfile"
 
     @extend_schema(
         methods=("post",),

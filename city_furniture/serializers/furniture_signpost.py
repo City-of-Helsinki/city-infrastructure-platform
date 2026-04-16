@@ -16,7 +16,6 @@ from traffic_control.serializers.common import (
     EwktPointField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
-    PermissionFilteredRelatedField,
 )
 
 
@@ -32,10 +31,7 @@ class FurnitureSignpostPlanSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
-    files = PermissionFilteredRelatedField(
-        permission_codename="city_furniture.view_furnituresignpostplanfile",
-        serializer_class=FurnitureSignpostPlanFileSerializer,
-    )
+    files = FurnitureSignpostPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=CityFurnitureDeviceType.objects.for_target_model(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
     )
@@ -97,10 +93,7 @@ class FurnitureSignpostRealSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
-    files = PermissionFilteredRelatedField(
-        permission_codename="city_furniture.view_furnituresignpostrealfile",
-        serializer_class=FurnitureSignpostRealFileSerializer,
-    )
+    files = FurnitureSignpostRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=CityFurnitureDeviceType.objects.for_target_model(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST)
     )

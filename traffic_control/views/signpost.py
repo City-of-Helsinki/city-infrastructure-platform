@@ -32,6 +32,7 @@ from traffic_control.services.signpost import (
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    PermissionFilteredFilePrefetchMixin,
     prefetch_replacements,
     TrafficControlViewSet,
 )
@@ -47,21 +48,24 @@ __all__ = ("SignpostPlanViewSet", "SignpostRealViewSet")
     partial_update=extend_schema(summary="Partially update single Signpost Plan"),
     destroy=extend_schema(summary="Soft-delete single Signpost Plan"),
 )
-class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
+class SignpostPlanViewSet(
+    PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin
+):
     serializer_classes = {
         "default": SignpostPlanOutputSerializer,
         "geojson": SignpostPlanGeoJSONOutputSerializer,
         "input": SignpostPlanInputSerializer,
         "input_geojson": SignpostPlanGeoJSONInputSerializer,
     }
-    queryset = prefetch_replacements(signpost_plan_get_active()).prefetch_related("files")
+    queryset = prefetch_replacements(signpost_plan_get_active())
     filterset_class = SignpostPlanFilterSet
     file_queryset = SignpostPlanFile.objects.all()
     file_serializer = SignpostPlanFileSerializer
     file_relation = "signpost_plan"
+    file_permission_codename = "traffic_control.view_signpostplanfile"
 
     def get_list_queryset(self):
-        return prefetch_replacements(signpost_plan_get_active()).prefetch_related("files")
+        return prefetch_replacements(signpost_plan_get_active())
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -118,14 +122,13 @@ class SignpostPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableMod
     partial_update=extend_schema(summary="Partially update single Signpost Real"),
     destroy=extend_schema(summary="Soft-delete single Signpost Real"),
 )
-class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
+class SignpostRealViewSet(PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": SignpostRealSerializer,
         "geojson": SignpostRealGeoJSONSerializer,
     }
     queryset = (
         SignpostReal.objects.active()
-        .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
         .select_related("signpost_plan__plan")
@@ -134,6 +137,7 @@ class SignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_queryset = SignpostRealFile.objects.all()
     file_serializer = SignpostRealFileSerializer
     file_relation = "signpost_real"
+    file_permission_codename = "traffic_control.view_signpostrealfile"
 
     @extend_schema(
         methods=("post",),

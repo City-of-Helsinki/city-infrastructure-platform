@@ -34,6 +34,7 @@ from traffic_control.schema import (
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    PermissionFilteredFilePrefetchMixin,
     TrafficControlViewSet,
 )
 
@@ -51,17 +52,18 @@ __all__ = (
     partial_update=extend_schema(summary="Partially update single FurnitureSignpost Plan"),
     destroy=extend_schema(summary="Soft-delete single FurnitureSignpost Plan"),
 )
-class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
+class FurnitureSignpostPlanViewSet(PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": FurnitureSignpostPlanSerializer,
         "geojson": FurnitureSignpostPlanGeoJSONSerializer,
     }
     permission_classes = [ResponsibleEntityPermission, *TrafficControlViewSet.permission_classes]
-    queryset = FurnitureSignpostPlan.objects.active().select_related("device_type").prefetch_related("files")
+    queryset = FurnitureSignpostPlan.objects.active().select_related("device_type").select_related("target")
     filterset_class = FurnitureSignpostPlanFilterSet
     file_queryset = FurnitureSignpostPlanFile.objects.all()
     file_serializer = FurnitureSignpostPlanFileSerializer
     file_relation = "furniture_signpost_plan"
+    file_permission_codename = "city_furniture.view_furnituresignpostplanfile"
 
     @extend_schema(
         methods=("post",),
@@ -113,7 +115,7 @@ class FurnitureSignpostPlanViewSet(TrafficControlViewSet, FileUploadViews):
     partial_update=extend_schema(summary="Partially update single FurnitureSignpost Real"),
     destroy=extend_schema(summary="Soft-delete single FurnitureSignpost Real"),
 )
-class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
+class FurnitureSignpostRealViewSet(PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": FurnitureSignpostRealSerializer,
         "geojson": FurnitureSignpostRealGeoJSONSerializer,
@@ -122,15 +124,16 @@ class FurnitureSignpostRealViewSet(TrafficControlViewSet, FileUploadViews):
     queryset = (
         FurnitureSignpostReal.objects.active()
         .select_related("device_type")
-        .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
+        .prefetch_related("target")
         .select_related("furniture_signpost_plan__plan")
     )
     filterset_class = FurnitureSignpostRealFilterSet
     file_queryset = FurnitureSignpostRealFile.objects.all()
     file_serializer = FurnitureSignpostRealFileSerializer
     file_relation = "furniture_signpost_real"
+    file_permission_codename = "city_furniture.view_furnituresignpostrealfile"
 
     @extend_schema(
         methods=("post",),

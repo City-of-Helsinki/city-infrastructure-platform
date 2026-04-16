@@ -16,7 +16,6 @@ from traffic_control.serializers.common import (
     EwktPointField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
-    PermissionFilteredRelatedField,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
@@ -70,10 +69,7 @@ class SignpostPlanOutputSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
-    files = PermissionFilteredRelatedField(
-        permission_codename="traffic_control.view_signpostplanfile",
-        serializer_class=SignpostPlanFileSerializer,
-    )
+    files = SignpostPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST),
         allow_null=True,
@@ -131,10 +127,7 @@ class SignpostRealSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
-    files = PermissionFilteredRelatedField(
-        permission_codename="traffic_control.view_signpostrealfile",
-        serializer_class=SignpostRealFileSerializer,
-    )
+    files = SignpostRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.SIGNPOST),
         allow_null=True,

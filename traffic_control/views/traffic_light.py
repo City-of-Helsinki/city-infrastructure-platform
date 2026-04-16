@@ -41,6 +41,7 @@ from traffic_control.services.traffic_light import (
 from traffic_control.views._common import (
     FileUploadViews,
     OperationViewSet,
+    PermissionFilteredFilePrefetchMixin,
     prefetch_replacements,
     TrafficControlViewSet,
 )
@@ -56,21 +57,24 @@ __all__ = ("TrafficLightPlanViewSet", "TrafficLightRealViewSet")
     partial_update=extend_schema(summary="Partially update single TrafficLight Plan"),
     destroy=extend_schema(summary="Soft-delete single TrafficLight Plan"),
 )
-class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin):
+class TrafficLightPlanViewSet(
+    PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews, ReplaceableModelMixin
+):
     serializer_classes = {
         "default": TrafficLightPlanOutputSerializer,
         "geojson": TrafficLightPlanGeoJSONOutputSerializer,
         "input": TrafficLightPlanInputSerializer,
         "input_geojson": TrafficLightPlanGeoJSONInputSerializer,
     }
-    queryset = prefetch_replacements(traffic_light_plan_get_active()).prefetch_related("files")
+    queryset = prefetch_replacements(traffic_light_plan_get_active())
     filterset_class = TrafficLightPlanFilterSet
     file_queryset = TrafficLightPlanFile.objects.all()
     file_serializer = TrafficLightPlanFileSerializer
     file_relation = "traffic_light_plan"
+    file_permission_codename = "traffic_control.view_trafficlightplanfile"
 
     def get_list_queryset(self):
-        return prefetch_replacements(traffic_light_plan_get_active()).prefetch_related("files")
+        return prefetch_replacements(traffic_light_plan_get_active())
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -127,14 +131,13 @@ class TrafficLightPlanViewSet(TrafficControlViewSet, FileUploadViews, Replaceabl
     partial_update=extend_schema(summary="Partially update single TrafficLight Real"),
     destroy=extend_schema(summary="Soft-delete single TrafficLight Real"),
 )
-class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
+class TrafficLightRealViewSet(PermissionFilteredFilePrefetchMixin, TrafficControlViewSet, FileUploadViews):
     serializer_classes = {
         "default": TrafficLightRealSerializer,
         "geojson": TrafficLightRealGeoJSONSerializer,
     }
     queryset = (
         TrafficLightReal.objects.active()
-        .prefetch_related("files")
         .prefetch_related("operations")
         .prefetch_related("operations__operation_type")
         .select_related("traffic_light_plan__plan")
@@ -143,6 +146,7 @@ class TrafficLightRealViewSet(TrafficControlViewSet, FileUploadViews):
     file_queryset = TrafficLightRealFile.objects.all()
     file_serializer = TrafficLightRealFileSerializer
     file_relation = "traffic_light_real"
+    file_permission_codename = "traffic_control.view_trafficlightrealfile"
 
     @extend_schema(
         methods=("post",),

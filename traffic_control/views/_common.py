@@ -1,7 +1,9 @@
 from django.core import exceptions
+from django.db.models import Prefetch
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
+from guardian.shortcuts import get_objects_for_user
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -17,7 +19,13 @@ from traffic_control.schema import geo_format_parameter
 from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
 from traffic_control.utils import get_file_upload_obstacles
 
-__all__ = ("prefetch_replacements", "FileUploadViews", "TrafficControlViewSet", "OperationViewSet")
+__all__ = (
+    "prefetch_replacements",
+    "FileUploadViews",
+    "TrafficControlViewSet",
+    "PermissionFilteredFilePrefetchMixin",
+    "OperationViewSet",
+)
 
 
 def prefetch_replacements(queryset):
@@ -97,6 +105,35 @@ class TrafficControlViewSet(ModelViewSet, AuditLoggingMixin):
         output_serializer = self.serializer_classes.get("default")
         output_data = output_serializer(serializer.instance, context=serializer.context).data
         return Response(output_data)
+
+
+class PermissionFilteredFilePrefetchMixin:
+    # Mixin to automatically prefetch permission-filtered files to solve N+1 problems.
+    # Requires the ViewSet to define file_queryset, file_related_name, and file_permission_codename.
+
+    file_queryset = None
+    file_related_name = "files"
+    file_permission_codename = None
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        user = self.request.user
+
+        if self.file_queryset is None or not self.file_permission_codename:
+            return qs
+
+        if user and user.is_authenticated:
+            permitted_files = get_objects_for_user(
+                user,
+                self.file_permission_codename,
+                klass=self.file_queryset,
+                accept_global_perms=True,
+            )
+            viewable_files = permitted_files | self.file_queryset.filter(is_public=True)
+        else:
+            viewable_files = self.file_queryset.filter(is_public=True)
+
+        return qs.prefetch_related(Prefetch(self.file_related_name, queryset=viewable_files.distinct()))
 
 
 class FileUploadViews(GenericViewSet):

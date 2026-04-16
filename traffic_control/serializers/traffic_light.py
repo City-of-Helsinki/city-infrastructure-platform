@@ -16,7 +16,6 @@ from traffic_control.serializers.common import (
     EwktPointField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
-    PermissionFilteredRelatedField,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
@@ -70,10 +69,7 @@ class TrafficLightPlanOutputSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
-    files = PermissionFilteredRelatedField(
-        permission_codename="traffic_control.view_trafficlightplanfile",
-        serializer_class=TrafficLightPlanFileSerializer,
-    )
+    files = TrafficLightPlanFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT),
         allow_null=True,
@@ -131,10 +127,7 @@ class TrafficLightRealSerializer(
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
-    files = PermissionFilteredRelatedField(
-        permission_codename="traffic_control.view_trafficlightrealfile",
-        serializer_class=TrafficLightRealFileSerializer,
-    )
+    files = TrafficLightRealFileSerializer(many=True, read_only=True)
     device_type = serializers.PrimaryKeyRelatedField(
         queryset=TrafficControlDeviceType.objects.for_target_model(DeviceTypeTargetModel.TRAFFIC_LIGHT),
         allow_null=True,
