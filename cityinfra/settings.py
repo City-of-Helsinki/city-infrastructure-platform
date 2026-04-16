@@ -7,7 +7,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 import os
 import sys
 
@@ -588,6 +587,7 @@ AXES_CLIENT_IP_CALLABLE = "traffic_control.utils.get_client_ip"
 
 DEBUG_TOOLBAR = False
 if DEBUG:
+    # Setup debug toolbar
     try:
         import debug_toolbar  # noqa
 
@@ -606,3 +606,8 @@ if DEBUG:
             INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1"]
         except Exception:
             INTERNAL_IPS = ["127.0.0.1", "localhost"]
+
+    # Setup detection of n+1 problems on console
+    INSTALLED_APPS.append("zeal")
+    MIDDLEWARE.append("zeal.middleware.zeal_middleware")
+    ZEAL_RAISE = False

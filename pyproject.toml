@@ -61,6 +61,7 @@ dev = [
     "rope>=1.7.0,<2",
     "ruff>=0.1.9,<0.2",
     "requests-mock>=1.11.0,<2",
+    "django-zeal>=2.1.0",
 ]
 
 [tool.uv]
