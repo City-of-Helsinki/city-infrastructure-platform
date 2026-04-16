@@ -32,10 +32,15 @@ from traffic_control.admin.signpost import (
     SignpostRealAdmin,
     SignpostRealFileInline,
 )
+from traffic_control.admin.signpost_migration import (
+    SignpostMigrationPlanRecordAdmin,
+    SignpostTrafficSignMigrationRealRecordAdmin,
+    SignpostTrafficSignMigrationRunAdmin,
+)
 from traffic_control.admin.ticket_machine_migration import (
     TicketMachineMigrationPlanRecordAdmin,
-    TicketMachineMigrationRealRecordAdmin,
-    TicketMachineMigrationRunAdmin,
+    TicketMachineTrafficSignMigrationRealRecordAdmin,
+    TicketMachineTrafficSignMigrationRunAdmin,
 )
 from traffic_control.admin.traffic_light import (
     TrafficLightPlanAdmin,

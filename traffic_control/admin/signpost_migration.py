@@ -1,4 +1,4 @@
-"""Django admin configuration for ticket machine migration tracking models."""
+"""Django admin configuration for signpost migration tracking models."""
 from django.contrib import admin
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -13,26 +13,23 @@ from traffic_control.admin.common import (
     TrafficSignMigrationRecordAdminMixin,
     TrafficSignMigrationRunAdminMixin,
 )
-from traffic_control.models.ticket_machine_migration import (
-    TicketMachineMigrationPlanRecord,
-    TicketMachineMigrationRealRecord,
-    TicketMachineMigrationRun,
+from traffic_control.models.signpost_migration import (
+    SignpostMigrationPlanRecord,
+    SignpostMigrationRealRecord,
+    SignpostMigrationRun,
 )
 
 
-class TicketMachineMigrationPlanRecordInline(admin.TabularInline):
+class SignpostMigrationPlanRecordInline(admin.TabularInline):
     """Inline for viewing plan migration records within a run."""
 
-    model = TicketMachineMigrationPlanRecord
+    model = SignpostMigrationPlanRecord
     extra = 0
     can_delete = False
     fields = (
         "original_id",
         "new_id",
         "device_type_code",
-        "parent_found",
-        "parent_sign_code",
-        "multiple_parents_found",
         "files_migrated",
     )
     readonly_fields = fields
@@ -42,20 +39,17 @@ class TicketMachineMigrationPlanRecordInline(admin.TabularInline):
         return False
 
 
-class TicketMachineMigrationRealRecordInline(admin.TabularInline):
+class SignpostMigrationRealRecordInline(admin.TabularInline):
     """Inline for viewing real migration records within a run."""
 
-    model = TicketMachineMigrationRealRecord
+    model = SignpostMigrationRealRecord
     extra = 0
     can_delete = False
     fields = (
         "original_id",
         "new_id",
         "device_type_code",
-        "parent_found",
-        "parent_sign_code",
         "plan_mapping_found",
-        "multiple_parents_found",
         "files_migrated",
     )
     readonly_fields = fields
@@ -65,9 +59,9 @@ class TicketMachineMigrationRealRecordInline(admin.TabularInline):
         return False
 
 
-@admin.register(TicketMachineMigrationRun)
-class TicketMachineTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixin, admin.ModelAdmin):
-    """Admin interface for ticket machine migration runs."""
+@admin.register(SignpostMigrationRun)
+class SignpostTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixin, admin.ModelAdmin):
+    """Admin interface for signpost migration runs."""
 
     list_display = (
         "id",
@@ -93,12 +87,10 @@ class TicketMachineTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixi
         "hard_delete",
         "plans_processed",
         "plans_migrated",
-        "plans_with_parent",
-        "plans_without_parent",
         "reals_processed",
         "reals_migrated",
-        "reals_with_parent",
-        "reals_without_parent",
+        "plan_files_migrated",
+        "real_files_migrated",
         "device_types_updated",
         "error_message",
         "success",
@@ -128,8 +120,7 @@ class TicketMachineTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixi
                 "fields": (
                     "plans_processed",
                     "plans_migrated",
-                    "plans_with_parent",
-                    "plans_without_parent",
+                    "plan_files_migrated",
                     "plan_records_link",
                 )
             },
@@ -140,8 +131,7 @@ class TicketMachineTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixi
                 "fields": (
                     "reals_processed",
                     "reals_migrated",
-                    "reals_with_parent",
-                    "reals_without_parent",
+                    "real_files_migrated",
                     "real_records_link",
                 )
             },
@@ -165,59 +155,49 @@ class TicketMachineTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixi
             },
         ),
     )
-    inlines = [TicketMachineMigrationPlanRecordInline, TicketMachineMigrationRealRecordInline]
+    inlines = [SignpostMigrationPlanRecordInline, SignpostMigrationRealRecordInline]
 
     @admin.display(description=_("Plans"))
-    def plans_summary(self, obj: TicketMachineMigrationRun) -> str:
+    def plans_summary(self, obj: SignpostMigrationRun) -> str:
         """Display plan migration summary."""
         if obj.plans_processed == 0:
             return "-"
 
         percentage = (obj.plans_migrated / obj.plans_processed * 100) if obj.plans_processed > 0 else 0
-        parent_percentage = (obj.plans_with_parent / obj.plans_processed * 100) if obj.plans_processed > 0 else 0
 
         return format_html(
-            "<strong>{}/{}</strong> migrated ({}%)<br/>"
-            '<small style="color: #28a745;">✓ {} with parent ({}%)</small><br/>'
-            '<small style="color: #6c757d;">○ {} without parent</small>',
+            "<strong>{}/{}</strong> migrated ({}%)<br/>" '<small style="color: #6c757d;">{} files</small>',
             obj.plans_migrated,
             obj.plans_processed,
             int(percentage),
-            obj.plans_with_parent,
-            int(parent_percentage),
-            obj.plans_without_parent,
+            obj.plan_files_migrated,
         )
 
     @admin.display(description=_("Reals"))
-    def reals_summary(self, obj: TicketMachineMigrationRun) -> str:
+    def reals_summary(self, obj: SignpostMigrationRun) -> str:
         """Display real migration summary."""
         if obj.reals_processed == 0:
             return "-"
 
         percentage = (obj.reals_migrated / obj.reals_processed * 100) if obj.reals_processed > 0 else 0
-        parent_percentage = (obj.reals_with_parent / obj.reals_processed * 100) if obj.reals_processed > 0 else 0
 
         return format_html(
-            "<strong>{}/{}</strong> migrated ({}%)<br/>"
-            '<small style="color: #28a745;">✓ {} with parent ({}%)</small><br/>'
-            '<small style="color: #6c757d;">○ {} without parent</small>',
+            "<strong>{}/{}</strong> migrated ({}%)<br/>" '<small style="color: #6c757d;">{} files</small>',
             obj.reals_migrated,
             obj.reals_processed,
             int(percentage),
-            obj.reals_with_parent,
-            int(parent_percentage),
-            obj.reals_without_parent,
+            obj.real_files_migrated,
         )
 
     @admin.display(description=_("Plan Records"))
-    def plan_records_link(self, obj: TicketMachineMigrationRun) -> str:
+    def plan_records_link(self, obj: SignpostMigrationRun) -> str:
         """Create link to view all plan records for this run."""
         count = obj.plan_records.count()
         if count == 0:
             return "-"
 
         url = reverse(
-            "admin:traffic_control_ticketmachinemigrationplanrecord_changelist",
+            "admin:traffic_control_signpostmigrationplanrecord_changelist",
             query={"migration_run__id__exact": obj.id},
         )
         return format_html(
@@ -228,14 +208,14 @@ class TicketMachineTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixi
         )
 
     @admin.display(description=_("Real Records"))
-    def real_records_link(self, obj: TicketMachineMigrationRun) -> str:
+    def real_records_link(self, obj: SignpostMigrationRun) -> str:
         """Create link to view all real records for this run."""
         count = obj.real_records.count()
         if count == 0:
             return "-"
 
         url = reverse(
-            "admin:traffic_control_ticketmachinemigrationrealrecord_changelist",
+            "admin:traffic_control_signpostmigrationrealrecord_changelist",
             query={"migration_run__id__exact": obj.id},
         )
         return format_html(
@@ -246,9 +226,19 @@ class TicketMachineTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixi
         )
 
     @admin.display(description=_("Lost Field Values"))
-    def lost_field_values_display(self, obj: TicketMachineMigrationRun) -> str:
+    def lost_field_values_display(self, obj: SignpostMigrationRun) -> str:
         """Display lost field values in a formatted way."""
-        all_lost_fields = ["value", "txt", "double_sided", "peak_fastened", "affect_area"]
+        all_lost_fields = [
+            "surface_class",
+            "peak_fastened",
+            "affect_area",
+            "installation_id",
+            "installation_details",
+            "permit_decision_id",
+            "rfid",
+            "operation",
+            "attachment_url",
+        ]
         lost_data = obj.lost_field_values or {}
 
         field_data = []
@@ -258,11 +248,11 @@ class TicketMachineTrafficSignMigrationRunAdmin(TrafficSignMigrationRunAdminMixi
 
         context = {"fields": field_data}
 
-        return render_to_string("admin/traffic_control/ticketmachinemigrationrun/lost_field_values.html", context)
+        return render_to_string("admin/traffic_control/signpostmigrationrun/lost_field_values.html", context)
 
 
-@admin.register(TicketMachineMigrationPlanRecord)
-class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminMixin, admin.ModelAdmin):
+@admin.register(SignpostMigrationPlanRecord)
+class SignpostMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminMixin, admin.ModelAdmin):
     """Admin interface for plan migration detail records."""
 
     list_display = (
@@ -271,7 +261,6 @@ class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminM
         "device_type_code",
         "original_id_short",
         "new_id_short",
-        "parent_status",
         "field_population_summary",
         "lost_data_summary",
         "files_migrated",
@@ -279,8 +268,6 @@ class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminM
     )
     list_filter = (
         "device_type_code",
-        "parent_found",
-        "multiple_parents_found",
         "migration_run__dry_run",
         "migration_run__success",
         "created_at",
@@ -289,22 +276,16 @@ class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminM
         "original_id",
         "new_id",
         "device_type_code",
-        "parent_sign_code",
-        "lost_value",
-        "lost_txt",
+        "lost_surface_class",
     )
-    list_select_related = ("migration_run", "original_traffic_sign_plan", "new_additional_sign_plan")
+    list_select_related = ("migration_run", "original_traffic_sign_plan", "new_signpost_plan")
     readonly_fields = (
         "migration_run",
         "original_traffic_sign_plan",
-        "new_additional_sign_plan",
+        "new_signpost_plan",
         "original_id",
         "new_id",
         "device_type_code",
-        "parent_found",
-        "parent_sign_id",
-        "parent_sign_code",
-        "multiple_parents_found",
         "had_mount_plan",
         "had_plan",
         "had_height",
@@ -321,15 +302,9 @@ class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminM
         "had_validity_period_end",
         "had_source_name",
         "had_source_id",
-        "lost_value",
-        "lost_txt",
-        "lost_double_sided",
+        "lost_surface_class",
         "lost_peak_fastened",
         "had_affect_area",
-        "set_color_to_blue",
-        "set_content_s_null",
-        "set_missing_content_false",
-        "set_additional_information_empty",
         "files_migrated",
         "created_at",
     )
@@ -351,18 +326,7 @@ class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminM
                     "original_id",
                     "original_traffic_sign_plan",
                     "new_id",
-                    "new_additional_sign_plan",
-                )
-            },
-        ),
-        (
-            _("Parent Assignment"),
-            {
-                "fields": (
-                    "parent_found",
-                    "parent_sign_id",
-                    "parent_sign_code",
-                    "multiple_parents_found",
+                    "new_signpost_plan",
                 )
             },
         ),
@@ -396,23 +360,9 @@ class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminM
             _("Lost Fields"),
             {
                 "fields": (
-                    "lost_value",
-                    "lost_txt",
-                    "lost_double_sided",
+                    "lost_surface_class",
                     "lost_peak_fastened",
                     "had_affect_area",
-                ),
-                "classes": ("collapse",),
-            },
-        ),
-        (
-            _("Default Values Set"),
-            {
-                "fields": (
-                    "set_color_to_blue",
-                    "set_content_s_null",
-                    "set_missing_content_false",
-                    "set_additional_information_empty",
                 ),
                 "classes": ("collapse",),
             },
@@ -424,30 +374,17 @@ class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminM
     )
 
     @admin.display(description=_("Migration Run"))
-    def migration_run_link(self, obj: TicketMachineMigrationPlanRecord) -> str:
+    def migration_run_link(self, obj: SignpostMigrationPlanRecord) -> str:
         """Create link to parent migration run."""
-        url = reverse("admin:traffic_control_ticketmachinemigrationrun_change", args=[obj.migration_run.id])
+        url = reverse("admin:traffic_control_signpostmigrationrun_change", args=[obj.migration_run.id])
         return format_html('<a href="{}">Run #{}</a>', url, obj.migration_run.id)
 
-    @admin.display(description=_("Parent"))
-    def parent_status(self, obj: TicketMachineMigrationPlanRecord) -> str:
-        """Display parent assignment status."""
-        if obj.parent_found:
-            style = "color: #28a745; font-weight: bold;"
-            warning = " ⚠" if obj.multiple_parents_found else ""
-            return format_html('<span style="{}">✓ {}{}</span>', style, obj.parent_sign_code, warning)
-        return mark_safe('<span style="color: #6c757d;">○ No parent</span>')
-
     @admin.display(description=_("Lost Data"))
-    def lost_data_summary(self, obj: TicketMachineMigrationPlanRecord) -> str:
+    def lost_data_summary(self, obj: SignpostMigrationPlanRecord) -> str:
         """Display summary of lost data."""
         lost_items = []
-        if obj.lost_value:
-            lost_items.append("value")
-        if obj.lost_txt:
-            lost_items.append("txt")
-        if obj.lost_double_sided:
-            lost_items.append("double_sided")
+        if obj.lost_surface_class:
+            lost_items.append("surface_class")
         if obj.lost_peak_fastened:
             lost_items.append("peak_fastened")
         if obj.had_affect_area:
@@ -459,8 +396,8 @@ class TicketMachineMigrationPlanRecordAdmin(TrafficSignMigrationPlanRecordAdminM
         return format_html('<span style="color: #ffc107;">{}</span>', ", ".join(lost_items))
 
 
-@admin.register(TicketMachineMigrationRealRecord)
-class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecordAdminMixin, admin.ModelAdmin):
+@admin.register(SignpostMigrationRealRecord)
+class SignpostTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecordAdminMixin, admin.ModelAdmin):
     """Admin interface for real migration detail records."""
 
     list_display = (
@@ -469,7 +406,6 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
         "device_type_code",
         "original_id_short",
         "new_id_short",
-        "parent_status",
         "plan_mapping_status",
         "field_population_summary",
         "lost_data_summary",
@@ -478,9 +414,7 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
     )
     list_filter = (
         "device_type_code",
-        "parent_found",
         "plan_mapping_found",
-        "multiple_parents_found",
         "migration_run__dry_run",
         "migration_run__success",
         "created_at",
@@ -489,22 +423,18 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
         "original_id",
         "new_id",
         "device_type_code",
-        "parent_sign_code",
-        "lost_value",
-        "lost_txt",
+        "lost_surface_class",
+        "lost_installation_id",
+        "lost_permit_decision_id",
     )
-    list_select_related = ("migration_run", "original_traffic_sign_real", "new_additional_sign_real")
+    list_select_related = ("migration_run", "original_traffic_sign_real", "new_signpost_real")
     readonly_fields = (
         "migration_run",
         "original_traffic_sign_real",
-        "new_additional_sign_real",
+        "new_signpost_real",
         "original_id",
         "new_id",
         "device_type_code",
-        "parent_found",
-        "parent_sign_id",
-        "parent_sign_code",
-        "multiple_parents_found",
         "plan_mapping_found",
         "had_mount_real",
         "had_traffic_sign_plan",
@@ -519,30 +449,23 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
         "had_lane_type",
         "had_location_specifier",
         "had_legacy_code",
-        "had_installation_id",
-        "had_installation_details",
-        "had_permit_decision_id",
         "had_scanned_at",
         "had_manufacturer",
-        "had_rfid",
-        "had_operation",
-        "had_attachment_url",
         "had_validity_period_start",
         "had_validity_period_end",
         "had_source_name",
         "had_source_id",
         "had_installation_status",
         "had_installation_date",
-        "had_installation_status_note",
-        "lost_value",
-        "lost_txt",
-        "lost_double_sided",
+        "had_condition",
+        "lost_surface_class",
         "lost_peak_fastened",
-        "set_color_to_blue",
-        "set_content_s_null",
-        "set_missing_content_false",
-        "set_additional_information_empty",
-        "set_installed_by_null",
+        "lost_installation_id",
+        "lost_installation_details",
+        "lost_permit_decision_id",
+        "lost_rfid",
+        "lost_operation",
+        "lost_attachment_url",
         "files_migrated",
         "created_at",
     )
@@ -564,18 +487,7 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
                     "original_id",
                     "original_traffic_sign_real",
                     "new_id",
-                    "new_additional_sign_real",
-                )
-            },
-        ),
-        (
-            _("Parent Assignment"),
-            {
-                "fields": (
-                    "parent_found",
-                    "parent_sign_id",
-                    "parent_sign_code",
-                    "multiple_parents_found",
+                    "new_signpost_real",
                 )
             },
         ),
@@ -606,11 +518,9 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
             _("Field Population - Installation"),
             {
                 "fields": (
-                    "had_installation_id",
-                    "had_installation_details",
                     "had_installation_status",
                     "had_installation_date",
-                    "had_installation_status_note",
+                    "had_condition",
                 )
             },
         ),
@@ -619,12 +529,8 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
             {
                 "fields": (
                     "had_legacy_code",
-                    "had_permit_decision_id",
                     "had_scanned_at",
                     "had_manufacturer",
-                    "had_rfid",
-                    "had_operation",
-                    "had_attachment_url",
                     "had_validity_period_start",
                     "had_validity_period_end",
                     "had_source_name",
@@ -636,23 +542,14 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
             _("Lost Fields"),
             {
                 "fields": (
-                    "lost_value",
-                    "lost_txt",
-                    "lost_double_sided",
+                    "lost_surface_class",
                     "lost_peak_fastened",
-                ),
-                "classes": ("collapse",),
-            },
-        ),
-        (
-            _("Default Values Set"),
-            {
-                "fields": (
-                    "set_color_to_blue",
-                    "set_content_s_null",
-                    "set_missing_content_false",
-                    "set_additional_information_empty",
-                    "set_installed_by_null",
+                    "lost_installation_id",
+                    "lost_installation_details",
+                    "lost_permit_decision_id",
+                    "lost_rfid",
+                    "lost_operation",
+                    "lost_attachment_url",
                 ),
                 "classes": ("collapse",),
             },
@@ -664,22 +561,13 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
     )
 
     @admin.display(description=_("Migration Run"))
-    def migration_run_link(self, obj: TicketMachineMigrationRealRecord) -> str:
+    def migration_run_link(self, obj: SignpostMigrationRealRecord) -> str:
         """Create link to parent migration run."""
-        url = reverse("admin:traffic_control_ticketmachinemigrationrun_change", args=[obj.migration_run.id])
+        url = reverse("admin:traffic_control_signpostmigrationrun_change", args=[obj.migration_run.id])
         return format_html('<a href="{}">Run #{}</a>', url, obj.migration_run.id)
 
-    @admin.display(description=_("Parent"))
-    def parent_status(self, obj: TicketMachineMigrationRealRecord) -> str:
-        """Display parent assignment status."""
-        if obj.parent_found:
-            style = "color: #28a745; font-weight: bold;"
-            warning = " ⚠" if obj.multiple_parents_found else ""
-            return format_html('<span style="{}">✓ {}{}</span>', style, obj.parent_sign_code, warning)
-        return mark_safe('<span style="color: #6c757d;">○ No parent</span>')
-
     @admin.display(description=_("Plan Mapping"))
-    def plan_mapping_status(self, obj: TicketMachineMigrationRealRecord) -> str:
+    def plan_mapping_status(self, obj: SignpostMigrationRealRecord) -> str:
         """Display plan mapping status."""
         if obj.plan_mapping_found:
             return mark_safe('<span style="color: #28a745;">✓ Mapped</span>')
@@ -688,7 +576,7 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
         return mark_safe('<span style="color: #6c757d;">- No plan</span>')
 
     @admin.display(description=_("Fields Populated"))
-    def field_population_summary(self, obj: TicketMachineMigrationRealRecord) -> str:
+    def field_population_summary(self, obj: SignpostMigrationRealRecord) -> str:
         """Display summary of populated fields."""
         populated = sum(
             [
@@ -705,36 +593,39 @@ class TicketMachineTrafficSignMigrationRealRecordAdmin(TrafficSignMigrationRecor
                 obj.had_lane_type,
                 obj.had_location_specifier,
                 obj.had_legacy_code,
-                obj.had_installation_id,
-                obj.had_installation_details,
-                obj.had_permit_decision_id,
                 obj.had_scanned_at,
                 obj.had_manufacturer,
-                obj.had_rfid,
-                obj.had_operation,
-                obj.had_attachment_url,
                 obj.had_validity_period_start,
                 obj.had_validity_period_end,
                 obj.had_source_name,
                 obj.had_source_id,
                 obj.had_installation_status,
                 obj.had_installation_date,
+                obj.had_condition,
             ]
         )
-        return self._render_field_population_html(populated, 27)
+        return self._render_field_population_html(populated, 20)
 
     @admin.display(description=_("Lost Data"))
-    def lost_data_summary(self, obj: TicketMachineMigrationRealRecord) -> str:
+    def lost_data_summary(self, obj: SignpostMigrationRealRecord) -> str:
         """Display summary of lost data."""
         lost_items = []
-        if obj.lost_value:
-            lost_items.append("value")
-        if obj.lost_txt:
-            lost_items.append("txt")
-        if obj.lost_double_sided:
-            lost_items.append("double_sided")
+        if obj.lost_surface_class:
+            lost_items.append("surface_class")
         if obj.lost_peak_fastened:
             lost_items.append("peak_fastened")
+        if obj.lost_installation_id:
+            lost_items.append("installation_id")
+        if obj.lost_installation_details:
+            lost_items.append("installation_details")
+        if obj.lost_permit_decision_id:
+            lost_items.append("permit_decision_id")
+        if obj.lost_rfid:
+            lost_items.append("rfid")
+        if obj.lost_operation:
+            lost_items.append("operation")
+        if obj.lost_attachment_url:
+            lost_items.append("attachment_url")
 
         if not lost_items:
             return mark_safe('<span style="color: #28a745;">None</span>')

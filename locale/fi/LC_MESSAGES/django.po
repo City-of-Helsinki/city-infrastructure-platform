@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 10:34+0200\n"
+"POT-Creation-Date: 2026-04-21 10:28+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1000,9 +1000,6 @@ msgstr ""
 msgid "Object IDs"
 msgstr ""
 
-msgid "Parent Assignment"
-msgstr ""
-
 msgid "Field Population - Basic"
 msgstr ""
 
@@ -1018,9 +1015,6 @@ msgstr ""
 msgid "Lost Fields"
 msgstr ""
 
-msgid "Default Values Set"
-msgstr ""
-
 msgid "Files"
 msgstr "Tiedostot"
 
@@ -1033,9 +1027,6 @@ msgstr "Alkupäinen ID"
 msgid "New ID"
 msgstr ""
 
-msgid "Parent"
-msgstr ""
-
 msgid "Fields Populated"
 msgstr ""
 
@@ -1043,6 +1034,15 @@ msgid "Plan Mapping"
 msgstr ""
 
 msgid "Field Population - Installation"
+msgstr ""
+
+msgid "Parent Assignment"
+msgstr ""
+
+msgid "Default Values Set"
+msgstr ""
+
+msgid "Parent"
 msgstr ""
 
 msgid "Traffic Light Real"
@@ -2291,6 +2291,12 @@ msgstr "Tämän laitteen valmistaneen organisaation nimi."
 msgid "Date and time on which this signpost was last scanned at."
 msgstr "Tämän opasteen edellisen skannauksen päivämäärä ja kellonaika."
 
+msgid "Attachment URL"
+msgstr "Liite (url)"
+
+msgid "URL of the attachment associated with this signpost."
+msgstr ""
+
 msgid "signpost real"
 msgstr "Opaste (toteuma)"
 
@@ -2311,6 +2317,115 @@ msgstr "Toteumadokumentti (opaste)"
 
 msgid "Signpost Real Files"
 msgstr "Toteumadokumentit (opaste)"
+
+msgid "Executed by"
+msgstr ""
+
+msgid "User who executed the migration command."
+msgstr ""
+
+msgid "Executed at"
+msgstr ""
+
+msgid "Timestamp when the migration was started."
+msgstr ""
+
+msgid "Completed at"
+msgstr ""
+
+msgid ""
+"Timestamp when the migration was completed (successfully or with error)."
+msgstr ""
+
+msgid "Whether this was a dry run (no actual changes made)."
+msgstr ""
+
+msgid "Hard delete"
+msgstr ""
+
+msgid ""
+"Whether original objects were permanently deleted (True) or soft-deleted "
+"(False)."
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Whether the migration completed successfully."
+msgstr ""
+
+msgid "Error message"
+msgstr ""
+
+msgid "Error message if migration failed."
+msgstr ""
+
+msgid "Plans processed"
+msgstr ""
+
+msgid "Plans migrated"
+msgstr ""
+
+msgid "Reals processed"
+msgstr ""
+
+msgid "Reals migrated"
+msgstr ""
+
+msgid "Plan files migrated"
+msgstr ""
+
+msgid "Real files migrated"
+msgstr ""
+
+msgid "Device types updated"
+msgstr ""
+
+msgid "Lost field values"
+msgstr ""
+
+msgid ""
+"Dictionary of field names to sets of unique values that were lost during "
+"migration. Example: {'surface_class': ['FLAT', 'CONVEX'], 'affect_area': "
+"['had_polygon'], 'peak_fastened': ['True', 'False']}"
+msgstr ""
+
+msgid "Signpost Migration Run"
+msgstr ""
+
+msgid "Signpost Migration Runs"
+msgstr ""
+
+msgid "Migration run"
+msgstr ""
+
+msgid "The migration run this record belongs to."
+msgstr ""
+
+msgid "Original TrafficSignPlan"
+msgstr "Alkuperäinen Isäntäkilpi (suunnitelma)"
+
+msgid "New SignpostPlan"
+msgstr "Uusi opaste (suunnitelma)"
+
+
+msgid "ID of the original TrafficSignPlan."
+msgstr "Alkuperäinen Isäntäkilpi (suunnitelma)"
+
+msgid "ID of the new SignpostPlan (null for dry-run)."
+msgstr ""
+
+msgid "Device type code"
+msgstr ""
+
+msgid "Code of the device type being migrated."
+msgstr ""
+
+msgid "Had mount_plan"
+msgstr ""
+
+msgid "Had plan"
+msgstr ""
 
 msgid "Had height"
 msgstr ""
@@ -2354,6 +2469,119 @@ msgstr ""
 msgid "Had source_id"
 msgstr ""
 
+msgid "Lost surface_class"
+msgstr ""
+
+msgid "Value of surface_class field that was lost."
+msgstr ""
+
+msgid "Lost peak_fastened"
+msgstr ""
+
+msgid "Value of peak_fastened field that was lost."
+msgstr ""
+
+msgid "Had affect_area"
+msgstr ""
+
+msgid "Whether the original had an affect_area polygon."
+msgstr ""
+
+msgid "Files migrated"
+msgstr ""
+
+msgid "Signpost Migration Plan Record"
+msgstr ""
+
+msgid "Signpost Migration Plan Records"
+msgstr ""
+
+msgid "Original TrafficSignReal"
+msgstr ""
+
+msgid "New SignpostReal"
+msgstr "Uusi opaste (toteuma)"
+
+msgid "ID of the original TrafficSignReal."
+msgstr "Alkuperäinen Isäntäkilpi (toteuma)"
+
+msgid "ID of the new SignpostReal (null for dry-run)."
+msgstr ""
+
+msgid "Plan mapping found"
+msgstr ""
+
+msgid ""
+"Whether a corresponding SignpostPlan was found for the traffic_sign_plan "
+"reference."
+msgstr ""
+
+msgid "Had mount_real"
+msgstr ""
+
+msgid "Had traffic_sign_plan"
+msgstr ""
+
+msgid "Had legacy_code"
+msgstr ""
+
+msgid "Had scanned_at"
+msgstr ""
+
+msgid "Had manufacturer"
+msgstr ""
+
+msgid "Had installation_status"
+msgstr ""
+
+msgid "Had installation_date"
+msgstr ""
+
+msgid "Had condition"
+msgstr ""
+
+msgid "Lost installation_id"
+msgstr ""
+
+msgid "Value of installation_id field that was lost."
+msgstr ""
+
+msgid "Lost installation_details"
+msgstr ""
+
+msgid "Value of installation_details field that was lost."
+msgstr ""
+
+msgid "Lost permit_decision_id"
+msgstr ""
+
+msgid "Value of permit_decision_id field that was lost."
+msgstr ""
+
+msgid "Lost rfid"
+msgstr ""
+
+msgid "Value of rfid field that was lost."
+msgstr ""
+
+msgid "Lost operation"
+msgstr ""
+
+msgid "Value of operation field that was lost."
+msgstr ""
+
+msgid "Lost attachment_url"
+msgstr ""
+
+msgid "Value of attachment_url field that was lost."
+msgstr ""
+
+msgid "Signpost Migration Real Record"
+msgstr ""
+
+msgid "Signpost Migration Real Records"
+msgstr ""
+
 msgid "Lost value"
 msgstr ""
 
@@ -2361,9 +2589,6 @@ msgid "Lost txt"
 msgstr ""
 
 msgid "Lost double_sided"
-msgstr ""
-
-msgid "Lost peak_fastened"
 msgstr ""
 
 msgid "Set color to BLUE"
@@ -2378,9 +2603,6 @@ msgstr ""
 msgid "Set additional_information to empty"
 msgstr ""
 
-msgid "Files migrated"
-msgstr ""
-
 msgid "Number of file attachments migrated."
 msgstr ""
 
@@ -2390,34 +2612,13 @@ msgstr ""
 msgid "Timestamp when the migration command started."
 msgstr ""
 
-msgid "Completed at"
-msgstr ""
-
 msgid "Timestamp when the migration command completed successfully."
-msgstr ""
-
-msgid "Executed by"
-msgstr ""
-
-msgid "User who executed the migration command."
-msgstr ""
-
-msgid "Whether this was a dry run (no actual changes made)."
-msgstr ""
-
-msgid "Hard delete"
 msgstr ""
 
 msgid "Whether hard-delete mode was used (true) or soft-delete (false)."
 msgstr ""
 
-msgid "Plans processed"
-msgstr ""
-
 msgid "Total number of TrafficSignPlan objects processed."
-msgstr ""
-
-msgid "Plans migrated"
 msgstr ""
 
 msgid "Number of TrafficSignPlan objects successfully migrated."
@@ -2435,13 +2636,7 @@ msgstr ""
 msgid "Number of plans that had no parent sign found."
 msgstr ""
 
-msgid "Reals processed"
-msgstr ""
-
 msgid "Total number of TrafficSignReal objects processed."
-msgstr ""
-
-msgid "Reals migrated"
 msgstr ""
 
 msgid "Number of TrafficSignReal objects successfully migrated."
@@ -2459,25 +2654,10 @@ msgstr ""
 msgid "Number of reals that had no parent sign found."
 msgstr ""
 
-msgid "Device types updated"
-msgstr ""
-
 msgid "Number of device types with target_model updated."
 msgstr ""
 
-msgid "Error message"
-msgstr ""
-
 msgid "Error message if the migration failed."
-msgstr ""
-
-msgid "Success"
-msgstr ""
-
-msgid "Whether the migration completed successfully."
-msgstr ""
-
-msgid "Lost field values"
 msgstr ""
 
 msgid ""
@@ -2492,15 +2672,6 @@ msgstr ""
 msgid "Ticket Machine Migration Runs"
 msgstr ""
 
-msgid "Migration run"
-msgstr ""
-
-msgid "The migration run this record belongs to."
-msgstr ""
-
-msgid "Original TrafficSignPlan"
-msgstr "Alkeperäinen Isäntäkilpi (suunnitelma)"
-
 msgid "The original TrafficSignPlan that was migrated."
 msgstr ""
 
@@ -2514,9 +2685,6 @@ msgid "UUID of the original TrafficSignPlan (preserved even if deleted)."
 msgstr ""
 
 msgid "UUID of the new AdditionalSignPlan."
-msgstr ""
-
-msgid "Device type code"
 msgstr ""
 
 msgid "Device type code of the ticket machine."
@@ -2546,22 +2714,10 @@ msgstr ""
 msgid "Whether multiple E2/521 signs were found on the same mount."
 msgstr ""
 
-msgid "Had mount_plan"
-msgstr ""
-
-msgid "Had plan"
-msgstr ""
-
-msgid "Had affect_area"
-msgstr ""
-
 msgid "Ticket Machine Migration Plan Record"
 msgstr ""
 
 msgid "Ticket Machine Migration Plan Records"
-msgstr ""
-
-msgid "Original TrafficSignReal"
 msgstr ""
 
 msgid "The original TrafficSignReal that was migrated."
@@ -2582,20 +2738,8 @@ msgstr ""
 msgid "UUID of the parent TrafficSignReal if found."
 msgstr ""
 
-msgid "Plan mapping found"
-msgstr ""
-
 msgid ""
 "Whether a corresponding AdditionalSignPlan was found for traffic_sign_plan."
-msgstr ""
-
-msgid "Had mount_real"
-msgstr ""
-
-msgid "Had traffic_sign_plan"
-msgstr ""
-
-msgid "Had legacy_code"
 msgstr ""
 
 msgid "Had installation_id"
@@ -2607,12 +2751,6 @@ msgstr ""
 msgid "Had permit_decision_id"
 msgstr ""
 
-msgid "Had scanned_at"
-msgstr ""
-
-msgid "Had manufacturer"
-msgstr ""
-
 msgid "Had rfid"
 msgstr ""
 
@@ -2620,12 +2758,6 @@ msgid "Had operation"
 msgstr ""
 
 msgid "Had attachment_url"
-msgstr ""
-
-msgid "Had installation_status"
-msgstr ""
-
-msgid "Had installation_date"
 msgstr ""
 
 msgid "Had installation_status_note"
@@ -3016,6 +3148,9 @@ msgid ""
 "deactivations and system events."
 msgstr ""
 
+msgid "Relations table"
+msgstr ""
+
 msgid "last login"
 msgstr "kirjautunut viimeksi"
 
@@ -3024,6 +3159,12 @@ msgid "User is active, but last login was %(days)d days ago"
 msgstr ""
 "Käyttäjätunnus on voimassa, mutta viimeisin kirjautuminen on %(days)d päivää "
 "sitten"
+
+msgid "Save the user first to view relations."
+msgstr ""
+
+msgid "No relations found."
+msgstr ""
 
 msgid "Reactivate selected users"
 msgstr ""
@@ -3114,4 +3255,13 @@ msgid "User Deactivation Status"
 msgstr ""
 
 msgid "User Deactivation Statuses"
+msgstr ""
+
+msgid "App"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "View related"
 msgstr ""

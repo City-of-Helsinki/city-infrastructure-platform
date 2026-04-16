@@ -4,51 +4,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.models.additional_sign import AdditionalSignPlan, AdditionalSignReal
+from traffic_control.models.migration_common import TicketMachineFieldTrackingMixin
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
 
 User = get_user_model()
-
-
-class BaseFieldTrackingMixin(models.Model):
-    """Abstract base class for common field tracking across Plan and Real records."""
-
-    # Common field tracking (fields that exist in both TrafficSignPlan and TrafficSignReal)
-    had_height = models.BooleanField(_("Had height"), default=False)
-    had_size = models.BooleanField(_("Had size"), default=False)
-    had_direction = models.BooleanField(_("Had direction"), default=False)
-    had_reflection_class = models.BooleanField(_("Had reflection_class"), default=False)
-    had_surface_class = models.BooleanField(_("Had surface_class"), default=False)
-    had_mount_type = models.BooleanField(_("Had mount_type"), default=False)
-    had_road_name = models.BooleanField(_("Had road_name"), default=False)
-    had_lane_number = models.BooleanField(_("Had lane_number"), default=False)
-    had_lane_type = models.BooleanField(_("Had lane_type"), default=False)
-    had_location_specifier = models.BooleanField(_("Had location_specifier"), default=False)
-    had_validity_period_start = models.BooleanField(_("Had validity_period_start"), default=False)
-    had_validity_period_end = models.BooleanField(_("Had validity_period_end"), default=False)
-    had_source_name = models.BooleanField(_("Had source_name"), default=False)
-    had_source_id = models.BooleanField(_("Had source_id"), default=False)
-
-    # Common lost fields
-    lost_value = models.CharField(_("Lost value"), max_length=50, blank=True, default="")
-    lost_txt = models.CharField(_("Lost txt"), max_length=254, blank=True, default="")
-    lost_double_sided = models.BooleanField(_("Lost double_sided"), default=False)
-    lost_peak_fastened = models.BooleanField(_("Lost peak_fastened"), default=False)
-
-    # Common default values set
-    set_color_to_blue = models.BooleanField(_("Set color to BLUE"), default=True)
-    set_content_s_null = models.BooleanField(_("Set content_s to null"), default=True)
-    set_missing_content_false = models.BooleanField(_("Set missing_content to false"), default=True)
-    set_additional_information_empty = models.BooleanField(_("Set additional_information to empty"), default=True)
-
-    files_migrated = models.IntegerField(
-        _("Files migrated"),
-        default=0,
-        help_text=_("Number of file attachments migrated."),
-    )
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-
-    class Meta:
-        abstract = True
 
 
 class TicketMachineMigrationRun(models.Model):
@@ -177,7 +136,7 @@ class TicketMachineMigrationRun(models.Model):
         return f"{self.started_at.strftime('%Y-%m-%d %H:%M:%S')} - {status} ({mode})"
 
 
-class TicketMachineMigrationPlanRecord(BaseFieldTrackingMixin):
+class TicketMachineMigrationPlanRecord(TicketMachineFieldTrackingMixin):
     """Detailed record of each TrafficSignPlan to AdditionalSignPlan migration."""
 
     id = models.BigAutoField(primary_key=True)
@@ -234,7 +193,7 @@ class TicketMachineMigrationPlanRecord(BaseFieldTrackingMixin):
         _("Parent sign code"),
         max_length=32,
         blank=True,
-        null=True,
+        default="",
         help_text=_("Device type code of the parent sign (E2 or 521)."),
     )
     multiple_parents_found = models.BooleanField(
@@ -260,7 +219,7 @@ class TicketMachineMigrationPlanRecord(BaseFieldTrackingMixin):
         return f"Plan {self.original_id} → {self.new_id} ({parent_status})"
 
 
-class TicketMachineMigrationRealRecord(BaseFieldTrackingMixin):
+class TicketMachineMigrationRealRecord(TicketMachineFieldTrackingMixin):
     """Detailed record of each TrafficSignReal to AdditionalSignReal migration."""
 
     id = models.BigAutoField(primary_key=True)
@@ -317,7 +276,7 @@ class TicketMachineMigrationRealRecord(BaseFieldTrackingMixin):
         _("Parent sign code"),
         max_length=32,
         blank=True,
-        null=True,
+        default="",
         help_text=_("Device type code of the parent sign (E2 or 521)."),
     )
     multiple_parents_found = models.BooleanField(
