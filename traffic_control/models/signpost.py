@@ -306,6 +306,13 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledD
         null=True,
         help_text=_("Date and time on which this signpost was last scanned at."),
     )
+    attachment_url = models.CharField(
+        _("Attachment URL"),
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text=_("URL of the attachment associated with this signpost."),
+    )
 
     class Meta:
         db_table = "signpost_real"

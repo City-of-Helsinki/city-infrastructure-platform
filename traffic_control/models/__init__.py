@@ -50,6 +50,11 @@ from traffic_control.models.signpost import (
     SignpostRealFile,
     SignpostRealOperation,
 )
+from traffic_control.models.signpost_migration import (
+    SignpostMigrationPlanRecord,
+    SignpostMigrationRealRecord,
+    SignpostMigrationRun,
+)
 from traffic_control.models.ticket_machine_migration import (
     TicketMachineMigrationPlanRecord,
     TicketMachineMigrationRealRecord,

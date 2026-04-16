@@ -10104,6 +10104,10 @@ paths:
         schema:
           type: string
       - in: query
+        name: attachment_url
+        schema:
+          type: string
+      - in: query
         name: condition
         schema:
           type: integer
@@ -24452,6 +24456,11 @@ components:
           format: date-time
           nullable: true
           description: Date and time on which this signpost was last scanned at.
+        attachment_url:
+          type: string
+          nullable: true
+          description: URL of the attachment associated with this signpost.
+          maxLength: 500
         owner:
           type: string
           format: uuid
@@ -28824,6 +28833,11 @@ components:
           format: date-time
           nullable: true
           description: Date and time on which this signpost was last scanned at.
+        attachment_url:
+          type: string
+          nullable: true
+          description: URL of the attachment associated with this signpost.
+          maxLength: 500
         created_by:
           type: string
           format: uuid
@@ -29231,6 +29245,11 @@ components:
           format: date-time
           nullable: true
           description: Date and time on which this signpost was last scanned at.
+        attachment_url:
+          type: string
+          nullable: true
+          description: URL of the attachment associated with this signpost.
+          maxLength: 500
         owner:
           type: string
           format: uuid
