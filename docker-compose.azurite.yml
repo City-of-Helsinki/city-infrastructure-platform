@@ -16,7 +16,7 @@ services:
     depends_on:
       - azurite
     volumes:
-      - ./azurite-init.sh:/azurite-init.sh # Mount the script into the container
+      - ./scripts/azurite-init.sh:/azurite-init.sh
     entrypoint: /bin/bash /azurite-init.sh
   # Utility command to wipe the media container on azurite
   azurite-delete-storage-containers:
@@ -24,7 +24,7 @@ services:
     depends_on:
       - azurite
     volumes:
-      - ./azurite-cleanup.sh:/azurite-cleanup.sh
+      - ./scripts/azurite-cleanup.sh:/azurite-cleanup.sh
     entrypoint: /bin/bash /azurite-cleanup.sh
 
 volumes:

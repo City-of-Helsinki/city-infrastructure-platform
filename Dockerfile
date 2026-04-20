@@ -92,7 +92,7 @@ COPY --from=build /map-view/build/ /city-infrastructure-platform/map-view/build/
 # authentication at docker image build time, and this will cause ImproperlyConfigured exceptions to be thrown in
 #the pipelines, even though these commands don't care about the settings
 RUN OIDC_AUTHENTICATION_ENABLED=0 uv run manage.py collectstatic --noinput && \
-    OIDC_AUTHENTICATION_ENABLED=0 ./compilemessages.sh \
+    OIDC_AUTHENTICATION_ENABLED=0 ./scripts/compilemessages.sh \
 
 # OpenShift runs container in arbitrary user which belongs to group `root` (0)
 # Create IPython directory for shell_plus and ensure proper permissions

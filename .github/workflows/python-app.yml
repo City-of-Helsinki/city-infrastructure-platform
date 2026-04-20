@@ -66,7 +66,7 @@ jobs:
 
       - name: Run openapi schema validations
         run: |
-          ./check-open-api-schema.sh
+          ./scripts/check-open-api-schema.sh
 
       - name: Install NodeJS dependencies
         run: |

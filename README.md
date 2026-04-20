@@ -251,7 +251,7 @@ docker compose run --rm api ./manage.py shell_plus
 docker compose run --rm --user root api ./manage.py collectstatic
 
 # Compile messages
-docker compose run --rm --user root api ./compilemessages.sh
+docker compose run --rm --user root api ./scripts/compilemessages.sh
 ```
 
 ## Translations (fi)
@@ -261,7 +261,7 @@ docker compose run --rm --user root api ./compilemessages.sh
 sudo apt install gettext
 
 # Run the script
-./makemessages.sh
+./scripts/makemessages.sh
 ```
 
 ## Traffic sign icons
