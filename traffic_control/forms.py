@@ -32,6 +32,7 @@ from traffic_control.models import (
     TrafficSignPlan,
     TrafficSignReal,
 )
+from traffic_control.services.common import device_plan_get_current, validate_device_plan_replacement
 from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
 from traffic_control.utils import get_file_upload_obstacles, get_icon_upload_obstacles
 from traffic_control.validators import validate_location_ewkt, validate_structured_content
@@ -187,6 +188,46 @@ class SRIDBoundGeometryFormMixin:
         return cleaned_data
 
 
+class ReplaceablePlanModelFormMixin:
+    """
+    Adds `replaces` field to replaceable plan admin forms.
+
+    The field is validated with the same invariants as the service layer to
+    surface clear form errors before save.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if "replaces" not in self.fields:
+            self.fields["replaces"] = forms.ModelChoiceField(
+                queryset=Plan.objects.none(),
+                required=False,
+                label=_("Replaces"),
+            )
+
+        model = self._meta.model
+        instance = self.instance
+        current_replaces = instance.replaces if instance and instance.pk else None
+
+        queryset = device_plan_get_current(model)
+        if instance and instance.pk:
+            queryset = queryset.exclude(pk=instance.pk)
+
+        if current_replaces:
+            queryset = queryset | model.objects.filter(pk=current_replaces.pk)
+
+        self.fields["replaces"].queryset = queryset.distinct().order_by("-created_at")
+        self.fields["replaces"].initial = current_replaces
+
+    def clean_replaces(self):
+        replaces = self.cleaned_data.get("replaces")
+        if not replaces:
+            return None
+
+        validate_device_plan_replacement(replaces, self.instance)
+        return replaces
+
+
 class Geometry3DFieldForm(forms.ModelForm):
     """Form class that allows entering a z coordinate for 3d point and location in ewkt format"""
 
@@ -282,7 +323,12 @@ class AdditionalSignRealModelForm(StructuredContentModelFormMixin, SRIDBoundGeom
         }
 
 
-class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
+class AdditionalSignPlanModelForm(
+    ReplaceablePlanModelFormMixin,
+    StructuredContentModelFormMixin,
+    SRIDBoundGeometryFormMixin,
+    Geometry3DFieldForm,
+):
     class Meta:
         model = AdditionalSignPlan
         fields = "__all__"
@@ -291,7 +337,7 @@ class AdditionalSignPlanModelForm(StructuredContentModelFormMixin, SRIDBoundGeom
         }
 
 
-class BarrierPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
+class BarrierPlanModelForm(ReplaceablePlanModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = BarrierPlan
         fields = "__all__"
@@ -303,7 +349,7 @@ class BarrierRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
         fields = "__all__"
 
 
-class MountPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
+class MountPlanModelForm(ReplaceablePlanModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = MountPlan
         fields = "__all__"
@@ -327,7 +373,7 @@ class PlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
         fields = "__all__"
 
 
-class RoadMarkingPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
+class RoadMarkingPlanModelForm(ReplaceablePlanModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = RoadMarkingPlan
         fields = "__all__"
@@ -339,7 +385,7 @@ class RoadMarkingRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
         fields = "__all__"
 
 
-class SignpostPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
+class SignpostPlanModelForm(ReplaceablePlanModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = SignpostPlan
         fields = "__all__"
@@ -401,7 +447,7 @@ class TrafficControlDeviceTypeIconForm(AbstractDeviceTypeIconForm):
         fields = "__all__"
 
 
-class TrafficLightPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
+class TrafficLightPlanModelForm(ReplaceablePlanModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = TrafficLightPlan
         fields = "__all__"
@@ -413,7 +459,7 @@ class TrafficLightRealModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm)
         fields = "__all__"
 
 
-class TrafficSignPlanModelForm(SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
+class TrafficSignPlanModelForm(ReplaceablePlanModelFormMixin, SRIDBoundGeometryFormMixin, Geometry3DFieldForm):
     class Meta:
         model = TrafficSignPlan
         fields = "__all__"

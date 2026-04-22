@@ -282,7 +282,7 @@ class ReplacesInline(PermissionInlineMixin, admin.StackedInline):
     fk_name = "new"
     verbose_name = _("Replaces")
     raw_id_fields = ("old",)
-    # TODO: Modifying replacements can be allowed when Admin UI uses service layer functions
+    # Replacement editing is handled in plan admin forms through service layer functions.
     readonly_fields = ("old",)
 
 
