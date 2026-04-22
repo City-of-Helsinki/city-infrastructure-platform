@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Callable, Type
+from typing import Callable, Optional, Type
 from uuid import UUID
 
 from django.core.exceptions import ValidationError
@@ -7,6 +7,7 @@ from django.db import transaction
 from django.db.models import Model, Q
 from django.utils import timezone
 
+from django.utils.translation import gettext_lazy as _
 from traffic_control.enums import Lifecycle
 from traffic_control.mixins.models import SoftDeleteModel
 from users.models import User
@@ -103,6 +104,28 @@ def device_plan_update(
     return instance
 
 
+def validate_device_plan_replacement(old: SoftDeleteModel, new: Optional[SoftDeleteModel]):
+    """
+    Validate that a device plan can be replaced by another device plan.
+
+    :param old: The old device plan to be replaced.
+    :param new: The new device plan that will replace the old one.
+    :raises ValidationError: If the replacement cannot be performed.
+    """
+    if old.replaced_by and (not new or not new.pk or old.replaced_by.pk != new.pk):
+        raise ValidationError(_("Cannot replace a device plan that is already replaced"))
+
+    if new and new.pk:
+        if old.pk == new.pk:
+            raise ValidationError(_("Cannot replace a device plan with itself"))
+
+        check_replaced = old.replaces
+        while check_replaced:
+            if check_replaced.pk == new.pk:
+                raise ValidationError(_("Cannot form a circular replacement chain"))
+            check_replaced = check_replaced.replaces
+
+
 @transaction.atomic
 def device_plan_replace(
     *,
@@ -129,15 +152,7 @@ def device_plan_replace(
     :param unreplace_method: A function to undo a replacement.
     :raises ValidationError: If the replacement cannot be performed between the given device plans.
     """
-    if old.replaced_by:
-        raise ValidationError("Cannot replace a device plan that is already replaced")
-    if old == new:
-        raise ValidationError("Cannot replace a device plan with itself")
-    check_replaced = old.replaces
-    while check_replaced:
-        if check_replaced == new:
-            raise ValidationError("Cannot form a circular replacement chain")
-        check_replaced = check_replaced.replaces
+    validate_device_plan_replacement(old, new)
 
     # Remove older replacement in case of update
     if new.replaces:
