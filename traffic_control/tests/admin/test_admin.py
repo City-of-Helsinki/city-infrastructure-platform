@@ -7,13 +7,15 @@ from django.contrib.admin import AdminSite
 from django.contrib.gis.geos import Point
 from django.urls import resolve, reverse
 
-from traffic_control.admin import BarrierRealAdmin, TrafficSignRealAdmin
+from traffic_control.admin import BarrierRealAdmin, TrafficSignPlanAdmin, TrafficSignRealAdmin
 from traffic_control.enums import Lifecycle
-from traffic_control.models import BarrierReal, TrafficSignReal
+from traffic_control.models import BarrierReal, TrafficSignPlan, TrafficSignReal
 from traffic_control.tests.factories import (
     AdditionalSignRealFactory,
     BarrierRealFactory,
     get_owner,
+    get_traffic_sign_plan,
+    get_traffic_sign_real,
     get_user,
     TrafficSignRealFactory,
 )
@@ -146,6 +148,42 @@ def test_save_model_set_updated_by_for_updating(admin_user, standard_user, traff
 
     assert traffic_sign_real.created_by == standard_user
     assert traffic_sign_real.updated_by == admin_user
+
+
+@pytest.mark.django_db
+def test_traffic_sign_plan_admin_includes_replaces_field(admin_user, admin_site):
+    ma = TrafficSignPlanAdmin(TrafficSignPlan, admin_site)
+    request = MockRequest()
+    request.user = admin_user
+
+    fieldsets = ma.get_fieldsets(request)
+
+    related_models_fields = next(
+        options["fields"] for _, options in fieldsets if "plan" in options.get("fields", ())
+    )
+    assert "replaces" in related_models_fields
+
+
+@pytest.mark.django_db
+def test_traffic_sign_plan_admin_save_model_applies_replacement_through_service(admin_user, admin_site):
+    old_plan = get_traffic_sign_plan()
+    new_plan = get_traffic_sign_plan()
+    real = get_traffic_sign_real(traffic_sign_plan=old_plan)
+
+    ma = TrafficSignPlanAdmin(TrafficSignPlan, admin_site)
+    request = MockRequest()
+    request.user = admin_user
+
+    form = type("DummyForm", (), {"cleaned_data": {"replaces": old_plan}, "changed_data": ["replaces"]})()
+    ma.save_model(request, new_plan, form, change=True)
+
+    old_plan.refresh_from_db()
+    new_plan.refresh_from_db()
+    real.refresh_from_db()
+
+    assert new_plan.replaces == old_plan
+    assert old_plan.replaced_by == new_plan
+    assert real.traffic_sign_plan == new_plan
 
 
 # ------------------------------------------------------------------------------

@@ -1,14 +1,17 @@
+import pytest
 from enum import member
 
 from django.conf import settings
 from django.contrib.gis.geos import Point
+from django.core.exceptions import ValidationError
 from django.forms import forms
 from django.test import TestCase
 from enumfields import Enum, EnumIntegerField
 
 from traffic_control.enums import Lifecycle
-from traffic_control.forms import AdminEnumChoiceField, TrafficSignRealModelForm
+from traffic_control.forms import AdminEnumChoiceField, TrafficSignPlanModelForm, TrafficSignRealModelForm
 from traffic_control.tests.factories import (
+    get_traffic_sign_plan,
     get_owner,
     get_user,
     TrafficControlDeviceTypeFactory,
@@ -120,3 +123,40 @@ class TrafficSignRealModelFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         instance = form.save()
         self.assertEqual(instance.location, Point(MIN_X + 10, MIN_Y + 10, 20, srid=settings.SRID))
+
+
+@pytest.mark.django_db
+def test_traffic_sign_plan_form_replaces_initial_and_queryset():
+    replaced_plan = get_traffic_sign_plan()
+    replacing_plan = get_traffic_sign_plan(replaces=replaced_plan)
+    free_plan = get_traffic_sign_plan()
+
+    form = TrafficSignPlanModelForm(instance=replacing_plan)
+
+    assert form.fields["replaces"].initial == replaced_plan
+    assert replaced_plan in form.fields["replaces"].queryset
+    assert free_plan in form.fields["replaces"].queryset
+    assert replacing_plan not in form.fields["replaces"].queryset
+
+
+@pytest.mark.django_db
+def test_traffic_sign_plan_form_clean_replaces_rejects_self_replacement():
+    plan = get_traffic_sign_plan()
+    form = TrafficSignPlanModelForm(instance=plan)
+    form.cleaned_data = {"replaces": plan}
+
+    with pytest.raises(ValidationError, match="Cannot replace a device plan with itself"):
+        form.clean_replaces()
+
+
+@pytest.mark.django_db
+def test_traffic_sign_plan_form_clean_replaces_rejects_circular_chain():
+    plan_a = get_traffic_sign_plan()
+    plan_b = get_traffic_sign_plan(replaces=plan_a)
+    plan_c = get_traffic_sign_plan(replaces=plan_b)
+
+    form = TrafficSignPlanModelForm(instance=plan_a)
+    form.cleaned_data = {"replaces": plan_c}
+
+    with pytest.raises(ValidationError, match="Cannot form a circular replacement chain"):
+        form.clean_replaces()
