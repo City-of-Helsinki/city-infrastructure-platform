@@ -24,6 +24,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    ReplaceablePlanServiceAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.forms import (
@@ -62,6 +63,7 @@ from traffic_control.resources.additional_sign import (
     AdditionalSignRealResource,
 )
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
+from traffic_control.services.additional_sign import additional_sign_plan_update
 
 shared_initial_values = {
     "size": Size.MEDIUM,
@@ -183,6 +185,7 @@ class AdditionalSignPlanAdmin(
     Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
+    ReplaceablePlanServiceAdminMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -192,6 +195,7 @@ class AdditionalSignPlanAdmin(
 ):
     resource_class = AdditionalSignPlanResource
     extra_export_resource_classes = [AdditionalSignPlanToRealTemplateResource]
+    plan_update_service = additional_sign_plan_update
     form = AdditionalSignPlanModelForm
     fieldsets = (
         (

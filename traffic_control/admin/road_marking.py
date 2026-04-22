@@ -22,6 +22,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    ReplaceablePlanServiceAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
@@ -48,6 +49,7 @@ from traffic_control.resources.road_marking import (
     RoadMarkingPlanToRealTemplateResource,
     RoadMarkingRealResource,
 )
+from traffic_control.services.road_marking import road_marking_plan_update
 
 __all__ = (
     "RoadMarkingPlanAdmin",
@@ -134,6 +136,7 @@ class RoadMarkingPlanAdmin(
     Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
+    ReplaceablePlanServiceAdminMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -142,6 +145,7 @@ class RoadMarkingPlanAdmin(
 ):
     resource_class = RoadMarkingPlanResource
     extra_export_resource_classes = [RoadMarkingPlanToRealTemplateResource]
+    plan_update_service = road_marking_plan_update
     form = RoadMarkingPlanModelForm
     SHOW_Z_COORD = False
     fieldsets = (

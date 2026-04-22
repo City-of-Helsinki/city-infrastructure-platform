@@ -23,6 +23,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    ReplaceablePlanServiceAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import (
@@ -51,6 +52,7 @@ from traffic_control.models import (
 )
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 from traffic_control.resources.mount import MountPlanResource, MountPlanToRealTemplateResource, MountRealResource
+from traffic_control.services.mount import mount_plan_update
 
 __all__ = (
     "MountPlanAdmin",
@@ -123,6 +125,7 @@ class MountPlanAdmin(
     Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
+    ReplaceablePlanServiceAdminMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -130,6 +133,7 @@ class MountPlanAdmin(
 ):
     resource_class = MountPlanResource
     extra_export_resource_classes = [MountPlanToRealTemplateResource]
+    plan_update_service = mount_plan_update
     form = MountPlanModelForm
     fieldsets = (
         (
