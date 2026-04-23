@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.37.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.36.1...city-infrastructure-platform-v1.37.0) (2026-04-23)
+
+
+### Features
+
+* Add table of related model changelist links for User change page ([7cb4fad](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7cb4fadb3b370b0e67ae82214990b79de662639e))
+* Environment banner with django-helusers ([2eab8f2](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/2eab8f2a86a32162bc513da486efb9edad483b03))
+* Make agents to follow projects ruff style ([0736f39](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0736f39e89eb4e7767c81d872e4322776ecc85e1))
+* Move signs that are actually signpost from traffic signs to signpost tables ([4766dc6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4766dc66046468ceb62170f71d7651c8dc86fe30))
+
+
+### Bug Fixes
+
+* Appuser needs to own application directory ([eefe1dd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/eefe1dd9d66de1d9c415a0a5febc06d5c304600a))
+* N+1 query performance problems in API endpoints ([b13e9a0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b13e9a02903e0d3da329328389423c4f2f217a1d))
+* Plan Geometry Import Log change view security fixes ([75eaa90](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/75eaa90dcf070bc12615c9078aa88111212db536))
+
 ## [1.36.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.36.0...city-infrastructure-platform-v1.36.1) (2026-03-23)
 
 
