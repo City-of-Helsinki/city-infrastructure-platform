@@ -213,5 +213,7 @@ class UserDeactivationStatus(models.Model):
 
 
 auditlog.register(
-    User, m2m_fields={"operational_areas", "responsible_entities", "groups", "ad_groups", "user_permissions"}
+    User,
+    m2m_fields={"operational_areas", "responsible_entities", "groups", "ad_groups", "user_permissions"},
+    mask_fields={"first_name", "last_name", "email"},
 )
