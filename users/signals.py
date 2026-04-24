@@ -2,6 +2,7 @@
 
 from typing import Optional
 
+from auditlog.signals import post_log
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -49,3 +50,16 @@ def delete_deactivation_status_on_activity(
         elif activity_fields & update_fields:
             if hasattr(instance, "deactivation_status"):
                 instance.deactivation_status.delete()
+
+
+@receiver(post_log, sender=User)
+def sanitize_user_object_repr(sender, instance, log_entry, log_created, **kwargs):
+    """
+    Sanitize the object_repr in the audit log to prevent GDPR PII leaks.
+    """
+    if log_created and log_entry and log_entry.object_repr:
+        # Overwrite the default string representation with a safe identifier
+        log_entry.object_repr = instance.pk
+
+        # Save only the object_repr field to avoid unnecessary overhead
+        log_entry.save(update_fields=["object_repr"])
