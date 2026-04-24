@@ -3,7 +3,7 @@ revision = 3
 requires-python = ">=3.11.9, <4"
 
 [options]
-exclude-newer = "2026-04-08T14:00:52.487173061Z"
+exclude-newer = "2026-04-17T10:41:37.318394956Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -311,7 +311,7 @@ requires-dist = [
     { name = "django-admin-confirm", specifier = ">=1.0.1,<2" },
     { name = "django-admin-rangefilter", specifier = ">=0.13.5,<0.14" },
     { name = "django-advanced-password-validation", specifier = ">=1.2.0,<2" },
-    { name = "django-auditlog", specifier = ">=3.0.0,<4" },
+    { name = "django-auditlog", specifier = ">=3.2.0,<4" },
     { name = "django-axes", specifier = ">=7.0.0,<8" },
     { name = "django-colorfield", specifier = ">=0.11.0,<0.12" },
     { name = "django-cors-headers", specifier = ">=4.3.1,<5" },
@@ -582,15 +582,15 @@ wheels = [
 
 [[package]]
 name = "django-auditlog"
-version = "3.0.0"
+version = "3.4.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
     { name = "python-dateutil" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/44/df/6cbc296b2fdd808bd710671409a1a838c9741670933f170930cb7b9c5804/django-auditlog-3.0.0.tar.gz", hash = "sha256:9de49f80a4911135d136017123cd73461f869b4947eec14d5e76db4b88182f3f", size = 65475, upload-time = "2024-04-12T09:56:52.782Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/70/e5/2beb2b256775c4fc041ed60cb44f5d77acb6cde307f01567dcf2756721a7/django_auditlog-3.4.1.tar.gz", hash = "sha256:ad07b9db452d5fa8303822cccd78cd3fcb2c2863aeb6abe039ec45739b4d7e33", size = 91611, upload-time = "2025-12-18T08:56:35.378Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bd/49/d62c4728cd80f42e5061b3ae9e12fd28b460bd1cd5754c4d34232d18aab2/django_auditlog-3.0.0-py3-none-any.whl", hash = "sha256:92db1cf4a51ceca5c26b3ff46997d9e3305a02da1bd435e2efb5b8b6d300ce1f", size = 35493, upload-time = "2024-04-12T09:56:40.177Z" },
+    { url = "https://files.pythonhosted.org/packages/91/37/3239143dddb34a3f64582c43f56587a80c9ac136cbd34fc215077f83beb9/django_auditlog-3.4.1-py3-none-any.whl", hash = "sha256:29958ecacfee00144127214f3ccef3f0c203c3659bcb6dd404a0f3d5551a10a5", size = 49541, upload-time = "2025-12-18T08:56:23.483Z" },
 ]
 
 [[package]]
