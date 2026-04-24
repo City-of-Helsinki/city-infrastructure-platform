@@ -224,6 +224,10 @@ docker compose -f docker-compose.azurite.yml up azurite-init
 
 # Wipe the media, upload storage containers on azurite (you will need to re-run azurite-init after this)
 docker compose -f docker-compose.azurite.yml up azurite-delete-storage-containers
+
+# Run elasticsearch / kibana
+# Locally hosted elastic search, helps you see what kind of auditlog entries you produce through resilient-logger
+docker compose -f docker-compose.elastic.yml up
 ```
 
 ##### Running management tasks in the api - Docker services
@@ -243,7 +247,6 @@ docker compose run --rm api ./manage.py createsuperuser
 # Open the Django interactive Python shell
 docker compose run --rm api ./manage.py shell_plus
 ```
-
 **NOTE:** If you're trying to run actions that alter the **volume**, like `collectstatic` or `compilemessages`, you must run these actions as root:
 
 ```bash
@@ -253,6 +256,19 @@ docker compose run --rm --user root api ./manage.py collectstatic
 # Compile messages
 docker compose run --rm --user root api ./scripts/compilemessages.sh
 ```
+
+##### Accessing control panels for the docker services
+
+###### Kibana (view resilient logger entries)
+
+**NOTE**: Resilient logger entries will only show up after you run the `submit_unsent_entries` management command. The command will most likely throw errors for very old log entries, but it will complete.
+
+1. Start the elasticsearch and kibana services
+1. Access http://localhost:5601/app/home#/
+1. (on the sidebar) Elasticsearch -> Index Management
+1. (on the main view) resilient-auditlog (only shows up after `submit_unsent_entries` is executed)
+1. (on the main view, right upper corner) Discover index
+1. (on the sidebar) Add fields you want to observe. It helps to include timestamp and to sort entries by timestamp, otherwise you might not see the latest entries. Old entries may be lacking important data.
 
 ## Translations (fi)
 
