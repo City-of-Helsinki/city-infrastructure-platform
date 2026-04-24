@@ -1,6 +1,6 @@
 [project]
 name = "city-infrastructure-platform"
-version = "1.37.0"
+version = "1.37.1"
 description = ""
 authors = []
 requires-python = ">=3.11.9,<4"
