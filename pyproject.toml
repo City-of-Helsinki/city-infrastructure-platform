@@ -7,7 +7,7 @@ requires-python = ">=3.12,<4"
 dependencies = [
     "django~=5.2",
     "cairosvg",
-    "django-auditlog",
+    "django-auditlog>=3.4.1",
     "django-colorfield",
     "django-cors-headers",
     "django-enumfields2",
@@ -40,6 +40,8 @@ dependencies = [
     "django-admin-confirm",
     "django-guardian",
     "django-admin-rangefilter",
+    "django-logger-extra>=1.3.0",
+    "django-resilient-logger>=3.1.0",
 ]
 
 [dependency-groups]
@@ -71,6 +73,10 @@ dev = [
 default-groups = "all"
 exclude-newer = "P7D"
 package = false
+
+[tool.uv.exclude-newer-package]
+django-resilient-logger = false  # Maintained by City of Helsinki
+django-logger-extra = false  # Maintained by City of Helsinki
 
 [tool.ruff]
 extend-select = [
@@ -117,6 +123,15 @@ ignore = ["D100", "D104", "D105", "D200", "D203", "D400"]
 
 
 [tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "cityinfra.settings"
+doctest_optionflags = [
+    "NORMALIZE_WHITESPACE",
+    "IGNORE_EXCEPTION_DETAIL",
+    "ALLOW_UNICODE",
+]
+filterwarnings = [
+    "ignore:The FORMS_URLFIELD_ASSUME_HTTPS transitional setting is deprecated.:django.utils.deprecation.RemovedInDjango60Warning",
+]
 norecursedirs = [
     ".git",
     ".github",
@@ -134,15 +149,6 @@ norecursedirs = [
     "scripts",
     "var",
     "venv",
-]
-DJANGO_SETTINGS_MODULE = "cityinfra.settings"
-doctest_optionflags = [
-    "NORMALIZE_WHITESPACE",
-    "IGNORE_EXCEPTION_DETAIL",
-    "ALLOW_UNICODE",
-]
-filterwarnings = [
-    "ignore:The FORMS_URLFIELD_ASSUME_HTTPS transitional setting is deprecated.:django.utils.deprecation.RemovedInDjango60Warning",
 ]
 
 

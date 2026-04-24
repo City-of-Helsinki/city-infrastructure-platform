@@ -1,6 +1,24 @@
 import pytest
 from django.apps import apps
 
+
+# Guarantee that certain settings are available for the tests
+@pytest.fixture(autouse=True)
+def settings(settings):
+    settings.RESILIENT_LOGGER["environment"] = "development"
+    settings.RESILIENT_LOGGER["targets"] = [
+        {
+            "class": "resilient_logger.targets.ElasticsearchLogTarget",
+            "es_url": "http://localhost:9200",
+            "es_username": "elastic",
+            "es_password": "elastic-password",
+            "es_index": "resilient-auditlog",
+            "required": True,
+        }
+    ]
+    return settings
+
+
 # Guarantee that objects that are supposed to be created by migrations exist
 # To find out if anything is missing run:
 # git grep -Irn "get_or_create" | grep migrations

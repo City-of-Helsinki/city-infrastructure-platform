@@ -93,7 +93,7 @@ def test__traffic_control_device_type_icon__auditlog_entries(settings):
 
     # 3. Test DELETE action
     icon_pk = icon.pk
-    icon_str = str(icon)
+    icon_class = icon.__class__.__name__
     icon.delete()
 
     # After deletion, query by model and PK since the object is gone
@@ -102,4 +102,4 @@ def test__traffic_control_device_type_icon__auditlog_entries(settings):
     delete_log = logs.latest("timestamp")
     assert delete_log.action == LogEntry.Action.DELETE
     assert delete_log.object_pk == str(icon_pk)
-    assert delete_log.object_repr == icon_str
+    assert delete_log.object_repr == f"{icon_class} ({icon_pk})"

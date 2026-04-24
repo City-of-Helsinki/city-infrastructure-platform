@@ -165,8 +165,11 @@ def test__device_type_tag_admin__saving_device_types_is_audit_logged(admin_clien
     )
     log_entries = LogEntry.objects.get_for_object(device_type).filter(changes__has_key="tags")
 
+    tag_class = tag.__class__.__name__
+    tag_pk = tag.pk
+
     assert log_entries.count() == 1
-    assert log_entries.first().changes["tags"]["objects"] == [str(tag)]
+    assert log_entries.first().changes["tags"]["objects"] == [f"{tag_class} ({tag_pk})"]
 
 
 @pytest.mark.django_db
