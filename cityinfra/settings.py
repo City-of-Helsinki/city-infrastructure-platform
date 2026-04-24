@@ -292,9 +292,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "drf_custom_auth.middleware.DRFCustomAuthMiddleware",
-    "auditlog_custom.middleware.AuditlogMiddleware",
     "axes.middleware.AxesMiddleware",
 ]
+
+# Exclude the IP address from audit logging
+AUDITLOG_DISABLE_REMOTE_ADDR = False
 
 ROOT_URLCONF = "cityinfra.urls"
 
