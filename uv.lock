@@ -235,7 +235,9 @@ dependencies = [
     { name = "django-health-check" },
     { name = "django-helusers" },
     { name = "django-import-export", extra = ["xlsx"] },
+    { name = "django-logger-extra" },
     { name = "django-mptt" },
+    { name = "django-resilient-logger" },
     { name = "django-storages", extra = ["azure"] },
     { name = "djangorestframework" },
     { name = "djangorestframework-gis" },
@@ -296,7 +298,9 @@ requires-dist = [
     { name = "django-health-check" },
     { name = "django-helusers" },
     { name = "django-import-export", extras = ["xlsx"] },
+    { name = "django-logger-extra" },
     { name = "django-mptt" },
+    { name = "django-resilient-logger", git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=176832d5f0be2cf7d73139fc645376e67f949ea2" },
     { name = "django-storages", extras = ["azure"] },
     { name = "djangorestframework" },
     { name = "djangorestframework-gis" },
@@ -535,15 +539,15 @@ wheels = [
 
 [[package]]
 name = "django-auditlog"
-version = "3.0.0"
+version = "3.4.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
     { name = "python-dateutil" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/44/df/6cbc296b2fdd808bd710671409a1a838c9741670933f170930cb7b9c5804/django-auditlog-3.0.0.tar.gz", hash = "sha256:9de49f80a4911135d136017123cd73461f869b4947eec14d5e76db4b88182f3f", size = 65475, upload-time = "2024-04-12T09:56:52.782Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/70/e5/2beb2b256775c4fc041ed60cb44f5d77acb6cde307f01567dcf2756721a7/django_auditlog-3.4.1.tar.gz", hash = "sha256:ad07b9db452d5fa8303822cccd78cd3fcb2c2863aeb6abe039ec45739b4d7e33", size = 91611, upload-time = "2025-12-18T08:56:35.378Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bd/49/d62c4728cd80f42e5061b3ae9e12fd28b460bd1cd5754c4d34232d18aab2/django_auditlog-3.0.0-py3-none-any.whl", hash = "sha256:92db1cf4a51ceca5c26b3ff46997d9e3305a02da1bd435e2efb5b8b6d300ce1f", size = 35493, upload-time = "2024-04-12T09:56:40.177Z" },
+    { url = "https://files.pythonhosted.org/packages/91/37/3239143dddb34a3f64582c43f56587a80c9ac136cbd34fc215077f83beb9/django_auditlog-3.4.1-py3-none-any.whl", hash = "sha256:29958ecacfee00144127214f3ccef3f0c203c3659bcb6dd404a0f3d5551a10a5", size = 49541, upload-time = "2025-12-18T08:56:23.483Z" },
 ]
 
 [[package]]
@@ -732,6 +736,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-logger-extra"
+version = "1.1.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fa/4a/401ce9c4e3ef8a453f84b198bf6904f9959a7567cdca65d2bff76c9c4cde/django_logger_extra-1.1.2.tar.gz", hash = "sha256:b86e2cbf5266997cceb7acb6b645b6916b9fc72cf466c71ef5b5eed672d5ed8b", size = 15776, upload-time = "2026-04-22T11:25:30.396Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/3b/b9339afaef62610f195ed5349b26a1c498cefcabfc2f58acde02a7ecec93/django_logger_extra-1.1.2-py2.py3-none-any.whl", hash = "sha256:d71004c4956577e7bff2e3745d9432f55172a6cf29de3f11179e015469ab4d26", size = 10222, upload-time = "2026-04-22T11:25:28.795Z" },
+]
+
+[[package]]
 name = "django-mptt"
 version = "0.18.0"
 source = { registry = "https://pypi.org/simple" }
@@ -741,6 +757,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/eb/25/04bb8e4384f3484dabbd0e2a84946f1c972b95b07512509a17aaa361be0f/django_mptt-0.18.0.tar.gz", hash = "sha256:cf5661357ff22bc64e20d3341c26e538aa54583aea0763cfe6aaec0ab8e3a8ee", size = 71407, upload-time = "2025-08-26T09:27:01.05Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/51/9e/78aad58a90f2e4d0c898eeadd2f2b720bcae29b43676dd37c2b627c4c6c6/django_mptt-0.18.0-py3-none-any.whl", hash = "sha256:bfa3f01627e3966a1df901aeca74570a3e933e66809ebf58d9df673e63627afb", size = 120157, upload-time = "2025-08-26T09:27:02.168Z" },
+]
+
+[[package]]
+name = "django-resilient-logger"
+version = "3.0.0"
+source = { git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=176832d5f0be2cf7d73139fc645376e67f949ea2#176832d5f0be2cf7d73139fc645376e67f949ea2" }
+dependencies = [
+    { name = "django" },
+    { name = "elasticsearch8" },
 ]
 
 [[package]]
@@ -882,6 +907,33 @@ name = "editorconfig"
 version = "0.12.4"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/3d/85/7b5c2fac7fdc37d959fab714b13b9acb75884490dcc0e8b1dc5e64105084/EditorConfig-0.12.4.tar.gz", hash = "sha256:24857fa1793917dd9ccf0c7810a07e05404ce9b823521c7dce22a4fb5d125f80", size = 13278, upload-time = "2024-02-12T08:33:06.745Z" }
+
+[[package]]
+name = "elastic-transport"
+version = "8.19.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fc/63/c61700c42f74d70a4ae11394c619cf91b837b500144166e828546f1fdd8d/elastic_transport-8.19.0.tar.gz", hash = "sha256:32afed2a70dad80511476c821b2cf823f35a82153289765f6b2e2eb8cb0de099", size = 76409, upload-time = "2026-07-06T16:57:01.664Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/46/a6091ee84351b61bfb55cf615e538c38c1be4cfceae12f952953eb8d446c/elastic_transport-8.19.0-py3-none-any.whl", hash = "sha256:97ab35de878c7f4c7ebf8840cbc8ff1ff01d9dbc0e977e52d82715b155678b4f", size = 65085, upload-time = "2026-07-06T16:57:00.233Z" },
+]
+
+[[package]]
+name = "elasticsearch8"
+version = "8.19.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "elastic-transport" },
+    { name = "python-dateutil" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/53/6a/1a7d54c1aee0a96870aa54375da4b4a6d5390dd767c917de58242d3d49b8/elasticsearch8-8.19.3.tar.gz", hash = "sha256:7effe95b360241b6d56ef68219037a90ad0f56723614db54bbe57d33058402f4", size = 800428, upload-time = "2025-12-23T12:56:01.961Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/90/ff/1033bf0048d8492c1bcfcf058511dff119895ba50888c7a6e364aa3b168f/elasticsearch8-8.19.3-py3-none-any.whl", hash = "sha256:4b52e59e68aea6f59bf37c28f6f4512333302dd8a52e26c17d0f10c076d833a1", size = 953171, upload-time = "2025-12-23T12:55:58.781Z" },
+]
 
 [[package]]
 name = "et-xmlfile"

@@ -40,6 +40,8 @@ dependencies = [
     "django-admin-confirm",
     "django-guardian",
     "django-admin-rangefilter",
+    "django-resilient-logger",
+    "django-logger-extra",
 ]
 
 [dependency-groups]
@@ -68,6 +70,9 @@ dev = [
 default-groups = "all"
 exclude-newer = "P7D"
 package = false
+
+[tool.uv.sources]
+django-resilient-logger = { git = "https://github.com/City-of-Helsinki/django-resilient-logger", rev = "176832d5f0be2cf7d73139fc645376e67f949ea2" }
 
 [tool.ruff]
 extend-select = [
