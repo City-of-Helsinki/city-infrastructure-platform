@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.37.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.37.0...city-infrastructure-platform-v1.37.1) (2026-04-24)
+
+
+### Bug Fixes
+
+* Add missing codes that should be moved from traffic signs to signposts ([0a75d4f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0a75d4f73ecfe74c70dd6429e22117d12eab7417))
+
 ## [1.37.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.36.1...city-infrastructure-platform-v1.37.0) (2026-04-23)
 
 
