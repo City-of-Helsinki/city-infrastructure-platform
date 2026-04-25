@@ -28,6 +28,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    ReplaceablePlanServiceAdminMixin,
 )
 from traffic_control.enums import (
     Condition,
@@ -81,6 +82,7 @@ from traffic_control.resources.traffic_sign import (
     TrafficSignPlanToRealTemplateResource,
     TrafficSignRealResource,
 )
+from traffic_control.services.traffic_sign import traffic_sign_plan_update
 
 __all__ = (
     "OrderedTrafficSignRealInline",
@@ -214,6 +216,7 @@ class TrafficSignPlanAdmin(
     Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
+    ReplaceablePlanServiceAdminMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -222,6 +225,7 @@ class TrafficSignPlanAdmin(
 ):
     resource_class = TrafficSignPlanResource
     extra_export_resource_classes = [TrafficSignPlanToRealTemplateResource]
+    plan_update_service = traffic_sign_plan_update
     form = TrafficSignPlanModelForm
     fieldsets = (
         (
@@ -236,6 +240,7 @@ class TrafficSignPlanAdmin(
                     "txt",
                     "source_id",
                     "source_name",
+                    "replaces",
                 )
             },
         ),

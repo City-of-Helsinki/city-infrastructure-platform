@@ -224,6 +224,7 @@ def get_barrier_real(
 ) -> BarrierReal:
     user = get_user("test_user")
     barrier_plan = barrier_plan or get_barrier_plan()
+    device_type = device_type or barrier_plan.device_type
 
     return BarrierReal.objects.create(
         device_type=device_type,
@@ -419,10 +420,12 @@ def get_road_marking_real(
     traffic_sign_real=None,
 ) -> RoadMarkingReal:
     user = get_user("test_user")
+    road_marking_plan = road_marking_plan or get_road_marking_plan()
+    device_type = device_type or road_marking_plan.device_type
 
     return RoadMarkingReal.objects.get_or_create(
         device_type=device_type,
-        road_marking_plan=road_marking_plan or get_road_marking_plan(),
+        road_marking_plan=road_marking_plan,
         value="30",
         color=RoadMarkingColor.WHITE,
         location=location or test_point,
@@ -684,9 +687,11 @@ def get_traffic_sign_real(
     mount_real=None,
 ) -> TrafficSignReal:
     user = get_user("test_user")
+    traffic_sign_plan = traffic_sign_plan or get_traffic_sign_plan()
+    device_type = device_type or traffic_sign_plan.device_type
 
     return TrafficSignReal.objects.get_or_create(
-        traffic_sign_plan=traffic_sign_plan or get_traffic_sign_plan(),
+        traffic_sign_plan=traffic_sign_plan,
         device_type=device_type,
         location=location or test_point_3d,
         installation_date=datetime.date(2020, 1, 1),

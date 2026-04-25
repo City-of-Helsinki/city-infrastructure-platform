@@ -22,6 +22,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
     MultiResourceExportActionAdminMixin,
+    ReplaceablePlanServiceAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
@@ -49,6 +50,7 @@ from traffic_control.resources.traffic_light import (
     TrafficLightPlanToRealTemplateResource,
     TrafficLightRealResource,
 )
+from traffic_control.services.traffic_light import traffic_light_plan_update
 
 __all__ = (
     "TrafficLightPlanAdmin",
@@ -124,6 +126,7 @@ class TrafficLightPlanAdmin(
     Geometry3DFieldAdminMixin,
     MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
+    ReplaceablePlanServiceAdminMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
@@ -132,6 +135,7 @@ class TrafficLightPlanAdmin(
 ):
     resource_class = TrafficLightPlanResource
     extra_export_resource_classes = [TrafficLightPlanToRealTemplateResource]
+    plan_update_service = traffic_light_plan_update
     form = TrafficLightPlanModelForm
     fieldsets = (
         (

@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import List, Tuple, Type
 
 import tablib
@@ -194,3 +195,54 @@ class PermissionInlineMixin:
 
     def has_view_permission(self, _request, _obj):
         return self.permissions.get("view")
+
+
+class ReplaceablePlanServiceAdminMixin:
+    """
+    Updates plan replacements through the service layer instead of inline model writes.
+    """
+
+    plan_update_service = None
+
+    @staticmethod
+    def _contains_field(fields, field_name: str) -> bool:
+        for field in fields:
+            if isinstance(field, (list, tuple)):
+                if ReplaceablePlanServiceAdminMixin._contains_field(field, field_name):
+                    return True
+                continue
+
+            if field == field_name:
+                return True
+
+        return False
+
+    def get_fieldsets(self, request, obj=None, **kwargs):
+        fieldsets = deepcopy(super().get_fieldsets(request, obj=obj, **kwargs))
+        for _, options in fieldsets:
+            fields = options.get("fields", ())
+            if self._contains_field(fields, "plan") and not self._contains_field(fields, "replaces"):
+                options["fields"] = (*fields, "replaces")
+                break
+
+        return fieldsets
+
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        """Avoid passing custom form-only fields to modelform_factory field filtering."""
+        fields = kwargs.get("fields")
+        if fields:
+            kwargs["fields"] = tuple(field for field in fields if field != "replaces")
+
+        return super().get_form(request, obj=obj, change=change, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+        service = type(self).plan_update_service
+        if not service:
+            return
+
+        if "replaces" not in form.cleaned_data or "replaces" not in form.changed_data:
+            return
+
+        service(instance=obj, data={"replaces": form.cleaned_data["replaces"]})
