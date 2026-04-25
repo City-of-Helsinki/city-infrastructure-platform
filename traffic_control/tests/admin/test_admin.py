@@ -5,15 +5,42 @@ from auditlog.models import LogEntry
 from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.gis.geos import Point
+from django.core.exceptions import ValidationError
 from django.urls import resolve, reverse
 
-from traffic_control.admin import BarrierRealAdmin, TrafficSignPlanAdmin, TrafficSignRealAdmin
+from traffic_control.admin import (
+    AdditionalSignPlanAdmin,
+    BarrierPlanAdmin,
+    BarrierRealAdmin,
+    MountPlanAdmin,
+    RoadMarkingPlanAdmin,
+    SignpostPlanAdmin,
+    TrafficLightPlanAdmin,
+    TrafficSignPlanAdmin,
+    TrafficSignRealAdmin,
+)
 from traffic_control.enums import Lifecycle
-from traffic_control.models import BarrierReal, TrafficSignPlan, TrafficSignReal
+from traffic_control.models import (
+    AdditionalSignPlan,
+    BarrierPlan,
+    BarrierReal,
+    MountPlan,
+    RoadMarkingPlan,
+    SignpostPlan,
+    TrafficLightPlan,
+    TrafficSignPlan,
+    TrafficSignReal,
+)
 from traffic_control.tests.factories import (
     AdditionalSignRealFactory,
+    get_additional_sign_plan_and_replace,
     BarrierRealFactory,
+    get_barrier_plan,
+    get_mount_plan,
     get_owner,
+    get_road_marking_plan,
+    get_signpost_plan,
+    get_traffic_light_plan,
     get_traffic_sign_plan,
     get_traffic_sign_real,
     get_user,
@@ -24,6 +51,17 @@ from traffic_control.tests.utils import MIN_X, MIN_Y
 
 class MockRequest:
     pass
+
+
+replaceable_plan_admin_configs = (
+    (AdditionalSignPlanAdmin, AdditionalSignPlan, get_additional_sign_plan_and_replace),
+    (BarrierPlanAdmin, BarrierPlan, get_barrier_plan),
+    (MountPlanAdmin, MountPlan, get_mount_plan),
+    (RoadMarkingPlanAdmin, RoadMarkingPlan, get_road_marking_plan),
+    (SignpostPlanAdmin, SignpostPlan, get_signpost_plan),
+    (TrafficLightPlanAdmin, TrafficLightPlan, get_traffic_light_plan),
+    (TrafficSignPlanAdmin, TrafficSignPlan, get_traffic_sign_plan),
+)
 
 
 # ------------------------------------------------------------------------------
@@ -184,6 +222,97 @@ def test_traffic_sign_plan_admin_save_model_applies_replacement_through_service(
     assert new_plan.replaces == old_plan
     assert old_plan.replaced_by == new_plan
     assert real.traffic_sign_plan == new_plan
+
+
+@pytest.mark.parametrize(("admin_class", "model", "plan_factory"), replaceable_plan_admin_configs)
+@pytest.mark.django_db
+def test_replaceable_plan_admin_includes_replaces_field_for_all_plan_types(
+    admin_user, admin_site, admin_class, model, plan_factory
+):
+    ma = admin_class(model, admin_site)
+    request = MockRequest()
+    request.user = admin_user
+
+    fieldsets = ma.get_fieldsets(request)
+
+    related_models_fields = next(
+        options["fields"] for _, options in fieldsets if "plan" in options.get("fields", ())
+    )
+    assert "replaces" in related_models_fields
+
+
+@pytest.mark.parametrize(("admin_class", "model", "plan_factory"), replaceable_plan_admin_configs)
+@pytest.mark.django_db
+def test_replaceable_plan_admin_save_model_applies_replacement_through_service_for_all_plan_types(
+    admin_user, admin_site, admin_class, model, plan_factory
+):
+    old_plan = plan_factory()
+    new_plan = plan_factory()
+
+    ma = admin_class(model, admin_site)
+    request = MockRequest()
+    request.user = admin_user
+
+    form = type("DummyForm", (), {"cleaned_data": {"replaces": old_plan}, "changed_data": ["replaces"]})()
+    ma.save_model(request, new_plan, form, change=True)
+
+    old_plan.refresh_from_db()
+    new_plan.refresh_from_db()
+
+    assert new_plan.replaces == old_plan
+    assert old_plan.replaced_by == new_plan
+
+
+@pytest.mark.parametrize(("admin_class", "model", "plan_factory"), replaceable_plan_admin_configs)
+@pytest.mark.django_db
+def test_replaceable_plan_admin_save_model_skips_service_when_replaces_not_changed(
+    admin_user, admin_site, admin_class, model, plan_factory, monkeypatch
+):
+    new_plan = plan_factory()
+    calls = []
+
+    def fake_service(*, instance, data):
+        calls.append((instance.pk, data))
+
+    monkeypatch.setattr(admin_class, "plan_update_service", staticmethod(fake_service))
+
+    ma = admin_class(model, admin_site)
+    request = MockRequest()
+    request.user = admin_user
+    form = type("DummyForm", (), {"cleaned_data": {"replaces": None}, "changed_data": []})()
+
+    ma.save_model(request, new_plan, form, change=True)
+
+    assert calls == []
+    new_plan.refresh_from_db()
+    assert new_plan.replaces is None
+
+
+@pytest.mark.parametrize(("admin_class", "model", "plan_factory"), replaceable_plan_admin_configs)
+@pytest.mark.django_db
+def test_replaceable_plan_admin_save_model_propagates_service_validation_error(
+    admin_user, admin_site, admin_class, model, plan_factory, monkeypatch
+):
+    old_plan = plan_factory()
+    new_plan = plan_factory()
+
+    def fake_service(*, instance, data):
+        raise ValidationError("Cannot replace a device plan that is already replaced")
+
+    monkeypatch.setattr(admin_class, "plan_update_service", staticmethod(fake_service))
+
+    ma = admin_class(model, admin_site)
+    request = MockRequest()
+    request.user = admin_user
+    form = type("DummyForm", (), {"cleaned_data": {"replaces": old_plan}, "changed_data": ["replaces"]})()
+
+    with pytest.raises(ValidationError, match="Cannot replace a device plan that is already replaced"):
+        ma.save_model(request, new_plan, form, change=True)
+
+    old_plan.refresh_from_db()
+    new_plan.refresh_from_db()
+    assert old_plan.replaced_by is None
+    assert new_plan.replaces is None
 
 
 # ------------------------------------------------------------------------------
