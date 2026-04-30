@@ -58,7 +58,7 @@ class TrafficSignPlanQuerySet(SoftDeleteQuerySet):
     def soft_delete(self, user):
         from traffic_control.models.additional_sign import AdditionalSignPlan
 
-        additional_signs = AdditionalSignPlan.objects.filter(parent__in=self).active()
+        additional_signs = AdditionalSignPlan.objects.filter(parent__in=self, signpost_plan__isnull=True).active()
 
         super().soft_delete(user)
         additional_signs.soft_delete(user)
@@ -68,7 +68,7 @@ class TrafficSignRealQuerySet(SoftDeleteQuerySet):
     def soft_delete(self, user):
         from traffic_control.models.additional_sign import AdditionalSignReal
 
-        additional_signs = AdditionalSignReal.objects.filter(parent__in=self).active()
+        additional_signs = AdditionalSignReal.objects.filter(parent__in=self, signpost_real__isnull=True).active()
 
         super().soft_delete(user)
         additional_signs.soft_delete(user)
@@ -85,6 +85,7 @@ class AbstractTrafficSign(
 ):
     ALLOWED_TARGET_MODELS = TRAFFIC_SIGN_ALLOWED_TARGET_MODELS
     """There exists some special codes that are signposts or barriers but we want to have them in trafficsign tables"""
+    SIGNPOST_FK_FIELD: str  # set by each concrete subclass, e.g. "signpost_plan" or "signpost_real"
 
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     device_type = models.ForeignKey(
@@ -212,9 +213,20 @@ class AbstractTrafficSign(
         super().save(*args, **kwargs)
 
     @transaction.atomic
-    def soft_delete(self, user):
+    def soft_delete(self, user) -> None:
+        """Soft-delete this traffic sign and cascade to un-re-parented additional signs.
+
+        Additional signs that have already been re-parented to a signpost are
+        excluded from the cascade — they are managed independently.
+
+        Args:
+            user: The user performing the soft-delete.
+
+        Returns:
+            None
+        """
         super().soft_delete(user)
-        self.additional_signs.soft_delete(user)
+        self.additional_signs.filter(**{f"{self.SIGNPOST_FK_FIELD}__isnull": True}).soft_delete(user)
 
 
 class TrafficSignPlan(
@@ -243,6 +255,8 @@ class TrafficSignPlan(
     )
 
     objects = TrafficSignPlanQuerySet.as_manager()
+
+    SIGNPOST_FK_FIELD = "signpost_plan"
 
     class Meta:
         db_table = "traffic_sign_plan"
@@ -361,6 +375,8 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
     )
 
     objects = TrafficSignRealQuerySet.as_manager()
+
+    SIGNPOST_FK_FIELD = "signpost_real"
 
     class Meta:
         db_table = "traffic_sign_real"

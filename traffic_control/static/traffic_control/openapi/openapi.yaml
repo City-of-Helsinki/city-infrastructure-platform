@@ -293,6 +293,11 @@ paths:
         schema:
           type: string
       - in: query
+        name: signpost_plan
+        schema:
+          type: string
+          format: uuid
+      - in: query
         name: size
         schema:
           type: string
@@ -964,6 +969,11 @@ paths:
         name: seasonal_validity_period_information
         schema:
           type: string
+      - in: query
+        name: signpost_real
+        schema:
+          type: string
+          format: uuid
       - in: query
         name: size
         schema:
@@ -14613,6 +14623,13 @@ components:
           nullable: true
           title: Parent Traffic Sign Plan
           description: The traffic sign to which this additional sign is associated.
+        signpost_plan:
+          type: string
+          format: uuid
+          nullable: true
+          title: Parent Signpost Plan
+          description: The signpost plan to which this additional sign is associated
+            (set after signpost migration).
         mount_plan:
           type: string
           format: uuid
@@ -14874,6 +14891,13 @@ components:
           nullable: true
           title: Parent Traffic Sign Plan
           description: The traffic sign to which this additional sign is associated.
+        signpost_plan:
+          type: string
+          format: uuid
+          nullable: true
+          title: Parent Signpost Plan
+          description: The signpost plan to which this additional sign is associated
+            (set after signpost migration).
         mount_plan:
           type: string
           format: uuid
@@ -15163,6 +15187,13 @@ components:
           nullable: true
           title: Parent Traffic Sign Plan
           description: The traffic sign to which this additional sign is associated.
+        signpost_plan:
+          type: string
+          format: uuid
+          nullable: true
+          title: Parent Signpost Plan
+          description: The signpost plan to which this additional sign is associated
+            (set after signpost migration).
         mount_plan:
           type: string
           format: uuid
@@ -15550,6 +15581,13 @@ components:
           nullable: true
           title: Parent Traffic Sign Real
           description: The traffic sign to which this additional sign is associated.
+        signpost_real:
+          type: string
+          format: uuid
+          nullable: true
+          title: Parent Signpost Real
+          description: The signpost real to which this additional sign is associated
+            (set after signpost migration).
         additional_sign_plan:
           type: string
           format: uuid
@@ -15976,6 +16014,13 @@ components:
           nullable: true
           title: Parent Traffic Sign Real
           description: The traffic sign to which this additional sign is associated.
+        signpost_real:
+          type: string
+          format: uuid
+          nullable: true
+          title: Parent Signpost Real
+          description: The signpost real to which this additional sign is associated
+            (set after signpost migration).
         additional_sign_plan:
           type: string
           format: uuid
@@ -21275,6 +21320,13 @@ components:
           nullable: true
           title: Parent Traffic Sign Plan
           description: The traffic sign to which this additional sign is associated.
+        signpost_plan:
+          type: string
+          format: uuid
+          nullable: true
+          title: Parent Signpost Plan
+          description: The signpost plan to which this additional sign is associated
+            (set after signpost migration).
         mount_plan:
           type: string
           format: uuid
@@ -21622,6 +21674,13 @@ components:
           nullable: true
           title: Parent Traffic Sign Real
           description: The traffic sign to which this additional sign is associated.
+        signpost_real:
+          type: string
+          format: uuid
+          nullable: true
+          title: Parent Signpost Real
+          description: The signpost real to which this additional sign is associated
+            (set after signpost migration).
         additional_sign_plan:
           type: string
           format: uuid

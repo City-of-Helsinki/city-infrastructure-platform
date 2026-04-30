@@ -105,41 +105,95 @@ class AdditionalSignParentValidationMixin:
     that only ticket machine device types can have a null parent.
     """
 
-    def validate(self, data: dict) -> dict:
+    def _is_update(self) -> bool:
+        """Check whether the current serializer operation is an update.
+
+        Returns:
+            bool: True if the serializer has an existing instance (update), False otherwise.
         """
-        Validate that parent is provided for non-ticket-machine device types.
+        return hasattr(self, "instance") and self.instance is not None
+
+    def _resolve_effective_parents(self, data: dict, is_update: bool) -> tuple:
+        """Resolve the effective parent, signpost_plan, and signpost_real values.
+
+        For updates, falls back to existing instance values when not explicitly provided.
 
         Args:
-            data: The validated data dictionary.
+            data (dict): The validated data dictionary.
+            is_update (bool): Whether the current operation is an update.
+
+        Returns:
+            tuple: A tuple of (parent, signpost_plan, signpost_real).
+        """
+        parent = data.get("parent") if not is_update or "parent" in data else self.instance.parent
+        signpost_plan = (
+            data.get("signpost_plan")
+            if not is_update or "signpost_plan" in data
+            else getattr(self.instance, "signpost_plan", None)
+        )
+        signpost_real = (
+            data.get("signpost_real")
+            if not is_update or "signpost_real" in data
+            else getattr(self.instance, "signpost_real", None)
+        )
+        return parent, signpost_plan, signpost_real
+
+    def _resolve_effective_device_type(self, data: dict, is_update: bool):
+        """Resolve the effective device type, falling back to the instance value on updates.
+
+        Args:
+            data (dict): The validated data dictionary.
+            is_update (bool): Whether the current operation is an update.
+
+        Returns:
+            The device type to use for validation.
+        """
+        device_type = data.get("device_type")
+        if is_update and not device_type:
+            return self.instance.device_type
+        return device_type
+
+    @staticmethod
+    def _raise_parent_required_error() -> None:
+        """Raise a ValidationError indicating that a parent is required.
+
+        Raises:
+            serializers.ValidationError: Always raised with a descriptive message.
+        """
+        raise serializers.ValidationError(
+            {
+                "parent": _(
+                    "Parent is required for additional signs that are not ticket machines. "
+                    "Set either parent (TrafficSign), signpost_plan, or signpost_real."
+                )
+            }
+        )
+
+    def validate(self, data: dict) -> dict:
+        """Validate that parent is provided for non-ticket-machine device types.
+
+        Args:
+            data (dict): The validated data dictionary.
 
         Returns:
             dict: The validated data.
 
         Raises:
-            ValidationError: If parent is missing for non-ticket-machine device types.
+            serializers.ValidationError: If parent is missing for non-ticket-machine device types.
         """
-        # Only validate parent on create or when parent field is explicitly being updated
-        is_update = hasattr(self, "instance") and self.instance is not None
+        is_update = self._is_update()
         parent_in_data = "parent" in data
+        signpost_parent_in_data = "signpost_plan" in data or "signpost_real" in data
 
-        # Skip validation if this is an update and parent is not being changed
-        if is_update and not parent_in_data:
+        if is_update and not parent_in_data and not signpost_parent_in_data:
             return data
 
-        # For create or when parent is being updated, check the requirement
-        parent = data.get("parent")
-        device_type = data.get("device_type")
+        parent, signpost_plan, signpost_real = self._resolve_effective_parents(data, is_update)
+        device_type = self._resolve_effective_device_type(data, is_update)
 
-        # If updating and device_type not in data, use existing device_type
-        if is_update and not device_type:
-            device_type = self.instance.device_type
-
-        # Check if parent is missing and device type is not a ticket machine
-        if not parent and device_type:
-            if device_type.code not in TICKET_MACHINE_CODES:
-                raise serializers.ValidationError(
-                    {"parent": _("Parent is required for additional signs that are not ticket machines.")}
-                )
+        has_any_parent = bool(parent or signpost_plan or signpost_real)
+        if not has_any_parent and device_type and device_type.code not in TICKET_MACHINE_CODES:
+            self._raise_parent_required_error()
 
         return data
 

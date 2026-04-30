@@ -33,6 +33,7 @@ from traffic_control.models.common import (
 )
 from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
+from traffic_control.models.signpost import SignpostPlan, SignpostReal
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
 from traffic_control.validators import validate_structured_content
 
@@ -218,12 +219,19 @@ class AbstractAdditionalSign(
             if len(content_s_validation_errors) > 0:
                 validation_errors["content_s"] = content_s_validation_errors
 
-        # Validate that parent can only be null for ticket machine device types
-        # Check if parent attribute exists (it's defined in concrete classes)
-        if hasattr(self, "parent") and not self.parent and self.device_type:
-            if self.device_type.code not in TICKET_MACHINE_CODES:
+        # Validate that parent can only be null for ticket machine device types.
+        # A valid parent is: the TrafficSign FK (parent), the SignpostPlan FK
+        # (signpost_plan), or the SignpostReal FK (signpost_real).
+        if self.device_type and self.device_type.code not in TICKET_MACHINE_CODES:
+            has_traffic_sign_parent = hasattr(self, "parent") and bool(self.parent)
+            has_signpost_plan_parent = hasattr(self, "signpost_plan") and bool(self.signpost_plan)
+            has_signpost_real_parent = hasattr(self, "signpost_real") and bool(self.signpost_real)
+            if not (has_traffic_sign_parent or has_signpost_plan_parent or has_signpost_real_parent):
                 validation_errors["parent"] = ValidationError(
-                    _("Parent is required for additional signs that are not ticket machines."),
+                    _(
+                        "Parent is required for additional signs that are not ticket machines. "
+                        "Set either parent (TrafficSign), signpost_plan, or signpost_real."
+                    ),
                     code="parent_required",
                 )
 
@@ -254,6 +262,15 @@ class AdditionalSignPlan(
         blank=True,
         null=True,
         help_text=_("The traffic sign to which this additional sign is associated."),
+    )
+    signpost_plan = models.ForeignKey(
+        SignpostPlan,
+        verbose_name=_("Parent Signpost Plan"),
+        on_delete=models.PROTECT,
+        related_name="additional_signs",
+        blank=True,
+        null=True,
+        help_text=_("The signpost plan to which this additional sign is associated (set after signpost migration)."),
     )
     mount_plan = models.ForeignKey(
         MountPlan,
@@ -318,6 +335,15 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         blank=True,
         null=True,
         help_text=_("The traffic sign to which this additional sign is associated."),
+    )
+    signpost_real = models.ForeignKey(
+        SignpostReal,
+        verbose_name=_("Parent Signpost Real"),
+        on_delete=models.PROTECT,
+        related_name="additional_signs",
+        blank=True,
+        null=True,
+        help_text=_("The signpost real to which this additional sign is associated (set after signpost migration)."),
     )
     additional_sign_plan = models.ForeignKey(
         AdditionalSignPlan,

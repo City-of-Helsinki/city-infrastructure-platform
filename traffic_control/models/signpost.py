@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
@@ -34,6 +35,39 @@ from traffic_control.models.common import (
 from traffic_control.models.mount import MountPlan, MountReal
 from traffic_control.models.plan import Plan
 from traffic_control.models.traffic_sign import LocationSpecifier
+from traffic_control.models.utils import SoftDeleteQuerySet
+
+
+class SignpostPlanQuerySet(SoftDeleteQuerySet):
+    """QuerySet for SignpostPlan that cascades soft-delete to additional signs."""
+
+    def soft_delete(self, user: object) -> None:
+        """Soft-delete signpost plans and cascade to linked additional sign plans.
+
+        Args:
+            user: The user performing the soft-delete.
+        """
+        from traffic_control.models.additional_sign import AdditionalSignPlan
+
+        additional_signs = AdditionalSignPlan.objects.filter(signpost_plan__in=self).active()
+        super().soft_delete(user)
+        additional_signs.soft_delete(user)
+
+
+class SignpostRealQuerySet(SoftDeleteQuerySet):
+    """QuerySet for SignpostReal that cascades soft-delete to additional signs."""
+
+    def soft_delete(self, user: object) -> None:
+        """Soft-delete signpost reals and cascade to linked additional sign reals.
+
+        Args:
+            user: The user performing the soft-delete.
+        """
+        from traffic_control.models.additional_sign import AdditionalSignReal
+
+        additional_signs = AdditionalSignReal.objects.filter(signpost_real__in=self).active()
+        super().soft_delete(user)
+        additional_signs.soft_delete(user)
 
 
 class AbstractSignpost(
@@ -191,6 +225,8 @@ class SignpostPlan(
     ReplaceableDevicePlanMixin,
     AbstractSignpost,
 ):
+    objects = SignpostPlanQuerySet.as_manager()
+
     mount_plan = models.ForeignKey(
         MountPlan,
         verbose_name=_("Mount Plan"),
@@ -229,6 +265,16 @@ class SignpostPlan(
             ),
         ]
 
+    @transaction.atomic
+    def soft_delete(self, user: object) -> None:
+        """Soft-delete this signpost plan and cascade to linked additional sign plans.
+
+        Args:
+            user: The user performing the soft-delete.
+        """
+        super().soft_delete(user)
+        self.additional_signs.active().soft_delete(user)
+
 
 class SignpostPlanReplacement(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -254,6 +300,8 @@ class SignpostPlanReplacement(models.Model):
 
 
 class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledDeviceModel):
+    objects = SignpostRealQuerySet.as_manager()
+
     signpost_plan = models.ForeignKey(
         SignpostPlan,
         verbose_name=_("Signpost Plan"),
@@ -330,6 +378,16 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledD
                 name="%(app_label)s_%(class)s_unique_signpost_plan_id",
             ),
         ]
+
+    @transaction.atomic
+    def soft_delete(self, user: object) -> None:
+        """Soft-delete this signpost real and cascade to linked additional sign reals.
+
+        Args:
+            user: The user performing the soft-delete.
+        """
+        super().soft_delete(user)
+        self.additional_signs.active().soft_delete(user)
 
 
 class SignpostRealOperation(OperationBase):
