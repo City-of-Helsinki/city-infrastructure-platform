@@ -7,13 +7,13 @@ from rest_framework.test import APITestCase
 
 from traffic_control.models import OperationalArea
 from traffic_control.tests.api_utils import do_illegal_geometry_test
-from traffic_control.tests.factories import get_api_client, get_operational_area, get_user
+from traffic_control.tests.factories import get_api_client, get_user, OperationalAreaFactory
 from traffic_control.tests.test_base_api import illegal_multipolygon, test_multi_polygon, test_multi_polygon_2
 
 
 class OperationalAreaAPITestCase(APITestCase):
     def setUp(self):
-        self.operational_area = get_operational_area()
+        self.operational_area = OperationalAreaFactory()
         self.user = get_user()
         self.admin = get_user(admin=True)
 
@@ -113,7 +113,7 @@ def test__operational_area__anonymous_user(method, expected_status, view_type):
     Test that for unauthorized user the API responses 401 unauthorized.
     """
     client = get_api_client(user=None)
-    operational_area = get_operational_area(test_multi_polygon, "Area 1")
+    operational_area = OperationalAreaFactory(location=test_multi_polygon, name="Area 1")
     kwargs = {"pk": operational_area.id} if view_type == "detail" else None
     resource_path = reverse(f"v1:operationalarea-{view_type}", kwargs=kwargs)
     data = {

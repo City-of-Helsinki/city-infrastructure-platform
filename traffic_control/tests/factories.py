@@ -85,11 +85,13 @@ def get_user(username=None, admin=False, bypass_operational_area=False, bypass_r
     )
 
 
-def get_operational_area(area=None, name=None) -> OperationalArea:
-    return OperationalArea.objects.get_or_create(
-        name=name or "Test operational area",
-        location=area or MultiPolygon(test_polygon, srid=settings.SRID),
-    )[0]
+class OperationalAreaFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = OperationalArea
+        django_get_or_create = ("name",)
+
+    name = "Test operational area"
+    location = MultiPolygon(test_polygon, srid=settings.SRID)
 
 
 class OwnerFactory(factory.django.DjangoModelFactory):
