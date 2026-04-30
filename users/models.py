@@ -8,8 +8,6 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from helusers.models import AbstractUser
 
-from admin_helper.decorators import requires_fields
-
 if TYPE_CHECKING:
     from traffic_control.models import ResponsibleEntity
 
@@ -151,9 +149,8 @@ class User(AbstractUser):
         verbose_name_plural = _("Users")
 
     # NOTE (2026-02-17 thiago) declare field dependencies so suggest_queryset_optimizations can introspect this
-    @requires_fields("email", "first_name", "last_name")
     def __str__(self):
-        return super().__str__()
+        return str(self.pk)
 
 
 class UserDeactivationStatus(models.Model):
@@ -213,5 +210,7 @@ class UserDeactivationStatus(models.Model):
 
 
 auditlog.register(
-    User, m2m_fields={"operational_areas", "responsible_entities", "groups", "ad_groups", "user_permissions"}
+    User,
+    m2m_fields={"operational_areas", "responsible_entities", "groups", "ad_groups", "user_permissions"},
+    mask_fields=["email", "first_name", "last_name"],
 )
