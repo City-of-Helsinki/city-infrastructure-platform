@@ -82,8 +82,11 @@ def value_referenced(value: Any, logentry: LogEntry):
 def test__user_created_auditlog_does_not_leak_user_pii(user):
     logentries = LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.CREATE)
     assert logentries.count() == 1
-    assert user_pii_leaks(user, logentries[0]) == [], "log entry does not store user PII"
-    assert value_referenced(user.pk, logentries[0]), "log entry references user PK"
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(logentries[0])
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    assert user_pii_leaks(user, logentries[0]) == [], "log entry should not store user PII"
+    assert value_referenced(user.pk, logentries[0]), "log entry should reference user PK"
 
 
 @pytest.mark.django_db
@@ -95,8 +98,8 @@ def test__user_updated_auditlog_does_not_leak_user_pii(user):
     user.save()
     logentries = LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE)
     assert logentries.count() == 1
-    assert user_pii_leaks(user, logentries[0]) == [], "log entry does not store user PII"
-    assert value_referenced(user.pk, logentries[0]), "log entry references user PK"
+    assert user_pii_leaks(user, logentries[0]) == [], "log entry should not store user PII"
+    assert value_referenced(user.pk, logentries[0]), "log entry should reference user PK"
 
 
 @pytest.mark.django_db
@@ -104,8 +107,8 @@ def test__user_deleted_auditlog_does_not_leak_user_pii(user):
     user.delete()
     logentries = LogEntry.objects.get_for_model(User).filter(action=LogEntry.Action.DELETE)
     assert logentries.count() == 1
-    assert user_pii_leaks(user, logentries[0]) == [], "log entry does not store user PII"
-    assert value_referenced(user.pk, logentries[0]), "log entry references user PK"
+    assert user_pii_leaks(user, logentries[0]) == [], "log entry should not store user PII"
+    assert value_referenced(user.pk, logentries[0]), "log entry should reference user PK"
 
 
 # Operations on other objects
@@ -115,8 +118,8 @@ def test__user_deleted_auditlog_does_not_leak_user_pii(user):
 def test__object_created_does_not_leak_actor_pii(actor, traffic_sign_real):
     logentries = LogEntry.objects.get_for_object(traffic_sign_real).filter(action=LogEntry.Action.CREATE)
     assert logentries.count() == 1
-    assert user_pii_leaks(actor, logentries[0]) == [], "log entry does not store actor PII"
-    assert value_referenced(actor.pk, logentries[0]), "log entry references actor PK"
+    assert user_pii_leaks(actor, logentries[0]) == [], "log entry should not store actor PII"
+    assert value_referenced(actor.pk, logentries[0]), "log entry should reference actor PK"
 
 
 @pytest.mark.django_db
@@ -127,10 +130,13 @@ def test__object_updated_does_not_leak_actor_pii(actor, user, traffic_sign_real)
 
     logentries = LogEntry.objects.get_for_object(traffic_sign_real).filter(action=LogEntry.Action.UPDATE)
     assert logentries.count() == 1
-    assert user_pii_leaks(actor, logentries[0]) == [], "log entry does not store actor PII"
-    assert value_referenced(actor.pk, logentries[0]), "log entry references actor PK"
-    assert user_pii_leaks(user, logentries[0]) == [], "log entry does not store user PII"
-    assert value_referenced(user.pk, logentries[0]), "log entry references user PK"
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(logentries[0])
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    assert user_pii_leaks(actor, logentries[0]) == [], "log entry should not store actor PII"
+    assert value_referenced(actor.pk, logentries[0]), "log entry should reference actor PK"
+    assert user_pii_leaks(user, logentries[0]) == [], "log entry should not store user PII"
+    assert value_referenced(user.pk, logentries[0]), "log entry should reference user PK"
 
 
 @pytest.mark.django_db
@@ -140,8 +146,8 @@ def test__object_deleted_does_not_leak_actor_pii(actor, traffic_sign_real):
 
     logentries = LogEntry.objects.get_for_model(TrafficSignReal).filter(action=LogEntry.Action.DELETE)
     assert logentries.count() == 1
-    assert user_pii_leaks(actor, logentries[0]) == [], "log entry does not store actor PII"
-    assert value_referenced(actor.pk, logentries[0]), "log entry references actor PK"
+    assert user_pii_leaks(actor, logentries[0]) == [], "log entry should not store actor PII"
+    assert value_referenced(actor.pk, logentries[0]), "log entry should reference actor PK"
 
 
 # M2M tests
@@ -166,14 +172,20 @@ def test__m2m_relations_do_not_leak_user_pii(actor, user, get_related_obj, actor
     actor.save()
     logentries = LogEntry.objects.get_for_object(actor).filter(action=LogEntry.Action.UPDATE)
     assert logentries.count() == 1
-    assert user_pii_leaks(actor, logentries[0]) == [], "log entry does not store actor PII"
-    assert value_referenced(actor.pk, logentries[0]), "log entry references actor PK"
-    assert value_referenced(related_obj, logentries[0]), "log entry references related object"
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(logentries[0])
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    assert user_pii_leaks(actor, logentries[0]) == [], "log entry should not store actor PII"
+    assert value_referenced(actor.pk, logentries[0]), "log entry should reference actor PK"
+    assert value_referenced(related_obj, logentries[0]), "log entry should reference related object"
 
     getattr(related_obj, related_relation).add(user)
     related_obj.save()
     logentries = LogEntry.objects.get_for_object(related_obj).filter(action=LogEntry.Action.UPDATE)
     assert logentries.count() == 1
-    assert user_pii_leaks(user, logentries[0]) == [], "log entry does not store user PII"
-    assert value_referenced(user.pk, logentries[0]), "log entry references user PK"
-    assert value_referenced(related_obj, logentries[0]), "log entry references related object"
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(logentries[0])
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    assert user_pii_leaks(user, logentries[0]) == [], "log entry should not store user PII"
+    assert value_referenced(user.pk, logentries[0]), "log entry should reference user PK"
+    assert value_referenced(related_obj, logentries[0]), "log entry should reference related object"

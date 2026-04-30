@@ -117,8 +117,8 @@ def value_referenced(value: Any, logentry: AbstractLogSource):
 def test__user_created_resilient_logger_does_not_leak_user_pii(user):
     auditlog_entry = LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.CREATE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
-    assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry does not store user PII"
-    assert value_referenced(user.pk, resilient_log_entry), "resilient log entry references user PK"
+    assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry should not store user PII"
+    assert value_referenced(user.pk, resilient_log_entry), "resilient log entry should reference user PK"
 
 
 @pytest.mark.django_db
@@ -130,8 +130,8 @@ def test__user_updated_resilient_logger_does_not_leak_user_pii(user):
     user.save()
     auditlog_entry = LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
-    assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry does not store user PII"
-    assert value_referenced(user.pk, resilient_log_entry), "resilient log entry references user PK"
+    assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry should not store user PII"
+    assert value_referenced(user.pk, resilient_log_entry), "resilient log entry should reference user PK"
 
 
 @pytest.mark.django_db
@@ -139,8 +139,8 @@ def test__user_deleted_resilient_logger_does_not_leak_user_pii(user):
     user.delete()
     auditlog_entry = LogEntry.objects.get_for_model(User).filter(action=LogEntry.Action.DELETE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
-    assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry does not store user PII"
-    assert value_referenced(user.pk, resilient_log_entry), "resilient log entry references user PK"
+    assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry should not store user PII"
+    assert value_referenced(user.pk, resilient_log_entry), "resilient log entry should reference user PK"
 
 
 # Operations on other objects
@@ -150,8 +150,8 @@ def test__user_deleted_resilient_logger_does_not_leak_user_pii(user):
 def test__object_created_resilient_logger_does_not_leak_actor_pii(actor, additional_sign_plan):
     auditlog_entry = LogEntry.objects.get_for_object(additional_sign_plan).filter(action=LogEntry.Action.CREATE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
-    assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry does not store actor PII"
-    assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry references actor PK"
+    assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry should not store actor PII"
+    assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry should reference actor PK"
 
 
 @pytest.mark.django_db
@@ -161,10 +161,10 @@ def test__object_updated_resilient_logger_does_not_leak_actor_pii(actor, user, a
         additional_sign_plan.save()
     auditlog_entry = LogEntry.objects.get_for_object(additional_sign_plan).filter(action=LogEntry.Action.UPDATE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
-    assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry does not store actor PII"
-    assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry references actor PK"
-    assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry does not store user PII"
-    assert value_referenced(user.pk, resilient_log_entry), "resilient log entry references user PK"
+    assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry should not store actor PII"
+    assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry should reference actor PK"
+    assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry should not store user PII"
+    assert value_referenced(user.pk, resilient_log_entry), "resilient log entry should reference user PK"
 
 
 @pytest.mark.django_db
@@ -173,8 +173,8 @@ def test__object_deleted_resilient_logger_does_not_leak_actor_pii(actor, additio
         additional_sign_plan.delete()
     auditlog_entry = LogEntry.objects.get_for_model(AdditionalSignPlan).filter(action=LogEntry.Action.DELETE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
-    assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry does not store actor PII"
-    assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry references actor PK"
+    assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry should not store actor PII"
+    assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry should reference actor PK"
 
 
 # M2M tests
@@ -199,14 +199,14 @@ def test__m2m_relations_do_not_leak_user_pii(actor, user, get_related_obj, actor
     actor.save()
     auditlog_entry = LogEntry.objects.get_for_object(actor).filter(action=LogEntry.Action.UPDATE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
-    assert user_pii_leaks(actor, resilient_log_entry) == [], "log entry does not store actor PII"
-    assert value_referenced(actor.pk, resilient_log_entry), "log entry references actor PK"
-    assert value_referenced(related_obj, resilient_log_entry), "log entry references related object"
+    assert user_pii_leaks(actor, resilient_log_entry) == [], "log entry should not store actor PII"
+    assert value_referenced(actor.pk, resilient_log_entry), "log entry should reference actor PK"
+    assert value_referenced(related_obj, resilient_log_entry), "log entry should reference related object"
 
     getattr(related_obj, related_relation).add(user)
     related_obj.save()
     auditlog_entry = LogEntry.objects.get_for_object(related_obj).filter(action=LogEntry.Action.UPDATE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
-    assert user_pii_leaks(user, resilient_log_entry) == [], "log entry does not store user PII"
-    assert value_referenced(user.pk, resilient_log_entry), "log entry references user PK"
-    assert value_referenced(related_obj, resilient_log_entry), "log entry references related object"
+    assert user_pii_leaks(user, resilient_log_entry) == [], "log entry should not store user PII"
+    assert value_referenced(user.pk, resilient_log_entry), "log entry should reference user PK"
+    assert value_referenced(related_obj, resilient_log_entry), "log entry should reference related object"
