@@ -13,6 +13,7 @@ from django.utils import timezone
 from traffic_control.constants import SIGNPOST_CODES
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.management.commands.base_migration import BaseMigrationCommand
+from traffic_control.models.additional_sign import AdditionalSignPlan, AdditionalSignReal
 from traffic_control.models.signpost import SignpostPlan, SignpostPlanFile, SignpostReal, SignpostRealFile
 from traffic_control.models.signpost_migration import (
     SignpostMigrationPlanRecord,
@@ -234,6 +235,7 @@ class Command(BaseMigrationCommand):
                 self.stats["plan_files_migrated"] += file_count
                 self.stats["plans_migrated"] += 1
                 self.stdout.write(f"    ✓ Created SignpostPlan {new_plan.id}")
+                self._reparent_additional_sign_plans(ts_plan, new_plan)
 
             # Create detail record (outside dry_run check so we log even in dry-run)
             self._create_plan_detail_record(ts_plan, new_plan, file_count)
@@ -279,6 +281,7 @@ class Command(BaseMigrationCommand):
         if not dry_run:
             new_real, file_count = self._create_signpost_real(ts_real, signpost_plan_id)
             self.stats["reals_migrated"] += 1
+            self._reparent_additional_sign_reals(ts_real, new_real)
 
         # Create detail record (outside dry_run check so we log even in dry-run)
         self._create_real_detail_record(ts_real, new_real, plan_mapping_found, file_count)
@@ -342,3 +345,35 @@ class Command(BaseMigrationCommand):
         self.stats["real_files_migrated"] += file_count
         self.stdout.write(f"    ✓ Created SignpostReal {new_real.id}")
         return new_real, file_count
+
+    def _reparent_additional_sign_plans(self, ts_plan: TrafficSignPlan, new_plan: SignpostPlan) -> None:
+        """Re-point AdditionalSignPlan children from a TrafficSignPlan to the new SignpostPlan.
+
+        Clears the old TrafficSign parent FK and sets the signpost_plan FK so that
+        the additional signs survive the subsequent soft-delete of the TrafficSignPlan.
+
+        Args:
+            ts_plan: The original TrafficSignPlan being migrated away.
+            new_plan: The newly created SignpostPlan to re-parent children to.
+        """
+        affected = AdditionalSignPlan.objects.filter(parent=ts_plan, is_active=True)
+        count = affected.count()
+        if count:
+            affected.update(parent=None, signpost_plan=new_plan)
+            self.stdout.write(f"    ↳ Re-parented {count} AdditionalSignPlan(s) → SignpostPlan {new_plan.id}")
+
+    def _reparent_additional_sign_reals(self, ts_real: TrafficSignReal, new_real: SignpostReal) -> None:
+        """Re-point AdditionalSignReal children from a TrafficSignReal to the new SignpostReal.
+
+        Clears the old TrafficSign parent FK and sets the signpost_real FK so that
+        the additional signs survive the subsequent soft-delete of the TrafficSignReal.
+
+        Args:
+            ts_real: The original TrafficSignReal being migrated away.
+            new_real: The newly created SignpostReal to re-parent children to.
+        """
+        affected = AdditionalSignReal.objects.filter(parent=ts_real, is_active=True)
+        count = affected.count()
+        if count:
+            affected.update(parent=None, signpost_real=new_real)
+            self.stdout.write(f"    ↳ Re-parented {count} AdditionalSignReal(s) → SignpostReal {new_real.id}")

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-21 10:28+0300\n"
+"POT-Creation-Date: 2026-05-07 13:36+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -855,6 +855,30 @@ msgstr "Ajoeste (toteuma)"
 msgid "Barrier reals"
 msgstr "Ajoeste (toteumat)"
 
+msgid "Field Population - Appearance"
+msgstr ""
+
+msgid "Field Population - Location"
+msgstr ""
+
+msgid "Original ID"
+msgstr "Alkupäinen ID"
+
+msgid "New ID"
+msgstr ""
+
+msgid "Fields Populated"
+msgstr ""
+
+msgid "Duration"
+msgstr "Kesto"
+
+msgid "Mode"
+msgstr ""
+
+msgid "Status"
+msgstr "Tila"
+
 msgid "Operational area"
 msgstr "Toiminta-alue"
 
@@ -970,15 +994,6 @@ msgstr ""
 msgid "Error Information"
 msgstr ""
 
-msgid "Mode"
-msgstr ""
-
-msgid "Status"
-msgstr "Tila"
-
-msgid "Duration"
-msgstr "Kesto"
-
 msgid "Plans"
 msgstr "Suunnitelmat"
 
@@ -1003,12 +1018,6 @@ msgstr ""
 msgid "Field Population - Basic"
 msgstr ""
 
-msgid "Field Population - Appearance"
-msgstr ""
-
-msgid "Field Population - Location"
-msgstr ""
-
 msgid "Field Population - Other"
 msgstr ""
 
@@ -1019,15 +1028,6 @@ msgid "Files"
 msgstr "Tiedostot"
 
 msgid "Migration Run"
-msgstr ""
-
-msgid "Original ID"
-msgstr "Alkupäinen ID"
-
-msgid "New ID"
-msgstr ""
-
-msgid "Fields Populated"
 msgstr ""
 
 msgid "Plan Mapping"
@@ -1482,7 +1482,9 @@ msgstr "Sijaintitarkenne"
 msgid "Specifies where the sign is in relation to the road."
 msgstr "Määrittää kilven sijainnin suhteessa tiehen."
 
-msgid "Parent is required for additional signs that are not ticket machines."
+msgid ""
+"Parent is required for additional signs that are not ticket machines. Set "
+"either parent (TrafficSign), signpost_plan, or signpost_real."
 msgstr ""
 
 msgid "Parent Traffic Sign Plan"
@@ -1490,6 +1492,14 @@ msgstr "Isäntäkilpi (suunnitelma)"
 
 msgid "The traffic sign to which this additional sign is associated."
 msgstr "Liikennemerkki, johon tämä lisäkilpi liittyy."
+
+msgid "Parent Signpost Plan"
+msgstr "Isäntäopaste (suunnitelma)"
+
+msgid ""
+"The signpost plan to which this additional sign is associated (set after "
+"signpost migration)."
+msgstr ""
 
 msgid "Mount that this sign is mounted on."
 msgstr "Kiinnityskohde, johon tämä kilpi on asennettu."
@@ -1505,6 +1515,14 @@ msgstr "Korvaukset lisäkilpisuunnitelmille"
 
 msgid "Parent Traffic Sign Real"
 msgstr "Isäntäkilpi (toteuma)"
+
+msgid "Parent Signpost Real"
+msgstr "Isäntäopaste (toteuma)"
+
+msgid ""
+"The signpost real to which this additional sign is associated (set after "
+"signpost migration)."
+msgstr ""
 
 msgid "The plan for this Additional Sign."
 msgstr "Tämän lisäkilpisuunnitelman suunnitelma."
@@ -1779,6 +1797,78 @@ msgstr "Suoruusarvo"
 
 msgid "Quality requirements fulfilled"
 msgstr "Hoidon laatuvaatimusten mukainen"
+
+msgid "Had height"
+msgstr ""
+
+msgid "Had size"
+msgstr ""
+
+msgid "Had direction"
+msgstr ""
+
+msgid "Had reflection_class"
+msgstr ""
+
+msgid "Had surface_class"
+msgstr ""
+
+msgid "Had mount_type"
+msgstr ""
+
+msgid "Had road_name"
+msgstr ""
+
+msgid "Had lane_number"
+msgstr ""
+
+msgid "Had lane_type"
+msgstr ""
+
+msgid "Had location_specifier"
+msgstr ""
+
+msgid "Had validity_period_start"
+msgstr ""
+
+msgid "Had validity_period_end"
+msgstr ""
+
+msgid "Had source_name"
+msgstr ""
+
+msgid "Had source_id"
+msgstr ""
+
+msgid "Files migrated"
+msgstr ""
+
+msgid "Number of file attachments migrated."
+msgstr ""
+
+msgid "Lost value"
+msgstr ""
+
+msgid "Lost txt"
+msgstr ""
+
+msgid "Lost double_sided"
+msgstr ""
+
+msgid "Lost peak_fastened"
+msgstr ""
+
+msgid "Set color to BLUE"
+msgstr ""
+
+msgid "Set content_s to null"
+msgstr ""
+
+msgid "Set missing_content to false"
+msgstr ""
+
+msgid "Set additional_information to empty"
+msgstr ""
 
 msgid "Right side"
 msgstr "Oikea puoli"
@@ -2255,9 +2345,6 @@ msgstr "Kaksipuolinen"
 msgid "Indicates if this object is double sided"
 msgstr "Kertoo, onko tämä objekti kaksipuolinen"
 
-msgid "Parent Signpost Plan"
-msgstr "Isäntäopaste (suunnitelma)"
-
 msgid "Signpost inside which this device is located."
 msgstr "Opaste, jonka sisällä tämä laite sijaitsee."
 
@@ -2275,9 +2362,6 @@ msgstr "Korvaukset opastesuunnitelmille"
 
 msgid "The plan for this signpost."
 msgstr "Tämän opasteen suunnitelma."
-
-msgid "Parent Signpost Real"
-msgstr "Isäntäopaste (toteuma)"
 
 msgid "Organization"
 msgstr "Käyttäjä/organisaatio"
@@ -2324,7 +2408,7 @@ msgstr ""
 msgid "User who executed the migration command."
 msgstr ""
 
-msgid "Executed at"
+msgid "Started at"
 msgstr ""
 
 msgid "Timestamp when the migration was started."
@@ -2408,7 +2492,6 @@ msgstr "Alkuperäinen Isäntäkilpi (suunnitelma)"
 msgid "New SignpostPlan"
 msgstr "Uusi opaste (suunnitelma)"
 
-
 msgid "ID of the original TrafficSignPlan."
 msgstr "Alkuperäinen Isäntäkilpi (suunnitelma)"
 
@@ -2427,55 +2510,10 @@ msgstr ""
 msgid "Had plan"
 msgstr ""
 
-msgid "Had height"
-msgstr ""
-
-msgid "Had size"
-msgstr ""
-
-msgid "Had direction"
-msgstr ""
-
-msgid "Had reflection_class"
-msgstr ""
-
-msgid "Had surface_class"
-msgstr ""
-
-msgid "Had mount_type"
-msgstr ""
-
-msgid "Had road_name"
-msgstr ""
-
-msgid "Had lane_number"
-msgstr ""
-
-msgid "Had lane_type"
-msgstr ""
-
-msgid "Had location_specifier"
-msgstr ""
-
-msgid "Had validity_period_start"
-msgstr ""
-
-msgid "Had validity_period_end"
-msgstr ""
-
-msgid "Had source_name"
-msgstr ""
-
-msgid "Had source_id"
-msgstr ""
-
 msgid "Lost surface_class"
 msgstr ""
 
 msgid "Value of surface_class field that was lost."
-msgstr ""
-
-msgid "Lost peak_fastened"
 msgstr ""
 
 msgid "Value of peak_fastened field that was lost."
@@ -2485,9 +2523,6 @@ msgid "Had affect_area"
 msgstr ""
 
 msgid "Whether the original had an affect_area polygon."
-msgstr ""
-
-msgid "Files migrated"
 msgstr ""
 
 msgid "Signpost Migration Plan Record"
@@ -2580,33 +2615,6 @@ msgid "Signpost Migration Real Record"
 msgstr ""
 
 msgid "Signpost Migration Real Records"
-msgstr ""
-
-msgid "Lost value"
-msgstr ""
-
-msgid "Lost txt"
-msgstr ""
-
-msgid "Lost double_sided"
-msgstr ""
-
-msgid "Set color to BLUE"
-msgstr ""
-
-msgid "Set content_s to null"
-msgstr ""
-
-msgid "Set missing_content to false"
-msgstr ""
-
-msgid "Set additional_information to empty"
-msgstr ""
-
-msgid "Number of file attachments migrated."
-msgstr ""
-
-msgid "Started at"
 msgstr ""
 
 msgid "Timestamp when the migration command started."

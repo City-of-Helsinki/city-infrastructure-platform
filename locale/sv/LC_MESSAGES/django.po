@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-21 10:28+0300\n"
+"POT-Creation-Date: 2026-05-07 13:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -859,6 +859,30 @@ msgstr "Bom (implementering)"
 msgid "Barrier reals"
 msgstr "Bom (implementeringar)"
 
+msgid "Field Population - Appearance"
+msgstr ""
+
+msgid "Field Population - Location"
+msgstr ""
+
+msgid "Original ID"
+msgstr ""
+
+msgid "New ID"
+msgstr ""
+
+msgid "Fields Populated"
+msgstr ""
+
+msgid "Duration"
+msgstr ""
+
+msgid "Mode"
+msgstr ""
+
+msgid "Status"
+msgstr "Status"
+
 msgid "Operational area"
 msgstr "Åtgärdsområde"
 
@@ -974,15 +998,6 @@ msgstr ""
 msgid "Error Information"
 msgstr ""
 
-msgid "Mode"
-msgstr ""
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Duration"
-msgstr ""
-
 msgid "Plans"
 msgstr "Planer"
 
@@ -1007,12 +1022,6 @@ msgstr ""
 msgid "Field Population - Basic"
 msgstr ""
 
-msgid "Field Population - Appearance"
-msgstr ""
-
-msgid "Field Population - Location"
-msgstr ""
-
 msgid "Field Population - Other"
 msgstr ""
 
@@ -1023,15 +1032,6 @@ msgid "Files"
 msgstr ""
 
 msgid "Migration Run"
-msgstr ""
-
-msgid "Original ID"
-msgstr ""
-
-msgid "New ID"
-msgstr ""
-
-msgid "Fields Populated"
 msgstr ""
 
 msgid "Plan Mapping"
@@ -1487,7 +1487,9 @@ msgstr "Platsspecifikation"
 msgid "Specifies where the sign is in relation to the road."
 msgstr "Fastställer skyltens läge i förhållande till vägen."
 
-msgid "Parent is required for additional signs that are not ticket machines."
+msgid ""
+"Parent is required for additional signs that are not ticket machines. Set "
+"either parent (TrafficSign), signpost_plan, or signpost_real."
 msgstr ""
 
 msgid "Parent Traffic Sign Plan"
@@ -1495,6 +1497,14 @@ msgstr "Överordnad trafikskylt (plan)"
 
 msgid "The traffic sign to which this additional sign is associated."
 msgstr "Vägmärke som denna tilläggsskylt gäller."
+
+msgid "Parent Signpost Plan"
+msgstr "Överordnad vägvisare (plan)"
+
+msgid ""
+"The signpost plan to which this additional sign is associated (set after "
+"signpost migration)."
+msgstr ""
 
 msgid "Mount that this sign is mounted on."
 msgstr "Fästpunkt som denna skylt är installerad i."
@@ -1510,6 +1520,14 @@ msgstr "Ersättningar för tilläggsskyltplaner"
 
 msgid "Parent Traffic Sign Real"
 msgstr "Överordnad trafikskylt (implementering)"
+
+msgid "Parent Signpost Real"
+msgstr "Överordnad vägvisare (implementering)"
+
+msgid ""
+"The signpost real to which this additional sign is associated (set after "
+"signpost migration)."
+msgstr ""
 
 msgid "The plan for this Additional Sign."
 msgstr "Plan för denna tilläggsskyltplan."
@@ -1787,6 +1805,78 @@ msgstr "Rakhetsvärde"
 
 msgid "Quality requirements fulfilled"
 msgstr "Kvalitetskrav uppfyllda"
+
+msgid "Had height"
+msgstr ""
+
+msgid "Had size"
+msgstr ""
+
+msgid "Had direction"
+msgstr ""
+
+msgid "Had reflection_class"
+msgstr ""
+
+msgid "Had surface_class"
+msgstr ""
+
+msgid "Had mount_type"
+msgstr ""
+
+msgid "Had road_name"
+msgstr ""
+
+msgid "Had lane_number"
+msgstr ""
+
+msgid "Had lane_type"
+msgstr ""
+
+msgid "Had location_specifier"
+msgstr ""
+
+msgid "Had validity_period_start"
+msgstr ""
+
+msgid "Had validity_period_end"
+msgstr ""
+
+msgid "Had source_name"
+msgstr ""
+
+msgid "Had source_id"
+msgstr ""
+
+msgid "Files migrated"
+msgstr ""
+
+msgid "Number of file attachments migrated."
+msgstr ""
+
+msgid "Lost value"
+msgstr ""
+
+msgid "Lost txt"
+msgstr ""
+
+msgid "Lost double_sided"
+msgstr ""
+
+msgid "Lost peak_fastened"
+msgstr ""
+
+msgid "Set color to BLUE"
+msgstr ""
+
+msgid "Set content_s to null"
+msgstr ""
+
+msgid "Set missing_content to false"
+msgstr ""
+
+msgid "Set additional_information to empty"
+msgstr ""
 
 msgid "Right side"
 msgstr "Höger sida"
@@ -2265,9 +2355,6 @@ msgstr "Dubbelsidig"
 msgid "Indicates if this object is double sided"
 msgstr "Anger om objektet är dubbelsidigt"
 
-msgid "Parent Signpost Plan"
-msgstr "Överordnad vägvisare (plan)"
-
 msgid "Signpost inside which this device is located."
 msgstr "Skylt i vilken denna anordning finns."
 
@@ -2285,9 +2372,6 @@ msgstr "Ersättningar för skyltplaner"
 
 msgid "The plan for this signpost."
 msgstr "Plan för denna skylt."
-
-msgid "Parent Signpost Real"
-msgstr "Överordnad vägvisare (implementering)"
 
 msgid "Organization"
 msgstr "Organisation"
@@ -2334,7 +2418,7 @@ msgstr ""
 msgid "User who executed the migration command."
 msgstr ""
 
-msgid "Executed at"
+msgid "Started at"
 msgstr ""
 
 msgid "Timestamp when the migration was started."
@@ -2436,55 +2520,10 @@ msgstr ""
 msgid "Had plan"
 msgstr ""
 
-msgid "Had height"
-msgstr ""
-
-msgid "Had size"
-msgstr ""
-
-msgid "Had direction"
-msgstr ""
-
-msgid "Had reflection_class"
-msgstr ""
-
-msgid "Had surface_class"
-msgstr ""
-
-msgid "Had mount_type"
-msgstr ""
-
-msgid "Had road_name"
-msgstr ""
-
-msgid "Had lane_number"
-msgstr ""
-
-msgid "Had lane_type"
-msgstr ""
-
-msgid "Had location_specifier"
-msgstr ""
-
-msgid "Had validity_period_start"
-msgstr ""
-
-msgid "Had validity_period_end"
-msgstr ""
-
-msgid "Had source_name"
-msgstr ""
-
-msgid "Had source_id"
-msgstr ""
-
 msgid "Lost surface_class"
 msgstr ""
 
 msgid "Value of surface_class field that was lost."
-msgstr ""
-
-msgid "Lost peak_fastened"
 msgstr ""
 
 msgid "Value of peak_fastened field that was lost."
@@ -2494,9 +2533,6 @@ msgid "Had affect_area"
 msgstr ""
 
 msgid "Whether the original had an affect_area polygon."
-msgstr ""
-
-msgid "Files migrated"
 msgstr ""
 
 msgid "Signpost Migration Plan Record"
@@ -2589,33 +2625,6 @@ msgid "Signpost Migration Real Record"
 msgstr ""
 
 msgid "Signpost Migration Real Records"
-msgstr ""
-
-msgid "Lost value"
-msgstr ""
-
-msgid "Lost txt"
-msgstr ""
-
-msgid "Lost double_sided"
-msgstr ""
-
-msgid "Set color to BLUE"
-msgstr ""
-
-msgid "Set content_s to null"
-msgstr ""
-
-msgid "Set missing_content to false"
-msgstr ""
-
-msgid "Set additional_information to empty"
-msgstr ""
-
-msgid "Number of file attachments migrated."
-msgstr ""
-
-msgid "Started at"
 msgstr ""
 
 msgid "Timestamp when the migration command started."

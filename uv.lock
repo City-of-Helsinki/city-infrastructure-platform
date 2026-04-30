@@ -3,7 +3,7 @@ revision = 3
 requires-python = ">=3.11.9, <4"
 
 [options]
-exclude-newer = "2026-04-08T14:00:52.487173061Z"
+exclude-newer = "2026-04-27T09:03:18.859273739Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -242,7 +242,7 @@ wheels = [
 
 [[package]]
 name = "city-infrastructure-platform"
-version = "1.36.1"
+version = "1.37.1"
 source = { virtual = "." }
 dependencies = [
     { name = "cairosvg" },
