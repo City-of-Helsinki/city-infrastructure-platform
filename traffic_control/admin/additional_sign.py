@@ -242,7 +242,7 @@ class AdditionalSignPlanAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -260,6 +260,7 @@ class AdditionalSignPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("parent", "plan", "mount_plan")
 
@@ -434,7 +435,7 @@ class AdditionalSignRealAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -449,6 +450,7 @@ class AdditionalSignRealAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
     ordering = ("-created_at",)

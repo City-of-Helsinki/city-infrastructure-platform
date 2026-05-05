@@ -181,7 +181,7 @@ class SignpostPlanAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -230,6 +230,7 @@ class SignpostPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("parent", "plan", "mount_plan")
     ordering = ("-created_at",)
@@ -368,7 +369,7 @@ class SignpostRealAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -405,6 +406,7 @@ class SignpostRealAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("parent", "signpost_plan", "mount_real")
     ordering = ("-created_at",)
