@@ -169,7 +169,7 @@ class MountPlanAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -207,6 +207,7 @@ class MountPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("plan",)
     ordering = ("-created_at",)
@@ -315,7 +316,7 @@ class MountRealAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -344,6 +345,7 @@ class MountRealAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("mount_plan",)
     ordering = ("-created_at",)

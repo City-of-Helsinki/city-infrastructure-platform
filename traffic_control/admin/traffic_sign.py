@@ -280,7 +280,7 @@ class TrafficSignPlanAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -330,6 +330,7 @@ class TrafficSignPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("plan", "mount_plan")
     ordering = ("-created_at",)

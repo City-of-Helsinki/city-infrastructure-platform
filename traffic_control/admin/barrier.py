@@ -179,7 +179,7 @@ class BarrierPlanAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -218,6 +218,7 @@ class BarrierPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("plan",)
     ordering = ("-created_at",)
@@ -337,7 +338,7 @@ class BarrierRealAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -366,6 +367,7 @@ class BarrierRealAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("barrier_plan",)
     ordering = ("-created_at",)

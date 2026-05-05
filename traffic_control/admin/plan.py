@@ -60,7 +60,7 @@ class PlanAdmin(
         (_("Location information"), {"fields": ("derive_location", "location", "z_coord", "location_ewkt")}),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = ("id", "decision_id", "name", "diary_number", "drawing_numbers", "created_at")
@@ -70,6 +70,7 @@ class PlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     ordering = ("-created_at",)
     search_fields = (

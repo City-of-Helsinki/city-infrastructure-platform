@@ -205,7 +205,7 @@ class RoadMarkingPlanAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -248,6 +248,7 @@ class RoadMarkingPlanAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("plan", "traffic_sign_plan")
     ordering = ("-created_at",)
@@ -386,7 +387,7 @@ class RoadMarkingRealAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -419,6 +420,7 @@ class RoadMarkingRealAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     raw_id_fields = ("road_marking_plan", "traffic_sign_real")
     ordering = ("-created_at",)

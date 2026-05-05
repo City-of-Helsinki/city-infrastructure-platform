@@ -222,7 +222,7 @@ class SoftDeleteAdminMixin:
     A mixin class for models that support soft deletion.
     """
 
-    exclude = ("is_active", "deleted_at", "deleted_by")
+    readonly_fields = ("deleted_at", "deleted_by", "is_active")
     actions = ["action_soft_delete"]
     list_filter = [
         SoftDeleteFilter,

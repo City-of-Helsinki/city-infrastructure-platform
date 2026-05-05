@@ -141,6 +141,7 @@ class AbstractFurnitureSignpostAdmin(
         "updated_at",
         "created_by",
         "updated_by",
+        "is_active",
     )
     list_select_related = ("device_type", "device_type__icon_file")
 
@@ -204,7 +205,7 @@ class AbstractFurnitureSignpostAdmin(
     )
     _fieldset_metadata = (
         _("Metadata"),
-        {"fields": (("created_at", "updated_at", "created_by", "updated_by"),)},
+        {"fields": (("created_at", "updated_at", "created_by", "updated_by", "is_active"),)},
     )
 
 
