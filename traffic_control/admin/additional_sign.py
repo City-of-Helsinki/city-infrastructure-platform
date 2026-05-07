@@ -229,7 +229,7 @@ class AdditionalSignPlanAdmin(
             _("Physical properties"),
             {"fields": ("size", "height", "color", "reflection_class", "surface_class")},
         ),
-        (_("Related models"), {"fields": ("parent", "plan", "mount_plan")}),
+        (_("Related models"), {"fields": ("parent", "signpost_plan", "plan", "mount_plan")}),
         (
             _("Validity"),
             {
@@ -409,7 +409,7 @@ class AdditionalSignRealAdmin(
         ),
         (
             _("Related models"),
-            {"fields": ("parent", "additional_sign_plan", "mount_real")},
+            {"fields": ("parent", "signpost_real", "additional_sign_plan", "mount_real")},
         ),
         (
             _("Installation information"),
