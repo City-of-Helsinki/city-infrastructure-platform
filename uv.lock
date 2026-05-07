@@ -236,6 +236,7 @@ dependencies = [
     { name = "django-helusers" },
     { name = "django-import-export", extra = ["xlsx"] },
     { name = "django-mptt" },
+    { name = "django-resilient-logger" },
     { name = "django-storages", extra = ["azure"] },
     { name = "djangorestframework" },
     { name = "djangorestframework-gis" },
@@ -297,6 +298,7 @@ requires-dist = [
     { name = "django-helusers" },
     { name = "django-import-export", extras = ["xlsx"] },
     { name = "django-mptt" },
+    { name = "django-resilient-logger", git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=c80aea11668c345faca9cd7edeb73582614876b2" },
     { name = "django-storages", extras = ["azure"] },
     { name = "djangorestframework" },
     { name = "djangorestframework-gis" },
@@ -743,6 +745,15 @@ wheels = [
 ]
 
 [[package]]
+name = "django-resilient-logger"
+version = "3.0.0"
+source = { git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=c80aea11668c345faca9cd7edeb73582614876b2#c80aea11668c345faca9cd7edeb73582614876b2" }
+dependencies = [
+    { name = "django" },
+    { name = "elasticsearch8" },
+]
+
+[[package]]
 name = "django-storages"
 version = "1.14.3"
 source = { registry = "https://pypi.org/simple" }
@@ -893,6 +904,33 @@ name = "editorconfig"
 version = "0.12.4"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/3d/85/7b5c2fac7fdc37d959fab714b13b9acb75884490dcc0e8b1dc5e64105084/EditorConfig-0.12.4.tar.gz", hash = "sha256:24857fa1793917dd9ccf0c7810a07e05404ce9b823521c7dce22a4fb5d125f80", size = 13278, upload-time = "2024-02-12T08:33:06.745Z" }
+
+[[package]]
+name = "elastic-transport"
+version = "8.19.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fc/63/c61700c42f74d70a4ae11394c619cf91b837b500144166e828546f1fdd8d/elastic_transport-8.19.0.tar.gz", hash = "sha256:32afed2a70dad80511476c821b2cf823f35a82153289765f6b2e2eb8cb0de099", size = 76409, upload-time = "2026-07-06T16:57:01.664Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/46/a6091ee84351b61bfb55cf615e538c38c1be4cfceae12f952953eb8d446c/elastic_transport-8.19.0-py3-none-any.whl", hash = "sha256:97ab35de878c7f4c7ebf8840cbc8ff1ff01d9dbc0e977e52d82715b155678b4f", size = 65085, upload-time = "2026-07-06T16:57:00.233Z" },
+]
+
+[[package]]
+name = "elasticsearch8"
+version = "8.19.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "elastic-transport" },
+    { name = "python-dateutil" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/53/6a/1a7d54c1aee0a96870aa54375da4b4a6d5390dd767c917de58242d3d49b8/elasticsearch8-8.19.3.tar.gz", hash = "sha256:7effe95b360241b6d56ef68219037a90ad0f56723614db54bbe57d33058402f4", size = 800428, upload-time = "2025-12-23T12:56:01.961Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/90/ff/1033bf0048d8492c1bcfcf058511dff119895ba50888c7a6e364aa3b168f/elasticsearch8-8.19.3-py3-none-any.whl", hash = "sha256:4b52e59e68aea6f59bf37c28f6f4512333302dd8a52e26c17d0f10c076d833a1", size = 953171, upload-time = "2025-12-23T12:55:58.781Z" },
+]
 
 [[package]]
 name = "et-xmlfile"
