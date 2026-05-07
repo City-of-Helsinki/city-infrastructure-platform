@@ -97,6 +97,12 @@ env = environ.Env(
     LOGGING_AUTH_DEBUG=(bool, False),  # Composes Django LOGGING["loggers"]["helusers"]["level"]
     SENTRY_DEBUG=(bool, False),  # Enables debug view that fires sentry error
     SENTRY_DSN=(str, ""),  # Composes sentry-sdk DSN (https://docs.sentry.io/platforms/python/integrations/django/)
+    # https://github.com/City-of-Helsinki/django-resilient-logger?tab=readme-ov-file#configuring-django-resilient-logger
+    AUDIT_LOG_ES_ENV=(str, ""),
+    AUDIT_LOG_ES_URL=(str, ""),
+    AUDIT_LOG_ES_USERNAME=(str, ""),
+    AUDIT_LOG_ES_PASSWORD=(str, ""),
+    AUDIT_LOG_ES_INDEX=(str, ""),
     # --- External APIs & App Settings ---
     ADDRESS_SEARCH_BASE_URL=(str, "https://api.hel.fi/servicemap/v2/search"),
     BASEMAP_SOURCE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/gwc/service/wmts"),
@@ -176,8 +182,32 @@ else:
 # Base URL for the application (used in emails, management commands, etc.)
 BASE_URL = env("BASE_URL")
 
+# https://github.com/City-of-Helsinki/django-resilient-logger
+RESILIENT_LOGGER = {
+    "origin": "cityinfra",
+    "environment": env("AUDIT_LOG_ES_ENV"),
+    "sources": [
+        {"class": "resilient_logger.sources.ResilientLogSource"},
+        {"class": "resilient_logger.sources.DjangoAuditLogSource"},
+    ],
+    "targets": [
+        {
+            "class": "resilient_logger.targets.ElasticsearchLogTarget",
+            "es_url": env("AUDIT_LOG_ES_URL"),
+            "es_username": env("AUDIT_LOG_ES_USERNAME"),
+            "es_password": env("AUDIT_LOG_ES_PASSWORD"),
+            "es_index": env("AUDIT_LOG_ES_INDEX"),
+            "required": True,
+        }
+    ],
+    "batch_limit": 5000,
+    "chunk_size": 500,
+    "submit_unsent_entries": True,
+    "clear_sent_entries": True,
+}
 
-# Logging
+# https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-LOGGING
+# https://docs.djangoproject.com/en/5.2/topics/logging/#configuring-logging
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -230,6 +260,7 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "django_filters",
     "auditlog",
+    "resilient_logger",
     "colorfield",
     "import_export",
     "gisserver",

@@ -40,6 +40,7 @@ dependencies = [
     "django-admin-confirm>=1.0.1,<2",
     "django-guardian>=3.2.0,<4",
     "django-admin-rangefilter>=0.13.5,<0.14",
+    "django-resilient-logger>=2.1.0",
 ]
 
 [dependency-groups]
