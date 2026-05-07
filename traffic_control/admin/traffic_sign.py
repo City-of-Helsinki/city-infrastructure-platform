@@ -505,7 +505,7 @@ class TrafficSignRealAdmin(
         ),
         (
             _("Metadata"),
-            {"fields": ("created_at", "updated_at", "created_by", "updated_by")},
+            {"fields": ("created_at", "updated_at", "created_by", "updated_by", "is_active")},
         ),
     )
     list_display = (
@@ -559,6 +559,7 @@ class TrafficSignRealAdmin(
         "updated_by",
         "source_name",
         "source_id",
+        "is_active",
     )
     raw_id_fields = ("traffic_sign_plan", "mount_real")
     ordering = ("-created_at",)
