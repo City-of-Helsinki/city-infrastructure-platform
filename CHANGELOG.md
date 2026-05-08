@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.38.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.37.1...city-infrastructure-platform-v1.38.0) (2026-05-08)
+
+
+### Features
+
+* Add is_active to metadata section for admin models where applicable ([5a0d878](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5a0d87836180b7fb4719a02c256dfd42a56f1683))
+* Add signpost parent FKs to AdditionalSign and fix cascade-deleted signs ([838a6db](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/838a6dbdba08fa2338cebd29a13c416d15d1c4d0))
+* Add signpost_real and signpost_plan to additional sign real/plan admin pages ([9ea75ab](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9ea75ab93e293d8ff536989ec1285b868bdefc41))
+
+
+### Bug Fixes
+
+* Add missing is_active to trafficsignreal admin detail page ([be2df69](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/be2df69b4f405cf2e4ee923d998b031986a6ffdb))
+
 ## [1.37.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.37.0...city-infrastructure-platform-v1.37.1) (2026-04-24)
 
 
