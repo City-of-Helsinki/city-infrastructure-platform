@@ -38,3 +38,11 @@ class AdditionalSignCatalog(DeviceCatalog):
     template_name = "catalogs/additional_sign_catalog.html"
     title = "Additional signs"
     target_model = DeviceTypeTargetModel.ADDITIONAL_SIGN
+
+
+class SignpostCatalog(TrafficSignCatalog):
+    """Intentionally inherited from TrafficSignCatalog since signposts are a special type
+    of traffic signs and share the same template"""
+
+    title = "Signposts"
+    target_model = DeviceTypeTargetModel.SIGNPOST
