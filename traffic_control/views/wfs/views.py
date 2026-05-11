@@ -12,6 +12,8 @@ from traffic_control.views.wfs import (
     MountRealCentroidFeatureType,
     MountRealFeatureType,
     PlanFeatureType,
+    SignpostPlanFeatureType,
+    SignpostRealFeatureType,
     TrafficSignPlanFeatureType,
     TrafficSignRealFeatureType,
 )
@@ -41,6 +43,8 @@ class CityInfrastructureWFSView(WFSView):
         TrafficSignPlanFeatureType,
         AdditionalSignRealFeatureType,
         AdditionalSignPlanFeatureType,
+        SignpostRealFeatureType,
+        SignpostPlanFeatureType,
         MountRealFeatureType,
         MountRealCentroidFeatureType,
         MountPlanFeatureType,
