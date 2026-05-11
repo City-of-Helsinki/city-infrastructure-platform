@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.39.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.38.0...city-infrastructure-platform-v1.39.0) (2026-05-11)
+
+
+### Features
+
+* Add signpost catalog ([0ea905c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0ea905c33a833110b8100176cbc6eef91589a88d))
+* Add WFS features for signpost reals and plans ([64ab112](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/64ab112629e896e9744e398d30e5273e51b41396))
+
 ## [1.38.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.37.1...city-infrastructure-platform-v1.38.0) (2026-05-08)
 
 
