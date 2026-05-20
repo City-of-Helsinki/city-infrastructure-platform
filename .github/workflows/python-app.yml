@@ -8,30 +8,36 @@ on:
 
 jobs:
   build:
-    # Ubuntu latests is Ubuntu 18.04 as of 2020/12
+    # NOTE (2026-05-20 thiago)
+    # Bookworm isn't available as a standard GitHub-provided runner
+    # https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories
     runs-on: ubuntu-latest
 
     env:
       DEBUG: 1
-      # Disabled OIDC to allow for minimal test configuration
+      # Disable OIDC to allow for minimal test configuration
       OIDC_AUTHENTICATION_ENABLED: 0
       # Database for tests
       DATABASE_URL: postgis://postgres:postgres@localhost/city-infrastructure-platform
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # release 6.0.2 (2026-01-09)
         with:
+          persist-credentials: false
+          # https://github.com/SonarSource/sonarqube-scan-action/tree/7006c4492b2e0ee0f816d36501671557c97f5995#3-quick-start-workflow-example-for-sonarqube-cloud
+          # Disabling shallow clones is recommended for improving the relevancy of reporting
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # release 6.2.0 (2026-01-22)
         with:
           python-version: "3.11"
 
-      - name: Set up NodeJS 20
-        uses: actions/setup-node@v3
+      - name: Set up NodeJS 24
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # release 6.4.0 (2026-04-20)
         with:
-          node-version: 20
+          node-version: "24"
+          package-manager-cache: false
 
       - name: Install required Ubuntu packages
         run: |
@@ -40,12 +46,12 @@ jobs:
 
       # https://github.com/astral-sh/setup-uv?tab=readme-ov-file#usage
       - name: Install uv
-        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
+        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # release 8.0.0 (2026-03-26)
         with:
           enable-cache: true
-          # https://github.com/astral-sh/uv/releases/tag/0.11.3 checksum for Linux x64
-          version: "0.11.3"
-          checksum: "c0f3236f146e55472663cfbcc9be3042a9f1092275bbe3fe2a56a6cbfd3da5ce"
+          version: "0.11.14" # 2026-05-12
+          # checksum for Linux x64: https://github.com/astral-sh/uv/releases/tag/0.11.14
+          checksum: "f3b623eb0e6141a7053d571d59a0bdc341e0f238ea8f5f0b4815ddbec9a2a296"
 
       - name: Install test dependencies
         run: uv sync --frozen
@@ -88,9 +94,8 @@ jobs:
           yarn --cwd map-view test:ci
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarqube-scan-action@59db25f34e16620e48ab4bb9e4a5dce155cb5432 # release 8.0.0 (2026-04-29)
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
