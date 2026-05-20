@@ -8,6 +8,7 @@ from django.db import transaction
 
 from traffic_control.geometry_utils import geometry_is_legit, get_3d_geometry
 from traffic_control.models.plan import Plan
+from users.utils import get_system_user
 
 
 class PlanGeometryImporter:
@@ -407,7 +408,7 @@ class PlanGeometryImporter:
                 "diary_number": result["diaari"],
                 "fields_changed": fields_changed,
             }
-            Plan.objects.filter(pk=result["plan_id"]).update(**update_fields)
+            Plan.objects.filter(pk=result["plan_id"]).update(**update_fields, updated_by=get_system_user())
             return True
 
         # No changes needed, mark as skipped

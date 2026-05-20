@@ -5,13 +5,14 @@ from calendar import month_name
 from datetime import timedelta
 from typing import Any
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand, CommandParser
 from django.template.loader import render_to_string
 from django.utils import timezone
 
 from traffic_control.services.email import send_email
 from users.models import UserDeactivationStatus
-from users.utils import get_admin_notification_recipients
+from users.utils import get_admin_notification_recipients, get_system_user
 
 
 class Command(BaseCommand):
@@ -109,112 +110,114 @@ class Command(BaseCommand):
             *args: Positional arguments.
             **options: Command options including 'dry_run', 'month', and 'year'.
         """
-        dry_run = options["dry_run"]
-        custom_month = options.get("month")
-        custom_year = options.get("year")
+        with set_actor(get_system_user()):
+            dry_run = options["dry_run"]
+            custom_month = options.get("month")
+            custom_year = options.get("year")
 
-        if dry_run:
-            self.stdout.write(self.style.WARNING("DRY RUN MODE - No emails will be sent"))
+            if dry_run:
+                self.stdout.write(self.style.WARNING("DRY RUN MODE - No emails will be sent"))
 
-        # Validate month parameter
-        if custom_month is not None:
-            if custom_month < 1 or custom_month > 12:
-                self.stdout.write(self.style.ERROR(f"Invalid month: {custom_month}. Must be between 1 and 12."))
+            # Validate month parameter
+            if custom_month is not None:
+                if custom_month < 1 or custom_month > 12:
+                    self.stdout.write(self.style.ERROR(f"Invalid month: {custom_month}. Must be between 1 and 12."))
+                    return
+
+            # Calculate month boundaries
+            now = timezone.now()
+
+            if custom_month is not None:
+                # Use specified month
+                (
+                    first_day_report_month,
+                    first_day_after_report_month,
+                    target_month,
+                    target_year,
+                ) = self._calculate_custom_month_boundaries(custom_month, custom_year, now)
+
+                self.stdout.write(
+                    f"Generating report for {month_name[target_month]} {target_year} (custom month specified)"
+                )
+            else:
+                # Use previous month (default behavior)
+                first_day_report_month, first_day_after_report_month = self._calculate_previous_month_boundaries(now)
+
+            # Query deactivated users from target month
+            deactivated_users = (
+                UserDeactivationStatus.objects.filter(
+                    deactivated_at__gte=first_day_report_month,
+                    deactivated_at__lt=first_day_after_report_month,
+                    deactivated_at__isnull=False,
+                )
+                .select_related("user")
+                .order_by("deactivated_at")
+            )
+
+            user_count = deactivated_users.count()
+            self.stdout.write(
+                f"Found {user_count} deactivated users in {month_name[first_day_report_month.month]} "
+                f"{first_day_report_month.year}"
+            )
+
+            if user_count == 0:
+                self.stdout.write(self.style.SUCCESS("No deactivated users to report."))
                 return
 
-        # Calculate month boundaries
-        now = timezone.now()
+            # Prepare context for email
+            context = {
+                "deactivated_users": deactivated_users,
+                "month_name": month_name[first_day_report_month.month],
+                "year": first_day_report_month.year,
+                "user_count": user_count,
+            }
+            # Render email templates
+            subject_template = "users/emails/admin_monthly_report_subject.txt"
+            text_template = "users/emails/admin_monthly_report.txt"
+            html_template = "users/emails/admin_monthly_report.html"
+            try:
+                subject = render_to_string(subject_template, context).strip()
+                text_body = render_to_string(text_template, context)
+                html_body = render_to_string(html_template, context)
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Failed to render email templates: {e}"))
+                return
 
-        if custom_month is not None:
-            # Use specified month
-            (
-                first_day_report_month,
-                first_day_after_report_month,
-                target_month,
-                target_year,
-            ) = self._calculate_custom_month_boundaries(custom_month, custom_year, now)
-
-            self.stdout.write(
-                f"Generating report for {month_name[target_month]} {target_year} (custom month specified)"
-            )
-        else:
-            # Use previous month (default behavior)
-            first_day_report_month, first_day_after_report_month = self._calculate_previous_month_boundaries(now)
-
-        # Query deactivated users from target month
-        deactivated_users = (
-            UserDeactivationStatus.objects.filter(
-                deactivated_at__gte=first_day_report_month,
-                deactivated_at__lt=first_day_after_report_month,
-                deactivated_at__isnull=False,
-            )
-            .select_related("user")
-            .order_by("deactivated_at")
-        )
-
-        user_count = deactivated_users.count()
-        self.stdout.write(
-            f"Found {user_count} deactivated users in {month_name[first_day_report_month.month]} "
-            f"{first_day_report_month.year}"
-        )
-
-        if user_count == 0:
-            self.stdout.write(self.style.SUCCESS("No deactivated users to report."))
-            return
-
-        # Prepare context for email
-        context = {
-            "deactivated_users": deactivated_users,
-            "month_name": month_name[first_day_report_month.month],
-            "year": first_day_report_month.year,
-            "user_count": user_count,
-        }
-        # Render email templates
-        subject_template = "users/emails/admin_monthly_report_subject.txt"
-        text_template = "users/emails/admin_monthly_report.txt"
-        html_template = "users/emails/admin_monthly_report.html"
-        try:
-            subject = render_to_string(subject_template, context).strip()
-            text_body = render_to_string(text_template, context)
-            html_body = render_to_string(html_template, context)
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f"Failed to render email templates: {e}"))
-            return
-
-        # Get admin email recipients from database
-        recipients = get_admin_notification_recipients()
-        if not recipients:
-            self.stdout.write(
-                self.style.ERROR(
-                    "No admin notification recipients configured. "
-                    "Set 'Receives admin notification emails' flag on admin users."
+            # Get admin email recipients from database
+            recipients = get_admin_notification_recipients()
+            if not recipients:
+                self.stdout.write(
+                    self.style.ERROR(
+                        "No admin notification recipients configured. "
+                        "Set 'Receives admin notification emails' flag on admin users."
+                    )
                 )
-            )
-            return
+                return
 
-        if dry_run:
-            self.stdout.write(
-                self.style.WARNING(
-                    f"[DRY RUN] Would send monthly report to {len(recipients)} admin(s): " f"{', '.join(recipients)}"
+            if dry_run:
+                self.stdout.write(
+                    self.style.WARNING(
+                        f"[DRY RUN] Would send monthly report to {len(recipients)} admin(s): "
+                        f"{', '.join(recipients)}"
+                    )
                 )
-            )
-            self.stdout.write(f"[DRY RUN] Report would include {user_count} deactivated users")
-            return
-        # Send email to admins
-        try:
-            send_email(
-                subject=subject,
-                message=text_body,
-                recipient_list=recipients,
-                html_message=html_body,
-                max_recipients=100,  # Allow more recipients for admin distribution lists
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"Successfully sent monthly deactivation report to {len(recipients)} admin(s): "
-                    f"{', '.join(recipients)}"
+                self.stdout.write(f"[DRY RUN] Report would include {user_count} deactivated users")
+                return
+            # Send email to admins
+            try:
+                send_email(
+                    subject=subject,
+                    message=text_body,
+                    recipient_list=recipients,
+                    html_message=html_body,
+                    max_recipients=100,  # Allow more recipients for admin distribution lists
                 )
-            )
-            self.stdout.write(f"Report included {user_count} deactivated users")
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f"Failed to send email to admins: {e}"))
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"Successfully sent monthly deactivation report to {len(recipients)} admin(s): "
+                        f"{', '.join(recipients)}"
+                    )
+                )
+                self.stdout.write(f"Report included {user_count} deactivated users")
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Failed to send email to admins: {e}"))

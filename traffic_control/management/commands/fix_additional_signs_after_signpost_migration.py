@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 from typing import Any, Optional, Type
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand
 from django.db import models, transaction
 from django.db.models import QuerySet
@@ -25,6 +26,7 @@ from traffic_control.models.signpost_migration import (
     SignpostMigrationRealRecord,
     SignpostMigrationRun,
 )
+from users.utils import get_system_user
 
 logger = logging.getLogger(__name__)
 
@@ -119,32 +121,33 @@ class Command(BaseCommand):
             *args: Positional arguments.
             **options: Command options from the argument parser.
         """
-        dry_run: bool = options["dry_run"]
-        migration_run_id: Optional[int] = options["migration_run_id"]
-        tolerance_seconds: int = options["time_tolerance_seconds"]
+        with set_actor(get_system_user()):
+            dry_run: bool = options["dry_run"]
+            migration_run_id: Optional[int] = options["migration_run_id"]
+            tolerance_seconds: int = options["time_tolerance_seconds"]
 
-        if dry_run:
-            self.stdout.write(self.style.WARNING("DRY RUN MODE — no changes will be made"))
+            if dry_run:
+                self.stdout.write(self.style.WARNING("DRY RUN MODE — no changes will be made"))
 
-        runs = self._get_migration_runs(migration_run_id)
-        if not runs.exists():
-            self.stdout.write(self.style.WARNING("No eligible migration runs found."))
-            return
+            runs = self._get_migration_runs(migration_run_id)
+            if not runs.exists():
+                self.stdout.write(self.style.WARNING("No eligible migration runs found."))
+                return
 
-        totals = {"plans_restored": 0, "reals_restored": 0}
+            totals = {"plans_restored": 0, "reals_restored": 0}
 
-        for run in runs:
+            for run in runs:
+                self.stdout.write(f"\n{'='*60}")
+                self.stdout.write(f"Processing: {run}")
+                totals["plans_restored"] += self._fix_for_type(run, PLAN_CONFIG, tolerance_seconds, dry_run)
+                totals["reals_restored"] += self._fix_for_type(run, REAL_CONFIG, tolerance_seconds, dry_run)
+
             self.stdout.write(f"\n{'='*60}")
-            self.stdout.write(f"Processing: {run}")
-            totals["plans_restored"] += self._fix_for_type(run, PLAN_CONFIG, tolerance_seconds, dry_run)
-            totals["reals_restored"] += self._fix_for_type(run, REAL_CONFIG, tolerance_seconds, dry_run)
-
-        self.stdout.write(f"\n{'='*60}")
-        self.stdout.write(self.style.SUCCESS("✅ Fix complete"))
-        self.stdout.write(f"  AdditionalSignPlan  — restored: {totals['plans_restored']}")
-        self.stdout.write(f"  AdditionalSignReal  — restored: {totals['reals_restored']}")
-        if dry_run:
-            self.stdout.write(self.style.WARNING("(DRY RUN — nothing was actually changed)"))
+            self.stdout.write(self.style.SUCCESS("✅ Fix complete"))
+            self.stdout.write(f"  AdditionalSignPlan  — restored: {totals['plans_restored']}")
+            self.stdout.write(f"  AdditionalSignReal  — restored: {totals['reals_restored']}")
+            if dry_run:
+                self.stdout.write(self.style.WARNING("(DRY RUN — nothing was actually changed)"))
 
     # ------------------------------------------------------------------
     # Internal helpers
@@ -273,6 +276,7 @@ class Command(BaseCommand):
         victim.is_active = True
         victim.deleted_at = None
         victim.deleted_by = None
+        victim.updated_by = get_system_user()
         victim.parent = None
         setattr(victim, config.signpost_fk_field, new_signpost_obj)
         victim.save(update_fields=["is_active", "deleted_at", "deleted_by", "parent", config.signpost_fk_field])

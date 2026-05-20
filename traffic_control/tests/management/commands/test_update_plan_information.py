@@ -7,6 +7,7 @@ from django.core.management import call_command
 
 from traffic_control.models import Plan
 from traffic_control.tests.factories import PlanFactory
+from users.utils import get_system_user
 
 BASE_PATH = os.path.dirname(__file__)
 TEST_FILES_DIR = os.path.join(BASE_PATH, "../../test_datas/plan_update")
@@ -30,7 +31,7 @@ def test__update_plan_information():
     updated_plan = Plan.objects.get(pk=original_plan.pk)
     # check that not all fields are updated
     assert updated_plan.created_by == original_plan.created_by
-    assert updated_plan.updated_by == original_plan.updated_by
+    assert updated_plan.updated_by == get_system_user(), "The management command should indicate it updated the plan"
     assert updated_plan.name == original_plan.name
     assert updated_plan.location == original_plan.location
     assert updated_plan.derive_location == original_plan.derive_location

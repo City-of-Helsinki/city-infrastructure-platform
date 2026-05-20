@@ -1,9 +1,11 @@
 import json
 import os
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand
 
 from traffic_control.analyze_utils.plan_updater import PlanUpdater
+from users.utils import get_system_user
 
 
 class Command(BaseCommand):
@@ -36,18 +38,19 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        plan_csv_file = options["plan_file"]
-        dry_run = options["dry_run"]
-        updater = PlanUpdater(plan_csv_file)
-        if dry_run:
-            self.stdout.write(self.style.NOTICE("Doing dry run, not updating data base"))
+        with set_actor(get_system_user()):
+            plan_csv_file = options["plan_file"]
+            dry_run = options["dry_run"]
+            updater = PlanUpdater(plan_csv_file)
+            if dry_run:
+                self.stdout.write(self.style.NOTICE("Doing dry run, not updating data base"))
 
-        self.stdout.write(self.style.NOTICE("Updating plans..."))
-        updated, failed = updater.update_plans(do_db_update=not dry_run)
-        self.stdout.write(self.style.SUCCESS(f"Updated {len(updated)} plans. "))
-        self.stdout.write(self.style.ERROR(f"failed count: {len(failed)}"))
-        self._write_result_jsons(updated, failed, options["output_dir"])
-        self.stdout.write(self.style.SUCCESS(f"Done. Check results in {options['output_dir']}"))
+            self.stdout.write(self.style.NOTICE("Updating plans..."))
+            updated, failed = updater.update_plans(do_db_update=not dry_run)
+            self.stdout.write(self.style.SUCCESS(f"Updated {len(updated)} plans. "))
+            self.stdout.write(self.style.ERROR(f"failed count: {len(failed)}"))
+            self._write_result_jsons(updated, failed, options["output_dir"])
+            self.stdout.write(self.style.SUCCESS(f"Done. Check results in {options['output_dir']}"))
 
     def _write_result_jsons(self, updated, failed, output_dir):
         with open(os.path.join(output_dir, "plan_fail_infos.json"), "w") as f:

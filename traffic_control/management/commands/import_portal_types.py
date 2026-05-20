@@ -1,9 +1,11 @@
 import csv
 import os
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand, CommandError
 
 from traffic_control.models import PortalType
+from users.utils import get_system_user
 
 
 class Command(BaseCommand):
@@ -13,18 +15,21 @@ class Command(BaseCommand):
         parser.add_argument("filename", help="Path to the portal types csv file")
 
     def handle(self, *args, **options):
-        filename = options["filename"]
-        if not os.path.exists(filename):
-            raise CommandError(f"File {filename} does not exist")
+        with set_actor(get_system_user()):
+            filename = options["filename"]
+            if not os.path.exists(filename):
+                raise CommandError(f"File {filename} does not exist")
 
-        self.stdout.write("Importing portal types...")
-        count = 0
-        with open(filename) as f:
-            csv_reader = csv.reader(f)
-            next(csv_reader, None)  # skip header
-            for row in csv_reader:
-                structure, build_type, model = row
-                _, created = PortalType.objects.get_or_create(structure=structure, build_type=build_type, model=model)
-                if created:
-                    count += 1
-        self.stdout.write(f"{count} portal types are imported")
+            self.stdout.write("Importing portal types...")
+            count = 0
+            with open(filename) as f:
+                csv_reader = csv.reader(f)
+                next(csv_reader, None)  # skip header
+                for row in csv_reader:
+                    structure, build_type, model = row
+                    _, created = PortalType.objects.get_or_create(
+                        structure=structure, build_type=build_type, model=model
+                    )
+                    if created:
+                        count += 1
+            self.stdout.write(f"{count} portal types are imported")

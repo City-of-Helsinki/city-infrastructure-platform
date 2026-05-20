@@ -11,6 +11,7 @@ Supports --dry-run for safe previewing and --migration-run for partial cleanup.
 import logging
 from typing import Optional, Type
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand, CommandParser
 from django.db.models import Model
 
@@ -22,6 +23,7 @@ from traffic_control.models.ticket_machine_migration import (
     TicketMachineMigrationRealRecord,
 )
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
+from users.utils import get_system_user
 
 # Models that hold a protected FK to TrafficSignReal / TrafficSignPlan.
 # Used to detect which traffic signs cannot be safely hard-deleted.
@@ -82,35 +84,36 @@ class Command(BaseCommand):
         Returns:
             None
         """
-        dry_run: bool = options["dry_run"]
-        ticket_machine_run_id: Optional[int] = options["ticket_machine_run"]
-        signpost_run_id: Optional[int] = options["signpost_run"]
+        with set_actor(get_system_user()):
+            dry_run: bool = options["dry_run"]
+            ticket_machine_run_id: Optional[int] = options["ticket_machine_run"]
+            signpost_run_id: Optional[int] = options["signpost_run"]
 
-        if dry_run:
-            self.stdout.write(self.style.WARNING("DRY RUN MODE - No changes will be made"))
+            if dry_run:
+                self.stdout.write(self.style.WARNING("DRY RUN MODE - No changes will be made"))
 
-        plan_ids = self._collect_plan_ids(ticket_machine_run_id, signpost_run_id)
-        real_ids = self._collect_real_ids(ticket_machine_run_id, signpost_run_id)
+            plan_ids = self._collect_plan_ids(ticket_machine_run_id, signpost_run_id)
+            real_ids = self._collect_real_ids(ticket_machine_run_id, signpost_run_id)
 
-        plans_qs = TrafficSignPlan.objects.filter(id__in=plan_ids, is_active=False)
-        reals_qs = TrafficSignReal.objects.filter(id__in=real_ids, is_active=False)
+            plans_qs = TrafficSignPlan.objects.filter(id__in=plan_ids, is_active=False)
+            reals_qs = TrafficSignReal.objects.filter(id__in=real_ids, is_active=False)
 
-        blocked_real_ids = self._find_blocked_ids(set(reals_qs.values_list("id", flat=True)), _REAL_DEPENDENTS)
-        blocked_plan_ids = self._find_blocked_ids(set(plans_qs.values_list("id", flat=True)), _PLAN_DEPENDENTS)
+            blocked_real_ids = self._find_blocked_ids(set(reals_qs.values_list("id", flat=True)), _REAL_DEPENDENTS)
+            blocked_plan_ids = self._find_blocked_ids(set(plans_qs.values_list("id", flat=True)), _PLAN_DEPENDENTS)
 
-        plans_count = plans_qs.count()
-        reals_count = reals_qs.count()
+            plans_count = plans_qs.count()
+            reals_count = reals_qs.count()
 
-        self._report_candidates(plans_count, reals_count)
-        self._warn_blocked(reals_qs, blocked_real_ids, "TrafficSignReal", _REAL_DEPENDENTS)
-        self._warn_blocked(plans_qs, blocked_plan_ids, "TrafficSignPlan", _PLAN_DEPENDENTS)
-        self._report_skipped(len(blocked_real_ids), len(blocked_plan_ids))
+            self._report_candidates(plans_count, reals_count)
+            self._warn_blocked(reals_qs, blocked_real_ids, "TrafficSignReal", _REAL_DEPENDENTS)
+            self._warn_blocked(plans_qs, blocked_plan_ids, "TrafficSignPlan", _PLAN_DEPENDENTS)
+            self._report_skipped(len(blocked_real_ids), len(blocked_plan_ids))
 
-        if not dry_run:
-            self._delete_objects(plans_qs, reals_qs, blocked_real_ids, blocked_plan_ids)
-            self._report_completion(plans_count - len(blocked_plan_ids), reals_count - len(blocked_real_ids))
-        else:
-            self.stdout.write(self.style.WARNING("\nDRY RUN COMPLETE - No changes were made"))
+            if not dry_run:
+                self._delete_objects(plans_qs, reals_qs, blocked_real_ids, blocked_plan_ids)
+                self._report_completion(plans_count - len(blocked_plan_ids), reals_count - len(blocked_real_ids))
+            else:
+                self.stdout.write(self.style.WARNING("\nDRY RUN COMPLETE - No changes were made"))
 
     # ── Collection helpers ────────────────────────────────────────────────────
 

@@ -44,28 +44,28 @@ class BaseMigrationCommand(BaseCommand, ABC):
 
     def handle(self, *args, **options) -> None:
         """Execute the command."""
-        dry_run = options["dry_run"]
-        hard_delete = options["hard_delete"]
-
-        if dry_run:
-            self.stdout.write(self.style.WARNING("DRY RUN MODE - No changes will be made"))
-
-        if hard_delete:
-            self.stdout.write(self.style.WARNING("HARD DELETE MODE - Original objects will be permanently deleted"))
-        else:
-            self.stdout.write("Soft-delete mode - Original objects will be marked as deleted but preserved in database")
-
-        self.stdout.write(self.get_migration_start_message())
-
-        # Get system user for soft-delete operations
         system_user = get_system_user()
+        with set_actor(system_user):
+            dry_run = options["dry_run"]
+            hard_delete = options["hard_delete"]
 
-        # Create migration run record
-        self.migration_run = self.create_migration_run(system_user, dry_run, hard_delete)
-        self.stdout.write(f"Created migration run record: {self.migration_run.id}")
+            if dry_run:
+                self.stdout.write(self.style.WARNING("DRY RUN MODE - No changes will be made"))
 
-        try:
-            with set_actor(system_user):
+            if hard_delete:
+                self.stdout.write(self.style.WARNING("HARD DELETE MODE - Original objects will be permanently deleted"))
+            else:
+                self.stdout.write(
+                    "Soft-delete mode - Original objects will be marked as deleted but preserved in database"
+                )
+
+            self.stdout.write(self.get_migration_start_message())
+
+            # Create migration run record
+            self.migration_run = self.create_migration_run(system_user, dry_run, hard_delete)
+            self.stdout.write(f"Created migration run record: {self.migration_run.id}")
+
+            try:
                 # Wrap entire migration in a single atomic transaction
                 with transaction.atomic():
                     # Step 1: Update device type target_model FIRST (before creating objects)
@@ -93,15 +93,14 @@ class BaseMigrationCommand(BaseCommand, ABC):
                 else:
                     self.stdout.write(self.style.SUCCESS("\n✓ Migration completed successfully!"))
 
-        except Exception as e:
-            # Update migration run with error
-            self.migration_run.completed_at = timezone.now()
-            self.migration_run.success = False
-            self.migration_run.error_message = str(e)
-            self.migration_run.save()
-
-            self.stdout.write(self.style.ERROR(f"\n✗ Migration failed: {str(e)}"))
-            raise
+            except Exception as e:
+                # Update migration run with error
+                self.migration_run.completed_at = timezone.now()
+                self.migration_run.success = False
+                self.migration_run.error_message = str(e)
+                self.migration_run.save()
+                self.stdout.write(self.style.ERROR(f"\n✗ Migration failed: {str(e)}"))
+                raise
 
     def _record_lost_data(self, obj_type: str, obj_id: str, field_name: str, field_value: Any) -> None:
         """Record lost field data for audit trail and track unique values."""

@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from functools import lru_cache
 
+from auditlog.context import set_actor
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand, CommandError
@@ -128,21 +129,22 @@ class Command(BaseCommand):
 
     @atomic
     def handle(self, *args, **options):
-        filename = options["filename"]
-        if not os.path.exists(filename):
-            raise CommandError(f"File {filename} does not exist")
+        with set_actor(get_system_user()):
+            filename = options["filename"]
+            if not os.path.exists(filename):
+                raise CommandError(f"File {filename} does not exist")
 
-        self.stdout.write("Importing Kantakaupungin Rantareitti Furniture Signposts...")
-        count = 0
+            self.stdout.write("Importing Kantakaupungin Rantareitti Furniture Signposts...")
+            count = 0
 
-        with open(filename, encoding="utf-8-sig") as f:
-            csv_reader = csv.DictReader(f, delimiter=",")
-            for row in csv_reader:
-                created = self.import_row_signpost(row)
-                if created:
-                    count += 1
+            with open(filename, encoding="utf-8-sig") as f:
+                csv_reader = csv.DictReader(f, delimiter=",")
+                for row in csv_reader:
+                    created = self.import_row_signpost(row)
+                    if created:
+                        count += 1
 
-                if count % self.step == 0:
-                    self.stdout.write(f"{count} traffic signs are imported...")
+                    if count % self.step == 0:
+                        self.stdout.write(f"{count} traffic signs are imported...")
 
-        self.stdout.write(f"{count} traffic signs are imported")
+            self.stdout.write(f"{count} traffic signs are imported")

@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Dict, List, NamedTuple
 
 from traffic_control.models.plan import Plan
+from users.utils import get_system_user
 
 DRAWING_NUMBER_PATTERN = re.compile(r"\d+-\d+")
 
@@ -58,7 +59,9 @@ class PlanUpdater:
                 try:
                     # just to get exceptions incase not found or too many found
                     Plan.objects.get(decision_id=decision_id)
-                    Plan.objects.filter(decision_id=decision_id).update(**actual_update_data)
+                    Plan.objects.filter(decision_id=decision_id).update(
+                        **actual_update_data, updated_by=get_system_user()
+                    )
                     successfully_updated[decision_id] = self._get_json_serializable_update_data(actual_update_data)
                 except Exception as e:
                     failed_decision_by_decision_id[decision_id] = {
