@@ -1,9 +1,9 @@
 version = 1
 revision = 3
-requires-python = ">=3.11.9, <4"
+requires-python = ">=3.11.15, <4"
 
 [options]
-exclude-newer = "2026-04-27T09:03:18.859273739Z"
+exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for backwards compatibility when using relative exclude-newer values.
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -242,7 +242,7 @@ wheels = [
 
 [[package]]
 name = "city-infrastructure-platform"
-version = "1.37.1"
+version = "1.39.0"
 source = { virtual = "." }
 dependencies = [
     { name = "cairosvg" },

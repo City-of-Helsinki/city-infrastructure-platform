@@ -3,7 +3,7 @@ name = "city-infrastructure-platform"
 version = "1.39.0"
 description = ""
 authors = []
-requires-python = ">=3.11.9,<4"
+requires-python = ">=3.11.15,<4"
 dependencies = [
     "django>=5.2,<6",
     "cairosvg>=2.9.0,<3",
@@ -68,7 +68,7 @@ dev = [
 default-groups = "all"
 exclude-newer = "P7D"
 package = false
-required-version = "0.11.3"
+required-version = "0.11.14"
 
 [tool.ruff]
 extend-select = [

@@ -19,5 +19,6 @@ export default defineConfig([
     rules: {
       "import/no-anonymous-default-export": "off",
     },
+    ignores: ["build/**"],
   },
 ]);
