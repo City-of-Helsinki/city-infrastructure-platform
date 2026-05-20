@@ -8,6 +8,7 @@ from traffic_control.geometry_utils import geometry_is_legit
 from .traffic_sign_data_v2_constants import (
     CSVHeadersV2,
     DIRECTION_TOLERANCE,
+    DUPLICATE_PAIR_EXCLUDED_CODES,
     ZEBRA_CROSSING_ALL_CODES,
 )
 
@@ -311,6 +312,25 @@ class ReportsMixin:
                 grouped.setdefault(key, []).append(sign)
         return grouped
 
+    @staticmethod
+    def _is_excluded_duplicate_pair(sign_list: list[dict]) -> bool:
+        """Check whether a duplicate group should be excluded from the report.
+
+        A group is excluded when it contains exactly 2 signs and every sign's
+        device code belongs to ``DUPLICATE_PAIR_EXCLUDED_CODES`` (e.g. double-sided
+        signs that legitimately appear in pairs on the same mount).
+
+        Args:
+            sign_list (list[dict]): List of CSV sign row dicts forming a duplicate group.
+
+        Returns:
+            bool: True if the group should be excluded from the report.
+        """
+        if len(sign_list) != 2:
+            return False
+        codes = [sign.get(CSVHeadersV2.code) for sign in sign_list]
+        return codes[0] == codes[1] and codes[0] in DUPLICATE_PAIR_EXCLUDED_CODES
+
     def _get_duplicate_signs_on_same_mount(self, exact_code_match: bool = False) -> dict[str, Any]:
         """Report multiple signs on same mount with same device type or exact code.
 
@@ -327,7 +347,7 @@ class ReportsMixin:
                 continue
             grouped = self._group_signs_by_key(signs, exact_code_match)
             for sign_list in grouped.values():
-                if len(sign_list) >= 2:
+                if len(sign_list) >= 2 and not self._is_excluded_duplicate_pair(sign_list):
                     results.append(
                         {
                             "mount_source_id": mount_id,
