@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand
 
 from traffic_control.analyze_utils.additional_sign_info_enrich import (
@@ -9,6 +10,7 @@ from traffic_control.analyze_utils.additional_sign_info_enrich import (
     get_update_infos,
 )
 from traffic_control.models import ParkingZoneUpdateInfo
+from users.utils import get_system_user
 
 
 class Command(BaseCommand):
@@ -25,21 +27,22 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        start_time = datetime.now(timezone.utc)
-        update_infos = get_update_infos()
-        update_errors = get_error_infos(update_infos)
-        update_success = get_success_infos(update_infos)
+        with set_actor(get_system_user()):
+            start_time = datetime.now(timezone.utc)
+            update_infos = get_update_infos()
+            update_errors = get_error_infos(update_infos)
+            update_success = get_success_infos(update_infos)
 
-        if options["update"]:
-            self.stdout.write("Updating additional_informations and schemas..")
-            do_database_update(update_success, update_errors)
-        else:
-            self.stdout.write("Checking what to update...")
-            end_time = datetime.now(timezone.utc)
-            ParkingZoneUpdateInfo.objects.create(
-                start_time=start_time,
-                end_time=end_time,
-                update_infos=update_success,
-                update_errors=update_errors,
-                database_update=False,
-            )
+            if options["update"]:
+                self.stdout.write("Updating additional_informations and schemas..")
+                do_database_update(update_success, update_errors)
+            else:
+                self.stdout.write("Checking what to update...")
+                end_time = datetime.now(timezone.utc)
+                ParkingZoneUpdateInfo.objects.create(
+                    start_time=start_time,
+                    end_time=end_time,
+                    update_infos=update_success,
+                    update_errors=update_errors,
+                    database_update=False,
+                )

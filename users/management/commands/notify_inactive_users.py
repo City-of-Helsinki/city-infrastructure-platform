@@ -6,13 +6,14 @@ Suggested cron schedule: Daily at 2 AM via cron: 0 2 * * *
 from datetime import timedelta
 from typing import Any
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand, CommandParser
 from django.template.loader import render_to_string
 from django.utils import timezone
 
 from traffic_control.services.email import send_email
 from users.models import User, UserDeactivationStatus
-from users.utils import get_admin_notification_recipients
+from users.utils import get_admin_notification_recipients, get_system_user
 
 
 class Command(BaseCommand):
@@ -43,34 +44,35 @@ class Command(BaseCommand):
             *args: Positional arguments.
             **options: Command options including 'dry_run'.
         """
-        dry_run = options["dry_run"]
+        with set_actor(get_system_user()):
+            dry_run = options["dry_run"]
 
-        if dry_run:
-            self.stdout.write(self.style.WARNING("DRY RUN MODE - No emails will be sent, no changes will be made"))
+            if dry_run:
+                self.stdout.write(self.style.WARNING("DRY RUN MODE - No emails will be sent, no changes will be made"))
 
-        now = timezone.now()
-        processed_count = 0
-        notified_count = 0
-        deactivated_count = 0
+            now = timezone.now()
+            processed_count = 0
+            notified_count = 0
+            deactivated_count = 0
 
-        # Get all active users excluding AnonymousUser
-        users = User.objects.filter(is_active=True).exclude(username="AnonymousUser")
+            # Get all active users excluding AnonymousUser
+            users = User.objects.filter(is_active=True).exclude(username="AnonymousUser")
 
-        for user in users:
-            # Process user and get action taken
-            action_result = self._process_user(user, now, dry_run)
-            if action_result == "deactivated":
-                deactivated_count += 1
-            elif action_result == "notified":
-                notified_count += 1
+            for user in users:
+                # Process user and get action taken
+                action_result = self._process_user(user, now, dry_run)
+                if action_result == "deactivated":
+                    deactivated_count += 1
+                elif action_result == "notified":
+                    notified_count += 1
 
-            processed_count += 1
-            # Log progress every 10 users
-            if processed_count % 10 == 0:
-                self.stdout.write(f"Processed {processed_count} users...")
+                processed_count += 1
+                # Log progress every 10 users
+                if processed_count % 10 == 0:
+                    self.stdout.write(f"Processed {processed_count} users...")
 
-        # Summary
-        self._print_summary(dry_run, processed_count, notified_count, deactivated_count)
+            # Summary
+            self._print_summary(dry_run, processed_count, notified_count, deactivated_count)
 
     def _process_user(self, user: User, now, dry_run: bool) -> str:
         """

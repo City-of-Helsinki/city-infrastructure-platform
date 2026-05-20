@@ -1,11 +1,13 @@
 import os
 from typing import Any, Dict, List
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand, CommandParser
 from django.utils import timezone
 
 from traffic_control.analyze_utils.plan_geometry_importer import PlanGeometryImporter
 from traffic_control.models import PlanGeometryImportLog
+from users.utils import get_system_user
 
 
 class Command(BaseCommand):
@@ -145,65 +147,66 @@ class Command(BaseCommand):
             *args: Variable length argument list (unused).
             **options: Command-line options including file, output_dir, dry_run, and no_csv.
         """
-        file_path: str = options["file"]
-        output_dir: str = options["output_dir"]
-        dry_run: bool = options["dry_run"]
-        no_csv: bool = options["no_csv"]
+        with set_actor(get_system_user()):
+            file_path: str = options["file"]
+            output_dir: str = options["output_dir"]
+            dry_run: bool = options["dry_run"]
+            no_csv: bool = options["no_csv"]
 
-        if not os.path.exists(file_path):
-            self.stderr.write(self.style.ERROR(f"File not found: {file_path}"))
-            return
-
-        log = PlanGeometryImportLog.objects.create(
-            start_time=timezone.now(),
-            file_path=os.path.abspath(file_path),
-            output_dir=os.path.abspath(output_dir),
-            dry_run=dry_run,
-        )
-
-        try:
-            self.stdout.write(self.style.SUCCESS(f"Starting plan geometry import from: {file_path}"))
-            if dry_run:
-                self.stdout.write(self.style.WARNING("DRY RUN MODE - No database changes will be made"))
-
-            importer = PlanGeometryImporter(file_path)
-            self.stdout.write("Parsing CSV file...")
-            importer.parse_csv()
-
-            if not importer.results:
-                self.stdout.write(self.style.WARNING("No data rows found in CSV"))
-                log.end_time = timezone.now()
-                log.results = []
-                log.save()
+            if not os.path.exists(file_path):
+                self.stderr.write(self.style.ERROR(f"File not found: {file_path}"))
                 return
 
-            self.stdout.write("Validating geometries and matching plans...")
-            importer.validate_and_process_rows()
+            log = PlanGeometryImportLog.objects.create(
+                start_time=timezone.now(),
+                file_path=os.path.abspath(file_path),
+                output_dir=os.path.abspath(output_dir),
+                dry_run=dry_run,
+            )
 
-            self.stdout.write("Updating plans..." if not dry_run else "Simulating updates...")
-            summary = importer.update_plans(dry_run=dry_run)
+            try:
+                self.stdout.write(self.style.SUCCESS(f"Starting plan geometry import from: {file_path}"))
+                if dry_run:
+                    self.stdout.write(self.style.WARNING("DRY RUN MODE - No database changes will be made"))
 
-            if not no_csv:
-                self.stdout.write(f"Generating CSV reports to: {output_dir}")
-                importer.generate_csv_reports(output_dir)
-            else:
-                self.stdout.write("Skipping CSV report generation (--no-csv flag set)")
+                importer = PlanGeometryImporter(file_path)
+                self.stdout.write("Parsing CSV file...")
+                importer.parse_csv()
 
-            results = importer.get_results()
-            log.end_time = timezone.now()
-            log.results = results
-            log.save()
+                if not importer.results:
+                    self.stdout.write(self.style.WARNING("No data rows found in CSV"))
+                    log.end_time = timezone.now()
+                    log.results = []
+                    log.save()
+                    return
 
-            self._print_summary(summary, results, str(log.id), no_csv, output_dir)
-            self._print_update_details(results, summary, dry_run)
-            self._print_error_breakdown(results)
+                self.stdout.write("Validating geometries and matching plans...")
+                importer.validate_and_process_rows()
 
-        except Exception as e:
-            # Ensure log is updated even on error
-            log.end_time = timezone.now()
-            if hasattr(importer, "results") and importer.results:
-                log.results = importer.get_results()
-            log.save()
+                self.stdout.write("Updating plans..." if not dry_run else "Simulating updates...")
+                summary = importer.update_plans(dry_run=dry_run)
 
-            self.stderr.write(self.style.ERROR(f"Error during import: {str(e)}"))
-            raise
+                if not no_csv:
+                    self.stdout.write(f"Generating CSV reports to: {output_dir}")
+                    importer.generate_csv_reports(output_dir)
+                else:
+                    self.stdout.write("Skipping CSV report generation (--no-csv flag set)")
+
+                results = importer.get_results()
+                log.end_time = timezone.now()
+                log.results = results
+                log.save()
+
+                self._print_summary(summary, results, str(log.id), no_csv, output_dir)
+                self._print_update_details(results, summary, dry_run)
+                self._print_error_breakdown(results)
+
+            except Exception as e:
+                # Ensure log is updated even on error
+                log.end_time = timezone.now()
+                if hasattr(importer, "results") and importer.results:
+                    log.results = importer.get_results()
+                log.save()
+
+                self.stderr.write(self.style.ERROR(f"Error during import: {str(e)}"))
+                raise

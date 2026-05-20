@@ -1,10 +1,13 @@
 from auditlog.admin import LogEntryAdmin
 from auditlog.models import LogEntry
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.admin.utils import unquote
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
+from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.admin_filters import CustomDateFieldListFilter
 
@@ -28,6 +31,18 @@ class CustomLogEntryAdmin(LogEntryAdmin):
         ("actor", RelatedOnlyFieldListFilter),
         "actor__groups",
     ]
+
+    @admin.display(description=_("User"))
+    def user_url(self, obj):
+        if obj.actor:
+            app_label, model = settings.AUTH_USER_MODEL.split(".")
+            try:
+                link = reverse(f"admin:{app_label}_{model.lower()}_change", args=[obj.actor.pk])
+            except NoReverseMatch:
+                return str(obj.actor)
+            return format_html('<a href="{}">{}</a>', link, obj.actor)
+
+        return "None (deleted or old management command)"
 
 
 admin.site.unregister(LogEntry)

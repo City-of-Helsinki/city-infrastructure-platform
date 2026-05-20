@@ -269,3 +269,15 @@ sudo apt install gettext
 Traffic sign icons are from Finnish Transport Infrastructure Agency which has released these icons in public
 domain under Creative Commons 1.0 universal (CC0 1.0) license. Original icons can be found
 [here](https://github.com/finnishtransportagency/liikennemerkit/tree/master/collections/new_signs/svg).
+
+## Management command writing (and review) checklist
+
+We currently have a very dissonant history of management commands. Some of them offer --dry-run option, some of them silently perform db writes, some of them produce operation log entries into the database.
+
+In order to harmonize future management commands, follow this checklist when writing or reviewing a management command:
+
+* If the command writes data onto the database (data imports, fixes, cleanup, etc):
+  * It offers a `--dry-run` option
+  * It produces an execution log onto the database detailing the relevant operations executed. The fine details of the operations may be written into a downloadable file instead.
+  * It wraps its database operations in a `with set_actor(get_system_user())` block to ensure the produced audit log entries contain unambiguous information about the author of the changes produced being a management command
+  * `created_by`, `updated_by` and `deleted_by` fields of objects affected by the management command are set to `get_system_user()` according to the operations executed (for example `created_by` on objects created by the management command)

@@ -4,8 +4,11 @@ This reduces code duplication between traffic_control and city_furniture apps.
 """
 from abc import ABC, abstractmethod
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand
 from django.db import transaction
+
+from users.utils import get_system_user
 
 
 class BaseCreateDummyDeviceTypeCommand(BaseCommand, ABC):
@@ -90,7 +93,9 @@ class BaseCreateDummyDeviceTypeCommand(BaseCommand, ABC):
                     )
             return count
         else:
-            updated_count = objects_with_null_device_type.update(device_type=dummy_device_type)
+            updated_count = objects_with_null_device_type.update(
+                device_type=dummy_device_type, updated_by=get_system_user()
+            )
             if updated_count > 0:
                 self.stdout.write(
                     self.style.SUCCESS(f"Updated {updated_count} {model_name} records with dummy device type")
@@ -108,25 +113,26 @@ class BaseCreateDummyDeviceTypeCommand(BaseCommand, ABC):
         if dry_run:
             self.stdout.write(self.style.WARNING("DRY RUN MODE - No changes will be made"))
 
-        with transaction.atomic():
-            dummy_device_type = self.get_or_create_dummy_device_type(dry_run)
+        with set_actor(get_system_user()):
+            with transaction.atomic():
+                dummy_device_type = self.get_or_create_dummy_device_type(dry_run)
 
-            all_models = self.get_all_models()
-            models_to_update = self.filter_models(all_models, selected_models)
+                all_models = self.get_all_models()
+                models_to_update = self.filter_models(all_models, selected_models)
 
-            total_updated = 0
-            for model_name, model in models_to_update:
-                total_updated += self.update_model(model_name, model, dummy_device_type, dry_run, list_ids)
+                total_updated = 0
+                for model_name, model in models_to_update:
+                    total_updated += self.update_model(model_name, model, dummy_device_type, dry_run, list_ids)
 
-            if total_updated == 0:
-                self.stdout.write(self.style.WARNING(self.get_no_devices_message()))
-            else:
-                action = "Would update" if dry_run else "Updated"
-                prefix = self.get_summary_message_prefix()
-                self.stdout.write(
-                    self.style.SUCCESS(f"Total: {action} {total_updated} {prefix} records with dummy device type")
-                )
+                if total_updated == 0:
+                    self.stdout.write(self.style.WARNING(self.get_no_devices_message()))
+                else:
+                    action = "Would update" if dry_run else "Updated"
+                    prefix = self.get_summary_message_prefix()
+                    self.stdout.write(
+                        self.style.SUCCESS(f"Total: {action} {total_updated} {prefix} records with dummy device type")
+                    )
 
-            if dry_run:
-                # Rollback all changes in dry-run mode
-                transaction.set_rollback(True)
+                if dry_run:
+                    # Rollback all changes in dry-run mode
+                    transaction.set_rollback(True)

@@ -1,6 +1,7 @@
 import csv
 import os
 
+from auditlog.context import set_actor
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand, CommandError
@@ -35,47 +36,48 @@ class Command(BaseCommand):
         parser.add_argument("filename", help="Path to the road marking csv file")
 
     def handle(self, *args, **options):
-        filename = options["filename"]
-        if not os.path.exists(filename):
-            raise CommandError(f"File {filename} does not exist")
-
-        self.stdout.write("Importing road markings...")
-        count = 0
         user = get_system_user()
-        owner = get_default_owner()
-        with open(filename) as f:
-            csv_reader = csv.reader(f, delimiter=";")
-            next(csv_reader, None)  # skip header
-            for row in csv_reader:
-                (
-                    source_id,
-                    x,
-                    y,
-                    device_type_code,
-                    arrow_direction,
-                    size,
-                    color,
-                    additional_info,
-                    value,
-                ) = row
-                RoadMarkingReal.objects.update_or_create(
-                    source_name=SOURCE_NAME,
-                    source_id=source_id,
-                    defaults={
-                        "location": Point(float(x), float(y), 0.0, srid=settings.SRID),
-                        "device_type": self.get_device_type(device_type_code),
-                        "arrow_direction": ARROW_DIRECTION_MAPPING.get(arrow_direction),
-                        "size": size,
-                        "color": color,
-                        "additional_info": additional_info,
-                        "value": value,
-                        "created_by": user,
-                        "updated_by": user,
-                        "owner": owner,
-                    },
-                )
-                count += 1
-        self.stdout.write(f"{count} road markings are imported")
+        with set_actor(user):
+            filename = options["filename"]
+            if not os.path.exists(filename):
+                raise CommandError(f"File {filename} does not exist")
+
+            self.stdout.write("Importing road markings...")
+            count = 0
+            owner = get_default_owner()
+            with open(filename) as f:
+                csv_reader = csv.reader(f, delimiter=";")
+                next(csv_reader, None)  # skip header
+                for row in csv_reader:
+                    (
+                        source_id,
+                        x,
+                        y,
+                        device_type_code,
+                        arrow_direction,
+                        size,
+                        color,
+                        additional_info,
+                        value,
+                    ) = row
+                    RoadMarkingReal.objects.update_or_create(
+                        source_name=SOURCE_NAME,
+                        source_id=source_id,
+                        defaults={
+                            "location": Point(float(x), float(y), 0.0, srid=settings.SRID),
+                            "device_type": self.get_device_type(device_type_code),
+                            "arrow_direction": ARROW_DIRECTION_MAPPING.get(arrow_direction),
+                            "size": size,
+                            "color": color,
+                            "additional_info": additional_info,
+                            "value": value,
+                            "created_by": user,
+                            "updated_by": user,
+                            "owner": owner,
+                        },
+                    )
+                    count += 1
+            self.stdout.write(f"{count} road markings are imported")
 
     def get_device_type(self, device_type_code):
         if device_type_code not in self.device_types:

@@ -15,6 +15,7 @@ from traffic_control.models.common import Owner, TrafficControlDeviceType
 from traffic_control.models.mount import LocationSpecifier as MountLocationSpecifier, MountReal, MountType
 from traffic_control.models.signpost import SignpostReal
 from traffic_control.models.traffic_sign import LocationSpecifier as SignLocationSpecifier, TrafficSignReal
+from users.utils import get_system_user
 
 VALUE_PATTERN = re.compile(r"^\d+(\.\d+)?")
 
@@ -343,10 +344,9 @@ class TrafficSignImporter:
                     update_by_source_ids[source_id] = update_data
 
             for source_id, update_data in update_by_source_ids.items():
-                (
-                    MountReal.objects.filter(source_id=source_id, source_name=TrafficSignImporter.SOURCE_NAME).update(
-                        **update_data
-                    )
+                MountReal.objects.filter(source_id=source_id, source_name=TrafficSignImporter.SOURCE_NAME).update(
+                    **update_data,
+                    updated_by=get_system_user(),
                 )
 
         MountReal.objects.bulk_create(
@@ -398,6 +398,7 @@ class TrafficSignImporter:
                         else None,
                         scanned_at=self._get_sign_scanned_at(mount_data.get(CSVHeaders.scanned_at)),
                         attachment_url=mount_data.get(CSVHeaders.attachment_url),
+                        created_by=get_system_user(),
                     )
 
     def _import_sign_data(self):
@@ -416,7 +417,7 @@ class TrafficSignImporter:
                 (
                     TrafficSignReal.objects.filter(
                         source_id=source_id, source_name=TrafficSignImporter.SOURCE_NAME
-                    ).update(**update_data)
+                    ).update(**update_data, updated_by=get_system_user())
                 )
 
         TrafficSignReal.objects.bulk_create(
@@ -505,6 +506,7 @@ class TrafficSignImporter:
                             installation_status=get_default_installation_status(),
                             location_specifier=get_sign_location_specifier(sign_data),
                             attachment_url=sign_data.get(CSVHeaders.attachment_url),
+                            created_by=get_system_user(),
                         )
                 else:
                     self.results.append(
@@ -560,6 +562,7 @@ class TrafficSignImporter:
                         installation_status=get_default_installation_status(),
                         location_specifier=get_sign_location_specifier(sign_data),
                         scanned_at=self._get_sign_scanned_at(sign_data.get(CSVHeaders.scanned_at)),
+                        created_by=get_system_user(),
                     )
                 else:
                     self.results.append(
@@ -587,7 +590,7 @@ class TrafficSignImporter:
                 (
                     AdditionalSignReal.objects.filter(
                         source_id=source_id, source_name=TrafficSignImporter.SOURCE_NAME
-                    ).update(**update_data)
+                    ).update(**update_data, updated_by=get_system_user())
                 )
 
         AdditionalSignReal.objects.bulk_create(
@@ -664,6 +667,7 @@ class TrafficSignImporter:
                     additional_information=get_additional_information(sign_data),
                     missing_content=True,
                     attachment_url=sign_data.get(CSVHeaders.attachment_url),
+                    created_by=get_system_user(),
                 )
             else:
                 self.results.append(
