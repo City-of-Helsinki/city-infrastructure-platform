@@ -127,6 +127,10 @@ CODE_AND_COLOR_DEPENDENT_CODES = {
     "833_2": {"new_code": "833_2", "color_1_suffix": "S", "color_2_suffix": None},
 }
 
+# Codes excluded from duplicate-on-same-mount reports when the duplicate count is exactly 2
+# (e.g. double-sided signs that legitimately appear in pairs)
+DUPLICATE_PAIR_EXCLUDED_CODES: frozenset[str] = frozenset(["5111", "5112", "E1", "E1_2", "5311", "5331", "E6", "E7"])
+
 # Codes that should be replaced with validation against number_code field
 # Format: old_code -> {"expected_number": "value", "new_code": "replacement"}
 NUMBER_CODE_DEPENDENT_CODES = {

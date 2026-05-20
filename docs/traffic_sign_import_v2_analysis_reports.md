@@ -165,12 +165,19 @@ device type** (i.e. the same `TrafficControlDeviceType` record, matched by both 
 and `legacy_code`).
 Mounts with `status = Removed` are excluded. Signs with `status = Removed` are also
 excluded from duplicate grouping.
+**Excluded pairs:** A group of **exactly 2** signs where both signs share the **same**
+code from the following list is silently excluded from the report, as these are
+expected legitimate pairs (e.g. double-sided signs):
+`5111`, `5112`, `E1`, `E1_2`, `5311`, `5331`, `E6`, `E7`
+Groups of 3 or more signs with these codes, or pairs where the two signs have
+*different* codes (even if both are on the excluded list), are still reported.
 **Result fields:** `mount_source_id`, `mount_location` (EWKT),
 `duplicate_signs` (list of `"source_id | code | status | direction"` strings)
 ---
 ### `DUPLICATE SIGNS ON SAME MOUNT (EXACT CODE)`
 Same as above but matches on the **exact raw code string** rather than device type ID.
 Catches identical codes that might share a device type with a different legacy code.
+The same pair-exclusion logic applies (see above).
 **Result fields:** same as above
 ---
 ### `ADDED DOUBLE SIDED ZEBRA CROSSINGS`
