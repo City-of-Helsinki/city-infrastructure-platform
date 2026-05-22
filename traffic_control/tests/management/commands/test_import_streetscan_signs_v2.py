@@ -316,13 +316,13 @@ def test_dry_run_true_when_flag_set(tmp_path: Path) -> None:
 
 
 # ===========================================================================
-# --resume flag
+# --force-update flag
 # ===========================================================================
 
 
 @pytest.mark.django_db
-def test_resume_false_by_default(tmp_path: Path) -> None:
-    """resume defaults to False when --resume is not provided.
+def test_force_update_false_by_default(tmp_path: Path) -> None:
+    """force_update defaults to False (resume behaviour is on by default).
 
     Args:
         tmp_path (Path): Pytest tmp_path fixture.
@@ -336,12 +336,12 @@ def test_resume_false_by_default(tmp_path: Path) -> None:
         _call(mount_file, sign_file)
 
         _, kwargs = mock_cls.call_args
-        assert kwargs["resume"] is False
+        assert kwargs["force_update"] is False
 
 
 @pytest.mark.django_db
-def test_resume_true_when_flag_set(tmp_path: Path) -> None:
-    """resume is True when --resume is provided.
+def test_force_update_true_when_flag_set(tmp_path: Path) -> None:
+    """force_update is True when --force-update is provided.
 
     Args:
         tmp_path (Path): Pytest tmp_path fixture.
@@ -349,13 +349,14 @@ def test_resume_true_when_flag_set(tmp_path: Path) -> None:
     mount_file, sign_file = _make_csv_files(tmp_path)
     with patch(_IMPORTER_PATH) as mock_cls:
         mock_instance = MagicMock()
-        mock_instance.run.return_value = _MOCK_SUMMARY
+        mock_instance.run.return_value = {**_MOCK_SUMMARY}
         mock_cls.return_value = mock_instance
 
-        _call(mount_file, sign_file, resume=True)
+        stdout, _ = _call(mount_file, sign_file, force_update=True)
 
         _, kwargs = mock_cls.call_args
-        assert kwargs["resume"] is True
+        assert kwargs["force_update"] is True
+        assert "FORCE UPDATE" in stdout
 
 
 # ===========================================================================

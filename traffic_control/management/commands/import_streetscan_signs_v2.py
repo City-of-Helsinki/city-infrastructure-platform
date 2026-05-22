@@ -1,6 +1,7 @@
 """Management command to import V2 traffic sign CSV data into the database."""
 from __future__ import annotations
 
+import logging
 import os
 from typing import Any
 
@@ -11,13 +12,14 @@ from traffic_control.analyze_utils.traffic_sign_data_v2_import import (
     VALID_OBJECT_TYPES,
     VALID_PHASES,
 )
+from users.utils import get_system_user
 
 
 class Command(BaseCommand):
     """Import V2 traffic sign CSV data (mounts, signs, signposts, additional signs).
 
     Supports selective execution via --object-type and --phase flags, dry-run
-    simulation, and resuming after a partial failure via --resume.
+    simulation, and --force-update to bypass the default resume behaviour.
     """
 
     help = (
@@ -63,12 +65,25 @@ class Command(BaseCommand):
             ),
         )
         parser.add_argument(
-            "--resume",
+            "--force-update",
+            dest="force_update",
             action="store_true",
             default=False,
             help=(
-                "Skip source_ids already recorded as successfully processed in previous "
-                "non-dry-run executions for the same file pair."
+                "Re-process all rows, even those already recorded as successfully processed "
+                "in previous non-dry-run executions for the same file pair. "
+                "By default, already-processed source_ids are skipped (resume behaviour)."
+            ),
+        )
+        parser.add_argument(
+            "--batch-size",
+            dest="batch_size",
+            type=int,
+            default=1000,
+            help=(
+                "Number of records per bulk_create / bulk_update batch. "
+                "Lower values reduce peak memory usage at the cost of more DB round-trips. "
+                "Default: 1000."
             ),
         )
         parser.add_argument(
@@ -122,7 +137,8 @@ class Command(BaseCommand):
         sign_file: str = options["sign_file"]
         delimiter: str = options["delimiter"]
         dry_run: bool = options["dry_run"]
-        resume: bool = options["resume"]
+        force_update: bool = options["force_update"]
+        batch_size: int = options["batch_size"]
 
         # Default to all object types / phases when none specified.
         object_types: list[str] = options["object_types"] or list(VALID_OBJECT_TYPES)
@@ -133,17 +149,32 @@ class Command(BaseCommand):
         if not self._validate_file(sign_file, "Sign file"):
             return
 
+        user = get_system_user()
+
+        # Forward importer logger output to management command stdout.
+        # verbosity 0 → WARNING+, 1 (default) → INFO+, 2/3 → DEBUG+
+        verbosity: int = options.get("verbosity", 1)
+        log_level = logging.WARNING if verbosity == 0 else (logging.DEBUG if verbosity >= 2 else logging.INFO)
+        importer_logger = logging.getLogger("traffic_control.analyze_utils.traffic_sign_data_v2_import")
+        _stream_handler = logging.StreamHandler(self.stdout)
+        _stream_handler.setLevel(log_level)
+        importer_logger.addHandler(_stream_handler)
+        importer_logger.setLevel(log_level)
+
         self.stdout.write(self.style.SUCCESS("Starting V2 traffic sign import"))
         self.stdout.write(f"  mount_file   : {mount_file}")
         self.stdout.write(f"  sign_file    : {sign_file}")
         self.stdout.write(f"  delimiter    : '{delimiter}'")
         self.stdout.write(f"  dry_run      : {dry_run}")
-        self.stdout.write(f"  resume       : {resume}")
+        self.stdout.write(f"  force_update : {force_update}")
+        self.stdout.write(f"  batch_size   : {batch_size}")
         self.stdout.write(f"  object_types : {object_types}")
         self.stdout.write(f"  phases       : {phases}")
 
         if dry_run:
             self.stdout.write(self.style.WARNING("DRY RUN — no database writes will be performed"))
+        if force_update:
+            self.stdout.write(self.style.WARNING("FORCE UPDATE — all rows will be re-processed"))
 
         importer = TrafficSignImporterV2(
             mount_file=mount_file,
@@ -151,12 +182,15 @@ class Command(BaseCommand):
             object_types=object_types,
             phases=phases,
             dry_run=dry_run,
-            resume=resume,
+            force_update=force_update,
             delimiter=delimiter,
+            batch_size=batch_size,
+            user=user,
         )
 
         summary = importer.run()
 
+        self.stdout.write(f"  preprocessing: {importer._preprocessing_duration_s:.2f}s")
         self._print_summary(summary)
 
     def _print_summary(self, summary: dict[str, Any]) -> None:
@@ -169,11 +203,22 @@ class Command(BaseCommand):
         self.stdout.write(f"  object_types : {summary.get('object_types')}")
         self.stdout.write(f"  phases       : {summary.get('phases')}")
         self.stdout.write(f"  dry_run      : {summary.get('dry_run')}")
+
+        phase_results: dict = summary.get("phase_results", {})
+        if phase_results:
+            self.stdout.write("\n  Results per object type / phase:")
+            for object_type, phases in phase_results.items():
+                for phase, counts in phases.items():
+                    duration = counts.pop("duration_s", None)
+                    counts_str = "  ".join(f"{k}={v}" for k, v in counts.items())
+                    duration_str = f"  ({duration}s)" if duration is not None else ""
+                    self.stdout.write(f"    {object_type:<20} {phase:<12} {counts_str}{duration_str}")
+
         details: list = summary.get("details", [])
         warnings = [e for e in details if e.get("level") == "warning"]
         skips = [e for e in details if e.get("level") == "skip"]
         errors = [e for e in details if e.get("level") == "error"]
-        self.stdout.write(f"  skipped      : {len(skips)}")
+        self.stdout.write(f"\n  skipped      : {len(skips)}")
         self.stdout.write(f"  warnings     : {len(warnings)}")
         self.stdout.write(f"  errors       : {len(errors)}")
         if errors:
