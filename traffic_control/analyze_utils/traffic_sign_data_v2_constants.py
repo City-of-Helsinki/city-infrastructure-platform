@@ -8,8 +8,9 @@ ZEBRA_CROSSING_RIGHT_CODES = ["5111", "E1"]
 ZEBRA_CROSSING_ALL_CODES = ZEBRA_CROSSING_LEFT_CODES + ZEBRA_CROSSING_RIGHT_CODES
 DIRECTION_TOLERANCE = 20  # degrees tolerance for 180° difference
 
-# Compiled regex pattern for extracting numeric part from number_code field
-NUMBER_CODE_PATTERN = re.compile(r"^(\d+)")
+# Compiled regex pattern for extracting numeric part from number_code / teksti fields
+NUMBER_CODE_PATTERN = re.compile(r"^\s*(\d+)")
+
 
 # Code transformation configuration constants
 INVALID_CODES = {"x", "not classified", "k06", "931-1"}  # Codes that should be filtered out (case insensitive)
@@ -163,6 +164,8 @@ NUMBER_CODE_DEPENDENT_CODES = {
     "364_40": {"expected_number": "40", "new_code": "3646"},
 }
 
+NUMBER_CODE_DEPENDENT_NEW_CODES: set[str] = {entry["new_code"] for entry in NUMBER_CODE_DEPENDENT_CODES.values()}
+
 # Conditional code replacements based on number_code value
 # Format: code -> {number_value: new_code}
 # Only replaces if number_code matches a key, otherwise code stays unchanged
@@ -206,7 +209,8 @@ class CSVHeadersV2:
     mount_type = "tyyppi"
     number_code = "numerokoodi"
     parent_sign_id = "lisäkilven_päämerkin_id"
-    scanned_at = "tallennusajankohta"
+    scanned_at = "recordedat"
+    mount_scanned_at = "tallennusajankohta"
     sign_mount_type = "kiinnitys"
     status = "status"  # New field
     txt = "teksti"

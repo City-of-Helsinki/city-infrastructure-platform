@@ -12,6 +12,7 @@ from .traffic_sign_data_v2_constants import (
     INVALID_CODES,
     LOCATION_SPECIFIER_4_CODES,
     NUMBER_CODE_DEPENDENT_CODES,
+    NUMBER_CODE_DEPENDENT_NEW_CODES,
     NUMBER_CODE_PATTERN,
     SKIPPABLE_CODES,
 )
@@ -292,6 +293,7 @@ class CodeTransformMixin:
             }
         )
         row[CSVHeadersV2.code] = replacement_code
+        row[CSVHeadersV2.number_code] = expected_number
 
     def _apply_number_code_replacement(
         self, row: dict, code: str, replacement_code: str, number_code_value: str, expected_number: str
@@ -323,6 +325,7 @@ class CodeTransformMixin:
             }
         )
         row[CSVHeadersV2.code] = replacement_code
+        row[CSVHeadersV2.number_code] = expected_number
 
     def _apply_number_code_validation(self, row: dict) -> None:
         """Apply number-code based validation and replacement if applicable.
@@ -409,6 +412,37 @@ class CodeTransformMixin:
         )
         row["internal_additional_info"] = value
 
+    def _enrich_number_code_from_teksti(self, row: dict) -> None:
+        """Enrich number_code from the teksti field when code is a NUMBER_CODE_DEPENDENT_NEW_CODES value.
+
+        If the row's code is one of the new_code values produced by NUMBER_CODE_DEPENDENT_CODES
+        and the number_code field is not already set, extract a leading integer from the teksti
+        field (e.g. "32 t" -> "32") and use it as the number_code value.
+
+        Args:
+            row (dict): CSV row dictionary (modified in place).
+        """
+        code = row.get(CSVHeadersV2.code, "")
+        if code not in NUMBER_CODE_DEPENDENT_NEW_CODES:
+            return
+        if row.get(CSVHeadersV2.number_code, ""):
+            return
+        teksti = row.get(CSVHeadersV2.txt, "") or ""
+        match = NUMBER_CODE_PATTERN.match(teksti)
+        if not match:
+            return
+        extracted = match.group(1)
+        self.enriched_signs.append(
+            {
+                "source_id": row.get(CSVHeadersV2.id),
+                "code": code,
+                "field": "number_code",
+                "old_value": None,
+                "new_value": extracted,
+            }
+        )
+        row[CSVHeadersV2.number_code] = extracted
+
     @staticmethod
     def _is_skippable_code(code: str) -> bool:
         return code in SKIPPABLE_CODES
@@ -419,7 +453,8 @@ class CodeTransformMixin:
         Applies the full transformation pipeline in order: invalid-code filtering,
         direct code replacement, color-based suffix, code+color transformation,
         number-code validation, conditional number-code replacement, skippable-code
-        filtering, location_specifier enrichment, and internal_additional_info enrichment.
+        filtering, location_specifier enrichment, internal_additional_info enrichment,
+        and number_code enrichment from teksti.
 
         See docs/traffic_sign_import_v2_code_transformations.md for the complete
         specification of all transformation rules.
@@ -447,6 +482,7 @@ class CodeTransformMixin:
                 continue
             self._enrich_location_specifier(row)
             self._enrich_internal_additional_info(row)
+            self._enrich_number_code_from_teksti(row)
             processed_rows.append(row)
         return processed_rows
 
