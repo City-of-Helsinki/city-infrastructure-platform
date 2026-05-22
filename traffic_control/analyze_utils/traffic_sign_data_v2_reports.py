@@ -731,6 +731,59 @@ class ReportsMixin:
             include_ssurl=True,
         )
 
+    def _get_removed_parents_referenced_by_active_additional_signs(self) -> dict[str, Any]:
+        """Report removed traffic signs or signposts used as parent by active additional signs.
+
+        Finds all additional signs that are not marked as Removed but reference a parent
+        (traffic sign or signpost) that is marked as Removed.
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+                Each result entry contains additional_sign_source_id, additional_sign_code,
+                additional_sign_status, parent_source_id, parent_code, parent_status, and parent_type.
+        """
+        results = []
+        for source_id, add_sign in self.additional_signs_by_id.items():
+            if add_sign.get(CSVHeadersV2.status) == "Removed":
+                continue
+            parent_source_id = add_sign.get(CSVHeadersV2.parent_sign_id)
+            if not parent_source_id:
+                continue
+            parent_data, parent_type = self._resolve_parent_data_and_type(parent_source_id)
+            if parent_data is None or parent_data.get(CSVHeadersV2.status) != "Removed":
+                continue
+            results.append(
+                {
+                    "additional_sign_source_id": source_id,
+                    "additional_sign_code": add_sign.get(CSVHeadersV2.code),
+                    "additional_sign_status": add_sign.get(CSVHeadersV2.status),
+                    "parent_source_id": parent_source_id,
+                    "parent_code": parent_data.get(CSVHeadersV2.code),
+                    "parent_status": parent_data.get(CSVHeadersV2.status),
+                    "parent_type": parent_type,
+                    "additional_sign_ssurl": add_sign.get(CSVHeadersV2.attachment_url, ""),
+                }
+            )
+        return {"REPORT_TYPE": "ACTIVE ADDITIONAL SIGNS WITH REMOVED PARENT", "results": results}
+
+    def _resolve_parent_data_and_type(self, parent_source_id: str) -> tuple[dict | None, str | None]:
+        """Resolve parent CSV row data and type label for a given parent source ID.
+
+        Checks traffic signs first, then signposts.
+
+        Args:
+            parent_source_id (str): The source ID of the parent sign or signpost.
+
+        Returns:
+            tuple[dict | None, str | None]: A tuple of (parent_data, parent_type).
+                parent_type is 'traffic_sign', 'signpost', or None if not found.
+        """
+        if parent_source_id in self.signs_by_id:
+            return self.signs_by_id[parent_source_id], "traffic_sign"
+        if parent_source_id in self.signposts_by_id:
+            return self.signposts_by_id[parent_source_id], "signpost"
+        return None, None
+
     def _collect_invalid_location_objects(
         self, objects: list, object_type: str, id_key: str, include_device_code: bool
     ) -> list[dict[str, Any]]:

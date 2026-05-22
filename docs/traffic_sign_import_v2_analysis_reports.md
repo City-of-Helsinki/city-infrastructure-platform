@@ -14,7 +14,7 @@ Source files:
 | 3 | [Status records](#3-status-records) | 5 |
 | 4 | [Non-existing mount references](#4-non-existing-mount-references) | 3 |
 | 5 | [Mountless signs](#5-mountless-signs) | 3 |
-| 6 | [Sign relationships](#6-sign-relationships) | 2 |
+| 6 | [Sign relationships](#6-sign-relationships) | 3 |
 | 7 | [Distance](#7-distance) | 3 |
 | 8 | [Duplicate detection](#8-duplicate-detection) | 3 |
 | 9 | [Mount health](#9-mount-health) | 2 |
@@ -138,6 +138,17 @@ incorrect source data.
 **Result fields:** `sign_source_id`, `sign_device_code`, `sign_status`,
 `parent_source_id`, `parent_device_code`, `parent_type`
 (`additional_sign` | `main_sign` | `not_found_in_csv`), `parent_status`
+---
+### `ACTIVE ADDITIONAL SIGNS WITH REMOVED PARENT`
+Additional signs that are **not** marked as `Removed` but whose
+`lisäkilven_päämerkin_id` references a traffic sign or signpost that **is** marked
+as `Removed`. This indicates a data integrity issue — the parent has been decommissioned
+but the child additional sign has not been updated accordingly.
+Only parents found in the traffic signs CSV or signposts CSV are checked; additional
+signs that reference another additional sign as parent are not covered here.
+**Result fields:** `additional_sign_source_id`, `additional_sign_code`,
+`additional_sign_status`, `parent_source_id`, `parent_code`, `parent_status`,
+`parent_type` (`traffic_sign` | `signpost`), `additional_sign_ssurl`
 ---
 ## 7. Distance
 ### `MOUNT DISTANCES`

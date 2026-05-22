@@ -1592,3 +1592,134 @@ def test_enrich_internal_additional_info_no_change_for_unknown_code() -> None:
     stub._enrich_internal_additional_info(row)
     assert row["internal_additional_info"] is None
     assert stub.enriched_signs == []
+
+
+# ===========================================================================
+# Active additional signs with removed parent report
+# ===========================================================================
+
+
+@pytest.mark.django_db
+def test_removed_parent_traffic_sign_reported(tmp_path: Path) -> None:
+    """Active additional sign referencing a Removed traffic sign is reported.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
+    TrafficControlDeviceType.objects.get_or_create(code="C39")
+    TrafficControlDeviceType.objects.get_or_create(code="H24S")
+
+    analyzer = _make_analyzer(
+        tmp_path,
+        [_mount_row("m1")],
+        [
+            _sign_row("parent1", "m1", "Removed", "C39"),
+            _sign_row("add1", "m1", "New", "H24S", parent_id="parent1", ssurl="https://example.com/add"),
+        ],
+    )
+    report = next(r for r in analyzer.analyze() if r["REPORT_TYPE"] == "ACTIVE ADDITIONAL SIGNS WITH REMOVED PARENT")
+    result = next((r for r in report["results"] if r["additional_sign_source_id"] == "add1"), None)
+
+    assert result is not None
+    assert result["parent_source_id"] == "parent1"
+    assert result["parent_status"] == "Removed"
+    assert result["parent_type"] == "traffic_sign"
+    assert result["parent_code"] == "C39"
+    assert result["additional_sign_ssurl"] == "https://example.com/add"
+
+
+@pytest.mark.django_db
+def test_removed_parent_signpost_reported(tmp_path: Path) -> None:
+    """Active additional sign referencing a Removed signpost is reported.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
+    TrafficControlDeviceType.objects.get_or_create(code="645")
+    TrafficControlDeviceType.objects.get_or_create(code="H24S")
+
+    analyzer = _make_analyzer(
+        tmp_path,
+        [_mount_row("m1")],
+        [
+            _sign_row("signpost1", "m1", "Removed", "645"),
+            _sign_row("add2", "m1", "Unchanged", "H24S", parent_id="signpost1"),
+        ],
+    )
+    report = next(r for r in analyzer.analyze() if r["REPORT_TYPE"] == "ACTIVE ADDITIONAL SIGNS WITH REMOVED PARENT")
+    result = next((r for r in report["results"] if r["additional_sign_source_id"] == "add2"), None)
+
+    assert result is not None
+    assert result["parent_source_id"] == "signpost1"
+    assert result["parent_type"] == "signpost"
+    assert result["parent_status"] == "Removed"
+
+
+@pytest.mark.django_db
+def test_removed_additional_sign_not_reported(tmp_path: Path) -> None:
+    """Additional sign that is itself Removed is excluded from the report even if parent is Removed.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
+    TrafficControlDeviceType.objects.get_or_create(code="C39")
+    TrafficControlDeviceType.objects.get_or_create(code="H24S")
+
+    analyzer = _make_analyzer(
+        tmp_path,
+        [_mount_row("m1")],
+        [
+            _sign_row("parent_removed", "m1", "Removed", "C39"),
+            _sign_row("add_removed", "m1", "Removed", "H24S", parent_id="parent_removed"),
+        ],
+    )
+    report = next(r for r in analyzer.analyze() if r["REPORT_TYPE"] == "ACTIVE ADDITIONAL SIGNS WITH REMOVED PARENT")
+    ids = [r["additional_sign_source_id"] for r in report["results"]]
+    assert "add_removed" not in ids
+
+
+@pytest.mark.django_db
+def test_active_additional_sign_with_active_parent_not_reported(tmp_path: Path) -> None:
+    """Additional sign referencing an active (non-Removed) parent is not reported.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
+    TrafficControlDeviceType.objects.get_or_create(code="C39")
+    TrafficControlDeviceType.objects.get_or_create(code="H24S")
+
+    analyzer = _make_analyzer(
+        tmp_path,
+        [_mount_row("m1")],
+        [
+            _sign_row("parent_active", "m1", "Unchanged", "C39"),
+            _sign_row("add_active", "m1", "New", "H24S", parent_id="parent_active"),
+        ],
+    )
+    report = next(r for r in analyzer.analyze() if r["REPORT_TYPE"] == "ACTIVE ADDITIONAL SIGNS WITH REMOVED PARENT")
+    ids = [r["additional_sign_source_id"] for r in report["results"]]
+    assert "add_active" not in ids
+
+
+@pytest.mark.django_db
+def test_additional_sign_with_no_parent_not_reported(tmp_path: Path) -> None:
+    """Additional sign with a blank parent ID is not reported.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
+    TrafficControlDeviceType.objects.get_or_create(code="H24S")
+
+    analyzer = _make_analyzer(
+        tmp_path,
+        [_mount_row("m1")],
+        [_sign_row("add_no_parent", "m1", "New", "H24S", parent_id="")],
+    )
+    report = next(r for r in analyzer.analyze() if r["REPORT_TYPE"] == "ACTIVE ADDITIONAL SIGNS WITH REMOVED PARENT")
+    ids = [r["additional_sign_source_id"] for r in report["results"]]
+    assert "add_no_parent" not in ids
