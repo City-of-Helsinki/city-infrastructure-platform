@@ -284,7 +284,7 @@ def test_validate_timestamp_id_key_per_object_type(object_type: str, expected_ke
         object_type (str): Object type label.
         expected_key (str): Expected key in the returned error dict.
     """
-    obj = {CSVHeadersV2.scanned_at: "INVALID", CSVHeadersV2.id: "the_id"}
+    obj = {CSVHeadersV2.scanned_at: "INVALID", CSVHeadersV2.mount_scanned_at: "INVALID", CSVHeadersV2.id: "the_id"}
     result = TrafficSignAnalyzerV2._validate_timestamp(obj, object_type)
     assert result is not None
     assert expected_key in result

@@ -37,6 +37,7 @@ from traffic_control.admin.signpost_migration import (
     SignpostTrafficSignMigrationRealRecordAdmin,
     SignpostTrafficSignMigrationRunAdmin,
 )
+from traffic_control.admin.streetscan_import import StreetScanImportRevertFileAdmin, StreetScanImportRunAdmin
 from traffic_control.admin.ticket_machine_migration import (
     TicketMachineMigrationPlanRecordAdmin,
     TicketMachineTrafficSignMigrationRealRecordAdmin,
