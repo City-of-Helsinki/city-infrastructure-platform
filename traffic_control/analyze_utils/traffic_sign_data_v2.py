@@ -123,6 +123,7 @@ class TrafficSignAnalyzerV2(
             # Sign relationships
             self._get_signless_additional_signs(),
             self._get_main_signs_with_parent_report(),
+            self._get_removed_parents_referenced_by_active_additional_signs(),
             # Distance reports
             self._get_mount_distances(),
             self._get_additional_sign_distances(),
