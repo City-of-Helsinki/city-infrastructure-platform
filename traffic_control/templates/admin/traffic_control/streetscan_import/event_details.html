@@ -1,0 +1,82 @@
+{% if sections %}
+    {% for section in sections %}
+        <details open
+                 style="margin-bottom:12px">
+            <summary style="font-weight:bold;
+                            cursor:pointer;
+                            padding:4px 0">{{ section.object_type }}</summary>
+
+            {% if not section.has_entries %}
+                <p style="margin:4px 0;
+                          color:#6c757d;
+                          font-style:italic">No events recorded.</p>
+            {% else %}
+                {% for level in section.levels %}
+                    <details style="margin:4px 0 8px;
+                                    border-left:4px solid {{ level.border }};
+                                    padding-left:6px">
+                        <summary style="cursor:pointer;
+                                        color:{{ level.colour }};
+                                        font-weight:bold;
+                                        padding:2px 6px;
+                                        background:{{ level.summary_bg }};
+                                        display:inline-block;
+                                        border-radius:3px">
+                            {{ level.level }} ({{ level.total }})
+                            <a href="{{ level.csv_url }}"
+                               style="font-size:0.8em;
+                                      font-weight:normal;
+                                      color:#fff;
+                                      background:#495057;
+                                      padding:1px 6px;
+                                      border-radius:3px;
+                                      text-decoration:none;
+                                      margin-left:6px">↓ CSV</a>
+                        </summary>
+                        <table style="width:100%;
+                                      border-collapse:collapse;
+                                      background:{{ level.bg }};
+                                      margin-top:4px">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left;
+                                               padding:2px 8px;
+                                               color:#212529">Source ID</th>
+                                    <th style="text-align:left;
+                                               padding:2px 8px;
+                                               color:#212529">Phase</th>
+                                    <th style="text-align:left;
+                                               padding:2px 8px;
+                                               color:#212529">Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in level.displayed_entries %}
+                                    <tr>
+                                        <td style="padding:2px 8px;
+                                                   font-family:monospace">{{ entry.source_id }}</td>
+                                        <td style="padding:2px 8px;
+                                                   font-family:monospace">{{ entry.phase }}</td>
+                                        <td style="padding:2px 8px">{{ entry.reason }}</td>
+                                    </tr>
+                                {% endfor %}
+                                {% if level.truncated %}
+                                    <tr>
+                                        <td colspan="3"
+                                            style="padding:4px 8px;
+                                                   color:#6c757d;
+                                                   font-style:italic">
+                                            Showing {{ level.max_rows }} of {{ level.total }} entries — use the CSV download for the full list.
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </details>
+                {% endfor %}
+            {% endif %}
+        </details>
+    {% endfor %}
+{% else %}
+    <span style="color:#6c757d">No events recorded.</span>
+{% endif %}

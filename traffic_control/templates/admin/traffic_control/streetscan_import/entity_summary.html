@@ -1,0 +1,5 @@
+<span title="created">+{{ created }}</span> / <span title="updated">↻{{ updated }}</span>
+{% if deactivated is not None %}
+    / <span title="deactivated"
+       style="color:#dc3545">✕{{ deactivated }}</span>
+{% endif %}

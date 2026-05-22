@@ -284,7 +284,7 @@ def test_validate_timestamp_id_key_per_object_type(object_type: str, expected_ke
         object_type (str): Object type label.
         expected_key (str): Expected key in the returned error dict.
     """
-    obj = {CSVHeadersV2.scanned_at: "INVALID", CSVHeadersV2.id: "the_id"}
+    obj = {CSVHeadersV2.scanned_at: "INVALID", CSVHeadersV2.mount_scanned_at: "INVALID", CSVHeadersV2.id: "the_id"}
     result = TrafficSignAnalyzerV2._validate_timestamp(obj, object_type)
     assert result is not None
     assert expected_key in result
@@ -1723,3 +1723,144 @@ def test_additional_sign_with_no_parent_not_reported(tmp_path: Path) -> None:
     report = next(r for r in analyzer.analyze() if r["REPORT_TYPE"] == "ACTIVE ADDITIONAL SIGNS WITH REMOVED PARENT")
     ids = [r["additional_sign_source_id"] for r in report["results"]]
     assert "add_no_parent" not in ids
+
+
+# ---------------------------------------------------------------------------
+# _enrich_number_code_from_teksti
+# ---------------------------------------------------------------------------
+
+
+def _stub_row_with_teksti(
+    code: str,
+    numero: str = "",
+    teksti: str = "",
+    source_id: str = "s1",
+) -> dict:
+    """Build a minimal CSV-like row dict including the teksti field.
+
+    Args:
+        code (str): Device type code value.
+        numero (str): Number code field value.
+        teksti (str): teksti field value.
+        source_id (str): Source id value.
+
+    Returns:
+        dict: Row dictionary with required keys.
+    """
+    return {
+        CSVHeadersV2.id: source_id,
+        CSVHeadersV2.code: code,
+        CSVHeadersV2.number_code: numero,
+        CSVHeadersV2.txt: teksti,
+        CSVHeadersV2.color: "",
+        CSVHeadersV2.location_specifier: "",
+    }
+
+
+def test_enrich_number_code_from_teksti_passthrough_for_unknown_code() -> None:
+    """_enrich_number_code_from_teksti leaves row unchanged when code is not in NUMBER_CODE_DEPENDENT_NEW_CODES.
+
+    Args: None
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("999", teksti="30 t")
+    stub._enrich_number_code_from_teksti(row)
+    assert row[CSVHeadersV2.number_code] == ""
+    assert stub.enriched_signs == []
+
+
+def test_enrich_number_code_from_teksti_passthrough_when_number_code_already_set() -> None:
+    """_enrich_number_code_from_teksti leaves row unchanged when number_code already has a value.
+
+    Args: None
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("344", numero="12", teksti="30 t")
+    stub._enrich_number_code_from_teksti(row)
+    assert row[CSVHeadersV2.number_code] == "12"
+    assert stub.enriched_signs == []
+
+
+def test_enrich_number_code_from_teksti_passthrough_when_teksti_has_no_leading_number() -> None:
+    """_enrich_number_code_from_teksti leaves row unchanged when teksti contains no leading integer.
+
+    Args: None
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("344", teksti="no number here")
+    stub._enrich_number_code_from_teksti(row)
+    assert row[CSVHeadersV2.number_code] == ""
+    assert stub.enriched_signs == []
+
+
+def test_enrich_number_code_from_teksti_passthrough_when_teksti_empty() -> None:
+    """_enrich_number_code_from_teksti leaves row unchanged when teksti is empty.
+
+    Args: None
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("344", teksti="")
+    stub._enrich_number_code_from_teksti(row)
+    assert row[CSVHeadersV2.number_code] == ""
+    assert stub.enriched_signs == []
+
+
+def test_enrich_number_code_from_teksti_extracts_plain_number() -> None:
+    """_enrich_number_code_from_teksti sets number_code from a plain integer in teksti.
+
+    Args: None
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("344", teksti="12")
+    stub._enrich_number_code_from_teksti(row)
+    assert row[CSVHeadersV2.number_code] == "12"
+    assert stub.enriched_signs[0]["field"] == "number_code"
+    assert stub.enriched_signs[0]["new_value"] == "12"
+
+
+def test_enrich_number_code_from_teksti_extracts_number_with_unit() -> None:
+    """_enrich_number_code_from_teksti extracts leading integer even when teksti has a unit suffix.
+
+    Args: None
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("344", teksti="30 t")
+    stub._enrich_number_code_from_teksti(row)
+    assert row[CSVHeadersV2.number_code] == "30"
+    assert stub.enriched_signs[0]["new_value"] == "30"
+
+
+def test_enrich_number_code_from_teksti_extracts_number_with_leading_whitespace() -> None:
+    """_enrich_number_code_from_teksti handles leading whitespace in teksti.
+
+    Args: None
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("345", teksti="  60 km/h")
+    stub._enrich_number_code_from_teksti(row)
+    assert row[CSVHeadersV2.number_code] == "60"
+    assert stub.enriched_signs[0]["source_id"] == "s1"
+
+
+def test_enrich_number_code_from_teksti_records_correct_enriched_sign_entry() -> None:
+    """_enrich_number_code_from_teksti records old_value as None and correct code in enriched_signs.
+
+    Args: None
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("346", teksti="8 t", source_id="abc")
+    stub._enrich_number_code_from_teksti(row)
+    entry = stub.enriched_signs[0]
+    assert entry["source_id"] == "abc"
+    assert entry["code"] == "346"
+    assert entry["field"] == "number_code"
+    assert entry["old_value"] is None
+    assert entry["new_value"] == "8"

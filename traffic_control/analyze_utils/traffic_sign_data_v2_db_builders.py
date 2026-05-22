@@ -3,6 +3,7 @@ import csv
 import os
 from datetime import datetime
 from typing import Any, Type
+from uuid import UUID
 
 from traffic_control.analyze_utils.traffic_sign_data import TrafficSignImporter
 from traffic_control.models.additional_sign import AdditionalSignReal
@@ -196,14 +197,14 @@ class DbBuilderMixin:
         return DbBuilderMixin._build_device_type_attr_map(SignpostReal, "legacy_code")
 
     @staticmethod
-    def _build_source_id_to_db_id(model_class: Type) -> dict[str, str]:
+    def _build_source_id_to_db_id(model_class: Type) -> dict[str, UUID]:
         """Build mapping from source_id to db_id for objects of the given model.
 
         Args:
             model_class (type): Django model class.
 
         Returns:
-            dict[str, str]: Dictionary mapping source_id to db_id.
+            dict[str, UUID]: Dictionary mapping source_id to db_id (UUID primary key).
         """
         return {
             obj.source_id: obj.id
@@ -211,38 +212,38 @@ class DbBuilderMixin:
         }
 
     @staticmethod
-    def _build_mount_source_id_to_db_id() -> dict[str, str]:
+    def _build_mount_source_id_to_db_id() -> dict[str, UUID]:
         """Build mapping from source_id to db_id for MountReal objects.
 
         Returns:
-            dict[str, str]: Dictionary mapping source_id to db_id.
+            dict[str, UUID]: Dictionary mapping source_id to db_id (UUID primary key).
         """
         return DbBuilderMixin._build_source_id_to_db_id(MountReal)
 
     @staticmethod
-    def _build_sign_source_id_to_db_id() -> dict[str, str]:
+    def _build_sign_source_id_to_db_id() -> dict[str, UUID]:
         """Build mapping from source_id to db_id for TrafficSignReal objects.
 
         Returns:
-            dict[str, str]: Dictionary mapping source_id to db_id.
+            dict[str, UUID]: Dictionary mapping source_id to db_id (UUID primary key).
         """
         return DbBuilderMixin._build_source_id_to_db_id(TrafficSignReal)
 
     @staticmethod
-    def _build_additional_sign_source_id_to_db_id() -> dict[str, str]:
+    def _build_additional_sign_source_id_to_db_id() -> dict[str, UUID]:
         """Build mapping from source_id to db_id for AdditionalSignReal objects.
 
         Returns:
-            dict[str, str]: Dictionary mapping source_id to db_id.
+            dict[str, UUID]: Dictionary mapping source_id to db_id (UUID primary key).
         """
         return DbBuilderMixin._build_source_id_to_db_id(AdditionalSignReal)
 
     @staticmethod
-    def _build_signpost_source_id_to_db_id() -> dict[str, str]:
+    def _build_signpost_source_id_to_db_id() -> dict[str, UUID]:
         """Build mapping from source_id to db_id for SignpostReal objects.
 
         Returns:
-            dict[str, str]: Dictionary mapping source_id to db_id.
+            dict[str, UUID]: Dictionary mapping source_id to db_id (UUID primary key).
         """
         return DbBuilderMixin._build_source_id_to_db_id(SignpostReal)
 
