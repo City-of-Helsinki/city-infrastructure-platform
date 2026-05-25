@@ -718,6 +718,46 @@ class ReportsMixin:
             )
         return {"REPORT_TYPE": "NON EXISTING MOUNTS FOR SIGNPOSTS", "results": results}
 
+    def _get_signposts_that_are_both_parent_and_child_report(self) -> dict[str, Any]:
+        """Report signposts that are marked as a parent of another signpost but are also a child of some other signpost.
+
+        A signpost is considered a *parent* when at least one other signpost in the CSV references it via
+        the ``parent_sign_id`` field (``lisäkilven_päämerkin_id``).  A signpost is considered a *child*
+        when its own ``parent_sign_id`` field points to another signpost in the CSV.  This report flags
+        all signposts that satisfy **both** conditions simultaneously, which indicates a data quality issue
+        in the input data.
+
+        Returns:
+            dict[str, Any]: Report dictionary with REPORT_TYPE and results keys.
+        """
+        signpost_ids: set[str] = self.signposts_by_id.keys()
+        parent_ids: set[str] = {
+            data.get(CSVHeadersV2.parent_sign_id, "")
+            for data in self.signposts_by_id.values()
+            if data.get(CSVHeadersV2.parent_sign_id, "") in signpost_ids
+        }
+        results = []
+        for sign_id, data in self.signposts_by_id.items():
+            own_parent_id = data.get(CSVHeadersV2.parent_sign_id, "")
+            is_child = own_parent_id in signpost_ids
+            is_parent = sign_id in parent_ids
+            if is_child and is_parent:
+                parent_data = self.signposts_by_id.get(own_parent_id, {})
+                results.append(
+                    {
+                        "signpost_source_id": sign_id,
+                        "devicetypecode": data.get(CSVHeadersV2.code, ""),
+                        "status": data.get(CSVHeadersV2.status, ""),
+                        "internal_status": data.get("internal_status", ""),
+                        "parent_signpost_source_id": own_parent_id,
+                        "parent_devicetypecode": parent_data.get(CSVHeadersV2.code, ""),
+                        "parent_status": parent_data.get(CSVHeadersV2.status, ""),
+                        "csv_ssurl": data.get(CSVHeadersV2.attachment_url, ""),
+                        "parent_csv_ssurl": parent_data.get(CSVHeadersV2.attachment_url, ""),
+                    }
+                )
+        return {"REPORT_TYPE": "SIGNPOSTS THAT ARE BOTH PARENT AND CHILD", "results": results}
+
     def _get_signposts_found_in_database_report(self) -> dict[str, Any]:
         """Report all signposts from CSV that exist in the database.
 
