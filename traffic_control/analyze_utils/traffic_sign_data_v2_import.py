@@ -25,7 +25,7 @@ from traffic_control.analyze_utils.traffic_sign_data_v2_data_loading import Data
 from traffic_control.analyze_utils.traffic_sign_data_v2_db_builders import DbBuilderMixin
 from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.geometry_utils import geometry_is_legit
-from traffic_control.models import MountReal, MountType, Owner, TrafficSignReal
+from traffic_control.models import MountReal, MountType, Owner, SignpostReal, TrafficSignReal
 from traffic_control.models.mount import LocationSpecifier as MountLocationSpecifier
 from traffic_control.models.streetscan_import import StreetScanImportRevertFile, StreetScanImportRun
 from traffic_control.models.traffic_sign import LocationSpecifier as SignLocationSpecifier
@@ -1428,53 +1428,491 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         self._save_run_log(summary)
 
     # ------------------------------------------------------------------
-    # Signpost handlers (skeleton)
+    # Signpost handlers
     # ------------------------------------------------------------------
 
     def _create_signposts(self, summary: dict[str, Any]) -> None:
-        """Create new SignpostReal records (two-pass for parent ordering).
+        """Create new SignpostReal records using a two-pass strategy.
+
+        Pass 1 inserts root signposts (no ``parent_sign_id``).  Pass 2 inserts
+        child signposts whose parent was either already in the DB before this
+        run or was created in pass 1.  Signposts whose parent is still not
+        found after both passes are imported without a parent and a warning is
+        recorded.
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
+            summary (dict[str, Any]): Mutable summary dict; skip/warning entries
+                are appended to summary["details"] and summary["signposts_created"]
+                is incremented.
         """
-        candidates = len(
-            [
-                s
-                for s, row in self.signposts_by_id.items()
-                if s not in self.signpost_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-            ]
+        existing_source_ids: set[str] = set(self.signpost_source_id_to_db_id.keys())
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault("signposts_created", 0)
+        details_before = len(summary.get("details", []))
+
+        # In-run map: source_id → db pk for signposts created during pass 1.
+        # Combined with the pre-existing signpost_source_id_to_db_id it gives
+        # the full parent-resolution map available during pass 2.
+        newly_created: dict[str, int] = {}
+
+        candidate_source_ids = [
+            s
+            for s, row in self.signposts_by_id.items()
+            if s not in existing_source_ids and row.get(CSVHeadersV2.status) != "Removed"
+        ]
+        # Partition into roots (no parent) and children (have parent_sign_id).
+        root_ids = [s for s in candidate_source_ids if not self.signposts_by_id[s].get(CSVHeadersV2.parent_sign_id, "")]
+        child_ids = [s for s in candidate_source_ids if s not in root_ids]
+
+        created_count = self._run_signpost_pass(
+            source_ids=root_ids,
+            parent_map={**self.signpost_source_id_to_db_id, **newly_created},
+            newly_created=newly_created,
+            summary=summary,
+            phase_started_at=phase_started_at,
         )
-        logger.info("[TODO] _create_signposts — %d new rows (not in DB, not Removed)", candidates)
+        # Refresh the combined map with pass-1 results before pass 2.
+        combined_parent_map = {**self.signpost_source_id_to_db_id, **newly_created}
+        created_count += self._run_signpost_pass(
+            source_ids=child_ids,
+            parent_map=combined_parent_map,
+            newly_created=newly_created,
+            summary=summary,
+            phase_started_at=phase_started_at,
+        )
+
+        summary["signposts_created"] += created_count
+        new_details = summary.get("details", [])[details_before:]
+        skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
+        warning_count = sum(1 for e in new_details if e.get("level") == "warning")
+        self._record_phase_result(
+            summary,
+            "signposts",
+            "create",
+            created=created_count,
+            skipped=skipped_count,
+            warnings=warning_count,
+        )
+        self._save_run_log(summary)
+
+    def _run_signpost_pass(  # noqa: C901
+        self,
+        source_ids: list[str],
+        parent_map: dict[str, int],
+        newly_created: dict[str, int],
+        summary: dict[str, Any],
+        phase_started_at: datetime.datetime,
+    ) -> int:
+        """Insert one batch of signpost rows (either roots or children).
+
+        Args:
+            source_ids (list[str]): Ordered list of source IDs for this pass.
+            parent_map (dict[str, int]): Combined source_id → DB PK map covering
+                pre-existing and pass-1-created signposts.
+            newly_created (dict[str, int]): Mutable map updated with PKs created
+                in this pass so subsequent passes can resolve them.
+            summary (dict[str, Any]): Mutable summary dict for details entries.
+            phase_started_at (datetime.datetime): Timestamp used as created_at.
+
+        Returns:
+            int: Number of signposts created in this pass.
+        """
+
+        default_owner = self._get_default_owner()
+        mount_types_by_name: dict[str, MountType] = {
+            **{mt.description_fi: mt for mt in MountType.objects.all()},
+            **{mt.description: mt for mt in MountType.objects.all()},
+        }
+        details: list[dict] = summary.setdefault("details", [])
+        processed: list[str] = summary.setdefault("processed_signpost_source_ids", [])
+
+        objects_to_create: list[SignpostReal] = []
+
+        for source_id in source_ids:
+            row = self.signposts_by_id[source_id]
+
+            try:
+                location = self._georeferenced_point_from_csv_row(row)
+            except (KeyError, ValueError) as exc:
+                details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates: {exc}"})
+                continue
+
+            if not geometry_is_legit(location):
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Invalid location: {location.ewkt}"}
+                )
+                continue
+
+            code = row.get(CSVHeadersV2.code, "")
+            device_type_id = self.code_to_device_type_id.get(code)
+            if device_type_id is None:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
+                )
+                continue
+
+            # Mount resolution — warn but still import without mount.
+            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+            mount_real_id = None
+            if mount_csv_id:
+                mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+                if mount_real_id is None:
+                    details.append(
+                        {
+                            "level": "warning",
+                            "source_id": source_id,
+                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
+                        }
+                    )
+
+            # Parent signpost resolution — warn but still import without parent.
+            parent_csv_id = row.get(CSVHeadersV2.parent_sign_id, "")
+            parent_id = None
+            if parent_csv_id:
+                parent_id = parent_map.get(parent_csv_id)
+                if parent_id is None:
+                    details.append(
+                        {
+                            "level": "warning",
+                            "source_id": source_id,
+                            "reason": f"Parent signpost not found for parent CSV id: {parent_csv_id}",
+                        }
+                    )
+
+            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+            location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
+            sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
+            mount_type = mount_types_by_name.get(sign_mount_type_name)
+            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
+            value = self._get_sign_value(number_code_str)
+
+            processed.append(source_id)
+            objects_to_create.append(
+                SignpostReal(
+                    source_id=source_id,
+                    source_name="StreetScan2025",
+                    location=location,
+                    device_type_id=device_type_id,
+                    owner=default_owner,
+                    installation_status=InstallationStatus.IN_USE,
+                    lifecycle=Lifecycle.ACTIVE,
+                    parent_id=parent_id,
+                    mount_real_id=mount_real_id,
+                    mount_type=mount_type,
+                    direction=self._get_sign_direction(row.get(CSVHeadersV2.direction)),
+                    height=self._get_sign_height(row.get(CSVHeadersV2.height)),
+                    condition=self._get_sign_condition(row.get(CSVHeadersV2.condition)),
+                    location_specifier=location_specifier,
+                    value=value,
+                    txt=row.get(CSVHeadersV2.txt, "") or None,
+                    scanned_at=self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+                    attachment_url=row.get(CSVHeadersV2.attachment_url, ""),
+                    created_by=self.user,
+                    created_at=phase_started_at,
+                )
+            )
+
+        if not objects_to_create:
+            return 0
+
+        if self.dry_run:
+            return len(objects_to_create)
+
+        created = SignpostReal.objects.bulk_create(objects_to_create, batch_size=self.batch_size)
+        for obj in created:
+            newly_created[obj.source_id] = obj.pk
+            self._write_revert_record(
+                {
+                    "action": "create",
+                    "object_type": "SignpostReal",
+                    "db_id": str(obj.id),
+                    "source_id": obj.source_id,
+                }
+            )
+        return len(created)
 
     def _update_signposts(self, summary: dict[str, Any]) -> None:
-        """Update existing SignpostReal records.
+        """Update existing SignpostReal records from non-Removed CSV rows.
+
+        Rows whose source_id is not already in the DB are ignored (they belong
+        to the create phase).  Removed rows are also ignored here.  Only rows
+        whose field values differ from the DB (or when ``force_update`` is True)
+        are written.
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
+            summary (dict[str, Any]): Mutable summary dict; the updated count is
+                recorded in summary["signposts_updated"] and phase results are
+                appended.
         """
-        candidates = len(
-            [
-                s
-                for s, row in self.signposts_by_id.items()
-                if s in self.signpost_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-            ]
+
+        update_source_ids = [
+            s
+            for s, row in self.signposts_by_id.items()
+            if s in self.signpost_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
+        ]
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault("signposts_updated", 0)
+        if not update_source_ids:
+            self._record_phase_result(summary, "signposts", "update", updated=0, skipped=0)
+            self._save_run_log(summary)
+            return
+
+        db_id_map: dict[str, int] = {s: self.signpost_source_id_to_db_id[s] for s in update_source_ids}
+        existing: dict[int, Any] = {obj.pk: obj for obj in SignpostReal.objects.filter(pk__in=db_id_map.values())}
+        mount_types_by_name: dict[str, MountType] = {
+            **{mt.description_fi: mt for mt in MountType.objects.all()},
+            **{mt.description: mt for mt in MountType.objects.all()},
+        }
+        default_owner = self._get_default_owner()
+        details: list[dict] = summary.setdefault("details", [])
+        details_before = len(details)
+
+        update_fields = [
+            "source_name",
+            "location",
+            "device_type_id",
+            "owner",
+            "mount_real_id",
+            "mount_type",
+            "direction",
+            "height",
+            "condition",
+            "location_specifier",
+            "value",
+            "txt",
+            "scanned_at",
+            "attachment_url",
+            "updated_by",
+            "updated_at",
+        ]
+        updated_count = 0
+        skipped_count = 0
+        batch: list[Any] = []
+
+        for source_id in update_source_ids:
+            row = self.signposts_by_id[source_id]
+            obj = existing.get(db_id_map[source_id])
+            if obj is None:
+                skipped_count += 1
+                continue
+
+            try:
+                new_location = self._georeferenced_point_from_csv_row(row)
+            except (KeyError, ValueError) as exc:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"}
+                )
+                skipped_count += 1
+                continue
+
+            if not geometry_is_legit(new_location):
+                details.append(
+                    {
+                        "level": "skip",
+                        "source_id": source_id,
+                        "reason": f"Invalid location on update: {new_location.ewkt}",
+                    }
+                )
+                skipped_count += 1
+                continue
+
+            code = row.get(CSVHeadersV2.code, "")
+            device_type_id = self.code_to_device_type_id.get(code)
+            if device_type_id is None:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
+                )
+                skipped_count += 1
+                continue
+
+            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+            new_mount_real_id = None
+            if mount_csv_id:
+                new_mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+                if new_mount_real_id is None:
+                    details.append(
+                        {
+                            "level": "warning",
+                            "source_id": source_id,
+                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
+                        }
+                    )
+
+            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+            new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
+            sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
+            new_mount_type = mount_types_by_name.get(sign_mount_type_name)
+            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
+            new_value = self._get_sign_value(number_code_str)
+            new_height = self._get_sign_height(row.get(CSVHeadersV2.height))
+            new_direction = self._get_sign_direction(row.get(CSVHeadersV2.direction))
+            new_condition = self._get_sign_condition(row.get(CSVHeadersV2.condition))
+            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
+            new_txt = row.get(CSVHeadersV2.txt, "") or None
+            new_source_name = "StreetScan2025"
+
+            changed = (
+                self.force_update
+                or obj.source_name != new_source_name
+                or obj.location != new_location
+                or obj.device_type_id != device_type_id
+                or obj.mount_real_id != new_mount_real_id
+                or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
+                or obj.direction != new_direction
+                or obj.height != new_height
+                or obj.condition != new_condition
+                or obj.location_specifier != new_location_specifier
+                or obj.value != new_value
+                or obj.txt != new_txt
+                or obj.scanned_at != new_scanned_at
+                or obj.attachment_url != new_attachment_url
+            )
+            if not changed:
+                skipped_count += 1
+                continue
+
+            if not self.dry_run:
+                self._write_revert_record(
+                    {
+                        "action": "update",
+                        "object_type": "SignpostReal",
+                        "db_id": str(obj.pk),
+                        "source_id": source_id,
+                        "old": {
+                            "source_name": obj.source_name,
+                            "location": obj.location.ewkt if obj.location else None,
+                            "device_type_id": obj.device_type_id,
+                            "mount_real_id": obj.mount_real_id,
+                            "direction": obj.direction,
+                            "height": str(obj.height) if obj.height is not None else None,
+                            "condition": obj.condition,
+                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                            "attachment_url": obj.attachment_url,
+                        },
+                    }
+                )
+
+            obj.source_name = new_source_name
+            obj.location = new_location
+            obj.device_type_id = device_type_id
+            obj.owner = default_owner
+            obj.mount_real_id = new_mount_real_id
+            obj.mount_type = new_mount_type
+            obj.direction = new_direction
+            obj.height = new_height
+            obj.condition = new_condition
+            obj.location_specifier = new_location_specifier
+            obj.value = new_value
+            obj.txt = new_txt
+            obj.scanned_at = new_scanned_at
+            obj.attachment_url = new_attachment_url
+            obj.updated_by = self.user
+            obj.updated_at = phase_started_at
+            batch.append(obj)
+
+            if len(batch) >= self.batch_size:
+                if not self.dry_run:
+                    SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                updated_count += len(batch)
+                batch = []
+
+        if batch:
+            if not self.dry_run:
+                SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+            updated_count += len(batch)
+
+        skipped_count += len([e for e in summary.get("details", [])[details_before:] if e.get("level") == "skip"])
+        summary["signposts_updated"] += updated_count
+        logger.info(
+            "_update_signposts: updated=%d skipped=%d (of %d candidates)",
+            updated_count,
+            skipped_count,
+            len(update_source_ids),
         )
-        logger.info("[TODO] _update_signposts — %d rows in CSV (non-Removed) that already exist in DB", candidates)
+        self._record_phase_result(summary, "signposts", "update", updated=updated_count, skipped=skipped_count)
+        self._save_run_log(summary)
 
     def _deactivate_signposts(self, summary: dict[str, Any]) -> None:
-        """Deactivate SignpostReal records marked as Removed in CSV.
+        """Deactivate SignpostReal records whose CSV status is ``Removed``.
+
+        Deactivation sets ``lifecycle`` to ``Lifecycle.INACTIVE``,
+        ``validity_period_end`` to today's date, ``scanned_at`` to the CSV
+        timestamp, ``source_name`` to ``"StreetScan2025"``, and also updates
+        ``updated_by`` and ``updated_at``.  No other fields are modified.
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
+            summary (dict[str, Any]): Mutable summary dict; the deactivated count
+                is recorded in summary["signposts_deactivated"] and phase results
+                are appended.
         """
-        candidates = len(
-            [
-                s
-                for s, row in self.signposts_by_id.items()
-                if s in self.signpost_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
-            ]
+
+        deactivate_source_ids = [
+            s
+            for s, row in self.signposts_by_id.items()
+            if s in self.signpost_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
+        ]
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault("signposts_deactivated", 0)
+        if not deactivate_source_ids:
+            self._record_phase_result(summary, "signposts", "deactivate", deactivated=0, skipped=0)
+            self._save_run_log(summary)
+            return
+
+        db_id_map: dict[str, int] = {s: self.signpost_source_id_to_db_id[s] for s in deactivate_source_ids}
+        existing: dict[int, Any] = {obj.pk: obj for obj in SignpostReal.objects.filter(pk__in=db_id_map.values())}
+        today = datetime.date.today()
+        update_fields = ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"]
+        batch: list[Any] = []
+        deactivated_count = 0
+
+        for source_id in deactivate_source_ids:
+            row = self.signposts_by_id[source_id]
+            obj = existing.get(db_id_map[source_id])
+            if obj is None:
+                continue
+
+            if not self.dry_run:
+                self._write_revert_record(
+                    {
+                        "action": "deactivate",
+                        "object_type": "SignpostReal",
+                        "db_id": str(obj.pk),
+                        "source_id": source_id,
+                        "before": {
+                            "lifecycle": obj.lifecycle,
+                            "validity_period_end": str(obj.validity_period_end) if obj.validity_period_end else None,
+                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                            "source_name": obj.source_name,
+                        },
+                    }
+                )
+
+            obj.lifecycle = Lifecycle.INACTIVE
+            obj.validity_period_end = today
+            obj.scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            obj.source_name = "StreetScan2025"
+            obj.updated_by = self.user
+            obj.updated_at = phase_started_at
+            batch.append(obj)
+
+            if len(batch) >= self.batch_size:
+                if not self.dry_run:
+                    SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                deactivated_count += len(batch)
+                batch = []
+
+        if batch:
+            if not self.dry_run:
+                SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+            deactivated_count += len(batch)
+
+        summary["signposts_deactivated"] += deactivated_count
+        logger.info(
+            "_deactivate_signposts: deactivated=%d (of %d candidates)", deactivated_count, len(deactivate_source_ids)
         )
-        logger.info("[TODO] _deactivate_signposts — %d Removed rows that exist in DB", candidates)
+        self._record_phase_result(summary, "signposts", "deactivate", deactivated=deactivated_count, skipped=0)
+        self._save_run_log(summary)
 
     # ------------------------------------------------------------------
     # Additional sign handlers (skeleton)
