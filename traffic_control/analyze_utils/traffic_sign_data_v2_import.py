@@ -14,19 +14,21 @@ import logging
 import os
 import tempfile
 from collections.abc import Callable, Generator
+from decimal import Decimal
 from typing import Any
 
 from django.core.files import File
 
 from traffic_control.analyze_utils.traffic_sign_data_v2_code_transform import CodeTransformMixin
-from traffic_control.analyze_utils.traffic_sign_data_v2_constants import CSVHeadersV2
+from traffic_control.analyze_utils.traffic_sign_data_v2_constants import CSVHeadersV2, NUMBER_CODE_PATTERN
 from traffic_control.analyze_utils.traffic_sign_data_v2_data_loading import DataLoadingMixin
 from traffic_control.analyze_utils.traffic_sign_data_v2_db_builders import DbBuilderMixin
-from traffic_control.enums import InstallationStatus
+from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.geometry_utils import geometry_is_legit
-from traffic_control.models import MountReal, MountType, Owner
+from traffic_control.models import MountReal, MountType, Owner, TrafficSignReal
 from traffic_control.models.mount import LocationSpecifier as MountLocationSpecifier
 from traffic_control.models.streetscan_import import StreetScanImportRevertFile, StreetScanImportRun
+from traffic_control.models.traffic_sign import LocationSpecifier as SignLocationSpecifier
 from users.models import User
 
 logger = logging.getLogger(__name__)
@@ -302,7 +304,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     }
                 )
         summary["mounts_created"] += created_count
-        skipped_count = len(summary.get("details", [])) - details_before
+        new_details = summary.get("details", [])[details_before:]
+        skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
         self._record_phase_result(summary, "mounts", "create", created=created_count, skipped=skipped_count)
         self._save_run_log(summary)
 
@@ -778,53 +781,651 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         self._save_run_log(summary)
 
     # ------------------------------------------------------------------
-    # Traffic sign handlers (skeleton)
+    # Traffic sign field-cast helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _get_sign_height(height_str: str | None) -> int | None:
+        """Convert height from metres (CSV) to centimetres (DB integer).
+
+        Args:
+            height_str (str | None): Raw height string from CSV, or None.
+
+        Returns:
+            int | None: Height in centimetres, or None if unparseable.
+        """
+        if not height_str:
+            return None
+        try:
+            return int(float(height_str) * 100)
+        except (ValueError, TypeError):
+            return None
+
+    @staticmethod
+    def _get_sign_direction(direction_str: str | None) -> int | None:
+        """Parse azimuth direction from CSV as integer degrees.
+
+        Args:
+            direction_str (str | None): Raw direction string from CSV, or None.
+
+        Returns:
+            int | None: Direction in degrees, or None if unparseable.
+        """
+        if not direction_str:
+            return None
+        try:
+            return int(float(direction_str))
+        except (ValueError, TypeError):
+            return None
+
+    @staticmethod
+    def _get_sign_condition(condition_str: str | None) -> Condition | None:
+        """Parse condition from CSV as Condition enum.
+
+        Args:
+            condition_str (str | None): Raw condition string from CSV, or None.
+
+        Returns:
+            Condition | None: Parsed Condition enum value, or None if unparseable.
+        """
+        if not condition_str:
+            return None
+        try:
+            return Condition(int(condition_str))
+        except (ValueError, TypeError):
+            return None
+
+    @staticmethod
+    def _get_sign_value(number_code_str: str | None) -> Decimal | None:
+        """Extract the leading numeric value from number_code field as Decimal.
+
+        Args:
+            number_code_str (str | None): Raw number_code string from CSV, or None.
+
+        Returns:
+            Decimal | None: Extracted value, or None if no numeric prefix found.
+        """
+        if not number_code_str:
+            return None
+        match = NUMBER_CODE_PATTERN.match(number_code_str.strip())
+        if not match:
+            return None
+        try:
+            return Decimal(match.group(1))
+        except Exception:
+            return None
+
+    @staticmethod
+    def _resolve_sign_owner(
+        code: str,
+        number_code_str: str,
+        default_owner: Owner,
+        private_owner: Owner,
+    ) -> Owner:
+        """Resolve the owner for a traffic sign row.
+
+        Speed-limit signs with code ``363`` and a value of 5, 10, or 15 are
+        owned by the private owner (Yksityinen); all other signs use the
+        default city owner.
+
+        Args:
+            code (str): Device type code from the CSV row.
+            number_code_str (str): Raw number_code value from the CSV row.
+            default_owner (Owner): City of Helsinki owner instance.
+            private_owner (Owner): Private owner instance.
+
+        Returns:
+            Owner: The resolved owner for this sign.
+        """
+        _private_speed_values = {"5", "10", "15"}
+        if code == "363" and number_code_str.strip() in _private_speed_values:
+            return private_owner
+        return default_owner
+
+    # ------------------------------------------------------------------
+    # Traffic sign handlers
     # ------------------------------------------------------------------
 
     def _create_signs(self, summary: dict[str, Any]) -> None:
-        """Create new TrafficSignReal records.
+        """Create new TrafficSignReal records from CSV rows not yet in the DB.
+
+        Rows with ``status == "Removed"``, already present in the DB, with
+        invalid geometry, or whose device type code is not found are skipped.
+        Rows referencing an unknown mount or carrying a parent_sign_id value
+        (which traffic signs do not support) are imported with a warning entry.
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
+            summary (dict[str, Any]): Mutable summary dict; skip/warning entries are
+                appended to summary["details"] and summary["signs_created"] is
+                incremented.
         """
-        candidates = len(
-            [
-                s
-                for s, row in self.signs_by_id.items()
-                if s not in self.sign_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-            ]
+        existing_source_ids: set[str] = set(self.sign_source_id_to_db_id.keys())
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault("signs_created", 0)
+        details_before = len(summary.get("details", []))
+        generator = self._get_signs_to_create(
+            existing_source_ids=existing_source_ids,
+            summary=summary,
+            phase_started_at=phase_started_at,
         )
-        logger.info("[TODO] _create_signs — %d new rows (not in DB, not Removed)", candidates)
+        if self.dry_run:
+            created_count = 0
+            for _ in generator:
+                created_count += 1
+        else:
+            created = TrafficSignReal.objects.bulk_create(generator, batch_size=self.batch_size)
+            created_count = len(created)
+            # Write revert records after bulk_create — PKs are only available once
+            # the batch has been committed. For creates the revert record only needs
+            # the DB id (to know which row to delete on revert).
+            for obj in created:
+                self._write_revert_record(
+                    {
+                        "action": "create",
+                        "object_type": "TrafficSignReal",
+                        "db_id": str(obj.id),
+                        "source_id": obj.source_id,
+                    }
+                )
+        summary["signs_created"] += created_count
+        new_details = summary.get("details", [])[details_before:]
+        skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
+        warning_count = sum(1 for e in new_details if e.get("level") == "warning")
+        self._record_phase_result(
+            summary, "signs", "create", created=created_count, skipped=skipped_count, warnings=warning_count
+        )
+        self._save_run_log(summary)
+
+    def _get_signs_to_create(  # noqa: C901
+        self,
+        existing_source_ids: set[str],
+        summary: dict[str, Any],
+        phase_started_at: datetime.datetime,
+    ) -> Generator[TrafficSignReal, None, None]:
+        """Yield TrafficSignReal instances built from new CSV rows.
+
+        Rows already in the DB, marked Removed, with invalid geometry, or whose
+        device type code is not found are skipped with a details entry.
+        Rows with an unresolved mount or a parent_sign_id value are imported with
+        a warning details entry.
+
+        Args:
+            existing_source_ids (set[str]): Source IDs already present in the DB.
+            summary (dict[str, Any]): Mutable summary dict for skip/warning entries.
+            phase_started_at (datetime.datetime): Timestamp of phase start, used as created_at.
+
+        Yields:
+            TrafficSignReal: Unsaved TrafficSignReal instance ready for bulk_create.
+        """
+        default_owner = self._get_default_owner()
+        try:
+            private_owner = Owner.objects.get(name_fi="Yksityinen")
+        except Owner.DoesNotExist:
+            private_owner = default_owner
+
+        mount_types_by_name: dict[str, MountType] = {
+            **{mt.description_fi: mt for mt in MountType.objects.all()},
+            **{mt.description: mt for mt in MountType.objects.all()},
+        }
+        details: list[dict] = summary.setdefault("details", [])
+        processed: list[str] = summary.setdefault("processed_sign_source_ids", [])
+
+        for source_id, row in self.signs_by_id.items():
+            if source_id in existing_source_ids:
+                continue
+            if row.get(CSVHeadersV2.status) == "Removed":
+                continue
+
+            try:
+                location = self._georeferenced_point_from_csv_row(row)
+            except (KeyError, ValueError) as exc:
+                details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates: {exc}"})
+                continue
+
+            if not geometry_is_legit(location):
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Invalid location: {location.ewkt}"}
+                )
+                continue
+
+            code = row.get(CSVHeadersV2.code, "")
+            device_type_id = self.code_to_device_type_id.get(code)
+            if device_type_id is None:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
+                )
+                continue
+
+            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+            mount_real_id = None
+            if mount_csv_id:
+                mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+                if mount_real_id is None:
+                    details.append(
+                        {
+                            "level": "warning",
+                            "source_id": source_id,
+                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
+                        }
+                    )
+
+            parent_sign_id = row.get(CSVHeadersV2.parent_sign_id, "")
+            if parent_sign_id:
+                details.append(
+                    {
+                        "level": "warning",
+                        "source_id": source_id,
+                        "reason": f"Traffic sign has parent_sign_id={parent_sign_id!r}; ignored (no parent FK)",
+                    }
+                )
+
+            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
+            value = self._get_sign_value(number_code_str)
+            owner = self._resolve_sign_owner(code, number_code_str, default_owner, private_owner)
+
+            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+            location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
+            sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
+            mount_type = mount_types_by_name.get(sign_mount_type_name)
+
+            processed.append(source_id)
+            yield TrafficSignReal(
+                source_id=source_id,
+                source_name="StreetScan2025",
+                location=location,
+                device_type_id=device_type_id,
+                owner=owner,
+                installation_status=InstallationStatus.IN_USE,
+                lifecycle=Lifecycle.ACTIVE,
+                mount_real_id=mount_real_id,
+                mount_type=mount_type,
+                direction=self._get_sign_direction(row.get(CSVHeadersV2.direction)),
+                height=self._get_sign_height(row.get(CSVHeadersV2.height)),
+                condition=self._get_sign_condition(row.get(CSVHeadersV2.condition)),
+                location_specifier=location_specifier,
+                value=value,
+                txt=row.get(CSVHeadersV2.txt, "") or None,
+                scanned_at=self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+                attachment_url=row.get(CSVHeadersV2.attachment_url, ""),
+                created_by=self.user,
+                created_at=phase_started_at,
+            )
+
+    def _get_signs_to_update(  # noqa: C901
+        self,
+        update_source_ids: list[str],
+        db_id_map: dict[str, int],
+        existing: dict[int, TrafficSignReal],
+        mount_types_by_name: dict[str, MountType],
+        default_owner: Owner,
+        private_owner: Owner,
+        summary: dict[str, Any],
+        phase_started_at: datetime.datetime,
+    ) -> Generator[TrafficSignReal, None, None]:
+        """Yield TrafficSignReal instances that need to be updated.
+
+        Applies geometry validation and (unless ``force_update`` is True) field
+        comparison to determine whether each row requires a DB write. Revert
+        records are written before each yield so they are always durable.
+        ``updated_by`` and ``updated_at`` are always set and are intentionally
+        excluded from the changed comparison so they do not trigger spurious updates.
+
+        Args:
+            update_source_ids (list[str]): Ordered list of source IDs to consider.
+            db_id_map (dict[str, int]): Mapping from source_id to DB primary key.
+            existing (dict[int, TrafficSignReal]): Currently persisted instances
+                keyed by DB primary key.
+            mount_types_by_name (dict[str, MountType]): MountType lookup by name.
+            default_owner (Owner): City of Helsinki owner instance.
+            private_owner (Owner): Private owner instance.
+            summary (dict[str, Any]): Mutable summary dict; skips/warnings are
+                appended to summary["details"].
+            phase_started_at (datetime.datetime): Timestamp of phase start, used as updated_at.
+
+        Yields:
+            TrafficSignReal: Mutated (unsaved) instance ready for bulk_update.
+        """
+        skipped: list[int] = summary.setdefault("_skipped_sign_update_count", [0])
+        details: list[dict] = summary.setdefault("details", [])
+
+        for source_id in update_source_ids:
+            row = self.signs_by_id[source_id]
+            obj = existing.get(db_id_map[source_id])
+            if obj is None:
+                skipped[0] += 1
+                continue
+
+            try:
+                new_location = self._georeferenced_point_from_csv_row(row)
+            except (KeyError, ValueError) as exc:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"}
+                )
+                skipped[0] += 1
+                continue
+
+            if not geometry_is_legit(new_location):
+                details.append(
+                    {
+                        "level": "skip",
+                        "source_id": source_id,
+                        "reason": f"Invalid location on update: {new_location.ewkt}",
+                    }
+                )
+                skipped[0] += 1
+                continue
+
+            code = row.get(CSVHeadersV2.code, "")
+            device_type_id = self.code_to_device_type_id.get(code)
+            if device_type_id is None:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
+                )
+                skipped[0] += 1
+                continue
+
+            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+            mount_real_id = None
+            if mount_csv_id:
+                mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+                if mount_real_id is None:
+                    details.append(
+                        {
+                            "level": "warning",
+                            "source_id": source_id,
+                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
+                        }
+                    )
+
+            parent_sign_id = row.get(CSVHeadersV2.parent_sign_id, "")
+            if parent_sign_id:
+                details.append(
+                    {
+                        "level": "warning",
+                        "source_id": source_id,
+                        "reason": f"Traffic sign has parent_sign_id={parent_sign_id!r}; ignored (no parent FK)",
+                    }
+                )
+
+            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
+            new_value = self._get_sign_value(number_code_str)
+            new_owner = self._resolve_sign_owner(code, number_code_str, default_owner, private_owner)
+            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+            new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
+            sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
+            new_mount_type = mount_types_by_name.get(sign_mount_type_name)
+            new_direction = self._get_sign_direction(row.get(CSVHeadersV2.direction))
+            new_height = self._get_sign_height(row.get(CSVHeadersV2.height))
+            new_condition = self._get_sign_condition(row.get(CSVHeadersV2.condition))
+            new_txt = row.get(CSVHeadersV2.txt, "") or None
+            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
+            new_source_name = "StreetScan2025"
+
+            # When force_update is True the field comparison is bypassed entirely.
+            changed = (
+                self.force_update
+                or obj.source_name != new_source_name
+                or obj.location != new_location
+                or obj.device_type_id != device_type_id
+                or obj.mount_real_id != mount_real_id
+                or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
+                or obj.direction != new_direction
+                or obj.height != new_height
+                or obj.condition != new_condition
+                or obj.location_specifier != new_location_specifier
+                or obj.value != new_value
+                or obj.txt != new_txt
+                or obj.scanned_at != new_scanned_at
+                or obj.attachment_url != new_attachment_url
+            )
+            if not changed:
+                skipped[0] += 1
+                continue
+
+            if not self.dry_run:
+                self._write_revert_record(
+                    {
+                        "action": "update",
+                        "object_type": "TrafficSignReal",
+                        "db_id": str(obj.pk),
+                        "source_id": source_id,
+                        "old": {
+                            "source_name": obj.source_name,
+                            "location": obj.location.ewkt if obj.location else None,
+                            "device_type_id": obj.device_type_id,
+                            "mount_real_id": obj.mount_real_id,
+                            "mount_type_id": obj.mount_type_id,
+                            "direction": obj.direction,
+                            "height": obj.height,
+                            "condition": str(obj.condition) if obj.condition else None,
+                            "location_specifier": str(obj.location_specifier) if obj.location_specifier else None,
+                            "value": str(obj.value) if obj.value is not None else None,
+                            "txt": obj.txt,
+                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                            "attachment_url": obj.attachment_url,
+                        },
+                    }
+                )
+
+            obj.source_name = new_source_name
+            obj.location = new_location
+            obj.device_type_id = device_type_id
+            obj.owner = new_owner
+            obj.installation_status = InstallationStatus.IN_USE
+            obj.lifecycle = Lifecycle.ACTIVE
+            obj.mount_real_id = mount_real_id
+            obj.mount_type = new_mount_type
+            obj.direction = new_direction
+            obj.height = new_height
+            obj.condition = new_condition
+            obj.location_specifier = new_location_specifier
+            obj.value = new_value
+            obj.txt = new_txt
+            obj.scanned_at = new_scanned_at
+            obj.attachment_url = new_attachment_url
+            obj.updated_by = self.user
+            obj.updated_at = phase_started_at
+            yield obj
 
     def _update_signs(self, summary: dict[str, Any]) -> None:
-        """Update existing TrafficSignReal records.
+        """Update existing TrafficSignReal records from CSV rows already in the DB.
+
+        Fetches current DB state, computes new field values from CSV, and bulk-updates
+        only the records where at least one field has changed. When ``force_update`` is
+        True the field comparison is bypassed and all records are updated unconditionally.
+        A revert record capturing the previous field values is written before each update
+        so the run can be rolled back. Records are consumed from a generator and written
+        in batches to keep memory usage O(batch_size).
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
+            summary (dict[str, Any]): Mutable summary dict; the updated count is
+                recorded in summary["signs_updated"] and phase results are appended.
         """
-        candidates = len(
-            [
-                s
-                for s, row in self.signs_by_id.items()
-                if s in self.sign_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-            ]
+        update_source_ids = [
+            s
+            for s, row in self.signs_by_id.items()
+            if s in self.sign_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
+        ]
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault("signs_updated", 0)
+        if not update_source_ids:
+            self._record_phase_result(summary, "signs", "update", updated=0, skipped=0)
+            self._save_run_log(summary)
+            return
+
+        db_id_map: dict[str, int] = {s: self.sign_source_id_to_db_id[s] for s in update_source_ids}
+        existing: dict[int, TrafficSignReal] = {
+            obj.pk: obj for obj in TrafficSignReal.objects.filter(pk__in=db_id_map.values())
+        }
+        mount_types_by_name: dict[str, MountType] = {
+            **{mt.description_fi: mt for mt in MountType.objects.all()},
+            **{mt.description: mt for mt in MountType.objects.all()},
+        }
+        default_owner = self._get_default_owner()
+        try:
+            private_owner = Owner.objects.get(name_fi="Yksityinen")
+        except Owner.DoesNotExist:
+            private_owner = default_owner
+
+        update_fields = [
+            "source_name",
+            "location",
+            "device_type",
+            "owner",
+            "installation_status",
+            "lifecycle",
+            "mount_real",
+            "mount_type",
+            "direction",
+            "height",
+            "condition",
+            "location_specifier",
+            "value",
+            "txt",
+            "scanned_at",
+            "attachment_url",
+            "updated_by",
+            "updated_at",
+        ]
+        summary["_skipped_sign_update_count"] = [0]
+        generator = self._get_signs_to_update(
+            update_source_ids,
+            db_id_map,
+            existing,
+            mount_types_by_name,
+            default_owner,
+            private_owner,
+            summary,
+            phase_started_at,
         )
-        logger.info("[TODO] _update_signs — %d rows in CSV (non-Removed) that already exist in DB", candidates)
+
+        # bulk_update does not accept a generator directly — unlike bulk_create which
+        # handles generators natively with its batch_size parameter, bulk_update
+        # internally slices the iterable (objs[i:i+batch_size]) which requires a
+        # sequence supporting len() and slicing.  We therefore drain the generator
+        # manually in fixed-size batches to keep memory consumption at O(batch_size).
+        updated_count = 0
+        warnings_count = 0
+        details_before = len(summary.get("details", []))
+        batch: list[TrafficSignReal] = []
+        for obj in generator:
+            batch.append(obj)
+            if len(batch) >= self.batch_size:
+                if not self.dry_run:
+                    TrafficSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                updated_count += len(batch)
+                batch = []
+        if batch:
+            if not self.dry_run:
+                TrafficSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+            updated_count += len(batch)
+
+        skipped_count: int = summary.pop("_skipped_sign_update_count")[0]
+        new_details = summary.get("details", [])[details_before:]
+        warnings_count = sum(1 for e in new_details if e.get("level") == "warning")
+        summary["signs_updated"] += updated_count
+        logger.info(
+            "_update_signs: updated=%d skipped=%d warnings=%d (of %d candidates)",
+            updated_count,
+            skipped_count,
+            warnings_count,
+            len(update_source_ids),
+        )
+        self._record_phase_result(
+            summary, "signs", "update", updated=updated_count, skipped=skipped_count, warnings=warnings_count
+        )
+        self._save_run_log(summary)
 
     def _deactivate_signs(self, summary: dict[str, Any]) -> None:
         """Deactivate TrafficSignReal records marked as Removed in CSV.
 
+        Deactivation updates exactly six fields on each matching record:
+        ``lifecycle`` → ``Lifecycle.INACTIVE``, ``validity_period_end`` → today,
+        ``scanned_at`` → CSV timestamp, ``source_name`` → ``"StreetScan2025"``,
+        ``updated_by`` → the configured user, ``updated_at`` → phase start time.
+        No other fields are modified.
+
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
+            summary (dict[str, Any]): Mutable summary dict; the deactivated count
+                is recorded in summary["signs_deactivated"] and phase results are
+                appended.
         """
-        candidates = len(
-            [
-                s
-                for s, row in self.signs_by_id.items()
-                if s in self.sign_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
-            ]
+        deactivate_source_ids = [
+            s
+            for s, row in self.signs_by_id.items()
+            if s in self.sign_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
+        ]
+        summary.setdefault("signs_deactivated", 0)
+        if not deactivate_source_ids:
+            self._record_phase_result(summary, "signs", "deactivate", deactivated=0)
+            self._save_run_log(summary)
+            return
+
+        today = datetime.date.today()
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        db_id_map: dict[str, int] = {s: self.sign_source_id_to_db_id[s] for s in deactivate_source_ids}
+        existing: dict[int, TrafficSignReal] = {
+            obj.pk: obj for obj in TrafficSignReal.objects.filter(pk__in=db_id_map.values())
+        }
+
+        deactivated_count = 0
+        batch: list[TrafficSignReal] = []
+        for source_id in deactivate_source_ids:
+            row = self.signs_by_id[source_id]
+            obj = existing.get(db_id_map[source_id])
+            if obj is None:
+                continue
+
+            if not self.dry_run:
+                self._write_revert_record(
+                    {
+                        "action": "deactivate",
+                        "object_type": "TrafficSignReal",
+                        "db_id": str(obj.pk),
+                        "source_id": source_id,
+                        "old": {
+                            "lifecycle": obj.lifecycle,
+                            "validity_period_end": str(obj.validity_period_end) if obj.validity_period_end else None,
+                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                            "source_name": obj.source_name,
+                        },
+                    }
+                )
+
+            obj.lifecycle = Lifecycle.INACTIVE
+            obj.validity_period_end = today
+            obj.scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            obj.source_name = "StreetScan2025"
+            obj.updated_by = self.user
+            obj.updated_at = phase_started_at
+            batch.append(obj)
+
+            if len(batch) >= self.batch_size:
+                if not self.dry_run:
+                    TrafficSignReal.objects.bulk_update(
+                        batch,
+                        ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"],
+                        batch_size=self.batch_size,
+                    )
+                deactivated_count += len(batch)
+                batch = []
+
+        if batch:
+            if not self.dry_run:
+                TrafficSignReal.objects.bulk_update(
+                    batch,
+                    ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"],
+                    batch_size=self.batch_size,
+                )
+            deactivated_count += len(batch)
+
+        summary["signs_deactivated"] += deactivated_count
+        logger.info(
+            "_deactivate_signs: deactivated=%d (of %d candidates)", deactivated_count, len(deactivate_source_ids)
         )
-        logger.info("[TODO] _deactivate_signs — %d Removed rows that exist in DB", candidates)
+        self._record_phase_result(summary, "signs", "deactivate", deactivated=deactivated_count)
+        self._save_run_log(summary)
 
     # ------------------------------------------------------------------
     # Signpost handlers (skeleton)
