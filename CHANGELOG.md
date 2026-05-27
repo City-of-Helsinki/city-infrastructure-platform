@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.40.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.39.0...city-infrastructure-platform-v1.40.0) (2026-05-27)
+
+
+### Features
+
+* Add a report to check if additional signs have a parent that is marked as Removed in the source data ([4623fbb](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4623fbb1c35f2dd08c891003564a1b34774eeb16))
+* Analyzing for streetscan data from 2025 ([06f94bd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/06f94bd3c5b7ab393c8d4834296f6faed6d73b8a))
+* Filter out rows from duplicate sings on same mount report ([25f6546](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/25f6546767771aadd9c0765f409099f885955c3a))
+* Management command for creating testdata ([79403c8](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/79403c8ce39b09628fc17cd77845613c4b82792e))
+
+
+### Bug Fixes
+
+* Ensure our db-writing management commands set system actor ([2478faf](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/2478faf7c976344dd61f1caf9ac375d5873d44ee))
+
 ## [1.39.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.38.0...city-infrastructure-platform-v1.39.0) (2026-05-11)
 
 
