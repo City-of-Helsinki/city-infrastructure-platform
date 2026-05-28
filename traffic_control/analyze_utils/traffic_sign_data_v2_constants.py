@@ -206,7 +206,8 @@ class CSVHeadersV2:
     mount_type = "tyyppi"
     number_code = "numerokoodi"
     parent_sign_id = "lisäkilven_päämerkin_id"
-    scanned_at = "tallennusajankohta"
+    scanned_at = "recordedat"
+    mount_scanned_at = "tallennusajankohta"
     sign_mount_type = "kiinnitys"
     status = "status"  # New field
     txt = "teksti"

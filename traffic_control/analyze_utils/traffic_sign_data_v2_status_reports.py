@@ -236,7 +236,8 @@ class StatusReportsMixin:
         Returns:
             dict | None: Error dict if timestamp is invalid, None otherwise.
         """
-        timestamp_str = obj.get(CSVHeadersV2.scanned_at, "")
+        timestamp_field = CSVHeadersV2.mount_scanned_at if object_type == "mount" else CSVHeadersV2.scanned_at
+        timestamp_str = obj.get(timestamp_field, "")
         if not timestamp_str:
             return None
         try:

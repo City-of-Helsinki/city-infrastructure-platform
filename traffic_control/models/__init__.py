@@ -55,6 +55,7 @@ from traffic_control.models.signpost_migration import (
     SignpostMigrationRealRecord,
     SignpostMigrationRun,
 )
+from traffic_control.models.streetscan_import import StreetScanImportRevertFile, StreetScanImportRun
 from traffic_control.models.ticket_machine_migration import (
     TicketMachineMigrationPlanRecord,
     TicketMachineMigrationRealRecord,
