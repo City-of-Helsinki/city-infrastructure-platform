@@ -124,6 +124,7 @@ class TrafficSignAnalyzerV2(
             self._get_signless_additional_signs(),
             self._get_main_signs_with_parent_report(),
             self._get_removed_parents_referenced_by_active_additional_signs(),
+            self._get_signposts_that_are_both_parent_and_child_report(),
             # Distance reports
             self._get_mount_distances(),
             self._get_additional_sign_distances(),
