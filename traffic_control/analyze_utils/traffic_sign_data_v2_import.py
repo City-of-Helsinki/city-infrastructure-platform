@@ -1657,7 +1657,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 recorded in summary["signposts_updated"] and phase results are
                 appended.
         """
-
         update_source_ids = [
             s
             for s, row in self.signposts_by_id.items()
@@ -1676,22 +1675,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         details_before = len(details)
 
         update_fields = [
-            "source_name",
-            "location",
-            "device_type_id",
-            "owner",
-            "mount_real_id",
-            "mount_type",
-            "direction",
-            "height",
-            "condition",
-            "location_specifier",
-            "value",
-            "txt",
-            "scanned_at",
-            "attachment_url",
-            "updated_by",
-            "updated_at",
+            "source_name", "location", "device_type_id", "owner", "mount_real_id",
+            "mount_type", "direction", "height", "condition", "location_specifier",
+            "value", "txt", "scanned_at", "attachment_url", "updated_by", "updated_at",
         ]
         updated_count = 0
         skipped_count = 0
@@ -1704,102 +1690,45 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped_count += 1
                 continue
 
-            try:
-                new_location = self._georeferenced_point_from_csv_row(row)
-            except (KeyError, ValueError) as exc:
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"}
-                )
+            fields = self._resolve_signpost_update_fields(row, source_id, details)
+            if fields is None:
                 skipped_count += 1
                 continue
 
-            if not geometry_is_legit(new_location):
-                details.append(
-                    {
-                        "level": "skip",
-                        "source_id": source_id,
-                        "reason": f"Invalid location on update: {new_location.ewkt}",
-                    }
-                )
-                skipped_count += 1
-                continue
-
-            code = row.get(CSVHeadersV2.code, "")
-            device_type_id = self.code_to_device_type_id.get(code)
-            if device_type_id is None:
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
-                )
-                skipped_count += 1
-                continue
-
-            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
-            new_mount_real_id = None
-            if mount_csv_id:
-                new_mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
-                if new_mount_real_id is None:
-                    details.append(
-                        {
-                            "level": "warning",
-                            "source_id": source_id,
-                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
-                        }
-                    )
-
-            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
-            new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
-            sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
-            new_mount_type = self.mount_types_by_name.get(sign_mount_type_name)
-            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
-            new_value = self._get_sign_value(number_code_str)
-            new_height = self._get_sign_height(row.get(CSVHeadersV2.height))
-            new_direction = self._get_sign_direction(row.get(CSVHeadersV2.direction))
-            new_condition = self._get_sign_condition(row.get(CSVHeadersV2.condition))
-            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
-            new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
-            new_txt = row.get(CSVHeadersV2.txt, "") or None
+            new_location, device_type_id, new_mount_real_id, new_mount_type = (
+                fields["location"], fields["device_type_id"], fields["mount_real_id"], fields["mount_type"]
+            )
+            new_location_specifier = fields["location_specifier"]
+            new_value, new_height, new_direction = fields["value"], fields["height"], fields["direction"]
+            new_condition, new_scanned_at = fields["condition"], fields["scanned_at"]
+            new_attachment_url, new_txt = fields["attachment_url"], fields["txt"]
             new_source_name = "StreetScan2025"
 
-            changed = (
-                self.force_update
-                or obj.source_name != new_source_name
-                or obj.location != new_location
-                or obj.device_type_id != device_type_id
-                or obj.mount_real_id != new_mount_real_id
-                or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
-                or obj.direction != new_direction
-                or obj.height != new_height
-                or obj.condition != new_condition
-                or obj.location_specifier != new_location_specifier
-                or obj.value != new_value
-                or obj.txt != new_txt
-                or obj.scanned_at != new_scanned_at
-                or obj.attachment_url != new_attachment_url
-            )
-            if not changed:
+            if not self._signpost_fields_changed(obj, new_source_name, new_location, device_type_id,
+                                                 new_mount_real_id, new_mount_type, new_direction,
+                                                 new_height, new_condition, new_location_specifier,
+                                                 new_value, new_txt, new_scanned_at, new_attachment_url):
                 skipped_count += 1
                 continue
 
             if not self.dry_run:
-                self._write_revert_record(
-                    {
-                        "action": "update",
-                        "object_type": "SignpostReal",
-                        "db_id": str(obj.pk),
-                        "source_id": source_id,
-                        "old": {
-                            "source_name": obj.source_name,
-                            "location": obj.location.ewkt if obj.location else None,
-                            "device_type_id": obj.device_type_id,
-                            "mount_real_id": obj.mount_real_id,
-                            "direction": obj.direction,
-                            "height": str(obj.height) if obj.height is not None else None,
-                            "condition": obj.condition,
-                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
-                            "attachment_url": obj.attachment_url,
-                        },
-                    }
-                )
+                self._write_revert_record({
+                    "action": "update",
+                    "object_type": "SignpostReal",
+                    "db_id": str(obj.pk),
+                    "source_id": source_id,
+                    "old": {
+                        "source_name": obj.source_name,
+                        "location": obj.location.ewkt if obj.location else None,
+                        "device_type_id": obj.device_type_id,
+                        "mount_real_id": obj.mount_real_id,
+                        "direction": obj.direction,
+                        "height": str(obj.height) if obj.height is not None else None,
+                        "condition": obj.condition,
+                        "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                        "attachment_url": obj.attachment_url,
+                    },
+                })
 
             obj.source_name = new_source_name
             obj.location = new_location
@@ -1820,15 +1749,12 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             batch.append(obj)
 
             if len(batch) >= self.batch_size:
-                if not self.dry_run:
-                    SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                self._flush_signpost_batch(batch, update_fields)
                 updated_count += len(batch)
                 batch = []
 
-        if batch:
-            if not self.dry_run:
-                SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-            updated_count += len(batch)
+        self._flush_signpost_batch(batch, update_fields)
+        updated_count += len(batch)
 
         skipped_count += len([e for e in summary.get("details", [])[details_before:] if e.get("level") == "skip"])
         summary["signposts_updated"] += updated_count
@@ -1840,6 +1766,131 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         )
         self._record_phase_result(summary, "signposts", "update", updated=updated_count, skipped=skipped_count)
         self._save_run_log(summary)
+
+    def _flush_signpost_batch(self, batch: list[Any], update_fields: list[str]) -> None:
+        """Write a batch of SignpostReal objects to the DB unless in dry-run mode.
+
+        Args:
+            batch (list[Any]): Signpost instances to bulk-update.
+            update_fields (list[str]): Field names to include in the bulk update.
+        """
+        if batch and not self.dry_run:
+            SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+
+    def _resolve_signpost_update_fields(
+        self, row: dict, source_id: str, details: list[dict]
+    ) -> dict[str, Any] | None:
+        """Resolve and validate all field values for a signpost update row.
+
+        Validates geometry and device type code, resolves FK ids, and casts all
+        field values. Returns ``None`` and appends a skip entry to ``details``
+        when a hard validation error is encountered.
+
+        Args:
+            row (dict): Enriched CSV row for the signpost.
+            source_id (str): Source identifier for logging.
+            details (list[dict]): Mutable details list to append skip/warning entries.
+
+        Returns:
+            dict[str, Any] | None: Resolved field dict, or None if the row must be skipped.
+        """
+        try:
+            new_location = self._georeferenced_point_from_csv_row(row)
+        except (KeyError, ValueError) as exc:
+            details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"})
+            return None
+
+        if not geometry_is_legit(new_location):
+            details.append({"level": "skip", "source_id": source_id,
+                            "reason": f"Invalid location on update: {new_location.ewkt}"})
+            return None
+
+        code = row.get(CSVHeadersV2.code, "")
+        device_type_id = self.code_to_device_type_id.get(code)
+        if device_type_id is None:
+            details.append({"level": "skip", "source_id": source_id,
+                            "reason": f"Device type code not found: {code}"})
+            return None
+
+        mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+        new_mount_real_id = None
+        if mount_csv_id:
+            new_mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+            if new_mount_real_id is None:
+                details.append({"level": "warning", "source_id": source_id,
+                                "reason": f"Mount not found for mount CSV id: {mount_csv_id}"})
+
+        raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+        return {
+            "location": new_location,
+            "device_type_id": device_type_id,
+            "mount_real_id": new_mount_real_id,
+            "mount_type": self.mount_types_by_name.get(row.get(CSVHeadersV2.sign_mount_type, "")),
+            "location_specifier": SignLocationSpecifier(int(raw_ls)) if raw_ls else None,
+            "value": self._get_sign_value(row.get(CSVHeadersV2.number_code, "") or ""),
+            "height": self._get_sign_height(row.get(CSVHeadersV2.height)),
+            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction)),
+            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition)),
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+            "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
+            "txt": row.get(CSVHeadersV2.txt, "") or None,
+        }
+
+    def _signpost_fields_changed(  # noqa: PLR0913
+        self,
+        obj: Any,
+        new_source_name: str,
+        new_location: Any,
+        device_type_id: int,
+        new_mount_real_id: int | None,
+        new_mount_type: Any,
+        new_direction: int | None,
+        new_height: int | None,
+        new_condition: Any,
+        new_location_specifier: Any,
+        new_value: Decimal | None,
+        new_txt: str | None,
+        new_scanned_at: Any,
+        new_attachment_url: str,
+    ) -> bool:
+        """Return True if any signpost field differs from the stored DB values.
+
+        Args:
+            obj (Any): Existing SignpostReal DB instance.
+            new_source_name (str): New source_name value.
+            new_location (Any): New geometry point.
+            device_type_id (int): New device type PK.
+            new_mount_real_id (int | None): New mount FK.
+            new_mount_type (Any): New MountType instance or None.
+            new_direction (int | None): New direction value.
+            new_height (int | None): New height value in cm.
+            new_condition (Any): New condition enum value.
+            new_location_specifier (Any): New location specifier enum value.
+            new_value (Decimal | None): New sign value.
+            new_txt (str | None): New text value.
+            new_scanned_at (Any): New scanned_at datetime.
+            new_attachment_url (str): New attachment URL.
+
+        Returns:
+            bool: True if any field has changed or force_update is set.
+        """
+        if self.force_update:
+            return True
+        return (
+            obj.source_name != new_source_name
+            or obj.location != new_location
+            or obj.device_type_id != device_type_id
+            or obj.mount_real_id != new_mount_real_id
+            or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
+            or obj.direction != new_direction
+            or obj.height != new_height
+            or obj.condition != new_condition
+            or obj.location_specifier != new_location_specifier
+            or obj.value != new_value
+            or obj.txt != new_txt
+            or obj.scanned_at != new_scanned_at
+            or obj.attachment_url != new_attachment_url
+        )
 
     def _deactivate_signposts(self, summary: dict[str, Any]) -> None:
         """Deactivate SignpostReal records whose CSV status is ``Removed``.
