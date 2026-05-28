@@ -6,7 +6,6 @@ SignpostReal and AdditionalSignReal based on enriched V2 CSV data.
 This module is intentionally kept separate from the analysis pipeline so that
 the management command can run an import without triggering the full analysis.
 """
-from __future__ import annotations
 
 import datetime
 import json
