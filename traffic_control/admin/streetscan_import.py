@@ -78,8 +78,8 @@ class StreetScanImportRunAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
-        "ran_at",
-        "is_dry_run",
+        "started_at",
+        "dry_run",
         "mount_file_short",
         "sign_file_short",
         "mounts_summary",
@@ -90,16 +90,16 @@ class StreetScanImportRunAdmin(admin.ModelAdmin):
         "warning_count",
         "error_count",
     )
-    list_filter = ("is_dry_run", "ran_at")
+    list_filter = ("dry_run", "started_at")
     search_fields = ("id", "mount_file", "sign_file")
-    ordering = ("-ran_at",)
+    ordering = ("-started_at",)
     readonly_fields = (
         "id",
-        "ran_at",
-        "is_dry_run",
+        "started_at",
+        "completed_at",
+        "dry_run",
         "mount_file",
         "sign_file",
-        "preprocessing_duration_s",
         "mounts_created",
         "mounts_updated",
         "signs_created",
@@ -127,11 +127,11 @@ class StreetScanImportRunAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "id",
-                    "ran_at",
-                    "is_dry_run",
+                    "started_at",
+                    "completed_at",
+                    "dry_run",
                     "mount_file",
                     "sign_file",
-                    "preprocessing_duration_s",
                 )
             },
         ),

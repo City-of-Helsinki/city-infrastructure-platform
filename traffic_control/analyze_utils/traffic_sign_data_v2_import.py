@@ -156,6 +156,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         # Record total preprocessing wall-clock time (CSV I/O + enrichment + DB map builds).
         self._preprocessing_duration_s: float = (datetime.datetime.now() - _t_preprocess_start).total_seconds()
+        # Stored in phase_durations under the "preprocessing" key on run_log creation.
 
         # --- Run log and revert file (populated during run()) ---
         self.run_log: StreetScanImportRun | None = None
@@ -456,13 +457,12 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         Returns:
             StreetScanImportRun: The newly created (saved) run log instance.
         """
-        run_log = StreetScanImportRun(
-            is_dry_run=self.dry_run,
+        run_log = StreetScanImportRun.objects.create(
+            dry_run=self.dry_run,
             mount_file=self.mount_file,
             sign_file=self.sign_file,
-            preprocessing_duration_s=self._preprocessing_duration_s,
+            phase_durations={"preprocessing": {"total": round(self._preprocessing_duration_s, 2)}},
         )
-        run_log.save()
         logger.debug("Created StreetScanImportRun pk=%s", run_log.pk)
         return run_log
 
@@ -502,8 +502,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         run_log.warning_count = sum(1 for e in details if e.get("level") == "warning")
         run_log.error_count = sum(1 for e in details if e.get("level") == "error")
 
-        # Extract phase durations from phase_results into the dedicated field.
-        phase_durations: dict[str, dict[str, float]] = {}
+        # Extract phase durations from phase_results into the dedicated field,
+        # preserving the 'preprocessing' key written at run_log creation.
+        phase_durations: dict[str, dict[str, float]] = dict(run_log.phase_durations or {})
         for obj_type, phases in summary.get("phase_results", {}).items():
             phase_durations[obj_type] = {
                 phase: counts.get("duration_s", 0.0) for phase, counts in phases.items() if "duration_s" in counts
@@ -523,6 +524,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         if self.run_log is None:
             return
         self._apply_summary_to_run_log(self.run_log, summary)
+        self.run_log.completed_at = datetime.datetime.now(tz=datetime.timezone.utc)
         self.run_log.save()
 
         if not self.dry_run:
@@ -553,7 +555,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             if file_size == 0:
                 logger.debug("Revert file is empty — skipping attachment for run pk=%s", self.run_log.pk)
                 return
-            filename = f"revert_{self.run_log.ran_at:%Y%m%d_%H%M%S}_{self.run_log.pk}.jsonl"
+            filename = f"revert_{self.run_log.started_at:%Y%m%d_%H%M%S}_{self.run_log.pk}.jsonl"
             logger.debug("_attach_revert_file: saving as '%s'", filename)
             revert_record = StreetScanImportRevertFile(import_run=self.run_log, is_public=False)
             with open(tmp_path, "rb") as fh:

@@ -61,7 +61,7 @@ class Command(BaseCommand):
             default=False,
             help=(
                 "Simulate the import without writing to the database. "
-                "A run log row is still written with is_dry_run=True."
+                "A run log row is still written with dry_run=True."
             ),
         )
         parser.add_argument(
@@ -190,7 +190,7 @@ class Command(BaseCommand):
 
         summary = importer.run()
 
-        self.stdout.write(f"  preprocessing: {importer._preprocessing_duration_s:.2f}s")
+        self.stdout.write(f"  preprocessing: {importer._preprocessing_duration_s:.2f}s (in phase_durations)")
         self._print_summary(summary)
 
     def _print_summary(self, summary: dict[str, Any]) -> None:

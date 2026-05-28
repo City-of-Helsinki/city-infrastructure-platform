@@ -15,12 +15,18 @@ class StreetScanImportRun(models.Model):
     """
 
     id = models.BigAutoField(primary_key=True)
-    ran_at = models.DateTimeField(
-        _("Ran at"),
+    started_at = models.DateTimeField(
+        _("Started at"),
         auto_now_add=True,
         help_text=_("Timestamp when the import run was started."),
     )
-    is_dry_run = models.BooleanField(
+    completed_at = models.DateTimeField(
+        _("Completed at"),
+        null=True,
+        blank=True,
+        help_text=_("Timestamp when the import run finished."),
+    )
+    dry_run = models.BooleanField(
         _("Dry run"),
         default=False,
         help_text=_("True if the run was executed with --dry-run (no DB writes performed)."),
@@ -80,21 +86,13 @@ class StreetScanImportRun(models.Model):
 
     # --- Timing ---
 
-    preprocessing_duration_s = models.FloatField(
-        _("Preprocessing duration (s)"),
-        null=True,
-        blank=True,
-        help_text=_(
-            "Seconds spent loading and enriching CSV rows and building all DB lookup maps "
-            "before the first import phase began."
-        ),
-    )
     phase_durations = models.JSONField(
         _("Phase durations"),
         default=dict,
         help_text=_(
             "Nested dict of seconds spent in each phase: "
             "{object_type: {phase: duration_s}}. "
+            "Also contains a 'preprocessing' key for CSV loading and DB map building time. "
             "Populated progressively as phases complete."
         ),
     )
@@ -140,7 +138,7 @@ class StreetScanImportRun(models.Model):
     class Meta:
         verbose_name = _("StreetScan import run")
         verbose_name_plural = _("StreetScan import runs")
-        ordering = ["-ran_at"]
+        ordering = ["-started_at"]
 
     def __str__(self) -> str:
         """Return a human-readable representation of this run.
@@ -148,8 +146,8 @@ class StreetScanImportRun(models.Model):
         Returns:
             str: String with run id, date and dry-run flag.
         """
-        dry = " [dry-run]" if self.is_dry_run else ""
-        return f"StreetScanImportRun #{self.pk} — {self.ran_at:%Y-%m-%d %H:%M}{dry}"
+        dry = " [dry-run]" if self.dry_run else ""
+        return f"StreetScanImportRun #{self.pk} — {self.started_at:%Y-%m-%d %H:%M}{dry}"
 
 
 class StreetScanImportRevertFile(AbstractFileModel):
