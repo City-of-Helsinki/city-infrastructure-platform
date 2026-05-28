@@ -113,6 +113,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         self.object_types: list[str] = [ot for ot in OBJECT_TYPE_ORDER if ot in object_types]
         self.phases: list[str] = list(phases)
 
+        # --- Owner lookup (fetched first; missing owner is a hard error) ---
+        self.default_owner, self.private_owner = self._load_required_owners()
+
         # --- CSV loading ---
         _t_preprocess_start = datetime.datetime.now()
         self.mount_rows: list[dict] = self._read_csv_file(mount_file, delimiter)
@@ -373,7 +376,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         Yields:
             MountReal: Unsaved MountReal instance ready for bulk_create.
         """
-        default_owner = self._get_default_owner()
         details: list[dict] = summary.setdefault("details", [])
         processed: list[str] = summary.setdefault("processed_mount_source_ids", [])
         # NOTE: source_ids are appended here (optimistically, before the DB write
@@ -408,7 +410,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 source_id=source_id,
                 source_name="StreetScan2025",
                 location=location,
-                owner=default_owner,
+                owner=self.default_owner,
                 installation_status=InstallationStatus.IN_USE,
                 location_specifier=location_specifier,
                 mount_type=mount_type,
@@ -439,16 +441,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             return datetime.datetime.strptime(date_str.strip() + "00", "%Y/%m/%d %H:%M:%S%z")
         except ValueError:
             return None
-
-    @staticmethod
-    def _get_default_owner() -> Owner:
-        """Return the default Owner instance (Helsingin kaupunki).
-
-        Returns:
-            Owner: The default owner object.
-        """
-
-        return Owner.objects.get(name_fi="Helsingin kaupunki")
 
     def _save_run_log(self, summary: dict[str, Any]) -> None:
         """Persist the current run log state to the database.
@@ -885,13 +877,32 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         except Exception:
             return None
 
-    @staticmethod
-    def _resolve_sign_owner(
-        code: str,
-        number_code_str: str,
-        default_owner: Owner,
-        private_owner: Owner,
-    ) -> Owner:
+    def _load_required_owners(self) -> tuple[Owner, Owner]:
+        """Fetch the two owner records required by the importer.
+
+        Called once at the start of ``__init__`` before any CSV or DB work so
+        that a missing owner raises immediately without wasting time.
+
+        Returns:
+            tuple[Owner, Owner]: ``(default_owner, private_owner)`` — the
+                Helsingin kaupunki and Yksityinen owner instances.
+
+        Raises:
+            RuntimeError: If either required owner is absent from the database.
+        """
+        try:
+            default_owner = Owner.objects.get(name_fi="Helsingin kaupunki")
+        except Owner.DoesNotExist:
+            raise RuntimeError(
+                "Required Owner 'Helsingin kaupunki' not found in the database. " "Cannot proceed with import."
+            )
+        try:
+            private_owner = Owner.objects.get(name_fi="Yksityinen")
+        except Owner.DoesNotExist:
+            raise RuntimeError("Required Owner 'Yksityinen' not found in the database. " "Cannot proceed with import.")
+        return default_owner, private_owner
+
+    def _resolve_sign_owner(self, code: str, number_code_str: str) -> Owner:
         """Resolve the owner for a traffic sign row.
 
         Speed-limit signs with code ``363`` and a value of 5, 10, or 15 are
@@ -901,16 +912,14 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         Args:
             code (str): Device type code from the CSV row.
             number_code_str (str): Raw number_code value from the CSV row.
-            default_owner (Owner): City of Helsinki owner instance.
-            private_owner (Owner): Private owner instance.
 
         Returns:
             Owner: The resolved owner for this sign.
         """
         _private_speed_values = {"5", "10", "15"}
         if code == "363" and number_code_str.strip() in _private_speed_values:
-            return private_owner
-        return default_owner
+            return self.private_owner
+        return self.default_owner
 
     # ------------------------------------------------------------------
     # Traffic sign handlers
@@ -987,11 +996,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         Yields:
             TrafficSignReal: Unsaved TrafficSignReal instance ready for bulk_create.
         """
-        default_owner = self._get_default_owner()
-        try:
-            private_owner = Owner.objects.get(name_fi="Yksityinen")
-        except Owner.DoesNotExist:
-            private_owner = default_owner
 
         details: list[dict] = summary.setdefault("details", [])
         processed: list[str] = summary.setdefault("processed_sign_source_ids", [])
@@ -1047,7 +1051,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
             number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
             value = self._get_sign_value(number_code_str)
-            owner = self._resolve_sign_owner(code, number_code_str, default_owner, private_owner)
+            owner = self._resolve_sign_owner(code, number_code_str)
 
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
@@ -1082,8 +1086,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         update_source_ids: list[str],
         db_id_map: dict[str, int],
         existing: dict[int, TrafficSignReal],
-        default_owner: Owner,
-        private_owner: Owner,
         summary: dict[str, Any],
         phase_started_at: datetime.datetime,
     ) -> Generator[TrafficSignReal, None, None]:
@@ -1173,7 +1175,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
             number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
             new_value = self._get_sign_value(number_code_str)
-            new_owner = self._resolve_sign_owner(code, number_code_str, default_owner, private_owner)
+            new_owner = self._resolve_sign_owner(code, number_code_str)
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
             sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
@@ -1282,11 +1284,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         existing: dict[int, TrafficSignReal] = {
             obj.pk: obj for obj in TrafficSignReal.objects.filter(pk__in=db_id_map.values())
         }
-        default_owner = self._get_default_owner()
-        try:
-            private_owner = Owner.objects.get(name_fi="Yksityinen")
-        except Owner.DoesNotExist:
-            private_owner = default_owner
 
         update_fields = [
             "source_name",
@@ -1313,8 +1310,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             update_source_ids,
             db_id_map,
             existing,
-            default_owner,
-            private_owner,
             summary,
             phase_started_at,
         )
@@ -1541,7 +1536,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             int: Number of signposts created in this pass.
         """
 
-        default_owner = self._get_default_owner()
         details: list[dict] = summary.setdefault("details", [])
         processed: list[str] = summary.setdefault("processed_signpost_source_ids", [])
 
@@ -1612,7 +1606,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     source_name="StreetScan2025",
                     location=location,
                     device_type_id=device_type_id,
-                    owner=default_owner,
+                    owner=self.default_owner,
                     installation_status=InstallationStatus.IN_USE,
                     lifecycle=Lifecycle.ACTIVE,
                     parent_id=parent_id,
@@ -1678,7 +1672,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         db_id_map: dict[str, int] = {s: self.signpost_source_id_to_db_id[s] for s in update_source_ids}
         existing: dict[int, Any] = {obj.pk: obj for obj in SignpostReal.objects.filter(pk__in=db_id_map.values())}
-        default_owner = self._get_default_owner()
         details: list[dict] = summary.setdefault("details", [])
         details_before = len(details)
 
@@ -1811,7 +1804,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             obj.source_name = new_source_name
             obj.location = new_location
             obj.device_type_id = device_type_id
-            obj.owner = default_owner
+            obj.owner = self.default_owner
             obj.mount_real_id = new_mount_real_id
             obj.mount_type = new_mount_type
             obj.direction = new_direction
@@ -2038,7 +2031,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         details: list[dict] = summary.setdefault("details", [])
         details_before = len(details)
         processed: list[str] = summary.setdefault("processed_additional_sign_source_ids", [])
-        default_owner = self._get_default_owner()
 
         existing_source_ids: set[str] = set(self.additional_sign_source_id_to_db_id.keys())
         objects_to_create: list[AdditionalSignReal] = []
@@ -2103,7 +2095,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     source_name="StreetScan2025",
                     location=location,
                     device_type_id=device_type_id,
-                    owner=default_owner,
+                    owner=self.default_owner,
                     installation_status=InstallationStatus.IN_USE,
                     lifecycle=Lifecycle.ACTIVE,
                     missing_content=True,
@@ -2187,7 +2179,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         db_id_map: dict[str, int] = {s: self.additional_sign_source_id_to_db_id[s] for s in update_source_ids}
         existing: dict[int, Any] = {obj.pk: obj for obj in AdditionalSignReal.objects.filter(pk__in=db_id_map.values())}
-        default_owner = self._get_default_owner()
         details: list[dict] = summary.setdefault("details", [])
         details_before = len(details)
 
@@ -2338,7 +2329,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             obj.source_name = new_source_name
             obj.location = new_location
             obj.device_type_id = device_type_id
-            obj.owner = default_owner
+            obj.owner = self.default_owner
             obj.parent_id = new_parent_id
             obj.signpost_real_id = new_signpost_real_id
             obj.mount_real_id = new_mount_real_id

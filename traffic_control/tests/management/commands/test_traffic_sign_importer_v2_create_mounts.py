@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -153,6 +154,59 @@ def mount_type(db):
         MountType: The created mount type instance.
     """
     return MountTypeFactory(description="POLE", description_fi="Pylväs")
+
+
+# ===========================================================================
+# TrafficSignImporterV2.__init__ — owner lookup failures
+# ===========================================================================
+
+_LOAD_OWNERS_PATH = (
+    "traffic_control.analyze_utils.traffic_sign_data_v2_import.TrafficSignImporterV2._load_required_owners"
+)
+
+
+@pytest.mark.django_db
+def test_init_raises_when_default_owner_missing(tmp_path: Path) -> None:
+    """RuntimeError is raised immediately when 'Helsingin kaupunki' owner is absent.
+
+    Uses mock.patch to simulate the owner being missing without touching the DB,
+    since migration 0022_initial_owners seeds both owners in the test database.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    mf = _write_csv(tmp_path, _MOUNT_CSV_HEADER, [])
+    sf = _write_csv(tmp_path, _SIGN_CSV_HEADER, [])
+    with patch(_LOAD_OWNERS_PATH, side_effect=RuntimeError("Required Owner 'Helsingin kaupunki' not found")):
+        with pytest.raises(RuntimeError, match="Helsingin kaupunki"):
+            TrafficSignImporterV2(
+                mount_file=mf,
+                sign_file=sf,
+                object_types=["mounts"],
+                phases=["create"],
+            )
+
+
+@pytest.mark.django_db
+def test_init_raises_when_private_owner_missing(tmp_path: Path) -> None:
+    """RuntimeError is raised immediately when 'Yksityinen' owner is absent.
+
+    Uses mock.patch to simulate the owner being missing without touching the DB,
+    since migration 0022_initial_owners seeds both owners in the test database.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    mf = _write_csv(tmp_path, _MOUNT_CSV_HEADER, [])
+    sf = _write_csv(tmp_path, _SIGN_CSV_HEADER, [])
+    with patch(_LOAD_OWNERS_PATH, side_effect=RuntimeError("Required Owner 'Yksityinen' not found")):
+        with pytest.raises(RuntimeError, match="Yksityinen"):
+            TrafficSignImporterV2(
+                mount_file=mf,
+                sign_file=sf,
+                object_types=["mounts"],
+                phases=["create"],
+            )
 
 
 # ===========================================================================
