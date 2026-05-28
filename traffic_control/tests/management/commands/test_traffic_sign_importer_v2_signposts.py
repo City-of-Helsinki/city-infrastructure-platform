@@ -827,7 +827,7 @@ def test_deactivate_signposts_sets_validity_period_end(tmp_path: Path, default_o
     importer._deactivate_signposts(summary)
 
     sp = SignpostReal.objects.get(source_id="SPDEA2")
-    assert sp.validity_period_end == datetime.date.today()
+    assert sp.validity_period_end == datetime.date(2023, 8, 15)
 
 
 @pytest.mark.django_db

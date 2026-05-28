@@ -760,7 +760,7 @@ def test_deactivate_signs_sets_validity_period_end(tmp_path: Path, default_owner
     importer._deactivate_signs(summary)
 
     sign = TrafficSignReal.objects.get(source_id="DEA2")
-    assert sign.validity_period_end == datetime.date.today()
+    assert sign.validity_period_end == datetime.date(2023, 8, 15)
 
 
 @pytest.mark.django_db

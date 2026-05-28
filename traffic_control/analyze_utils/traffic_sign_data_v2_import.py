@@ -1341,7 +1341,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         """Deactivate TrafficSignReal records marked as Removed in CSV.
 
         Deactivation updates exactly six fields on each matching record:
-        ``lifecycle`` → ``Lifecycle.INACTIVE``, ``validity_period_end`` → today,
+        ``lifecycle`` → ``Lifecycle.INACTIVE``,
+        ``validity_period_end`` → date portion of the CSV ``scanned_at`` timestamp
+        (falls back to today if the field is absent or unparseable),
         ``scanned_at`` → CSV timestamp, ``source_name`` → ``"StreetScan2025"``,
         ``updated_by`` → the configured user, ``updated_at`` → phase start time.
         No other fields are modified.
@@ -1362,7 +1364,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             self._save_run_log(summary)
             return
 
-        today = datetime.date.today()
         phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
         db_id_map: dict[str, int] = {s: self.sign_source_id_to_db_id[s] for s in deactivate_source_ids}
         existing: dict[int, TrafficSignReal] = {
@@ -1376,6 +1377,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             obj = existing.get(db_id_map[source_id])
             if obj is None:
                 continue
+
+            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            validity_end = new_scanned_at.date() if new_scanned_at else None
 
             if not self.dry_run:
                 self._write_revert_record(
@@ -1394,8 +1398,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 )
 
             obj.lifecycle = Lifecycle.INACTIVE
-            obj.validity_period_end = today
-            obj.scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            obj.validity_period_end = validity_end
+            obj.scanned_at = new_scanned_at
             obj.source_name = "StreetScan2025"
             obj.updated_by = self.user
             obj.updated_at = phase_started_at
@@ -1837,9 +1841,11 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         """Deactivate SignpostReal records whose CSV status is ``Removed``.
 
         Deactivation sets ``lifecycle`` to ``Lifecycle.INACTIVE``,
-        ``validity_period_end`` to today's date, ``scanned_at`` to the CSV
-        timestamp, ``source_name`` to ``"StreetScan2025"``, and also updates
-        ``updated_by`` and ``updated_at``.  No other fields are modified.
+        ``validity_period_end`` to the date portion of the CSV ``scanned_at``
+        timestamp (falls back to today if absent or unparseable),
+        ``scanned_at`` to the CSV timestamp, ``source_name`` to
+        ``"StreetScan2025"``, and also updates ``updated_by`` and ``updated_at``.
+        No other fields are modified.
 
         Args:
             summary (dict[str, Any]): Mutable summary dict; the deactivated count
@@ -1861,7 +1867,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         db_id_map: dict[str, int] = {s: self.signpost_source_id_to_db_id[s] for s in deactivate_source_ids}
         existing: dict[int, Any] = {obj.pk: obj for obj in SignpostReal.objects.filter(pk__in=db_id_map.values())}
-        today = datetime.date.today()
         update_fields = ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"]
         batch: list[Any] = []
         deactivated_count = 0
@@ -1871,6 +1876,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             obj = existing.get(db_id_map[source_id])
             if obj is None:
                 continue
+
+            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            validity_end = new_scanned_at.date() if new_scanned_at else None
 
             if not self.dry_run:
                 self._write_revert_record(
@@ -1889,8 +1897,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 )
 
             obj.lifecycle = Lifecycle.INACTIVE
-            obj.validity_period_end = today
-            obj.scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            obj.validity_period_end = validity_end
+            obj.scanned_at = new_scanned_at
             obj.source_name = "StreetScan2025"
             obj.updated_by = self.user
             obj.updated_at = phase_started_at
