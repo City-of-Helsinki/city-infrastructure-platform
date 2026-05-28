@@ -395,13 +395,13 @@ class StreetScanImportRunAdmin(admin.ModelAdmin):
         rows = "".join(
             format_html(
                 "<tr>"
-                '<td style="padding:2px 8px;font-weight:bold;">{obj_type}</td>'
-                '<td style="padding:2px 8px;">{phase}</td>'
-                '<td style="padding:2px 8px;font-family:monospace;">{duration:.3f}s</td>'
+                '<td style="padding:2px 8px;font-weight:bold;">{}</td>'
+                '<td style="padding:2px 8px;">{}</td>'
+                '<td style="padding:2px 8px;font-family:monospace;">{}</td>'
                 "</tr>",
-                obj_type=obj_type,
-                phase=phase,
-                duration=duration_s,
+                obj_type,
+                phase,
+                f"{duration_s:.3f}s",
             )
             for obj_type, phases in durations.items()
             for phase, duration_s in phases.items()
