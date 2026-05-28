@@ -223,6 +223,11 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             summary (dict[str, Any]): Mutable summary dict to update with results.
         """
         logger.info("\n[TrafficSignImporterV2] Object type: %s", object_type)
+        # Refresh all source_id → DB PK maps once before running any phase for
+        # this object type so that objects created by a preceding object type
+        # (e.g. mounts created before signs, or signs/signposts created before
+        # additional signs) are visible for FK resolution and existence checks.
+        self._refresh_db_maps()
         for phase in self.phases:
             if phase == "deactivate" and object_type not in _DEACTIVATABLE_OBJECT_TYPES:
                 logger.debug("Skipping phase '%s' — %s are never deactivated", phase, object_type)
@@ -269,9 +274,13 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     def _refresh_db_maps(self) -> None:
         """Rebuild all source_id → DB PK lookup maps from the current DB state.
 
-        Must be called before any phase that depends on objects created by a
-        preceding phase in the same run (e.g. additional-signs phases need the
-        PKs of signs and signposts created earlier in the same run).
+        Called once per object type in ``_run_object_type`` before any phase
+        runs, so that objects created by a preceding object type in the same run
+        are visible for FK resolution and existence checks.
+
+        The maps are also built during ``__init__`` so that direct calls to
+        individual phase methods (e.g. in tests) work without going through
+        ``run()`` / ``_run_object_type``.
         """
         self.mount_source_id_to_db_id = self._build_mount_source_id_to_db_id()
         self.sign_source_id_to_db_id = self._build_sign_source_id_to_db_id()
@@ -1466,7 +1475,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 are appended to summary["details"] and summary["signposts_created"]
                 is incremented.
         """
-        existing_source_ids: set[str] = set(self.signpost_source_id_to_db_id.keys())
         phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
         summary.setdefault("signposts_created", 0)
         details_before = len(summary.get("details", []))
@@ -1476,6 +1484,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         # the full parent-resolution map available during pass 2.
         newly_created: dict[str, int] = {}
 
+        existing_source_ids: set[str] = set(self.signpost_source_id_to_db_id.keys())
         candidate_source_ids = [
             s
             for s, row in self.signposts_by_id.items()
@@ -2039,8 +2048,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 are appended to summary["details"] and
                 summary["additional_signs_created"] is incremented.
         """
-        self._refresh_db_maps()
-        existing_source_ids: set[str] = set(self.additional_sign_source_id_to_db_id.keys())
         phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
         summary.setdefault("additional_signs_created", 0)
         details: list[dict] = summary.setdefault("details", [])
@@ -2052,6 +2059,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             **{mt.description: mt for mt in MountType.objects.all()},
         }
 
+        existing_source_ids: set[str] = set(self.additional_sign_source_id_to_db_id.keys())
         objects_to_create: list[AdditionalSignReal] = []
 
         for source_id, row in self.additional_signs_by_id.items():
@@ -2184,7 +2192,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 recorded in summary["additional_signs_updated"] and phase results
                 are appended.
         """
-        self._refresh_db_maps()
         update_source_ids = [
             s
             for s, row in self.additional_signs_by_id.items()
@@ -2406,7 +2413,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 is recorded in summary["additional_signs_deactivated"] and phase
                 results are appended.
         """
-        self._refresh_db_maps()
         deactivate_source_ids = [
             s
             for s, row in self.additional_signs_by_id.items()
