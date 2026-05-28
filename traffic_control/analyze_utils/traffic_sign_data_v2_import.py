@@ -25,7 +25,8 @@ from traffic_control.analyze_utils.traffic_sign_data_v2_data_loading import Data
 from traffic_control.analyze_utils.traffic_sign_data_v2_db_builders import DbBuilderMixin
 from traffic_control.enums import Condition, InstallationStatus, Lifecycle
 from traffic_control.geometry_utils import geometry_is_legit
-from traffic_control.models import MountReal, MountType, Owner, SignpostReal, TrafficSignReal
+from traffic_control.models import AdditionalSignReal, MountReal, MountType, Owner, SignpostReal, TrafficSignReal
+from traffic_control.models.additional_sign import Color
 from traffic_control.models.mount import LocationSpecifier as MountLocationSpecifier
 from traffic_control.models.streetscan_import import StreetScanImportRevertFile, StreetScanImportRun
 from traffic_control.models.traffic_sign import LocationSpecifier as SignLocationSpecifier
@@ -260,6 +261,22 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         phase_result = summary.get("phase_results", {}).get(object_type, {}).get(phase)
         if phase_result is not None:
             phase_result["duration_s"] = round(duration_s, 2)
+
+    # ------------------------------------------------------------------
+    # DB map refresh
+    # ------------------------------------------------------------------
+
+    def _refresh_db_maps(self) -> None:
+        """Rebuild all source_id → DB PK lookup maps from the current DB state.
+
+        Must be called before any phase that depends on objects created by a
+        preceding phase in the same run (e.g. additional-signs phases need the
+        PKs of signs and signposts created earlier in the same run).
+        """
+        self.mount_source_id_to_db_id = self._build_mount_source_id_to_db_id()
+        self.sign_source_id_to_db_id = self._build_sign_source_id_to_db_id()
+        self.additional_sign_source_id_to_db_id = self._build_additional_sign_source_id_to_db_id()
+        self.signpost_source_id_to_db_id = self._build_signpost_source_id_to_db_id()
 
     # ------------------------------------------------------------------
     # Mount handlers
@@ -1926,49 +1943,537 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     # Additional sign handlers (skeleton)
     # ------------------------------------------------------------------
 
-    def _create_additional_signs(self, summary: dict[str, Any]) -> None:
-        """Create new AdditionalSignReal records.
+    # ------------------------------------------------------------------
+    # Additional sign field helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _get_additional_sign_color(color_str: str | None) -> Color | None:
+        """Parse the color field into a Color enum value.
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
-        """
-        candidates = len(
-            [
-                s
-                for s, row in self.additional_signs_by_id.items()
-                if s not in self.additional_sign_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-            ]
-        )
-        logger.info("[TODO] _create_additional_signs — %d new rows (not in DB, not Removed)", candidates)
+            color_str (str | None): Raw color string from CSV, or None.
 
-    def _update_additional_signs(self, summary: dict[str, Any]) -> None:
-        """Update existing AdditionalSignReal records.
+        Returns:
+            Color | None: Parsed Color enum value, or None if absent/invalid.
+        """
+        if not color_str:
+            return None
+        try:
+            value = int(color_str)
+            return Color(value) if value else None
+        except (ValueError, TypeError):
+            return None
+
+    @staticmethod
+    def _build_additional_information(txt: str, number_code: str, internal_info: str | None) -> str:
+        """Compose the additional_information field value from CSV fields.
+
+        Format: ``"text:{txt}; numbercode:{number_code}"``
+        With enrichment hint: ``"text:{txt}; numbercode:{number_code}; info:{internal_info}"``
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
+            txt (str): Raw teksti value from CSV.
+            number_code (str): Raw numerokoodi value from CSV.
+            internal_info (str | None): Preprocessed internal_additional_info hint, or None.
+
+        Returns:
+            str: Composed additional_information string.
         """
-        candidates = len(
-            [
-                s
-                for s, row in self.additional_signs_by_id.items()
-                if s in self.additional_sign_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-            ]
+        base = f"text:{txt.strip()}; numbercode:{number_code.strip()}"
+        hint = (internal_info or "").strip()
+        return f"{base}; info:{hint}" if hint else base
+
+    def _resolve_additional_sign_parent(
+        self,
+        parent_csv_id: str,
+        source_id: str,
+        details: list[dict],
+    ) -> tuple[int | None, int | None]:
+        """Resolve parent_sign_id to either a TrafficSignReal PK or a SignpostReal PK.
+
+        Checks sign_source_id_to_db_id first, then signpost_source_id_to_db_id.
+        Logs a warning if the id is non-blank but matches neither map.
+
+        Args:
+            parent_csv_id (str): CSV parent_sign_id value.
+            source_id (str): Source ID of the additional sign being resolved (for warning logging).
+            details (list[dict]): Mutable details list from summary.
+
+        Returns:
+            tuple[int | None, int | None]: (parent_id, signpost_real_id) — at most one is non-None.
+        """
+        if not parent_csv_id:
+            return None, None
+
+        traffic_sign_pk = self.sign_source_id_to_db_id.get(parent_csv_id)
+        if traffic_sign_pk is not None:
+            return traffic_sign_pk, None
+
+        signpost_pk = self.signpost_source_id_to_db_id.get(parent_csv_id)
+        if signpost_pk is not None:
+            return None, signpost_pk
+
+        details.append(
+            {
+                "level": "warning",
+                "source_id": source_id,
+                "reason": f"Parent sign not found in signs or signposts for parent CSV id: {parent_csv_id}",
+            }
         )
+        return None, None
+
+    # ------------------------------------------------------------------
+    # Additional sign phase handlers
+    # ------------------------------------------------------------------
+
+    def _create_additional_signs(self, summary: dict[str, Any]) -> None:  # noqa: C901
+        """Create new AdditionalSignReal records from CSV rows not yet in the DB.
+
+        Rows with ``status == "Removed"``, already present in the DB, with
+        invalid geometry, unreadable text, or whose device type code is not found
+        are skipped. An unresolved parent_sign_id is imported with a warning.
+
+        Args:
+            summary (dict[str, Any]): Mutable summary dict; skip/warning entries
+                are appended to summary["details"] and
+                summary["additional_signs_created"] is incremented.
+        """
+        self._refresh_db_maps()
+        existing_source_ids: set[str] = set(self.additional_sign_source_id_to_db_id.keys())
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault("additional_signs_created", 0)
+        details: list[dict] = summary.setdefault("details", [])
+        details_before = len(details)
+        processed: list[str] = summary.setdefault("processed_additional_sign_source_ids", [])
+        default_owner = self._get_default_owner()
+        mount_types_by_name: dict[str, MountType] = {
+            **{mt.description_fi: mt for mt in MountType.objects.all()},
+            **{mt.description: mt for mt in MountType.objects.all()},
+        }
+
+        objects_to_create: list[AdditionalSignReal] = []
+
+        for source_id, row in self.additional_signs_by_id.items():
+            if source_id in existing_source_ids or row.get(CSVHeadersV2.status) == "Removed":
+                continue
+
+            txt = row.get(CSVHeadersV2.txt, "") or ""
+            if txt.strip().lower() == "unreadable":
+                details.append({"level": "skip", "source_id": source_id, "reason": "text value is unreadable"})
+                continue
+
+            try:
+                location = self._georeferenced_point_from_csv_row(row)
+            except (KeyError, ValueError) as exc:
+                details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates: {exc}"})
+                continue
+
+            if not geometry_is_legit(location):
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Invalid location: {location.ewkt}"}
+                )
+                continue
+
+            code = row.get(CSVHeadersV2.code, "")
+            device_type_id = self.code_to_device_type_id.get(code)
+            if device_type_id is None:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
+                )
+                continue
+
+            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+            mount_real_id = None
+            if mount_csv_id:
+                mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+                if mount_real_id is None:
+                    details.append(
+                        {
+                            "level": "warning",
+                            "source_id": source_id,
+                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
+                        }
+                    )
+
+            parent_csv_id = row.get(CSVHeadersV2.parent_sign_id, "")
+            parent_id, signpost_real_id = self._resolve_additional_sign_parent(parent_csv_id, source_id, details)
+
+            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
+            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+            location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
+            sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
+            mount_type = mount_types_by_name.get(sign_mount_type_name)
+            internal_info = row.get("internal_additional_info")
+            additional_information = self._build_additional_information(txt, number_code_str, internal_info)
+
+            processed.append(source_id)
+            objects_to_create.append(
+                AdditionalSignReal(
+                    source_id=source_id,
+                    source_name="StreetScan2025",
+                    location=location,
+                    device_type_id=device_type_id,
+                    owner=default_owner,
+                    installation_status=InstallationStatus.IN_USE,
+                    lifecycle=Lifecycle.ACTIVE,
+                    missing_content=True,
+                    parent_id=parent_id,
+                    signpost_real_id=signpost_real_id,
+                    mount_real_id=mount_real_id,
+                    mount_type=mount_type,
+                    direction=self._get_sign_direction(row.get(CSVHeadersV2.direction)),
+                    height=self._get_sign_height(row.get(CSVHeadersV2.height)),
+                    condition=self._get_sign_condition(row.get(CSVHeadersV2.condition)),
+                    location_specifier=location_specifier,
+                    color=self._get_additional_sign_color(row.get(CSVHeadersV2.color)),
+                    additional_information=additional_information,
+                    scanned_at=self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+                    attachment_url=row.get(CSVHeadersV2.attachment_url, ""),
+                    created_by=self.user,
+                    created_at=phase_started_at,
+                )
+            )
+
+        created_count = 0
+        if objects_to_create:
+            if self.dry_run:
+                created_count = len(objects_to_create)
+            else:
+                created = AdditionalSignReal.objects.bulk_create(objects_to_create, batch_size=self.batch_size)
+                created_count = len(created)
+                for obj in created:
+                    self._write_revert_record(
+                        {
+                            "action": "create",
+                            "object_type": "AdditionalSignReal",
+                            "db_id": str(obj.id),
+                            "source_id": obj.source_id,
+                        }
+                    )
+
+        summary["additional_signs_created"] += created_count
+        new_details = details[details_before:]
+        skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
+        warning_count = sum(1 for e in new_details if e.get("level") == "warning")
         logger.info(
-            "[TODO] _update_additional_signs — %d rows in CSV (non-Removed) that already exist in DB", candidates
+            "_create_additional_signs: created=%d skipped=%d warnings=%d",
+            created_count,
+            skipped_count,
+            warning_count,
         )
+        self._record_phase_result(
+            summary,
+            "additional-signs",
+            "create",
+            created=created_count,
+            skipped=skipped_count,
+            warnings=warning_count,
+        )
+        self._save_run_log(summary)
+
+    def _update_additional_signs(self, summary: dict[str, Any]) -> None:  # noqa: C901
+        """Update existing AdditionalSignReal records from non-Removed CSV rows.
+
+        Only rows whose source_id already exists in the DB and whose status is not
+        ``"Removed"`` are processed. Field comparison is applied unless
+        ``force_update`` is True.
+
+        Args:
+            summary (dict[str, Any]): Mutable summary dict; the updated count is
+                recorded in summary["additional_signs_updated"] and phase results
+                are appended.
+        """
+        self._refresh_db_maps()
+        update_source_ids = [
+            s
+            for s, row in self.additional_signs_by_id.items()
+            if s in self.additional_sign_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
+        ]
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault("additional_signs_updated", 0)
+        if not update_source_ids:
+            self._record_phase_result(summary, "additional-signs", "update", updated=0, skipped=0)
+            self._save_run_log(summary)
+            return
+
+        db_id_map: dict[str, int] = {s: self.additional_sign_source_id_to_db_id[s] for s in update_source_ids}
+        existing: dict[int, Any] = {obj.pk: obj for obj in AdditionalSignReal.objects.filter(pk__in=db_id_map.values())}
+        mount_types_by_name: dict[str, MountType] = {
+            **{mt.description_fi: mt for mt in MountType.objects.all()},
+            **{mt.description: mt for mt in MountType.objects.all()},
+        }
+        default_owner = self._get_default_owner()
+        details: list[dict] = summary.setdefault("details", [])
+        details_before = len(details)
+
+        update_fields = [
+            "source_name",
+            "location",
+            "device_type_id",
+            "owner",
+            "parent_id",
+            "signpost_real_id",
+            "mount_real_id",
+            "mount_type",
+            "direction",
+            "height",
+            "condition",
+            "location_specifier",
+            "color",
+            "additional_information",
+            "scanned_at",
+            "attachment_url",
+            "updated_by",
+            "updated_at",
+        ]
+        updated_count = 0
+        skipped_count = 0
+        batch: list[Any] = []
+
+        for source_id in update_source_ids:
+            row = self.additional_signs_by_id[source_id]
+            obj = existing.get(db_id_map[source_id])
+            if obj is None:
+                skipped_count += 1
+                continue
+
+            txt = row.get(CSVHeadersV2.txt, "") or ""
+            if txt.strip().lower() == "unreadable":
+                details.append({"level": "skip", "source_id": source_id, "reason": "text value is unreadable"})
+                skipped_count += 1
+                continue
+
+            try:
+                new_location = self._georeferenced_point_from_csv_row(row)
+            except (KeyError, ValueError) as exc:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"}
+                )
+                skipped_count += 1
+                continue
+
+            if not geometry_is_legit(new_location):
+                details.append(
+                    {
+                        "level": "skip",
+                        "source_id": source_id,
+                        "reason": f"Invalid location on update: {new_location.ewkt}",
+                    }
+                )
+                skipped_count += 1
+                continue
+
+            code = row.get(CSVHeadersV2.code, "")
+            device_type_id = self.code_to_device_type_id.get(code)
+            if device_type_id is None:
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
+                )
+                skipped_count += 1
+                continue
+
+            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+            new_mount_real_id = None
+            if mount_csv_id:
+                new_mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+                if new_mount_real_id is None:
+                    details.append(
+                        {
+                            "level": "warning",
+                            "source_id": source_id,
+                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
+                        }
+                    )
+
+            parent_csv_id = row.get(CSVHeadersV2.parent_sign_id, "")
+            new_parent_id, new_signpost_real_id = self._resolve_additional_sign_parent(
+                parent_csv_id, source_id, details
+            )
+
+            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
+            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+            new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
+            new_mount_type = mount_types_by_name.get(row.get(CSVHeadersV2.sign_mount_type, ""))
+            new_color = self._get_additional_sign_color(row.get(CSVHeadersV2.color))
+            new_direction = self._get_sign_direction(row.get(CSVHeadersV2.direction))
+            new_height = self._get_sign_height(row.get(CSVHeadersV2.height))
+            new_condition = self._get_sign_condition(row.get(CSVHeadersV2.condition))
+            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
+            new_source_name = "StreetScan2025"
+            internal_info = row.get("internal_additional_info")
+            new_additional_information = self._build_additional_information(txt, number_code_str, internal_info)
+
+            changed = (
+                self.force_update
+                or obj.source_name != new_source_name
+                or obj.location != new_location
+                or obj.device_type_id != device_type_id
+                or obj.parent_id != new_parent_id
+                or obj.signpost_real_id != new_signpost_real_id
+                or obj.mount_real_id != new_mount_real_id
+                or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
+                or obj.direction != new_direction
+                or obj.height != new_height
+                or obj.condition != new_condition
+                or obj.location_specifier != new_location_specifier
+                or obj.color != new_color
+                or obj.additional_information != new_additional_information
+                or obj.scanned_at != new_scanned_at
+                or obj.attachment_url != new_attachment_url
+            )
+            if not changed:
+                skipped_count += 1
+                continue
+
+            if not self.dry_run:
+                self._write_revert_record(
+                    {
+                        "action": "update",
+                        "object_type": "AdditionalSignReal",
+                        "db_id": str(obj.pk),
+                        "source_id": source_id,
+                        "old": {
+                            "source_name": obj.source_name,
+                            "location": obj.location.ewkt if obj.location else None,
+                            "device_type_id": obj.device_type_id,
+                            "parent_id": obj.parent_id,
+                            "signpost_real_id": obj.signpost_real_id,
+                            "mount_real_id": obj.mount_real_id,
+                            "direction": obj.direction,
+                            "height": str(obj.height) if obj.height is not None else None,
+                            "condition": obj.condition,
+                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                            "attachment_url": obj.attachment_url,
+                            "additional_information": obj.additional_information,
+                        },
+                    }
+                )
+
+            obj.source_name = new_source_name
+            obj.location = new_location
+            obj.device_type_id = device_type_id
+            obj.owner = default_owner
+            obj.parent_id = new_parent_id
+            obj.signpost_real_id = new_signpost_real_id
+            obj.mount_real_id = new_mount_real_id
+            obj.mount_type = new_mount_type
+            obj.direction = new_direction
+            obj.height = new_height
+            obj.condition = new_condition
+            obj.location_specifier = new_location_specifier
+            obj.color = new_color
+            obj.additional_information = new_additional_information
+            obj.scanned_at = new_scanned_at
+            obj.attachment_url = new_attachment_url
+            obj.updated_by = self.user
+            obj.updated_at = phase_started_at
+            batch.append(obj)
+
+            if len(batch) >= self.batch_size:
+                if not self.dry_run:
+                    AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                updated_count += len(batch)
+                batch = []
+
+        if batch:
+            if not self.dry_run:
+                AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+            updated_count += len(batch)
+
+        skipped_count += sum(1 for e in details[details_before:] if e.get("level") == "skip")
+        summary["additional_signs_updated"] += updated_count
+        logger.info(
+            "_update_additional_signs: updated=%d skipped=%d (of %d candidates)",
+            updated_count,
+            skipped_count,
+            len(update_source_ids),
+        )
+        self._record_phase_result(summary, "additional-signs", "update", updated=updated_count, skipped=skipped_count)
+        self._save_run_log(summary)
 
     def _deactivate_additional_signs(self, summary: dict[str, Any]) -> None:
-        """Deactivate AdditionalSignReal records marked as Removed in CSV.
+        """Deactivate AdditionalSignReal records whose CSV status is ``Removed``.
+
+        Sets ``lifecycle`` → ``Lifecycle.INACTIVE``,
+        ``validity_period_end`` → date from CSV ``scanned_at`` (``None`` if absent),
+        ``scanned_at`` → CSV timestamp, ``source_name`` → ``"StreetScan2025"``,
+        ``updated_by`` and ``updated_at``. No other fields are modified.
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict.
+            summary (dict[str, Any]): Mutable summary dict; the deactivated count
+                is recorded in summary["additional_signs_deactivated"] and phase
+                results are appended.
         """
-        candidates = len(
-            [
-                s
-                for s, row in self.additional_signs_by_id.items()
-                if s in self.additional_sign_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
-            ]
+        self._refresh_db_maps()
+        deactivate_source_ids = [
+            s
+            for s, row in self.additional_signs_by_id.items()
+            if s in self.additional_sign_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
+        ]
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault("additional_signs_deactivated", 0)
+        if not deactivate_source_ids:
+            self._record_phase_result(summary, "additional-signs", "deactivate", deactivated=0, skipped=0)
+            self._save_run_log(summary)
+            return
+
+        db_id_map: dict[str, int] = {s: self.additional_sign_source_id_to_db_id[s] for s in deactivate_source_ids}
+        existing: dict[int, Any] = {obj.pk: obj for obj in AdditionalSignReal.objects.filter(pk__in=db_id_map.values())}
+        update_fields = ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"]
+        batch: list[Any] = []
+        deactivated_count = 0
+
+        for source_id in deactivate_source_ids:
+            row = self.additional_signs_by_id[source_id]
+            obj = existing.get(db_id_map[source_id])
+            if obj is None:
+                continue
+
+            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+            validity_end = new_scanned_at.date() if new_scanned_at else None
+
+            if not self.dry_run:
+                self._write_revert_record(
+                    {
+                        "action": "deactivate",
+                        "object_type": "AdditionalSignReal",
+                        "db_id": str(obj.pk),
+                        "source_id": source_id,
+                        "before": {
+                            "lifecycle": obj.lifecycle,
+                            "validity_period_end": str(obj.validity_period_end) if obj.validity_period_end else None,
+                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                            "source_name": obj.source_name,
+                        },
+                    }
+                )
+
+            obj.lifecycle = Lifecycle.INACTIVE
+            obj.validity_period_end = validity_end
+            obj.scanned_at = new_scanned_at
+            obj.source_name = "StreetScan2025"
+            obj.updated_by = self.user
+            obj.updated_at = phase_started_at
+            batch.append(obj)
+
+            if len(batch) >= self.batch_size:
+                if not self.dry_run:
+                    AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                deactivated_count += len(batch)
+                batch = []
+
+        if batch:
+            if not self.dry_run:
+                AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+            deactivated_count += len(batch)
+
+        summary["additional_signs_deactivated"] += deactivated_count
+        logger.info(
+            "_deactivate_additional_signs: deactivated=%d (of %d candidates)",
+            deactivated_count,
+            len(deactivate_source_ids),
         )
-        logger.info("[TODO] _deactivate_additional_signs — %d Removed rows that exist in DB", candidates)
+        self._record_phase_result(summary, "additional-signs", "deactivate", deactivated=deactivated_count, skipped=0)
+        self._save_run_log(summary)
