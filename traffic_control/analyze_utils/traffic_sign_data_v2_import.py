@@ -147,6 +147,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         # --- Device type FK lookup ---
         self.code_to_device_type_id: dict = self._build_code_to_device_type_mapping()
 
+        # --- MountType lookup (by Finnish and English description) ---
+        self.mount_types_by_name: dict[str, MountType] = self._build_mount_types_by_name()
+
         # --- DB PK maps (source_id → db pk) ---
         # Used for update and deactivate FK resolution.
         self.mount_source_id_to_db_id: dict = self._build_mount_source_id_to_db_id()
@@ -288,6 +291,21 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         self.additional_sign_source_id_to_db_id = self._build_additional_sign_source_id_to_db_id()
         self.signpost_source_id_to_db_id = self._build_signpost_source_id_to_db_id()
 
+    @staticmethod
+    def _build_mount_types_by_name() -> dict[str, MountType]:
+        """Build a MountType lookup dict keyed by Finnish and English description.
+
+        Returns:
+            dict[str, MountType]: Mapping from description string to MountType instance.
+        """
+        result: dict[str, MountType] = {}
+        for mt in MountType.objects.all():
+            if mt.description_fi:
+                result[mt.description_fi] = mt
+            if mt.description:
+                result[mt.description] = mt
+        return result
+
     # ------------------------------------------------------------------
     # Mount handlers
     # ------------------------------------------------------------------
@@ -356,10 +374,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         Yields:
             MountReal: Unsaved MountReal instance ready for bulk_create.
         """
-        mount_types_by_name: dict[str, MountType] = {
-            **{mt.description_fi: mt for mt in MountType.objects.all()},
-            **{mt.description: mt for mt in MountType.objects.all()},
-        }
         default_owner = self._get_default_owner()
         details: list[dict] = summary.setdefault("details", [])
         processed: list[str] = summary.setdefault("processed_mount_source_ids", [])
@@ -388,7 +402,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             raw_location_specifier = row.get(CSVHeadersV2.location_specifier, "")
             location_specifier = MountLocationSpecifier(int(raw_location_specifier)) if raw_location_specifier else None
             mount_type_name = row.get(CSVHeadersV2.mount_type, "")
-            mount_type = mount_types_by_name.get(mount_type_name)
+            mount_type = self.mount_types_by_name.get(mount_type_name)
 
             processed.append(source_id)
             yield MountReal(
@@ -630,7 +644,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         update_source_ids: list[str],
         db_id_map: dict[str, int],
         existing: dict[int, MountReal],
-        mount_types_by_name: dict[str, MountType],
         summary: dict[str, Any],
         phase_started_at: datetime.datetime,
     ) -> Generator[MountReal, None, None]:
@@ -647,11 +660,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             db_id_map (dict[str, int]): Mapping from source_id to DB primary key.
             existing (dict[int, MountReal]): Currently persisted MountReal instances
                 keyed by DB primary key.
-            mount_types_by_name (dict[str, MountType]): MountType lookup by name.
             summary (dict[str, Any]): Mutable summary dict; skips are appended to
-                summary["details"] and summary["skipped_mount_update_count"] is
-                incremented.
-            phase_started_at (datetime.datetime): Timestamp of phase start, used as updated_at.
 
         Yields:
             MountReal: Mutated (unsaved) MountReal instance ready for bulk_update.
@@ -687,7 +696,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             new_location_specifier = MountLocationSpecifier(int(raw_ls)) if raw_ls else None
-            new_mount_type = mount_types_by_name.get(row.get(CSVHeadersV2.mount_type, ""))
+            new_mount_type = self.mount_types_by_name.get(row.get(CSVHeadersV2.mount_type, ""))
             new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at))
             new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
             new_source_name = "StreetScan2025"
@@ -758,10 +767,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         db_id_map: dict[str, int] = {s: self.mount_source_id_to_db_id[s] for s in update_source_ids}
         existing: dict[int, MountReal] = {obj.pk: obj for obj in MountReal.objects.filter(pk__in=db_id_map.values())}
-        mount_types_by_name: dict[str, MountType] = {
-            **{mt.description_fi: mt for mt in MountType.objects.all()},
-            **{mt.description: mt for mt in MountType.objects.all()},
-        }
 
         update_fields = [
             "source_name",
@@ -774,9 +779,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "updated_at",
         ]
         summary["_skipped_mount_update_count"] = [0]
-        generator = self._get_mounts_to_update(
-            update_source_ids, db_id_map, existing, mount_types_by_name, summary, phase_started_at
-        )
+        generator = self._get_mounts_to_update(update_source_ids, db_id_map, existing, summary, phase_started_at)
 
         # bulk_update does not accept a generator directly — unlike bulk_create which
         # handles generators natively with its batch_size parameter, bulk_update
@@ -991,10 +994,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         except Owner.DoesNotExist:
             private_owner = default_owner
 
-        mount_types_by_name: dict[str, MountType] = {
-            **{mt.description_fi: mt for mt in MountType.objects.all()},
-            **{mt.description: mt for mt in MountType.objects.all()},
-        }
         details: list[dict] = summary.setdefault("details", [])
         processed: list[str] = summary.setdefault("processed_sign_source_ids", [])
 
@@ -1054,7 +1053,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
             sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
-            mount_type = mount_types_by_name.get(sign_mount_type_name)
+            mount_type = self.mount_types_by_name.get(sign_mount_type_name)
 
             processed.append(source_id)
             yield TrafficSignReal(
@@ -1084,7 +1083,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         update_source_ids: list[str],
         db_id_map: dict[str, int],
         existing: dict[int, TrafficSignReal],
-        mount_types_by_name: dict[str, MountType],
         default_owner: Owner,
         private_owner: Owner,
         summary: dict[str, Any],
@@ -1103,7 +1101,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             db_id_map (dict[str, int]): Mapping from source_id to DB primary key.
             existing (dict[int, TrafficSignReal]): Currently persisted instances
                 keyed by DB primary key.
-            mount_types_by_name (dict[str, MountType]): MountType lookup by name.
             default_owner (Owner): City of Helsinki owner instance.
             private_owner (Owner): Private owner instance.
             summary (dict[str, Any]): Mutable summary dict; skips/warnings are
@@ -1181,7 +1178,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
             sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
-            new_mount_type = mount_types_by_name.get(sign_mount_type_name)
+            new_mount_type = self.mount_types_by_name.get(sign_mount_type_name)
             new_direction = self._get_sign_direction(row.get(CSVHeadersV2.direction))
             new_height = self._get_sign_height(row.get(CSVHeadersV2.height))
             new_condition = self._get_sign_condition(row.get(CSVHeadersV2.condition))
@@ -1286,10 +1283,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         existing: dict[int, TrafficSignReal] = {
             obj.pk: obj for obj in TrafficSignReal.objects.filter(pk__in=db_id_map.values())
         }
-        mount_types_by_name: dict[str, MountType] = {
-            **{mt.description_fi: mt for mt in MountType.objects.all()},
-            **{mt.description: mt for mt in MountType.objects.all()},
-        }
         default_owner = self._get_default_owner()
         try:
             private_owner = Owner.objects.get(name_fi="Yksityinen")
@@ -1321,7 +1314,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             update_source_ids,
             db_id_map,
             existing,
-            mount_types_by_name,
             default_owner,
             private_owner,
             summary,
@@ -1551,10 +1543,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         """
 
         default_owner = self._get_default_owner()
-        mount_types_by_name: dict[str, MountType] = {
-            **{mt.description_fi: mt for mt in MountType.objects.all()},
-            **{mt.description: mt for mt in MountType.objects.all()},
-        }
         details: list[dict] = summary.setdefault("details", [])
         processed: list[str] = summary.setdefault("processed_signpost_source_ids", [])
 
@@ -1614,7 +1602,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
             sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
-            mount_type = mount_types_by_name.get(sign_mount_type_name)
+            mount_type = self.mount_types_by_name.get(sign_mount_type_name)
             number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
             value = self._get_sign_value(number_code_str)
 
@@ -1691,10 +1679,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         db_id_map: dict[str, int] = {s: self.signpost_source_id_to_db_id[s] for s in update_source_ids}
         existing: dict[int, Any] = {obj.pk: obj for obj in SignpostReal.objects.filter(pk__in=db_id_map.values())}
-        mount_types_by_name: dict[str, MountType] = {
-            **{mt.description_fi: mt for mt in MountType.objects.all()},
-            **{mt.description: mt for mt in MountType.objects.all()},
-        }
         default_owner = self._get_default_owner()
         details: list[dict] = summary.setdefault("details", [])
         details_before = len(details)
@@ -1773,7 +1757,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
             sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
-            new_mount_type = mount_types_by_name.get(sign_mount_type_name)
+            new_mount_type = self.mount_types_by_name.get(sign_mount_type_name)
             number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
             new_value = self._get_sign_value(number_code_str)
             new_height = self._get_sign_height(row.get(CSVHeadersV2.height))
@@ -2056,10 +2040,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         details_before = len(details)
         processed: list[str] = summary.setdefault("processed_additional_sign_source_ids", [])
         default_owner = self._get_default_owner()
-        mount_types_by_name: dict[str, MountType] = {
-            **{mt.description_fi: mt for mt in MountType.objects.all()},
-            **{mt.description: mt for mt in MountType.objects.all()},
-        }
 
         existing_source_ids: set[str] = set(self.additional_sign_source_id_to_db_id.keys())
         objects_to_create: list[AdditionalSignReal] = []
@@ -2113,7 +2093,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
             sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
-            mount_type = mount_types_by_name.get(sign_mount_type_name)
+            mount_type = self.mount_types_by_name.get(sign_mount_type_name)
             internal_info = row.get("internal_additional_info")
             additional_information = self._build_additional_information(txt, number_code_str, internal_info)
 
@@ -2208,10 +2188,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         db_id_map: dict[str, int] = {s: self.additional_sign_source_id_to_db_id[s] for s in update_source_ids}
         existing: dict[int, Any] = {obj.pk: obj for obj in AdditionalSignReal.objects.filter(pk__in=db_id_map.values())}
-        mount_types_by_name: dict[str, MountType] = {
-            **{mt.description_fi: mt for mt in MountType.objects.all()},
-            **{mt.description: mt for mt in MountType.objects.all()},
-        }
         default_owner = self._get_default_owner()
         details: list[dict] = summary.setdefault("details", [])
         details_before = len(details)
@@ -2303,7 +2279,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
             raw_ls = row.get(CSVHeadersV2.location_specifier, "")
             new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
-            new_mount_type = mount_types_by_name.get(row.get(CSVHeadersV2.sign_mount_type, ""))
+            new_mount_type = self.mount_types_by_name.get(row.get(CSVHeadersV2.sign_mount_type, ""))
             new_color = self._get_additional_sign_color(row.get(CSVHeadersV2.color))
             new_direction = self._get_sign_direction(row.get(CSVHeadersV2.direction))
             new_height = self._get_sign_height(row.get(CSVHeadersV2.height))
