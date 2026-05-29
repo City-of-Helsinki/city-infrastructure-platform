@@ -6,6 +6,9 @@ requires-python = ">=3.11.15, <4"
 exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for backwards compatibility when using relative exclude-newer values.
 exclude-newer-span = "P7D"
 
+[options.exclude-newer-package]
+django-resilient-logger = { timestamp = "0001-01-01T00:00:00Z", span = "P2D" }
+
 [[package]]
 name = "asgiref"
 version = "3.8.1"
@@ -326,7 +329,7 @@ requires-dist = [
     { name = "django-helusers", specifier = "==1.1.0" },
     { name = "django-import-export", specifier = ">=3.2.0,<4" },
     { name = "django-mptt", specifier = ">=0.18.0,<0.19" },
-    { name = "django-resilient-logger", specifier = ">=2.1.0" },
+    { name = "django-resilient-logger", specifier = ">=2.3.0" },
     { name = "django-storages", extras = ["azure"], specifier = ">=1.13.2,<2" },
     { name = "djangorestframework", specifier = ">=3.15.2,<4" },
     { name = "djangorestframework-gis", specifier = ">=1.0.0,<2" },
@@ -787,15 +790,15 @@ wheels = [
 
 [[package]]
 name = "django-resilient-logger"
-version = "2.1.0"
+version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
     { name = "elasticsearch8" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e6/74/d55f16bb0364644fd1b0a427c84827d7e03099a90f1749dc6cb4be08f7b6/django_resilient_logger-2.1.0.tar.gz", hash = "sha256:765560f135c1e38c27bab829d5675d4d6840f8ca9db05c4ab947472d74d6a88d", size = 22427, upload-time = "2026-02-18T09:10:09.013Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/80/72/23015ce1edbf1c409f14c5fda5e59d60287c23bf0c9645ead832afeb3c81/django_resilient_logger-2.3.0.tar.gz", hash = "sha256:4ed7790574964971c0d6300a1dca81f9ec16e5566340047788fb022fc588b13c", size = 24260, upload-time = "2026-05-27T07:24:01.745Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3e/3b/62b267e17f7c0b31bc05495851d8c947648cab8368b5c16c8cf2d808f873/django_resilient_logger-2.1.0-py2.py3-none-any.whl", hash = "sha256:c9a76aa2f1056117ba6a44f62e2c6836144da76a3d6322ac4af109fbb50d12c1", size = 22131, upload-time = "2026-02-18T09:10:07.857Z" },
+    { url = "https://files.pythonhosted.org/packages/85/37/a7984d971692f759c0f46dd2078d1e1f464814b6d79c691f18d72753d0e8/django_resilient_logger-2.3.0-py2.py3-none-any.whl", hash = "sha256:542d2a83f4e8ecc92555bcac1e5d9a10d257e5ba99338e4553e16fe167c6f91e", size = 23692, upload-time = "2026-05-27T07:24:00.109Z" },
 ]
 
 [[package]]
