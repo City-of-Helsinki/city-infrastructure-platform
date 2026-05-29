@@ -8,6 +8,8 @@ from django.test import override_settings
 from helusers.models import ADGroup
 from resilient_logger.resilient_logger import ResilientLogger
 from resilient_logger.sources import AbstractLogSource, DjangoAuditLogSource
+from resilient_logger.sources.abstract_log_source_entry import AbstractLogSourceEntry
+from resilient_logger.sources.django_audit_log_source_entry import DjangoAuditLogSourceEntry
 from resilient_logger.utils import get_resilient_logger_config
 
 from traffic_control.models import AdditionalSignPlan
@@ -84,7 +86,7 @@ def clear_config_cache():
 # Utility checks
 
 
-def user_pii_leaks(user: User | UserFactory, logentry: AbstractLogSource):
+def user_pii_leaks(user: User | UserFactory, logentry: AbstractLogSourceEntry):
     """
     Checks for user PII leaks in a LogEntry object
     """
@@ -114,7 +116,7 @@ def value_referenced(value: Any, logentry: AbstractLogSource):
 @pytest.mark.django_db
 def test__user_created_resilient_logger_does_not_leak_user_pii(user):
     auditlog_entry = LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.CREATE).last()
-    resilient_log_entry = DjangoAuditLogSource(auditlog_entry)
+    resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
     assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry does not store user PII"
     assert value_referenced(user.pk, resilient_log_entry), "resilient log entry references user PK"
 
@@ -127,7 +129,7 @@ def test__user_updated_resilient_logger_does_not_leak_user_pii(user):
     user.username = "xavier_example"
     user.save()
     auditlog_entry = LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).last()
-    resilient_log_entry = DjangoAuditLogSource(auditlog_entry)
+    resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
     assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry does not store user PII"
     assert value_referenced(user.pk, resilient_log_entry), "resilient log entry references user PK"
 
@@ -136,7 +138,7 @@ def test__user_updated_resilient_logger_does_not_leak_user_pii(user):
 def test__user_deleted_resilient_logger_does_not_leak_user_pii(user):
     user.delete()
     auditlog_entry = LogEntry.objects.get_for_model(User).filter(action=LogEntry.Action.DELETE).last()
-    resilient_log_entry = DjangoAuditLogSource(auditlog_entry)
+    resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
     assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry does not store user PII"
     assert value_referenced(user.pk, resilient_log_entry), "resilient log entry references user PK"
 
@@ -147,7 +149,7 @@ def test__user_deleted_resilient_logger_does_not_leak_user_pii(user):
 @pytest.mark.django_db
 def test__object_created_resilient_logger_does_not_leak_actor_pii(actor, additional_sign_plan):
     auditlog_entry = LogEntry.objects.get_for_object(additional_sign_plan).filter(action=LogEntry.Action.CREATE).last()
-    resilient_log_entry = DjangoAuditLogSource(auditlog_entry)
+    resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
     assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry does not store actor PII"
     assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry references actor PK"
 
@@ -158,7 +160,7 @@ def test__object_updated_resilient_logger_does_not_leak_actor_pii(actor, user, a
         additional_sign_plan.updated_by = user
         additional_sign_plan.save()
     auditlog_entry = LogEntry.objects.get_for_object(additional_sign_plan).filter(action=LogEntry.Action.UPDATE).last()
-    resilient_log_entry = DjangoAuditLogSource(auditlog_entry)
+    resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
     assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry does not store actor PII"
     assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry references actor PK"
     assert user_pii_leaks(user, resilient_log_entry) == [], "resilient log entry does not store user PII"
@@ -170,7 +172,7 @@ def test__object_deleted_resilient_logger_does_not_leak_actor_pii(actor, additio
     with set_actor(actor):
         additional_sign_plan.delete()
     auditlog_entry = LogEntry.objects.get_for_model(AdditionalSignPlan).filter(action=LogEntry.Action.DELETE).last()
-    resilient_log_entry = DjangoAuditLogSource(auditlog_entry)
+    resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
     assert user_pii_leaks(actor, resilient_log_entry) == [], "resilient log entry does not store actor PII"
     assert value_referenced(actor.pk, resilient_log_entry), "resilient log entry references actor PK"
 
@@ -196,7 +198,7 @@ def test__m2m_relations_do_not_leak_user_pii(actor, user, get_related_obj, actor
     getattr(actor, actor_relation).add(related_obj)
     actor.save()
     auditlog_entry = LogEntry.objects.get_for_object(actor).filter(action=LogEntry.Action.UPDATE).last()
-    resilient_log_entry = DjangoAuditLogSource(auditlog_entry)
+    resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
     assert user_pii_leaks(actor, resilient_log_entry) == [], "log entry does not store actor PII"
     assert value_referenced(actor.pk, resilient_log_entry), "log entry references actor PK"
     assert value_referenced(related_obj, resilient_log_entry), "log entry references related object"
@@ -204,7 +206,7 @@ def test__m2m_relations_do_not_leak_user_pii(actor, user, get_related_obj, actor
     getattr(related_obj, related_relation).add(user)
     related_obj.save()
     auditlog_entry = LogEntry.objects.get_for_object(related_obj).filter(action=LogEntry.Action.UPDATE).last()
-    resilient_log_entry = DjangoAuditLogSource(auditlog_entry)
+    resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
     assert user_pii_leaks(user, resilient_log_entry) == [], "log entry does not store user PII"
     assert value_referenced(user.pk, resilient_log_entry), "log entry references user PK"
     assert value_referenced(related_obj, resilient_log_entry), "log entry references related object"
