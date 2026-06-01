@@ -1719,34 +1719,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped_count += 1
                 continue
 
-            new_location, device_type_id, new_mount_real_id, new_mount_type = (
-                fields["location"],
-                fields["device_type_id"],
-                fields["mount_real_id"],
-                fields["mount_type"],
-            )
-            new_location_specifier = fields["location_specifier"]
-            new_value, new_height, new_direction = fields["value"], fields["height"], fields["direction"]
-            new_condition, new_scanned_at = fields["condition"], fields["scanned_at"]
-            new_attachment_url, new_txt = fields["attachment_url"], fields["txt"]
-            new_source_name = "StreetScan2025"
-
-            if not self._signpost_fields_changed(
-                obj,
-                new_source_name,
-                new_location,
-                device_type_id,
-                new_mount_real_id,
-                new_mount_type,
-                new_direction,
-                new_height,
-                new_condition,
-                new_location_specifier,
-                new_value,
-                new_txt,
-                new_scanned_at,
-                new_attachment_url,
-            ):
+            if not self._signpost_fields_changed(obj, fields):
                 skipped_count += 1
                 continue
 
@@ -1771,20 +1744,20 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     }
                 )
 
-            obj.source_name = new_source_name
-            obj.location = new_location
-            obj.device_type_id = device_type_id
+            obj.source_name = "StreetScan2025"
+            obj.location = fields["location"]
+            obj.device_type_id = fields["device_type_id"]
             obj.owner = self.default_owner
-            obj.mount_real_id = new_mount_real_id
-            obj.mount_type = new_mount_type
-            obj.direction = new_direction
-            obj.height = new_height
-            obj.condition = new_condition
-            obj.location_specifier = new_location_specifier
-            obj.value = new_value
-            obj.txt = new_txt
-            obj.scanned_at = new_scanned_at
-            obj.attachment_url = new_attachment_url
+            obj.mount_real_id = fields["mount_real_id"]
+            obj.mount_type = fields["mount_type"]
+            obj.direction = fields["direction"]
+            obj.height = fields["height"]
+            obj.condition = fields["condition"]
+            obj.location_specifier = fields["location_specifier"]
+            obj.value = fields["value"]
+            obj.txt = fields["txt"]
+            obj.scanned_at = fields["scanned_at"]
+            obj.attachment_url = fields["attachment_url"]
             obj.updated_by = self.user
             obj.updated_at = phase_started_at
             batch.append(obj)
@@ -1880,60 +1853,41 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "txt": row.get(CSVHeadersV2.txt, "") or None,
         }
 
-    def _signpost_fields_changed(  # noqa: PLR0913
+    def _signpost_fields_changed(
         self,
         obj: Any,
-        new_source_name: str,
-        new_location: Any,
-        device_type_id: int,
-        new_mount_real_id: int | None,
-        new_mount_type: Any,
-        new_direction: int | None,
-        new_height: int | None,
-        new_condition: Any,
-        new_location_specifier: Any,
-        new_value: Decimal | None,
-        new_txt: str | None,
-        new_scanned_at: Any,
-        new_attachment_url: str,
+        fields: dict[str, Any],
     ) -> bool:
         """Return True if any signpost field differs from the stored DB values.
 
         Args:
             obj (Any): Existing SignpostReal DB instance.
-            new_source_name (str): New source_name value.
-            new_location (Any): New geometry point.
-            device_type_id (int): New device type PK.
-            new_mount_real_id (int | None): New mount FK.
-            new_mount_type (Any): New MountType instance or None.
-            new_direction (int | None): New direction value.
-            new_height (int | None): New height value in cm.
-            new_condition (Any): New condition enum value.
-            new_location_specifier (Any): New location specifier enum value.
-            new_value (Decimal | None): New sign value.
-            new_txt (str | None): New text value.
-            new_scanned_at (Any): New scanned_at datetime.
-            new_attachment_url (str): New attachment URL.
+            fields (dict[str, Any]): Dictionary containing new field values returned
+                by _resolve_signpost_update_fields.
 
         Returns:
             bool: True if any field has changed or force_update is set.
         """
         if self.force_update:
             return True
+
+        new_source_name = "StreetScan2025"
+        new_mount_type = fields["mount_type"]
+
         return (
             obj.source_name != new_source_name
-            or obj.location != new_location
-            or obj.device_type_id != device_type_id
-            or obj.mount_real_id != new_mount_real_id
+            or obj.location != fields["location"]
+            or obj.device_type_id != fields["device_type_id"]
+            or obj.mount_real_id != fields["mount_real_id"]
             or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
-            or obj.direction != new_direction
-            or obj.height != new_height
-            or obj.condition != new_condition
-            or obj.location_specifier != new_location_specifier
-            or obj.value != new_value
-            or obj.txt != new_txt
-            or obj.scanned_at != new_scanned_at
-            or obj.attachment_url != new_attachment_url
+            or obj.direction != fields["direction"]
+            or obj.height != fields["height"]
+            or obj.condition != fields["condition"]
+            or obj.location_specifier != fields["location_specifier"]
+            or obj.value != fields["value"]
+            or obj.txt != fields["txt"]
+            or obj.scanned_at != fields["scanned_at"]
+            or obj.attachment_url != fields["attachment_url"]
         )
 
     def _deactivate_signposts(self, summary: dict[str, Any]) -> None:
