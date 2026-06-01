@@ -1,13 +1,11 @@
 """Tests for TrafficSignImporterV2._create_mounts and _get_mounts."""
-from __future__ import annotations
-
 import csv
 from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 
-from traffic_control.analyze_utils.traffic_sign_data_v2_import import TrafficSignImporterV2
+from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME, TrafficSignImporterV2
 from traffic_control.models import MountReal
 from traffic_control.tests.factories import MountRealFactory, MountTypeFactory, OwnerFactory
 
@@ -227,7 +225,7 @@ def test_create_mounts_inserts_new_records(tmp_path: Path, default_owner, mount_
     summary: dict = {"details": []}
     importer._create_mounts(summary)
 
-    assert MountReal.objects.filter(source_id__in=["M1", "M2"], source_name="StreetScan2025").count() == 2
+    assert MountReal.objects.filter(source_id__in=["M1", "M2"], source_name=SOURCE_NAME).count() == 2
 
 
 @pytest.mark.django_db
@@ -244,7 +242,7 @@ def test_create_mounts_sets_source_name(tmp_path: Path, default_owner, mount_typ
     importer._create_mounts(summary)
 
     mount = MountReal.objects.get(source_id="M10")
-    assert mount.source_name == "StreetScan2025"
+    assert mount.source_name == SOURCE_NAME
 
 
 @pytest.mark.django_db
@@ -296,7 +294,7 @@ def test_create_mounts_skips_existing_source_ids(tmp_path: Path, default_owner, 
         default_owner: Owner fixture.
         mount_type: MountType fixture.
     """
-    MountRealFactory(source_id="EXISTING", source_name="StreetScan2025", owner=default_owner)
+    MountRealFactory(source_id="EXISTING", source_name=SOURCE_NAME, owner=default_owner)
 
     importer = _make_importer(tmp_path, [_mount_row("EXISTING"), _mount_row("NEW")])
     summary: dict = {"details": []}
@@ -315,7 +313,7 @@ def test_create_mounts_count_reflects_only_new_records(tmp_path: Path, default_o
         default_owner: Owner fixture.
         mount_type: MountType fixture.
     """
-    MountRealFactory(source_id="OLD", source_name="StreetScan2025", owner=default_owner)
+    MountRealFactory(source_id="OLD", source_name=SOURCE_NAME, owner=default_owner)
 
     importer = _make_importer(tmp_path, [_mount_row("OLD"), _mount_row("NEW1"), _mount_row("NEW2")])
     summary: dict = {"details": []}

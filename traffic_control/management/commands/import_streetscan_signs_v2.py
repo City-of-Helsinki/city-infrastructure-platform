@@ -1,6 +1,4 @@
 """Management command to import V2 traffic sign CSV data into the database."""
-from __future__ import annotations
-
 import logging
 import os
 from typing import Any

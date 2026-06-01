@@ -1,6 +1,4 @@
 """Tests for TrafficSignImporterV2 traffic sign phases: create, update, deactivate."""
-from __future__ import annotations
-
 import csv
 import datetime
 from pathlib import Path
@@ -8,7 +6,7 @@ from pathlib import Path
 import pytest
 from django.contrib.gis.geos import Point
 
-from traffic_control.analyze_utils.traffic_sign_data_v2_import import TrafficSignImporterV2
+from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME, TrafficSignImporterV2
 from traffic_control.enums import Lifecycle
 from traffic_control.models import TrafficSignReal
 from traffic_control.tests.factories import (
@@ -240,7 +238,7 @@ def test_create_signs_inserts_new_records(tmp_path: Path, default_owner, device_
     summary: dict = {"details": []}
     importer._create_signs(summary)
 
-    assert TrafficSignReal.objects.filter(source_id__in=["S1", "S2"], source_name="StreetScan2025").count() == 2
+    assert TrafficSignReal.objects.filter(source_id__in=["S1", "S2"], source_name=SOURCE_NAME).count() == 2
 
 
 @pytest.mark.django_db
@@ -361,7 +359,7 @@ def test_create_signs_skips_already_existing_source_ids(tmp_path: Path, default_
     """
     TrafficSignRealFactory(
         source_id="EXIST",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
     )
@@ -465,7 +463,7 @@ def test_update_signs_updates_existing_record(tmp_path: Path, default_owner, dev
     """
     TrafficSignRealFactory(
         source_id="U1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -493,7 +491,7 @@ def test_update_signs_sets_updated_at(tmp_path: Path, default_owner, device_type
     """
     TrafficSignRealFactory(
         source_id="UA1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -519,7 +517,7 @@ def test_update_signs_skips_unchanged_record(tmp_path: Path, default_owner, devi
     """
     TrafficSignRealFactory(
         source_id="UNC",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -557,7 +555,7 @@ def test_update_signs_force_update_bypasses_comparison(tmp_path: Path, default_o
     """
     TrafficSignRealFactory(
         source_id="FU1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -591,7 +589,7 @@ def test_update_signs_skips_invalid_coordinates(tmp_path: Path, default_owner, d
     """
     TrafficSignRealFactory(
         source_id="BDU",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -618,7 +616,7 @@ def test_update_signs_skips_unknown_device_type_code(tmp_path: Path, default_own
     """
     TrafficSignRealFactory(
         source_id="UKC",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -662,7 +660,7 @@ def test_update_signs_dry_run_does_not_write(tmp_path: Path, default_owner, devi
     """
     TrafficSignRealFactory(
         source_id="DRYU",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -690,7 +688,7 @@ def test_update_signs_phase_result_recorded(tmp_path: Path, default_owner, devic
     """
     TrafficSignRealFactory(
         source_id="PH2",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -723,7 +721,7 @@ def test_deactivate_signs_sets_lifecycle_inactive(tmp_path: Path, default_owner,
     """
     TrafficSignRealFactory(
         source_id="DEA1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -749,7 +747,7 @@ def test_deactivate_signs_sets_validity_period_end(tmp_path: Path, default_owner
     """
     TrafficSignRealFactory(
         source_id="DEA2",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -775,7 +773,7 @@ def test_deactivate_signs_sets_updated_at(tmp_path: Path, default_owner, device_
     """
     TrafficSignRealFactory(
         source_id="DEA3",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -814,7 +812,7 @@ def test_deactivate_signs_updates_source_name(tmp_path: Path, default_owner, dev
     importer._deactivate_signs(summary)
 
     sign = TrafficSignReal.objects.get(source_id="DEA4")
-    assert sign.source_name == "StreetScan2025"
+    assert sign.source_name == SOURCE_NAME
 
 
 @pytest.mark.django_db
@@ -829,7 +827,7 @@ def test_deactivate_signs_skips_non_removed_rows(tmp_path: Path, default_owner, 
     """
     TrafficSignRealFactory(
         source_id="NRM1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -873,7 +871,7 @@ def test_deactivate_signs_dry_run_does_not_write(tmp_path: Path, default_owner, 
     """
     TrafficSignRealFactory(
         source_id="DRYD",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -900,7 +898,7 @@ def test_deactivate_signs_phase_result_recorded(tmp_path: Path, default_owner, d
     """
     TrafficSignRealFactory(
         source_id="PH3",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),

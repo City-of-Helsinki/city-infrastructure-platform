@@ -1,12 +1,12 @@
 """End-to-end tests for the import_streetscan_signs_v2 management command."""
-from __future__ import annotations
-
 import csv
 from io import StringIO
 from pathlib import Path
 
 import pytest
 from django.core.management import call_command
+
+from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -191,8 +191,8 @@ def test_dry_run_writes_no_db_records(tmp_path: Path) -> None:
     mount_file, sign_file = _make_csv_files(tmp_path)
     _call(mount_file, sign_file, dry_run=True)
 
-    assert MountReal.objects.filter(source_name="StreetScan2025").count() == 0
-    assert TrafficSignReal.objects.filter(source_name="StreetScan2025").count() == 0
+    assert MountReal.objects.filter(source_name=SOURCE_NAME).count() == 0
+    assert TrafficSignReal.objects.filter(source_name=SOURCE_NAME).count() == 0
 
 
 @pytest.mark.django_db

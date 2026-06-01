@@ -38,6 +38,9 @@ logger = logging.getLogger(__name__)
 VALID_OBJECT_TYPES: tuple[str, ...] = ("mounts", "signs", "signposts", "additional-signs")
 VALID_PHASES: tuple[str, ...] = ("create", "update", "deactivate")
 
+# Source name for all imported records.
+SOURCE_NAME: str = "StreetScan2025"
+
 # Dependency order — object types must be processed in this sequence.
 OBJECT_TYPE_ORDER: tuple[str, ...] = ("mounts", "signs", "signposts", "additional-signs")
 # Phase order
@@ -411,7 +414,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             processed.append(source_id)
             yield MountReal(
                 source_id=source_id,
-                source_name="StreetScan2025",
+                source_name=SOURCE_NAME,
                 location=location,
                 owner=self.default_owner,
                 installation_status=InstallationStatus.IN_USE,
@@ -693,7 +696,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             new_mount_type = self.mount_types_by_name.get(row.get(CSVHeadersV2.mount_type, ""))
             new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at))
             new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
-            new_source_name = "StreetScan2025"
+            new_source_name = SOURCE_NAME
 
             # When force_update is True the field comparison is bypassed entirely.
             changed = (
@@ -1064,7 +1067,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             processed.append(source_id)
             yield TrafficSignReal(
                 source_id=source_id,
-                source_name="StreetScan2025",
+                source_name=SOURCE_NAME,
                 location=location,
                 device_type_id=device_type_id,
                 owner=owner,
@@ -1189,7 +1192,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             new_txt = row.get(CSVHeadersV2.txt, "") or None
             new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
             new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
-            new_source_name = "StreetScan2025"
+            new_source_name = SOURCE_NAME
 
             # When force_update is True the field comparison is bypassed entirely.
             changed = (
@@ -1361,7 +1364,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         ``lifecycle`` → ``Lifecycle.INACTIVE``,
         ``validity_period_end`` → date portion of the CSV ``scanned_at`` timestamp
         (falls back to today if the field is absent or unparseable),
-        ``scanned_at`` → CSV timestamp, ``source_name`` → ``"StreetScan2025"``,
+        ``scanned_at`` → CSV timestamp, ``source_name`` → ``SOURCE_NAME``,
         ``updated_by`` → the configured user, ``updated_at`` → phase start time.
         No other fields are modified.
 
@@ -1417,7 +1420,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             obj.lifecycle = Lifecycle.INACTIVE
             obj.validity_period_end = validity_end
             obj.scanned_at = new_scanned_at
-            obj.source_name = "StreetScan2025"
+            obj.source_name = SOURCE_NAME
             obj.updated_by = self.user
             obj.updated_at = phase_started_at
             batch.append(obj)
@@ -1614,7 +1617,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             objects_to_create.append(
                 SignpostReal(
                     source_id=source_id,
-                    source_name="StreetScan2025",
+                    source_name=SOURCE_NAME,
                     location=location,
                     device_type_id=device_type_id,
                     owner=self.default_owner,
@@ -1744,7 +1747,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     }
                 )
 
-            obj.source_name = "StreetScan2025"
+            obj.source_name = SOURCE_NAME
             obj.location = fields["location"]
             obj.device_type_id = fields["device_type_id"]
             obj.owner = self.default_owner
@@ -1871,7 +1874,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         if self.force_update:
             return True
 
-        new_source_name = "StreetScan2025"
+        new_source_name = SOURCE_NAME
         new_mount_type = fields["mount_type"]
 
         return (
@@ -1897,7 +1900,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         ``validity_period_end`` to the date portion of the CSV ``scanned_at``
         timestamp (falls back to today if absent or unparseable),
         ``scanned_at`` to the CSV timestamp, ``source_name`` to
-        ``"StreetScan2025"``, and also updates ``updated_by`` and ``updated_at``.
+        ``SOURCE_NAME``, and also updates ``updated_by`` and ``updated_at``.
         No other fields are modified.
 
         Args:
@@ -1952,7 +1955,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             obj.lifecycle = Lifecycle.INACTIVE
             obj.validity_period_end = validity_end
             obj.scanned_at = new_scanned_at
-            obj.source_name = "StreetScan2025"
+            obj.source_name = SOURCE_NAME
             obj.updated_by = self.user
             obj.updated_at = phase_started_at
             batch.append(obj)
@@ -2141,7 +2144,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             objects_to_create.append(
                 AdditionalSignReal(
                     source_id=source_id,
-                    source_name="StreetScan2025",
+                    source_name=SOURCE_NAME,
                     location=location,
                     device_type_id=device_type_id,
                     owner=self.default_owner,
@@ -2325,7 +2328,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             new_condition = self._get_sign_condition(row.get(CSVHeadersV2.condition))
             new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
             new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
-            new_source_name = "StreetScan2025"
+            new_source_name = SOURCE_NAME
             internal_info = row.get("internal_additional_info")
             new_additional_information = self._build_additional_information(txt, number_code_str, internal_info)
 
@@ -2422,7 +2425,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         Sets ``lifecycle`` → ``Lifecycle.INACTIVE``,
         ``validity_period_end`` → date from CSV ``scanned_at`` (``None`` if absent),
-        ``scanned_at`` → CSV timestamp, ``source_name`` → ``"StreetScan2025"``,
+        ``scanned_at`` → CSV timestamp, ``source_name`` → ``SOURCE_NAME``,
         ``updated_by`` and ``updated_at``. No other fields are modified.
 
         Args:
@@ -2476,7 +2479,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             obj.lifecycle = Lifecycle.INACTIVE
             obj.validity_period_end = validity_end
             obj.scanned_at = new_scanned_at
-            obj.source_name = "StreetScan2025"
+            obj.source_name = SOURCE_NAME
             obj.updated_by = self.user
             obj.updated_at = phase_started_at
             batch.append(obj)

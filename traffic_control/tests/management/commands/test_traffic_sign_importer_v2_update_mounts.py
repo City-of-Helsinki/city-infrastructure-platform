@@ -1,13 +1,11 @@
 """Tests for TrafficSignImporterV2._update_mounts and _get_mounts_to_update."""
-from __future__ import annotations
-
 import csv
 from pathlib import Path
 
 import pytest
 from django.contrib.gis.geos import Point
 
-from traffic_control.analyze_utils.traffic_sign_data_v2_import import TrafficSignImporterV2
+from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME, TrafficSignImporterV2
 from traffic_control.models import MountReal
 from traffic_control.tests.factories import MountRealFactory, MountTypeFactory, OwnerFactory
 
@@ -192,7 +190,7 @@ def test_update_mounts_updates_existing_record(tmp_path: Path, default_owner, mo
     importer._update_mounts(summary)
 
     existing.refresh_from_db()
-    assert existing.source_name == "StreetScan2025"
+    assert existing.source_name == SOURCE_NAME
     assert summary["mounts_updated"] == 1
 
 
@@ -236,7 +234,7 @@ def test_update_mounts_skips_unchanged_record(tmp_path: Path, default_owner, mou
     """
     MountRealFactory(
         source_id="UNCHANGED",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
         mount_type=None,
@@ -269,7 +267,7 @@ def test_update_mounts_force_update_bypasses_comparison(tmp_path: Path, default_
     """
     MountRealFactory(
         source_id="FORCE",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
         mount_type=None,
@@ -300,7 +298,7 @@ def test_update_mounts_skips_invalid_coordinates(tmp_path: Path, default_owner, 
     """
     MountRealFactory(
         source_id="BAD_UPD",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
     )
@@ -325,7 +323,7 @@ def test_update_mounts_skips_zero_coordinates(tmp_path: Path, default_owner, mou
     """
     MountRealFactory(
         source_id="ZERO_UPD",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
     )
@@ -457,7 +455,7 @@ def test_update_mounts_updates_attachment_url(tmp_path: Path, default_owner, mou
     """
     MountRealFactory(
         source_id="URL1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
         attachment_url="",

@@ -1,6 +1,4 @@
 """Tests for TrafficSignImporterV2 signpost phases: create, update, deactivate."""
-from __future__ import annotations
-
 import csv
 import datetime
 from pathlib import Path
@@ -8,7 +6,7 @@ from pathlib import Path
 import pytest
 from django.contrib.gis.geos import Point
 
-from traffic_control.analyze_utils.traffic_sign_data_v2_import import TrafficSignImporterV2
+from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME, TrafficSignImporterV2
 from traffic_control.enums import Lifecycle
 from traffic_control.models import SignpostReal
 from traffic_control.tests.factories import (
@@ -241,7 +239,7 @@ def test_create_signposts_inserts_new_records(tmp_path: Path, default_owner, dev
     summary: dict = {"details": []}
     importer._create_signposts(summary)
 
-    assert SignpostReal.objects.filter(source_id__in=["SP1", "SP2"], source_name="StreetScan2025").count() == 2
+    assert SignpostReal.objects.filter(source_id__in=["SP1", "SP2"], source_name=SOURCE_NAME).count() == 2
 
 
 @pytest.mark.django_db
@@ -346,7 +344,7 @@ def test_create_signposts_skips_already_existing_source_ids(
     """
     SignpostRealFactory(
         source_id="SPEXIST",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
     )
@@ -417,7 +415,7 @@ def test_create_signposts_child_links_to_parent_already_in_db(
     """
     existing_parent = SignpostRealFactory(
         source_id="SPPARENT_DB",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
     )
@@ -618,7 +616,7 @@ def test_update_signposts_updates_existing_record(tmp_path: Path, default_owner,
     """
     SignpostRealFactory(
         source_id="SPU1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -645,7 +643,7 @@ def test_update_signposts_sets_updated_at(tmp_path: Path, default_owner, device_
     """
     SignpostRealFactory(
         source_id="SPUA",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -671,7 +669,7 @@ def test_update_signposts_skips_unchanged_record(tmp_path: Path, default_owner, 
     """
     SignpostRealFactory(
         source_id="SPUNC",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -710,7 +708,7 @@ def test_update_signposts_force_update_bypasses_comparison(
     """
     SignpostRealFactory(
         source_id="SPFU",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -745,7 +743,7 @@ def test_update_signposts_skips_removed_rows(tmp_path: Path, default_owner, devi
     """
     SignpostRealFactory(
         source_id="SPURM",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -770,7 +768,7 @@ def test_update_signposts_skips_invalid_coordinates(tmp_path: Path, default_owne
     """
     SignpostRealFactory(
         source_id="SPBDU",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -799,7 +797,7 @@ def test_update_signposts_skips_unknown_device_type_code(
     """
     SignpostRealFactory(
         source_id="SPUKC",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -843,7 +841,7 @@ def test_update_signposts_dry_run_does_not_write(tmp_path: Path, default_owner, 
     """
     SignpostRealFactory(
         source_id="SPDRYU",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -870,7 +868,7 @@ def test_update_signposts_phase_result_recorded(tmp_path: Path, default_owner, d
     """
     SignpostRealFactory(
         source_id="SPPH2",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -903,7 +901,7 @@ def test_deactivate_signposts_sets_lifecycle_inactive(tmp_path: Path, default_ow
     """
     SignpostRealFactory(
         source_id="SPDEA1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -929,7 +927,7 @@ def test_deactivate_signposts_sets_validity_period_end(tmp_path: Path, default_o
     """
     SignpostRealFactory(
         source_id="SPDEA2",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -955,7 +953,7 @@ def test_deactivate_signposts_sets_updated_at(tmp_path: Path, default_owner, dev
     """
     SignpostRealFactory(
         source_id="SPDEA3",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -971,7 +969,7 @@ def test_deactivate_signposts_sets_updated_at(tmp_path: Path, default_owner, dev
 
 @pytest.mark.django_db
 def test_deactivate_signposts_stamps_source_name(tmp_path: Path, default_owner, device_type, mount_type) -> None:
-    """Deactivation sets source_name to StreetScan2025.
+    """Deactivation sets source_name to SOURCE_NAME.
 
     Args:
         tmp_path (Path): Pytest tmp_path fixture.
@@ -992,7 +990,7 @@ def test_deactivate_signposts_stamps_source_name(tmp_path: Path, default_owner, 
     importer._deactivate_signposts(summary)
 
     sp = SignpostReal.objects.get(source_id="SPDEA4")
-    assert sp.source_name == "StreetScan2025"
+    assert sp.source_name == SOURCE_NAME
 
 
 @pytest.mark.django_db
@@ -1007,7 +1005,7 @@ def test_deactivate_signposts_skips_non_removed_rows(tmp_path: Path, default_own
     """
     SignpostRealFactory(
         source_id="SPNRM",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -1051,7 +1049,7 @@ def test_deactivate_signposts_dry_run_does_not_write(tmp_path: Path, default_own
     """
     SignpostRealFactory(
         source_id="SPDRYD",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -1078,7 +1076,7 @@ def test_deactivate_signposts_phase_result_recorded(tmp_path: Path, default_owne
     """
     SignpostRealFactory(
         source_id="SPPH3",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),

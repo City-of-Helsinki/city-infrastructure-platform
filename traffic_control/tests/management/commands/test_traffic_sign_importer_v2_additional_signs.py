@@ -1,6 +1,4 @@
 """Tests for TrafficSignImporterV2 additional sign phases: create, update, deactivate."""
-from __future__ import annotations
-
 import csv
 import datetime
 from pathlib import Path
@@ -8,7 +6,7 @@ from pathlib import Path
 import pytest
 from django.contrib.gis.geos import Point
 
-from traffic_control.analyze_utils.traffic_sign_data_v2_import import TrafficSignImporterV2
+from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME, TrafficSignImporterV2
 from traffic_control.enums import Lifecycle
 from traffic_control.models import AdditionalSignReal
 from traffic_control.tests.factories import (
@@ -244,7 +242,7 @@ def test_create_additional_signs_inserts_new_records(tmp_path: Path, default_own
     summary: dict = {"details": []}
     importer._create_additional_signs(summary)
 
-    assert AdditionalSignReal.objects.filter(source_id__in=["AS1", "AS2"], source_name="StreetScan2025").count() == 2
+    assert AdditionalSignReal.objects.filter(source_id__in=["AS1", "AS2"], source_name=SOURCE_NAME).count() == 2
 
 
 @pytest.mark.django_db
@@ -390,7 +388,7 @@ def test_create_additional_signs_skips_already_existing(tmp_path: Path, default_
     """
     AdditionalSignRealFactory(
         source_id="ASEXIST",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         parent=None,
@@ -439,7 +437,7 @@ def test_create_additional_signs_parent_resolved_to_traffic_sign(
     """
     ts = TrafficSignRealFactory(
         source_id="TS_PARENT",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
     )
@@ -467,7 +465,7 @@ def test_create_additional_signs_parent_resolved_to_signpost(
     """
     sp = SignpostRealFactory(
         source_id="SP_PARENT",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
     )
@@ -560,7 +558,7 @@ def test_update_additional_signs_updates_existing_record(
     """
     AdditionalSignRealFactory(
         source_id="ASU1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -588,7 +586,7 @@ def test_update_additional_signs_sets_updated_at(tmp_path: Path, default_owner, 
     """
     AdditionalSignRealFactory(
         source_id="ASUA",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -615,7 +613,7 @@ def test_update_additional_signs_skips_unchanged_record(tmp_path: Path, default_
     """
     AdditionalSignRealFactory(
         source_id="ASUNC",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -656,7 +654,7 @@ def test_update_additional_signs_force_update_bypasses_comparison(
     """
     AdditionalSignRealFactory(
         source_id="ASFU",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -693,7 +691,7 @@ def test_update_additional_signs_skips_removed_rows(tmp_path: Path, default_owne
     """
     AdditionalSignRealFactory(
         source_id="ASURM",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -719,7 +717,7 @@ def test_update_additional_signs_skips_unreadable_text(tmp_path: Path, default_o
     """
     AdditionalSignRealFactory(
         source_id="ASUURT",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -749,7 +747,7 @@ def test_update_additional_signs_skips_invalid_coordinates(
     """
     AdditionalSignRealFactory(
         source_id="ASBDU",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -779,7 +777,7 @@ def test_update_additional_signs_skips_unknown_device_type_code(
     """
     AdditionalSignRealFactory(
         source_id="ASUKC",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -824,7 +822,7 @@ def test_update_additional_signs_dry_run_does_not_write(tmp_path: Path, default_
     """
     AdditionalSignRealFactory(
         source_id="ASDRYU",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -852,7 +850,7 @@ def test_update_additional_signs_phase_result_recorded(tmp_path: Path, default_o
     """
     AdditionalSignRealFactory(
         source_id="ASPH2",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497100.0, 6673400.0, 5.0, srid=3879),
@@ -888,7 +886,7 @@ def test_deactivate_additional_signs_sets_lifecycle_inactive(
     """
     AdditionalSignRealFactory(
         source_id="ASDEA1",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -917,7 +915,7 @@ def test_deactivate_additional_signs_sets_validity_period_end(
     """
     AdditionalSignRealFactory(
         source_id="ASDEA2",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -944,7 +942,7 @@ def test_deactivate_additional_signs_sets_updated_at(tmp_path: Path, default_own
     """
     AdditionalSignRealFactory(
         source_id="ASDEA3",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -983,7 +981,7 @@ def test_deactivate_additional_signs_stamps_source_name(tmp_path: Path, default_
     importer._deactivate_additional_signs(summary)
 
     obj = AdditionalSignReal.objects.get(source_id="ASDEA4")
-    assert obj.source_name == "StreetScan2025"
+    assert obj.source_name == SOURCE_NAME
 
 
 @pytest.mark.django_db
@@ -1000,7 +998,7 @@ def test_deactivate_additional_signs_skips_non_removed_rows(
     """
     AdditionalSignRealFactory(
         source_id="ASNRM",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -1049,7 +1047,7 @@ def test_deactivate_additional_signs_dry_run_does_not_write(
     """
     AdditionalSignRealFactory(
         source_id="ASDRYD",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
@@ -1079,7 +1077,7 @@ def test_deactivate_additional_signs_phase_result_recorded(
     """
     AdditionalSignRealFactory(
         source_id="ASPH3",
-        source_name="StreetScan2025",
+        source_name=SOURCE_NAME,
         owner=default_owner,
         device_type=device_type,
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
