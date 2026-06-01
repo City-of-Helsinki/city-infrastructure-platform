@@ -394,16 +394,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             if source_id in skip_source_ids:
                 continue
 
-            try:
-                location = self._georeferenced_point_from_csv_row(row)
-            except (KeyError, ValueError) as exc:
-                details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates: {exc}"})
-                continue
-
-            if not geometry_is_legit(location):
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Invalid location: {location.ewkt}"}
-                )
+            location = self._validate_and_get_location(row, source_id, details)
+            if location is None:
                 continue
 
             raw_location_specifier = row.get(CSVHeadersV2.location_specifier, "")
@@ -671,23 +663,10 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped[0] += 1
                 continue
 
-            try:
-                new_location = self._georeferenced_point_from_csv_row(row)
-            except (KeyError, ValueError) as exc:
-                summary.setdefault("details", []).append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"}
-                )
-                skipped[0] += 1
-                continue
-
-            if not geometry_is_legit(new_location):
-                summary.setdefault("details", []).append(
-                    {
-                        "level": "skip",
-                        "source_id": source_id,
-                        "reason": f"Invalid location on update: {new_location.ewkt}",
-                    }
-                )
+            new_location = self._validate_and_get_location(
+                row, source_id, summary.setdefault("details", []), " on update"
+            )
+            if new_location is None:
                 skipped[0] += 1
                 continue
 
@@ -883,6 +862,44 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         except Exception:
             return None
 
+    def _validate_and_get_location(
+        self,
+        row: dict,
+        source_id: str,
+        details: list[dict],
+        operation: str = "",
+    ) -> Any | None:
+        """Validate and return a georeferenced point from a CSV row.
+
+        Performs two-stage validation: first parses coordinates from the row,
+        then validates the resulting geometry. If either stage fails, appends
+        a skip-level detail entry and returns None.
+
+        Args:
+            row (dict): CSV row data.
+            source_id (str): Source identifier for error reporting.
+            details (list[dict]): Mutable list to append skip entries to.
+            operation (str): Optional suffix for error messages (e.g., " on update").
+
+        Returns:
+            Any | None: Valid Point geometry, or None if validation failed.
+        """
+        try:
+            location = self._georeferenced_point_from_csv_row(row)
+        except (KeyError, ValueError) as exc:
+            details.append(
+                {"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates{operation}: {exc}"}
+            )
+            return None
+
+        if not geometry_is_legit(location):
+            details.append(
+                {"level": "skip", "source_id": source_id, "reason": f"Invalid location{operation}: {location.ewkt}"}
+            )
+            return None
+
+        return location
+
     def _load_required_owners(self) -> tuple[Owner, Owner]:
         """Fetch the two owner records required by the importer.
 
@@ -1012,16 +1029,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             if row.get(CSVHeadersV2.status) == "Removed":
                 continue
 
-            try:
-                location = self._georeferenced_point_from_csv_row(row)
-            except (KeyError, ValueError) as exc:
-                details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates: {exc}"})
-                continue
-
-            if not geometry_is_legit(location):
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Invalid location: {location.ewkt}"}
-                )
+            location = self._validate_and_get_location(row, source_id, details)
+            if location is None:
                 continue
 
             code = row.get(CSVHeadersV2.code, "")
@@ -1127,23 +1136,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped[0] += 1
                 continue
 
-            try:
-                new_location = self._georeferenced_point_from_csv_row(row)
-            except (KeyError, ValueError) as exc:
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"}
-                )
-                skipped[0] += 1
-                continue
-
-            if not geometry_is_legit(new_location):
-                details.append(
-                    {
-                        "level": "skip",
-                        "source_id": source_id,
-                        "reason": f"Invalid location on update: {new_location.ewkt}",
-                    }
-                )
+            new_location = self._validate_and_get_location(row, source_id, details, " on update")
+            if new_location is None:
                 skipped[0] += 1
                 continue
 
@@ -1558,16 +1552,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         for source_id in source_ids:
             row = self.signposts_by_id[source_id]
 
-            try:
-                location = self._georeferenced_point_from_csv_row(row)
-            except (KeyError, ValueError) as exc:
-                details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates: {exc}"})
-                continue
-
-            if not geometry_is_legit(location):
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Invalid location: {location.ewkt}"}
-                )
+            location = self._validate_and_get_location(row, source_id, details)
+            if location is None:
                 continue
 
             code = row.get(CSVHeadersV2.code, "")
@@ -1809,16 +1795,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         Returns:
             dict[str, Any] | None: Resolved field dict, or None if the row must be skipped.
         """
-        try:
-            new_location = self._georeferenced_point_from_csv_row(row)
-        except (KeyError, ValueError) as exc:
-            details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"})
-            return None
-
-        if not geometry_is_legit(new_location):
-            details.append(
-                {"level": "skip", "source_id": source_id, "reason": f"Invalid location on update: {new_location.ewkt}"}
-            )
+        new_location = self._validate_and_get_location(row, source_id, details, " on update")
+        if new_location is None:
             return None
 
         code = row.get(CSVHeadersV2.code, "")
@@ -2096,16 +2074,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 details.append({"level": "skip", "source_id": source_id, "reason": "text value is unreadable"})
                 continue
 
-            try:
-                location = self._georeferenced_point_from_csv_row(row)
-            except (KeyError, ValueError) as exc:
-                details.append({"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates: {exc}"})
-                continue
-
-            if not geometry_is_legit(location):
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Invalid location: {location.ewkt}"}
-                )
+            location = self._validate_and_get_location(row, source_id, details)
+            if location is None:
                 continue
 
             code = row.get(CSVHeadersV2.code, "")
@@ -2271,23 +2241,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped_count += 1
                 continue
 
-            try:
-                new_location = self._georeferenced_point_from_csv_row(row)
-            except (KeyError, ValueError) as exc:
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Invalid coordinates on update: {exc}"}
-                )
-                skipped_count += 1
-                continue
-
-            if not geometry_is_legit(new_location):
-                details.append(
-                    {
-                        "level": "skip",
-                        "source_id": source_id,
-                        "reason": f"Invalid location on update: {new_location.ewkt}",
-                    }
-                )
+            new_location = self._validate_and_get_location(row, source_id, details, " on update")
+            if new_location is None:
                 skipped_count += 1
                 continue
 
