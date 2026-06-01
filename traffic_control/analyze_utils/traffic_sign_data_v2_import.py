@@ -1487,7 +1487,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         created_count = self._run_signpost_pass(
             source_ids=root_ids,
-            parent_map={**self.signpost_source_id_to_db_id, **newly_created},
+            parent_map={**self.signpost_source_id_to_db_id},
             newly_created=newly_created,
             summary=summary,
             phase_started_at=phase_started_at,
