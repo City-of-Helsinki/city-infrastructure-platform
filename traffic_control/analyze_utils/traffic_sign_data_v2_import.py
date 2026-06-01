@@ -15,6 +15,7 @@ import tempfile
 from collections.abc import Callable, Generator
 from decimal import Decimal
 from typing import Any
+from uuid import UUID
 
 from django.core.files import File
 
@@ -1472,7 +1473,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         # In-run map: source_id → db pk for signposts created during pass 1.
         # Combined with the pre-existing signpost_source_id_to_db_id it gives
         # the full parent-resolution map available during pass 2.
-        newly_created: dict[str, int] = {}
+        newly_created: dict[str, UUID] = {}
 
         existing_source_ids: set[str] = set(self.signpost_source_id_to_db_id.keys())
         candidate_source_ids = [
@@ -1519,7 +1520,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         self,
         source_ids: list[str],
         parent_map: dict[str, int],
-        newly_created: dict[str, int],
+        newly_created: dict[str, UUID],
         summary: dict[str, Any],
         phase_started_at: datetime.datetime,
     ) -> int:
