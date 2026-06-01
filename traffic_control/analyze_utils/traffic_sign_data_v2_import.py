@@ -246,7 +246,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 continue
             self._run_phase(object_type, phase, summary)
 
-    def _run_phase(self, object_type: str, phase: str, summary: dict[str, Any]) -> None:  # noqa: C901
+    def _run_phase(self, object_type: str, phase: str, summary: dict[str, Any]) -> None:
         """Dispatch a single object-type / phase combination.
 
         Args:
@@ -1152,7 +1152,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         )
         self._save_run_log(summary)
 
-    def _get_signs_to_create(  # noqa: C901
+    def _get_signs_to_create(
         self,
         existing_source_ids: AbstractSet[str],
         summary: dict[str, Any],
@@ -1214,7 +1214,138 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 created_at=phase_started_at,
             )
 
-    def _get_signs_to_update(  # noqa: C901
+    def _resolve_sign_update_fields(
+        self,
+        row: dict,
+        source_id: str,
+        details: list[dict],
+    ) -> dict[str, Any] | None:
+        """Resolve and validate all field values for a traffic sign update row.
+
+        Validates device type code, resolves FK ids (mount), and casts all field
+        values. Returns ``None`` and appends a skip entry when a hard validation
+        error is encountered.
+
+        Args:
+            row (dict): CSV row data.
+            source_id (str): Source identifier.
+            details (list[dict]): Mutable details list for skip/warning entries.
+
+        Returns:
+            dict[str, Any] | None: Resolved field dict, or None if row must be skipped.
+        """
+        code = row.get(CSVHeadersV2.code, "")
+        device_type_id = self.code_to_device_type_id.get(code)
+        if device_type_id is None:
+            details.append({"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"})
+            return None
+
+        mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+        mount_real_id = None
+        if mount_csv_id:
+            mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+            if mount_real_id is None:
+                details.append(
+                    {
+                        "level": "warning",
+                        "source_id": source_id,
+                        "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
+                    }
+                )
+
+        parent_sign_id = row.get(CSVHeadersV2.parent_sign_id, "")
+        if parent_sign_id:
+            details.append(
+                {
+                    "level": "warning",
+                    "source_id": source_id,
+                    "reason": f"Traffic sign has parent_sign_id={parent_sign_id!r}; ignored (no parent FK)",
+                }
+            )
+
+        number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
+        raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+        location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
+        mount_type = self.mount_types_by_name.get(row.get(CSVHeadersV2.sign_mount_type, ""))
+
+        return {
+            "device_type_id": device_type_id,
+            "mount_real_id": mount_real_id,
+            "mount_type": mount_type,
+            "owner": self._resolve_sign_owner(code, number_code_str),
+            "location_specifier": location_specifier,
+            "value": self._get_sign_value(number_code_str),
+            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction)),
+            "height": self._get_sign_height(row.get(CSVHeadersV2.height)),
+            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition)),
+            "txt": row.get(CSVHeadersV2.txt, "") or None,
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+            "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
+        }
+
+    def _sign_fields_changed(self, obj: Any, new_location: Any, fields: dict[str, Any]) -> bool:
+        """Check if any traffic sign fields have changed from stored DB values.
+
+        Args:
+            obj (Any): Existing TrafficSignReal DB instance.
+            new_location (Any): New geometry point.
+            fields (dict[str, Any]): Dictionary containing new field values.
+
+        Returns:
+            bool: True if any field has changed or force_update is set.
+        """
+        if self.force_update:
+            return True
+
+        new_mount_type = fields["mount_type"]
+        return (
+            obj.source_name != SOURCE_NAME
+            or obj.location != new_location
+            or obj.device_type_id != fields["device_type_id"]
+            or obj.mount_real_id != fields["mount_real_id"]
+            or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
+            or obj.direction != fields["direction"]
+            or obj.height != fields["height"]
+            or obj.condition != fields["condition"]
+            or obj.location_specifier != fields["location_specifier"]
+            or obj.value != fields["value"]
+            or obj.txt != fields["txt"]
+            or obj.scanned_at != fields["scanned_at"]
+            or obj.attachment_url != fields["attachment_url"]
+        )
+
+    def _create_sign_update_revert_record(self, obj: Any, source_id: str) -> None:
+        """Create and write a revert record for a traffic sign update operation.
+
+        Args:
+            obj (Any): Existing TrafficSignReal DB instance being updated.
+            source_id (str): Source identifier.
+        """
+        self._write_revert_record(
+            {
+                "action": "update",
+                "object_type": "TrafficSignReal",
+                "db_id": str(obj.pk),
+                "source_id": source_id,
+                "old": {
+                    "source_name": obj.source_name,
+                    "location": obj.location.ewkt if obj.location else None,
+                    "device_type_id": obj.device_type_id,
+                    "mount_real_id": obj.mount_real_id,
+                    "mount_type_id": obj.mount_type_id,
+                    "direction": obj.direction,
+                    "height": obj.height,
+                    "condition": str(obj.condition) if obj.condition else None,
+                    "location_specifier": str(obj.location_specifier) if obj.location_specifier else None,
+                    "value": str(obj.value) if obj.value is not None else None,
+                    "txt": obj.txt,
+                    "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                    "attachment_url": obj.attachment_url,
+                },
+            }
+        )
+
+    def _get_signs_to_update(
         self,
         update_source_ids: list[str],
         db_id_map: dict[str, int],
@@ -1235,8 +1366,6 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             db_id_map (dict[str, int]): Mapping from source_id to DB primary key.
             existing (dict[int, TrafficSignReal]): Currently persisted instances
                 keyed by DB primary key.
-            default_owner (Owner): City of Helsinki owner instance.
-            private_owner (Owner): Private owner instance.
             summary (dict[str, Any]): Mutable summary dict; skips/warnings are
                 appended to summary["details"].
             phase_started_at (datetime.datetime): Timestamp of phase start, used as updated_at.
@@ -1259,115 +1388,34 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped[0] += 1
                 continue
 
-            code = row.get(CSVHeadersV2.code, "")
-            device_type_id = self.code_to_device_type_id.get(code)
-            if device_type_id is None:
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
-                )
+            fields = self._resolve_sign_update_fields(row, source_id, details)
+            if fields is None:
                 skipped[0] += 1
                 continue
 
-            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
-            mount_real_id = None
-            if mount_csv_id:
-                mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
-                if mount_real_id is None:
-                    details.append(
-                        {
-                            "level": "warning",
-                            "source_id": source_id,
-                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
-                        }
-                    )
-
-            parent_sign_id = row.get(CSVHeadersV2.parent_sign_id, "")
-            if parent_sign_id:
-                details.append(
-                    {
-                        "level": "warning",
-                        "source_id": source_id,
-                        "reason": f"Traffic sign has parent_sign_id={parent_sign_id!r}; ignored (no parent FK)",
-                    }
-                )
-
-            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
-            new_value = self._get_sign_value(number_code_str)
-            new_owner = self._resolve_sign_owner(code, number_code_str)
-            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
-            new_location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
-            sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
-            new_mount_type = self.mount_types_by_name.get(sign_mount_type_name)
-            new_direction = self._get_sign_direction(row.get(CSVHeadersV2.direction))
-            new_height = self._get_sign_height(row.get(CSVHeadersV2.height))
-            new_condition = self._get_sign_condition(row.get(CSVHeadersV2.condition))
-            new_txt = row.get(CSVHeadersV2.txt, "") or None
-            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
-            new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
-            new_source_name = SOURCE_NAME
-
-            # When force_update is True the field comparison is bypassed entirely.
-            changed = (
-                self.force_update
-                or obj.source_name != new_source_name
-                or obj.location != new_location
-                or obj.device_type_id != device_type_id
-                or obj.mount_real_id != mount_real_id
-                or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
-                or obj.direction != new_direction
-                or obj.height != new_height
-                or obj.condition != new_condition
-                or obj.location_specifier != new_location_specifier
-                or obj.value != new_value
-                or obj.txt != new_txt
-                or obj.scanned_at != new_scanned_at
-                or obj.attachment_url != new_attachment_url
-            )
-            if not changed:
+            if not self._sign_fields_changed(obj, new_location, fields):
                 skipped[0] += 1
                 continue
 
             if not self.dry_run:
-                self._write_revert_record(
-                    {
-                        "action": "update",
-                        "object_type": "TrafficSignReal",
-                        "db_id": str(obj.pk),
-                        "source_id": source_id,
-                        "old": {
-                            "source_name": obj.source_name,
-                            "location": obj.location.ewkt if obj.location else None,
-                            "device_type_id": obj.device_type_id,
-                            "mount_real_id": obj.mount_real_id,
-                            "mount_type_id": obj.mount_type_id,
-                            "direction": obj.direction,
-                            "height": obj.height,
-                            "condition": str(obj.condition) if obj.condition else None,
-                            "location_specifier": str(obj.location_specifier) if obj.location_specifier else None,
-                            "value": str(obj.value) if obj.value is not None else None,
-                            "txt": obj.txt,
-                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
-                            "attachment_url": obj.attachment_url,
-                        },
-                    }
-                )
+                self._create_sign_update_revert_record(obj, source_id)
 
-            obj.source_name = new_source_name
+            obj.source_name = SOURCE_NAME
             obj.location = new_location
-            obj.device_type_id = device_type_id
-            obj.owner = new_owner
+            obj.device_type_id = fields["device_type_id"]
+            obj.owner = fields["owner"]
             obj.installation_status = InstallationStatus.IN_USE
             obj.lifecycle = Lifecycle.ACTIVE
-            obj.mount_real_id = mount_real_id
-            obj.mount_type = new_mount_type
-            obj.direction = new_direction
-            obj.height = new_height
-            obj.condition = new_condition
-            obj.location_specifier = new_location_specifier
-            obj.value = new_value
-            obj.txt = new_txt
-            obj.scanned_at = new_scanned_at
-            obj.attachment_url = new_attachment_url
+            obj.mount_real_id = fields["mount_real_id"]
+            obj.mount_type = fields["mount_type"]
+            obj.direction = fields["direction"]
+            obj.height = fields["height"]
+            obj.condition = fields["condition"]
+            obj.location_specifier = fields["location_specifier"]
+            obj.value = fields["value"]
+            obj.txt = fields["txt"]
+            obj.scanned_at = fields["scanned_at"]
+            obj.attachment_url = fields["attachment_url"]
             obj.updated_by = self.user
             obj.updated_at = phase_started_at
             yield obj
@@ -1615,7 +1663,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         )
         self._save_run_log(summary)
 
-    def _run_signpost_pass(  # noqa: C901
+    def _run_signpost_pass(
         self,
         source_ids: list[str],
         parent_map: dict[str, Any],
@@ -1816,6 +1864,46 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         """
         if batch and not self.dry_run:
             SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+
+    def _flush_additional_sign_batch(self, batch: list[Any], update_fields: list[str]) -> None:
+        """Write a batch of AdditionalSignReal objects to the DB unless in dry-run mode.
+
+        Args:
+            batch (list[Any]): AdditionalSignReal instances to bulk-update.
+            update_fields (list[str]): Field names to include in the bulk update.
+        """
+        if batch and not self.dry_run:
+            AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+
+    def _create_additional_sign_update_revert_record(self, obj: Any, source_id: str) -> None:
+        """Create and write a revert record for an additional sign update operation.
+
+        Args:
+            obj (Any): Existing AdditionalSignReal DB instance being updated.
+            source_id (str): Source identifier.
+        """
+        self._write_revert_record(
+            {
+                "action": "update",
+                "object_type": "AdditionalSignReal",
+                "db_id": str(obj.pk),
+                "source_id": source_id,
+                "old": {
+                    "source_name": obj.source_name,
+                    "location": obj.location.ewkt if obj.location else None,
+                    "device_type_id": obj.device_type_id,
+                    "parent_id": obj.parent_id,
+                    "signpost_real_id": obj.signpost_real_id,
+                    "mount_real_id": obj.mount_real_id,
+                    "direction": obj.direction,
+                    "height": str(obj.height) if obj.height is not None else None,
+                    "condition": obj.condition,
+                    "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                    "attachment_url": obj.attachment_url,
+                    "additional_information": obj.additional_information,
+                },
+            }
+        )
 
     def _resolve_signpost_create_fields(
         self,
@@ -2159,6 +2247,75 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         )
         return None, None
 
+    def _resolve_additional_sign_create_fields(
+        self,
+        row: dict,
+        source_id: str,
+        details: list[dict],
+    ) -> dict[str, Any] | None:
+        """Resolve and validate all field values for an additional sign create row.
+
+        Validates text (skips "unreadable"), device type code, resolves FK ids
+        (mount, parent), and casts all field values. Returns ``None`` and appends a
+        skip entry when a hard validation error is encountered.
+
+        Args:
+            row (dict): CSV row data.
+            source_id (str): Source identifier.
+            details (list[dict]): Mutable details list for skip/warning entries.
+
+        Returns:
+            dict[str, Any] | None: Resolved field dict, or None if row must be skipped.
+        """
+        txt = row.get(CSVHeadersV2.txt, "") or ""
+        if txt.strip().lower() == "unreadable":
+            details.append({"level": "skip", "source_id": source_id, "reason": "text value is unreadable"})
+            return None
+
+        code = row.get(CSVHeadersV2.code, "")
+        device_type_id = self.code_to_device_type_id.get(code)
+        if device_type_id is None:
+            details.append({"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"})
+            return None
+
+        mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
+        mount_real_id = None
+        if mount_csv_id:
+            mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
+            if mount_real_id is None:
+                details.append(
+                    {
+                        "level": "warning",
+                        "source_id": source_id,
+                        "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
+                    }
+                )
+
+        parent_csv_id = row.get(CSVHeadersV2.parent_sign_id, "")
+        parent_id, signpost_real_id = self._resolve_additional_sign_parent(parent_csv_id, source_id, details)
+
+        number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
+        raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+        location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
+        mount_type = self.mount_types_by_name.get(row.get(CSVHeadersV2.sign_mount_type, ""))
+        internal_info = row.get("internal_additional_info")
+
+        return {
+            "device_type_id": device_type_id,
+            "parent_id": parent_id,
+            "signpost_real_id": signpost_real_id,
+            "mount_real_id": mount_real_id,
+            "mount_type": mount_type,
+            "location_specifier": location_specifier,
+            "color": self._get_additional_sign_color(row.get(CSVHeadersV2.color)),
+            "additional_information": self._build_additional_information(txt, number_code_str, internal_info),
+            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction)),
+            "height": self._get_sign_height(row.get(CSVHeadersV2.height)),
+            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition)),
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+            "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
+        }
+
     def _resolve_additional_sign_update_fields(
         self,
         row: dict,
@@ -2272,7 +2429,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     # Additional sign phase handlers
     # ------------------------------------------------------------------
 
-    def _create_additional_signs(self, summary: dict[str, Any]) -> None:  # noqa: C901
+    def _create_additional_signs(self, summary: dict[str, Any]) -> None:
         """Create new AdditionalSignReal records from CSV rows not yet in the DB.
 
         Rows with ``status == "Removed"``, already present in the DB, with
@@ -2297,46 +2454,13 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             if source_id in existing_source_ids or row.get(CSVHeadersV2.status) == "Removed":
                 continue
 
-            txt = row.get(CSVHeadersV2.txt, "") or ""
-            if txt.strip().lower() == "unreadable":
-                details.append({"level": "skip", "source_id": source_id, "reason": "text value is unreadable"})
-                continue
-
             location = self._validate_and_get_location(row, source_id, details)
             if location is None:
                 continue
 
-            code = row.get(CSVHeadersV2.code, "")
-            device_type_id = self.code_to_device_type_id.get(code)
-            if device_type_id is None:
-                details.append(
-                    {"level": "skip", "source_id": source_id, "reason": f"Device type code not found: {code}"}
-                )
+            fields = self._resolve_additional_sign_create_fields(row, source_id, details)
+            if fields is None:
                 continue
-
-            mount_csv_id = row.get(CSVHeadersV2.mount_id, "")
-            mount_real_id = None
-            if mount_csv_id:
-                mount_real_id = self.mount_source_id_to_db_id.get(mount_csv_id)
-                if mount_real_id is None:
-                    details.append(
-                        {
-                            "level": "warning",
-                            "source_id": source_id,
-                            "reason": f"Mount not found for mount CSV id: {mount_csv_id}",
-                        }
-                    )
-
-            parent_csv_id = row.get(CSVHeadersV2.parent_sign_id, "")
-            parent_id, signpost_real_id = self._resolve_additional_sign_parent(parent_csv_id, source_id, details)
-
-            number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
-            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
-            location_specifier = SignLocationSpecifier(int(raw_ls)) if raw_ls else None
-            sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
-            mount_type = self.mount_types_by_name.get(sign_mount_type_name)
-            internal_info = row.get("internal_additional_info")
-            additional_information = self._build_additional_information(txt, number_code_str, internal_info)
 
             processed.append(source_id)
             objects_to_create.append(
@@ -2344,23 +2468,23 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     source_id=source_id,
                     source_name=SOURCE_NAME,
                     location=location,
-                    device_type_id=device_type_id,
+                    device_type_id=fields["device_type_id"],
                     owner=self.default_owner,
                     installation_status=InstallationStatus.IN_USE,
                     lifecycle=Lifecycle.ACTIVE,
                     missing_content=True,
-                    parent_id=parent_id,
-                    signpost_real_id=signpost_real_id,
-                    mount_real_id=mount_real_id,
-                    mount_type=mount_type,
-                    direction=self._get_sign_direction(row.get(CSVHeadersV2.direction)),
-                    height=self._get_sign_height(row.get(CSVHeadersV2.height)),
-                    condition=self._get_sign_condition(row.get(CSVHeadersV2.condition)),
-                    location_specifier=location_specifier,
-                    color=self._get_additional_sign_color(row.get(CSVHeadersV2.color)),
-                    additional_information=additional_information,
-                    scanned_at=self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
-                    attachment_url=row.get(CSVHeadersV2.attachment_url, ""),
+                    parent_id=fields["parent_id"],
+                    signpost_real_id=fields["signpost_real_id"],
+                    mount_real_id=fields["mount_real_id"],
+                    mount_type=fields["mount_type"],
+                    direction=fields["direction"],
+                    height=fields["height"],
+                    condition=fields["condition"],
+                    location_specifier=fields["location_specifier"],
+                    color=fields["color"],
+                    additional_information=fields["additional_information"],
+                    scanned_at=fields["scanned_at"],
+                    attachment_url=fields["attachment_url"],
                     created_by=self.user,
                     created_at=phase_started_at,
                 )
@@ -2403,7 +2527,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         )
         self._save_run_log(summary)
 
-    def _update_additional_signs(self, summary: dict[str, Any]) -> None:  # noqa: C901
+    def _update_additional_signs(self, summary: dict[str, Any]) -> None:
         """Update existing AdditionalSignReal records from non-Removed CSV rows.
 
         Only rows whose source_id already exists in the DB and whose status is not
@@ -2478,28 +2602,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 continue
 
             if not self.dry_run:
-                self._write_revert_record(
-                    {
-                        "action": "update",
-                        "object_type": "AdditionalSignReal",
-                        "db_id": str(obj.pk),
-                        "source_id": source_id,
-                        "old": {
-                            "source_name": obj.source_name,
-                            "location": obj.location.ewkt if obj.location else None,
-                            "device_type_id": obj.device_type_id,
-                            "parent_id": obj.parent_id,
-                            "signpost_real_id": obj.signpost_real_id,
-                            "mount_real_id": obj.mount_real_id,
-                            "direction": obj.direction,
-                            "height": str(obj.height) if obj.height is not None else None,
-                            "condition": obj.condition,
-                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
-                            "attachment_url": obj.attachment_url,
-                            "additional_information": obj.additional_information,
-                        },
-                    }
-                )
+                self._create_additional_sign_update_revert_record(obj, source_id)
 
             obj.source_name = SOURCE_NAME
             obj.location = new_location
@@ -2522,15 +2625,12 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             batch.append(obj)
 
             if len(batch) >= self.batch_size:
-                if not self.dry_run:
-                    AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                self._flush_additional_sign_batch(batch, update_fields)
                 updated_count += len(batch)
                 batch = []
 
-        if batch:
-            if not self.dry_run:
-                AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-            updated_count += len(batch)
+        self._flush_additional_sign_batch(batch, update_fields)
+        updated_count += len(batch)
 
         skipped_count += sum(1 for e in details[details_before:] if e.get("level") == "skip")
         summary["additional_signs_updated"] += updated_count
