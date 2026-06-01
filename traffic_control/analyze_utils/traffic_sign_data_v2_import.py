@@ -39,6 +39,8 @@ VALID_PHASES: tuple[str, ...] = ("create", "update", "deactivate")
 
 # Dependency order — object types must be processed in this sequence.
 OBJECT_TYPE_ORDER: tuple[str, ...] = ("mounts", "signs", "signposts", "additional-signs")
+# Phase order
+PHASE_ORDER: tuple[str, ...] = ("create", "update", "deactivate")
 
 # Mounts are never deactivated; the deactivate phase is silently skipped for them.
 _DEACTIVATABLE_OBJECT_TYPES: frozenset[str] = frozenset({"signs", "signposts", "additional-signs"})
@@ -111,7 +113,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         # Normalise and sort by dependency order.
         self.object_types: list[str] = [ot for ot in OBJECT_TYPE_ORDER if ot in object_types]
-        self.phases: list[str] = list(phases)
+        self.phases: list[str] = [phase for phase in PHASE_ORDER if phase in phases]
 
         # --- Owner lookup (fetched first; missing owner is a hard error) ---
         self.default_owner, self.private_owner = self._load_required_owners()
