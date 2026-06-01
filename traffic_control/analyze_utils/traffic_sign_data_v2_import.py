@@ -12,7 +12,7 @@ import json
 import logging
 import os
 import tempfile
-from collections.abc import Callable, Generator
+from collections.abc import Callable, Generator, KeysView, Set as AbstractSet
 from decimal import Decimal
 from typing import Any
 from uuid import UUID
@@ -327,7 +327,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 appended to summary["details"] and summary["mounts_created"] is
                 incremented.
         """
-        existing_source_ids: set[str] = set(self.mount_source_id_to_db_id.keys())
+        existing_source_ids: KeysView[str] = self.mount_source_id_to_db_id.keys()
         phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
         summary.setdefault("mounts_created", 0)
         details_before = len(summary.get("details", []))
@@ -361,7 +361,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
     def _get_mounts(
         self,
-        skip_source_ids: set[str],
+        skip_source_ids: AbstractSet[str],
         summary: dict[str, Any],
         phase_started_at: datetime.datetime,
     ) -> Generator[MountReal, None, None]:
@@ -371,7 +371,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         Rows with invalid geometry are recorded as skip entries in summary["details"].
 
         Args:
-            skip_source_ids (set[str]): Source IDs to exclude (already exist in DB,
+            skip_source_ids (AbstractSet[str]): Source IDs to exclude (already exist in DB,
                 i.e. keys of mount_source_id_to_db_id).
             summary (dict[str, Any]): Mutable summary dict for skip/warning entries.
             phase_started_at (datetime.datetime): Timestamp of phase start, used as created_at.
@@ -941,7 +941,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 appended to summary["details"] and summary["signs_created"] is
                 incremented.
         """
-        existing_source_ids: set[str] = set(self.sign_source_id_to_db_id.keys())
+        existing_source_ids: KeysView[str] = self.sign_source_id_to_db_id.keys()
         phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
         summary.setdefault("signs_created", 0)
         details_before = len(summary.get("details", []))
@@ -980,7 +980,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
     def _get_signs_to_create(  # noqa: C901
         self,
-        existing_source_ids: set[str],
+        existing_source_ids: AbstractSet[str],
         summary: dict[str, Any],
         phase_started_at: datetime.datetime,
     ) -> Generator[TrafficSignReal, None, None]:
@@ -992,7 +992,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         a warning details entry.
 
         Args:
-            existing_source_ids (set[str]): Source IDs already present in the DB.
+            existing_source_ids (AbstractSet[str]): Source IDs already present in the DB.
             summary (dict[str, Any]): Mutable summary dict for skip/warning entries.
             phase_started_at (datetime.datetime): Timestamp of phase start, used as created_at.
 
@@ -1475,7 +1475,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         # the full parent-resolution map available during pass 2.
         newly_created: dict[str, UUID] = {}
 
-        existing_source_ids: set[str] = set(self.signpost_source_id_to_db_id.keys())
+        existing_source_ids: KeysView[str] = self.signpost_source_id_to_db_id.keys()
         candidate_source_ids = [
             s
             for s, row in self.signposts_by_id.items()
@@ -2119,7 +2119,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         details_before = len(details)
         processed: list[str] = summary.setdefault("processed_additional_sign_source_ids", [])
 
-        existing_source_ids: set[str] = set(self.additional_sign_source_id_to_db_id.keys())
+        existing_source_ids: KeysView[str] = self.additional_sign_source_id_to_db_id.keys()
         objects_to_create: list[AdditionalSignReal] = []
 
         for source_id, row in self.additional_signs_by_id.items():
