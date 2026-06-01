@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 
 from traffic_control.models import GroupOperationalArea
-from traffic_control.tests.factories import get_operational_area, get_user
+from traffic_control.tests.factories import get_user, OperationalAreaFactory
 from traffic_control.tests.utils import MIN_X, MIN_Y
 
 polygon = Polygon(
@@ -29,7 +29,7 @@ def test__user_operational_area__contains_location(location, expected):
     user = get_user()
     assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.CREATE).count() == 1
 
-    oa = get_operational_area(area=area)
+    oa = OperationalAreaFactory(location=area)
     user.operational_areas.add(oa)
     assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).count() == 1
 
@@ -43,7 +43,7 @@ def test__superuser_operational_area(location):
     user = get_user(admin=True)
     assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.CREATE).count() == 1
 
-    oa = get_operational_area(area=area)
+    oa = OperationalAreaFactory(location=area)
     user.operational_areas.add(oa)
     assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).count() == 1
 
@@ -59,7 +59,7 @@ def test__user_operational_area__bypass_operational_area(location):
 
     user.bypass_operational_area = True
     user.save(update_fields=["bypass_operational_area"])
-    oa = get_operational_area(area=area)
+    oa = OperationalAreaFactory(location=area)
     assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).count() == 1
     user.operational_areas.add(oa)
     assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).count() == 2
@@ -78,7 +78,7 @@ def test__user_group_operational_area__contains_location(location, expected):
     user.groups.add(group)
     assert LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.UPDATE).count() == 1
 
-    oa = get_operational_area(area)
+    oa = OperationalAreaFactory(location=area)
     group_oa = GroupOperationalArea.objects.create(group=group)
     group_oa.areas.add(oa)
 
