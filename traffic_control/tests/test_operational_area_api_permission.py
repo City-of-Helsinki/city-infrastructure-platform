@@ -17,11 +17,11 @@ from traffic_control.tests.factories import (
     BarrierPlanFactory,
     BarrierRealFactory,
     get_api_client,
-    get_operational_area,
     get_owner,
     get_user,
     MountPlanFactory,
     MountRealFactory,
+    OperationalAreaFactory,
     PlanFactory,
     RoadMarkingPlanFactory,
     RoadMarkingRealFactory,
@@ -137,7 +137,7 @@ model_factory_map = {
     ),
 )
 def test__api_operational_area_permission__create(model, location, success):
-    operational_area = get_operational_area()
+    operational_area = OperationalAreaFactory()
     user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
@@ -200,7 +200,7 @@ def test__api_operational_area_permission__create(model, location, success):
     ((test_point_inside_area, True), (test_point_outside_area, False), (None, False)),
 )
 def test__api_operational_area_permission__create__geojson(location, success):
-    operational_area = get_operational_area()
+    operational_area = OperationalAreaFactory()
     user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains="barrierplan")
     user.operational_areas.add(operational_area)
@@ -270,7 +270,7 @@ def test__api_operational_area_permission__create__geojson(location, success):
     ),
 )
 def test__api_operational_area_permission__update(model, location, success):
-    operational_area = get_operational_area()
+    operational_area = OperationalAreaFactory()
     user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
@@ -364,7 +364,7 @@ def test__api_operational_area_permission__update(model, location, success):
     ),
 )
 def test__api_operational_area_permission__partial_update(model, location, success):
-    operational_area = get_operational_area()
+    operational_area = OperationalAreaFactory()
     user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)
@@ -430,7 +430,7 @@ def test__api_operational_area_permission__partial_update(model, location, succe
     ),
 )
 def test__api_operational_area_permission__delete(model, location, success):
-    operational_area = get_operational_area()
+    operational_area = OperationalAreaFactory()
     user = get_user(bypass_responsible_entity=True)
     perms = Permission.objects.filter(codename__contains=model.lower())
     user.operational_areas.add(operational_area)

@@ -27,7 +27,8 @@ class Command(BaseCommand):
             url = f"{WFS_SOURCE_URL}?service=wfs&version=2.0.0&request=GetFeature&typeNames={SOURCE_LAYER}"
             filename, _ = urlretrieve(url)
             ds = DataSource(filename)
-            count = 0
+            created = 0
+            synced = 0
             for feature in ds[0]:
                 if feature["tehtavakokonaisuus"].value == "KATU":
                     gdal_geometry = feature.geom
@@ -35,7 +36,7 @@ class Command(BaseCommand):
                     start_date = parse_date(feature["alku_pvm"].value)
                     end_date = parse_date(feature["loppu_pvm"].value)
                     updated_date = parse_date(feature["paivitetty_tietopalveluun"].value)
-                    OperationalArea.objects.update_or_create(
+                    _, created_new = OperationalArea.objects.update_or_create(
                         source_name=SOURCE_NAME,
                         source_id=feature["id"].value,
                         defaults={
@@ -51,5 +52,8 @@ class Command(BaseCommand):
                             "location": gdal_geometry.geos,
                         },
                     )
-                    count += 1
-            self.stdout.write(f"{count} features are imported.")
+                    created += int(created_new)
+                    synced += 1
+            self.stdout.write(
+                f"{len(ds[0])} features found, {synced - created} synced from source ({created} newly created)."
+            )

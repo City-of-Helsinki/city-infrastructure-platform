@@ -33,5 +33,10 @@ class OperationalAreaAdmin(Geometry3DFieldAdminMixin, admin.GISModelAdmin):
     )
     search_fields = ("id",)
 
+    # Disable edits in admin
+    # https://docs.djangoproject.com/en/5.2/ref/contrib/admin/#django.contrib.admin.ModelAdmin.has_add_permission
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 admin.site.register(OperationalArea, OperationalAreaAdmin)

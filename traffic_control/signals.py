@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
+from traffic_control.models import OperationalArea
 from traffic_control.models.common import TrafficControlDeviceTypeIcon
 from traffic_control.signal_utils import delete_icon_files_on_row_delete, generate_pngs_on_svg_save
 
@@ -149,6 +150,8 @@ def register_auditlog_signals():
     auditlog.register(MountReal)
     auditlog.register(MountRealFile)
     auditlog.register(MountPlanReplacement)
+
+    auditlog.register(OperationalArea)
 
 
 # NOTE: Do NOT call register_auditlog_signals() here at module level!
