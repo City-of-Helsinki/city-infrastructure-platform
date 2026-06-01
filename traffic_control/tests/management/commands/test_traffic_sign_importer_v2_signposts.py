@@ -452,6 +452,119 @@ def test_create_signposts_warning_for_unresolved_parent(tmp_path: Path, default_
 
 
 @pytest.mark.django_db
+def test_create_signposts_three_level_tree(tmp_path: Path, default_owner, device_type, mount_type) -> None:
+    """Multi-pass handles three-level tree: Grandparent → Parent → Child.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+        default_owner: Owner fixture.
+        device_type: DeviceType fixture.
+        mount_type: MountType fixture.
+    """
+    importer = _make_importer(
+        tmp_path,
+        [
+            _sign_row("SPGP"),
+            _sign_row("SPP", parent_sign_id="SPGP"),
+            _sign_row("SPC", parent_sign_id="SPP"),
+        ],
+    )
+    summary: dict = {"details": []}
+    importer._create_signposts(summary)
+
+    assert summary["signposts_created"] == 3
+    grandparent = SignpostReal.objects.get(source_id="SPGP")
+    parent = SignpostReal.objects.get(source_id="SPP")
+    child = SignpostReal.objects.get(source_id="SPC")
+
+    assert grandparent.parent_id is None
+    assert parent.parent_id == grandparent.pk
+    assert child.parent_id == parent.pk
+
+
+@pytest.mark.django_db
+def test_create_signposts_four_level_tree(tmp_path: Path, default_owner, device_type, mount_type) -> None:
+    """Multi-pass handles four-level tree: Grandparent → Parent → Node → Leaf.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+        default_owner: Owner fixture.
+        device_type: DeviceType fixture.
+        mount_type: MountType fixture.
+    """
+    importer = _make_importer(
+        tmp_path,
+        [
+            _sign_row("SPGGP"),
+            _sign_row("SPGP2", parent_sign_id="SPGGP"),
+            _sign_row("SPP2", parent_sign_id="SPGP2"),
+            _sign_row("SPL", parent_sign_id="SPP2"),
+        ],
+    )
+    summary: dict = {"details": []}
+    importer._create_signposts(summary)
+
+    assert summary["signposts_created"] == 4
+    great_grandparent = SignpostReal.objects.get(source_id="SPGGP")
+    grandparent = SignpostReal.objects.get(source_id="SPGP2")
+    parent = SignpostReal.objects.get(source_id="SPP2")
+    leaf = SignpostReal.objects.get(source_id="SPL")
+
+    assert great_grandparent.parent_id is None
+    assert grandparent.parent_id == great_grandparent.pk
+    assert parent.parent_id == grandparent.pk
+    assert leaf.parent_id == parent.pk
+
+
+@pytest.mark.django_db
+def test_create_signposts_multiple_branches(tmp_path: Path, default_owner, device_type, mount_type) -> None:
+    """Multi-pass handles multiple independent branches at different depths.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+        default_owner: Owner fixture.
+        device_type: DeviceType fixture.
+        mount_type: MountType fixture.
+    """
+    importer = _make_importer(
+        tmp_path,
+        [
+            # Branch 1: 3 levels
+            _sign_row("SPB1R"),
+            _sign_row("SPB1C1", parent_sign_id="SPB1R"),
+            _sign_row("SPB1C2", parent_sign_id="SPB1C1"),
+            # Branch 2: 2 levels
+            _sign_row("SPB2R"),
+            _sign_row("SPB2C", parent_sign_id="SPB2R"),
+            # Orphan
+            _sign_row("SPORP"),
+        ],
+    )
+    summary: dict = {"details": []}
+    importer._create_signposts(summary)
+
+    assert summary["signposts_created"] == 6
+
+    # Branch 1
+    b1_root = SignpostReal.objects.get(source_id="SPB1R")
+    b1_child1 = SignpostReal.objects.get(source_id="SPB1C1")
+    b1_child2 = SignpostReal.objects.get(source_id="SPB1C2")
+    assert b1_root.parent_id is None
+    assert b1_child1.parent_id == b1_root.pk
+    assert b1_child2.parent_id == b1_child1.pk
+
+    # Branch 2
+    b2_root = SignpostReal.objects.get(source_id="SPB2R")
+    b2_child = SignpostReal.objects.get(source_id="SPB2C")
+    assert b2_root.parent_id is None
+    assert b2_child.parent_id == b2_root.pk
+
+    # Orphan
+    orphan = SignpostReal.objects.get(source_id="SPORP")
+    assert orphan.parent_id is None
+
+
+@pytest.mark.django_db
 def test_create_signposts_phase_result_recorded(tmp_path: Path, default_owner, device_type, mount_type) -> None:
     """_create_signposts writes a phase_results entry for ('signposts', 'create').
 

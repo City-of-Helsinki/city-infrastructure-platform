@@ -1453,13 +1453,14 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     # ------------------------------------------------------------------
 
     def _create_signposts(self, summary: dict[str, Any]) -> None:
-        """Create new SignpostReal records using a two-pass strategy.
+        """Create new SignpostReal records using a BFS multi-pass strategy.
 
-        Pass 1 inserts root signposts (no ``parent_sign_id``).  Pass 2 inserts
-        child signposts whose parent was either already in the DB before this
-        run or was created in pass 1.  Signposts whose parent is still not
-        found after both passes are imported without a parent and a warning is
-        recorded.
+        Each pass inserts signposts whose parent is already resolved (either
+        pre-existing in the DB or created in a previous pass).  The loop
+        repeats until all candidates are processed, naturally handling trees of
+        arbitrary depth (e.g. Grandparent → Parent → Node → Leaf).  Candidates
+        whose parent cannot be resolved after all resolvable nodes are drained
+        are imported without a parent and a warning is recorded.
 
         Args:
             summary (dict[str, Any]): Mutable summary dict; skip/warning entries
@@ -1470,9 +1471,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         summary.setdefault("signposts_created", 0)
         details_before = len(summary.get("details", []))
 
-        # In-run map: source_id → db pk for signposts created during pass 1.
-        # Combined with the pre-existing signpost_source_id_to_db_id it gives
-        # the full parent-resolution map available during pass 2.
+        # In-run map: source_id → db pk for signposts created so far this run.
         newly_created: dict[str, UUID] = {}
 
         existing_source_ids: KeysView[str] = self.signpost_source_id_to_db_id.keys()
@@ -1481,26 +1480,35 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             for s, row in self.signposts_by_id.items()
             if s not in existing_source_ids and row.get(CSVHeadersV2.status) != "Removed"
         ]
-        # Partition into roots (no parent) and children (have parent_sign_id).
-        root_ids = [s for s in candidate_source_ids if not self.signposts_by_id[s].get(CSVHeadersV2.parent_sign_id, "")]
-        child_ids = [s for s in candidate_source_ids if s not in root_ids]
+        candidates_set: set[str] = set(candidate_source_ids)
+        remaining: list[str] = candidate_source_ids
+        created_count = 0
 
-        created_count = self._run_signpost_pass(
-            source_ids=root_ids,
-            parent_map={**self.signpost_source_id_to_db_id},
-            newly_created=newly_created,
-            summary=summary,
-            phase_started_at=phase_started_at,
-        )
-        # Refresh the combined map with pass-1 results before pass 2.
-        combined_parent_map = {**self.signpost_source_id_to_db_id, **newly_created}
-        created_count += self._run_signpost_pass(
-            source_ids=child_ids,
-            parent_map=combined_parent_map,
-            newly_created=newly_created,
-            summary=summary,
-            phase_started_at=phase_started_at,
-        )
+        while remaining:
+            combined_parent_map = {**self.signpost_source_id_to_db_id, **newly_created}
+            # Ready: no parent, parent already in DB/created, or parent is not a
+            # candidate (unresolvable — will warn inside _run_signpost_pass).
+            ready = [
+                s
+                for s in remaining
+                if not self.signposts_by_id[s].get(CSVHeadersV2.parent_sign_id, "")
+                or self.signposts_by_id[s].get(CSVHeadersV2.parent_sign_id, "") in combined_parent_map
+                or self.signposts_by_id[s].get(CSVHeadersV2.parent_sign_id, "") not in candidates_set
+            ]
+            if not ready:
+                # No progress possible (e.g. circular refs). Force all remaining
+                # nodes through in one final pass: _run_signpost_pass will set
+                # parent_id=None and record a warning for each unresolved parent.
+                # After this pass, remaining becomes empty and the loop exits.
+                ready = remaining
+            remaining = [s for s in remaining if s not in set(ready)]
+            created_count += self._run_signpost_pass(
+                source_ids=ready,
+                parent_map=combined_parent_map,
+                newly_created=newly_created,
+                summary=summary,
+                phase_started_at=phase_started_at,
+            )
 
         summary["signposts_created"] += created_count
         new_details = summary.get("details", [])[details_before:]
@@ -1519,7 +1527,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     def _run_signpost_pass(  # noqa: C901
         self,
         source_ids: list[str],
-        parent_map: dict[str, int],
+        parent_map: dict[str, Any],
         newly_created: dict[str, UUID],
         summary: dict[str, Any],
         phase_started_at: datetime.datetime,
@@ -1528,9 +1536,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         Args:
             source_ids (list[str]): Ordered list of source IDs for this pass.
-            parent_map (dict[str, int]): Combined source_id → DB PK map covering
-                pre-existing and pass-1-created signposts.
-            newly_created (dict[str, int]): Mutable map updated with PKs created
+            parent_map (dict[str, Any]): Combined source_id → DB PK map covering
+                pre-existing and previously-created signposts.
+            newly_created (dict[str, UUID]): Mutable map updated with PKs created
                 in this pass so subsequent passes can resolve them.
             summary (dict[str, Any]): Mutable summary dict for details entries.
             phase_started_at (datetime.datetime): Timestamp used as created_at.
