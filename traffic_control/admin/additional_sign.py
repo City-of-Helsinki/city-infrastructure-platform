@@ -285,6 +285,7 @@ class AdditionalSignPlanAdmin(
     ]
     search_fields = (
         "additional_information",
+        "content_s",
         "device_type__code",
         "id",
         "mount_plan__id",
@@ -480,6 +481,8 @@ class AdditionalSignRealAdmin(
         ("validity_period_end", DateRangeFilterBuilder()),
     ]
     search_fields = (
+        "additional_information",
+        "content_s",
         "size",
         "height",
         "reflection_class",
