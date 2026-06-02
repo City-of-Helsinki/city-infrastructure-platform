@@ -1546,75 +1546,92 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         )
         self._save_run_log(summary)
 
+    def _deactivate_objects(
+        self,
+        summary: dict[str, Any],
+        rows_by_id: dict[str, Any],
+        source_id_to_db_id: dict[str, Any],
+        model_class: type,
+        object_type: str,
+        summary_key: str,
+        object_type_name: str,
+    ) -> None:
+        """Deactivate DB records whose CSV status is ``Removed``.
+
+        Generic implementation shared by all three deactivate phase handlers.
+        Sets ``lifecycle`` → ``Lifecycle.INACTIVE``, ``validity_period_end`` →
+        date from CSV ``scanned_at``, ``scanned_at`` → CSV timestamp,
+        ``source_name`` → ``SOURCE_NAME``, ``updated_by`` and ``updated_at``.
+
+        Args:
+            summary (dict[str, Any]): Mutable summary dict.
+            rows_by_id (dict[str, Any]): CSV rows keyed by source_id.
+            source_id_to_db_id (dict[str, Any]): Mapping from source_id to DB primary key.
+            model_class (type): Django model class to query and bulk_update.
+            object_type (str): Object type label used in phase results (e.g. ``"signs"``).
+            summary_key (str): Key in summary dict for deactivated count (e.g. ``"signs_deactivated"``).
+            object_type_name (str): Class name string used in revert records (e.g. ``"TrafficSignReal"``).
+        """
+        deactivate_source_ids = [
+            s for s, row in rows_by_id.items() if s in source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
+        ]
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault(summary_key, 0)
+        if not deactivate_source_ids:
+            self._record_phase_result(summary, object_type, "deactivate", deactivated=0, skipped=0)
+            self._save_run_log(summary)
+            return
+
+        db_id_map = {s: source_id_to_db_id[s] for s in deactivate_source_ids}
+        existing = {obj.pk: obj for obj in model_class.objects.filter(pk__in=db_id_map.values())}
+        update_fields = ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"]
+        batch: list[Any] = []
+        deactivated_count = 0
+
+        for source_id in deactivate_source_ids:
+            obj = existing.get(db_id_map[source_id])
+            if obj is None:
+                continue
+            self._apply_deactivation(obj, rows_by_id[source_id], source_id, object_type_name, phase_started_at)
+            batch.append(obj)
+            if len(batch) >= self.batch_size:
+                if not self.dry_run:
+                    model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                deactivated_count += len(batch)
+                batch = []
+
+        if batch:
+            if not self.dry_run:
+                model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+            deactivated_count += len(batch)
+
+        summary[summary_key] += deactivated_count
+        logger.info(
+            "_%s: deactivated=%d (of %d candidates)",
+            f"deactivate_{object_type.replace('-', '_')}",
+            deactivated_count,
+            len(deactivate_source_ids),
+        )
+        self._record_phase_result(summary, object_type, "deactivate", deactivated=deactivated_count, skipped=0)
+        self._save_run_log(summary)
+
     def _deactivate_signs(self, summary: dict[str, Any]) -> None:
         """Deactivate TrafficSignReal records marked as Removed in CSV.
-
-        Deactivation updates exactly six fields on each matching record:
-        ``lifecycle`` → ``Lifecycle.INACTIVE``,
-        ``validity_period_end`` → date portion of the CSV ``scanned_at`` timestamp
-        (falls back to today if the field is absent or unparseable),
-        ``scanned_at`` → CSV timestamp, ``source_name`` → ``SOURCE_NAME``,
-        ``updated_by`` → the configured user, ``updated_at`` → phase start time.
-        No other fields are modified.
 
         Args:
             summary (dict[str, Any]): Mutable summary dict; the deactivated count
                 is recorded in summary["signs_deactivated"] and phase results are
                 appended.
         """
-        deactivate_source_ids = [
-            s
-            for s, row in self.signs_by_id.items()
-            if s in self.sign_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
-        ]
-        summary.setdefault("signs_deactivated", 0)
-        if not deactivate_source_ids:
-            self._record_phase_result(summary, "signs", "deactivate", deactivated=0)
-            self._save_run_log(summary)
-            return
-
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        db_id_map: dict[str, int] = {s: self.sign_source_id_to_db_id[s] for s in deactivate_source_ids}
-        existing: dict[int, TrafficSignReal] = {
-            obj.pk: obj for obj in TrafficSignReal.objects.filter(pk__in=db_id_map.values())
-        }
-
-        deactivated_count = 0
-        batch: list[TrafficSignReal] = []
-        for source_id in deactivate_source_ids:
-            row = self.signs_by_id[source_id]
-            obj = existing.get(db_id_map[source_id])
-            if obj is None:
-                continue
-
-            self._apply_deactivation(obj, row, source_id, "TrafficSignReal", phase_started_at)
-            batch.append(obj)
-
-            if len(batch) >= self.batch_size:
-                if not self.dry_run:
-                    TrafficSignReal.objects.bulk_update(
-                        batch,
-                        ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"],
-                        batch_size=self.batch_size,
-                    )
-                deactivated_count += len(batch)
-                batch = []
-
-        if batch:
-            if not self.dry_run:
-                TrafficSignReal.objects.bulk_update(
-                    batch,
-                    ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"],
-                    batch_size=self.batch_size,
-                )
-            deactivated_count += len(batch)
-
-        summary["signs_deactivated"] += deactivated_count
-        logger.info(
-            "_deactivate_signs: deactivated=%d (of %d candidates)", deactivated_count, len(deactivate_source_ids)
+        self._deactivate_objects(
+            summary,
+            rows_by_id=self.signs_by_id,
+            source_id_to_db_id=self.sign_source_id_to_db_id,
+            model_class=TrafficSignReal,
+            object_type="signs",
+            summary_key="signs_deactivated",
+            object_type_name="TrafficSignReal",
         )
-        self._record_phase_result(summary, "signs", "deactivate", deactivated=deactivated_count)
-        self._save_run_log(summary)
 
     # ------------------------------------------------------------------
     # Signpost handlers
@@ -2134,63 +2151,20 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     def _deactivate_signposts(self, summary: dict[str, Any]) -> None:
         """Deactivate SignpostReal records whose CSV status is ``Removed``.
 
-        Deactivation sets ``lifecycle`` to ``Lifecycle.INACTIVE``,
-        ``validity_period_end`` to the date portion of the CSV ``scanned_at``
-        timestamp (falls back to today if absent or unparseable),
-        ``scanned_at`` to the CSV timestamp, ``source_name`` to
-        ``SOURCE_NAME``, and also updates ``updated_by`` and ``updated_at``.
-        No other fields are modified.
-
         Args:
             summary (dict[str, Any]): Mutable summary dict; the deactivated count
                 is recorded in summary["signposts_deactivated"] and phase results
                 are appended.
         """
-
-        deactivate_source_ids = [
-            s
-            for s, row in self.signposts_by_id.items()
-            if s in self.signpost_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
-        ]
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("signposts_deactivated", 0)
-        if not deactivate_source_ids:
-            self._record_phase_result(summary, "signposts", "deactivate", deactivated=0, skipped=0)
-            self._save_run_log(summary)
-            return
-
-        db_id_map: dict[str, int] = {s: self.signpost_source_id_to_db_id[s] for s in deactivate_source_ids}
-        existing: dict[int, Any] = {obj.pk: obj for obj in SignpostReal.objects.filter(pk__in=db_id_map.values())}
-        update_fields = ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"]
-        batch: list[Any] = []
-        deactivated_count = 0
-
-        for source_id in deactivate_source_ids:
-            row = self.signposts_by_id[source_id]
-            obj = existing.get(db_id_map[source_id])
-            if obj is None:
-                continue
-
-            self._apply_deactivation(obj, row, source_id, "SignpostReal", phase_started_at)
-            batch.append(obj)
-
-            if len(batch) >= self.batch_size:
-                if not self.dry_run:
-                    SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-                deactivated_count += len(batch)
-                batch = []
-
-        if batch:
-            if not self.dry_run:
-                SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-            deactivated_count += len(batch)
-
-        summary["signposts_deactivated"] += deactivated_count
-        logger.info(
-            "_deactivate_signposts: deactivated=%d (of %d candidates)", deactivated_count, len(deactivate_source_ids)
+        self._deactivate_objects(
+            summary,
+            rows_by_id=self.signposts_by_id,
+            source_id_to_db_id=self.signpost_source_id_to_db_id,
+            model_class=SignpostReal,
+            object_type="signposts",
+            summary_key="signposts_deactivated",
+            object_type_name="SignpostReal",
         )
-        self._record_phase_result(summary, "signposts", "deactivate", deactivated=deactivated_count, skipped=0)
-        self._save_run_log(summary)
 
     # ------------------------------------------------------------------
     # Additional sign handlers (skeleton)
@@ -2672,59 +2646,17 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     def _deactivate_additional_signs(self, summary: dict[str, Any]) -> None:
         """Deactivate AdditionalSignReal records whose CSV status is ``Removed``.
 
-        Sets ``lifecycle`` → ``Lifecycle.INACTIVE``,
-        ``validity_period_end`` → date from CSV ``scanned_at`` (``None`` if absent),
-        ``scanned_at`` → CSV timestamp, ``source_name`` → ``SOURCE_NAME``,
-        ``updated_by`` and ``updated_at``. No other fields are modified.
-
         Args:
             summary (dict[str, Any]): Mutable summary dict; the deactivated count
                 is recorded in summary["additional_signs_deactivated"] and phase
                 results are appended.
         """
-        deactivate_source_ids = [
-            s
-            for s, row in self.additional_signs_by_id.items()
-            if s in self.additional_sign_source_id_to_db_id and row.get(CSVHeadersV2.status) == "Removed"
-        ]
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("additional_signs_deactivated", 0)
-        if not deactivate_source_ids:
-            self._record_phase_result(summary, "additional-signs", "deactivate", deactivated=0, skipped=0)
-            self._save_run_log(summary)
-            return
-
-        db_id_map: dict[str, int] = {s: self.additional_sign_source_id_to_db_id[s] for s in deactivate_source_ids}
-        existing: dict[int, Any] = {obj.pk: obj for obj in AdditionalSignReal.objects.filter(pk__in=db_id_map.values())}
-        update_fields = ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"]
-        batch: list[Any] = []
-        deactivated_count = 0
-
-        for source_id in deactivate_source_ids:
-            row = self.additional_signs_by_id[source_id]
-            obj = existing.get(db_id_map[source_id])
-            if obj is None:
-                continue
-
-            self._apply_deactivation(obj, row, source_id, "AdditionalSignReal", phase_started_at)
-            batch.append(obj)
-
-            if len(batch) >= self.batch_size:
-                if not self.dry_run:
-                    AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-                deactivated_count += len(batch)
-                batch = []
-
-        if batch:
-            if not self.dry_run:
-                AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-            deactivated_count += len(batch)
-
-        summary["additional_signs_deactivated"] += deactivated_count
-        logger.info(
-            "_deactivate_additional_signs: deactivated=%d (of %d candidates)",
-            deactivated_count,
-            len(deactivate_source_ids),
+        self._deactivate_objects(
+            summary,
+            rows_by_id=self.additional_signs_by_id,
+            source_id_to_db_id=self.additional_sign_source_id_to_db_id,
+            model_class=AdditionalSignReal,
+            object_type="additional-signs",
+            summary_key="additional_signs_deactivated",
+            object_type_name="AdditionalSignReal",
         )
-        self._record_phase_result(summary, "additional-signs", "deactivate", deactivated=deactivated_count, skipped=0)
-        self._save_run_log(summary)
