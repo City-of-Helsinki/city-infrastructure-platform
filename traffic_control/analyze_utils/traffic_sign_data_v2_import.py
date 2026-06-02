@@ -12,7 +12,7 @@ import json
 import logging
 import os
 import tempfile
-from collections.abc import Callable, Generator, KeysView, Set as AbstractSet
+from collections.abc import Callable, KeysView, Set as AbstractSet
 from decimal import Decimal
 from typing import Any
 from uuid import UUID
@@ -321,105 +321,171 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     # Mount handlers
     # ------------------------------------------------------------------
 
-    def _create_mounts(self, summary: dict[str, Any]) -> None:
-        """Create new MountReal records from CSV rows not yet in the DB.
-
-        Rows whose source_id already exists in mount_source_id_to_db_id are skipped
-        because they belong to the update phase. Rows with invalid geometry are logged
-        as skips.
+    def _build_mount_for_create(
+        self,
+        source_id: str,
+        row: dict[str, Any],
+        location: Any,
+        details: list[dict],
+        phase_started_at: datetime.datetime,
+    ) -> MountReal:
+        """Build an unsaved MountReal instance from a CSV row.
 
         Args:
-            summary (dict[str, Any]): Mutable summary dict; skip/warning entries are
-                appended to summary["details"] and summary["mounts_created"] is
-                incremented.
+            source_id (str): Source identifier.
+            row (dict[str, Any]): CSV row for this source_id.
+            location (Any): Already-validated geometry point.
+            details (list[dict]): Mutable details list (unused for mounts, present for API consistency).
+            phase_started_at (datetime.datetime): Timestamp used as ``created_at``.
+
+        Returns:
+            MountReal: Unsaved MountReal instance ready for bulk_create.
         """
-        existing_source_ids: KeysView[str] = self.mount_source_id_to_db_id.keys()
+        raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+        return MountReal(
+            source_id=source_id,
+            source_name=SOURCE_NAME,
+            location=location,
+            owner=self.default_owner,
+            installation_status=InstallationStatus.IN_USE,
+            location_specifier=MountLocationSpecifier(int(raw_ls)) if raw_ls else None,
+            mount_type=self.mount_types_by_name.get(row.get(CSVHeadersV2.mount_type, "")),
+            scanned_at=self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at)),
+            attachment_url=row.get(CSVHeadersV2.attachment_url, ""),
+            created_by=self.user,
+            created_at=phase_started_at,
+        )
+
+    def _iter_objects_to_create(
+        self,
+        rows_by_id: dict[str, Any],
+        existing_source_ids: AbstractSet[str],
+        details: list[dict],
+        processed: list[str],
+        build_object: Callable[[str, dict[str, Any], Any, list[dict], datetime.datetime], Any],
+        phase_started_at: datetime.datetime,
+        filter_removed: bool = True,
+    ) -> Any:
+        """Yield unsaved model instances for the create phase.
+
+        Memory-efficient generator consumed by ``bulk_create`` in ``_create_objects``.
+        Django pulls exactly ``batch_size`` items at a time from the generator so
+        peak Python memory stays at O(batch_size) rather than O(total rows).
+
+        Args:
+            rows_by_id (dict[str, Any]): CSV rows keyed by source_id.
+            existing_source_ids (AbstractSet[str]): Source IDs already in the DB (skipped).
+            details (list[dict]): Mutable details list for skip/warning entries.
+            processed (list[str]): Mutable list to append successfully prepared source_ids.
+            build_object (Callable): Per-row factory ``(source_id, row, location, details,
+                phase_started_at) -> model instance | None``. Return None to skip.
+            phase_started_at (datetime.datetime): Timestamp used as ``created_at``.
+            filter_removed (bool): When True (default), rows with status ``"Removed"``
+                are excluded. Set to False for mounts.
+
+        Yields:
+            Unsaved model instances ready for ``bulk_create``.
+        """
+        for source_id, row in rows_by_id.items():
+            if source_id in existing_source_ids:
+                continue
+            if filter_removed and row.get(CSVHeadersV2.status) == "Removed":
+                continue
+            location = self._validate_and_get_location(row, source_id, details)
+            if location is None:
+                continue
+            obj = build_object(source_id, row, location, details, phase_started_at)
+            if obj is None:
+                continue
+            processed.append(source_id)
+            yield obj
+
+    def _create_objects(
+        self,
+        summary: dict[str, Any],
+        rows_by_id: dict[str, Any],
+        existing_source_ids: AbstractSet[str],
+        model_class: type,
+        object_type: str,
+        summary_key: str,
+        object_type_name: str,
+        processed_key: str,
+        build_object: Callable[[str, dict[str, Any], Any, list[dict], datetime.datetime], Any],
+        filter_removed: bool = True,
+    ) -> None:
+        """Generic create phase handler shared by mounts, signs and additional signs.
+
+        Uses a generator so Django's ``bulk_create`` processes rows in batches of
+        ``batch_size``, keeping peak Python memory at O(batch_size) rather than
+        O(total rows).
+
+        Args:
+            summary (dict[str, Any]): Mutable summary dict.
+            rows_by_id (dict[str, Any]): CSV rows keyed by source_id.
+            existing_source_ids (AbstractSet[str]): Source IDs already in the DB.
+            model_class (type): Django model class to bulk_create.
+            object_type (str): Object type label used in phase results (e.g. ``"mounts"``).
+            summary_key (str): Key in summary dict for created count (e.g. ``"mounts_created"``).
+            object_type_name (str): Model class name used in revert records (e.g. ``"MountReal"``).
+            processed_key (str): Key in summary dict for processed source_id list.
+            build_object (Callable): ``(source_id, row, location, details, phase_started_at)
+                -> model instance | None``. Return None to skip the row.
+            filter_removed (bool): When True (default), rows with status ``"Removed"``
+                are excluded. Set to False for mounts which have no status field.
+        """
         phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("mounts_created", 0)
-        details_before = len(summary.get("details", []))
-        generator = self._get_mounts(
-            skip_source_ids=existing_source_ids, summary=summary, phase_started_at=phase_started_at
+        summary.setdefault(summary_key, 0)
+        details: list[dict] = summary.setdefault("details", [])
+        details_before = len(details)
+        processed: list[str] = summary.setdefault(processed_key, [])
+
+        generator = self._iter_objects_to_create(
+            rows_by_id, existing_source_ids, details, processed, build_object, phase_started_at, filter_removed
         )
         if self.dry_run:
-            created_count = 0
-            for _ in generator:
-                created_count += 1
+            created_count = sum(1 for _ in generator)
         else:
-            created = MountReal.objects.bulk_create(generator, batch_size=self.batch_size)
+            created = model_class.objects.bulk_create(generator, batch_size=self.batch_size)
             created_count = len(created)
-            # Write revert records after bulk_create — PKs are only available once
-            # the batch has been committed. For creates the revert record only needs
-            # the DB id (to know which row to delete on revert).
             for obj in created:
                 self._write_revert_record(
                     {
                         "action": "create",
-                        "object_type": "MountReal",
+                        "object_type": object_type_name,
                         "db_id": str(obj.id),
                         "source_id": obj.source_id,
                     }
                 )
-        summary["mounts_created"] += created_count
-        new_details = summary.get("details", [])[details_before:]
+
+        summary[summary_key] += created_count
+        new_details = details[details_before:]
         skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
-        self._record_phase_result(summary, "mounts", "create", created=created_count, skipped=skipped_count)
+        warning_count = sum(1 for e in new_details if e.get("level") == "warning")
+        self._record_phase_result(
+            summary, object_type, "create", created=created_count, skipped=skipped_count, warnings=warning_count
+        )
         self._save_run_log(summary)
 
-    def _get_mounts(
-        self,
-        skip_source_ids: AbstractSet[str],
-        summary: dict[str, Any],
-        phase_started_at: datetime.datetime,
-    ) -> Generator[MountReal, None, None]:
-        """Yield MountReal instances built from CSV rows.
-
-        Rows whose source_id is in skip_source_ids are silently skipped.
-        Rows with invalid geometry are recorded as skip entries in summary["details"].
+    def _create_mounts(self, summary: dict[str, Any]) -> None:
+        """Create new MountReal records from CSV rows not yet in the DB.
 
         Args:
-            skip_source_ids (AbstractSet[str]): Source IDs to exclude (already exist in DB,
-                i.e. keys of mount_source_id_to_db_id).
-            summary (dict[str, Any]): Mutable summary dict for skip/warning entries.
-            phase_started_at (datetime.datetime): Timestamp of phase start, used as created_at.
-
-        Yields:
-            MountReal: Unsaved MountReal instance ready for bulk_create.
+            summary (dict[str, Any]): Mutable summary dict; skip entries are
+                appended to summary["details"] and summary["mounts_created"] is
+                incremented.
         """
-        details: list[dict] = summary.setdefault("details", [])
-        processed: list[str] = summary.setdefault("processed_mount_source_ids", [])
-        # NOTE: source_ids are appended here (optimistically, before the DB write
-        # succeeds) purely as an in-memory accumulator.  _save_run_log() is only
-        # called after bulk_create() returns without error, so this list is never
-        # persisted if a batch fails.  On re-run the union of *saved* run log rows
-        # is used, so stale in-memory entries from a failed run are harmless.
-
-        for source_id, row in self.mounts_by_id.items():
-            if source_id in skip_source_ids:
-                continue
-
-            location = self._validate_and_get_location(row, source_id, details)
-            if location is None:
-                continue
-
-            raw_location_specifier = row.get(CSVHeadersV2.location_specifier, "")
-            location_specifier = MountLocationSpecifier(int(raw_location_specifier)) if raw_location_specifier else None
-            mount_type_name = row.get(CSVHeadersV2.mount_type, "")
-            mount_type = self.mount_types_by_name.get(mount_type_name)
-
-            processed.append(source_id)
-            yield MountReal(
-                source_id=source_id,
-                source_name=SOURCE_NAME,
-                location=location,
-                owner=self.default_owner,
-                installation_status=InstallationStatus.IN_USE,
-                location_specifier=location_specifier,
-                mount_type=mount_type,
-                scanned_at=self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at)),
-                attachment_url=row.get(CSVHeadersV2.attachment_url, ""),
-                created_by=self.user,
-                created_at=phase_started_at,
-            )
+        self._create_objects(
+            summary,
+            rows_by_id=self.mounts_by_id,
+            existing_source_ids=self.mount_source_id_to_db_id.keys(),
+            model_class=MountReal,
+            object_type="mounts",
+            summary_key="mounts_created",
+            object_type_name="MountReal",
+            processed_key="processed_mount_source_ids",
+            build_object=self._build_mount_for_create,
+            filter_removed=False,
+        )
 
     @staticmethod
     def _get_scanned_at(date_str: str | None) -> datetime.datetime | None:
@@ -1150,117 +1216,70 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     # Traffic sign handlers
     # ------------------------------------------------------------------
 
+    def _build_sign_for_create(
+        self,
+        source_id: str,
+        row: dict[str, Any],
+        location: Any,
+        details: list[dict],
+        phase_started_at: datetime.datetime,
+    ) -> TrafficSignReal | None:
+        """Build an unsaved TrafficSignReal instance from a CSV row.
+
+        Args:
+            source_id (str): Source identifier.
+            row (dict[str, Any]): CSV row for this source_id.
+            location (Any): Already-validated geometry point.
+            details (list[dict]): Mutable details list for skip/warning entries.
+            phase_started_at (datetime.datetime): Timestamp used as ``created_at``.
+
+        Returns:
+            TrafficSignReal | None: Unsaved instance, or None if row must be skipped.
+        """
+        fields = self._resolve_sign_create_fields(row, source_id, details)
+        if fields is None:
+            return None
+        return TrafficSignReal(
+            source_id=source_id,
+            source_name=SOURCE_NAME,
+            location=location,
+            device_type_id=fields["device_type_id"],
+            owner=fields["owner"],
+            installation_status=InstallationStatus.IN_USE,
+            lifecycle=Lifecycle.ACTIVE,
+            mount_real_id=fields["mount_real_id"],
+            mount_type=fields["mount_type"],
+            direction=fields["direction"],
+            height=fields["height"],
+            condition=fields["condition"],
+            location_specifier=fields["location_specifier"],
+            value=fields["value"],
+            txt=fields["txt"],
+            scanned_at=fields["scanned_at"],
+            attachment_url=fields["attachment_url"],
+            created_by=self.user,
+            created_at=phase_started_at,
+        )
+
     def _create_signs(self, summary: dict[str, Any]) -> None:
         """Create new TrafficSignReal records from CSV rows not yet in the DB.
-
-        Rows with ``status == "Removed"``, already present in the DB, with
-        invalid geometry, or whose device type code is not found are skipped.
-        Rows referencing an unknown mount or carrying a parent_sign_id value
-        (which traffic signs do not support) are imported with a warning entry.
 
         Args:
             summary (dict[str, Any]): Mutable summary dict; skip/warning entries are
                 appended to summary["details"] and summary["signs_created"] is
                 incremented.
         """
-        existing_source_ids: KeysView[str] = self.sign_source_id_to_db_id.keys()
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("signs_created", 0)
-        details_before = len(summary.get("details", []))
-        generator = self._get_signs_to_create(
-            existing_source_ids=existing_source_ids,
-            summary=summary,
-            phase_started_at=phase_started_at,
+        self._create_objects(
+            summary,
+            rows_by_id=self.signs_by_id,
+            existing_source_ids=self.sign_source_id_to_db_id.keys(),
+            model_class=TrafficSignReal,
+            object_type="signs",
+            summary_key="signs_created",
+            object_type_name="TrafficSignReal",
+            processed_key="processed_sign_source_ids",
+            build_object=self._build_sign_for_create,
         )
-        if self.dry_run:
-            created_count = 0
-            for _ in generator:
-                created_count += 1
-        else:
-            created = TrafficSignReal.objects.bulk_create(generator, batch_size=self.batch_size)
-            created_count = len(created)
-            # Write revert records after bulk_create — PKs are only available once
-            # the batch has been committed. For creates the revert record only needs
-            # the DB id (to know which row to delete on revert).
-            for obj in created:
-                self._write_revert_record(
-                    {
-                        "action": "create",
-                        "object_type": "TrafficSignReal",
-                        "db_id": str(obj.id),
-                        "source_id": obj.source_id,
-                    }
-                )
-        summary["signs_created"] += created_count
-        new_details = summary.get("details", [])[details_before:]
-        skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
-        warning_count = sum(1 for e in new_details if e.get("level") == "warning")
-        self._record_phase_result(
-            summary, "signs", "create", created=created_count, skipped=skipped_count, warnings=warning_count
-        )
-        self._save_run_log(summary)
-
-    def _get_signs_to_create(
-        self,
-        existing_source_ids: AbstractSet[str],
-        summary: dict[str, Any],
-        phase_started_at: datetime.datetime,
-    ) -> Generator[TrafficSignReal, None, None]:
-        """Yield TrafficSignReal instances built from new CSV rows.
-
-        Rows already in the DB, marked Removed, with invalid geometry, or whose
-        device type code is not found are skipped with a details entry.
-        Rows with an unresolved mount or a parent_sign_id value are imported with
-        a warning details entry.
-
-        Args:
-            existing_source_ids (AbstractSet[str]): Source IDs already present in the DB.
-            summary (dict[str, Any]): Mutable summary dict for skip/warning entries.
-            phase_started_at (datetime.datetime): Timestamp of phase start, used as created_at.
-
-        Yields:
-            TrafficSignReal: Unsaved TrafficSignReal instance ready for bulk_create.
-        """
-
-        details: list[dict] = summary.setdefault("details", [])
-        processed: list[str] = summary.setdefault("processed_sign_source_ids", [])
-
-        for source_id, row in self.signs_by_id.items():
-            if source_id in existing_source_ids:
-                continue
-            if row.get(CSVHeadersV2.status) == "Removed":
-                continue
-
-            location = self._validate_and_get_location(row, source_id, details)
-            if location is None:
-                continue
-
-            fields = self._resolve_sign_create_fields(row, source_id, details)
-            if fields is None:
-                continue
-
-            processed.append(source_id)
-            yield TrafficSignReal(
-                source_id=source_id,
-                source_name=SOURCE_NAME,
-                location=location,
-                device_type_id=fields["device_type_id"],
-                owner=fields["owner"],
-                installation_status=InstallationStatus.IN_USE,
-                lifecycle=Lifecycle.ACTIVE,
-                mount_real_id=fields["mount_real_id"],
-                mount_type=fields["mount_type"],
-                direction=fields["direction"],
-                height=fields["height"],
-                condition=fields["condition"],
-                location_specifier=fields["location_specifier"],
-                value=fields["value"],
-                txt=fields["txt"],
-                scanned_at=fields["scanned_at"],
-                attachment_url=fields["attachment_url"],
-                created_by=self.user,
-                created_at=phase_started_at,
-            )
 
     def _resolve_sign_update_fields(
         self,
@@ -2315,103 +2334,73 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     # Additional sign phase handlers
     # ------------------------------------------------------------------
 
+    def _build_additional_sign_for_create(
+        self,
+        source_id: str,
+        row: dict[str, Any],
+        location: Any,
+        details: list[dict],
+        phase_started_at: datetime.datetime,
+    ) -> AdditionalSignReal | None:
+        """Build an unsaved AdditionalSignReal instance from a CSV row.
+
+        Args:
+            source_id (str): Source identifier.
+            row (dict[str, Any]): CSV row for this source_id.
+            location (Any): Already-validated geometry point.
+            details (list[dict]): Mutable details list for skip/warning entries.
+            phase_started_at (datetime.datetime): Timestamp used as ``created_at``.
+
+        Returns:
+            AdditionalSignReal | None: Unsaved instance, or None if row must be skipped.
+        """
+        fields = self._resolve_additional_sign_create_fields(row, source_id, details)
+        if fields is None:
+            return None
+        return AdditionalSignReal(
+            source_id=source_id,
+            source_name=SOURCE_NAME,
+            location=location,
+            device_type_id=fields["device_type_id"],
+            owner=self.default_owner,
+            installation_status=InstallationStatus.IN_USE,
+            lifecycle=Lifecycle.ACTIVE,
+            missing_content=True,
+            parent_id=fields["parent_id"],
+            signpost_real_id=fields["signpost_real_id"],
+            mount_real_id=fields["mount_real_id"],
+            mount_type=fields["mount_type"],
+            direction=fields["direction"],
+            height=fields["height"],
+            condition=fields["condition"],
+            location_specifier=fields["location_specifier"],
+            color=fields["color"],
+            additional_information=fields["additional_information"],
+            scanned_at=fields["scanned_at"],
+            attachment_url=fields["attachment_url"],
+            created_by=self.user,
+            created_at=phase_started_at,
+        )
+
     def _create_additional_signs(self, summary: dict[str, Any]) -> None:
         """Create new AdditionalSignReal records from CSV rows not yet in the DB.
-
-        Rows with ``status == "Removed"``, already present in the DB, with
-        invalid geometry, unreadable text, or whose device type code is not found
-        are skipped. An unresolved parent_sign_id is imported with a warning.
 
         Args:
             summary (dict[str, Any]): Mutable summary dict; skip/warning entries
                 are appended to summary["details"] and
                 summary["additional_signs_created"] is incremented.
         """
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("additional_signs_created", 0)
-        details: list[dict] = summary.setdefault("details", [])
-        details_before = len(details)
-        processed: list[str] = summary.setdefault("processed_additional_sign_source_ids", [])
-
-        existing_source_ids: KeysView[str] = self.additional_sign_source_id_to_db_id.keys()
-        objects_to_create: list[AdditionalSignReal] = []
-
-        for source_id, row in self.additional_signs_by_id.items():
-            if source_id in existing_source_ids or row.get(CSVHeadersV2.status) == "Removed":
-                continue
-
-            location = self._validate_and_get_location(row, source_id, details)
-            if location is None:
-                continue
-
-            fields = self._resolve_additional_sign_create_fields(row, source_id, details)
-            if fields is None:
-                continue
-
-            processed.append(source_id)
-            objects_to_create.append(
-                AdditionalSignReal(
-                    source_id=source_id,
-                    source_name=SOURCE_NAME,
-                    location=location,
-                    device_type_id=fields["device_type_id"],
-                    owner=self.default_owner,
-                    installation_status=InstallationStatus.IN_USE,
-                    lifecycle=Lifecycle.ACTIVE,
-                    missing_content=True,
-                    parent_id=fields["parent_id"],
-                    signpost_real_id=fields["signpost_real_id"],
-                    mount_real_id=fields["mount_real_id"],
-                    mount_type=fields["mount_type"],
-                    direction=fields["direction"],
-                    height=fields["height"],
-                    condition=fields["condition"],
-                    location_specifier=fields["location_specifier"],
-                    color=fields["color"],
-                    additional_information=fields["additional_information"],
-                    scanned_at=fields["scanned_at"],
-                    attachment_url=fields["attachment_url"],
-                    created_by=self.user,
-                    created_at=phase_started_at,
-                )
-            )
-
-        created_count = 0
-        if objects_to_create:
-            if self.dry_run:
-                created_count = len(objects_to_create)
-            else:
-                created = AdditionalSignReal.objects.bulk_create(objects_to_create, batch_size=self.batch_size)
-                created_count = len(created)
-                for obj in created:
-                    self._write_revert_record(
-                        {
-                            "action": "create",
-                            "object_type": "AdditionalSignReal",
-                            "db_id": str(obj.id),
-                            "source_id": obj.source_id,
-                        }
-                    )
-
-        summary["additional_signs_created"] += created_count
-        new_details = details[details_before:]
-        skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
-        warning_count = sum(1 for e in new_details if e.get("level") == "warning")
-        logger.info(
-            "_create_additional_signs: created=%d skipped=%d warnings=%d",
-            created_count,
-            skipped_count,
-            warning_count,
-        )
-        self._record_phase_result(
+        self._create_objects(
             summary,
-            "additional-signs",
-            "create",
-            created=created_count,
-            skipped=skipped_count,
-            warnings=warning_count,
+            rows_by_id=self.additional_signs_by_id,
+            existing_source_ids=self.additional_sign_source_id_to_db_id.keys(),
+            model_class=AdditionalSignReal,
+            object_type="additional-signs",
+            summary_key="additional_signs_created",
+            object_type_name="AdditionalSignReal",
+            processed_key="processed_additional_sign_source_ids",
+            build_object=self._build_additional_sign_for_create,
         )
-        self._save_run_log(summary)
 
     def _prepare_additional_sign_for_update(
         self,
