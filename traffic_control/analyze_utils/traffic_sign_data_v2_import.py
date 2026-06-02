@@ -439,6 +439,11 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         details_before = len(details)
         processed: list[str] = summary.setdefault(processed_key, [])
 
+        total_candidates = sum(
+            1
+            for s, row in rows_by_id.items()
+            if s not in existing_source_ids and (not filter_removed or row.get(CSVHeadersV2.status) != "Removed")
+        )
         generator = self._iter_objects_to_create(
             rows_by_id, existing_source_ids, details, processed, build_object, phase_started_at, filter_removed
         )
@@ -461,6 +466,14 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         new_details = details[details_before:]
         skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
         warning_count = sum(1 for e in new_details if e.get("level") == "warning")
+        logger.info(
+            "_%s: created=%d skipped=%d warnings=%d (of %d candidates)",
+            f"create_{object_type.replace('-', '_')}",
+            created_count,
+            skipped_count,
+            warning_count,
+            total_candidates,
+        )
         self._record_phase_result(
             summary, object_type, "create", created=created_count, skipped=skipped_count, warnings=warning_count
         )
