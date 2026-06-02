@@ -706,141 +706,160 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             }
         )
 
-    def _get_mounts_to_update(
+    def _prepare_mount_for_update(
         self,
-        update_source_ids: list[str],
-        db_id_map: dict[str, int],
-        existing: dict[int, MountReal],
-        summary: dict[str, Any],
+        obj: MountReal,
+        row: dict[str, Any],
+        source_id: str,
+        details: list[dict],
         phase_started_at: datetime.datetime,
-    ) -> Generator[MountReal, None, None]:
-        """Yield MountReal instances that need to be updated.
-
-        Applies geometry validation and (unless ``force_update`` is True) field
-        comparison to determine whether each row requires a DB write. Revert
-        records are written before each yield so they are always durable.
-        ``updated_by`` and ``updated_at`` are always set and are intentionally
-        excluded from the changed comparison so they do not trigger spurious updates.
+    ) -> bool:
+        """Mutate a MountReal instance in-place with new CSV values.
 
         Args:
-            update_source_ids (list[str]): Ordered list of source IDs to consider.
-            db_id_map (dict[str, int]): Mapping from source_id to DB primary key.
-            existing (dict[int, MountReal]): Currently persisted MountReal instances
-                keyed by DB primary key.
-            summary (dict[str, Any]): Mutable summary dict; skips are appended to
+            obj (MountReal): Existing DB instance to mutate.
+            row (dict[str, Any]): CSV row for this source_id.
+            source_id (str): Source identifier used for error reporting.
+            details (list[dict]): Mutable details list for skip/warning entries.
+            phase_started_at (datetime.datetime): Timestamp used as ``updated_at``.
 
-        Yields:
-            MountReal: Mutated (unsaved) MountReal instance ready for bulk_update.
+        Returns:
+            bool: True if the object was mutated and should be bulk-updated, False to skip.
         """
-        skipped: list[int] = summary.setdefault("_skipped_mount_update_count", [0])
+        new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
+        if new_location is None:
+            return False
+        fields = self._resolve_mount_new_fields(row)
+        if not self._mount_fields_changed(
+            obj,
+            new_location,
+            fields["location_specifier"],
+            fields["mount_type"],
+            fields["scanned_at"],
+            fields["attachment_url"],
+        ):
+            return False
+        if not self.dry_run:
+            self._write_mount_update_revert_record(obj, source_id)
+        obj.source_name = SOURCE_NAME
+        obj.location = new_location
+        obj.location_specifier = fields["location_specifier"]
+        obj.mount_type = fields["mount_type"]
+        obj.scanned_at = fields["scanned_at"]
+        obj.attachment_url = fields["attachment_url"]
+        obj.updated_by = self.user
+        obj.updated_at = phase_started_at
+        return True
+
+    def _update_objects(
+        self,
+        summary: dict[str, Any],
+        rows_by_id: dict[str, Any],
+        source_id_to_db_id: dict[str, Any],
+        model_class: type,
+        object_type: str,
+        summary_key: str,
+        update_fields: list[str],
+        prepare_row: Callable[[Any, dict[str, Any], str, list[dict], datetime.datetime], bool],
+        filter_removed: bool = True,
+    ) -> None:
+        """Generic update phase handler shared by all four object types.
+
+        Filters candidate source_ids, fetches current DB state, calls ``prepare_row``
+        for each candidate to mutate the object in-place (or signal skip), and
+        bulk-updates mutated objects in batches.
+
+        Args:
+            summary (dict[str, Any]): Mutable summary dict.
+            rows_by_id (dict[str, Any]): CSV rows keyed by source_id.
+            source_id_to_db_id (dict[str, Any]): Mapping from source_id to DB primary key.
+            model_class (type): Django model class to query and bulk_update.
+            object_type (str): Object type label used in phase results (e.g. ``"signs"``).
+            summary_key (str): Key in summary dict for updated count (e.g. ``"signs_updated"``).
+            update_fields (list[str]): Field names passed to bulk_update.
+            prepare_row (Callable): Per-row callback ``(obj, row, source_id, details,
+                phase_started_at) -> bool``. Returns True if the object was mutated and
+                should be saved, False to skip.
+            filter_removed (bool): When True (default), rows with status ``"Removed"``
+                are excluded. Set to False for mounts which have no status field.
+        """
+        update_source_ids = [
+            s
+            for s, row in rows_by_id.items()
+            if s in source_id_to_db_id and (not filter_removed or row.get(CSVHeadersV2.status) != "Removed")
+        ]
+        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        summary.setdefault(summary_key, 0)
+        if not update_source_ids:
+            self._record_phase_result(summary, object_type, "update", updated=0, skipped=0)
+            self._save_run_log(summary)
+            return
+
+        db_id_map = {s: source_id_to_db_id[s] for s in update_source_ids}
+        existing = {obj.pk: obj for obj in model_class.objects.filter(pk__in=db_id_map.values())}
+        details: list[dict] = summary.setdefault("details", [])
+        updated_count = 0
+        skipped_count = 0
+        batch: list[Any] = []
 
         for source_id in update_source_ids:
-            row = self.mounts_by_id[source_id]
             obj = existing.get(db_id_map[source_id])
             if obj is None:
-                skipped[0] += 1
+                skipped_count += 1
                 continue
+            if prepare_row(obj, rows_by_id[source_id], source_id, details, phase_started_at):
+                batch.append(obj)
+                if len(batch) >= self.batch_size:
+                    if not self.dry_run:
+                        model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+                    updated_count += len(batch)
+                    batch = []
+            else:
+                skipped_count += 1
 
-            new_location = self._validate_and_get_location(
-                row, source_id, summary.setdefault("details", []), _ON_UPDATE_SUFFIX
-            )
-            if new_location is None:
-                skipped[0] += 1
-                continue
-
-            fields = self._resolve_mount_new_fields(row)
-
-            if not self._mount_fields_changed(
-                obj,
-                new_location,
-                fields["location_specifier"],
-                fields["mount_type"],
-                fields["scanned_at"],
-                fields["attachment_url"],
-            ):
-                skipped[0] += 1
-                continue
-
+        if batch:
             if not self.dry_run:
-                self._write_mount_update_revert_record(obj, source_id)
+                model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+            updated_count += len(batch)
 
-            obj.source_name = SOURCE_NAME
-            obj.location = new_location
-            obj.location_specifier = fields["location_specifier"]
-            obj.mount_type = fields["mount_type"]
-            obj.scanned_at = fields["scanned_at"]
-            obj.attachment_url = fields["attachment_url"]
-            obj.updated_by = self.user
-            obj.updated_at = phase_started_at
-            yield obj
+        summary[summary_key] += updated_count
+        logger.info(
+            "_%s: updated=%d skipped=%d (of %d candidates)",
+            f"update_{object_type.replace('-', '_')}",
+            updated_count,
+            skipped_count,
+            len(update_source_ids),
+        )
+        self._record_phase_result(summary, object_type, "update", updated=updated_count, skipped=skipped_count)
+        self._save_run_log(summary)
 
     def _update_mounts(self, summary: dict[str, Any]) -> None:
         """Update existing MountReal records from CSV rows whose source_id is already in the DB.
-
-        Fetches current DB state, computes new field values from CSV, and bulk-updates
-        only the records where at least one field has changed. When ``force_update`` is
-        True the field comparison is bypassed and all records are updated unconditionally.
-        A revert record capturing the previous field values is written before each update
-        so the run can be rolled back. Records are consumed from a generator and written
-        in batches to keep memory usage O(batch_size).
 
         Args:
             summary (dict[str, Any]): Mutable summary dict; the updated count is
                 recorded in summary["mounts_updated"] and phase results are appended.
         """
-        update_source_ids = [s for s in self.mounts_by_id if s in self.mount_source_id_to_db_id]
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("mounts_updated", 0)
-        if not update_source_ids:
-            self._record_phase_result(summary, "mounts", "update", updated=0, skipped=0)
-            self._save_run_log(summary)
-            return
-
-        db_id_map: dict[str, int] = {s: self.mount_source_id_to_db_id[s] for s in update_source_ids}
-        existing: dict[int, MountReal] = {obj.pk: obj for obj in MountReal.objects.filter(pk__in=db_id_map.values())}
-
-        update_fields = [
-            "source_name",
-            "location",
-            "location_specifier",
-            "mount_type",
-            "scanned_at",
-            "attachment_url",
-            "updated_by",
-            "updated_at",
-        ]
-        summary["_skipped_mount_update_count"] = [0]
-        generator = self._get_mounts_to_update(update_source_ids, db_id_map, existing, summary, phase_started_at)
-
-        # bulk_update does not accept a generator directly — unlike bulk_create which
-        # handles generators natively with its batch_size parameter, bulk_update
-        # internally slices the iterable (objs[i:i+batch_size]) which requires a
-        # sequence supporting len() and slicing.  We therefore drain the generator
-        # manually in fixed-size batches to keep memory consumption at O(batch_size).
-        updated_count = 0
-        batch: list[MountReal] = []
-        for obj in generator:
-            batch.append(obj)
-            if len(batch) >= self.batch_size:
-                if not self.dry_run:
-                    MountReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-                updated_count += len(batch)
-                batch = []
-        if batch:
-            if not self.dry_run:
-                MountReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-            updated_count += len(batch)
-
-        skipped_count: int = summary.pop("_skipped_mount_update_count")[0]
-        summary["mounts_updated"] += updated_count
-        logger.info(
-            "_update_mounts: updated=%d skipped=%d (of %d candidates)",
-            updated_count,
-            skipped_count,
-            len(update_source_ids),
+        self._update_objects(
+            summary,
+            rows_by_id=self.mounts_by_id,
+            source_id_to_db_id=self.mount_source_id_to_db_id,
+            model_class=MountReal,
+            object_type="mounts",
+            summary_key="mounts_updated",
+            update_fields=[
+                "source_name",
+                "location",
+                "location_specifier",
+                "mount_type",
+                "scanned_at",
+                "attachment_url",
+                "updated_by",
+                "updated_at",
+            ],
+            prepare_row=self._prepare_mount_for_update,
+            filter_removed=False,
         )
-        self._record_phase_result(summary, "mounts", "update", updated=updated_count, skipped=skipped_count)
-        self._save_run_log(summary)
 
     # ------------------------------------------------------------------
     # Traffic sign field-cast helpers
@@ -1374,177 +1393,92 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             }
         )
 
-    def _get_signs_to_update(
+    def _prepare_sign_for_update(
         self,
-        update_source_ids: list[str],
-        db_id_map: dict[str, int],
-        existing: dict[int, TrafficSignReal],
-        summary: dict[str, Any],
+        obj: TrafficSignReal,
+        row: dict[str, Any],
+        source_id: str,
+        details: list[dict],
         phase_started_at: datetime.datetime,
-    ) -> Generator[TrafficSignReal, None, None]:
-        """Yield TrafficSignReal instances that need to be updated.
-
-        Applies geometry validation and (unless ``force_update`` is True) field
-        comparison to determine whether each row requires a DB write. Revert
-        records are written before each yield so they are always durable.
-        ``updated_by`` and ``updated_at`` are always set and are intentionally
-        excluded from the changed comparison so they do not trigger spurious updates.
+    ) -> bool:
+        """Mutate a TrafficSignReal instance in-place with new CSV values.
 
         Args:
-            update_source_ids (list[str]): Ordered list of source IDs to consider.
-            db_id_map (dict[str, int]): Mapping from source_id to DB primary key.
-            existing (dict[int, TrafficSignReal]): Currently persisted instances
-                keyed by DB primary key.
-            summary (dict[str, Any]): Mutable summary dict; skips/warnings are
-                appended to summary["details"].
-            phase_started_at (datetime.datetime): Timestamp of phase start, used as updated_at.
+            obj (TrafficSignReal): Existing DB instance to mutate.
+            row (dict[str, Any]): CSV row for this source_id.
+            source_id (str): Source identifier used for error reporting.
+            details (list[dict]): Mutable details list for skip/warning entries.
+            phase_started_at (datetime.datetime): Timestamp used as ``updated_at``.
 
-        Yields:
-            TrafficSignReal: Mutated (unsaved) instance ready for bulk_update.
+        Returns:
+            bool: True if the object was mutated and should be bulk-updated, False to skip.
         """
-        skipped: list[int] = summary.setdefault("_skipped_sign_update_count", [0])
-        details: list[dict] = summary.setdefault("details", [])
-
-        for source_id in update_source_ids:
-            row = self.signs_by_id[source_id]
-            obj = existing.get(db_id_map[source_id])
-            if obj is None:
-                skipped[0] += 1
-                continue
-
-            new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
-            if new_location is None:
-                skipped[0] += 1
-                continue
-
-            fields = self._resolve_sign_update_fields(row, source_id, details)
-            if fields is None:
-                skipped[0] += 1
-                continue
-
-            if not self._sign_fields_changed(obj, new_location, fields):
-                skipped[0] += 1
-                continue
-
-            if not self.dry_run:
-                self._create_sign_update_revert_record(obj, source_id)
-
-            obj.source_name = SOURCE_NAME
-            obj.location = new_location
-            obj.device_type_id = fields["device_type_id"]
-            obj.owner = fields["owner"]
-            obj.installation_status = InstallationStatus.IN_USE
-            obj.lifecycle = Lifecycle.ACTIVE
-            obj.mount_real_id = fields["mount_real_id"]
-            obj.mount_type = fields["mount_type"]
-            obj.direction = fields["direction"]
-            obj.height = fields["height"]
-            obj.condition = fields["condition"]
-            obj.location_specifier = fields["location_specifier"]
-            obj.value = fields["value"]
-            obj.txt = fields["txt"]
-            obj.scanned_at = fields["scanned_at"]
-            obj.attachment_url = fields["attachment_url"]
-            obj.updated_by = self.user
-            obj.updated_at = phase_started_at
-            yield obj
+        new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
+        if new_location is None:
+            return False
+        fields = self._resolve_sign_update_fields(row, source_id, details)
+        if fields is None:
+            return False
+        if not self._sign_fields_changed(obj, new_location, fields):
+            return False
+        if not self.dry_run:
+            self._create_sign_update_revert_record(obj, source_id)
+        obj.source_name = SOURCE_NAME
+        obj.location = new_location
+        obj.device_type_id = fields["device_type_id"]
+        obj.owner = fields["owner"]
+        obj.installation_status = InstallationStatus.IN_USE
+        obj.lifecycle = Lifecycle.ACTIVE
+        obj.mount_real_id = fields["mount_real_id"]
+        obj.mount_type = fields["mount_type"]
+        obj.direction = fields["direction"]
+        obj.height = fields["height"]
+        obj.condition = fields["condition"]
+        obj.location_specifier = fields["location_specifier"]
+        obj.value = fields["value"]
+        obj.txt = fields["txt"]
+        obj.scanned_at = fields["scanned_at"]
+        obj.attachment_url = fields["attachment_url"]
+        obj.updated_by = self.user
+        obj.updated_at = phase_started_at
+        return True
 
     def _update_signs(self, summary: dict[str, Any]) -> None:
         """Update existing TrafficSignReal records from CSV rows already in the DB.
-
-        Fetches current DB state, computes new field values from CSV, and bulk-updates
-        only the records where at least one field has changed. When ``force_update`` is
-        True the field comparison is bypassed and all records are updated unconditionally.
-        A revert record capturing the previous field values is written before each update
-        so the run can be rolled back. Records are consumed from a generator and written
-        in batches to keep memory usage O(batch_size).
 
         Args:
             summary (dict[str, Any]): Mutable summary dict; the updated count is
                 recorded in summary["signs_updated"] and phase results are appended.
         """
-        update_source_ids = [
-            s
-            for s, row in self.signs_by_id.items()
-            if s in self.sign_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-        ]
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("signs_updated", 0)
-        if not update_source_ids:
-            self._record_phase_result(summary, "signs", "update", updated=0, skipped=0)
-            self._save_run_log(summary)
-            return
-
-        db_id_map: dict[str, int] = {s: self.sign_source_id_to_db_id[s] for s in update_source_ids}
-        existing: dict[int, TrafficSignReal] = {
-            obj.pk: obj for obj in TrafficSignReal.objects.filter(pk__in=db_id_map.values())
-        }
-
-        update_fields = [
-            "source_name",
-            "location",
-            "device_type",
-            "owner",
-            "installation_status",
-            "lifecycle",
-            "mount_real",
-            "mount_type",
-            "direction",
-            "height",
-            "condition",
-            "location_specifier",
-            "value",
-            "txt",
-            "scanned_at",
-            "attachment_url",
-            "updated_by",
-            "updated_at",
-        ]
-        summary["_skipped_sign_update_count"] = [0]
-        generator = self._get_signs_to_update(
-            update_source_ids,
-            db_id_map,
-            existing,
+        self._update_objects(
             summary,
-            phase_started_at,
+            rows_by_id=self.signs_by_id,
+            source_id_to_db_id=self.sign_source_id_to_db_id,
+            model_class=TrafficSignReal,
+            object_type="signs",
+            summary_key="signs_updated",
+            update_fields=[
+                "source_name",
+                "location",
+                "device_type",
+                "owner",
+                "installation_status",
+                "lifecycle",
+                "mount_real",
+                "mount_type",
+                "direction",
+                "height",
+                "condition",
+                "location_specifier",
+                "value",
+                "txt",
+                "scanned_at",
+                "attachment_url",
+                "updated_by",
+                "updated_at",
+            ],
+            prepare_row=self._prepare_sign_for_update,
         )
-
-        # bulk_update does not accept a generator directly — unlike bulk_create which
-        # handles generators natively with its batch_size parameter, bulk_update
-        # internally slices the iterable (objs[i:i+batch_size]) which requires a
-        # sequence supporting len() and slicing.  We therefore drain the generator
-        # manually in fixed-size batches to keep memory consumption at O(batch_size).
-        updated_count = 0
-        warnings_count = 0
-        details_before = len(summary.get("details", []))
-        batch: list[TrafficSignReal] = []
-        for obj in generator:
-            batch.append(obj)
-            if len(batch) >= self.batch_size:
-                if not self.dry_run:
-                    TrafficSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-                updated_count += len(batch)
-                batch = []
-        if batch:
-            if not self.dry_run:
-                TrafficSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-            updated_count += len(batch)
-
-        skipped_count: int = summary.pop("_skipped_sign_update_count")[0]
-        new_details = summary.get("details", [])[details_before:]
-        warnings_count = sum(1 for e in new_details if e.get("level") == "warning")
-        summary["signs_updated"] += updated_count
-        logger.info(
-            "_update_signs: updated=%d skipped=%d warnings=%d (of %d candidates)",
-            updated_count,
-            skipped_count,
-            warnings_count,
-            len(update_source_ids),
-        )
-        self._record_phase_result(
-            summary, "signs", "update", updated=updated_count, skipped=skipped_count, warnings=warnings_count
-        )
-        self._save_run_log(summary)
 
     def _deactivate_objects(
         self,
@@ -1793,133 +1727,85 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             )
         return len(created)
 
+    def _prepare_signpost_for_update(
+        self,
+        obj: Any,
+        row: dict[str, Any],
+        source_id: str,
+        details: list[dict],
+        phase_started_at: datetime.datetime,
+    ) -> bool:
+        """Mutate a SignpostReal instance in-place with new CSV values.
+
+        Args:
+            obj (Any): Existing SignpostReal DB instance to mutate.
+            row (dict[str, Any]): CSV row for this source_id.
+            source_id (str): Source identifier used for error reporting.
+            details (list[dict]): Mutable details list for skip/warning entries.
+            phase_started_at (datetime.datetime): Timestamp used as ``updated_at``.
+
+        Returns:
+            bool: True if the object was mutated and should be bulk-updated, False to skip.
+        """
+        fields = self._resolve_signpost_update_fields(row, source_id, details)
+        if fields is None:
+            return False
+        if not self._signpost_fields_changed(obj, fields):
+            return False
+        if not self.dry_run:
+            self._create_signpost_update_revert_record(obj, source_id)
+        obj.source_name = SOURCE_NAME
+        obj.location = fields["location"]
+        obj.device_type_id = fields["device_type_id"]
+        obj.owner = self.default_owner
+        obj.mount_real_id = fields["mount_real_id"]
+        obj.mount_type = fields["mount_type"]
+        obj.direction = fields["direction"]
+        obj.height = fields["height"]
+        obj.condition = fields["condition"]
+        obj.location_specifier = fields["location_specifier"]
+        obj.value = fields["value"]
+        obj.txt = fields["txt"]
+        obj.scanned_at = fields["scanned_at"]
+        obj.attachment_url = fields["attachment_url"]
+        obj.updated_by = self.user
+        obj.updated_at = phase_started_at
+        return True
+
     def _update_signposts(self, summary: dict[str, Any]) -> None:
         """Update existing SignpostReal records from non-Removed CSV rows.
 
-        Rows whose source_id is not already in the DB are ignored (they belong
-        to the create phase).  Removed rows are also ignored here.  Only rows
-        whose field values differ from the DB (or when ``force_update`` is True)
-        are written.
-
         Args:
             summary (dict[str, Any]): Mutable summary dict; the updated count is
-                recorded in summary["signposts_updated"] and phase results are
-                appended.
+                recorded in summary["signposts_updated"] and phase results are appended.
         """
-        update_source_ids = [
-            s
-            for s, row in self.signposts_by_id.items()
-            if s in self.signpost_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-        ]
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("signposts_updated", 0)
-        if not update_source_ids:
-            self._record_phase_result(summary, "signposts", "update", updated=0, skipped=0)
-            self._save_run_log(summary)
-            return
-
-        db_id_map: dict[str, int] = {s: self.signpost_source_id_to_db_id[s] for s in update_source_ids}
-        existing: dict[int, Any] = {obj.pk: obj for obj in SignpostReal.objects.filter(pk__in=db_id_map.values())}
-        details: list[dict] = summary.setdefault("details", [])
-        details_before = len(details)
-
-        update_fields = [
-            "source_name",
-            "location",
-            "device_type_id",
-            "owner",
-            "mount_real_id",
-            "mount_type",
-            "direction",
-            "height",
-            "condition",
-            "location_specifier",
-            "value",
-            "txt",
-            "scanned_at",
-            "attachment_url",
-            "updated_by",
-            "updated_at",
-        ]
-        updated_count = 0
-        skipped_count = 0
-        batch: list[Any] = []
-
-        for source_id in update_source_ids:
-            row = self.signposts_by_id[source_id]
-            obj = existing.get(db_id_map[source_id])
-            if obj is None:
-                skipped_count += 1
-                continue
-
-            fields = self._resolve_signpost_update_fields(row, source_id, details)
-            if fields is None:
-                skipped_count += 1
-                continue
-
-            if not self._signpost_fields_changed(obj, fields):
-                skipped_count += 1
-                continue
-
-            if not self.dry_run:
-                self._create_signpost_update_revert_record(obj, source_id)
-
-            obj.source_name = SOURCE_NAME
-            obj.location = fields["location"]
-            obj.device_type_id = fields["device_type_id"]
-            obj.owner = self.default_owner
-            obj.mount_real_id = fields["mount_real_id"]
-            obj.mount_type = fields["mount_type"]
-            obj.direction = fields["direction"]
-            obj.height = fields["height"]
-            obj.condition = fields["condition"]
-            obj.location_specifier = fields["location_specifier"]
-            obj.value = fields["value"]
-            obj.txt = fields["txt"]
-            obj.scanned_at = fields["scanned_at"]
-            obj.attachment_url = fields["attachment_url"]
-            obj.updated_by = self.user
-            obj.updated_at = phase_started_at
-            batch.append(obj)
-
-            if len(batch) >= self.batch_size:
-                self._flush_signpost_batch(batch, update_fields)
-                updated_count += len(batch)
-                batch = []
-
-        self._flush_signpost_batch(batch, update_fields)
-        updated_count += len(batch)
-
-        skipped_count += len([e for e in summary.get("details", [])[details_before:] if e.get("level") == "skip"])
-        summary["signposts_updated"] += updated_count
-        logger.info(
-            "_update_signposts: updated=%d skipped=%d (of %d candidates)",
-            updated_count,
-            skipped_count,
-            len(update_source_ids),
+        self._update_objects(
+            summary,
+            rows_by_id=self.signposts_by_id,
+            source_id_to_db_id=self.signpost_source_id_to_db_id,
+            model_class=SignpostReal,
+            object_type="signposts",
+            summary_key="signposts_updated",
+            update_fields=[
+                "source_name",
+                "location",
+                "device_type_id",
+                "owner",
+                "mount_real_id",
+                "mount_type",
+                "direction",
+                "height",
+                "condition",
+                "location_specifier",
+                "value",
+                "txt",
+                "scanned_at",
+                "attachment_url",
+                "updated_by",
+                "updated_at",
+            ],
+            prepare_row=self._prepare_signpost_for_update,
         )
-        self._record_phase_result(summary, "signposts", "update", updated=updated_count, skipped=skipped_count)
-        self._save_run_log(summary)
-
-    def _flush_signpost_batch(self, batch: list[Any], update_fields: list[str]) -> None:
-        """Write a batch of SignpostReal objects to the DB unless in dry-run mode.
-
-        Args:
-            batch (list[Any]): Signpost instances to bulk-update.
-            update_fields (list[str]): Field names to include in the bulk update.
-        """
-        if batch and not self.dry_run:
-            SignpostReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-
-    def _flush_additional_sign_batch(self, batch: list[Any], update_fields: list[str]) -> None:
-        """Write a batch of AdditionalSignReal objects to the DB unless in dry-run mode.
-
-        Args:
-            batch (list[Any]): AdditionalSignReal instances to bulk-update.
-            update_fields (list[str]): Field names to include in the bulk update.
-        """
-        if batch and not self.dry_run:
-            AdditionalSignReal.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
 
     def _create_additional_sign_update_revert_record(self, obj: Any, source_id: str) -> None:
         """Create and write a revert record for an additional sign update operation.
@@ -2527,121 +2413,93 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         )
         self._save_run_log(summary)
 
+    def _prepare_additional_sign_for_update(
+        self,
+        obj: Any,
+        row: dict[str, Any],
+        source_id: str,
+        details: list[dict],
+        phase_started_at: datetime.datetime,
+    ) -> bool:
+        """Mutate an AdditionalSignReal instance in-place with new CSV values.
+
+        Args:
+            obj (Any): Existing AdditionalSignReal DB instance to mutate.
+            row (dict[str, Any]): CSV row for this source_id.
+            source_id (str): Source identifier used for error reporting.
+            details (list[dict]): Mutable details list for skip/warning entries.
+            phase_started_at (datetime.datetime): Timestamp used as ``updated_at``.
+
+        Returns:
+            bool: True if the object was mutated and should be bulk-updated, False to skip.
+        """
+        new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
+        if new_location is None:
+            return False
+        fields = self._resolve_additional_sign_update_fields(row, source_id, details)
+        if fields is None:
+            return False
+        if not self._additional_sign_fields_changed(obj, new_location, fields):
+            return False
+        if not self.dry_run:
+            self._create_additional_sign_update_revert_record(obj, source_id)
+        obj.source_name = SOURCE_NAME
+        obj.location = new_location
+        obj.device_type_id = fields["device_type_id"]
+        obj.owner = self.default_owner
+        obj.parent_id = fields["parent_id"]
+        obj.signpost_real_id = fields["signpost_real_id"]
+        obj.mount_real_id = fields["mount_real_id"]
+        obj.mount_type = fields["mount_type"]
+        obj.direction = fields["direction"]
+        obj.height = fields["height"]
+        obj.condition = fields["condition"]
+        obj.location_specifier = fields["location_specifier"]
+        obj.color = fields["color"]
+        obj.additional_information = fields["additional_information"]
+        obj.scanned_at = fields["scanned_at"]
+        obj.attachment_url = fields["attachment_url"]
+        obj.updated_by = self.user
+        obj.updated_at = phase_started_at
+        return True
+
     def _update_additional_signs(self, summary: dict[str, Any]) -> None:
         """Update existing AdditionalSignReal records from non-Removed CSV rows.
-
-        Only rows whose source_id already exists in the DB and whose status is not
-        ``"Removed"`` are processed. Field comparison is applied unless
-        ``force_update`` is True.
 
         Args:
             summary (dict[str, Any]): Mutable summary dict; the updated count is
                 recorded in summary["additional_signs_updated"] and phase results
                 are appended.
         """
-        update_source_ids = [
-            s
-            for s, row in self.additional_signs_by_id.items()
-            if s in self.additional_sign_source_id_to_db_id and row.get(CSVHeadersV2.status) != "Removed"
-        ]
-        phase_started_at = datetime.datetime.now(tz=datetime.timezone.utc)
-        summary.setdefault("additional_signs_updated", 0)
-        if not update_source_ids:
-            self._record_phase_result(summary, "additional-signs", "update", updated=0, skipped=0)
-            self._save_run_log(summary)
-            return
-
-        db_id_map: dict[str, int] = {s: self.additional_sign_source_id_to_db_id[s] for s in update_source_ids}
-        existing: dict[int, Any] = {obj.pk: obj for obj in AdditionalSignReal.objects.filter(pk__in=db_id_map.values())}
-        details: list[dict] = summary.setdefault("details", [])
-        details_before = len(details)
-
-        update_fields = [
-            "source_name",
-            "location",
-            "device_type_id",
-            "owner",
-            "parent_id",
-            "signpost_real_id",
-            "mount_real_id",
-            "mount_type",
-            "direction",
-            "height",
-            "condition",
-            "location_specifier",
-            "color",
-            "additional_information",
-            "scanned_at",
-            "attachment_url",
-            "updated_by",
-            "updated_at",
-        ]
-        updated_count = 0
-        skipped_count = 0
-        batch: list[Any] = []
-
-        for source_id in update_source_ids:
-            row = self.additional_signs_by_id[source_id]
-            obj = existing.get(db_id_map[source_id])
-            if obj is None:
-                skipped_count += 1
-                continue
-
-            new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
-            if new_location is None:
-                skipped_count += 1
-                continue
-
-            fields = self._resolve_additional_sign_update_fields(row, source_id, details)
-            if fields is None:
-                skipped_count += 1
-                continue
-
-            if not self._additional_sign_fields_changed(obj, new_location, fields):
-                skipped_count += 1
-                continue
-
-            if not self.dry_run:
-                self._create_additional_sign_update_revert_record(obj, source_id)
-
-            obj.source_name = SOURCE_NAME
-            obj.location = new_location
-            obj.device_type_id = fields["device_type_id"]
-            obj.owner = self.default_owner
-            obj.parent_id = fields["parent_id"]
-            obj.signpost_real_id = fields["signpost_real_id"]
-            obj.mount_real_id = fields["mount_real_id"]
-            obj.mount_type = fields["mount_type"]
-            obj.direction = fields["direction"]
-            obj.height = fields["height"]
-            obj.condition = fields["condition"]
-            obj.location_specifier = fields["location_specifier"]
-            obj.color = fields["color"]
-            obj.additional_information = fields["additional_information"]
-            obj.scanned_at = fields["scanned_at"]
-            obj.attachment_url = fields["attachment_url"]
-            obj.updated_by = self.user
-            obj.updated_at = phase_started_at
-            batch.append(obj)
-
-            if len(batch) >= self.batch_size:
-                self._flush_additional_sign_batch(batch, update_fields)
-                updated_count += len(batch)
-                batch = []
-
-        self._flush_additional_sign_batch(batch, update_fields)
-        updated_count += len(batch)
-
-        skipped_count += sum(1 for e in details[details_before:] if e.get("level") == "skip")
-        summary["additional_signs_updated"] += updated_count
-        logger.info(
-            "_update_additional_signs: updated=%d skipped=%d (of %d candidates)",
-            updated_count,
-            skipped_count,
-            len(update_source_ids),
+        self._update_objects(
+            summary,
+            rows_by_id=self.additional_signs_by_id,
+            source_id_to_db_id=self.additional_sign_source_id_to_db_id,
+            model_class=AdditionalSignReal,
+            object_type="additional-signs",
+            summary_key="additional_signs_updated",
+            update_fields=[
+                "source_name",
+                "location",
+                "device_type_id",
+                "owner",
+                "parent_id",
+                "signpost_real_id",
+                "mount_real_id",
+                "mount_type",
+                "direction",
+                "height",
+                "condition",
+                "location_specifier",
+                "color",
+                "additional_information",
+                "scanned_at",
+                "attachment_url",
+                "updated_by",
+                "updated_at",
+            ],
+            prepare_row=self._prepare_additional_sign_for_update,
         )
-        self._record_phase_result(summary, "additional-signs", "update", updated=updated_count, skipped=skipped_count)
-        self._save_run_log(summary)
 
     def _deactivate_additional_signs(self, summary: dict[str, Any]) -> None:
         """Deactivate AdditionalSignReal records whose CSV status is ``Removed``.
