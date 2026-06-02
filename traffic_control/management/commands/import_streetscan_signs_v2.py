@@ -152,7 +152,12 @@ class Command(BaseCommand):
         # Forward importer logger output to management command stdout.
         # verbosity 0 → WARNING+, 1 (default) → INFO+, 2/3 → DEBUG+
         verbosity: int = options.get("verbosity", 1)
-        log_level = logging.WARNING if verbosity == 0 else (logging.DEBUG if verbosity >= 2 else logging.INFO)
+        if verbosity == 0:
+            log_level = logging.WARNING
+        elif verbosity >= 2:
+            log_level = logging.DEBUG
+        else:
+            log_level = logging.INFO
         importer_logger = logging.getLogger("traffic_control.analyze_utils.traffic_sign_data_v2_import")
         _stream_handler = logging.StreamHandler(self.stdout)
         _stream_handler.setLevel(log_level)

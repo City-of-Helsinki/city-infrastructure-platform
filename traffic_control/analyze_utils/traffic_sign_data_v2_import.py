@@ -49,6 +49,9 @@ PHASE_ORDER: tuple[str, ...] = ("create", "update", "deactivate")
 # Mounts are never deactivated; the deactivate phase is silently skipped for them.
 _DEACTIVATABLE_OBJECT_TYPES: frozenset[str] = frozenset({"signs", "signposts", "additional-signs"})
 
+# Suffix appended to geometry validation error messages during update phases.
+_ON_UPDATE_SUFFIX: str = " on update"
+
 
 class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin):
     """Importer for V2 traffic sign CSV data.
@@ -661,6 +664,48 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             or obj.attachment_url != new_attachment_url
         )
 
+    def _resolve_mount_new_fields(self, row: dict[str, Any]) -> dict[str, Any]:
+        """Resolve new field values for a MountReal update from a CSV row.
+
+        Args:
+            row (dict[str, Any]): A single CSV row keyed by CSVHeadersV2 constants.
+
+        Returns:
+            dict[str, Any]: Resolved field values with keys ``location_specifier``,
+                ``mount_type``, ``scanned_at``, and ``attachment_url``.
+        """
+        raw_ls = row.get(CSVHeadersV2.location_specifier, "")
+        return {
+            "location_specifier": MountLocationSpecifier(int(raw_ls)) if raw_ls else None,
+            "mount_type": self.mount_types_by_name.get(row.get(CSVHeadersV2.mount_type, "")),
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at)),
+            "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
+        }
+
+    def _write_mount_update_revert_record(self, obj: MountReal, source_id: str) -> None:
+        """Write a revert record capturing the current state of a MountReal before update.
+
+        Args:
+            obj (MountReal): The MountReal instance about to be updated.
+            source_id (str): The source identifier for this mount.
+        """
+        self._write_revert_record(
+            {
+                "action": "update",
+                "object_type": "MountReal",
+                "db_id": str(obj.pk),
+                "source_id": source_id,
+                "old": {
+                    "source_name": obj.source_name,
+                    "location": obj.location.ewkt if obj.location else None,
+                    "location_specifier": str(obj.location_specifier) if obj.location_specifier else None,
+                    "mount_type_id": obj.mount_type_id,
+                    "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                    "attachment_url": obj.attachment_url,
+                },
+            }
+        )
+
     def _get_mounts_to_update(
         self,
         update_source_ids: list[str],
@@ -697,48 +742,34 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 continue
 
             new_location = self._validate_and_get_location(
-                row, source_id, summary.setdefault("details", []), " on update"
+                row, source_id, summary.setdefault("details", []), _ON_UPDATE_SUFFIX
             )
             if new_location is None:
                 skipped[0] += 1
                 continue
 
-            raw_ls = row.get(CSVHeadersV2.location_specifier, "")
-            new_location_specifier = MountLocationSpecifier(int(raw_ls)) if raw_ls else None
-            new_mount_type = self.mount_types_by_name.get(row.get(CSVHeadersV2.mount_type, ""))
-            new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at))
-            new_attachment_url = row.get(CSVHeadersV2.attachment_url, "")
+            fields = self._resolve_mount_new_fields(row)
 
             if not self._mount_fields_changed(
-                obj, new_location, new_location_specifier, new_mount_type, new_scanned_at, new_attachment_url
+                obj,
+                new_location,
+                fields["location_specifier"],
+                fields["mount_type"],
+                fields["scanned_at"],
+                fields["attachment_url"],
             ):
                 skipped[0] += 1
                 continue
 
             if not self.dry_run:
-                self._write_revert_record(
-                    {
-                        "action": "update",
-                        "object_type": "MountReal",
-                        "db_id": str(obj.pk),
-                        "source_id": source_id,
-                        "old": {
-                            "source_name": obj.source_name,
-                            "location": obj.location.ewkt if obj.location else None,
-                            "location_specifier": str(obj.location_specifier) if obj.location_specifier else None,
-                            "mount_type_id": obj.mount_type_id,
-                            "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
-                            "attachment_url": obj.attachment_url,
-                        },
-                    }
-                )
+                self._write_mount_update_revert_record(obj, source_id)
 
             obj.source_name = SOURCE_NAME
             obj.location = new_location
-            obj.location_specifier = new_location_specifier
-            obj.mount_type = new_mount_type
-            obj.scanned_at = new_scanned_at
-            obj.attachment_url = new_attachment_url
+            obj.location_specifier = fields["location_specifier"]
+            obj.mount_type = fields["mount_type"]
+            obj.scanned_at = fields["scanned_at"]
+            obj.attachment_url = fields["attachment_url"]
             obj.updated_by = self.user
             obj.updated_at = phase_started_at
             yield obj
@@ -879,10 +910,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         if not number_code_str:
             return None
         match = NUMBER_CODE_PATTERN.match(number_code_str.strip())
-        if not match:
-            return None
         try:
-            return Decimal(match.group(1))
+            return Decimal(match.group(1)) if match else None
         except Exception:
             return None
 
@@ -941,12 +970,12 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             default_owner = Owner.objects.get(name_fi="Helsingin kaupunki")
         except Owner.DoesNotExist:
             raise RuntimeError(
-                "Required Owner 'Helsingin kaupunki' not found in the database. " "Cannot proceed with import."
+                "Required Owner 'Helsingin kaupunki' not found in the database. Cannot proceed with import."
             )
         try:
             private_owner = Owner.objects.get(name_fi="Yksityinen")
         except Owner.DoesNotExist:
-            raise RuntimeError("Required Owner 'Yksityinen' not found in the database. " "Cannot proceed with import.")
+            raise RuntimeError("Required Owner 'Yksityinen' not found in the database. Cannot proceed with import.")
         return default_owner, private_owner
 
     def _resolve_sign_owner(self, code: str, number_code_str: str) -> Owner:
@@ -1383,7 +1412,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped[0] += 1
                 continue
 
-            new_location = self._validate_and_get_location(row, source_id, details, " on update")
+            new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
             if new_location is None:
                 skipped[0] += 1
                 continue
@@ -1999,7 +2028,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         Returns:
             dict[str, Any] | None: Resolved field dict, or None if the row must be skipped.
         """
-        new_location = self._validate_and_get_location(row, source_id, details, " on update")
+        new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
         if new_location is None:
             return None
 
@@ -2231,21 +2260,18 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             return None, None
 
         traffic_sign_pk = self.sign_source_id_to_db_id.get(parent_csv_id)
-        if traffic_sign_pk is not None:
-            return traffic_sign_pk, None
-
         signpost_pk = self.signpost_source_id_to_db_id.get(parent_csv_id)
-        if signpost_pk is not None:
-            return None, signpost_pk
 
-        details.append(
-            {
-                "level": "warning",
-                "source_id": source_id,
-                "reason": f"Parent sign not found in signs or signposts for parent CSV id: {parent_csv_id}",
-            }
-        )
-        return None, None
+        if traffic_sign_pk is None and signpost_pk is None:
+            details.append(
+                {
+                    "level": "warning",
+                    "source_id": source_id,
+                    "reason": f"Parent sign not found in signs or signposts for parent CSV id: {parent_csv_id}",
+                }
+            )
+
+        return traffic_sign_pk, (signpost_pk if traffic_sign_pk is None else None)
 
     def _resolve_additional_sign_create_fields(
         self,
@@ -2587,7 +2613,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped_count += 1
                 continue
 
-            new_location = self._validate_and_get_location(row, source_id, details, " on update")
+            new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
             if new_location is None:
                 skipped_count += 1
                 continue
