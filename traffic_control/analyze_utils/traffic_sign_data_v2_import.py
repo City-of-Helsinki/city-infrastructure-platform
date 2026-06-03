@@ -464,6 +464,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         summary[summary_key] += created_count
         new_details = details[details_before:]
+        self._stamp_object_type(details, details_before, object_type, "create")
         skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
         warning_count = sum(1 for e in new_details if e.get("level") == "warning")
         logger.info(
@@ -699,6 +700,24 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         )
 
     @staticmethod
+    def _stamp_object_type(details: list[dict], from_index: int, object_type: str, phase: str) -> None:
+        """Stamp ``object_type`` and ``phase`` onto all details entries added during a phase.
+
+        Called immediately after each create/update/deactivate phase so that every
+        warning, skip, or error entry in the run log carries enough context for
+        grouped display in the admin.
+
+        Args:
+            details (list[dict]): The full details list from the summary dict.
+            from_index (int): Index of the first entry written during this phase.
+            object_type (str): One of VALID_OBJECT_TYPES (e.g. ``"signs"``).
+            phase (str): One of VALID_PHASES (e.g. ``"create"``).
+        """
+        for entry in details[from_index:]:
+            entry["object_type"] = object_type
+            entry["phase"] = phase
+
+    @staticmethod
     def _record_phase_result(
         summary: dict[str, Any],
         object_type: str,
@@ -895,6 +914,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         db_id_map = {s: source_id_to_db_id[s] for s in update_source_ids}
         existing = {obj.pk: obj for obj in model_class.objects.filter(pk__in=db_id_map.values())}
         details: list[dict] = summary.setdefault("details", [])
+        details_before = len(details)
         updated_count = 0
         skipped_count = 0
         batch: list[Any] = []
@@ -916,8 +936,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             updated_count += self._flush_update_batch(batch, model_class, update_fields)
 
         summary[summary_key] += updated_count
+        self._stamp_object_type(details, details_before, object_type, "update")
         logger.info(
-            "_%s: updated=%d skipped=%d (of %d candidates)",
             f"update_{object_type.replace('-', '_')}",
             updated_count,
             skipped_count,
@@ -1556,6 +1576,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         existing = {obj.pk: obj for obj in model_class.objects.filter(pk__in=db_id_map.values())}
         update_fields = ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"]
         details: list[dict] = summary.setdefault("details", [])
+        details_before = len(details)
         batch: list[Any] = []
         deactivated_count = 0
         skipped_count = 0
@@ -1582,6 +1603,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             deactivated_count += self._flush_update_batch(batch, model_class, update_fields)
 
         summary[summary_key] += deactivated_count
+        self._stamp_object_type(details, details_before, object_type, "deactivate")
         logger.info(
             "_%s: deactivated=%d skipped=%d (of %d candidates)",
             f"deactivate_{object_type.replace('-', '_')}",
@@ -1675,6 +1697,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             )
 
         summary["signposts_created"] += created_count
+        self._stamp_object_type(summary.setdefault("details", []), details_before, "signposts", "create")
         new_details = summary.get("details", [])[details_before:]
         skipped_count = sum(1 for e in new_details if e.get("level") == "skip")
         warning_count = sum(1 for e in new_details if e.get("level") == "warning")

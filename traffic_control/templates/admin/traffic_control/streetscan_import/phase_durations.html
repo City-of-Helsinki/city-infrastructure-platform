@@ -1,0 +1,28 @@
+{% if rows %}
+    <table style="width:100%;
+                  border-collapse:collapse">
+        <thead>
+            <tr>
+                <th style="text-align:left;
+                           padding:2px 8px">Object type</th>
+                <th style="text-align:left;
+                           padding:2px 8px">Phase</th>
+                <th style="text-align:left;
+                           padding:2px 8px">Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td style="padding:2px 8px;
+                               font-weight:bold">{{ row.obj_type }}</td>
+                    <td style="padding:2px 8px">{{ row.phase }}</td>
+                    <td style="padding:2px 8px;
+                               font-family:monospace">{{ row.duration }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <span style="color:#6c757d">No timing data recorded.</span>
+{% endif %}
