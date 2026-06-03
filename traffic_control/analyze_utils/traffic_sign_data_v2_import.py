@@ -350,7 +350,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             installation_status=InstallationStatus.IN_USE,
             location_specifier=MountLocationSpecifier(int(raw_ls)) if raw_ls else None,
             mount_type=self.mount_types_by_name.get(row.get(CSVHeadersV2.mount_type, "")),
-            scanned_at=self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at)),
+            scanned_at=self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at), source_id, details),
             attachment_url=row.get(CSVHeadersV2.attachment_url, ""),
             created_by=self.user,
             created_at=phase_started_at,
@@ -500,8 +500,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             filter_removed=False,
         )
 
-    @staticmethod
-    def _get_scanned_at(date_str: str | None) -> datetime.datetime | None:
+    def _get_scanned_at(self, date_str: str | None, source_id: str, details: list[dict]) -> datetime.datetime | None:
         """Parse the scanned_at timestamp from a CSV row value.
 
         Both mount and sign CSVs use the format ``2025/08/27 08:17:40+00``
@@ -511,15 +510,21 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         Args:
             date_str (str | None): Raw timestamp string from CSV, or None.
+            source_id (str): Source identifier used for warning messages.
+            details (list[dict]): Mutable details list; a warning is appended on parse failure.
 
         Returns:
-            datetime.datetime | None: Parsed UTC-aware datetime, or None if unparseable.
+            datetime.datetime | None: Parsed UTC-aware datetime, or None if absent/unparseable.
         """
         if not date_str:
+            details.append({"level": "warning", "source_id": source_id, "reason": "scanned_at is absent or empty"})
             return None
         try:
             return datetime.datetime.strptime(date_str.strip() + "00", "%Y/%m/%d %H:%M:%S%z")
         except ValueError:
+            details.append(
+                {"level": "warning", "source_id": source_id, "reason": f"Could not parse scanned_at={date_str!r}"}
+            )
             return None
 
     def _save_run_log(self, summary: dict[str, Any]) -> None:
@@ -741,11 +746,13 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         ]
         return any(old != new for old, new in comparisons)
 
-    def _resolve_mount_new_fields(self, row: dict[str, Any]) -> dict[str, Any]:
+    def _resolve_mount_new_fields(self, row: dict[str, Any], source_id: str, details: list[dict]) -> dict[str, Any]:
         """Resolve new field values for a MountReal update from a CSV row.
 
         Args:
             row (dict[str, Any]): A single CSV row keyed by CSVHeadersV2 constants.
+            source_id (str): Source identifier used for warning messages.
+            details (list[dict]): Mutable details list for warning entries.
 
         Returns:
             dict[str, Any]: Resolved field values with keys ``location_specifier``,
@@ -755,7 +762,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         return {
             "location_specifier": MountLocationSpecifier(int(raw_ls)) if raw_ls else None,
             "mount_type": self.mount_types_by_name.get(row.get(CSVHeadersV2.mount_type, "")),
-            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at)),
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.mount_scanned_at), source_id, details),
             "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
         }
 
@@ -804,7 +811,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             bool: True if the object was mutated and should be bulk-updated, False to skip.
         """
         new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
-        fields = self._resolve_mount_new_fields(row)
+        fields = self._resolve_mount_new_fields(row, source_id, details)
         if new_location is None or not self._mount_fields_changed(obj, new_location, fields):
             return False
         if not self.dry_run:
@@ -951,73 +958,97 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     # Traffic sign field-cast helpers
     # ------------------------------------------------------------------
 
-    @staticmethod
-    def _get_sign_height(height_str: str | None) -> int | None:
+    def _get_sign_height(self, height_str: str | None, source_id: str, details: list[dict]) -> int | None:
         """Convert height from metres (CSV) to centimetres (DB integer).
 
         Args:
             height_str (str | None): Raw height string from CSV, or None.
+            source_id (str): Source identifier used for warning messages.
+            details (list[dict]): Mutable details list; a warning is appended on parse failure.
 
         Returns:
-            int | None: Height in centimetres, or None if unparseable.
+            int | None: Height in centimetres, or None if absent/unparseable.
         """
         if not height_str:
+            details.append({"level": "warning", "source_id": source_id, "reason": "height is absent or empty"})
             return None
         try:
             return int(float(height_str) * 100)
         except (ValueError, TypeError):
+            details.append(
+                {"level": "warning", "source_id": source_id, "reason": f"Could not parse height={height_str!r}"}
+            )
             return None
 
-    @staticmethod
-    def _get_sign_direction(direction_str: str | None) -> int | None:
+    def _get_sign_direction(self, direction_str: str | None, source_id: str, details: list[dict]) -> int | None:
         """Parse azimuth direction from CSV as integer degrees.
 
         Args:
             direction_str (str | None): Raw direction string from CSV, or None.
+            source_id (str): Source identifier used for warning messages.
+            details (list[dict]): Mutable details list; a warning is appended on parse failure.
 
         Returns:
-            int | None: Direction in degrees, or None if unparseable.
+            int | None: Direction in degrees, or None if absent/unparseable.
         """
         if not direction_str:
+            details.append({"level": "warning", "source_id": source_id, "reason": "direction is absent or empty"})
             return None
         try:
             return int(float(direction_str))
         except (ValueError, TypeError):
+            details.append(
+                {"level": "warning", "source_id": source_id, "reason": f"Could not parse direction={direction_str!r}"}
+            )
             return None
 
-    @staticmethod
-    def _get_sign_condition(condition_str: str | None) -> Condition | None:
+    def _get_sign_condition(self, condition_str: str | None, source_id: str, details: list[dict]) -> Condition | None:
         """Parse condition from CSV as Condition enum.
 
         Args:
             condition_str (str | None): Raw condition string from CSV, or None.
+            source_id (str): Source identifier used for warning messages.
+            details (list[dict]): Mutable details list; a warning is appended on parse failure.
 
         Returns:
-            Condition | None: Parsed Condition enum value, or None if unparseable.
+            Condition | None: Parsed Condition enum value, or None if absent/unparseable.
         """
         if not condition_str:
+            details.append({"level": "warning", "source_id": source_id, "reason": "condition is absent or empty"})
             return None
         try:
             return Condition(int(condition_str))
         except (ValueError, TypeError):
+            details.append(
+                {"level": "warning", "source_id": source_id, "reason": f"Could not parse condition={condition_str!r}"}
+            )
             return None
 
-    @staticmethod
-    def _get_sign_value(number_code_str: str | None) -> Decimal | None:
+    def _get_sign_value(self, number_code_str: str | None, source_id: str, details: list[dict]) -> Decimal | None:
         """Extract the leading numeric value from number_code field as Decimal.
 
         Args:
             number_code_str (str | None): Raw number_code string from CSV, or None.
+            source_id (str): Source identifier used for warning messages.
+            details (list[dict]): Mutable details list; a warning is appended on parse failure.
 
         Returns:
-            Decimal | None: Extracted value, or None if no numeric prefix found.
+            Decimal | None: Extracted value, or None if absent/no numeric prefix found.
         """
         if not number_code_str:
+            details.append({"level": "warning", "source_id": source_id, "reason": "number_code is absent or empty"})
             return None
         match = NUMBER_CODE_PATTERN.match(number_code_str.strip())
         try:
             return Decimal(match.group(1)) if match else None
         except Exception:
+            details.append(
+                {
+                    "level": "warning",
+                    "source_id": source_id,
+                    "reason": f"Could not parse value from number_code={number_code_str!r}",
+                }
+            )
             return None
 
     def _validate_and_get_location(
@@ -1189,7 +1220,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             )
 
         number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
-        value = self._get_sign_value(number_code_str)
+        value = self._get_sign_value(number_code_str, source_id, details)
         owner = self._resolve_sign_owner(code, number_code_str)
 
         raw_ls = row.get(CSVHeadersV2.location_specifier, "")
@@ -1204,11 +1235,11 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "owner": owner,
             "location_specifier": location_specifier,
             "value": value,
-            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction)),
-            "height": self._get_sign_height(row.get(CSVHeadersV2.height)),
-            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition)),
+            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction), source_id, details),
+            "height": self._get_sign_height(row.get(CSVHeadersV2.height), source_id, details),
+            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition), source_id, details),
             "txt": row.get(CSVHeadersV2.txt, "") or None,
-            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at), source_id, details),
             "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
         }
 
@@ -1245,6 +1276,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         source_id: str,
         object_type: str,
         phase_started_at: datetime.datetime,
+        details: list[dict],
     ) -> None:
         """Apply deactivation fields to an object and create revert record.
 
@@ -1254,8 +1286,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             source_id (str): Source identifier.
             object_type (str): Model name for revert record.
             phase_started_at (datetime.datetime): Timestamp for updated_at field.
+            details (list[dict]): Mutable details list for warning entries.
         """
-        new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at))
+        new_scanned_at = self._get_scanned_at(row.get(CSVHeadersV2.scanned_at), source_id, details)
         validity_end = new_scanned_at.date() if new_scanned_at else None
 
         if not self.dry_run:
@@ -1539,7 +1572,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 skipped_count += 1
                 details.append({"level": "skip", "source_id": source_id, "reason": "already inactive"})
                 continue
-            self._apply_deactivation(obj, rows_by_id[source_id], source_id, object_type_name, phase_started_at)
+            self._apply_deactivation(obj, rows_by_id[source_id], source_id, object_type_name, phase_started_at, details)
             batch.append(obj)
             if len(batch) >= self.batch_size:
                 deactivated_count += self._flush_update_batch(batch, model_class, update_fields)
@@ -1896,7 +1929,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
         mount_type = self.mount_types_by_name.get(sign_mount_type_name)
         number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
-        value = self._get_sign_value(number_code_str)
+        value = self._get_sign_value(number_code_str, source_id, details)
 
         return {
             "device_type_id": device_type_id,
@@ -1905,11 +1938,11 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "parent_id": parent_id,
             "location_specifier": location_specifier,
             "value": value,
-            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction)),
-            "height": self._get_sign_height(row.get(CSVHeadersV2.height)),
-            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition)),
+            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction), source_id, details),
+            "height": self._get_sign_height(row.get(CSVHeadersV2.height), source_id, details),
+            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition), source_id, details),
             "txt": row.get(CSVHeadersV2.txt, "") or None,
-            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at), source_id, details),
             "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
         }
 
@@ -1945,11 +1978,11 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "mount_real_id": new_mount_real_id,
             "mount_type": self.mount_types_by_name.get(row.get(CSVHeadersV2.sign_mount_type, "")),
             "location_specifier": SignLocationSpecifier(int(raw_ls)) if raw_ls else None,
-            "value": self._get_sign_value(row.get(CSVHeadersV2.number_code, "") or ""),
-            "height": self._get_sign_height(row.get(CSVHeadersV2.height)),
-            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction)),
-            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition)),
-            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+            "value": self._get_sign_value(row.get(CSVHeadersV2.number_code, "") or "", source_id, details),
+            "height": self._get_sign_height(row.get(CSVHeadersV2.height), source_id, details),
+            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction), source_id, details),
+            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition), source_id, details),
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at), source_id, details),
             "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
             "txt": row.get(CSVHeadersV2.txt, "") or None,
         }
@@ -2043,22 +2076,27 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     # Additional sign field helpers
     # ------------------------------------------------------------------
 
-    @staticmethod
-    def _get_additional_sign_color(color_str: str | None) -> Color | None:
+    def _get_additional_sign_color(self, color_str: str | None, source_id: str, details: list[dict]) -> Color | None:
         """Parse the color field into a Color enum value.
 
         Args:
             color_str (str | None): Raw color string from CSV, or None.
+            source_id (str): Source identifier used for warning messages.
+            details (list[dict]): Mutable details list; a warning is appended on parse failure.
 
         Returns:
             Color | None: Parsed Color enum value, or None if absent/invalid.
         """
         if not color_str:
+            details.append({"level": "warning", "source_id": source_id, "reason": "color is absent or empty"})
             return None
         try:
             value = int(color_str)
             return Color(value) if value else None
         except (ValueError, TypeError):
+            details.append(
+                {"level": "warning", "source_id": source_id, "reason": f"Could not parse color={color_str!r}"}
+            )
             return None
 
     @staticmethod
@@ -2163,12 +2201,12 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "mount_real_id": mount_real_id,
             "mount_type": mount_type,
             "location_specifier": location_specifier,
-            "color": self._get_additional_sign_color(row.get(CSVHeadersV2.color)),
+            "color": self._get_additional_sign_color(row.get(CSVHeadersV2.color), source_id, details),
             "additional_information": self._build_additional_information(txt, number_code_str, internal_info),
-            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction)),
-            "height": self._get_sign_height(row.get(CSVHeadersV2.height)),
-            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition)),
-            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at)),
+            "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction), source_id, details),
+            "height": self._get_sign_height(row.get(CSVHeadersV2.height), source_id, details),
+            "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition), source_id, details),
+            "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at), source_id, details),
             "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
         }
 

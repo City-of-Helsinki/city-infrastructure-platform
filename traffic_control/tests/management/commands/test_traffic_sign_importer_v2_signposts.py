@@ -373,7 +373,7 @@ def test_create_signposts_warning_for_unresolved_mount(tmp_path: Path, default_o
 
     assert SignpostReal.objects.filter(source_id="SPWM").count() == 1
     warnings = [e for e in summary["details"] if e["source_id"] == "SPWM" and e["level"] == "warning"]
-    assert len(warnings) == 1
+    assert any("Mount not found" in w["reason"] for w in warnings)
 
 
 @pytest.mark.django_db
@@ -446,7 +446,7 @@ def test_create_signposts_warning_for_unresolved_parent(tmp_path: Path, default_
     sp = SignpostReal.objects.get(source_id="SPNOP")
     assert sp.parent_id is None
     warnings = [e for e in summary["details"] if e["source_id"] == "SPNOP" and e["level"] == "warning"]
-    assert len(warnings) == 1
+    assert any("Parent signpost not found" in w["reason"] for w in warnings)
 
 
 @pytest.mark.django_db

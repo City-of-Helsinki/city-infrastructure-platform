@@ -420,7 +420,7 @@ def test_create_additional_signs_warning_for_unresolved_mount(
 
     assert AdditionalSignReal.objects.filter(source_id="ASWM").count() == 1
     warnings = [e for e in summary["details"] if e["source_id"] == "ASWM" and e["level"] == "warning"]
-    assert len(warnings) == 1
+    assert any("Mount not found" in w["reason"] for w in warnings)
 
 
 @pytest.mark.django_db
@@ -499,7 +499,7 @@ def test_create_additional_signs_warning_for_unresolved_parent(
     assert obj.parent_id is None
     assert obj.signpost_real_id is None
     warnings = [e for e in summary["details"] if e["source_id"] == "ASNOP" and e["level"] == "warning"]
-    assert len(warnings) == 1
+    assert any("Parent sign not found" in w["reason"] for w in warnings)
 
 
 @pytest.mark.django_db

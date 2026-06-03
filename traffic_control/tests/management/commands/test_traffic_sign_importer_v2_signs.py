@@ -387,7 +387,7 @@ def test_create_signs_warning_for_unresolved_mount(tmp_path: Path, default_owner
 
     assert TrafficSignReal.objects.filter(source_id="WM1").count() == 1
     warnings = [e for e in summary["details"] if e["source_id"] == "WM1" and e["level"] == "warning"]
-    assert len(warnings) == 1
+    assert any("Mount not found" in w["reason"] for w in warnings)
 
 
 @pytest.mark.django_db
@@ -406,7 +406,7 @@ def test_create_signs_warning_for_parent_sign_id(tmp_path: Path, default_owner, 
 
     assert TrafficSignReal.objects.filter(source_id="PS1").count() == 1
     warnings = [e for e in summary["details"] if e["source_id"] == "PS1" and e["level"] == "warning"]
-    assert len(warnings) == 1
+    assert any("parent_sign_id" in w["reason"] for w in warnings)
 
 
 @pytest.mark.django_db
