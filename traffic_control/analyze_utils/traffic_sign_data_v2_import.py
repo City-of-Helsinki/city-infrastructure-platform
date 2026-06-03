@@ -1522,12 +1522,22 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         db_id_map = {s: source_id_to_db_id[s] for s in deactivate_source_ids}
         existing = {obj.pk: obj for obj in model_class.objects.filter(pk__in=db_id_map.values())}
         update_fields = ["lifecycle", "validity_period_end", "scanned_at", "source_name", "updated_by", "updated_at"]
+        details: list[dict] = summary.setdefault("details", [])
         batch: list[Any] = []
         deactivated_count = 0
+        skipped_count = 0
 
         for source_id in deactivate_source_ids:
             obj = existing.get(db_id_map[source_id])
             if obj is None:
+                skipped_count += 1
+                details.append(
+                    {"level": "skip", "source_id": source_id, "reason": "DB record not found for deactivation"}
+                )
+                continue
+            if obj.lifecycle == Lifecycle.INACTIVE:
+                skipped_count += 1
+                details.append({"level": "skip", "source_id": source_id, "reason": "already inactive"})
                 continue
             self._apply_deactivation(obj, rows_by_id[source_id], source_id, object_type_name, phase_started_at)
             batch.append(obj)
@@ -1540,12 +1550,15 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         summary[summary_key] += deactivated_count
         logger.info(
-            "_%s: deactivated=%d (of %d candidates)",
+            "_%s: deactivated=%d skipped=%d (of %d candidates)",
             f"deactivate_{object_type.replace('-', '_')}",
             deactivated_count,
+            skipped_count,
             len(deactivate_source_ids),
         )
-        self._record_phase_result(summary, object_type, "deactivate", deactivated=deactivated_count, skipped=0)
+        self._record_phase_result(
+            summary, object_type, "deactivate", deactivated=deactivated_count, skipped=skipped_count
+        )
         self._save_run_log(summary)
 
     def _deactivate_signs(self, summary: dict[str, Any]) -> None:
