@@ -938,6 +938,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         summary[summary_key] += updated_count
         self._stamp_object_type(details, details_before, object_type, "update")
         logger.info(
+            "_%s: updated=%d skipped=%d (of %d candidates)",
             f"update_{object_type.replace('-', '_')}",
             updated_count,
             skipped_count,
