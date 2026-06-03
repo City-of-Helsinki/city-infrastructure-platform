@@ -714,34 +714,32 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         self,
         obj: MountReal,
         new_location: Any,
-        new_location_specifier: Any,
-        new_mount_type: Any,
-        new_scanned_at: Any,
-        new_attachment_url: str,
+        fields: dict[str, Any],
     ) -> bool:
         """Check if any mount fields have changed from stored DB values.
 
         Args:
             obj (MountReal): Existing MountReal DB instance.
             new_location (Any): New geometry point.
-            new_location_specifier (Any): New location specifier enum value.
-            new_mount_type (Any): New MountType instance or None.
-            new_scanned_at (Any): New scanned_at datetime.
-            new_attachment_url (str): New attachment URL.
+            fields (dict[str, Any]): Resolved field values from ``_resolve_mount_new_fields``,
+                containing ``location_specifier``, ``mount_type``, ``scanned_at`` and
+                ``attachment_url``.
 
         Returns:
             bool: True if any field has changed or force_update is set.
         """
         if self.force_update:
             return True
-        return (
-            obj.source_name != SOURCE_NAME
-            or obj.scanned_at != new_scanned_at
-            or obj.location != new_location
-            or obj.location_specifier != new_location_specifier
-            or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
-            or obj.attachment_url != new_attachment_url
-        )
+        new_mount_type = fields["mount_type"]
+        comparisons: list[tuple[Any, Any]] = [
+            (obj.source_name, SOURCE_NAME),
+            (obj.scanned_at, fields["scanned_at"]),
+            (obj.location, new_location),
+            (obj.location_specifier, fields["location_specifier"]),
+            (obj.mount_type_id, new_mount_type.pk if new_mount_type else None),
+            (obj.attachment_url, fields["attachment_url"]),
+        ]
+        return any(old != new for old, new in comparisons)
 
     def _resolve_mount_new_fields(self, row: dict[str, Any]) -> dict[str, Any]:
         """Resolve new field values for a MountReal update from a CSV row.
@@ -809,14 +807,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         if new_location is None:
             return False
         fields = self._resolve_mount_new_fields(row)
-        if not self._mount_fields_changed(
-            obj,
-            new_location,
-            fields["location_specifier"],
-            fields["mount_type"],
-            fields["scanned_at"],
-            fields["attachment_url"],
-        ):
+        if not self._mount_fields_changed(obj, new_location, fields):
             return False
         if not self.dry_run:
             self._write_mount_update_revert_record(obj, source_id)
@@ -829,6 +820,28 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         obj.updated_by = self.user
         obj.updated_at = phase_started_at
         return True
+
+    def _flush_update_batch(
+        self,
+        batch: list[Any],
+        model_class: type,
+        update_fields: list[str],
+    ) -> int:
+        """Persist a batch of mutated model instances via bulk_update and return the count.
+
+        A no-op (returns the batch length without writing) when ``dry_run`` is True.
+
+        Args:
+            batch (list[Any]): Mutated model instances to persist.
+            model_class (type): Django model class with an ``objects`` manager.
+            update_fields (list[str]): Field names passed to ``bulk_update``.
+
+        Returns:
+            int: Number of objects in the batch (same whether dry run or not).
+        """
+        if not self.dry_run:
+            model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
+        return len(batch)
 
     def _update_objects(
         self,
@@ -889,17 +902,13 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             if prepare_row(obj, rows_by_id[source_id], source_id, details, phase_started_at):
                 batch.append(obj)
                 if len(batch) >= self.batch_size:
-                    if not self.dry_run:
-                        model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-                    updated_count += len(batch)
+                    updated_count += self._flush_update_batch(batch, model_class, update_fields)
                     batch = []
             else:
                 skipped_count += 1
 
         if batch:
-            if not self.dry_run:
-                model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-            updated_count += len(batch)
+            updated_count += self._flush_update_batch(batch, model_class, update_fields)
 
         summary[summary_key] += updated_count
         logger.info(
@@ -1345,21 +1354,22 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             return True
 
         new_mount_type = fields["mount_type"]
-        return (
-            obj.source_name != SOURCE_NAME
-            or obj.location != new_location
-            or obj.device_type_id != fields["device_type_id"]
-            or obj.mount_real_id != fields["mount_real_id"]
-            or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
-            or obj.direction != fields["direction"]
-            or obj.height != fields["height"]
-            or obj.condition != fields["condition"]
-            or obj.location_specifier != fields["location_specifier"]
-            or obj.value != fields["value"]
-            or obj.txt != fields["txt"]
-            or obj.scanned_at != fields["scanned_at"]
-            or obj.attachment_url != fields["attachment_url"]
-        )
+        comparisons: list[tuple[Any, Any]] = [
+            (obj.source_name, SOURCE_NAME),
+            (obj.location, new_location),
+            (obj.device_type_id, fields["device_type_id"]),
+            (obj.mount_real_id, fields["mount_real_id"]),
+            (obj.mount_type_id, new_mount_type.pk if new_mount_type else None),
+            (obj.direction, fields["direction"]),
+            (obj.height, fields["height"]),
+            (obj.condition, fields["condition"]),
+            (obj.location_specifier, fields["location_specifier"]),
+            (obj.value, fields["value"]),
+            (obj.txt, fields["txt"]),
+            (obj.scanned_at, fields["scanned_at"]),
+            (obj.attachment_url, fields["attachment_url"]),
+        ]
+        return any(old != new for old, new in comparisons)
 
     def _create_sign_update_revert_record(self, obj: Any, source_id: str) -> None:
         """Create and write a revert record for a traffic sign update operation.
@@ -1528,15 +1538,11 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             self._apply_deactivation(obj, rows_by_id[source_id], source_id, object_type_name, phase_started_at)
             batch.append(obj)
             if len(batch) >= self.batch_size:
-                if not self.dry_run:
-                    model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-                deactivated_count += len(batch)
+                deactivated_count += self._flush_update_batch(batch, model_class, update_fields)
                 batch = []
 
         if batch:
-            if not self.dry_run:
-                model_class.objects.bulk_update(batch, update_fields, batch_size=self.batch_size)
-            deactivated_count += len(batch)
+            deactivated_count += self._flush_update_batch(batch, model_class, update_fields)
 
         summary[summary_key] += deactivated_count
         logger.info(
@@ -1961,24 +1967,23 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         if self.force_update:
             return True
 
-        new_source_name = SOURCE_NAME
         new_mount_type = fields["mount_type"]
-
-        return (
-            obj.source_name != new_source_name
-            or obj.location != fields["location"]
-            or obj.device_type_id != fields["device_type_id"]
-            or obj.mount_real_id != fields["mount_real_id"]
-            or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
-            or obj.direction != fields["direction"]
-            or obj.height != fields["height"]
-            or obj.condition != fields["condition"]
-            or obj.location_specifier != fields["location_specifier"]
-            or obj.value != fields["value"]
-            or obj.txt != fields["txt"]
-            or obj.scanned_at != fields["scanned_at"]
-            or obj.attachment_url != fields["attachment_url"]
-        )
+        comparisons: list[tuple[Any, Any]] = [
+            (obj.source_name, SOURCE_NAME),
+            (obj.location, fields["location"]),
+            (obj.device_type_id, fields["device_type_id"]),
+            (obj.mount_real_id, fields["mount_real_id"]),
+            (obj.mount_type_id, new_mount_type.pk if new_mount_type else None),
+            (obj.direction, fields["direction"]),
+            (obj.height, fields["height"]),
+            (obj.condition, fields["condition"]),
+            (obj.location_specifier, fields["location_specifier"]),
+            (obj.value, fields["value"]),
+            (obj.txt, fields["txt"]),
+            (obj.scanned_at, fields["scanned_at"]),
+            (obj.attachment_url, fields["attachment_url"]),
+        ]
+        return any(old != new for old, new in comparisons)
 
     def _create_signpost_update_revert_record(self, obj: Any, source_id: str) -> None:
         """Create and write a revert record for a signpost update operation.
@@ -2182,23 +2187,24 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             return True
 
         new_mount_type = fields["mount_type"]
-        return (
-            obj.source_name != SOURCE_NAME
-            or obj.location != new_location
-            or obj.device_type_id != fields["device_type_id"]
-            or obj.parent_id != fields["parent_id"]
-            or obj.signpost_real_id != fields["signpost_real_id"]
-            or obj.mount_real_id != fields["mount_real_id"]
-            or obj.mount_type_id != (new_mount_type.pk if new_mount_type else None)
-            or obj.direction != fields["direction"]
-            or obj.height != fields["height"]
-            or obj.condition != fields["condition"]
-            or obj.location_specifier != fields["location_specifier"]
-            or obj.color != fields["color"]
-            or obj.additional_information != fields["additional_information"]
-            or obj.scanned_at != fields["scanned_at"]
-            or obj.attachment_url != fields["attachment_url"]
-        )
+        comparisons: list[tuple[Any, Any]] = [
+            (obj.source_name, SOURCE_NAME),
+            (obj.location, new_location),
+            (obj.device_type_id, fields["device_type_id"]),
+            (obj.parent_id, fields["parent_id"]),
+            (obj.signpost_real_id, fields["signpost_real_id"]),
+            (obj.mount_real_id, fields["mount_real_id"]),
+            (obj.mount_type_id, new_mount_type.pk if new_mount_type else None),
+            (obj.direction, fields["direction"]),
+            (obj.height, fields["height"]),
+            (obj.condition, fields["condition"]),
+            (obj.location_specifier, fields["location_specifier"]),
+            (obj.color, fields["color"]),
+            (obj.additional_information, fields["additional_information"]),
+            (obj.scanned_at, fields["scanned_at"]),
+            (obj.attachment_url, fields["attachment_url"]),
+        ]
+        return any(old != new for old, new in comparisons)
 
     # ------------------------------------------------------------------
     # Additional sign phase handlers
