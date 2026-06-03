@@ -804,10 +804,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             bool: True if the object was mutated and should be bulk-updated, False to skip.
         """
         new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
-        if new_location is None:
-            return False
         fields = self._resolve_mount_new_fields(row)
-        if not self._mount_fields_changed(obj, new_location, fields):
+        if new_location is None or not self._mount_fields_changed(obj, new_location, fields):
             return False
         if not self.dry_run:
             self._write_mount_update_revert_record(obj, source_id)
@@ -1423,12 +1421,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             bool: True if the object was mutated and should be bulk-updated, False to skip.
         """
         new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
-        if new_location is None:
-            return False
         fields = self._resolve_sign_fields(row, source_id, details)
-        if fields is None:
-            return False
-        if not self._sign_fields_changed(obj, new_location, fields):
+        if new_location is None or fields is None or not self._sign_fields_changed(obj, new_location, fields):
             return False
         if not self.dry_run:
             self._create_sign_update_revert_record(obj, source_id)
@@ -1753,9 +1747,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             bool: True if the object was mutated and should be bulk-updated, False to skip.
         """
         fields = self._resolve_signpost_update_fields(row, source_id, details)
-        if fields is None:
-            return False
-        if not self._signpost_fields_changed(obj, fields):
+        if fields is None or not self._signpost_fields_changed(obj, fields):
             return False
         if not self.dry_run:
             self._create_signpost_update_revert_record(obj, source_id)
@@ -2299,12 +2291,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             bool: True if the object was mutated and should be bulk-updated, False to skip.
         """
         new_location = self._validate_and_get_location(row, source_id, details, _ON_UPDATE_SUFFIX)
-        if new_location is None:
-            return False
         fields = self._resolve_additional_sign_fields(row, source_id, details)
-        if fields is None:
-            return False
-        if not self._additional_sign_fields_changed(obj, new_location, fields):
+        fields_unchanged = fields is not None and not self._additional_sign_fields_changed(obj, new_location, fields)
+        if new_location is None or fields is None or fields_unchanged:
             return False
         if not self.dry_run:
             self._create_additional_sign_update_revert_record(obj, source_id)
