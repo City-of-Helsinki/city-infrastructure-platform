@@ -20,7 +20,11 @@ from uuid import UUID
 from django.core.files import File
 
 from traffic_control.analyze_utils.traffic_sign_data_v2_code_transform import CodeTransformMixin
-from traffic_control.analyze_utils.traffic_sign_data_v2_constants import CSVHeadersV2, NUMBER_CODE_PATTERN
+from traffic_control.analyze_utils.traffic_sign_data_v2_constants import (
+    CSVHeadersV2,
+    NUMBER_CODE_DEPENDENT_CODES,
+    NUMBER_CODE_PATTERN,
+)
 from traffic_control.analyze_utils.traffic_sign_data_v2_data_loading import DataLoadingMixin
 from traffic_control.analyze_utils.traffic_sign_data_v2_db_builders import DbBuilderMixin
 from traffic_control.enums import Condition, InstallationStatus, Lifecycle
@@ -171,6 +175,12 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         # Record total preprocessing wall-clock time (CSV I/O + enrichment + DB map builds).
         self._preprocessing_duration_s: float = (datetime.datetime.now() - _t_preprocess_start).total_seconds()
         # Stored in phase_durations under the "preprocessing" key on run_log creation.
+
+        # Pre-computed set of device type codes that require a warning when number_code is absent.
+        # These are the ``new_code`` values produced by NUMBER_CODE_DEPENDENT_CODES transformations.
+        self._number_code_warning_codes: frozenset[str] = frozenset(
+            entry["new_code"] for entry in NUMBER_CODE_DEPENDENT_CODES.values()
+        )
 
         # --- Run log and revert file (populated during run()) ---
         self.run_log: StreetScanImportRun | None = None
@@ -1045,19 +1055,35 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             )
             return None
 
-    def _get_sign_value(self, number_code_str: str | None, source_id: str, details: list[dict]) -> Decimal | None:
+    def _get_sign_value(
+        self,
+        number_code_str: str | None,
+        source_id: str,
+        details: list[dict],
+        device_type_code: str = "",
+    ) -> Decimal | None:
         """Extract the leading numeric value from number_code field as Decimal.
 
         Args:
             number_code_str (str | None): Raw number_code string from CSV, or None.
             source_id (str): Source identifier used for warning messages.
             details (list[dict]): Mutable details list; a warning is appended on parse failure.
+            device_type_code (str): Device type code of the sign; a warning for missing
+                number_code is only emitted when this code belongs to
+                ``_number_code_warning_codes``.
 
         Returns:
             Decimal | None: Extracted value, or None if absent/no numeric prefix found.
         """
         if not number_code_str:
-            details.append({"level": "warning", "source_id": source_id, "reason": "number_code is absent or empty"})
+            if device_type_code in self._number_code_warning_codes:
+                details.append(
+                    {
+                        "level": "warning",
+                        "source_id": source_id,
+                        "reason": f"number_code is absent or empty for device_type_code={device_type_code!r}",
+                    }
+                )
             return None
         match = NUMBER_CODE_PATTERN.match(number_code_str.strip())
         try:
@@ -1241,7 +1267,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             )
 
         number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
-        value = self._get_sign_value(number_code_str, source_id, details)
+        value = self._get_sign_value(number_code_str, source_id, details, device_type_code=code)
         owner = self._resolve_sign_owner(code, number_code_str)
 
         raw_ls = row.get(CSVHeadersV2.location_specifier, "")
@@ -1953,7 +1979,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         sign_mount_type_name = row.get(CSVHeadersV2.sign_mount_type, "")
         mount_type = self.mount_types_by_name.get(sign_mount_type_name)
         number_code_str = row.get(CSVHeadersV2.number_code, "") or ""
-        value = self._get_sign_value(number_code_str, source_id, details)
+        value = self._get_sign_value(
+            number_code_str, source_id, details, device_type_code=row.get(CSVHeadersV2.code, "")
+        )
 
         return {
             "device_type_id": device_type_id,
@@ -2002,7 +2030,12 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "mount_real_id": new_mount_real_id,
             "mount_type": self.mount_types_by_name.get(row.get(CSVHeadersV2.sign_mount_type, "")),
             "location_specifier": SignLocationSpecifier(int(raw_ls)) if raw_ls else None,
-            "value": self._get_sign_value(row.get(CSVHeadersV2.number_code, "") or "", source_id, details),
+            "value": self._get_sign_value(
+                row.get(CSVHeadersV2.number_code, "") or "",
+                source_id,
+                details,
+                device_type_code=row.get(CSVHeadersV2.code, ""),
+            ),
             "height": self._get_sign_height(row.get(CSVHeadersV2.height), source_id, details),
             "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction), source_id, details),
             "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition), source_id, details),
