@@ -292,6 +292,7 @@ class CodeTransformMixin:
             }
         )
         row[CSVHeadersV2.code] = replacement_code
+        row[CSVHeadersV2.number_code] = expected_number
 
     def _apply_number_code_replacement(
         self, row: dict, code: str, replacement_code: str, number_code_value: str, expected_number: str
@@ -323,6 +324,7 @@ class CodeTransformMixin:
             }
         )
         row[CSVHeadersV2.code] = replacement_code
+        row[CSVHeadersV2.number_code] = expected_number
 
     def _apply_number_code_validation(self, row: dict) -> None:
         """Apply number-code based validation and replacement if applicable.
