@@ -809,6 +809,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     "mount_type_id": obj.mount_type_id,
                     "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
                     "attachment_url": obj.attachment_url,
+                    "updated_by_id": obj.updated_by_id,
+                    "updated_at": str(obj.updated_at) if obj.updated_at else None,
                 },
             }
         )
@@ -1306,6 +1308,10 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                 "old": {
                     "lifecycle": str(obj.lifecycle),
                     "validity_period_end": str(obj.validity_period_end) if obj.validity_period_end else None,
+                    "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
+                    "source_name": obj.source_name,
+                    "updated_by_id": obj.updated_by_id,
+                    "updated_at": str(obj.updated_at) if obj.updated_at else None,
                 },
             }
         )
@@ -1470,6 +1476,11 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     "txt": obj.txt,
                     "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
                     "attachment_url": obj.attachment_url,
+                    "owner_id": obj.owner_id,
+                    "installation_status": str(obj.installation_status) if obj.installation_status else None,
+                    "lifecycle": str(obj.lifecycle),
+                    "updated_by_id": obj.updated_by_id,
+                    "updated_at": str(obj.updated_at) if obj.updated_at else None,
                 },
             }
         )
@@ -1920,6 +1931,12 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
                     "attachment_url": obj.attachment_url,
                     "additional_information": obj.additional_information,
+                    "owner_id": obj.owner_id,
+                    "mount_type_id": obj.mount_type_id,
+                    "location_specifier": str(obj.location_specifier) if obj.location_specifier else None,
+                    "color": obj.color,
+                    "updated_by_id": obj.updated_by_id,
+                    "updated_at": str(obj.updated_at) if obj.updated_at else None,
                 },
             }
         )
@@ -2097,6 +2114,13 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     "condition": obj.condition,
                     "scanned_at": str(obj.scanned_at) if obj.scanned_at else None,
                     "attachment_url": obj.attachment_url,
+                    "owner_id": obj.owner_id,
+                    "mount_type_id": obj.mount_type_id,
+                    "location_specifier": str(obj.location_specifier) if obj.location_specifier else None,
+                    "value": str(obj.value) if obj.value is not None else None,
+                    "txt": obj.txt,
+                    "updated_by_id": obj.updated_by_id,
+                    "updated_at": str(obj.updated_at) if obj.updated_at else None,
                 },
             }
         )
