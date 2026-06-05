@@ -161,6 +161,12 @@ urlpatterns += [
         kwargs={"upload_folder": "realfiles"},
         name="realfiles_proxy",
     ),
+    path(
+        "uploads/management_commands/<str:model_name>/<str:file_id>",
+        FileProxyView.as_view(),
+        kwargs={"upload_folder": "management_commands"},
+        name="management_commands_proxy",
+    ),
 ]
 
 if settings.SENTRY_DEBUG:

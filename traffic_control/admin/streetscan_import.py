@@ -8,25 +8,26 @@ from django.template.loader import render_to_string
 from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
+from traffic_control.mixins import UploadsFileProxyMixin
 from traffic_control.models.streetscan_import import StreetScanImportRevertFile, StreetScanImportRun
 
 
 @admin.register(StreetScanImportRevertFile)
-class StreetScanImportRevertFileAdmin(admin.ModelAdmin):
+class StreetScanImportRevertFileAdmin(admin.ModelAdmin, UploadsFileProxyMixin):
     """Admin interface for StreetScan import revert files.
 
     Adding and editing records is not permitted through the admin interface.
     Revert files are attached programmatically by the import management command.
     """
 
-    list_display = ("id", "import_run_link", "file", "is_public")
+    list_display = ("id", "import_run_link", "file_proxy", "is_public")
     list_filter = ("is_public",)
     search_fields = ("file", "import_run__id")
-    readonly_fields = ("id", "import_run_link")
+    readonly_fields = ("id", "import_run_link", "file_proxy")
     fieldsets = (
         (
             _("File"),
-            {"fields": ("id", "file", "is_public")},
+            {"fields": ("id", "file_proxy", "is_public")},
         ),
         (
             _("Import run"),
@@ -65,13 +66,14 @@ class StreetScanImportRevertFileAdmin(admin.ModelAdmin):
         )
 
 
-class StreetScanImportRevertFileInline(admin.TabularInline):
-    """Inline for viewing and adding revert files within an import run."""
+class StreetScanImportRevertFileInline(admin.TabularInline, UploadsFileProxyMixin):
+    """Inline for viewing revert files within an import run."""
 
     model = StreetScanImportRevertFile
     extra = 1
     can_delete = False
-    fields = ("file", "is_public")
+    fields = ("file_proxy", "is_public")
+    readonly_fields = ("file_proxy",)
 
 
 @admin.register(StreetScanImportRun)

@@ -163,7 +163,7 @@ class StreetScanImportRevertFile(AbstractFileModel):
         _("File"),
         blank=False,
         null=False,
-        upload_to="streetscan_import/revert/",
+        upload_to="management_commands/streetscan_revert/",
         help_text=_("JSONL file containing pre-update snapshots and created-object IDs for this run."),
     )
     import_run = models.ForeignKey(
