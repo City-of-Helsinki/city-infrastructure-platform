@@ -2,6 +2,7 @@
 
 from .traffic_sign_data_v2_constants import (
     ALLOWED_COLOR_VALUES,
+    ALLOWED_SIGNPOST_CODE_PREFIXES,
     CODE_AND_COLOR_DEPENDENT_CODES,
     CODE_REPLACEMENTS,
     COLOR_CODES_DEFAULT_SUFFIX,
@@ -447,14 +448,30 @@ class CodeTransformMixin:
     def _is_skippable_code(code: str) -> bool:
         return code in SKIPPABLE_CODES
 
+    def _is_disallowed_signpost_code(self, row: dict) -> bool:
+        """Return True if the row is a signpost whose code does not start with an allowed prefix.
+
+        Non-signpost rows always return False.
+
+        Args:
+            row (dict): CSV row dictionary.
+
+        Returns:
+            bool: True if the row is a signpost with a disallowed code.
+        """
+        if not self._is_signpost(row):
+            return False
+        code = row.get(CSVHeadersV2.code, "")
+        return not code.startswith(ALLOWED_SIGNPOST_CODE_PREFIXES)
+
     def _filter_and_enrich_sign_rows(self, sign_rows: list[dict]) -> list[dict]:
         """Filter out invalid sign codes, replace device type codes, and add location_specifier values.
 
         Applies the full transformation pipeline in order: invalid-code filtering,
         direct code replacement, color-based suffix, code+color transformation,
         number-code validation, conditional number-code replacement, skippable-code
-        filtering, location_specifier enrichment, internal_additional_info enrichment,
-        and number_code enrichment from teksti.
+        filtering, disallowed-signpost filtering, location_specifier enrichment,
+        internal_additional_info enrichment, and number_code enrichment from teksti.
 
         See docs/traffic_sign_import_v2_code_transformations.md for the complete
         specification of all transformation rules.
@@ -479,6 +496,9 @@ class CodeTransformMixin:
             code = row.get(CSVHeadersV2.code, "")
             if self._is_skippable_code(code):
                 self._record_filtered_sign(row, code, "skipped_code")
+                continue
+            if self._is_disallowed_signpost_code(row):
+                self._record_filtered_sign(row, code, "disallowed_signpost_code")
                 continue
             self._enrich_location_specifier(row)
             self._enrich_internal_additional_info(row)
