@@ -154,7 +154,7 @@ def _make_analyzer(tmp_path: Path, mount_rows: list[list[str]], sign_rows: list[
 def _create_db_entries():
     """Create necessary database entries for tests."""
     MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
-    for code in ["C39", "C40", "H24S", "H24", "645", "511", "5111", "5112", "E1", "E1_2"]:
+    for code in ["C39", "C40", "H24S", "H24", "G4", "511", "5111", "5112", "E1", "E1_2"]:
         TrafficControlDeviceType.objects.get_or_create(code=code)
 
 
@@ -239,6 +239,95 @@ def test_is_skippable_code(code: str, expected: bool) -> None:
         expected (bool): Expected result.
     """
     assert TrafficSignAnalyzerV2._is_skippable_code(code) is expected
+
+
+@pytest.mark.parametrize(
+    "code,expected",
+    [
+        # Signpost codes with disallowed prefixes → True
+        ("645", True),
+        ("726", True),
+        ("F21.1", True),
+        ("7xx", True),
+        # Signpost codes with allowed prefixes → False
+        ("G4", False),
+        ("G15", False),
+        ("6221", False),
+        ("6502", False),
+        ("F7.1", False),
+        ("F8.2", False),
+        ("F18.3", False),
+        ("F24", False),
+        ("F51", False),
+        ("F57", False),
+        # Non-signpost codes are never disallowed → False
+        ("C39", False),
+        ("H24S", False),
+        ("833", False),
+        ("", False),
+    ],
+)
+def test_is_disallowed_signpost_code(code: str, expected: bool) -> None:
+    """_is_disallowed_signpost_code returns True only for signposts with a disallowed code prefix.
+
+    Args:
+        code (str): Device type code to test.
+        expected (bool): Expected result.
+    """
+    row = {CSVHeadersV2.code: code}
+    # Pass TrafficSignAnalyzerV2 as self: _is_signpost is a @staticmethod so
+    # self._is_signpost(row) resolves correctly without a real instance.
+    result = CodeTransformMixin._is_disallowed_signpost_code(TrafficSignAnalyzerV2, row)
+    assert result is expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "code,is_filtered",
+    [
+        # Disallowed signpost codes → filtered out
+        ("645", True),
+        ("726", True),
+        ("F21.1", True),
+        # Allowed signpost codes → kept
+        ("G4", False),
+        ("6221", False),
+        ("6502", False),
+        ("F51", False),
+        # Non-signpost codes → never filtered by this rule
+        ("C39", False),
+        ("H24S", False),
+    ],
+)
+def test_disallowed_signpost_codes_filtered(tmp_path: Path, code: str, is_filtered: bool) -> None:
+    """Signpost rows with disallowed code prefixes are removed from the pipeline.
+
+    Disallowed signpost rows must appear in filtered_signs with reason
+    'disallowed_signpost_code', while allowed and non-signpost rows must survive.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+        code (str): Device type code.
+        is_filtered (bool): True if the row should be filtered out.
+    """
+    MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
+    TrafficControlDeviceType.objects.get_or_create(code=code)
+
+    analyzer = _make_analyzer(
+        tmp_path,
+        [_mount_row("m1")],
+        [_sign_row("obj1", "m1", "New", code)],
+    )
+
+    filtered_codes = [f["code"] for f in analyzer.filtered_signs if f["reason"] == "disallowed_signpost_code"]
+    all_sign_ids = set(analyzer.all_signs_by_id)
+
+    if is_filtered:
+        assert code in filtered_codes
+        assert "obj1" not in all_sign_ids
+    else:
+        assert code not in filtered_codes
+        assert "obj1" in all_sign_ids
 
 
 @pytest.mark.parametrize(
@@ -424,10 +513,10 @@ def test_color_replacement_failure(tmp_path: Path, code: str, color: str, expect
 @pytest.mark.parametrize(
     "code,in_signposts,in_signs,in_additional",
     [
-        ("645", True, False, False),
-        ("F21.1", True, False, False),
+        ("6221", True, False, False),
+        ("F51", True, False, False),
         ("G4", True, False, False),
-        ("726", True, False, False),
+        ("6502", True, False, False),
         ("C39", False, True, False),
         ("H24S", False, False, True),
         ("833", False, False, True),
@@ -485,7 +574,7 @@ def test_skippable_exact_6_and_7_are_filtered(tmp_path: Path) -> None:
     [
         ("C39", "NON EXISTING MOUNTS FOR SIGNS", "sign_source_id", "csv_ssurl"),
         ("H24S", "NON EXISTING MOUNTS FOR ADDITIONAL SIGNS", "additional_sign_source_id", "additional_sign_ssurl"),
-        ("645", "NON EXISTING MOUNTS FOR SIGNPOSTS", "signpost_source_id", "csv_ssurl"),
+        ("G4", "NON EXISTING MOUNTS FOR SIGNPOSTS", "signpost_source_id", "csv_ssurl"),
     ],
 )
 def test_non_existing_mounts_reports(tmp_path: Path, code: str, report_type: str, id_key: str, ssurl_key: str) -> None:
@@ -526,7 +615,7 @@ def test_non_existing_mounts_reports(tmp_path: Path, code: str, report_type: str
     [
         ("C39", "sign_source_id"),
         ("H24S", "additional_sign_source_id"),
-        ("645", "signpost_source_id"),
+        ("G4", "signpost_source_id"),
     ],
 )
 def test_remove_records_includes_all_types(tmp_path: Path, code: str, expected_id_key: str) -> None:
@@ -613,7 +702,7 @@ def test_status_mismatch_reason(
     [
         ("C39", "MISSING TRAFFIC SIGNS FROM DATABASE", "sign_source_id", True),
         ("H24S", "MISSING ADDITIONAL SIGNS FROM DATABASE", "additional_sign_source_id", False),
-        ("645", "MISSING SIGNPOSTS FROM DATABASE", "signpost_source_id", True),
+        ("G4", "MISSING SIGNPOSTS FROM DATABASE", "signpost_source_id", True),
     ],
 )
 def test_missing_from_database_report(
@@ -653,7 +742,7 @@ def test_missing_from_database_report(
     "code,use_signpost_factory,report_type",
     [
         ("C39", False, "TRAFFIC SIGNS FOUND IN DATABASE"),
-        ("645", True, "SIGNPOSTS FOUND IN DATABASE"),
+        ("G4", True, "SIGNPOSTS FOUND IN DATABASE"),
     ],
 )
 def test_found_in_database_report(tmp_path: Path, code: str, use_signpost_factory: bool, report_type: str) -> None:
@@ -695,8 +784,8 @@ def test_analyze_includes_signpost_report_types(tmp_path: Path) -> None:
         tmp_path (Path): Pytest tmp_path fixture.
     """
     _create_db_entries()
-    TrafficControlDeviceType.objects.get_or_create(code="645")
-    analyzer = _make_analyzer(tmp_path, [_mount_row("m1")], [_sign_row("sp1", "m1", "New", "645")])
+    TrafficControlDeviceType.objects.get_or_create(code="G4")
+    analyzer = _make_analyzer(tmp_path, [_mount_row("m1")], [_sign_row("sp1", "m1", "New", "G4")])
     report_types = {r["REPORT_TYPE"] for r in analyzer.analyze()}
 
     for rt in [
@@ -760,7 +849,7 @@ def test_invalid_device_type_codes_report(tmp_path: Path) -> None:
     "code,dict_attr",
     [
         ("C39", "signs_by_id"),
-        ("645", "signposts_by_id"),
+        ("G4", "signposts_by_id"),
         ("H24S", "additional_signs_by_id"),
     ],
 )
@@ -826,7 +915,7 @@ def test_non_existing_mounts_ssurl_fields(tmp_path: Path, report_type: str, id_k
     code_map = {
         "sign_source_id": "C39",
         "additional_sign_source_id": "H24S",
-        "signpost_source_id": "645",
+        "signpost_source_id": "G4",
     }
     code = code_map[id_key]
     MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
@@ -1637,14 +1726,14 @@ def test_removed_parent_signpost_reported(tmp_path: Path) -> None:
         tmp_path (Path): Pytest tmp_path fixture.
     """
     MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
-    TrafficControlDeviceType.objects.get_or_create(code="645")
+    TrafficControlDeviceType.objects.get_or_create(code="G4")
     TrafficControlDeviceType.objects.get_or_create(code="H24S")
 
     analyzer = _make_analyzer(
         tmp_path,
         [_mount_row("m1")],
         [
-            _sign_row("signpost1", "m1", "Removed", "645"),
+            _sign_row("signpost1", "m1", "Removed", "G4"),
             _sign_row("add2", "m1", "Unchanged", "H24S", parent_id="signpost1"),
         ],
     )

@@ -62,8 +62,8 @@ _SIGN_CSV_HEADER: list[str] = [
 # Valid Helsinki-area EPSG:3879 coordinates
 _COORDS = ["25497188.0", "6673461.0", "8.0", "0.01", "0.01", "0.01"]
 _TS = "2023/08/15 12:00:00+00"
-# Signpost codes start with 6, 7, G or F — use a plain '6xx' code.
-_SIGNPOST_CODE = "645"
+# Signpost codes start with 6, 7, G or F — use a code with an allowed prefix.
+_SIGNPOST_CODE = "G4"
 
 
 def _sign_row(
@@ -321,7 +321,7 @@ def test_create_signposts_skips_unknown_device_type_code(tmp_path: Path, default
         default_owner: Owner fixture.
         mount_type: MountType fixture.
     """
-    importer = _make_importer(tmp_path, [_sign_row("SPUNK", code="6DOESNOTEXIST")])
+    importer = _make_importer(tmp_path, [_sign_row("SPUNK", code="G9DOESNOTEXIST")])
     summary: dict = {"details": []}
     importer._create_signposts(summary)
 
@@ -803,7 +803,7 @@ def test_update_signposts_skips_unknown_device_type_code(
         location=Point(25497188.0, 6673461.0, 8.0, srid=3879),
     )
 
-    importer = _make_importer(tmp_path, [_sign_row("SPUKC", code="6NOTEXIST")], phases=["update"])
+    importer = _make_importer(tmp_path, [_sign_row("SPUKC", code="G9NOTEXIST")], phases=["update"])
     summary: dict = {"details": []}
     importer._update_signposts(summary)
 

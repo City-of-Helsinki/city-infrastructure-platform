@@ -188,6 +188,25 @@ LOCATION_SPECIFIER_4_CODES = ["4171", "4172", "418", "D3.1", "D3.1_2", "D3.2", "
 # Codes that should that are valid but should be skipped
 SKIPPABLE_CODES = ["6", "7"]
 
+# Allowed code prefixes for signpost rows; signposts whose code does not start with
+# any of these prefixes are filtered out as "disallowed_signpost_code".
+ALLOWED_SIGNPOST_CODE_PREFIXES = (
+    "62",
+    "65",
+    "F7.",
+    "F8.",
+    "F18.",
+    "F24",
+    "F51",
+    "F52",
+    "F53",
+    "F54",
+    "F55",
+    "F56",
+    "F57",
+    "G",
+)
+
 # allowed color values
 ALLOWED_COLOR_VALUES = ["1", "2"]
 
