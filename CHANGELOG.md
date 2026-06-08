@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.40.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.39.0...city-infrastructure-platform-v1.40.0) (2026-06-08)
+
+
+### Features
+
+* Add a report to check if additional signs have a parent that is marked as Removed in the source data ([4623fbb](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4623fbb1c35f2dd08c891003564a1b34774eeb16))
+* Analyzing for streetscan data from 2025 ([06f94bd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/06f94bd3c5b7ab393c8d4834296f6faed6d73b8a))
+* Do not create maintance mode row in maintenancemode middleware ([5e88bd6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5e88bd60209bc6e62442d64784682e1f26463f4a))
+* Filter out rows from duplicate sings on same mount report ([25f6546](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/25f6546767771aadd9c0765f409099f885955c3a))
+* Management command for creating testdata ([79403c8](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/79403c8ce39b09628fc17cd77845613c4b82792e))
+* Streetscan2025 data import ([386d185](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/386d185ee9cf092c64fb85b8c551a93d829b8639))
+
+
+### Bug Fixes
+
+* Add missing fields from deactivation and update revert records ([c8374d0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c8374d0f17f90ee2a5adfb48b3616fbec9a40da4))
+* Devicetype code mapping to database id was not done correctly ([452e982](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/452e9826a5f39305a26aaccad386fd01564e6285))
+* Ensure our db-writing management commands set system actor ([2478faf](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/2478faf7c976344dd61f1caf9ac375d5873d44ee))
+* Revert file path and url ([b3cc92c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b3cc92cb8584b6923c7a389c85e1f643a9a55502))
+* Signposts filtering ([97df77a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/97df77a9336d02b2445ae492e1c35d9a9078f3aa))
+
 ## [1.39.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.38.0...city-infrastructure-platform-v1.39.0) (2026-05-11)
 
 
