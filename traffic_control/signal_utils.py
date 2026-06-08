@@ -31,16 +31,16 @@ def generate_pngs_on_svg_save(*, instance, png_folder):
             try:
                 png_data = cairosvg.svg2png(bytestring=svg_bytestring, output_width=size, output_height=size)
             except Exception as e:
-                logger.error(f"Unable to convert {png_file_name} to PNG: {e}")
+                logger.error("Unable to convert %s to PNG: %s", png_file_name, e)
                 return
             try:
                 png_file_content = ContentFile(png_data)
                 instance.file.storage.save(png_file_path, png_file_content)
             except Exception as e:
-                logger.error(f"Unable to store {png_file_path}: {e}")
+                logger.error("Unable to store %s: %s", png_file_path, e)
                 return
 
-            logger.info(f"PNG icon generated: {png_file_path}")
+            logger.debug("PNG icon generated: %s", png_file_path)
 
 
 def delete_icon_files_on_row_delete(*, instance, png_folder):
@@ -60,16 +60,16 @@ def delete_icon_files_on_row_delete(*, instance, png_folder):
                 if instance.file.storage.exists(png_file_path):
                     try:
                         instance.file.storage.delete(png_file_path)
-                        logger.info(f"PNG file deleted: {png_file_path}")
+                        logger.debug("PNG file deleted: %s", png_file_path)
                     except Exception as e:
-                        logger.error(f"Unable to delete {png_file_path}: {e}")
+                        logger.error("Unable to delete %s: %s", png_file_path, e)
 
             # Delete the main SVG file
             instance.file.storage.delete(instance.file.name)
-            logger.info(f"SVG file deleted: {instance.file.name}")
+            logger.debug("SVG file deleted: %s", instance.file.name)
 
     except Exception as e:
-        logger.error(f"Error deleting files for instance {instance.pk}: {e}")
+        logger.error("Error deleting files for instance %s: %s", instance.pk, e)
 
 
 def _create_parent_log_entry(parent, message, action=None):
@@ -87,9 +87,9 @@ def _create_parent_log_entry(parent, message, action=None):
             action=action,
             changes=changes,
         )
-        logger.info(f"Successfully created log entry for {parent}: {message}")
+        logger.debug("Successfully created log entry for %s: %s", parent, message)
     except Exception as e:
-        logger.error(f"Failed to create log entry for {parent}: {e}", exc_info=True)
+        logger.error("Failed to create log entry for %s: %s", parent, e, exc_info=True)
 
 
 def _fetch_old_parent_value(sender, instance, parent_field_name, using):
@@ -98,7 +98,7 @@ def _fetch_old_parent_value(sender, instance, parent_field_name, using):
         db_instance = sender._default_manager.using(using).only("pk", parent_field_name).get(pk=instance.pk)
         return getattr(db_instance, parent_field_name)
     except sender.DoesNotExist:
-        logger.warning(f"Could not find {sender.__name__} pk={instance.pk} in database during pre_save")
+        logger.warning("Could not find %s pk=%s in database during pre_save", sender.__name__, instance.pk)
         return None
 
 
@@ -121,8 +121,8 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
             old_parent_value = _fetch_old_parent_value(sender, instance, parent_field_name, using)
             setattr(instance, cache_attr, old_parent_value)
             if old_parent_value:
-                logger.info(
-                    f"Cached old {parent_field_name} for {sender.__name__} pk={instance.pk}: {old_parent_value}"
+                logger.debug(
+                    "Cached old %s for %s pk=%s: %s", parent_field_name, sender.__name__, instance.pk, old_parent_value
                 )
         else:
             # New instance, no old parent
@@ -132,15 +132,19 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
         old_parent = getattr(instance, cache_attr, None)
         new_parent = getattr(instance, parent_field_name)
 
-        logger.info(
-            f"log_parent_change for {sender.__name__} pk={instance.pk}: "
-            f"created={created}, old_parent={old_parent}, new_parent={new_parent}"
+        logger.debug(
+            "log_parent_change for %s pk=%s: created=%s, old_parent=%s, new_parent=%s",
+            sender.__name__,
+            instance.pk,
+            created,
+            old_parent,
+            new_parent,
         )
 
         # Log removal from the old parent if the parent has changed
         if not created and old_parent and old_parent != new_parent:
             message = f"{child_model_name} '{instance}' was removed."
-            logger.info(f"Creating removal log entry: {message} for {old_parent}")
+            logger.debug("Creating removal log entry: %s for %s", message, old_parent)
             _create_parent_log_entry(old_parent, message)
 
         # Log addition or update to the new parent
@@ -151,7 +155,7 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
                 if is_new_relation
                 else f"{child_model_name} '{instance}' was updated."
             )
-            logger.info(f"Creating log entry for parent {new_parent}: {message}")
+            logger.debug("Creating log entry for parent %s: %s", new_parent, message)
             _create_parent_log_entry(new_parent, message)
 
     def log_parent_deletion(sender, instance, **kwargs):
@@ -160,7 +164,7 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
 
         if parent:
             message = f"{child_model_name} '{instance}' was removed."
-            logger.info(f"Creating deletion log entry: {message} for {parent}")
+            logger.debug("Creating deletion log entry: %s for %s", message, parent)
             _create_parent_log_entry(parent, message)
 
     pre_save.connect(
