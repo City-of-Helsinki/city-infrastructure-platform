@@ -96,16 +96,18 @@ class DbBuilderMixin:
 
     @staticmethod
     def _build_code_to_device_type_mapping() -> dict[str, Any]:
-        """Build mapping from both code and legacy_code to device type ID.
+        """Build mapping from device type code to device type ID.
+
+        Only the canonical ``code`` field is used as a key.  Legacy codes are
+        intentionally excluded to avoid ambiguous look-ups caused by stale or
+        overlapping legacy values.
 
         Returns:
-            dict[str, Any]: Dictionary mapping device codes to device type IDs.
+            dict[str, Any]: Dictionary mapping device type codes to device type IDs.
         """
         code_to_id = {}
         for dt in TrafficControlDeviceType.objects.all():
             code_to_id[dt.code] = dt.id
-            if dt.legacy_code:
-                code_to_id[dt.legacy_code] = dt.id
         return code_to_id
 
     @staticmethod
