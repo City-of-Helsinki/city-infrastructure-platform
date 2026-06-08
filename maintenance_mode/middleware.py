@@ -34,8 +34,17 @@ class MaintenanceModeMiddleware:
         self._maintenance_mode = None
         self._last_check = None
 
-    def _is_maintenance_active(self):
-        """Check if maintenance mode is active. Cache for performance."""
+    def _is_maintenance_active(self) -> bool:
+        """Check if maintenance mode is active. Cache the result for performance.
+
+        Uses a read-only DB lookup (``find_instance``) so the middleware never
+        creates a row.  This prevents conflicts with ``pg_restore --clean``
+        operations that delete and re-insert the singleton row: if no row exists
+        the method simply returns ``False`` (maintenance inactive).
+
+        Returns:
+            bool: True if maintenance mode is currently active, False otherwise.
+        """
         import time
 
         from maintenance_mode.models import MaintenanceMode
@@ -45,7 +54,7 @@ class MaintenanceModeMiddleware:
         # Cache for 10 seconds to avoid hitting the database on every request
         if self._last_check is None or (current_time - self._last_check) > 10:
             try:
-                maintenance = MaintenanceMode.get_instance()
+                maintenance = MaintenanceMode.find_instance()
                 self._maintenance_mode = maintenance
                 self._last_check = current_time
             except Exception:
@@ -53,7 +62,7 @@ class MaintenanceModeMiddleware:
                 self._maintenance_mode = None
                 self._last_check = current_time
 
-        return self._maintenance_mode and self._maintenance_mode.is_active
+        return self._maintenance_mode is not None and self._maintenance_mode.is_active
 
     def _get_maintenance_message(self, request: HttpRequest) -> str:
         """

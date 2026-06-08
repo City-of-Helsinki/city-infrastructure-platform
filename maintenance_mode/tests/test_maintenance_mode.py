@@ -117,6 +117,32 @@ class TestMaintenanceModeMiddleware:
         # Should not return 503 - login page should be accessible
         assert response.status_code != 503
 
+    def test_middleware_does_not_create_row_when_none_exists(self, db):
+        """Test that middleware never creates a MaintenanceMode row.
+
+        Guards against a pg_restore race condition where the middleware's
+        get_or_create call would insert a row that conflicts with the data
+        being restored by pg_restore --clean.
+        """
+        from django.contrib.auth.models import AnonymousUser
+        from django.test import RequestFactory
+
+        from maintenance_mode.middleware import MaintenanceModeMiddleware
+
+        assert MaintenanceMode.objects.count() == 0
+
+        factory = RequestFactory()
+        request = factory.get("/some/path/")
+        request.user = AnonymousUser()
+
+        middleware = MaintenanceModeMiddleware(lambda r: type("Response", (), {"status_code": 200})())
+        response = middleware(request)
+
+        # Should pass through normally (maintenance not active)
+        assert response.status_code == 200
+        # Must not have created a row as a side-effect
+        assert MaintenanceMode.objects.count() == 0
+
 
 @pytest.mark.django_db
 class TestMaintenanceModeModel:
@@ -168,3 +194,18 @@ class TestMaintenanceModeModel:
 
         with pytest.raises(ValidationError):
             instance.delete()
+
+    def test_find_instance_returns_none_when_no_row(self):
+        """Test that find_instance returns None without creating a row."""
+        assert MaintenanceMode.objects.count() == 0
+        result = MaintenanceMode.find_instance()
+        assert result is None
+        # Must not have created a row as a side-effect
+        assert MaintenanceMode.objects.count() == 0
+
+    def test_find_instance_returns_instance_when_row_exists(self):
+        """Test that find_instance returns the existing row."""
+        existing = MaintenanceMode.get_instance()
+        found = MaintenanceMode.find_instance()
+        assert found is not None
+        assert found.pk == existing.pk

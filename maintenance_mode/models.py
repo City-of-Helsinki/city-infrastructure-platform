@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -70,7 +72,28 @@ class MaintenanceMode(models.Model):
         raise ValidationError(_("Maintenance mode configuration cannot be deleted."))
 
     @classmethod
-    def get_instance(cls):
-        """Get or create the single instance of MaintenanceMode."""
+    def get_instance(cls) -> MaintenanceMode:
+        """Get or create the single instance of MaintenanceMode.
+
+        Creates the row if it does not exist. Use this in write contexts
+        (e.g., admin, management commands, fixtures) where creating the
+        singleton on first access is intentional.
+
+        Returns:
+            MaintenanceMode: The single MaintenanceMode instance.
+        """
         instance, _ = cls.objects.get_or_create(id=1)
         return instance
+
+    @classmethod
+    def find_instance(cls) -> MaintenanceMode | None:
+        """Return the MaintenanceMode instance without creating it.
+
+        Use this in read-only contexts (e.g., middleware) to avoid
+        inserting a row that could conflict with database restore operations
+        such as ``pg_restore --clean``.
+
+        Returns:
+            MaintenanceMode | None: The instance if a row exists, otherwise None.
+        """
+        return cls.objects.filter(pk=1).first()
