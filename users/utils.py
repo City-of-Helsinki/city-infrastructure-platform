@@ -1,7 +1,7 @@
 from .models import User
 
 
-def get_system_user():
+def get_system_user() -> User:
     user, _ = User.objects.get_or_create(
         username="system",
         is_active=False,
