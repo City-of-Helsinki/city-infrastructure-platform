@@ -1,0 +1,35 @@
+{% extends "gis/openlayers.html" %}
+{% load l10n %}
+
+{% block options %}{{ block.super }}
+options['default_lon'] = {{ default_lon|unlocalize }};
+options['default_lat'] = {{ default_lat|unlocalize }};
+options['default_zoom'] = {{ default_zoom|unlocalize }};
+{% endblock %}
+
+{% block base_layer %}
+/*
+ * Tiles are fetched through a Django proxy (/osm-tile-proxy/{z}/{x}/{y}.png)
+ * instead of contacting tile.openstreetmap.org directly.
+ *
+ * Root cause of the Firefox-only 403:
+ *   ol.source.OSM sets crossOrigin='anonymous' on tile <img> elements, which
+ *   puts the browser into CORS mode (Sec-Fetch-Mode: cors) and adds an
+ *   Origin header to every tile request.  OpenStreetMap's CDN returns 403
+ *   for CORS requests whose Origin is a private/localhost domain.  Chrome
+ *   happened to serve tiles from its cache (loaded before CORS mode was
+ *   active) so it appeared unaffected.
+ *
+ * Fix: the browser requests same-origin URLs, so no Origin header is sent.
+ *   Django fetches the real tile from OSM server-side with a compliant
+ *   User-Agent and returns it.
+ */
+var base_layer = new ol.layer.Tile({
+    source: new ol.source.XYZ({
+        url: '/osm-tile-proxy/{z}/{x}/{y}.png',
+        attributions: '\u00a9 <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.',
+        maxZoom: 19,
+    })
+});
+{% endblock %}
+

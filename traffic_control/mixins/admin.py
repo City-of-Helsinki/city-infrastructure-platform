@@ -10,8 +10,15 @@ from traffic_control.models.plan import Plan
 
 
 class CityInfra3DOSMWidget(OSMWidget):
-    """This point is near Helsinki railway station"""
+    """OSM map widget centred on Helsinki railway station with 3D geometry support.
 
+    Tiles are served through the Django ``osm-tile-proxy`` view instead of
+    directly from ``tile.openstreetmap.org``.  This prevents Firefox from
+    sending an ``Origin`` header (which OSM's CDN blocks with 403) caused by
+    OpenLayers' default ``crossOrigin='anonymous'`` on tile ``<img>`` elements.
+    """
+
+    template_name = "gis/cityinfra-osm.html"
     default_lon = 24.9416259
     default_lat = 60.170255
     default_zoom = 12.5

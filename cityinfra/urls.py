@@ -32,6 +32,7 @@ from traffic_control.views import (
     traffic_sign as traffic_sign_views,
 )
 from traffic_control.views.device_catalog import AdditionalSignCatalog, SignpostCatalog, TrafficSignCatalog
+from traffic_control.views.osm_tile_proxy import osm_tile_proxy
 from traffic_control.views.embed import TrafficSignPlanEmbed, TrafficSignRealEmbed
 from traffic_control.views.wfs.views import CityInfrastructureWFSView
 
@@ -112,6 +113,9 @@ furniture_signpost_operations_router.register(
 urlpatterns = [
     path("healthz", HealthCheckView.as_view(), name="health-check"),
     path("readiness", HealthCheckView.as_view(), name="readiness-check"),
+    # Proxy OSM tiles server-side so the browser never sends an Origin header
+    # directly to tile.openstreetmap.org (Firefox CORS 403 fix).
+    path("osm-tile-proxy/<int:z>/<int:x>/<int:y>.png", osm_tile_proxy, name="osm-tile-proxy"),
     path("ha/", include("helusers.urls", namespace="helusers")),
     path("v1/", include((router.urls, "traffic_control"), namespace="v1")),
     path("v1/", include(barrier_operations_router.urls)),
