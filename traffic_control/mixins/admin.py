@@ -10,8 +10,16 @@ from traffic_control.models.plan import Plan
 
 
 class CityInfra3DOSMWidget(OSMWidget):
-    """This point is near Helsinki railway station"""
+    """OSM map widget centred on Helsinki railway station with 3D geometry support.
 
+    Uses Helsinki city raster tiles (maptiles.api.hel.fi) instead of the
+    default tile.openstreetmap.org.  This fixes a Firefox-only 403: OpenLayers'
+    ``crossOrigin='anonymous'`` puts Firefox into CORS mode and OSM's CDN
+    blocks requests whose ``Origin`` header is a private/localhost domain.
+    Helsinki's tile CDN supports CORS for all origins and requires no API key.
+    """
+
+    template_name = "gis/cityinfra-osm.html"
     default_lon = 24.9416259
     default_lat = 60.170255
     default_zoom = 12.5
