@@ -1,0 +1,32 @@
+{% extends "gis/openlayers.html" %}
+{% load l10n %}
+
+{% block options %}
+    {{ block.super }}
+    options['default_lon'] = {{ default_lon|unlocalize }};
+    options['default_lat'] = {{ default_lat|unlocalize }};
+    options['default_zoom'] = {{ default_zoom|unlocalize }};
+{% endblock %}
+
+{# djlint:off #}
+{% block base_layer %}
+    /*
+     * Use Helsinki city raster tiles instead of tile.openstreetmap.org.
+     *
+     * Root cause of the Firefox-only 403 with the default OSMWidget:
+     *   ol.source.OSM sets crossOrigin='anonymous' on tile img elements, which
+     *   puts Firefox into CORS mode (Sec-Fetch-Mode: cors, Origin: HOST).
+     *   OSM's CDN blocks CORS requests from private/localhost origins.  Chrome
+     *   was unaffected because it served tiles from its cache.
+     *
+     * Fix: Helsinki's maptiles CDN (maptiles.api.hel.fi) supports CORS for all
+     *   origins and requires no API key, so the browser requests tiles directly.
+     */
+    var base_layer = new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: 'https://maptiles.api.hel.fi/styles/hel-osm-bright-fi/{z}/{x}/{y}.png',
+            attributions: '\u00a9 <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors \u00a9 <a href="https://www.hel.fi" target="_blank">City of Helsinki</a>',
+        })
+    });
+{% endblock %}
+{# djlint:on #}
