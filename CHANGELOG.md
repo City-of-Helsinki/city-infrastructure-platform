@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.41.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.40.0...city-infrastructure-platform-v1.41.0) (2026-06-12)
+
+
+### Features
+
+* Report for checking signposts for cyclic relations ([2e36355](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/2e36355a67e5e9d3374e610cda0bb4f0dc1f3b12))
+* Revert operation for import Streetscan2025 v2 command ([d509291](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d509291313f86909117f328500b2432773e21d84))
+
+
+### Bug Fixes
+
+* 403 response when using openlayers tile provider ([0a07469](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0a07469748ed5545b197edd6e35a53f8f86c86b4))
+
 ## [1.40.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.39.0...city-infrastructure-platform-v1.40.0) (2026-06-08)
 
 
