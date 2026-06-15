@@ -8,12 +8,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from traffic_control.services.azure import get_azure_storage_base_url
-from traffic_control.services.icon_draw_config import (
-    get_icons_relative_url,
-    get_icons_scale,
-    get_icons_size,
-    get_icons_type,
-)
+from traffic_control.services.icon_draw_config import get_icon_draw_config_values
 
 from .models import FeatureTypeEditMapping, Layer
 
@@ -54,7 +49,8 @@ def map_config(request):
         )
 
     icon_options = settings.STORAGES["icons"]["OPTIONS"]
-    traffic_sign_icons_url = f"{get_azure_storage_base_url(icon_options)}{get_icons_relative_url()}"
+    icon_config = get_icon_draw_config_values()
+    traffic_sign_icons_url = f"{get_azure_storage_base_url(icon_options)}{icon_config.icons_relative_url}"
     config = {
         "basemapConfig": {
             "name": _("Basemaps"),
@@ -72,9 +68,9 @@ def map_config(request):
             "imageExtent": _get_overview_image_extent(),
         },
         "traffic_sign_icons_url": traffic_sign_icons_url,
-        "icon_scale": get_icons_scale(),
-        "icon_type": get_icons_type(),
-        "icon_size": get_icons_size(),
+        "icon_scale": icon_config.scale,
+        "icon_type": icon_config.image_type,
+        "icon_size": icon_config.png_size,
         "featureTypeEditNameMapping": FeatureTypeEditMapping.get_featuretype_edit_name_mapping(),
         "address_search_base_url": settings.ADDRESS_SEARCH_BASE_URL,
     }
