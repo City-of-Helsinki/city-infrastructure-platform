@@ -7,6 +7,7 @@ This module is intentionally kept separate from the analysis pipeline so that
 the management command can run an import without triggering the full analysis.
 """
 
+import csv
 import datetime
 import json
 import logging
@@ -18,6 +19,7 @@ from typing import Any
 from uuid import UUID
 
 from django.core.files import File
+from django.db.models import Exists, OuterRef
 
 from traffic_control.analyze_utils.traffic_sign_data_v2_code_transform import CodeTransformMixin
 from traffic_control.analyze_utils.traffic_sign_data_v2_constants import (
@@ -2494,3 +2496,63 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             summary_key="additional_signs_deactivated",
             object_type_name="AdditionalSignReal",
         )
+
+    @staticmethod
+    def get_orphan_mount_ids() -> set[UUID]:
+        """Return IDs of MountReal records with source_name=SOURCE_NAME not referenced by any sign or signpost.
+
+        Only MountReal objects whose ``source_name`` matches ``SOURCE_NAME`` are considered.
+        A mount is treated as an orphan when no TrafficSignReal, AdditionalSignReal, or
+        SignpostReal with ``source_name=SOURCE_NAME`` references it via ``mount_real``.
+
+        Args:
+            None
+
+        Returns:
+            set[UUID]: Set of orphan MountReal IDs scoped to SOURCE_NAME.
+        """
+        referenced = (
+            Exists(TrafficSignReal.objects.filter(source_name=SOURCE_NAME, mount_real=OuterRef("pk")))
+            | Exists(AdditionalSignReal.objects.filter(source_name=SOURCE_NAME, mount_real=OuterRef("pk")))
+            | Exists(SignpostReal.objects.filter(source_name=SOURCE_NAME, mount_real=OuterRef("pk")))
+        )
+        return set(MountReal.objects.filter(source_name=SOURCE_NAME).exclude(referenced).values_list("id", flat=True))
+
+    @staticmethod
+    def clean_orphan_mounts() -> None:
+        """Hard-delete all MountReal orphans scoped to SOURCE_NAME.
+
+        An orphan is a MountReal with source_name=SOURCE_NAME that is not
+        referenced by any TrafficSignReal, AdditionalSignReal, or SignpostReal
+        with the same source_name.
+
+        Returns:
+            None
+        """
+        MountReal.objects.filter(id__in=TrafficSignImporterV2.get_orphan_mount_ids()).delete()
+
+    @staticmethod
+    def write_orphan_mounts_to_csv(file_path: str) -> None:
+        """Write orphan mount data to a CSV file.
+
+        Args:
+            file_path (str): The path to the output CSV file.
+
+        Returns:
+            None
+        """
+        orphan_mount_ids = TrafficSignImporterV2.get_orphan_mount_ids()
+        mounts = MountReal.objects.filter(id__in=orphan_mount_ids).select_related("mount_type")
+        with open(file_path, "w", newline="") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["location", "dbid", "mount_type", "source_id", "source_name"])
+            for mount in mounts:
+                writer.writerow(
+                    [
+                        str(mount.location),
+                        str(mount.id),
+                        str(mount.mount_type) if mount.mount_type else "",
+                        mount.source_id,
+                        mount.source_name,
+                    ]
+                )
