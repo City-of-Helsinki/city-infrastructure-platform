@@ -453,7 +453,7 @@ class AdditionalSignRealAdmin(
         "updated_by",
         "is_active",
     )
-    raw_id_fields = ("parent", "additional_sign_plan", "mount_real")
+    raw_id_fields = ("parent", "additional_sign_plan", "mount_real", "signpost_real")
     ordering = ("-created_at",)
     list_filter = SoftDeleteAdminMixin.list_filter + [
         ("additional_sign_plan", as_dropdown(EmptyFieldListFilter)),
