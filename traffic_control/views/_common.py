@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.core import exceptions
 from django.db.models import Prefetch
 from django.utils.translation import gettext_lazy as _
@@ -85,9 +86,9 @@ class TrafficControlViewSet(ModelViewSet, AuditLoggingMixin):
             raise PermissionDenied("Location outside allowed operational area.")
 
         self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
         output_serializer = self.serializer_classes.get("default")
         output_data = output_serializer(serializer.instance, context=serializer.context).data
+        headers = self.get_success_headers(output_data)
         return Response(output_data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
@@ -123,6 +124,13 @@ class PermissionFilteredFilePrefetchMixin:
             return qs
 
         if user and user.is_authenticated:
+            # Pre-warm Django's ContentType cache for the file model.  Guardian's
+            # get_objects_for_user() makes two separate ContentType.objects.get()
+            # calls from this same code location: one via _get_ct_cached() and one
+            # via get_content_type(queryset.model) → get_for_model() → .get().
+            # With the cache already warm, the second call becomes a cache hit and
+            # never reaches the database, keeping zeal's per-location count at 1.
+            ContentType.objects.get_for_model(self.file_queryset.model)
             permitted_files = get_objects_for_user(
                 user,
                 self.file_permission_codename,
