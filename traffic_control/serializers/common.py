@@ -3,7 +3,7 @@ from uuid import UUID
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import extend_schema_field, extend_schema_serializer
 from enumfields.drf import EnumSupportSerializerMixin
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
@@ -74,8 +74,85 @@ class EwktGeometryField(serializers.CharField):
     pass
 
 
+class CachedRelatedField(serializers.PrimaryKeyRelatedField):
+    """A PrimaryKeyRelatedField that returns a pre-fetched instance instead of querying the DB.
+
+    Avoids N+1 database queries when the same related object would otherwise be
+    re-fetched via ``Model.objects.get(pk=…)`` on every validation call.
+    When the incoming PK matches the cached instance, the instance is returned
+    directly; otherwise it falls back to the normal queryset lookup.
+
+    Args:
+        cached_instance: The already-fetched model instance to return on a PK match.
+        **kwargs: Additional keyword arguments forwarded to ``PrimaryKeyRelatedField``.
+    """
+
+    def __init__(self, cached_instance: object, **kwargs) -> None:
+        self._cached_instance = cached_instance
+        super().__init__(**kwargs)
+
+    def to_internal_value(self, data: object) -> object:
+        """Return the cached instance when the PK matches; fall back otherwise.
+
+        Args:
+            data: The raw PK value from the incoming request data.
+
+        Returns:
+            The cached model instance when the PK matches, or the result of the
+            normal queryset lookup otherwise.
+        """
+        if str(data) == str(self._cached_instance.pk):
+            return self._cached_instance
+        return super().to_internal_value(data)
+
+
+@extend_schema_serializer(description="")
 class FileProxySerializerMixin:
-    def to_representation(self, instance):
+    """Mixin for file serializers that rewrites the ``file`` URL and caches the parent FK.
+
+    When ``file_parent_instance`` and ``file_relation_key`` are present in the
+    serializer context (injected by :class:`~traffic_control.views._common.FileUploadViews`
+    during bulk file uploads), the FK field for the parent object is replaced with a
+    :class:`CachedRelatedField` so that the parent is **not** re-fetched from
+    the database for every uploaded file, preventing N+1 queries.
+    """
+
+    def get_fields(self) -> dict:
+        """Return serializer fields, replacing the parent FK with a cached variant when possible.
+
+        Returns:
+            dict: The field mapping, with the parent FK field swapped out when
+            context carries a pre-fetched parent instance.
+        """
+        fields = super().get_fields()
+        parent_instance = self.context.get("file_parent_instance")
+        relation_key = self.context.get("file_relation_key")
+
+        if (
+            parent_instance is not None
+            and relation_key
+            and relation_key in fields
+            and isinstance(fields[relation_key], serializers.PrimaryKeyRelatedField)
+            and fields[relation_key].queryset is not None
+        ):
+            original_field = fields[relation_key]
+            fields[relation_key] = CachedRelatedField(
+                cached_instance=parent_instance,
+                queryset=original_field.queryset,
+            )
+
+        return fields
+
+    def to_representation(self, instance: object) -> dict:
+        """Serialize the instance, rewriting the file URL to use the proxy path.
+
+        Args:
+            instance: The model instance being serialized.
+
+        Returns:
+            dict: The serialized representation with an absolute proxy URL for
+            the ``file`` field.
+        """
         representation = super().to_representation(instance)
         if "file" in representation:
             request = self.context.get("request")
