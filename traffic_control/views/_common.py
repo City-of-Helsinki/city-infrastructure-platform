@@ -164,6 +164,7 @@ class FileUploadViews(GenericViewSet):
     def post_files(self, request, *args, **kwargs):
         serializer_class = self.get_file_serializer()
         obj = self.get_object()
+        relation = self.get_file_relation()
         serializer_cache = []
         files = []
 
@@ -175,9 +176,19 @@ class FileUploadViews(GenericViewSet):
             add_virus_scan_errors_to_auditlog(virus_scan_errors, request.user, type(obj), object_id=None)
             raise ValidationError(f"Virus scan failure: {get_error_details_message(virus_scan_errors)}")
 
+        # Pass the pre-fetched parent instance via context so that
+        # FileProxySerializerMixin can replace the FK field with a
+        # CachedRelatedField, avoiding an extra Model.objects.get()
+        # call per file (N+1).
+        upload_context = {
+            "request": request,
+            "file_parent_instance": obj,
+            "file_relation_key": relation,
+        }
         for _filename, file in request.data.items():
             serializer = serializer_class(
-                data={self.get_file_relation(): obj.id, "file": file}, context={"request": request}
+                data={relation: obj.id, "file": file},
+                context=upload_context,
             )
             serializer.is_valid(raise_exception=True)
             serializer_cache.append(serializer)
