@@ -6,9 +6,106 @@ from django.views.generic import DetailView
 
 from traffic_control.models import MountPlan, MountReal, TrafficSignPlan, TrafficSignReal
 
+# ---------------------------------------------------------------------------
+# Shared select_related fragments
+# ---------------------------------------------------------------------------
 
-@method_decorator(xframe_options_exempt, name="dispatch")
-class TrafficSignEmbed(DetailView):
+_BASE_SIGN_SELECT_RELATED: list[str] = [
+    "device_type",
+    "device_type__icon_file",
+    "mount_type",
+    "owner",
+]
+
+_COMMON_ADDITIONAL_SIGN_SELECT_RELATED: list[str] = [*_BASE_SIGN_SELECT_RELATED, "parent"]
+
+# ---------------------------------------------------------------------------
+# Shared field-list blocks (sign models)
+# ---------------------------------------------------------------------------
+
+_DEVICE_TYPE_FIELDS: list[str] = [
+    "device_type.code",
+    "device_type.description",
+    "device_type.legacy_code",
+]
+
+_SIGN_LOCATION_FIELDS: list[str] = [
+    "location",
+    "road_name",
+    "lane_number",
+    "lane_type",
+    "direction",
+    "location_specifier",
+    "height",
+    "size",
+    "reflection_class",
+    "surface_class",
+]
+
+_VALIDITY_PERIOD_FIELDS: list[str] = [
+    "validity_period_start",
+    "validity_period_end",
+    "seasonal_validity_period_information",
+]
+
+# Real-only installed-device fields, split so "installed_by" can be inserted
+# between base and suffix for AdditionalSignReal.
+_INSTALLED_DEVICE_FIELDS_BASE: list[str] = [
+    "condition",
+    "installation_date",
+    "installation_status",
+    "installation_id",
+    "installation_details",
+]
+
+_INSTALLED_DEVICE_FIELDS_SUFFIX: list[str] = [
+    "permit_decision_id",
+    "scanned_at",
+    "manufacturer",
+    "rfid",
+    "operation",
+    "attachment_url",
+]
+
+_SIGN_SOURCE_FIELDS: list[str] = [
+    "created_at",
+    "updated_at",
+    "source_id",
+    "source_name",
+]
+
+# ---------------------------------------------------------------------------
+# Shared field-list blocks (mount models)
+# ---------------------------------------------------------------------------
+
+_MOUNT_TYPE_FIELDS: list[str] = [
+    "mount_type.code",
+    "mount_type.description",
+    "mount_type.description_fi",
+    "mount_type.digiroad_code",
+    "mount_type.digiroad_description",
+]
+
+_MOUNT_PHYSICAL_FIELDS: list[str] = [
+    "location",
+    "height",
+    "cross_bar_length",
+    "base",
+    "portal_type",
+    "material",
+    "is_foldable",
+]
+
+# Note: mount fields use source_name before source_id (unlike sign fields).
+_MOUNT_SOURCE_FIELDS: list[str] = [
+    "created_at",
+    "updated_at",
+    "source_name",
+    "source_id",
+]
+
+
+class TrafficSignEmbedMixin:
     template_name = "embed/traffic_sign.html"
 
     @property
@@ -35,16 +132,7 @@ class TrafficSignEmbed(DetailView):
         )
 
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .active()
-            .select_related(
-                "device_type",
-                "mount_type",
-                "owner",
-            )
-        )
+        return super().get_queryset().active().select_related(*self.traffic_sign_select_related)
 
     def get_context_data(self, **kwargs):
         parent_context = super().get_context_data(**kwargs)
@@ -61,7 +149,11 @@ class TrafficSignEmbed(DetailView):
         return self.get_fields_and_values(object, self.traffic_sign_fields)
 
     def get_additional_signs(self, traffic_sign):
-        objects = traffic_sign.additional_signs.active().order_by("-height").select_related("device_type", "owner")
+        objects = (
+            traffic_sign.additional_signs.active()
+            .order_by("-height")
+            .select_related(*self.additional_sign_select_related)
+        )
         additional_signs = []
         for object in objects:
             content_s_rows = object.get_content_s_rows()
@@ -110,33 +202,31 @@ class TrafficSignEmbed(DetailView):
         return value
 
 
-class TrafficSignPlanEmbed(TrafficSignEmbed):
+@method_decorator(xframe_options_exempt, name="dispatch")
+class TrafficSignPlanEmbed(TrafficSignEmbedMixin, DetailView):
     model = TrafficSignPlan
     mount_model = MountPlan
     mount_field_name = "mount_plan"
+    traffic_sign_select_related: list[str] = [
+        *_BASE_SIGN_SELECT_RELATED,
+        "mount_plan__mount_type",
+        "plan",
+    ]
+    additional_sign_select_related: list[str] = [
+        *_COMMON_ADDITIONAL_SIGN_SELECT_RELATED,
+        "mount_plan__mount_type",
+        "plan",
+    ]
 
-    traffic_sign_fields = [
-        "device_type.code",
-        "device_type.description",
-        "device_type.legacy_code",
+    traffic_sign_fields: list[str] = [
+        *_DEVICE_TYPE_FIELDS,
         "id",
         "lifecycle",
         #
-        "location",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "direction",
-        "location_specifier",
-        "height",
-        "size",
-        "reflection_class",
-        "surface_class",
+        *_SIGN_LOCATION_FIELDS,
         #
         "value",
-        "validity_period_start",
-        "validity_period_end",
-        "seasonal_validity_period_information",
+        *_VALIDITY_PERIOD_FIELDS,
         #
         "owner",
         "mount_type",
@@ -144,35 +234,19 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "txt",
         "plan",
         #
-        "created_at",
-        "updated_at",
-        "source_id",
-        "source_name",
+        *_SIGN_SOURCE_FIELDS,
     ]
 
-    additional_sign_fields = [
-        "device_type.code",
-        "device_type.description",
-        "device_type.legacy_code",
+    additional_sign_fields: list[str] = [
+        *_DEVICE_TYPE_FIELDS,
         "id",
         "lifecycle",
         #
-        "location",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "direction",
-        "location_specifier",
-        "height",
-        "size",
-        "reflection_class",
-        "surface_class",
+        *_SIGN_LOCATION_FIELDS,
         "color",
         #
         "content_s",
-        "validity_period_start",
-        "validity_period_end",
-        "seasonal_validity_period_information",
+        *_VALIDITY_PERIOD_FIELDS,
         "additional_information",
         #
         "owner",
@@ -182,132 +256,81 @@ class TrafficSignPlanEmbed(TrafficSignEmbed):
         "mount_plan",
         "plan",
         #
-        "created_at",
-        "updated_at",
-        "source_id",
-        "source_name",
+        *_SIGN_SOURCE_FIELDS,
     ]
 
-    mount_fields = [
-        "mount_type.code",
-        "mount_type.description",
-        "mount_type.description_fi",
-        "mount_type.digiroad_code",
-        "mount_type.digiroad_description",
+    mount_fields: list[str] = [
+        *_MOUNT_TYPE_FIELDS,
         "id",
         "lifecycle",
         #
-        "location",
-        "height",
-        "cross_bar_length",
-        "base",
-        "portal_type",
-        "material",
-        "is_foldable",
+        *_MOUNT_PHYSICAL_FIELDS,
         #
         "owner",
         "electric_accountable",
         #
         "txt",
         #
-        "created_at",
-        "updated_at",
-        "source_name",
-        "source_id",
+        *_MOUNT_SOURCE_FIELDS,
     ]
 
 
-class TrafficSignRealEmbed(TrafficSignEmbed):
+@method_decorator(xframe_options_exempt, name="dispatch")
+class TrafficSignRealEmbed(TrafficSignEmbedMixin, DetailView):
     model = TrafficSignReal
     mount_model = MountReal
     mount_field_name = "mount_real"
+    traffic_sign_select_related: list[str] = [
+        *_BASE_SIGN_SELECT_RELATED,
+        "mount_real__mount_type",
+        "mount_real__mount_plan__mount_type",
+        "traffic_sign_plan",
+    ]
+    additional_sign_select_related: list[str] = [
+        *_COMMON_ADDITIONAL_SIGN_SELECT_RELATED,
+        "mount_real__mount_type",
+        "additional_sign_plan",
+    ]
 
-    traffic_sign_fields = [
-        "device_type.code",
-        "device_type.description",
-        "device_type.legacy_code",
+    traffic_sign_fields: list[str] = [
+        *_DEVICE_TYPE_FIELDS,
         "id",
         "lifecycle",
         "legacy_code",
         "traffic_sign_plan",
         #
-        "location",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "direction",
-        "location_specifier",
-        "height",
-        "size",
-        "reflection_class",
-        "surface_class",
+        *_SIGN_LOCATION_FIELDS,
         #
         "value",
-        "validity_period_start",
-        "validity_period_end",
-        "seasonal_validity_period_information",
+        *_VALIDITY_PERIOD_FIELDS,
         #
-        "condition",
-        "installation_date",
-        "installation_status",
-        "installation_id",
-        "installation_details",
-        "permit_decision_id",
-        "scanned_at",
-        "manufacturer",
-        "rfid",
-        "operation",
-        "attachment_url",
+        *_INSTALLED_DEVICE_FIELDS_BASE,
+        *_INSTALLED_DEVICE_FIELDS_SUFFIX,
         #
         "owner",
         "mount_type",
         #
         "txt",
         #
-        "created_at",
-        "updated_at",
-        "source_id",
-        "source_name",
+        *_SIGN_SOURCE_FIELDS,
     ]
 
-    additional_sign_fields = [
-        "device_type.code",
-        "device_type.description",
-        "device_type.legacy_code",
+    additional_sign_fields: list[str] = [
+        *_DEVICE_TYPE_FIELDS,
         "id",
         "lifecycle",
         "additional_sign_plan",
         "legacy_code",
         #
-        "location",
-        "road_name",
-        "lane_number",
-        "lane_type",
-        "direction",
-        "location_specifier",
-        "height",
-        "size",
-        "reflection_class",
-        "surface_class",
+        *_SIGN_LOCATION_FIELDS,
         "color",
         #
         "content_s",
-        "validity_period_start",
-        "validity_period_end",
-        "seasonal_validity_period_information",
+        *_VALIDITY_PERIOD_FIELDS,
         #
-        "condition",
-        "installation_date",
-        "installation_status",
-        "installation_id",
-        "installation_details",
+        *_INSTALLED_DEVICE_FIELDS_BASE,
         "installed_by",
-        "permit_decision_id",
-        "scanned_at",
-        "manufacturer",
-        "rfid",
-        "operation",
-        "attachment_url",
+        *_INSTALLED_DEVICE_FIELDS_SUFFIX,
         #
         "owner",
         "mount_type",
@@ -315,29 +338,16 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         "parent",
         "mount_real",
         #
-        "created_at",
-        "updated_at",
-        "source_id",
-        "source_name",
+        *_SIGN_SOURCE_FIELDS,
     ]
 
-    mount_fields = [
-        "mount_type.code",
-        "mount_type.description",
-        "mount_type.description_fi",
-        "mount_type.digiroad_code",
-        "mount_type.digiroad_description",
+    mount_fields: list[str] = [
+        *_MOUNT_TYPE_FIELDS,
         "id",
         "lifecycle",
         "mount_plan",
         #
-        "location",
-        "height",
-        "cross_bar_length",
-        "base",
-        "portal_type",
-        "material",
-        "is_foldable",
+        *_MOUNT_PHYSICAL_FIELDS,
         #
         "condition",
         "installation_date",
@@ -350,8 +360,5 @@ class TrafficSignRealEmbed(TrafficSignEmbed):
         #
         "txt",
         #
-        "created_at",
-        "updated_at",
-        "source_name",
-        "source_id",
+        *_MOUNT_SOURCE_FIELDS,
     ]
