@@ -611,3 +611,14 @@ if DEBUG:
     INSTALLED_APPS.append("zeal")
     MIDDLEWARE.append("zeal.middleware.zeal_middleware")
     ZEAL_RAISE = False
+    ZEAL_ALLOWLIST = [
+        # ResponsibleEntity is an MPTT model. MPTT's delete() calls refresh_from_db()
+        # to refresh tree fields (lft, rght, tree_id) before deletion. This results in
+        # a second standalone get() call within the same request (the first being DRF's
+        # get_object()), which zeal incorrectly flags as an N+1. This is a known false
+        # positive caused by MPTT internals, not an actual N+1 query problem.
+        # "get*" uses an fnmatch pattern to bypass zeal's field-name validation
+        # (which only accepts real model field names), while still only matching
+        # the "get" pseudo-field zeal uses for standalone QuerySet.get() tracking.
+        {"model": "traffic_control.ResponsibleEntity", "field": "get*"},
+    ]
