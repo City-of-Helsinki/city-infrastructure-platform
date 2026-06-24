@@ -25,5 +25,5 @@ class ResponsibleEntityViewSet(ModelViewSet):
     ordering = ["name"]
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = ResponsibleEntitySerializer
-    queryset = ResponsibleEntity.objects.all()
+    queryset = ResponsibleEntity.objects.select_related("parent")
     filterset_class = ResponsibleEntityFilterSet
