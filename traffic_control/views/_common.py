@@ -30,7 +30,20 @@ __all__ = (
 
 
 def prefetch_replacements(queryset):
-    return queryset.prefetch_related("replacement_to_new", "replacement_to_old")
+    """Prefetch replacement relations with nested plan objects to avoid N+1 queries.
+
+    Args:
+        queryset: A QuerySet for a replaceable device plan model.
+
+    Returns:
+        QuerySet: The same queryset with optimised replacement prefetches applied.
+    """
+    replacement_rel = queryset.model._meta.get_field("replacement_to_new")
+    replacement_model = replacement_rel.related_model
+    return queryset.prefetch_related(
+        Prefetch("replacement_to_new", queryset=replacement_model.objects.select_related("new")),
+        Prefetch("replacement_to_old", queryset=replacement_model.objects.select_related("old")),
+    )
 
 
 @extend_schema(methods=("get",), parameters=[geo_format_parameter])
