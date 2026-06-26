@@ -1,7 +1,7 @@
 import logging
 import uuid
 from decimal import Decimal, InvalidOperation
-from typing import Optional
+from typing import Any, Optional, Self
 
 from django.contrib import admin
 from django.contrib.auth import get_user_model
@@ -164,29 +164,89 @@ class InstalledDeviceModel(models.Model):
         abstract = True
 
 
+_DB_PLAN_ID_UNSET = object()
+
+
 class UpdatePlanLocationMixin:
-    """
-    A mixin class that updates `Plan` location when the `plan` field of target model is changed.
+    """A mixin class that updates `Plan` location when the `plan` field of target model is changed.
+
     Affects only `Plan` objects with `derive_location` set to True.
     """
 
-    def save(self, *args, **kwargs):
+    @classmethod
+    def from_db(cls, db: str, field_names: list[str], values: list[Any]) -> Self:
+        """Load an instance from the database and cache its current plan FK id.
+
+        The cached value is used in save() to detect plan changes without an
+        additional database query.
+
+        Args:
+            db (str): The database alias the instance is being loaded from.
+            field_names (list[str]): The field names present in values.
+            values (list[Any]): The raw database values for the instance.
+
+        Returns:
+            Self: A new model instance with _db_plan_id cached.
+        """
+        instance = super().from_db(db, field_names, values)
+        instance._db_plan_id = instance.plan_id
+        return instance
+
+    def save(self, *args, **kwargs) -> None:
+        """Save the instance and trigger plan location derivation when the plan changes.
+
+        Args:
+            *args: Positional arguments forwarded to the parent save().
+            **kwargs: Keyword arguments forwarded to the parent save().
+        """
         if self._state.adding:
             old_plan = None
         else:
-            # remember the old plan when updating existing traffic
-            # control objects
-            old_plan = type(self).objects.get(pk=self.pk).plan
+            old_plan = self._resolve_old_plan()
         super().save(*args, **kwargs)
         if self.plan != old_plan:
-            # note that we also need to update the old plan location when
-            # updating the plan field of existing traffic control objects.
             if old_plan and old_plan.derive_location:
                 old_plan.derive_location_from_related_plans()
             if self.plan and self.plan.derive_location:
                 self.plan.derive_location_from_related_plans()
 
-    def delete(self, *args, **kwargs):
+    def _resolve_old_plan(self) -> Optional[models.Model]:
+        """Return the Plan instance assigned before the current save.
+
+        Uses the plan_id cached by from_db to avoid an extra database query
+        when the plan has not changed.
+
+        Returns:
+            Optional[models.Model]: The old Plan instance, or None.
+        """
+        db_plan_id = getattr(self, "_db_plan_id", _DB_PLAN_ID_UNSET)
+        if db_plan_id is _DB_PLAN_ID_UNSET:
+            return type(self).objects.get(pk=self.pk).plan
+        if db_plan_id == self.plan_id:
+            return self.plan
+        return self._fetch_old_plan_by_id(db_plan_id)
+
+    def _fetch_old_plan_by_id(self, plan_id: Any) -> Optional[models.Model]:
+        """Fetch the Plan instance for the given plan_id.
+
+        Args:
+            plan_id (Any): The primary key of the Plan to fetch, or None.
+
+        Returns:
+            Optional[models.Model]: The matching Plan instance, or None if plan_id is None.
+        """
+        if plan_id is None:
+            return None
+        plan_model = type(self)._meta.get_field("plan").related_model
+        return plan_model.objects.only("id", "derive_location").get(pk=plan_id)
+
+    def delete(self, *args, **kwargs) -> None:
+        """Delete the instance and trigger plan location derivation.
+
+        Args:
+            *args: Positional arguments forwarded to the parent delete().
+            **kwargs: Keyword arguments forwarded to the parent delete().
+        """
         super().delete(*args, **kwargs)
         if self.plan and self.plan.derive_location:
             self.plan.derive_location_from_related_plans()

@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Any, Optional
 
 import cairosvg
 from auditlog.models import LogEntry
@@ -8,6 +9,11 @@ from django.core.files.base import ContentFile
 from django.db.models.signals import post_delete, post_save, pre_save
 
 logger = logging.getLogger("django")
+
+# Sentinel used to distinguish "attribute not set" from an explicitly stored None.
+_DB_VALUE_UNSET = object()
+# Key for tracking which `_loaded_*_id` attributes have been patched onto a model's from_db.
+_PATCHED_FROM_DB_ATTRS_KEY = "_signal_utils_patched_from_db_attrs"
 
 
 def generate_pngs_on_svg_save(*, instance, png_folder):
@@ -92,6 +98,85 @@ def _create_parent_log_entry(parent, message, action=None):
         logger.error("Failed to create log entry for %s: %s", parent, e, exc_info=True)
 
 
+def _extend_model_from_db(model: type, loaded_attr: str, source_id_attr: str) -> None:
+    """Patch model.from_db to cache a FK id on every loaded instance.
+
+    This allows signal handlers to read the pre-modification FK id without
+    issuing an extra database query in pre_save.  Calling this function more
+    than once for the same (model, loaded_attr) pair is safe and a no-op.
+
+    Args:
+        model (type): The Django model class to patch.
+        loaded_attr (str): Attribute name to store the cached id (e.g. ``_loaded_parent_id``).
+        source_id_attr (str): FK id attribute name to cache (e.g. ``parent_id``).
+    """
+    already_patched: frozenset[str] = getattr(model, _PATCHED_FROM_DB_ATTRS_KEY, frozenset())
+    if loaded_attr in already_patched:
+        return
+
+    original_from_db = model.from_db
+
+    @classmethod  # type: ignore[misc]
+    def patched_from_db(cls, db: str, field_names: list, values: list) -> Any:
+        instance = original_from_db.__func__(cls, db, field_names, values)
+        setattr(instance, loaded_attr, instance.__dict__.get(source_id_attr))
+        return instance
+
+    model.from_db = patched_from_db
+    setattr(model, _PATCHED_FROM_DB_ATTRS_KEY, already_patched | {loaded_attr})
+
+
+def _fetch_parent_by_id(sender: type, parent_field_name: str, parent_id: Any, using: str) -> Optional[Any]:
+    """Fetch the parent model instance for the given pk.
+
+    Args:
+        sender (type): The child model class, used to resolve the parent model.
+        parent_field_name (str): The FK field name on the child model.
+        parent_id (Any): Primary key of the parent to fetch, or None.
+        using (str): Database alias to use.
+
+    Returns:
+        Optional[Any]: The parent model instance, or None if parent_id is None.
+    """
+    if parent_id is None:
+        return None
+    parent_model = sender._meta.get_field(parent_field_name).related_model
+    try:
+        return parent_model._default_manager.using(using).get(pk=parent_id)
+    except parent_model.DoesNotExist:
+        return None
+
+
+def _get_old_parent(
+    sender: type,
+    instance: Any,
+    parent_field_name: str,
+    loaded_parent_id_attr: str,
+    using: str,
+) -> Optional[Any]:
+    """Return the old parent value without a DB query when the parent has not changed.
+
+    Falls back to a database query when the cached id is absent or when the parent
+    FK has actually changed (and we need the old parent object for audit logging).
+
+    Args:
+        sender (type): The child model class.
+        instance (Any): The child model instance about to be saved.
+        parent_field_name (str): The FK field name pointing to the parent.
+        loaded_parent_id_attr (str): Instance attribute holding the cached parent id.
+        using (str): Database alias.
+
+    Returns:
+        Optional[Any]: The parent model instance before the pending save, or None.
+    """
+    loaded_parent_id = getattr(instance, loaded_parent_id_attr, _DB_VALUE_UNSET)
+    if loaded_parent_id is _DB_VALUE_UNSET:
+        return _fetch_old_parent_value(sender, instance, parent_field_name, using)
+    if loaded_parent_id == getattr(instance, f"{parent_field_name}_id", None):
+        return getattr(instance, parent_field_name, None)
+    return _fetch_parent_by_id(sender, parent_field_name, loaded_parent_id, using)
+
+
 def _fetch_old_parent_value(sender, instance, parent_field_name, using):
     """Helper to fetch the old parent value from the database."""
     try:
@@ -113,12 +198,17 @@ def create_auditlog_signals_for_parent_model(child_model, parent_field_name):
     """
     cache_attr = f"_old_{parent_field_name}"
     child_model_name = child_model._meta.verbose_name.capitalize()
+    loaded_parent_id_attr = f"_loaded_{parent_field_name}_id"
+
+    # Patch from_db to cache the parent FK id at load time, eliminating the N+1
+    # query in cache_old_parent when the parent has not changed.
+    _extend_model_from_db(child_model, loaded_parent_id_attr, f"{parent_field_name}_id")
 
     def cache_old_parent(sender, instance, **kwargs):
         # Only cache if this is an update (instance has pk and exists in DB)
         if instance.pk and not instance._state.adding:
             using = kwargs.get("using") or instance._state.db or "default"
-            old_parent_value = _fetch_old_parent_value(sender, instance, parent_field_name, using)
+            old_parent_value = _get_old_parent(sender, instance, parent_field_name, loaded_parent_id_attr, using)
             setattr(instance, cache_attr, old_parent_value)
             if old_parent_value:
                 logger.debug(
