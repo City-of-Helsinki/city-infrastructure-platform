@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.42.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.41.0...city-infrastructure-platform-v1.42.0) (2026-06-30)
+
+
+### Features
+
+* Add endpoint for atomic insertion of plan and dependent objects ([950369c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/950369ce37103df186ae9bffdc95c772beee576e))
+* Support for getting deleting and writing orphan mounts to a csv file ([90ce4c5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/90ce4c5e5bae96fe228bd0e543daf7fcd0590440))
+
+
+### Bug Fixes
+
+* Add missing select_related to TrafficControlDeviceTypeViewSet queryset ([81c44ec](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/81c44ec315dc4568b41c2d3d0d342486f047a1e2))
+* AdditionalSignReal admin detail page N+1 problem ([4569935](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/45699359590597c65b5002a4b95360b7281da102))
+* Avoid N+1 DB queries in post_files bulk file upload ([02873c3](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/02873c38f48a4af2aff0df6bca1267ca54b8aba5))
+* N+1 problem in signpostreal list page ([9ff62c0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9ff62c08c9de092943688d3ccb89fcb55c4496da))
+* N+1 problems with replace feature ([5499270](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/549927088d0fd14308cb695c3e9c0a91e795a827))
+* Nplusone problems in embed view ([8312616](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/83126166b48cc61fc3735eb76def286b7b24cf36))
+* Performance optimazation to ResponsibleEntityViewSet and silence false positive n+1 ([655e095](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/655e0950b4aca6c5cd0ebca5c4301a4c3db5c68a))
+* Resolve N+1 warnings in PermissionFilteredFilePrefetchMixin and create() ([754e8ec](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/754e8ec67914c59a5c57ec317636182f774e29c9))
+* Unnecessary database hits when getting icondraw config for map-view ([f1284dc](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f1284dcbddd5f23e41b10f217b0f6b8f3c0ad95f))
+
 ## [1.41.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.40.0...city-infrastructure-platform-v1.41.0) (2026-06-12)
 
 
