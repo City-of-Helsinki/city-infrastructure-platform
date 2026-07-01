@@ -63,6 +63,17 @@ class StreetScanImportRun(models.Model):
     additional_signs_updated = models.IntegerField(_("Additional signs updated"), default=0)
     additional_signs_deactivated = models.IntegerField(_("Additional signs deactivated"), default=0)
 
+    orphans_deleted = models.IntegerField(
+        _("Orphans deleted"),
+        default=0,
+        help_text=_("Number of orphan MountReal records hard-deleted after the import phases."),
+    )
+    orphan_mount_source_ids = models.JSONField(
+        _("Orphan mount source IDs"),
+        default=list,
+        help_text=_("List of source_ids for MountReal records hard-deleted as orphans in this run."),
+    )
+
     # --- Aggregate event counters ---
 
     skipped_count = models.IntegerField(

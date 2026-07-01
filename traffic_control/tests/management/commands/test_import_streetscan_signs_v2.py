@@ -7,6 +7,8 @@ import pytest
 from django.core.management import call_command
 
 from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME
+from traffic_control.models import MountReal
+from traffic_control.tests.factories import MountRealFactory, TrafficSignRealFactory
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -227,3 +229,123 @@ def test_dry_run_log_row_marked_as_dry_run(tmp_path: Path) -> None:
 
     run = StreetScanImportRun.objects.get(mount_file=mount_file, sign_file=sign_file)
     assert run.dry_run is True
+
+
+# ===========================================================================
+# --clean-orphans phase
+# ===========================================================================
+
+
+@pytest.mark.django_db
+def test_clean_orphans_deletes_orphan_mounts(tmp_path: Path) -> None:
+    """--clean-orphans hard-deletes mounts with SOURCE_NAME that have no referencing signs.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    mount = MountRealFactory(source_name=SOURCE_NAME)
+    mount_file, sign_file = _make_csv_files(tmp_path)
+
+    _call(mount_file, sign_file, clean_orphans=True)
+
+    assert not MountReal.objects.filter(id=mount.id).exists()
+
+
+@pytest.mark.django_db
+def test_clean_orphans_preserves_referenced_mount(tmp_path: Path) -> None:
+    """--clean-orphans keeps mounts that are still referenced by a sign with SOURCE_NAME.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    mount = MountRealFactory(source_name=SOURCE_NAME)
+    TrafficSignRealFactory(source_name=SOURCE_NAME, mount_real=mount)
+    mount_file, sign_file = _make_csv_files(tmp_path)
+
+    _call(mount_file, sign_file, clean_orphans=True)
+
+    assert MountReal.objects.filter(id=mount.id).exists()
+
+
+@pytest.mark.django_db
+def test_clean_orphans_not_run_by_default(tmp_path: Path) -> None:
+    """Orphan mounts are preserved when --clean-orphans is not passed.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    mount = MountRealFactory(source_name=SOURCE_NAME)
+    mount_file, sign_file = _make_csv_files(tmp_path)
+
+    _call(mount_file, sign_file)
+
+    assert MountReal.objects.filter(id=mount.id).exists()
+
+
+@pytest.mark.django_db
+def test_clean_orphans_dry_run_does_not_delete(tmp_path: Path) -> None:
+    """--clean-orphans combined with --dry-run makes no database changes.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    mount = MountRealFactory(source_name=SOURCE_NAME)
+    mount_file, sign_file = _make_csv_files(tmp_path)
+
+    _call(mount_file, sign_file, clean_orphans=True, dry_run=True)
+
+    assert MountReal.objects.filter(id=mount.id).exists()
+
+
+@pytest.mark.django_db
+def test_clean_orphans_count_reported_in_summary(tmp_path: Path) -> None:
+    """Summary output includes the orphans_deleted count when --clean-orphans is used.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    MountRealFactory(source_name=SOURCE_NAME)
+    mount_file, sign_file = _make_csv_files(tmp_path)
+
+    stdout, _ = _call(mount_file, sign_file, clean_orphans=True)
+
+    assert "orphans_deleted" in stdout
+    assert "1" in stdout
+
+
+@pytest.mark.django_db
+def test_clean_orphans_updates_run_log(tmp_path: Path) -> None:
+    """StreetScanImportRun.orphans_deleted and orphan_mount_source_ids are persisted correctly.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    from traffic_control.models.streetscan_import import StreetScanImportRun
+
+    mount = MountRealFactory(source_name=SOURCE_NAME)
+    mount_file, sign_file = _make_csv_files(tmp_path)
+
+    _call(mount_file, sign_file, clean_orphans=True)
+
+    run = StreetScanImportRun.objects.get(mount_file=mount_file, sign_file=sign_file)
+    assert run.orphans_deleted == 1
+    assert mount.source_id in run.orphan_mount_source_ids
+
+
+@pytest.mark.django_db
+def test_clean_orphans_dry_run_run_log_has_empty_source_ids(tmp_path: Path) -> None:
+    """In dry-run mode orphan_mount_source_ids is empty and orphans_deleted is 0.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    from traffic_control.models.streetscan_import import StreetScanImportRun
+
+    MountRealFactory(source_name=SOURCE_NAME)
+    mount_file, sign_file = _make_csv_files(tmp_path)
+
+    _call(mount_file, sign_file, clean_orphans=True, dry_run=True)
+
+    run = StreetScanImportRun.objects.get(mount_file=mount_file, sign_file=sign_file)
+    assert run.orphans_deleted == 0
+    assert run.orphan_mount_source_ids == []
