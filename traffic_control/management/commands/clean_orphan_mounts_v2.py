@@ -2,11 +2,13 @@
 from typing import Any
 from uuid import UUID
 
+from auditlog.context import set_actor
 from django.core.management.base import BaseCommand, CommandParser
 from django.db import transaction
 
 from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME, TrafficSignImporterV2
 from traffic_control.models import MountReal
+from users.utils import get_system_user
 
 
 class Command(BaseCommand):
@@ -60,14 +62,16 @@ class Command(BaseCommand):
             *args: Positional arguments (unused).
             **options: Parsed command options.
         """
-        dry_run: bool = options["dry_run"]
-        dry_run_detail: str = options["dry_run_detail"]
+        system_user = get_system_user()
+        with set_actor(system_user):
+            dry_run: bool = options["dry_run"]
+            dry_run_detail: str = options["dry_run_detail"]
 
-        if dry_run:
-            self._handle_dry_run(dry_run_detail)
-            return
+            if dry_run:
+                self._handle_dry_run(dry_run_detail)
+                return
 
-        self._handle_delete()
+            self._handle_delete()
 
     def _handle_dry_run(self, detail: str) -> None:
         """Preview orphan mounts without making database changes.
