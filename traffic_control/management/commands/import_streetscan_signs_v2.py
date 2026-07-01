@@ -18,7 +18,8 @@ class Command(BaseCommand):
     """Import V2 traffic sign CSV data (mounts, signs, signposts, additional signs).
 
     Supports selective execution via --object-type and --phase flags, dry-run
-    simulation, and --force-update to bypass the default resume behaviour.
+    simulation, --force-update to bypass the default resume behaviour, and
+    --clean-orphans to hard-delete unreferenced mounts after all import phases.
     """
 
     help = (
@@ -109,6 +110,18 @@ class Command(BaseCommand):
                 f"If omitted, all three phases are run."
             ),
         )
+        parser.add_argument(
+            "--clean-orphans",
+            dest="clean_orphans",
+            action="store_true",
+            default=False,
+            help=(
+                "After all import phases complete, hard-delete MountReal records "
+                "that are no longer referenced by any sign or signpost with the same "
+                "source_name. In dry-run mode the deletion is skipped but the count "
+                "of orphans that would be removed is logged."
+            ),
+        )
 
     def _validate_file(self, path: str, label: str) -> bool:
         """Check that a file path exists and is readable.
@@ -139,6 +152,7 @@ class Command(BaseCommand):
         dry_run: bool = options["dry_run"]
         force_update: bool = options["force_update"]
         batch_size: int = options["batch_size"]
+        clean_orphans: bool = options["clean_orphans"]
 
         # Default to all object types / phases when none specified.
         object_types: list[str] = options["object_types"] or list(VALID_OBJECT_TYPES)
@@ -172,6 +186,7 @@ class Command(BaseCommand):
         self.stdout.write(f"  delimiter    : '{delimiter}'")
         self.stdout.write(f"  dry_run      : {dry_run}")
         self.stdout.write(f"  force_update : {force_update}")
+        self.stdout.write(f"  clean_orphans: {clean_orphans}")
         self.stdout.write(f"  batch_size   : {batch_size}")
         self.stdout.write(f"  object_types : {object_types}")
         self.stdout.write(f"  phases       : {phases}")
@@ -188,6 +203,7 @@ class Command(BaseCommand):
             phases=phases,
             dry_run=dry_run,
             force_update=force_update,
+            clean_orphans=clean_orphans,
             delimiter=delimiter,
             batch_size=batch_size,
             user=user,
@@ -226,6 +242,8 @@ class Command(BaseCommand):
         self.stdout.write(f"\n  skipped      : {len(skips)}")
         self.stdout.write(f"  warnings     : {len(warnings)}")
         self.stdout.write(f"  errors       : {len(errors)}")
+        if "orphans_deleted" in summary:
+            self.stdout.write(f"  orphans_deleted: {summary['orphans_deleted']}")
         if errors:
             self.stdout.write(self.style.ERROR(f"\n  {len(errors)} error(s) occurred:"))
             for entry in errors:
