@@ -97,6 +97,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         phases: list[str],
         dry_run: bool = False,
         force_update: bool = False,
+        clean_orphans: bool = False,
         delimiter: str = ",",
         batch_size: int = 1000,
         user: User | None = None,
@@ -111,6 +112,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             dry_run (bool): If True, no DB writes are performed.
             force_update (bool): If True, previously-processed source_ids are not skipped.
                 Default False — already-processed rows are skipped (resume behaviour).
+            clean_orphans (bool): If True, orphan MountReal records scoped to SOURCE_NAME
+                are hard-deleted after all import phases complete. Default False.
             delimiter (str): CSV delimiter character.
             batch_size (int): Number of records per bulk_create / bulk_update batch.
                 Default 1000.
@@ -120,6 +123,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
         self.sign_file = sign_file
         self.dry_run = dry_run
         self.force_update = force_update
+        self.clean_orphans = clean_orphans
         self.delimiter = delimiter
         self.batch_size = batch_size
         self.user = user
@@ -226,6 +230,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
 
         for object_type in self.object_types:
             self._run_object_type(object_type, summary)
+
+        if self.clean_orphans:
+            self._run_clean_orphans(summary)
 
         self._finalise_run_log(summary)
 
@@ -534,6 +541,38 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             )
             return None
 
+    def _run_clean_orphans(self, summary: dict[str, Any]) -> None:
+        """Hard-delete orphan MountReal records and record the count in the summary.
+
+        An orphan is a MountReal with source_name=SOURCE_NAME that is not referenced
+        by any TrafficSignReal, AdditionalSignReal, or SignpostReal with the same
+        source_name. In dry-run mode no deletions are performed and the source_ids
+        list is left empty.
+
+        Args:
+            summary (dict[str, Any]): Mutable summary dict; ``orphans_deleted`` and
+                ``orphan_mount_source_ids`` are set and the run log is saved afterwards.
+        """
+        orphan_ids: set[UUID] = self.get_orphan_mount_ids()
+        count: int = len(orphan_ids)
+        logger.info("[TrafficSignImporterV2] Orphan mounts found: %d", count)
+
+        orphan_source_ids: list[str] = list(
+            MountReal.objects.filter(id__in=orphan_ids).values_list("source_id", flat=True)
+        )
+
+        if self.dry_run:
+            logger.info("[TrafficSignImporterV2] DRY RUN — skipping orphan mount deletion")
+            summary["orphans_deleted"] = 0
+            summary["orphan_mount_source_ids"] = []
+        else:
+            MountReal.objects.filter(id__in=orphan_ids).delete()
+            logger.info("[TrafficSignImporterV2] Deleted %d orphan mount(s)", count)
+            summary["orphans_deleted"] = count
+            summary["orphan_mount_source_ids"] = orphan_source_ids
+
+        self._save_run_log(summary)
+
     def _save_run_log(self, summary: dict[str, Any]) -> None:
         """Persist the current run log state to the database.
 
@@ -585,6 +624,8 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "additional_signs_created",
             "additional_signs_updated",
             "additional_signs_deactivated",
+            "orphans_deleted",
+            "orphan_mount_source_ids",
             "processed_mount_source_ids",
             "processed_sign_source_ids",
             "processed_signpost_source_ids",
