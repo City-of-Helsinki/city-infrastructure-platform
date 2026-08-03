@@ -1,0 +1,156 @@
+{% extends "admin/base_site.html" %}
+{% load admin_urls %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+  .module-section { margin-bottom: 30px; }
+  .instructions-box { background: #e0f2fe; border: 1px solid #bae6fd; padding: 15px; border-radius: 4px; color: #0369a1; }
+  .btn-danger { background-color: #ba2121; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+  .btn-success { background-color: #166534; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+
+        {% if tracked_commands %}
+            <section class="module module-section">
+                <h2>Tracked commands</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">App</th>
+                            <th scope="col">Command Name</th>
+                            <th scope="col">Last Tracked At</th>
+                            <th scope="col">Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cmd in tracked_commands %}
+                            <tr>
+                                <td style="font-family: monospace">{{ cmd.app }}</td>
+                                <td style="font-family: monospace">
+                                    <a href="{% url 'admin:command_tracker_trackedmanagementcommand_change' cmd.id %}">{{ cmd.command }}</a>
+                                </td>
+                                <td>{{ cmd.latest_tracked_at|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ cmd.comment|default:"-" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% endif %}
+
+        {% if orphaned_entries %}
+            <div class="module module-section">
+                <h2>Invalid tracking entries (command removed, renamed or made untrackable)</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">App</th>
+                            <th scope="col">Command Name</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for orphan in orphaned_entries %}
+                            <tr>
+                                <td style="font-family: monospace">{{ orphan.app }}</td>
+                                <td style="font-family: monospace">{{ orphan.command }}</td>
+                                <td>
+                                    <form method="post"
+                                          action="{% url 'admin:command_tracker_trackedmanagementcommand_delete' orphan.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                class="btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        {% if untracked_trackable %}
+            <section class="module module-section">
+                <h2>Untracked trackable commands</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">App</th>
+                            <th scope="col">Command Name</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cmd in untracked_trackable %}
+                            <tr>
+                                <td style="font-family: monospace">{{ cmd.app }}</td>
+                                <td style="font-family: monospace">{{ cmd.command }}</td>
+                                <td>
+                                    <form method="post"
+                                          action="{% url 'admin:command_tracker_trackedmanagementcommand_start' cmd.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                class="btn-success">Start Tracking</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% endif %}
+
+        {% if untrackable %}
+            <section class="module module-section">
+                <h2>Untrackable commands</h2>
+                <article class="module-section instructions-box">
+                    <h3>💡 How to make a command trackable</h3>
+                    <p>
+                        To allow a management command to be tracked, inherit from <strong><code>TrackableCommand</code></strong>
+                        instead of <code>BaseCommand</code>.
+                    </p>
+                    <code>
+                        <span style="color:red;
+                                     text-decoration: line-through">
+                            - from django.core.management.base import BaseCommand
+                        </span>
+                        <br />
+                        <span style="color:green">+ from command_tracker.management.trackable_command import TrackableCommand</span>
+                        <br />
+                        <br />
+                        <br />
+                        <span style="color:red;
+                                     text-decoration: line-through">- class Command(BaseCommand):</span>
+                        <br />
+                        <span style="color:green">+ class Command(TrackableCommand):</span>
+                        <br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;...
+                    </code>
+                </article>
+
+                <div class="module module-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">App</th>
+                                <th scope="col">Command Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cmd in untrackable %}
+                                <tr>
+                                    <td style="font-family: monospace">{{ cmd.app }}</td>
+                                    <td style="font-family: monospace">{{ cmd.command }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}
