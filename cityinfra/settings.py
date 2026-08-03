@@ -248,6 +248,7 @@ LOCAL_APPS = [
     "maintenance_mode.apps.MaintenanceModeConfig",
     "site_alert.apps.SiteAlertConfig",
     "admin_helper.apps.AdminHelperConfig",
+    "command_tracker.apps.CommandTrackerConfig",
 ]
 INSTALLED_APPS = LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
