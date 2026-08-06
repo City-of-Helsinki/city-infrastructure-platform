@@ -21,7 +21,7 @@ git clone git@github.com:City-of-Helsinki/city-infrastructure-platform.git
 
 ```bash
 cd city-infrastructure-platform
-./setup-git-hooks.sh
+./setup-hooks.sh
 ```
 
 ### Common dependencies
