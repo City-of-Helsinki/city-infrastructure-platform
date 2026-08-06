@@ -75,7 +75,6 @@ def test_list_view_shows_only_tracked_command_section(admin_client, mock_command
         id="track_example_app-tracked_command",
         app="track_example_app",
         command="tracked_command",
-        latest_tracked_at=timezone.now(),
     )
 
     url = reverse("admin:command_tracker_trackedmanagementcommand_changelist")
@@ -144,7 +143,6 @@ def test_list_view_shows_only_invalid_formerly_trackable_command_section(admin_c
         id="track_example_app-formerly_trackable_command",
         app="track_example_app",
         command="formerly_trackable_command",
-        latest_tracked_at=timezone.now(),
     )
 
     url = reverse("admin:command_tracker_trackedmanagementcommand_changelist")
@@ -179,13 +177,11 @@ def test_list_view_shows_all_sections_simultaneously(admin_client, mock_commands
         id="track_example_app-tracked_command",
         app="track_example_app",
         command="tracked_command",
-        latest_tracked_at=timezone.now(),
     )
     TrackedManagementCommand.objects.create(
         id="track_example_app-formerly_trackable_command",
         app="track_example_app",
         command="formerly_trackable_command",
-        latest_tracked_at=timezone.now(),
     )
 
     url = reverse("admin:command_tracker_trackedmanagementcommand_changelist")
@@ -231,7 +227,7 @@ def test_action_start_tracking_creates_entry_and_redirects(admin_client, mock_co
     assert tracker_obj.id == "track_example_app-untracked_trackable_command"
     assert tracker_obj.app == "track_example_app"
     assert tracker_obj.command == "untracked_trackable_command"
-    assert tracker_obj.latest_tracked_at is not None
+    assert tracker_obj.tracking_started_at is not None
 
 
 @pytest.mark.django_db
@@ -241,7 +237,6 @@ def test_action_delete_removes_invalid_tracking_entry(admin_client, mock_command
         id="track_example_app-formerly_trackable_command",
         app="track_example_app",
         command="formerly_trackable_command",
-        latest_tracked_at=timezone.now(),
     )
 
     assert TrackedManagementCommand.objects.count() == 1
@@ -281,14 +276,15 @@ def test_trackable_command_execution_updates_timestamp():
         id="track_example_app-dummy_trackable_command",
         app="track_example_app",
         command="dummy_trackable_command",
-        latest_tracked_at=past_timestamp,
+        tracking_started_at=past_timestamp,
+        latest_executed_at=past_timestamp,
     )
-    assert tracker.latest_tracked_at == past_timestamp  # sanity check
+    assert tracker.latest_executed_at == past_timestamp  # sanity check
 
-    # Call the command and verify that its latest_tracked_at is basically "now" (with a small error margin)
+    # Call the command and verify that its tracking_started_at is basically "now" (with a small error margin)
     call_command(DummyTrackableCommand())
     tracker.refresh_from_db()
-    current_timestamp = tracker.latest_tracked_at
-    time_difference = timezone.now() - tracker.latest_tracked_at
+    current_timestamp = tracker.latest_executed_at
+    time_difference = timezone.now() - tracker.latest_executed_at
     assert current_timestamp > past_timestamp
     assert time_difference.total_seconds() < 5

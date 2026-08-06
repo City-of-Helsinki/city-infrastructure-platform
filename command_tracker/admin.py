@@ -6,7 +6,6 @@ from django.contrib import admin
 from django.core.management import get_commands, load_command_class
 from django.shortcuts import redirect, render
 from django.urls import path
-from django.utils import timezone
 
 from command_tracker.management.trackable_command import TrackableCommand
 from command_tracker.models import TrackedManagementCommand
@@ -40,8 +39,8 @@ def get_tracked_apps():
 
 @admin.register(TrackedManagementCommand)
 class TrackedManagementCommandAdmin(admin.ModelAdmin):
-    fields = ("app", "command", "comment", "latest_tracked_at")
-    readonly_fields = ("app", "command", "latest_tracked_at")
+    fields = ("app", "command", "comment", "tracking_started_at", "latest_executed_at")
+    readonly_fields = ("app", "command", "tracking_started_at", "latest_executed_at")
 
     def has_add_permission(self, request):
         return False
@@ -87,7 +86,8 @@ class TrackedManagementCommandAdmin(admin.ModelAdmin):
                         "id": cmd_id,
                         "app": db_record.app,
                         "command": db_record.command,
-                        "latest_tracked_at": db_record.latest_tracked_at,
+                        "tracking_started_at": db_record.tracking_started_at,
+                        "latest_executed_at": db_record.latest_executed_at,
                         "comment": db_record.comment,
                     }
                 )
@@ -132,7 +132,5 @@ class TrackedManagementCommandAdmin(admin.ModelAdmin):
     def start_tracking_view(self, request, object_id):
         if request.method == "POST":
             app, command = object_id.split("-", 1)
-            TrackedManagementCommand.objects.create(
-                id=object_id, app=app, command=command, latest_tracked_at=timezone.now()
-            )
+            TrackedManagementCommand.objects.create(id=object_id, app=app, command=command)
         return redirect(f"admin:{self.model._meta.app_label}_{self.model._meta.model_name}_changelist")

@@ -22,7 +22,8 @@
                         <tr>
                             <th scope="col">App</th>
                             <th scope="col">Command Name</th>
-                            <th scope="col">Last Tracked At</th>
+                            <th scope="col">Tracked since</th>
+                            <th scope="col">Latest execution</th>
                             <th scope="col">Comment</th>
                         </tr>
                     </thead>
@@ -33,7 +34,8 @@
                                 <td style="font-family: monospace">
                                     <a href="{% url 'admin:command_tracker_trackedmanagementcommand_change' cmd.id %}">{{ cmd.command }}</a>
                                 </td>
-                                <td>{{ cmd.latest_tracked_at|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ cmd.tracking_started_at|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ cmd.latest_executed_at|date:"Y-m-d H:i:s"|default:"Unknown" }}</td>
                                 <td>{{ cmd.comment|default:"-" }}</td>
                             </tr>
                         {% endfor %}
