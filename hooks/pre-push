@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Stop execution immediately if any command fails
+set -e
+
+echo "Running code neatness checks. These checks are done here in order to save cloud processing time running the same"
+echo "checks for a push that contains trivial mistakes to fix. The checks executed are taken from our github workflow,"
+echo "but only the quick-to-execute stuff."
+echo ""
+echo "If, for some reason, you need to quickly push work-in-progress code to a branch, knowing that it might fail these"
+echo "basic checks, you can do:"
+echo ""
+echo "        git push --no-verify"
+echo ""
+
+ruff check .
+ruff format --check --diff .
+djlint .
+djlint --check .
+./scripts/check-open-api-schema.sh
+yarn --cwd map-view prettier
+yarn --cwd map-view lint
+yarn --cwd map-view validate-ts
+
+echo "All checks passed."
