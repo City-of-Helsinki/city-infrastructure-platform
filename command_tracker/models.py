@@ -18,9 +18,16 @@ class TrackedManagementCommand(models.Model):
         null=False,
         help_text=_("Notes on tracking the command or clarifications about the command's purpose"),
     )
-    latest_tracked_at = models.DateTimeField(
-        help_text=_("Timestamp for moment the command was most recently executed or had its tracking enabled"),
+    tracking_started_at = models.DateTimeField(
+        help_text=_("When was usage tracking for this command started"),
         editable=False,
+        auto_now_add=True,
+    )
+    latest_executed_at = models.DateTimeField(
+        help_text=_("When was this command last executed. Unknown if it happened before tracking started"),
+        default=None,
+        editable=False,
+        null=True,
     )
 
     def __str__(self):

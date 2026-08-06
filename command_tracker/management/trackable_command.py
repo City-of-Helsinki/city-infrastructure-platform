@@ -20,7 +20,7 @@ class TrackableCommand(BaseCommand):
         cmd_id = f"{app_name}-{command_name}"
 
         # Update the tracking timestamp
-        TrackedManagementCommand.objects.filter(id=cmd_id).update(latest_tracked_at=timezone.now())
+        TrackedManagementCommand.objects.filter(id=cmd_id).update(latest_executed_at=timezone.now())
 
         # Execute as usual
         return super().execute(*args, **options)
