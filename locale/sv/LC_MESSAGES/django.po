@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 13:36+0300\n"
+"POT-Creation-Date: 2026-08-06 12:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -620,6 +620,18 @@ msgstr ""
 msgid "We apologize for the inconvenience. Please check back soon."
 msgstr ""
 
+msgid "Management Command Usage Tracker"
+msgstr ""
+
+msgid ""
+"Notes on tracking the command or clarifications about the command's purpose"
+msgstr ""
+
+msgid ""
+"Timestamp for moment the command was most recently executed or had its "
+"tracking enabled"
+msgstr ""
+
 msgid "Maintenance mode active"
 msgstr ""
 
@@ -853,6 +865,9 @@ msgstr "Höjd < 1.5m"
 msgid "Height >= 1.5m"
 msgstr "Höjd >= 1.5m"
 
+msgid "User"
+msgstr "Användare"
+
 msgid "Barrier real"
 msgstr "Bom (implementering)"
 
@@ -1038,6 +1053,60 @@ msgid "Plan Mapping"
 msgstr ""
 
 msgid "Field Population - Installation"
+msgstr ""
+
+msgid "Import run"
+msgstr ""
+
+msgid "Mounts"
+msgstr ""
+
+msgid "Traffic Signs"
+msgstr ""
+
+msgid "Signposts"
+msgstr ""
+
+msgid "Additional Signs"
+msgstr "Tilläggsskyltar"
+
+msgid "Event Summary"
+msgstr ""
+
+msgid "Event Details"
+msgstr ""
+
+msgid "Phase Durations"
+msgstr ""
+
+msgid "Mount file"
+msgstr ""
+
+msgid "Sign file"
+msgstr ""
+
+msgid "Signs"
+msgstr ""
+
+msgid "Additional signs"
+msgstr "Tilläggsskyltar"
+
+msgid "Processed mount source IDs (count)"
+msgstr ""
+
+msgid "Processed sign source IDs (count)"
+msgstr ""
+
+msgid "Processed signpost source IDs (count)"
+msgstr ""
+
+msgid "Processed additional sign source IDs (count)"
+msgstr ""
+
+msgid "Phase durations"
+msgstr ""
+
+msgid "Event details"
 msgstr ""
 
 msgid "Parent Assignment"
@@ -2627,6 +2696,152 @@ msgstr ""
 msgid "Signpost Migration Real Records"
 msgstr ""
 
+msgid "Timestamp when the import run was started."
+msgstr ""
+
+msgid "Timestamp when the import run finished."
+msgstr ""
+
+msgid "True if the run was executed with --dry-run (no DB writes performed)."
+msgstr ""
+
+msgid "Path or name of the mount CSV file used for this run."
+msgstr ""
+
+msgid "Path or name of the sign CSV file used for this run."
+msgstr ""
+
+msgid "Mounts created"
+msgstr ""
+
+msgid "Mounts updated"
+msgstr ""
+
+msgid "Signs created"
+msgstr ""
+
+msgid "Signs updated"
+msgstr ""
+
+msgid "Signs deactivated"
+msgstr ""
+
+msgid "TrafficSignReal records whose lifecycle was set to INACTIVE."
+msgstr ""
+
+msgid "Signposts created"
+msgstr ""
+
+msgid "Signposts updated"
+msgstr ""
+
+msgid "Signposts deactivated"
+msgstr ""
+
+msgid "Additional signs created"
+msgstr ""
+
+msgid "Additional signs updated"
+msgstr ""
+
+msgid "Additional signs deactivated"
+msgstr ""
+
+msgid "Orphans deleted"
+msgstr ""
+
+msgid ""
+"Number of orphan MountReal records hard-deleted after the import phases."
+msgstr ""
+
+msgid "Orphan mount source IDs"
+msgstr ""
+
+msgid ""
+"List of source_ids for MountReal records hard-deleted as orphans in this run."
+msgstr ""
+
+msgid "Skipped count"
+msgstr ""
+
+msgid ""
+"Total rows skipped due to invalid geometry, unreadable text, missing device "
+"type code, etc."
+msgstr ""
+
+msgid "Warning count"
+msgstr ""
+
+msgid ""
+"Total warning-level events: imported without a mount, without a parent, "
+"traffic sign with ignored parent value, etc."
+msgstr ""
+
+msgid "Error count"
+msgstr ""
+
+msgid "Total error-level events (unexpected exceptions during the run)."
+msgstr ""
+
+msgid ""
+"Nested dict of seconds spent in each phase: {object_type: {phase: "
+"duration_s}}. Also contains a 'preprocessing' key for CSV loading and DB map "
+"building time. Populated progressively as phases complete."
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid ""
+"Full list of per-row skip, warning and error entries. Each entry has at "
+"minimum: level ('skip'/'warning'/'error'), source_id, reason."
+msgstr ""
+
+msgid "Processed mount source IDs"
+msgstr ""
+
+msgid "List of MountReal source_ids successfully upserted in this run."
+msgstr ""
+
+msgid "Processed sign source IDs"
+msgstr ""
+
+msgid "List of TrafficSignReal source_ids successfully upserted in this run."
+msgstr ""
+
+msgid "Processed signpost source IDs"
+msgstr ""
+
+msgid "List of SignpostReal source_ids successfully upserted in this run."
+msgstr ""
+
+msgid "Processed additional sign source IDs"
+msgstr ""
+
+msgid ""
+"List of AdditionalSignReal source_ids successfully upserted in this run."
+msgstr ""
+
+msgid "StreetScan import run"
+msgstr ""
+
+msgid "StreetScan import runs"
+msgstr ""
+
+msgid ""
+"JSONL file containing pre-update snapshots and created-object IDs for this "
+"run."
+msgstr ""
+
+msgid "The import run this revert file belongs to."
+msgstr ""
+
+msgid "StreetScan import revert file"
+msgstr ""
+
+msgid "StreetScan import revert files"
+msgstr ""
+
 msgid "Timestamp when the migration command started."
 msgstr ""
 
@@ -3064,9 +3279,6 @@ msgstr "Visuell presentation"
 msgid "Missing icon graphics. Description: "
 msgstr "Märkets grafik saknas. Märkets beskrivning:"
 
-msgid "Additional signs"
-msgstr "Tilläggsskyltar"
-
 msgid "No additional signs"
 msgstr "Inga tilläggsskyltar"
 
@@ -3244,9 +3456,6 @@ msgid ""
 "deactivations and system events. Only users with valid email addresses will "
 "receive notifications."
 msgstr ""
-
-msgid "User"
-msgstr "Användare"
 
 msgid "One month warning email sent at"
 msgstr ""
