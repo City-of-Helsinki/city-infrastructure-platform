@@ -7,8 +7,8 @@ LABEL vendor="City of Helsinki"
 ENV PYTHONUNBUFFERED=1
 
 # https://docs.astral.sh/uv/guides/integration/docker/#installing-uv
-# https://github.com/astral-sh/uv/pkgs/container/uv/859757638?tag=0.11.14 (2026-05-12)
-COPY --from=ghcr.io/astral-sh/uv:0.11.14@sha256:1025398289b62de8269e70c45b91ffa37c373f38118d7da036fb8bb8efc85d97 /uv /uvx /bin/
+# https://github.com/astral-sh/uv/pkgs/container/uv/1054364955?tag=0.11.31 (2026-07-21)
+COPY --from=ghcr.io/astral-sh/uv:0.11.31@sha256:ecd4de2f060c64bea0ff8ecb182ddf46ba3fcccdc8a60cfdbaf20d1a047d7437 /uv /uvx /bin/
 
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_FROZEN=1
