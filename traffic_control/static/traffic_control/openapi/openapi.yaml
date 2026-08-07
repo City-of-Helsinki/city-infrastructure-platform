@@ -17458,10 +17458,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BulkPlanInputSerializerMountPlanItemRequest'
-        plans:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkPlanInputSerializerPlanItemRequest'
+        plan:
+          $ref: '#/components/schemas/BulkPlanInputSerializerPlanItemRequest'
         signpost_plans:
           type: array
           items:
@@ -17471,7 +17469,7 @@ components:
           items:
             $ref: '#/components/schemas/BulkPlanInputSerializerTrafficSignPlanItemRequest'
       required:
-      - plans
+      - plan
     BulkPlanInputResponse:
       type: object
       properties:
@@ -17483,10 +17481,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MountPlanOutput'
-        plans:
-          type: array
-          items:
-            $ref: '#/components/schemas/Plan'
+        plan:
+          $ref: '#/components/schemas/Plan'
         signpost_plans:
           type: array
           items:
@@ -17496,7 +17492,7 @@ components:
           items:
             $ref: '#/components/schemas/TrafficSignPlanOutput'
       required:
-      - plans
+      - plan
     BulkPlanInputSerializerAdditionalSignPlanItemRequest:
       type: object
       description: |-
