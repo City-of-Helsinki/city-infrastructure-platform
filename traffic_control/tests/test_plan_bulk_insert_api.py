@@ -87,7 +87,7 @@ def plan_payload(*, request_object_id=DEFAULT_PLAN_ID, **kwargs) -> dict:
         "drawing_numbers": [],
         "derive_location": True,
     }
-    result.update(**kwargs)
+    result.update(kwargs)
     return result
 
 
@@ -150,7 +150,7 @@ def _post_insert_plan_bulk(
     *,
     additional_sign_plans=None,
     mount_plans=None,
-    plans=None,
+    plan=None,
     signpost_plans=None,
     traffic_sign_plans=None,
 ):
@@ -159,8 +159,8 @@ def _post_insert_plan_bulk(
         payload_obj["additional_sign_plans"] = additional_sign_plans
     if mount_plans:
         payload_obj["mount_plans"] = mount_plans
-    if plans:
-        payload_obj["plans"] = plans
+    if plan:
+        payload_obj["plan"] = plan
     if signpost_plans:
         payload_obj["signpost_plans"] = signpost_plans
     if traffic_sign_plans:
@@ -224,7 +224,7 @@ def test_plan_bulk_insert_success(
             additional_sign_plan_payload(device_type=additional_sign_device_type.pk, owner=owner.pk)
         ],
         mount_plans=[mount_plan_payload(owner=owner.pk)],
-        plans=[plan_payload()],
+        plan=plan_payload(),
         signpost_plans=[signpost_plan_payload(device_type=signpost_sign_device_type.pk, owner=owner.pk)],
         traffic_sign_plans=[traffic_sign_plan_payload(device_type=traffic_sign_device_type.pk, owner=owner.pk)],
     )
@@ -236,14 +236,14 @@ def test_plan_bulk_insert_success(
     # Check that the returned objects are present in the response
     assert len(response_data.get("additional_sign_plans")) == 1, "Should create one additional sign plan"
     assert len(response_data.get("mount_plans")) == 1, "Should create one mount plan"
-    assert len(response_data.get("plans")) == 1, "Should create one plan"
+    assert "plan" in response_data, "Should include plan"
     assert len(response_data.get("signpost_plans")) == 1, "Should create one signpost plan"
     assert len(response_data.get("traffic_sign_plans")) == 1, "Should create one traffic sign plan"
 
     # Check that the returned objects have been created with the expected IDs
     assert response_data.get("additional_sign_plans")[0]["id"] == DEFAULT_ADDITIONAL_SIGN_PLAN_ID
     assert response_data.get("mount_plans")[0]["id"] == DEFAULT_MOUNT_PLAN_ID
-    assert response_data.get("plans")[0]["id"] == DEFAULT_PLAN_ID
+    assert response_data.get("plan")["id"] == DEFAULT_PLAN_ID
     assert response_data.get("signpost_plans")[0]["id"] == DEFAULT_SIGNPOST_PLAN_ID
     assert response_data.get("traffic_sign_plans")[0]["id"] == DEFAULT_TRAFFIC_SIGN_PLAN_ID
 
@@ -266,7 +266,7 @@ def test_plan_bulk_insert_is_atomic(
             additional_sign_plan_payload(device_type=additional_sign_device_type.pk, owner=owner.pk)
         ],
         mount_plans=[mount_plan_payload(owner="bogus-id")],
-        plans=[plan_payload()],
+        plan=plan_payload(),
         signpost_plans=[signpost_plan_payload(device_type=signpost_sign_device_type.pk, owner=owner.pk)],
         traffic_sign_plans=[traffic_sign_plan_payload(device_type=traffic_sign_device_type.pk, owner=owner.pk)],
     )
@@ -286,13 +286,13 @@ def test_plan_bulk_insert_single_object_validation_failure(admin_client):
     response = _post_insert_plan_bulk(
         admin_client,
         mount_plans=[mount_plan_payload(owner="bogus-id")],
-        plans=[plan_payload()],
+        plan=plan_payload(),
     )
     response_data = response.json()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     # Assert that we only get a single complaint about mount plans and no other objects are mentioned in response
-    assert "plans" not in response_data, "Should not complain about plans"
+    assert "plan" not in response_data, "Should not complain about plan"
     assert len(response_data) == 1, "Response contains unexpected keys"
     assert len(response_data.get("mount_plans")) == 1, "Should have one mount plan complaint"
     assert "owner" in response_data["mount_plans"][0], "Complaint should be about the owner field"
@@ -305,7 +305,7 @@ def test_plan_bulk_insert_multiple_object_validation_failures(admin_client, owne
     response = _post_insert_plan_bulk(
         admin_client,
         mount_plans=[mount_plan_payload(owner="bogus-id")],
-        plans=[plan_payload()],
+        plan=plan_payload(),
         traffic_sign_plans=[
             traffic_sign_plan_payload(device_type="bogus-device-type-id", owner="another-bogus-id"),  # two complaints
             traffic_sign_plan_payload(device_type=traffic_sign_device_type.pk, owner=owner.pk),  # no complaints
@@ -342,7 +342,7 @@ def test_plan_bulk_insert_cycle_detected_failure(admin_client, owner, signpost_s
     # Assign both signposts' parent field to each other
     response = _post_insert_plan_bulk(
         admin_client,
-        plans=[plan_payload()],
+        plan=plan_payload(),
         signpost_plans=[
             signpost_plan_payload(
                 device_type=signpost_sign_device_type.pk,
@@ -379,16 +379,16 @@ def test_plan_bulk_insert_rejects_object_duplication(admin_client):  # (or datab
     # Attempt to create the object with the endpoint
     response = _post_insert_plan_bulk(
         admin_client,
-        plans=[plan_payload(request_object_id=DEFAULT_PLAN_ID)],
+        plan=plan_payload(request_object_id=DEFAULT_PLAN_ID),
     )
     response_data = response.json()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     # Expect duplicate plan object complaint
-    assert "plans" in response_data, "Should complain about plans"
+    assert "plan" in response_data, "Should complain about plan"
     assert len(response_data) == 1, "Response contains unexpected keys"
-    assert DEFAULT_PLAN_ID in response_data.get("plans")[0], "Complaint should be about the duplicated plan object"
-    assert "duplicate" in response_data.get("plans")[0][DEFAULT_PLAN_ID], "Complaint should mention 'duplicate'"
+    assert DEFAULT_PLAN_ID in response_data.get("plan")[0], "Complaint should be about the duplicated plan object"
+    assert "duplicate" in response_data.get("plan")[0][DEFAULT_PLAN_ID], "Complaint should mention 'duplicate'"
 
 
 @pytest.mark.django_db
@@ -401,13 +401,13 @@ def test_plan_bulk_insert_announces_cascading_errors_neatly(admin_client, owner)
             mount_plan_payload(owner=owner.pk),
             mount_plan_payload(owner=owner.pk, request_object_id=ALT_MOUNT_PLAN_ID),
         ],
-        plans=[plan_payload(request_object_id=DEFAULT_PLAN_ID)],
+        plan=plan_payload(request_object_id=DEFAULT_PLAN_ID),
     )
     response_data = response.json()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     # Expect both mount plans to fail
-    assert "plans" in response_data, "Should complain about plans"
+    assert "plan" in response_data, "Should complain about plan"
     assert "mount_plans" in response_data, "Should complain about mount plans"
     assert len(response_data) == 2, "Response contains unexpected keys"
 
