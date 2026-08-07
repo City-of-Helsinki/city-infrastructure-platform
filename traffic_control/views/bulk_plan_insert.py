@@ -130,7 +130,7 @@ DEPENDENCY_ID_FIELDS = {"plan", "mount_plan", "parent", "signpost_plan"}
 class BulkPlanInputSerializer(serializers.Serializer):
     additional_sign_plans = BulkPlanInputSerializerAdditionalSignPlanItem(many=True, required=False, default=list)
     mount_plans = BulkPlanInputSerializerMountPlanItem(many=True, required=False, default=list)
-    plans = BulkPlanInputSerializerPlanItem(many=True, required=True)
+    plan = BulkPlanInputSerializerPlanItem(many=False, required=True)
     signpost_plans = BulkPlanInputSerializerSignpostPlanItem(many=True, required=False, default=list)
     traffic_sign_plans = BulkPlanInputSerializerTrafficSignPlanItem(many=True, required=False, default=list)
 
@@ -150,7 +150,10 @@ class BulkPlanInputSerializer(serializers.Serializer):
         # Build dependency graph and object type/data map
         sorter = graphlib.TopologicalSorter()
         for object_type in self.fields:
-            for object_data in attrs.get(object_type, []):
+            # Cast single-entry fields to arrays for uniform processing
+            entries_data = to_list(attrs.get(object_type, []))
+
+            for object_data in entries_data:
                 dependencies = []
                 for dependency_field in DEPENDENCY_ID_FIELDS:
                     if dependency_field in object_data and object_data[dependency_field]:
@@ -175,17 +178,18 @@ class BulkPlanInputSerializer(serializers.Serializer):
         Due to dependencies between objects being created, objects need to be created in topological order. The method
         may raise further validation errors if any objects fail creation along the way.
         """
-        created_objects_by_type = defaultdict(list)
+        created_objects_by_type = {}
         created_objects_by_pk = {}
 
         errors = defaultdict(list)
+        created_objects_by_type = defaultdict(list)
         with transaction.atomic():
             for object_id in self._object_topological_order:
                 try:
                     object_info = self._object_type_and_data_map[object_id]
                     object_type = object_info["type"]
                     object_data = object_info["data"]
-                    object_serializer = self.fields[object_type].child
+                    object_serializer, is_array = get_single_object_serializer(self.fields[object_type])
 
                     # NOTE (2026-06-25 thiago)
                     # Because django-rest-framework's object existence validation has been bypassed, we have to
@@ -198,7 +202,10 @@ class BulkPlanInputSerializer(serializers.Serializer):
                             object_data[dependency_field] = created_objects_by_pk[dependency_pk]
 
                     instance = object_serializer.create(object_data)
-                    created_objects_by_type[object_type].append(instance)
+                    if is_array:
+                        created_objects_by_type[object_type].append(instance)
+                    else:
+                        created_objects_by_type[object_type] = instance
                     created_objects_by_pk[instance.pk] = instance
                 except Exception as e:
                     errors[object_type].append({str(object_id): e})
@@ -211,6 +218,20 @@ class BulkPlanInputSerializer(serializers.Serializer):
 class BulkPlanInputResponseSerializer(serializers.Serializer):
     additional_sign_plans = AdditionalSignPlanOutputSerializer(many=True, required=False, default=list)
     mount_plans = MountPlanOutputSerializer(many=True, required=False, default=list)
-    plans = PlanSerializer(many=True, required=True)
+    plan = PlanSerializer(many=False, required=True)
     signpost_plans = SignpostPlanOutputSerializer(many=True, required=False, default=list)
     traffic_sign_plans = TrafficSignPlanOutputSerializer(many=True, required=False, default=list)
+
+
+def to_list(value) -> list:
+    if not isinstance(value, list):
+        return [value]
+    return value
+
+
+def get_single_object_serializer(
+    serializer_class: serializers.ModelSerializer,
+) -> tuple[serializers.ModelSerializer, bool]:
+    if hasattr(serializer_class, "child"):
+        return serializer_class.child, True
+    return serializer_class, False
