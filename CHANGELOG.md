@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.42.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.41.0...city-infrastructure-platform-v1.42.0) (2026-08-10)
+
+
+### Features
+
+* Add app with admin view to track usage of management commands ([7d2e720](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7d2e720ef88764cdd94f0cd8fbb4e41cb812f956))
+* Add endpoint for atomic insertion of plan and dependent objects ([950369c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/950369ce37103df186ae9bffdc95c772beee576e))
+* Add missing translation ids ([e975ca3](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e975ca382a08b91194c5504c5ed23e25eabc4ac9))
+* Add option to cleanup orphan mounts to streetscan2025 import ([c26d8ae](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c26d8aec9acf2b64f0c3f7605b79722b335de5d6))
+* Management command for cleaning up orphan mount after trafficsign 2025 import ([7e6eeed](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7e6eeed34f18fbae2254e5fb5984b820b082a199))
+* Support for getting deleting and writing orphan mounts to a csv file ([90ce4c5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/90ce4c5e5bae96fe228bd0e543daf7fcd0590440))
+
+
+### Bug Fixes
+
+* Add missing select_related to TrafficControlDeviceTypeViewSet queryset ([81c44ec](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/81c44ec315dc4568b41c2d3d0d342486f047a1e2))
+* AdditionalSignReal admin detail page N+1 problem ([4569935](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/45699359590597c65b5002a4b95360b7281da102))
+* Avoid N+1 DB queries in post_files bulk file upload ([02873c3](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/02873c38f48a4af2aff0df6bca1267ca54b8aba5))
+* N+1 problem in signpostreal list page ([9ff62c0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9ff62c08c9de092943688d3ccb89fcb55c4496da))
+* N+1 problems with replace feature ([5499270](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/549927088d0fd14308cb695c3e9c0a91e795a827))
+* Nplusone problems in embed view ([8312616](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/83126166b48cc61fc3735eb76def286b7b24cf36))
+* Performance optimazation to ResponsibleEntityViewSet and silence false positive n+1 ([655e095](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/655e0950b4aca6c5cd0ebca5c4301a4c3db5c68a))
+* Resolve N+1 warnings in PermissionFilteredFilePrefetchMixin and create() ([754e8ec](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/754e8ec67914c59a5c57ec317636182f774e29c9))
+* Split tracking start and execution timestamps on command tracker ([d3851a1](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d3851a19be80f454990526b1bf51e4350c19d5db))
+* Unnecessary database hits when getting icondraw config for map-view ([f1284dc](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f1284dcbddd5f23e41b10f217b0f6b8f3c0ad95f))
+* Update dependabot python package-ecosystem to uv ([f2e19ee](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f2e19ee608f8bf51b2ef9ee4c6645c40c7bd4b42))
+* Wrong path for hooks setup script in README ([df44c50](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/df44c5091255a5e2d47be171d2e4b890bc873d87))
+
 ## [1.41.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.40.0...city-infrastructure-platform-v1.41.0) (2026-06-12)
 
 
