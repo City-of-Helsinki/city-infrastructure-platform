@@ -158,7 +158,7 @@ def test__barrier_plan__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:barrierplan-list",
         data,
-        [f"Geometry for barrierplan {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 
@@ -432,7 +432,7 @@ def test__barrier_real__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:barrierreal-list",
         data,
-        [f"Geometry for barrierreal {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 

@@ -301,7 +301,7 @@ def test__furniture_signpost_plan__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:furnituresignpostplan-list",
         data,
-        [f"Geometry for furnituresignpostplan {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 
@@ -315,7 +315,7 @@ def test__furniture_signpost_real__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:furnituresignpostreal-list",
         data,
-        [f"Geometry for furnituresignpostreal {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 

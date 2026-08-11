@@ -21,9 +21,10 @@ def do_filtering_test(
     assert response.json()["count"] == 2 + extra_count_for_second
 
 
-def do_illegal_geometry_test(endpoint, data, expected_non_field_errors):
+def do_illegal_geometry_test(endpoint, data, expected_location_errors):
     client = get_api_client(user=get_user(admin=True))
 
     response = client.post(reverse(endpoint), data=data)
     assert response.status_code == 400
-    assert response.json().get("non_field_errors") == expected_non_field_errors
+    for error in expected_location_errors:
+        assert error in response.json().get("location")

@@ -138,5 +138,5 @@ def test__operational_area__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:operationalarea-list",
         data,
-        [f"Geometry for operationalarea {illegal_multipolygon.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )

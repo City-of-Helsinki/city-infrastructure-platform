@@ -1,6 +1,7 @@
 from typing import Optional, OrderedDict
 from uuid import UUID
 
+from django.contrib.gis.geos import GEOSException, GEOSGeometry
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema_field, extend_schema_serializer
@@ -10,9 +11,26 @@ from rest_framework_gis.fields import GeometryField
 
 from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import DeviceTypeTargetModel
+from traffic_control.geometry_utils import geometry_is_legit
 from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceType
 from traffic_control.schema import IconsType, TrafficSignType
 from traffic_control.validators import validate_structured_content
+
+
+def validate_geometry_field(data: GEOSGeometry, geometry_types: list[str]):
+    if geometry_types and data.geom_type not in geometry_types:
+        raise serializers.ValidationError(f"Expected a one of {geometry_types} geometry, got {data.geom_type}.")
+    if not geometry_is_legit(data):
+        raise serializers.ValidationError("The location falls outside the city's boundaries.")
+    return data
+
+
+def parse_and_validate_geometry_field(data: str, geometry_types: list[str]):
+    try:
+        geom = GEOSGeometry(data)
+    except GEOSException as error:
+        raise serializers.ValidationError(str(error))
+    return validate_geometry_field(geom, geometry_types)
 
 
 @extend_schema_field(
@@ -23,7 +41,9 @@ from traffic_control.validators import validate_structured_content
     }
 )
 class EwktPointField(serializers.CharField):
-    pass
+    def to_internal_value(self, data):
+        internal_data = super().to_internal_value(data)
+        return parse_and_validate_geometry_field(internal_data, ["Point"])
 
 
 @extend_schema_field(
@@ -47,7 +67,9 @@ class EwktPointField(serializers.CharField):
     }
 )
 class EwktPolygonField(serializers.CharField):
-    pass
+    def to_internal_value(self, data):
+        internal_data = super().to_internal_value(data)
+        return parse_and_validate_geometry_field(internal_data, ["Polygon"])
 
 
 @extend_schema_field(
@@ -71,7 +93,9 @@ class EwktPolygonField(serializers.CharField):
     }
 )
 class EwktGeometryField(serializers.CharField):
-    pass
+    def to_internal_value(self, data):
+        internal_data = super().to_internal_value(data)
+        return parse_and_validate_geometry_field(internal_data, [])
 
 
 class CachedRelatedField(serializers.PrimaryKeyRelatedField):
@@ -396,6 +420,9 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
 
 class OperationalAreaSerializer(serializers.ModelSerializer):
     location = GeometryField()
+
+    def validate_location(self, value):
+        return validate_geometry_field(value, ["MultiPolygon"])
 
     class Meta:
         model = OperationalArea
