@@ -2,13 +2,12 @@
 name: Update uv.lock on release-please PRs
 
 on:
-  pull_request:
+  push:
     branches:
-      - master
+      - 'release-please--**'
 
 jobs:
   update-uv-lock:
-    if: startsWith(github.head_ref, 'release-please--')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -16,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # release 6.0.2 (2026-01-09)
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.ref_name }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # release 8.0.0 (2026-03-26)
