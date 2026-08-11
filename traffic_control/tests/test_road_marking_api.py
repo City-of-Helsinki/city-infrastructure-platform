@@ -160,7 +160,7 @@ def test__road_marking_plan__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:roadmarkingplan-list",
         data,
-        [f"Geometry for roadmarkingplan {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 
@@ -439,7 +439,7 @@ def test__road_marking_real__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:roadmarkingreal-list",
         data,
-        [f"Geometry for roadmarkingreal {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 

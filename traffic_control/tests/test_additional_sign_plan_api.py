@@ -221,7 +221,7 @@ def test__additional_sign_plan__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:additionalsignplan-list",
         data,
-        [f"Geometry for additionalsignplan {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 

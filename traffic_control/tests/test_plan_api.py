@@ -279,7 +279,7 @@ def test__plan__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:plan-list",
         data,
-        [f"Geometry for plan {illegal_multipolygon.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 

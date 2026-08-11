@@ -173,7 +173,7 @@ def test__traffic_light_plan__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:trafficlightplan-list",
         data,
-        [f"Geometry for trafficlightplan {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 
@@ -450,7 +450,7 @@ def test__traffic_light_real__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:trafficlightreal-list",
         data,
-        [f"Geometry for trafficlightreal {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 

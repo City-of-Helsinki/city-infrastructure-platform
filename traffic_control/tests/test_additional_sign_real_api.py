@@ -289,7 +289,7 @@ def test__additional_sign_real__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:additionalsignreal-list",
         data,
-        [f"Geometry for additionalsignreal {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 

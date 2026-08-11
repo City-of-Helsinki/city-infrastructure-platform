@@ -165,7 +165,7 @@ def test__signpost_plan__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:signpostplan-list",
         data,
-        [f"Geometry for signpostplan {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 
@@ -433,7 +433,7 @@ def test__signpost_real__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:signpostreal-list",
         data,
-        [f"Geometry for signpostreal {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 

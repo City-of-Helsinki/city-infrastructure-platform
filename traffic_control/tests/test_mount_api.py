@@ -81,7 +81,7 @@ def test__mount_plan__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:mountplan-list",
         data,
-        [f"Geometry for mountplan {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 
@@ -309,7 +309,7 @@ def test__mount_real__create_with_invalid_geometry():
     do_illegal_geometry_test(
         "v1:mountreal-list",
         data,
-        [f"Geometry for mountreal {illegal_test_point.ewkt} is not legal"],
+        ["The location falls outside the city's boundaries."],
     )
 
 
