@@ -6,13 +6,13 @@ from rest_framework.response import Response
 from traffic_control.filters import PlanFilterSet
 from traffic_control.models import Plan
 from traffic_control.schema import location_search_parameter
-from traffic_control.serializers.plan import PlanGeoJSONSerializer, PlanSerializer
-from traffic_control.views._common import TrafficControlViewSet
-from traffic_control.views.bulk_plan_insert import (
+from traffic_control.serializers.bulk_plan_insert import (
     BULK_PLAN_INSERT_MOCK_BATCH_PAYLOAD,
     BulkPlanInputResponseSerializer,
     BulkPlanInputSerializer,
 )
+from traffic_control.serializers.plan import PlanGeoJSONSerializer, PlanSerializer
+from traffic_control.views._common import TrafficControlViewSet
 
 
 @extend_schema_view(

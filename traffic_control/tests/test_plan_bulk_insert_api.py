@@ -3,6 +3,7 @@ import json
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.settings import api_settings
 
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import (
@@ -29,6 +30,8 @@ MULTIPOLYGON = (
     "6672708.5 0, 25498314.5 6672170.5 0, 25497651.5 6672629.5 0, 25497646.5 6672775.5 0, 25497733.5 6672927.5 0)))"
 )
 POINT = "SRID=3879;POINT Z (25496751.5 6673129.5 1.5)"
+
+NON_FIELD_ERRORS = api_settings.NON_FIELD_ERRORS_KEY
 
 
 def additional_sign_plan_payload(
@@ -167,7 +170,6 @@ def _post_insert_plan_bulk(
         payload_obj["traffic_sign_plans"] = traffic_sign_plans
     payload = json.dumps(payload_obj, indent=2, default=str)
 
-    print(f"Request is:\n{payload}\n\n")
     return admin_client.post(reverse("v1:plan-bulk-insert"), data=payload, content_type="application/json")
 
 
@@ -281,11 +283,11 @@ def test_plan_bulk_insert_is_atomic(
 
 
 @pytest.mark.django_db
-def test_plan_bulk_insert_single_object_validation_failure(admin_client):
+def test_plan_bulk_insert_single_object_validation_failure(admin_client, owner):
     # Send request with 1 bogus mount plan with single error and 1 OK plan
     response = _post_insert_plan_bulk(
         admin_client,
-        mount_plans=[mount_plan_payload(owner="bogus-id")],
+        mount_plans=[mount_plan_payload(owner="bogus-id"), mount_plan_payload(id=ALT_MOUNT_PLAN_ID, owner=owner.pk)],
         plan=plan_payload(),
     )
     response_data = response.json()
@@ -293,10 +295,11 @@ def test_plan_bulk_insert_single_object_validation_failure(admin_client):
 
     # Assert that we only get a single complaint about mount plans and no other objects are mentioned in response
     assert "plan" not in response_data, "Should not complain about plan"
-    assert len(response_data) == 1, "Response contains unexpected keys"
-    assert len(response_data.get("mount_plans")) == 1, "Should have one mount plan complaint"
-    assert "owner" in response_data["mount_plans"][0], "Complaint should be about the owner field"
-    assert len(response_data.get("mount_plans")[0]) == 1, "Should have no other complaints about the mount plan"
+    assert len(response_data) == 1, "Response should not contain unexpected keys"
+    assert len(response_data.get("mount_plans")) == 2, "Mount plan errors array should have same length as in input"
+    assert "owner" in response_data["mount_plans"][0], "First mount plan complaint should be about the owner field"
+    assert len(response_data.get("mount_plans")[0]) == 1, "Should have no other complaints about the first mount plan"
+    assert not response_data.get("mount_plans")[1], "Second mount plan error list should be empty"
 
 
 @pytest.mark.django_db
@@ -362,13 +365,16 @@ def test_plan_bulk_insert_cycle_detected_failure(admin_client, owner, signpost_s
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     # Expect error about dependency cycle between objects
-    assert "dependencies" in response_data, "Should complain about dependencies"
-    dependencies_error_message = response_data.get("dependencies")[0].lower()
+    assert NON_FIELD_ERRORS in response_data, "Response should have non-field errors"
+    assert len(response_data) == 1, "Response contains unexpected keys"
+    assert len(response_data.get(NON_FIELD_ERRORS)) == 1, "Response should have only one non-field error"
+
+    cycle_error = response_data.get(NON_FIELD_ERRORS)[0]
+    assert "nodes are in a cycle" in cycle_error, "Error should be about dependency cycle"
 
     # Expect circular dependency objects to have their IDs accused
-    assert "circular dependency" in dependencies_error_message
-    assert DEFAULT_SIGNPOST_PLAN_ID in dependencies_error_message, "Should accuse elements with loop"
-    assert ALT_SIGNPOST_PLAN_ID in dependencies_error_message, "Should accuse elements with loop"
+    assert DEFAULT_SIGNPOST_PLAN_ID in cycle_error, "Should accuse elements with loop"
+    assert ALT_SIGNPOST_PLAN_ID in cycle_error, "Should accuse elements with loop"
 
 
 @pytest.mark.django_db
@@ -387,8 +393,10 @@ def test_plan_bulk_insert_rejects_object_duplication(admin_client):  # (or datab
     # Expect duplicate plan object complaint
     assert "plan" in response_data, "Should complain about plan"
     assert len(response_data) == 1, "Response contains unexpected keys"
-    assert DEFAULT_PLAN_ID in response_data.get("plan")[0], "Complaint should be about the duplicated plan object"
-    assert "duplicate" in response_data.get("plan")[0][DEFAULT_PLAN_ID], "Complaint should mention 'duplicate'"
+    assert NON_FIELD_ERRORS in response_data.get("plan"), "Complaint should be about non field errors"
+    assert len(response_data.get("plan")[NON_FIELD_ERRORS]) == 1, "Response should have only one non field error"
+    duplication_error = response_data.get("plan")[NON_FIELD_ERRORS][0]
+    assert "duplicate" in duplication_error, "Complaint should mention 'duplicate'"
 
 
 @pytest.mark.django_db
@@ -414,5 +422,5 @@ def test_plan_bulk_insert_announces_cascading_errors_neatly(admin_client, owner)
     # Both mount plans should explain they could not be created because the plan was not created
     mount_plan_errors = response_data.get("mount_plans")
     assert len(mount_plan_errors) == 2, "Both mount plans should fail"
-    assert f"Dependency plan ({DEFAULT_PLAN_ID}) was not created." in mount_plan_errors[0][DEFAULT_MOUNT_PLAN_ID]
-    assert f"Dependency plan ({DEFAULT_PLAN_ID}) was not created." in mount_plan_errors[1][ALT_MOUNT_PLAN_ID]
+    assert f"Dependency plan ({DEFAULT_PLAN_ID}) was not created by this request." in mount_plan_errors[0]["plan"]
+    assert f"Dependency plan ({DEFAULT_PLAN_ID}) was not created by this request." in mount_plan_errors[1]["plan"]
