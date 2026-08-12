@@ -613,17 +613,27 @@ msgstr "Huoltotila"
 msgid "We apologize for the inconvenience. Please check back soon."
 msgstr "Pahoittelemme häiriötä. Tarkista asia pian uudelleen."
 
+# AI translation - needs human review
 msgid "Management Command Usage Tracker"
-msgstr ""
+msgstr "Hallintakomennon käyttöseuranta"
 
+# AI translation - needs human review
 msgid ""
 "Notes on tracking the command or clarifications about the command's purpose"
 msgstr ""
+"Huomioita komennon seurannasta tai tarkennuksia komennon tarkoituksesta"
 
+# AI translation - needs human review
+msgid "When was usage tracking for this command started"
+msgstr "Milloin tämän komennon käyttöseuranta aloitettiin"
+
+# AI translation - needs human review
 msgid ""
-"Timestamp for moment the command was most recently executed or had its "
-"tracking enabled"
+"When was this command last executed. Unknown if it happened before tracking "
+"started"
 msgstr ""
+"Milloin tämä komento suoritettiin viimeksi. Tuntematon, jos se tapahtui "
+"ennen seurannan aloittamista"
 
 msgid "Maintenance mode active"
 msgstr "Huoltotila käytössä"
@@ -632,8 +642,8 @@ msgid ""
 "When active, all requests (except admin for admin users) will be blocked "
 "with 503 status."
 msgstr ""
-"Kun aktiivinen, kaikki pyynnöt (paitsi ylläpito ylläpitäjille) estetään 503-"
-"tilakoodilla."
+"Kun aktiivinen, kaikki pyynnöt (paitsi ylläpito ylläpitäjille) estetään "
+"503-tilakoodilla."
 
 msgid "Message (Finnish)"
 msgstr "Viesti (Suomeksi)"
@@ -708,11 +718,13 @@ msgstr "Muokkaus nimi"
 msgid "Name used in the edit link of the map's FeatureInfo component "
 msgstr "Nimi, jota käytetään kartan FeatureInfo‑komponentin muokkauslinkissä"
 
+# AI translation - needs human review
 msgid "Feature Type Edit Mapping"
-msgstr ""
+msgstr "Kohdetyypin muokkausmääritys"
 
+# AI translation - needs human review
 msgid "Feature Type Edit Mappings"
-msgstr ""
+msgstr "Kohdetyypin muokkausmääritykset"
 
 msgid "png"
 msgstr "png"
@@ -756,47 +768,59 @@ msgstr "Pohjakartat"
 msgid "Overlays"
 msgstr "Tasot"
 
+# AI translation - needs human review
 msgid "Configuration"
-msgstr ""
+msgstr "Asetukset"
 
 msgid "Content"
 msgstr "Sisältö"
 
+# AI translation - needs human review
 msgid "Scheduling"
-msgstr ""
+msgstr "Ajastus"
 
+# AI translation - needs human review
 msgid "Message Preview"
-msgstr ""
+msgstr "Viestin esikatselu"
 
 msgid "Site Alerts"
 msgstr "Sivustotiedotteet"
 
+# AI translation - needs human review
 msgid "Info"
-msgstr ""
+msgstr "Tiedote"
 
+# AI translation - needs human review
 msgid "Warning"
-msgstr ""
+msgstr "Varoitus"
 
+# AI translation - needs human review
 msgid "Critical"
-msgstr ""
+msgstr "Kriittinen"
 
+# AI translation - needs human review
 msgid "Message active"
-msgstr ""
+msgstr "Viesti käytössä"
 
+# AI translation - needs human review
 msgid "When enabled, display this message to users in the admin pages."
-msgstr ""
+msgstr "Kun käytössä, näytä tämä viesti käyttäjille ylläpitosivuilla."
 
+# AI translation - needs human review
 msgid "Alert level"
-msgstr ""
+msgstr "Ilmoitustaso"
 
+# AI translation - needs human review
 msgid "Select a style of warning to reflect how critical it is"
-msgstr ""
+msgstr "Valitse varoituksen tyyli sen mukaan, kuinka kriittinen se on"
 
+# AI translation - needs human review
 msgid "Start time"
-msgstr ""
+msgstr "Alkamisaika"
 
+# AI translation - needs human review
 msgid "End time"
-msgstr ""
+msgstr "Päättymisaika"
 
 msgid "Created at"
 msgstr "Luotu-aikaleima"
@@ -804,8 +828,9 @@ msgstr "Luotu-aikaleima"
 msgid "Site Alert"
 msgstr "Sivustotiedoite"
 
+# AI translation - needs human review
 msgid "Dismiss"
-msgstr ""
+msgstr "Hylkää"
 
 msgid "Additional Sign Real"
 msgstr "Lisäkilpi (toteuma)"
@@ -849,8 +874,9 @@ msgstr "On päivämäärä"
 msgid "Responsible Entity Permission"
 msgstr "Vastuutahon oikeus"
 
+# AI translation - needs human review
 msgid "Height is null"
-msgstr ""
+msgstr "Korkeus on tyhjä"
 
 msgid "Height = 0m"
 msgstr "Korkeus = 0m"
@@ -870,26 +896,31 @@ msgstr "Ajoeste (toteuma)"
 msgid "Barrier reals"
 msgstr "Ajoeste (toteumat)"
 
+# AI translation - needs human review
 msgid "Field Population - Appearance"
-msgstr ""
+msgstr "Kenttien täyttö – Ulkoasu"
 
+# AI translation - needs human review
 msgid "Field Population - Location"
-msgstr ""
+msgstr "Kenttien täyttö – Sijainti"
 
 msgid "Original ID"
 msgstr "Alkupäinen ID"
 
+# AI translation - needs human review
 msgid "New ID"
-msgstr ""
+msgstr "Uusi tunnus"
 
+# AI translation - needs human review
 msgid "Fields Populated"
-msgstr ""
+msgstr "Täytetyt kentät"
 
 msgid "Duration"
 msgstr "Kesto"
 
+# AI translation - needs human review
 msgid "Mode"
-msgstr ""
+msgstr "Tila"
 
 msgid "Status"
 msgstr "Tila"
@@ -925,8 +956,9 @@ msgstr "Toiminta-alue"
 msgid "Set related plans for plan %s"
 msgstr "Aseta liittyviä suunnitelmia suunnitelmalle %s"
 
+# AI translation - needs human review
 msgid "Import Information"
-msgstr ""
+msgstr "Tuonnin tiedot"
 
 msgid "Results Summary"
 msgstr "Tulosteen yhteenveto"
@@ -991,23 +1023,28 @@ msgstr "Opaste (toteuma)"
 msgid "Signpost Reals"
 msgstr "Opaste (toteumat)"
 
+# AI translation - needs human review
 msgid "Run Information"
-msgstr ""
+msgstr "Suorituksen tiedot"
 
+# AI translation - needs human review
 msgid "Plan Migration Statistics"
-msgstr ""
+msgstr "Suunnitelmien migraatiotilastot"
 
+# AI translation - needs human review
 msgid "Real Migration Statistics"
-msgstr ""
+msgstr "Toteumien migraatiotilastot"
 
 msgid "Device Types"
 msgstr "Laitteen tyyppit"
 
+# AI translation - needs human review
 msgid "Lost Data"
-msgstr ""
+msgstr "Menetetyt tiedot"
 
+# AI translation - needs human review
 msgid "Error Information"
-msgstr ""
+msgstr "Virheen tiedot"
 
 msgid "Plans"
 msgstr "Suunnitelmat"
@@ -1015,44 +1052,56 @@ msgstr "Suunnitelmat"
 msgid "Reals"
 msgstr "Toteumat"
 
+# AI translation - needs human review
 msgid "Plan Records"
-msgstr ""
+msgstr "Suunnitelmatietueet"
 
+# AI translation - needs human review
 msgid "Real Records"
-msgstr ""
+msgstr "Toteumatietueet"
 
+# AI translation - needs human review
 msgid "Lost Field Values"
-msgstr ""
+msgstr "Menetetyt kenttäarvot"
 
+# AI translation - needs human review
 msgid "Migration Information"
-msgstr ""
+msgstr "Migraation tiedot"
 
+# AI translation - needs human review
 msgid "Object IDs"
-msgstr ""
+msgstr "Objektitunnukset"
 
+# AI translation - needs human review
 msgid "Field Population - Basic"
-msgstr ""
+msgstr "Kenttien täyttö – Perustiedot"
 
+# AI translation - needs human review
 msgid "Field Population - Other"
-msgstr ""
+msgstr "Kenttien täyttö – Muut"
 
+# AI translation - needs human review
 msgid "Lost Fields"
-msgstr ""
+msgstr "Menetetyt kentät"
 
 msgid "Files"
 msgstr "Tiedostot"
 
+# AI translation - needs human review
 msgid "Migration Run"
-msgstr ""
+msgstr "Migraatioajo"
 
+# AI translation - needs human review
 msgid "Plan Mapping"
-msgstr ""
+msgstr "Suunnitelmakartoitus"
 
+# AI translation - needs human review
 msgid "Field Population - Installation"
-msgstr ""
+msgstr "Kenttien täyttö – Asennus"
 
+# AI translation - needs human review
 msgid "Import run"
-msgstr ""
+msgstr "Tuontiajo"
 
 msgid "Mounts"
 msgstr "Kiinnityskohteet"
@@ -1066,20 +1115,25 @@ msgstr "Opasteet"
 msgid "Additional Signs"
 msgstr "Lisäkilvet"
 
+# AI translation - needs human review
 msgid "Event Summary"
-msgstr ""
+msgstr "Tapahtumien yhteenveto"
 
+# AI translation - needs human review
 msgid "Event Details"
-msgstr ""
+msgstr "Tapahtuman tiedot"
 
+# AI translation - needs human review
 msgid "Phase Durations"
-msgstr ""
+msgstr "Vaiheiden kestot"
 
+# AI translation - needs human review
 msgid "Mount file"
-msgstr ""
+msgstr "Kiinniketiedosto"
 
+# AI translation - needs human review
 msgid "Sign file"
-msgstr ""
+msgstr "Merkkitiedosto"
 
 msgid "Signs"
 msgstr "Merkit"
@@ -1087,32 +1141,41 @@ msgstr "Merkit"
 msgid "Additional signs"
 msgstr "Lisäkilvet"
 
+# AI translation - needs human review
 msgid "Processed mount source IDs (count)"
-msgstr ""
+msgstr "Käsitellyt kiinnikkeiden lähdetunnukset (lukumäärä)"
 
+# AI translation - needs human review
 msgid "Processed sign source IDs (count)"
-msgstr ""
+msgstr "Käsitellyt merkkien lähdetunnukset (lukumäärä)"
 
+# AI translation - needs human review
 msgid "Processed signpost source IDs (count)"
-msgstr ""
+msgstr "Käsitellyt viittatukien lähdetunnukset (lukumäärä)"
 
+# AI translation - needs human review
 msgid "Processed additional sign source IDs (count)"
-msgstr ""
+msgstr "Käsitellyt lisäkilpien lähdetunnukset (lukumäärä)"
 
+# AI translation - needs human review
 msgid "Phase durations"
-msgstr ""
+msgstr "Vaiheiden kestot"
 
+# AI translation - needs human review
 msgid "Event details"
-msgstr ""
+msgstr "Tapahtuman tiedot"
 
+# AI translation - needs human review
 msgid "Parent Assignment"
-msgstr ""
+msgstr "Ylätason määritys"
 
+# AI translation - needs human review
 msgid "Default Values Set"
-msgstr ""
+msgstr "Oletusarvot asetettu"
 
+# AI translation - needs human review
 msgid "Parent"
-msgstr ""
+msgstr "Ylätaso"
 
 msgid "Traffic Light Real"
 msgstr "Liikennevalo (toteuma)"
@@ -1151,9 +1214,9 @@ msgid "Direction"
 msgstr "Suunta"
 
 msgid ""
-"The orientation of the device’s front side in degrees (0–359): 0 = north, 90 "
-"= east, 180 = south, 270 = west. The direction indicates from which side the "
-"device is correctly visible."
+"The orientation of the device’s front side in degrees (0–359): 0 = north, 90"
+" = east, 180 = south, 270 = west. The direction indicates from which side "
+"the device is correctly visible."
 msgstr ""
 "Laitteen etupuolen suunta asteina (0–359): 0 = pohjoinen, 90 = itä, 180 = "
 "etelä, 270 = länsi. Suunta kertoo, mistä suunnasta laite näkyy oikein päin."
@@ -1472,8 +1535,8 @@ msgid "Is public"
 msgstr "On julkinen"
 
 msgid ""
-"If unchecked, access is restricted to users/groups with appropriate table or "
-"file permissions"
+"If unchecked, access is restricted to users/groups with appropriate table or"
+" file permissions"
 msgstr ""
 "Jos ei valittuna, pääsy on rajattu käyttäjille/ryhmille, joilla on "
 "asianmukaiset taulu‑ tai tiedosto‑oikeudet"
@@ -1506,8 +1569,8 @@ msgid "Missing content"
 msgstr "Sisältö puuttuu"
 
 msgid ""
-"Content (content_s) is not available although the device type content schema "
-"requires it."
+"Content (content_s) is not available although the device type content schema"
+" requires it."
 msgstr ""
 "Sisältö (content_s) ei ole saatavilla, vaikka laitetyypin sisällön skeema "
 "sen vaatii."
@@ -1551,10 +1614,13 @@ msgstr "Sijaintitarkenne"
 msgid "Specifies where the sign is in relation to the road."
 msgstr "Määrittää kilven sijainnin suhteessa tiehen."
 
+# AI translation - needs human review
 msgid ""
 "Parent is required for additional signs that are not ticket machines. Set "
 "either parent (TrafficSign), signpost_plan, or signpost_real."
 msgstr ""
+"Ylätaso vaaditaan lisäkilville, jotka eivät ole lippuautomaatteja. Aseta "
+"joko ylätaso (TrafficSign), signpost_plan tai signpost_real."
 
 msgid "Parent Traffic Sign Plan"
 msgstr "Isäntäkilpi (suunnitelma)"
@@ -1565,10 +1631,13 @@ msgstr "Liikennemerkki, johon tämä lisäkilpi liittyy."
 msgid "Parent Signpost Plan"
 msgstr "Isäntäopaste (suunnitelma)"
 
+# AI translation - needs human review
 msgid ""
 "The signpost plan to which this additional sign is associated (set after "
 "signpost migration)."
 msgstr ""
+"Viittatuen suunnitelma, johon tämä lisäkilpi liittyy (asetetaan viittatukien"
+" migraation jälkeen)."
 
 msgid "Mount that this sign is mounted on."
 msgstr "Kiinnityskohde, johon tämä kilpi on asennettu."
@@ -1588,10 +1657,13 @@ msgstr "Isäntäkilpi (toteuma)"
 msgid "Parent Signpost Real"
 msgstr "Isäntäopaste (toteuma)"
 
+# AI translation - needs human review
 msgid ""
 "The signpost real to which this additional sign is associated (set after "
 "signpost migration)."
 msgstr ""
+"Viittatuen toteuma, johon tämä lisäkilpi liittyy (asetetaan viittatukien "
+"migraation jälkeen)."
 
 msgid "The plan for this Additional Sign."
 msgstr "Tämän lisäkilpisuunnitelman suunnitelma."
@@ -1867,77 +1939,101 @@ msgstr "Suoruusarvo"
 msgid "Quality requirements fulfilled"
 msgstr "Hoidon laatuvaatimusten mukainen"
 
+# AI translation - needs human review
 msgid "Had height"
-msgstr ""
+msgstr "Oli korkeus"
 
+# AI translation - needs human review
 msgid "Had size"
-msgstr ""
+msgstr "Oli koko"
 
+# AI translation - needs human review
 msgid "Had direction"
-msgstr ""
+msgstr "Oli suunta"
 
+# AI translation - needs human review
 msgid "Had reflection_class"
-msgstr ""
+msgstr "Oli reflection_class"
 
+# AI translation - needs human review
 msgid "Had surface_class"
-msgstr ""
+msgstr "Oli surface_class"
 
+# AI translation - needs human review
 msgid "Had mount_type"
-msgstr ""
+msgstr "Oli mount_type"
 
+# AI translation - needs human review
 msgid "Had road_name"
-msgstr ""
+msgstr "Oli road_name"
 
+# AI translation - needs human review
 msgid "Had lane_number"
-msgstr ""
+msgstr "Oli lane_number"
 
+# AI translation - needs human review
 msgid "Had lane_type"
-msgstr ""
+msgstr "Oli lane_type"
 
+# AI translation - needs human review
 msgid "Had location_specifier"
-msgstr ""
+msgstr "Oli location_specifier"
 
+# AI translation - needs human review
 msgid "Had validity_period_start"
-msgstr ""
+msgstr "Oli validity_period_start"
 
+# AI translation - needs human review
 msgid "Had validity_period_end"
-msgstr ""
+msgstr "Oli validity_period_end"
 
+# AI translation - needs human review
 msgid "Had source_name"
-msgstr ""
+msgstr "Oli source_name"
 
+# AI translation - needs human review
 msgid "Had source_id"
-msgstr ""
+msgstr "Oli source_id"
 
+# AI translation - needs human review
 msgid "Files migrated"
-msgstr ""
+msgstr "Migroidut tiedostot"
 
+# AI translation - needs human review
 msgid "Number of file attachments migrated."
-msgstr ""
+msgstr "Migroitujen tiedostoliitteiden lukumäärä."
 
+# AI translation - needs human review
 msgid "Lost value"
-msgstr ""
+msgstr "Menetetty arvo"
 
+# AI translation - needs human review
 msgid "Lost txt"
-msgstr ""
+msgstr "Menetetty txt"
 
+# AI translation - needs human review
 msgid "Lost double_sided"
-msgstr ""
+msgstr "Menetetty double_sided"
 
+# AI translation - needs human review
 msgid "Lost peak_fastened"
-msgstr ""
+msgstr "Menetetty peak_fastened"
 
+# AI translation - needs human review
 msgid "Set color to BLUE"
-msgstr ""
+msgstr "Aseta väriksi SININEN"
 
+# AI translation - needs human review
 msgid "Set content_s to null"
-msgstr ""
+msgstr "Aseta content_s tyhjäksi"
 
+# AI translation - needs human review
 msgid "Set missing_content to false"
-msgstr ""
+msgstr "Aseta missing_content epätodeksi"
 
+# AI translation - needs human review
 msgid "Set additional_information to empty"
-msgstr ""
+msgstr "Aseta additional_information tyhjäksi"
 
 msgid "Right side"
 msgstr "Oikea puoli"
@@ -2048,7 +2144,8 @@ msgid "Diameter of the mount in centimeters."
 msgstr "Kiinnityskohteen halkaisija senttimetreinä."
 
 msgid "Date and time on which this mount was last scanned at."
-msgstr "Tämän kiinnityskohteen edellisen skannauksen päivämäärä ja kellonaika."
+msgstr ""
+"Tämän kiinnityskohteen edellisen skannauksen päivämäärä ja kellonaika."
 
 msgid "URL to a file attachment related to this mount."
 msgstr "Tähän kilpeen liittyvän tiedostoliitteen URL-osoite."
@@ -2186,8 +2283,8 @@ msgid "Parent Responsible Entity"
 msgstr "Isäntävastuutaho"
 
 msgid ""
-"Organization under which this object belongs to. This objects organizational "
-"level must be lower than its parents."
+"Organization under which this object belongs to. This objects organizational"
+" level must be lower than its parents."
 msgstr ""
 "Organisaatio, jonka alle tämä objekti kuuluu. Tämän objektin "
 "organisaatiotason on oltava olla alhaisempi kuin sen ylemmän tason objektin."
@@ -2337,11 +2434,11 @@ msgid "Missing Traffic Sign Real txt"
 msgstr "Puuttuva liikennemerkki (vapaa teksti)"
 
 msgid ""
-"Free-form text description of the traffic sign the road marking is connected "
-"to, if the road marking doesn't have a traffic sign real id."
+"Free-form text description of the traffic sign the road marking is connected"
+" to, if the road marking doesn't have a traffic sign real id."
 msgstr ""
-"Vapaamuotoinen tekstikuvaus liikennemerkistä, johon tiemerkintä liittyy, jos "
-"tiemerkinnällä ei ole liittyvää liikennemerkkitoteumaa."
+"Vapaamuotoinen tekstikuvaus liikennemerkistä, johon tiemerkintä liittyy, jos"
+" tiemerkinnällä ei ole liittyvää liikennemerkkitoteumaa."
 
 msgid "Road Marking Reals"
 msgstr "Tiemerkintä (toteumat)"
@@ -2380,8 +2477,8 @@ msgid "Attachment class"
 msgstr "Kiinnitysluokka"
 
 msgid ""
-"The attachment class of the sign according to the standard SFS-EN 12899-1."
-"The possible values are P1, P2 and P3."
+"The attachment class of the sign according to the standard SFS-EN "
+"12899-1.The possible values are P1, P2 and P3."
 msgstr ""
 "Kilven kiinnitysluokka standardin SFS-EN 12899-1 mukaan. Mahdolliset arvot "
 "ovat P1, P2 ja P3."
@@ -2399,8 +2496,8 @@ msgid ""
 "Free-form text description of the target the sign is guiding to, if the "
 "target has no id number."
 msgstr ""
-"Vapaamuotoinen tekstikuvaus kohteesta, mihin opasteella ohjataan. Käytetään, "
-"jos kohteella ei ole tunnusnumeroa."
+"Vapaamuotoinen tekstikuvaus kohteesta, mihin opasteella ohjataan. Käytetään,"
+" jos kohteella ei ole tunnusnumeroa."
 
 msgid "Electric maintainer"
 msgstr "Sähköisen opastimen ylläpitäjä"
@@ -2447,8 +2544,9 @@ msgstr "Tämän opasteen edellisen skannauksen päivämäärä ja kellonaika."
 msgid "Attachment URL"
 msgstr "Liite (url)"
 
+# AI translation - needs human review
 msgid "URL of the attachment associated with this signpost."
-msgstr ""
+msgstr "Tähän viittatukeen liittyvän liitteen URL-osoite."
 
 msgid "signpost real"
 msgstr "Opaste (toteuma)"
@@ -2471,89 +2569,120 @@ msgstr "Toteumadokumentti (opaste)"
 msgid "Signpost Real Files"
 msgstr "Toteumadokumentit (opaste)"
 
+# AI translation - needs human review
 msgid "Executed by"
-msgstr ""
+msgstr "Suorittaja"
 
+# AI translation - needs human review
 msgid "User who executed the migration command."
-msgstr ""
+msgstr "Käyttäjä, joka suoritti migraatiokomennon."
 
+# AI translation - needs human review
 msgid "Started at"
-msgstr ""
+msgstr "Aloitettu"
 
+# AI translation - needs human review
 msgid "Timestamp when the migration was started."
-msgstr ""
+msgstr "Aikaleima, jolloin migraatio aloitettiin."
 
+# AI translation - needs human review
 msgid "Completed at"
-msgstr ""
+msgstr "Valmistunut"
 
+# AI translation - needs human review
 msgid ""
 "Timestamp when the migration was completed (successfully or with error)."
-msgstr ""
+msgstr "Aikaleima, jolloin migraatio valmistui (onnistuneesti tai virheellä)."
 
+# AI translation - needs human review
 msgid "Whether this was a dry run (no actual changes made)."
-msgstr ""
+msgstr "Oliko tämä koeajo (todellisia muutoksia ei tehty)."
 
+# AI translation - needs human review
 msgid "Hard delete"
-msgstr ""
+msgstr "Pysyvä poisto"
 
+# AI translation - needs human review
 msgid ""
 "Whether original objects were permanently deleted (True) or soft-deleted "
 "(False)."
 msgstr ""
+"Poistettiinko alkuperäiset objektit pysyvästi (True) vai pehmeästi (False)."
 
+# AI translation - needs human review
 msgid "Success"
-msgstr ""
+msgstr "Onnistui"
 
+# AI translation - needs human review
 msgid "Whether the migration completed successfully."
-msgstr ""
+msgstr "Valmistuiko migraatio onnistuneesti."
 
+# AI translation - needs human review
 msgid "Error message"
-msgstr ""
+msgstr "Virheilmoitus"
 
+# AI translation - needs human review
 msgid "Error message if migration failed."
-msgstr ""
+msgstr "Virheilmoitus, jos migraatio epäonnistui."
 
+# AI translation - needs human review
 msgid "Plans processed"
-msgstr ""
+msgstr "Käsitellyt suunnitelmat"
 
+# AI translation - needs human review
 msgid "Plans migrated"
-msgstr ""
+msgstr "Migroidut suunnitelmat"
 
+# AI translation - needs human review
 msgid "Reals processed"
-msgstr ""
+msgstr "Käsitellyt toteumat"
 
+# AI translation - needs human review
 msgid "Reals migrated"
-msgstr ""
+msgstr "Migroidut toteumat"
 
+# AI translation - needs human review
 msgid "Plan files migrated"
-msgstr ""
+msgstr "Migroidut suunnitelmatiedostot"
 
+# AI translation - needs human review
 msgid "Real files migrated"
-msgstr ""
+msgstr "Migroidut toteumatiedostot"
 
+# AI translation - needs human review
 msgid "Device types updated"
-msgstr ""
+msgstr "Päivitetyt laitetyypit"
 
+# AI translation - needs human review
 msgid "Lost field values"
-msgstr ""
+msgstr "Menetetyt kenttäarvot"
 
+# AI translation - needs human review
 msgid ""
 "Dictionary of field names to sets of unique values that were lost during "
 "migration. Example: {'surface_class': ['FLAT', 'CONVEX'], 'affect_area': "
 "['had_polygon'], 'peak_fastened': ['True', 'False']}"
 msgstr ""
+"Hakemisto kenttien nimistä joukkoihin yksilöllisistä arvoista, jotka "
+"menetettiin migraation aikana. Esimerkki: {'surface_class': ['FLAT', "
+"'CONVEX'], 'affect_area': ['had_polygon'], 'peak_fastened': ['True', "
+"'False']}"
 
+# AI translation - needs human review
 msgid "Signpost Migration Run"
-msgstr ""
+msgstr "Viittatukien migraatioajo"
 
+# AI translation - needs human review
 msgid "Signpost Migration Runs"
-msgstr ""
+msgstr "Viittatukien migraatioajot"
 
+# AI translation - needs human review
 msgid "Migration run"
-msgstr ""
+msgstr "Migraatioajo"
 
+# AI translation - needs human review
 msgid "The migration run this record belongs to."
-msgstr ""
+msgstr "Migraatioajo, johon tämä tietue kuuluu."
 
 msgid "Original TrafficSignPlan"
 msgstr "Alkuperäinen Isäntäkilpi (suunnitelma)"
@@ -2564,44 +2693,57 @@ msgstr "Uusi opaste (suunnitelma)"
 msgid "ID of the original TrafficSignPlan."
 msgstr "Alkuperäinen Isäntäkilpi (suunnitelma)"
 
+# AI translation - needs human review
 msgid "ID of the new SignpostPlan (null for dry-run)."
-msgstr ""
+msgstr "Uuden SignpostPlan-objektin tunnus (tyhjä koeajossa)."
 
+# AI translation - needs human review
 msgid "Device type code"
-msgstr ""
+msgstr "Laitetyypin koodi"
 
+# AI translation - needs human review
 msgid "Code of the device type being migrated."
-msgstr ""
+msgstr "Migroitavan laitetyypin koodi."
 
+# AI translation - needs human review
 msgid "Had mount_plan"
-msgstr ""
+msgstr "Oli mount_plan"
 
+# AI translation - needs human review
 msgid "Had plan"
-msgstr ""
+msgstr "Oli plan"
 
+# AI translation - needs human review
 msgid "Lost surface_class"
-msgstr ""
+msgstr "Menetetty surface_class"
 
+# AI translation - needs human review
 msgid "Value of surface_class field that was lost."
-msgstr ""
+msgstr "Menetetyn surface_class-kentän arvo."
 
+# AI translation - needs human review
 msgid "Value of peak_fastened field that was lost."
-msgstr ""
+msgstr "Menetetyn peak_fastened-kentän arvo."
 
+# AI translation - needs human review
 msgid "Had affect_area"
-msgstr ""
+msgstr "Oli affect_area"
 
+# AI translation - needs human review
 msgid "Whether the original had an affect_area polygon."
-msgstr ""
+msgstr "Oliko alkuperäisellä affect_area-polygoni."
 
+# AI translation - needs human review
 msgid "Signpost Migration Plan Record"
-msgstr ""
+msgstr "Viittatukien migraation suunnitelmatietue"
 
+# AI translation - needs human review
 msgid "Signpost Migration Plan Records"
-msgstr ""
+msgstr "Viittatukien migraation suunnitelmatietueet"
 
+# AI translation - needs human review
 msgid "Original TrafficSignReal"
-msgstr ""
+msgstr "Alkuperäinen TrafficSignReal"
 
 msgid "New SignpostReal"
 msgstr "Uusi opaste (toteuma)"
@@ -2609,391 +2751,548 @@ msgstr "Uusi opaste (toteuma)"
 msgid "ID of the original TrafficSignReal."
 msgstr "Alkuperäinen Isäntäkilpi (toteuma)"
 
+# AI translation - needs human review
 msgid "ID of the new SignpostReal (null for dry-run)."
-msgstr ""
+msgstr "Uuden SignpostReal-objektin tunnus (tyhjä koeajossa)."
 
+# AI translation - needs human review
 msgid "Plan mapping found"
-msgstr ""
+msgstr "Suunnitelmakartoitus löytyi"
 
+# AI translation - needs human review
 msgid ""
 "Whether a corresponding SignpostPlan was found for the traffic_sign_plan "
 "reference."
-msgstr ""
+msgstr "Löytyikö traffic_sign_plan-viittaukselle vastaava SignpostPlan."
 
+# AI translation - needs human review
 msgid "Had mount_real"
-msgstr ""
+msgstr "Oli mount_real"
 
+# AI translation - needs human review
 msgid "Had traffic_sign_plan"
-msgstr ""
+msgstr "Oli traffic_sign_plan"
 
+# AI translation - needs human review
 msgid "Had legacy_code"
-msgstr ""
+msgstr "Oli legacy_code"
 
+# AI translation - needs human review
 msgid "Had scanned_at"
-msgstr ""
+msgstr "Oli scanned_at"
 
+# AI translation - needs human review
 msgid "Had manufacturer"
-msgstr ""
+msgstr "Oli manufacturer"
 
+# AI translation - needs human review
 msgid "Had installation_status"
-msgstr ""
+msgstr "Oli installation_status"
 
+# AI translation - needs human review
 msgid "Had installation_date"
-msgstr ""
+msgstr "Oli installation_date"
 
+# AI translation - needs human review
 msgid "Had condition"
-msgstr ""
+msgstr "Oli condition"
 
+# AI translation - needs human review
 msgid "Lost installation_id"
-msgstr ""
+msgstr "Menetetty installation_id"
 
+# AI translation - needs human review
 msgid "Value of installation_id field that was lost."
-msgstr ""
+msgstr "Menetetyn installation_id-kentän arvo."
 
+# AI translation - needs human review
 msgid "Lost installation_details"
-msgstr ""
+msgstr "Menetetty installation_details"
 
+# AI translation - needs human review
 msgid "Value of installation_details field that was lost."
-msgstr ""
+msgstr "Menetetyn installation_details-kentän arvo."
 
+# AI translation - needs human review
 msgid "Lost permit_decision_id"
-msgstr ""
+msgstr "Menetetty permit_decision_id"
 
+# AI translation - needs human review
 msgid "Value of permit_decision_id field that was lost."
-msgstr ""
+msgstr "Menetetyn permit_decision_id-kentän arvo."
 
+# AI translation - needs human review
 msgid "Lost rfid"
-msgstr ""
+msgstr "Menetetty rfid"
 
+# AI translation - needs human review
 msgid "Value of rfid field that was lost."
-msgstr ""
+msgstr "Menetetyn rfid-kentän arvo."
 
+# AI translation - needs human review
 msgid "Lost operation"
-msgstr ""
+msgstr "Menetetty operation"
 
+# AI translation - needs human review
 msgid "Value of operation field that was lost."
-msgstr ""
+msgstr "Menetetyn operation-kentän arvo."
 
+# AI translation - needs human review
 msgid "Lost attachment_url"
-msgstr ""
+msgstr "Menetetty attachment_url"
 
+# AI translation - needs human review
 msgid "Value of attachment_url field that was lost."
-msgstr ""
+msgstr "Menetetyn attachment_url-kentän arvo."
 
+# AI translation - needs human review
 msgid "Signpost Migration Real Record"
-msgstr ""
+msgstr "Viittatukien migraation toteumatietue"
 
+# AI translation - needs human review
 msgid "Signpost Migration Real Records"
-msgstr ""
+msgstr "Viittatukien migraation toteumatietueet"
 
+# AI translation - needs human review
 msgid "Timestamp when the import run was started."
-msgstr ""
+msgstr "Aikaleima, jolloin tuontiajo aloitettiin."
 
+# AI translation - needs human review
 msgid "Timestamp when the import run finished."
-msgstr ""
+msgstr "Aikaleima, jolloin tuontiajo päättyi."
 
+# AI translation - needs human review
 msgid "True if the run was executed with --dry-run (no DB writes performed)."
 msgstr ""
+"Tosi, jos ajo suoritettiin --dry-run-tilassa (tietokantaan ei kirjoitettu)."
 
+# AI translation - needs human review
 msgid "Path or name of the mount CSV file used for this run."
-msgstr ""
+msgstr "Tässä ajossa käytetyn kiinnikkeiden CSV-tiedoston polku tai nimi."
 
+# AI translation - needs human review
 msgid "Path or name of the sign CSV file used for this run."
-msgstr ""
+msgstr "Tässä ajossa käytetyn merkkien CSV-tiedoston polku tai nimi."
 
+# AI translation - needs human review
 msgid "Mounts created"
-msgstr ""
+msgstr "Luodut kiinnikkeet"
 
+# AI translation - needs human review
 msgid "Mounts updated"
-msgstr ""
+msgstr "Päivitetyt kiinnikkeet"
 
+# AI translation - needs human review
 msgid "Signs created"
-msgstr ""
+msgstr "Luodut merkit"
 
+# AI translation - needs human review
 msgid "Signs updated"
-msgstr ""
+msgstr "Päivitetyt merkit"
 
+# AI translation - needs human review
 msgid "Signs deactivated"
-msgstr ""
+msgstr "Poistetut merkit käytöstä"
 
+# AI translation - needs human review
 msgid "TrafficSignReal records whose lifecycle was set to INACTIVE."
 msgstr ""
+"TrafficSignReal-tietueet, joiden elinkaari asetettiin tilaan INACTIVE."
 
+# AI translation - needs human review
 msgid "Signposts created"
-msgstr ""
+msgstr "Luodut viittatuet"
 
+# AI translation - needs human review
 msgid "Signposts updated"
-msgstr ""
+msgstr "Päivitetyt viittatuet"
 
+# AI translation - needs human review
 msgid "Signposts deactivated"
-msgstr ""
+msgstr "Poistetut viittatuet käytöstä"
 
+# AI translation - needs human review
 msgid "Additional signs created"
-msgstr ""
+msgstr "Luodut lisäkilvet"
 
+# AI translation - needs human review
 msgid "Additional signs updated"
-msgstr ""
+msgstr "Päivitetyt lisäkilvet"
 
+# AI translation - needs human review
 msgid "Additional signs deactivated"
-msgstr ""
+msgstr "Poistetut lisäkilvet käytöstä"
 
+# AI translation - needs human review
 msgid "Orphans deleted"
-msgstr ""
+msgstr "Poistetut orvot tietueet"
 
+# AI translation - needs human review
 msgid ""
 "Number of orphan MountReal records hard-deleted after the import phases."
 msgstr ""
+"Tuontivaiheiden jälkeen pysyvästi poistettujen orpojen MountReal-tietueiden "
+"lukumäärä."
 
+# AI translation - needs human review
 msgid "Orphan mount source IDs"
-msgstr ""
+msgstr "Orpojen kiinnikkeiden lähdetunnukset"
 
+# AI translation - needs human review
 msgid ""
-"List of source_ids for MountReal records hard-deleted as orphans in this run."
+"List of source_ids for MountReal records hard-deleted as orphans in this "
+"run."
 msgstr ""
+"Luettelo source_id-arvoista MountReal-tietueille, jotka poistettiin "
+"pysyvästi orpoina tässä ajossa."
 
+# AI translation - needs human review
 msgid "Skipped count"
-msgstr ""
+msgstr "Ohitettujen lukumäärä"
 
+# AI translation - needs human review
 msgid ""
 "Total rows skipped due to invalid geometry, unreadable text, missing device "
 "type code, etc."
 msgstr ""
+"Ohitettujen rivien kokonaismäärä virheellisen geometrian, lukukelvottoman "
+"tekstin, puuttuvan laitetyyppikoodin tms. vuoksi."
 
+# AI translation - needs human review
 msgid "Warning count"
-msgstr ""
+msgstr "Varoitusten lukumäärä"
 
+# AI translation - needs human review
 msgid ""
 "Total warning-level events: imported without a mount, without a parent, "
 "traffic sign with ignored parent value, etc."
 msgstr ""
+"Varoitustason tapahtumien kokonaismäärä: tuotu ilman kiinnikettä, ilman "
+"ylätasoa, liikennemerkki ohitetulla ylätason arvolla jne."
 
+# AI translation - needs human review
 msgid "Error count"
-msgstr ""
+msgstr "Virheiden lukumäärä"
 
+# AI translation - needs human review
 msgid "Total error-level events (unexpected exceptions during the run)."
 msgstr ""
+"Virhetason tapahtumien kokonaismäärä (odottamattomat poikkeukset ajon "
+"aikana)."
 
+# AI translation - needs human review
 msgid ""
 "Nested dict of seconds spent in each phase: {object_type: {phase: "
-"duration_s}}. Also contains a 'preprocessing' key for CSV loading and DB map "
-"building time. Populated progressively as phases complete."
+"duration_s}}. Also contains a 'preprocessing' key for CSV loading and DB map"
+" building time. Populated progressively as phases complete."
 msgstr ""
+"Sisäkkäinen hakemisto kussakin vaiheessa käytetyistä sekunneista: "
+"{object_type: {phase: duration_s}}. Sisältää myös 'preprocessing'-avaimen "
+"CSV:n lataamiseen ja tietokantakartan rakentamiseen käytetylle ajalle. "
+"Täytetään vaiheittain vaiheiden valmistuessa."
 
+# AI translation - needs human review
 msgid "Details"
-msgstr ""
+msgstr "Tiedot"
 
+# AI translation - needs human review
 msgid ""
 "Full list of per-row skip, warning and error entries. Each entry has at "
 "minimum: level ('skip'/'warning'/'error'), source_id, reason."
 msgstr ""
+"Täydellinen luettelo rivikohtaisista ohitus-, varoitus- ja "
+"virhemerkinnöistä. Jokaisessa merkinnässä on vähintään: taso "
+"('skip'/'warning'/'error'), source_id, syy."
 
+# AI translation - needs human review
 msgid "Processed mount source IDs"
-msgstr ""
+msgstr "Käsitellyt kiinnikkeiden lähdetunnukset"
 
+# AI translation - needs human review
 msgid "List of MountReal source_ids successfully upserted in this run."
 msgstr ""
+"Luettelo tässä ajossa onnistuneesti päivitetyistä tai luoduista MountReal "
+"source_id -arvoista."
 
+# AI translation - needs human review
 msgid "Processed sign source IDs"
-msgstr ""
+msgstr "Käsitellyt merkkien lähdetunnukset"
 
+# AI translation - needs human review
 msgid "List of TrafficSignReal source_ids successfully upserted in this run."
 msgstr ""
+"Luettelo tässä ajossa onnistuneesti päivitetyistä tai luoduista "
+"TrafficSignReal source_id -arvoista."
 
+# AI translation - needs human review
 msgid "Processed signpost source IDs"
-msgstr ""
+msgstr "Käsitellyt viittatukien lähdetunnukset"
 
+# AI translation - needs human review
 msgid "List of SignpostReal source_ids successfully upserted in this run."
 msgstr ""
+"Luettelo tässä ajossa onnistuneesti päivitetyistä tai luoduista SignpostReal"
+" source_id -arvoista."
 
+# AI translation - needs human review
 msgid "Processed additional sign source IDs"
-msgstr ""
+msgstr "Käsitellyt lisäkilpien lähdetunnukset"
 
+# AI translation - needs human review
 msgid ""
 "List of AdditionalSignReal source_ids successfully upserted in this run."
 msgstr ""
+"Luettelo tässä ajossa onnistuneesti päivitetyistä tai luoduista "
+"AdditionalSignReal source_id -arvoista."
 
+# AI translation - needs human review
 msgid "StreetScan import run"
-msgstr ""
+msgstr "StreetScan-tuontiajo"
 
+# AI translation - needs human review
 msgid "StreetScan import runs"
-msgstr ""
+msgstr "StreetScan-tuontiajot"
 
+# AI translation - needs human review
 msgid ""
 "JSONL file containing pre-update snapshots and created-object IDs for this "
 "run."
 msgstr ""
+"JSONL-tiedosto, joka sisältää tämän ajon päivitystä edeltävät tilannekuvat "
+"ja luotujen objektien tunnukset."
 
+# AI translation - needs human review
 msgid "The import run this revert file belongs to."
-msgstr ""
+msgstr "Tuontiajo, johon tämä peruutustiedosto kuuluu."
 
+# AI translation - needs human review
 msgid "StreetScan import revert file"
-msgstr ""
+msgstr "StreetScan-tuonnin peruutustiedosto"
 
+# AI translation - needs human review
 msgid "StreetScan import revert files"
-msgstr ""
+msgstr "StreetScan-tuonnin peruutustiedostot"
 
+# AI translation - needs human review
 msgid "Timestamp when the migration command started."
-msgstr ""
+msgstr "Aikaleima, jolloin migraatiokomento aloitettiin."
 
+# AI translation - needs human review
 msgid "Timestamp when the migration command completed successfully."
-msgstr ""
+msgstr "Aikaleima, jolloin migraatiokomento valmistui onnistuneesti."
 
+# AI translation - needs human review
 msgid "Whether hard-delete mode was used (true) or soft-delete (false)."
-msgstr ""
+msgstr "Käytettiinkö pysyvää poistotilaa (true) vai pehmeää poistoa (false)."
 
+# AI translation - needs human review
 msgid "Total number of TrafficSignPlan objects processed."
-msgstr ""
+msgstr "Käsiteltyjen TrafficSignPlan-objektien kokonaismäärä."
 
+# AI translation - needs human review
 msgid "Number of TrafficSignPlan objects successfully migrated."
-msgstr ""
+msgstr "Onnistuneesti migroitujen TrafficSignPlan-objektien lukumäärä."
 
+# AI translation - needs human review
 msgid "Plans with parent"
-msgstr ""
+msgstr "Suunnitelmat, joilla on ylätaso"
 
+# AI translation - needs human review
 msgid "Number of plans that were assigned a parent sign (E2/521)."
 msgstr ""
+"Suunnitelmien lukumäärä, joille määritettiin ylätason merkki (E2/521)."
 
+# AI translation - needs human review
 msgid "Plans without parent"
-msgstr ""
+msgstr "Suunnitelmat ilman ylätasoa"
 
+# AI translation - needs human review
 msgid "Number of plans that had no parent sign found."
-msgstr ""
+msgstr "Suunnitelmien lukumäärä, joille ei löytynyt ylätason merkkiä."
 
+# AI translation - needs human review
 msgid "Total number of TrafficSignReal objects processed."
-msgstr ""
+msgstr "Käsiteltyjen TrafficSignReal-objektien kokonaismäärä."
 
+# AI translation - needs human review
 msgid "Number of TrafficSignReal objects successfully migrated."
-msgstr ""
+msgstr "Onnistuneesti migroitujen TrafficSignReal-objektien lukumäärä."
 
+# AI translation - needs human review
 msgid "Reals with parent"
-msgstr ""
+msgstr "Toteumat, joilla on ylätaso"
 
+# AI translation - needs human review
 msgid "Number of reals that were assigned a parent sign (E2/521)."
-msgstr ""
+msgstr "Toteumien lukumäärä, joille määritettiin ylätason merkki (E2/521)."
 
+# AI translation - needs human review
 msgid "Reals without parent"
-msgstr ""
+msgstr "Toteumat ilman ylätasoa"
 
+# AI translation - needs human review
 msgid "Number of reals that had no parent sign found."
-msgstr ""
+msgstr "Toteumien lukumäärä, joille ei löytynyt ylätason merkkiä."
 
+# AI translation - needs human review
 msgid "Number of device types with target_model updated."
-msgstr ""
+msgstr "Laitetyyppien lukumäärä, joiden target_model päivitettiin."
 
+# AI translation - needs human review
 msgid "Error message if the migration failed."
-msgstr ""
+msgstr "Virheilmoitus, jos migraatio epäonnistui."
 
+# AI translation - needs human review
 msgid ""
 "Dictionary of field names to sets of unique values that were lost during "
 "migration. Example: {'value': ['10', '20'], 'txt': ['Info text'], "
 "'affect_area': ['had_polygon']}"
 msgstr ""
+"Hakemisto kenttien nimistä joukkoihin yksilöllisistä arvoista, jotka "
+"menetettiin migraation aikana. Esimerkki: {'value': ['10', '20'], 'txt': "
+"['Info text'], 'affect_area': ['had_polygon']}"
 
+# AI translation - needs human review
 msgid "Ticket Machine Migration Run"
-msgstr ""
+msgstr "Lippuautomaattien migraatioajo"
 
+# AI translation - needs human review
 msgid "Ticket Machine Migration Runs"
-msgstr ""
+msgstr "Lippuautomaattien migraatioajot"
 
+# AI translation - needs human review
 msgid "The original TrafficSignPlan that was migrated."
-msgstr ""
+msgstr "Migroitu alkuperäinen TrafficSignPlan."
 
 msgid "New AdditionalSignPlan"
 msgstr "Uusi Lisäkilpi (suunnitelma)"
 
+# AI translation - needs human review
 msgid "The newly created AdditionalSignPlan."
-msgstr ""
+msgstr "Juuri luotu AdditionalSignPlan."
 
+# AI translation - needs human review
 msgid "UUID of the original TrafficSignPlan (preserved even if deleted)."
 msgstr ""
+"Alkuperäisen TrafficSignPlan-objektin UUID (säilytetään, vaikka "
+"poistettaisiin)."
 
+# AI translation - needs human review
 msgid "UUID of the new AdditionalSignPlan."
-msgstr ""
+msgstr "Uuden AdditionalSignPlan-objektin UUID."
 
+# AI translation - needs human review
 msgid "Device type code of the ticket machine."
-msgstr ""
+msgstr "Lippuautomaatin laitetyypin koodi."
 
 msgid "Parent found"
 msgstr "Isäntää ei löytynyt."
 
+# AI translation - needs human review
 msgid "Whether a parent sign (E2/521) was found and assigned."
-msgstr ""
+msgstr "Löytyikö ylätason merkki (E2/521) ja määritettiinkö se."
 
+# AI translation - needs human review
 msgid "Parent sign ID"
-msgstr ""
+msgstr "Ylätason merkin tunnus"
 
+# AI translation - needs human review
 msgid "UUID of the parent TrafficSignPlan if found."
-msgstr ""
+msgstr "Ylätason TrafficSignPlan-objektin UUID, jos löytyi."
 
+# AI translation - needs human review
 msgid "Parent sign code"
-msgstr ""
+msgstr "Ylätason merkin koodi"
 
+# AI translation - needs human review
 msgid "Device type code of the parent sign (E2 or 521)."
-msgstr ""
+msgstr "Ylätason merkin laitetyypin koodi (E2 tai 521)."
 
+# AI translation - needs human review
 msgid "Multiple parents found"
-msgstr ""
+msgstr "Useita ylätasoja löytyi"
 
+# AI translation - needs human review
 msgid "Whether multiple E2/521 signs were found on the same mount."
-msgstr ""
+msgstr "Löytyikö samasta kiinnikkeestä useita E2/521-merkkejä."
 
+# AI translation - needs human review
 msgid "Ticket Machine Migration Plan Record"
-msgstr ""
+msgstr "Lippuautomaattien migraation suunnitelmatietue"
 
+# AI translation - needs human review
 msgid "Ticket Machine Migration Plan Records"
-msgstr ""
+msgstr "Lippuautomaattien migraation suunnitelmatietueet"
 
+# AI translation - needs human review
 msgid "The original TrafficSignReal that was migrated."
-msgstr ""
+msgstr "Migroitu alkuperäinen TrafficSignReal."
 
 msgid "New AdditionalSignReal"
 msgstr "Uusi Lisäkilpi (toteuma)"
 
+# AI translation - needs human review
 msgid "The newly created AdditionalSignReal."
-msgstr ""
+msgstr "Juuri luotu AdditionalSignReal."
 
+# AI translation - needs human review
 msgid "UUID of the original TrafficSignReal (preserved even if deleted)."
 msgstr ""
+"Alkuperäisen TrafficSignReal-objektin UUID (säilytetään, vaikka "
+"poistettaisiin)."
 
+# AI translation - needs human review
 msgid "UUID of the new AdditionalSignReal."
-msgstr ""
+msgstr "Uuden AdditionalSignReal-objektin UUID."
 
+# AI translation - needs human review
 msgid "UUID of the parent TrafficSignReal if found."
-msgstr ""
+msgstr "Ylätason TrafficSignReal-objektin UUID, jos löytyi."
 
+# AI translation - needs human review
 msgid ""
 "Whether a corresponding AdditionalSignPlan was found for traffic_sign_plan."
-msgstr ""
+msgstr "Löytyikö traffic_sign_plan-viittaukselle vastaava AdditionalSignPlan."
 
+# AI translation - needs human review
 msgid "Had installation_id"
-msgstr ""
+msgstr "Oli installation_id"
 
+# AI translation - needs human review
 msgid "Had installation_details"
-msgstr ""
+msgstr "Oli installation_details"
 
+# AI translation - needs human review
 msgid "Had permit_decision_id"
-msgstr ""
+msgstr "Oli permit_decision_id"
 
+# AI translation - needs human review
 msgid "Had rfid"
-msgstr ""
+msgstr "Oli rfid"
 
+# AI translation - needs human review
 msgid "Had operation"
-msgstr ""
+msgstr "Oli operation"
 
+# AI translation - needs human review
 msgid "Had attachment_url"
-msgstr ""
+msgstr "Oli attachment_url"
 
+# AI translation - needs human review
 msgid "Had installation_status_note"
-msgstr ""
+msgstr "Oli installation_status_note"
 
+# AI translation - needs human review
 msgid "Set installed_by to null"
-msgstr ""
+msgstr "Aseta installed_by tyhjäksi"
 
+# AI translation - needs human review
 msgid "Ticket Machine Migration Real Record"
-msgstr ""
+msgstr "Lippuautomaattien migraation toteumatietue"
 
+# AI translation - needs human review
 msgid "Ticket Machine Migration Real Records"
-msgstr ""
+msgstr "Lippuautomaattien migraation toteumatietueet"
 
 msgid "Right side of the road (relative to traffic direction)"
 msgstr "Ajoradan oikea puoli (ajosuuntaan nähden)"
@@ -3215,9 +3514,10 @@ msgstr ""
 "Sinulla ei ole oikeutta luoda tai muokata laitteita annetulla vastuutaholla "
 "(%(responsible_entity)s)."
 
+# AI translation - needs human review
 #, python-format
 msgid " By %(filter_title)s "
-msgstr ""
+msgstr " Suodatin: %(filter_title)s "
 
 msgid "Export template"
 msgstr "Vie malli"
@@ -3301,23 +3601,29 @@ msgstr "Kiinnityskohta_keskipiste (suunnitelma)"
 msgid "Traffic Control Plan"
 msgstr "Liikenteenohjaussuunnitelma"
 
+# AI translation - needs human review
 msgid "authentication type"
-msgstr ""
+msgstr "todennustyyppi"
 
+# AI translation - needs human review
 msgid "Local"
-msgstr ""
+msgstr "Paikallinen"
 
+# AI translation - needs human review
 msgid "Azure AD"
-msgstr ""
+msgstr "Azure AD"
 
+# AI translation - needs human review
 msgid "Both"
-msgstr ""
+msgstr "Molemmat"
 
+# AI translation - needs human review
 msgid "None"
-msgstr ""
+msgstr "Ei mikään"
 
+# AI translation - needs human review
 msgid "reactivated"
-msgstr ""
+msgstr "aktivoitu uudelleen"
 
 msgid "Last 30 days"
 msgstr "Edelliset 30 päivää"
@@ -3328,48 +3634,63 @@ msgstr "Edelliset 90 päivää"
 msgid "Last 180 days"
 msgstr "Edelliset 180 päivää"
 
+# AI translation - needs human review
 msgid "deactivation stage"
-msgstr ""
+msgstr "käytöstäpoiston vaihe"
 
+# AI translation - needs human review
 msgid "30-day warning sent"
-msgstr ""
+msgstr "30 päivän varoitus lähetetty"
 
+# AI translation - needs human review
 msgid "7-day warning sent"
-msgstr ""
+msgstr "7 päivän varoitus lähetetty"
 
+# AI translation - needs human review
 msgid "1-day warning sent"
-msgstr ""
+msgstr "1 päivän varoitus lähetetty"
 
 msgid "Deactivated"
 msgstr "Pysyvästi poissa käytöstä"
 
+# AI translation - needs human review
 msgid "Authentication Type"
-msgstr ""
+msgstr "Todennustyyppi"
 
 msgid "Additional user information"
 msgstr "Lisätiedot käyttäjästä"
 
+# AI translation - needs human review
 msgid "Activity Tracking"
-msgstr ""
+msgstr "Aktiivisuuden seuranta"
 
+# AI translation - needs human review
 msgid ""
 "Track user's API usage activity. This field is automatically updated when "
 "the user uses the API."
 msgstr ""
+"Seuraa käyttäjän API:n käyttöaktiivisuutta. Tämä kenttä päivittyy "
+"automaattisesti, kun käyttäjä käyttää API:a."
 
+# AI translation - needs human review
 msgid "Reactivation"
-msgstr ""
+msgstr "Uudelleenaktivointi"
 
+# AI translation - needs human review
 msgid "Admin Notifications"
-msgstr ""
+msgstr "Ylläpidon ilmoitukset"
 
+# AI translation - needs human review
 msgid ""
 "Configure whether this user receives admin notification emails about user "
 "deactivations and system events."
 msgstr ""
+"Määritä, saako tämä käyttäjä ylläpidon sähköposti-ilmoituksia käyttäjien "
+"käytöstäpoistoista ja järjestelmätapahtumista."
 
+# AI translation - needs human review
 msgid "Relations table"
-msgstr ""
+msgstr "Suhteiden taulukko"
 
 msgid "last login"
 msgstr "kirjautunut viimeksi"
@@ -3377,24 +3698,29 @@ msgstr "kirjautunut viimeksi"
 #, python-format
 msgid "User is active, but last login was %(days)d days ago"
 msgstr ""
-"Käyttäjätunnus on voimassa, mutta viimeisin kirjautuminen on %(days)d päivää "
-"sitten"
+"Käyttäjätunnus on voimassa, mutta viimeisin kirjautuminen on %(days)d päivää"
+" sitten"
 
+# AI translation - needs human review
 msgid "Save the user first to view relations."
-msgstr ""
+msgstr "Tallenna käyttäjä ensin nähdäksesi suhteet."
 
+# AI translation - needs human review
 msgid "No relations found."
-msgstr ""
+msgstr "Suhteita ei löytynyt."
 
+# AI translation - needs human review
 msgid "Reactivate selected users"
-msgstr ""
+msgstr "Aktivoi valitut käyttäjät uudelleen"
 
+# AI translation - needs human review
 msgid "Only superusers can reactivate users."
-msgstr ""
+msgstr "Vain pääkäyttäjät voivat aktivoida käyttäjiä uudelleen."
 
+# AI translation - needs human review
 #, python-format
 msgid "Successfully reactivated %(count)d user(s)."
-msgstr ""
+msgstr "Aktivoitiin onnistuneesti uudelleen %(count)d käyttäjää."
 
 msgid "Users"
 msgstr "Käyttäjät"
@@ -3427,58 +3753,80 @@ msgstr ""
 msgid "Additional information related to this user."
 msgstr "Lisätietoa tästä käyttäjästä."
 
+# AI translation - needs human review
 msgid "Reactivated at"
-msgstr ""
+msgstr "Uudelleenaktivoitu"
 
+# AI translation - needs human review
 msgid ""
 "Timestamp when admin manually reactivated this user account. Prevents "
 "automatic deactivation."
 msgstr ""
+"Aikaleima, jolloin ylläpitäjä aktivoi tämän käyttäjätilin manuaalisesti "
+"uudelleen. Estää automaattisen käytöstäpoiston."
 
+# AI translation - needs human review
 msgid "Receives admin notification emails"
-msgstr ""
+msgstr "Vastaanottaa ylläpidon sähköposti-ilmoituksia"
 
+# AI translation - needs human review
 msgid ""
 "If enabled, this user will receive admin notification emails about user "
 "deactivations and system events. Only users with valid email addresses will "
 "receive notifications."
 msgstr ""
+"Jos käytössä, tämä käyttäjä saa ylläpidon sähköposti-ilmoituksia käyttäjien "
+"käytöstäpoistoista ja järjestelmätapahtumista. Vain käyttäjät, joilla on "
+"kelvollinen sähköpostiosoite, saavat ilmoituksia."
 
+# AI translation - needs human review
 msgid "One month warning email sent at"
-msgstr ""
+msgstr "Kuukauden varoitussähköposti lähetetty"
 
+# AI translation - needs human review
 msgid "Timestamp when the 30-day warning email was sent."
-msgstr ""
+msgstr "Aikaleima, jolloin 30 päivän varoitussähköposti lähetettiin."
 
+# AI translation - needs human review
 msgid "One week warning email sent at"
-msgstr ""
+msgstr "Viikon varoitussähköposti lähetetty"
 
+# AI translation - needs human review
 msgid "Timestamp when the 7-day warning email was sent."
-msgstr ""
+msgstr "Aikaleima, jolloin 7 päivän varoitussähköposti lähetettiin."
 
+# AI translation - needs human review
 msgid "One day warning email sent at"
-msgstr ""
+msgstr "Päivän varoitussähköposti lähetetty"
 
+# AI translation - needs human review
 msgid "Timestamp when the 1-day warning email was sent."
-msgstr ""
+msgstr "Aikaleima, jolloin 1 päivän varoitussähköposti lähetettiin."
 
+# AI translation - needs human review
 msgid "Deactivated at"
-msgstr ""
+msgstr "Poistettu käytöstä"
 
+# AI translation - needs human review
 msgid "Timestamp when the user was deactivated."
-msgstr ""
+msgstr "Aikaleima, jolloin käyttäjä poistettiin käytöstä."
 
+# AI translation - needs human review
 msgid "User Deactivation Status"
-msgstr ""
+msgstr "Käyttäjän käytöstäpoiston tila"
 
+# AI translation - needs human review
 msgid "User Deactivation Statuses"
-msgstr ""
+msgstr "Käyttäjien käytöstäpoiston tilat"
 
+# AI translation - needs human review
 msgid "App"
-msgstr ""
+msgstr "Sovellus"
 
+# AI translation - needs human review
 msgid "Model"
-msgstr ""
+msgstr "Tietomalli"
 
+# AI translation - needs human review
 msgid "View related"
-msgstr ""
+msgstr "Näytä liittyvät"
