@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from django.db import transaction
 from rest_framework import serializers
+from rest_framework.settings import api_settings
 
 from traffic_control.serializers.additional_sign import (
     AdditionalSignPlanInputSerializer,
@@ -12,6 +13,7 @@ from traffic_control.serializers.mount import MountPlanInputSerializer, MountPla
 from traffic_control.serializers.plan import PlanSerializer
 from traffic_control.serializers.signpost import SignpostPlanInputSerializer, SignpostPlanOutputSerializer
 from traffic_control.serializers.traffic_sign import TrafficSignPlanInputSerializer, TrafficSignPlanOutputSerializer
+from traffic_control.serializers.utils import get_single_object_serializer
 
 BULK_PLAN_INSERT_MOCK_BATCH_PAYLOAD = {
     "additional_sign_plans": [
@@ -151,22 +153,25 @@ class BulkPlanInputSerializer(serializers.Serializer):
         sorter = graphlib.TopologicalSorter()
         for object_type in self.fields:
             # Cast single-entry fields to arrays for uniform processing
-            entries_data = to_list(attrs.get(object_type, []))
+            entries_data = _to_list(attrs.get(object_type, []))
 
-            for object_data in entries_data:
-                dependencies = []
-                for dependency_field in DEPENDENCY_ID_FIELDS:
-                    if dependency_field in object_data and object_data[dependency_field]:
-                        dependencies.append(object_data[dependency_field])
+            for index, object_data in enumerate(entries_data):
+                dependencies = [object_data[field] for field in DEPENDENCY_ID_FIELDS if object_data.get(field)]
 
                 object_id = object_data["id"]
-                self._object_type_and_data_map[object_id] = {"type": object_type, "data": object_data}
+                self._object_type_and_data_map[object_id] = {
+                    "type": object_type,
+                    "data": object_data,
+                    "index": index,
+                }
                 sorter.add(object_id, *dependencies)
 
         try:
             self._object_topological_order = list(sorter.static_order())
         except graphlib.CycleError as e:
-            raise serializers.ValidationError({"dependencies": f"Circular dependency detected: {e}"})
+            error_msg = e.args[0]
+            error_nodes = ", ".join([str(node) for node in e.args[1]])
+            raise serializers.ValidationError({api_settings.NON_FIELD_ERRORS_KEY: [f"{error_msg}: {error_nodes}"]})
 
         return attrs
 
@@ -178,41 +183,96 @@ class BulkPlanInputSerializer(serializers.Serializer):
         Due to dependencies between objects being created, objects need to be created in topological order. The method
         may raise further validation errors if any objects fail creation along the way.
         """
-        created_objects_by_type = {}
         created_objects_by_pk = {}
-
-        errors = defaultdict(list)
+        errors = self._stub_errors_map(validated_data)
+        # Treat all fields as lists to simplify method logic
         created_objects_by_type = defaultdict(list)
+
         with transaction.atomic():
             for object_id in self._object_topological_order:
+                object_info = self._object_type_and_data_map[object_id]
+                object_type = object_info["type"]
+                object_data = object_info["data"]
+                object_index = object_info["index"]
+                object_serializer = get_single_object_serializer(self.fields[object_type])
+
                 try:
-                    object_info = self._object_type_and_data_map[object_id]
-                    object_type = object_info["type"]
-                    object_data = object_info["data"]
-                    object_serializer, is_array = get_single_object_serializer(self.fields[object_type])
-
-                    # NOTE (2026-06-25 thiago)
-                    # Because django-rest-framework's object existence validation has been bypassed, we have to
-                    # explicitly resolve the FK references into objects ourselves
-                    for dependency_field in DEPENDENCY_ID_FIELDS:
-                        if dependency_field in object_data and object_data[dependency_field]:
-                            dependency_pk = object_data[dependency_field]
-                            if dependency_pk not in created_objects_by_pk:
-                                raise ValueError(f"Dependency {dependency_field} ({dependency_pk}) was not created.")
-                            object_data[dependency_field] = created_objects_by_pk[dependency_pk]
-
-                    instance = object_serializer.create(object_data)
-                    if is_array:
-                        created_objects_by_type[object_type].append(instance)
-                    else:
-                        created_objects_by_type[object_type] = instance
+                    instance = self._create_serialize_object(
+                        object_serializer=object_serializer,
+                        object_data=object_data,
+                        created_objects_by_pk=created_objects_by_pk,
+                    )
+                    created_objects_by_type[object_type].append(instance)
                     created_objects_by_pk[instance.pk] = instance
                 except Exception as e:
-                    errors[object_type].append({str(object_id): e})
+                    # Allow errors to pile up for a comprehensive error response
+                    error_detail = (
+                        e.detail
+                        if isinstance(e, serializers.ValidationError)
+                        else {api_settings.NON_FIELD_ERRORS_KEY: [str(e)]}
+                    )
+                    errors[object_type][object_index] = error_detail
 
-            if errors:
-                raise serializers.ValidationError(detail=errors)
-        return created_objects_by_type
+            # Check if we have errors and return them if any, reshaping error map to conform to input data structure
+            cleaned_errors = self._reshape_and_filter_errors_map(errors)
+            if cleaned_errors:
+                raise serializers.ValidationError(detail=cleaned_errors)
+
+        # Return our objects-by-type structure after reshaping it to conform to input data structure
+        return self._reshape_created_objects_by_type(created_objects_by_type)
+
+    def _create_serialize_object(
+        self, *, object_serializer: serializers.ModelSerializer, object_data: dict, created_objects_by_pk: dict
+    ):
+        """Resolve dependency fields for a given object and instance the object."""
+        # NOTE (2026-06-25 thiago)
+        # Because django-rest-framework's object existence validation has been bypassed, we have to explicitly resolve
+        # the FK references into objects ourselves
+        for dependency_field in DEPENDENCY_ID_FIELDS:
+            if dependency_field in object_data and object_data[dependency_field]:
+                dependency_pk = object_data[dependency_field]
+                if dependency_pk not in created_objects_by_pk:
+                    raise serializers.ValidationError(
+                        {
+                            dependency_field: [
+                                f"Dependency {dependency_field} ({dependency_pk}) was not created by " "this request."
+                            ]
+                        }
+                    )
+                object_data[dependency_field] = created_objects_by_pk[dependency_pk]
+
+        return object_serializer.create(object_data)
+
+    def _stub_errors_map(self, validated_data):
+        """Pre-allocate DRF-style error lists. Single-value fields are also treated as lists."""
+        errors = {}
+        for field_name in self.fields:
+            if field_name in validated_data:
+                entries = _to_list(validated_data[field_name])
+                errors[field_name] = [{} for _ in range(len(entries))]
+        return errors
+
+    def _reshape_and_filter_errors_map(self, errors):
+        """Reshape the errors-by-field dict to fit the serializer's input format. Filter out fields with no errors."""
+        cleaned_errors = {}
+        for field_name, errors_list in errors.items():
+            if any(errors_list):
+                if isinstance(self.fields[field_name], serializers.ListSerializer):
+                    cleaned_errors[field_name] = errors_list
+                else:
+                    cleaned_errors[field_name] = errors_list[0]
+
+        return cleaned_errors
+
+    def _reshape_created_objects_by_type(self, created_objects_by_type):
+        """Reshape the objects-by-type dict to fit the serializer's input format."""
+        result = {}
+        for field_name, field_value in created_objects_by_type.items():
+            if isinstance(self.fields[field_name], serializers.ListSerializer):
+                result[field_name] = field_value
+            else:
+                result[field_name] = field_value[0]
+        return result
 
 
 class BulkPlanInputResponseSerializer(serializers.Serializer):
@@ -223,15 +283,9 @@ class BulkPlanInputResponseSerializer(serializers.Serializer):
     traffic_sign_plans = TrafficSignPlanOutputSerializer(many=True, required=False, default=list)
 
 
-def to_list(value) -> list:
-    if not isinstance(value, list):
+def _to_list(value) -> list:
+    """Cast the value as a list."""
+    if isinstance(value, list):
+        return value
+    else:
         return [value]
-    return value
-
-
-def get_single_object_serializer(
-    serializer_class: serializers.ModelSerializer,
-) -> tuple[serializers.ModelSerializer, bool]:
-    if hasattr(serializer_class, "child"):
-        return serializer_class.child, True
-    return serializer_class, False
