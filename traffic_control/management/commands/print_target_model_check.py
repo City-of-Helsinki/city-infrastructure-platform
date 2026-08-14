@@ -1,7 +1,6 @@
 import pprint
 
-from django.core.management.base import BaseCommand
-
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models import (
     AdditionalSignPlan,
@@ -19,7 +18,7 @@ from traffic_control.models import (
 )
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Print target model check. "
 
     MODEL_TO_TARGETMODEL_MAP = [

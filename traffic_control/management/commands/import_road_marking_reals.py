@@ -4,8 +4,9 @@ import os
 from auditlog.context import set_actor
 from django.conf import settings
 from django.contrib.gis.geos import Point
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import CommandError
 
+from command_tracker.management.trackable_command import TrackableCommand
 from users.utils import get_system_user
 
 from ...models import ArrowDirection, RoadMarkingReal, TrafficControlDeviceType
@@ -25,7 +26,7 @@ ARROW_DIRECTION_MAPPING = {
 }
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Import road marking reals from a csv file"
 
     def __init__(self, *args, **kwargs):

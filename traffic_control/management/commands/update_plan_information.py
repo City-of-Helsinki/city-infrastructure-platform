@@ -2,13 +2,13 @@ import json
 import os
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.analyze_utils.plan_updater import PlanUpdater
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = (
         "Updates plan information from given CSV file. CSV file has columns:"
         "Päätösnumero; Päätöspäivä; Nimi; Diaarinumero; Piirustusnumerot; Linkki."

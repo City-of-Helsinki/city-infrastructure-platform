@@ -3,15 +3,16 @@ from typing import Any
 from uuid import UUID
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand, CommandParser
+from django.core.management.base import CommandParser
 from django.db import transaction
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME, TrafficSignImporterV2
 from traffic_control.models import MountReal
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     """Hard-delete orphan MountReal records scoped to the V2 StreetScan import source.
 
     An orphan is a MountReal with source_name matching the V2 import source name

@@ -1,12 +1,12 @@
 from auditlog.context import set_actor
-from django.core.management import BaseCommand
 from django.db import transaction
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models.common import TrafficControlDeviceType, TrafficControlDeviceTypeIcon
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = (
         "Point the file_field of existing TrafficControlDeviceType objects to the file corresponds to the icon string"
     )

@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.analyze_utils.additional_sign_info_enrich import (
     do_database_update,
     get_error_infos,
@@ -13,7 +13,7 @@ from traffic_control.models import ParkingZoneUpdateInfo
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Update AdditionalSignReal additional_information field. Also json schema updated if that can be done."
 
     def add_arguments(self, parser):

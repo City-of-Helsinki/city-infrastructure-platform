@@ -3,9 +3,10 @@ import logging
 import os
 from typing import Any
 
-from django.core.management.base import BaseCommand, CommandParser
+from django.core.management.base import CommandParser
 from django.db import transaction
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.analyze_utils.traffic_sign_data_v2_import import (
     TrafficSignImporterV2,
     VALID_OBJECT_TYPES,
@@ -14,7 +15,7 @@ from traffic_control.analyze_utils.traffic_sign_data_v2_import import (
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     """Import V2 traffic sign CSV data (mounts, signs, signposts, additional signs).
 
     Supports selective execution via --object-type and --phase flags, dry-run

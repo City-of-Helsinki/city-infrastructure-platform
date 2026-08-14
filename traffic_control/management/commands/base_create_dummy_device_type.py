@@ -5,13 +5,13 @@ This reduces code duplication between traffic_control and city_furniture apps.
 from abc import ABC, abstractmethod
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand
 from django.db import transaction
 
+from command_tracker.management.trackable_command import TrackableCommand
 from users.utils import get_system_user
 
 
-class BaseCreateDummyDeviceTypeCommand(BaseCommand, ABC):
+class BaseCreateDummyDeviceTypeCommand(TrackableCommand, ABC):
     """
     Abstract base class for creating dummy device types and assigning them
     to devices with device_type=None.

@@ -12,9 +12,10 @@ import logging
 from typing import Optional, Type
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand, CommandParser
+from django.core.management.base import CommandParser
 from django.db.models import Model
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models.additional_sign import AdditionalSignPlan, AdditionalSignReal
 from traffic_control.models.road_marking import RoadMarkingPlan, RoadMarkingReal
 from traffic_control.models.signpost_migration import SignpostMigrationPlanRecord, SignpostMigrationRealRecord
@@ -39,7 +40,7 @@ _PLAN_DEPENDENTS: list[tuple[type, str]] = [
 logger = logging.getLogger(__name__)
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     """Hard-delete traffic signs soft-deleted by the ticket-machine and signpost migration commands."""
 
     help = (
