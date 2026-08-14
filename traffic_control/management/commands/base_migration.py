@@ -5,10 +5,10 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.models.common import TrafficControlDeviceType
 from traffic_control.models.traffic_sign import TrafficSignPlan, TrafficSignReal
@@ -17,7 +17,7 @@ from users.utils import get_system_user
 logger = logging.getLogger(__name__)
 
 
-class BaseMigrationCommand(BaseCommand, ABC):
+class BaseMigrationCommand(TrackableCommand, ABC):
     """Base class for migration commands with shared functionality."""
 
     def __init__(self, *args, **kwargs):

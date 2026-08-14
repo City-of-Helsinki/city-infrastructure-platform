@@ -3,8 +3,8 @@ from urllib.request import urlretrieve
 
 from auditlog.context import set_actor
 from django.contrib.gis.gdal import DataSource
-from django.core.management import BaseCommand
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models import OperationalArea
 from users.utils import get_system_user
 
@@ -18,7 +18,7 @@ def parse_date(date_str):
     return datetime.strptime(date_str, DATE_FORMAT).date()
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Import operational areas from Helsinki WFS"
 
     def handle(self, *args, **options):

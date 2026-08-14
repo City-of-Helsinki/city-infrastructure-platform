@@ -5,8 +5,9 @@ from typing import NamedTuple
 from auditlog.context import set_actor
 from django.conf import settings
 from django.contrib.gis.geos import Point
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import CommandError
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.enums import DeviceTypeTargetModel, Lifecycle
 from traffic_control.models.additional_sign import AdditionalSignReal
 from traffic_control.models.common import Owner, TrafficControlDeviceType
@@ -41,7 +42,7 @@ class TripletAttrs(NamedTuple):
     source_name: str
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     """Create linked testdata triplets (MountReal, TrafficSignReal, AdditionalSignReal) for 3rd party app testing."""
 
     help = "Creates linked testdata triplets of MountReal, TrafficSignReal and AdditionalSignReal."

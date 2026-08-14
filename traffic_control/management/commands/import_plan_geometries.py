@@ -2,15 +2,16 @@ import os
 from typing import Any, Dict, List
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand, CommandParser
+from django.core.management.base import CommandParser
 from django.utils import timezone
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.analyze_utils.plan_geometry_importer import PlanGeometryImporter
 from traffic_control.models import PlanGeometryImportLog
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     """Django management command to import plan geometries from CSV files."""
 
     help = "Import plan geometries from CSV file with WKT MultiPolygon data"

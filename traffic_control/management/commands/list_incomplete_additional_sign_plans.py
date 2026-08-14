@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.management.base import BaseCommand
 from django.urls import reverse
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models import AdditionalSignPlan
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Runs clean() on all AdditionalSignPlan objects to identify validation errors"
 
     def handle(self, *args, **options):

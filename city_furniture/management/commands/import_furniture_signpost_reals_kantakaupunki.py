@@ -6,12 +6,13 @@ from functools import lru_cache
 from auditlog.context import set_actor
 from django.conf import settings
 from django.contrib.gis.geos import Point
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import CommandError
 from django.db.transaction import atomic
 
 from city_furniture.models import FurnitureSignpostReal
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
 from city_furniture.models.furniture_signpost import ArrowDirection
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models import MountType
 from traffic_control.utils import get_default_owner
 from users.utils import get_system_user
@@ -19,7 +20,7 @@ from users.utils import get_system_user
 SOURCE_NAME = "Kantakaupungin Rantareitti 2022 csv"
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Import Kantakaupungin Rantareitti Furniture Signpost reals from a csv file"
     step = 1000
     user = get_system_user()

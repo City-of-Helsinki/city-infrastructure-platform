@@ -4,12 +4,14 @@ import os
 from datetime import datetime
 from typing import Any
 
-from django.core.management.base import BaseCommand, CommandParser
+from django.core.management.base import CommandParser
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.analyze_utils.traffic_sign_data_v2 import TrafficSignAnalyzerV2
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
+
     """Analyze traffic sign V2 CSV data and generate analysis reports."""
 
     help = "Analyzes sign input data in V2 format (with status field) and generates analysis reports"

@@ -7,16 +7,17 @@ from datetime import timedelta
 from typing import Any
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand, CommandParser
+from django.core.management.base import CommandParser
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.services.email import send_email
 from users.models import User, UserDeactivationStatus
 from users.utils import get_admin_notification_recipients, get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     """Notify inactive users and deactivate accounts after 6 months."""
 
     help = "Send notifications to inactive users and deactivate accounts after 180 days of inactivity"

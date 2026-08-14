@@ -3,14 +3,15 @@ import os
 from auditlog.context import set_actor
 from django.apps import apps
 from django.core.files.base import ContentFile, File
-from django.core.management import BaseCommand, CommandError
+from django.core.management import CommandError
 from django.db import transaction
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models.common import TrafficControlDeviceTypeIcon
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = (
         "Generate TrafficControlDeviceTypeIcon objects for svg icons in our static icon folder and upload the SVG "
         "icons (and their corresponding PNG icons) to blobstorage. Will overwrite existing objects in the blobstorage "

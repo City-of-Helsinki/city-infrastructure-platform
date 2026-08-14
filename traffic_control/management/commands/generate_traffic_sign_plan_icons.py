@@ -3,12 +3,12 @@ from xml.etree.ElementTree import parse
 
 from auditlog.context import set_actor
 from django.conf import settings
-from django.core.management.base import BaseCommand
 
+from command_tracker.management.trackable_command import TrackableCommand
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Generate traffic sign plan icons from traffic sign real icons"
     ns = {"": "http://www.w3.org/2000/svg"}
     opacity = "0.6"

@@ -6,10 +6,11 @@ from typing import Literal
 
 from auditlog.context import set_actor
 from django.apps import apps
-from django.core.management import BaseCommand, CommandParser
+from django.core.management import CommandParser
 from django.db import transaction
 from django.utils import timezone
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models import AdditionalSignReal, MountReal, SignpostReal, TrafficSignReal
 from users.models import User
 from users.utils import get_system_user
@@ -44,7 +45,7 @@ class SplitStringsAction(argparse.Action):
         setattr(namespace, self.dest, values.split(","))
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Revert the effects of an import_streetscan_signs_v2 run"
 
     def add_arguments(self, parser: CommandParser) -> None:

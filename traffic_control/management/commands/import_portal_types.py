@@ -2,13 +2,14 @@ import csv
 import os
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import CommandError
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models import PortalType
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Import portal types from a csv file"
 
     def add_arguments(self, parser):

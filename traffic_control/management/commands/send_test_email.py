@@ -4,12 +4,13 @@ import smtplib
 from typing import Any
 
 from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError, CommandParser
+from django.core.management.base import CommandError, CommandParser
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.services.email import send_email
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     """Django management command to send test emails for email configuration verification."""
 
     help = "Send a test email to verify email configuration"

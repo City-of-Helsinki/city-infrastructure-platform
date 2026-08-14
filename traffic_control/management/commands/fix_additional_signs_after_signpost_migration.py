@@ -16,10 +16,10 @@ from datetime import timedelta
 from typing import Any, Optional, Type
 
 from auditlog.context import set_actor
-from django.core.management.base import BaseCommand
 from django.db import models, transaction
 from django.db.models import QuerySet
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models.additional_sign import AdditionalSignPlan, AdditionalSignReal
 from traffic_control.models.signpost_migration import (
     SignpostMigrationPlanRecord,
@@ -75,7 +75,7 @@ REAL_CONFIG = MigrationTypeConfig(
 )
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     """Restore AdditionalSign objects cascade-deleted by a previous signpost migration run."""
 
     help = (

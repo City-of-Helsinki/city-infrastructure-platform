@@ -2,13 +2,13 @@ from auditlog.context import set_actor
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
-from django.core.management.base import BaseCommand
 
+from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models import AdditionalSignReal, TrafficSignReal
 from users.utils import get_system_user
 
 
-class Command(BaseCommand):
+class Command(TrackableCommand):
     help = "Link additional traffic signs to main traffic signs"
 
     def add_arguments(self, parser):
