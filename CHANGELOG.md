@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.43.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.42.0...city-infrastructure-platform-v1.43.0) (2026-08-17)
+
+
+### Features
+
+* AI translations ([aa20525](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/aa205251f1c57bf8ffa7296ca0dea2f85c252231))
+* All management command are now inherited from TrackableCommand instead of BaseCommand ([5081f3f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/5081f3fe9bda52779ff311dfa50a4a8dc43d0269))
+* Force test language to be english in all apps where there are tests excluding maintenance_mode app ([9e0b65d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9e0b65d4389b7649d2d4ea720e2be86a71ead5b9))
+
+
+### Bug Fixes
+
+* Application version still not updated to uv.lock ([22e0514](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/22e05144f7a0638199e83c61a732fa3032772f00))
+* More idiomatic error responses for plan bulk insertion endpoint ([c7f36c0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c7f36c077294f6c7b21698cffe776cada909cde7))
+* Uv lock for release please ([eba1c10](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/eba1c10a2033e52ab76b9fa862db4143532be618))
+
 ## [1.42.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.41.0...city-infrastructure-platform-v1.42.0) (2026-08-10)
 
 
