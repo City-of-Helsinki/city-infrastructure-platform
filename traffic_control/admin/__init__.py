@@ -10,6 +10,7 @@ from traffic_control.admin.barrier import (
     BarrierRealFileInline,
 )
 from traffic_control.admin.common import OperationTypeAdmin
+from traffic_control.admin.link_additional_sign_parents_run_info import LinkAdditionalSignParentsRunInfoAdmin
 from traffic_control.admin.mount import (
     MountPlanAdmin,
     MountPlanFileInline,
