@@ -281,3 +281,4 @@ In order to harmonize future management commands, follow this checklist when wri
   * It produces an execution log onto the database detailing the relevant operations executed. The fine details of the operations may be written into a downloadable file instead.
   * It wraps its database operations in a `with set_actor(get_system_user())` block to ensure the produced audit log entries contain unambiguous information about the author of the changes produced being a management command
   * `created_by`, `updated_by` and `deleted_by` fields of objects affected by the management command are set to `get_system_user()` according to the operations executed (for example `created_by` on objects created by the management command)
+  * start and end timestamps should be stored to fields `started_at` and `completed_at` of the execution log entry or database entry
