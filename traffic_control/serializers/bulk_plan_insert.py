@@ -190,6 +190,12 @@ class BulkPlanInputSerializer(serializers.Serializer):
 
         with transaction.atomic():
             for object_id in self._object_topological_order:
+                # NOTE (2026-08-19 thiago)
+                # If an object_id is missing from the map, it means it's a dependency field reference to an ID of an
+                # object that either does not exist, or has been created outside of this transaction. It is an error
+                # but to report the error properly we need to let _create_serialize_object catch this scenario instead
+                if object_id not in self._object_type_and_data_map:
+                    continue
                 object_info = self._object_type_and_data_map[object_id]
                 object_type = object_info["type"]
                 object_data = object_info["data"]

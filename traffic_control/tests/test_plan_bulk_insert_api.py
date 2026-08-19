@@ -14,7 +14,14 @@ from traffic_control.models import (
     TrafficControlDeviceType,
     TrafficSignPlan,
 )
-from traffic_control.tests.factories import OwnerFactory, PlanFactory
+from traffic_control.tests.factories import (
+    AdditionalSignPlanFactory,
+    MountPlanFactory,
+    OwnerFactory,
+    PlanFactory,
+    SignpostPlanFactory,
+    TrafficSignPlanFactory,
+)
 
 DEFAULT_PLAN_ID = "00000000-0000-4000-0000-000000000000"
 DEFAULT_MOUNT_PLAN_ID = "11111111-1111-4111-1111-111111111111"
@@ -424,3 +431,97 @@ def test_plan_bulk_insert_announces_cascading_errors_neatly(admin_client, owner)
     assert len(mount_plan_errors) == 2, "Both mount plans should fail"
     assert f"Dependency plan ({DEFAULT_PLAN_ID}) was not created by this request." in mount_plan_errors[0]["plan"]
     assert f"Dependency plan ({DEFAULT_PLAN_ID}) was not created by this request." in mount_plan_errors[1]["plan"]
+
+
+@pytest.mark.django_db
+def test_plan_bulk_insert_replaces_stuff_properly(
+    admin_client, additional_sign_device_type, signpost_sign_device_type, traffic_sign_device_type, owner
+):
+    old_plan = PlanFactory.create()
+    old_mount = MountPlanFactory.create(plan=old_plan)
+    old_signpost = SignpostPlanFactory.create(plan=old_plan, mount_plan=old_mount)
+    old_trafficsign = TrafficSignPlanFactory.create(plan=old_plan, mount_plan=old_mount)
+    old_additionalsign = AdditionalSignPlanFactory.create(
+        plan=old_plan, mount_plan=old_mount, signpost_plan=old_signpost, parent=old_trafficsign
+    )
+
+    assert old_mount.replaced_by is None
+    assert old_signpost.replaced_by is None
+    assert old_trafficsign.replaced_by is None
+    assert old_additionalsign.replaced_by is None
+
+    _post_insert_plan_bulk(
+        admin_client,
+        plan=plan_payload(owner=owner.pk, replaces=old_plan.pk),
+        mount_plans=[mount_plan_payload(owner=owner.pk, replaces=old_mount.pk)],
+        signpost_plans=[
+            signpost_plan_payload(owner=owner.pk, replaces=old_signpost.pk, device_type=signpost_sign_device_type.pk)
+        ],
+        traffic_sign_plans=[
+            traffic_sign_plan_payload(
+                owner=owner.pk, replaces=old_trafficsign.pk, device_type=traffic_sign_device_type.pk
+            )
+        ],
+        additional_sign_plans=[
+            additional_sign_plan_payload(
+                owner=owner.pk, replaces=old_additionalsign.pk, device_type=additional_sign_device_type.pk
+            )
+        ],
+    )
+
+    old_mount.refresh_from_db()
+    old_signpost.refresh_from_db()
+    old_trafficsign.refresh_from_db()
+    old_additionalsign.refresh_from_db()
+
+    assert old_mount.is_replaced and str(old_mount.replaced_by.pk) == DEFAULT_MOUNT_PLAN_ID
+    assert old_signpost.is_replaced and str(old_signpost.replaced_by.pk) == DEFAULT_SIGNPOST_PLAN_ID
+    assert old_trafficsign.is_replaced and str(old_trafficsign.replaced_by.pk) == DEFAULT_TRAFFIC_SIGN_PLAN_ID
+    assert old_additionalsign.is_replaced and str(old_additionalsign.replaced_by.pk) == DEFAULT_ADDITIONAL_SIGN_PLAN_ID
+
+
+@pytest.mark.django_db
+def test_plan_bulk_insert_expects_new_objects(
+    admin_client, additional_sign_device_type, signpost_sign_device_type, traffic_sign_device_type, owner
+):
+    old_plan = PlanFactory.create()
+    old_mount = MountPlanFactory.create()
+
+    response = _post_insert_plan_bulk(
+        admin_client,
+        plan=plan_payload(owner=owner.pk),
+        mount_plans=[mount_plan_payload(owner=owner.pk, plan=old_plan.pk)],
+        signpost_plans=[
+            signpost_plan_payload(owner=owner.pk, mount_plan=old_mount.pk, device_type=signpost_sign_device_type.pk),
+            signpost_plan_payload(
+                id=ALT_MOUNT_PLAN_ID,
+                owner=owner.pk,
+                mount_plan=NON_EXISTENT_ID,
+                device_type=signpost_sign_device_type.pk,
+            ),
+        ],
+    )
+    response_data = response.json()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "mount_plans" in response_data
+    assert "signpost_plans" in response_data
+
+    # References to pre-existing plans fail
+    mount_plan_errors = response_data.get("mount_plans")
+    assert "plan" in mount_plan_errors[0]
+    assert f"Dependency plan ({old_plan.id}) was not created by this request." in mount_plan_errors[0]["plan"]
+
+    # References to pre-existing device plans fail in the same manner
+    signpost_plan_errors = response_data.get("signpost_plans")
+    assert "mount_plan" in signpost_plan_errors[0]
+    assert (
+        f"Dependency mount_plan ({old_mount.id}) was not created by this request."
+        in signpost_plan_errors[0]["mount_plan"]
+    )
+
+    # References to non_existing device plans fail in the same manner
+    assert "mount_plan" in signpost_plan_errors[1]
+    assert (
+        f"Dependency mount_plan ({NON_EXISTENT_ID}) was not created by this request."
+        in signpost_plan_errors[1]["mount_plan"]
+    )
