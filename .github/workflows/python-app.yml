@@ -49,9 +49,9 @@ jobs:
         uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # release 8.0.0 (2026-03-26)
         with:
           enable-cache: true
-          version: "0.11.31" # 2026-07-21
-          # checksum for Linux x64: https://github.com/astral-sh/uv/releases/tag/0.11.31
-          checksum: "8cc1cd82d434ec565376f98bd938d4b715b5791a80ff2d3aa78821cf85091b4b"
+          version: "0.12.1" # 2026-07-31
+          # checksum for Linux x64: https://github.com/astral-sh/uv/releases/tag/0.12.1
+          checksum: "90b2f223fb69d19db49e117da601f64978593417988530aa733d456141b4bcbb"
 
       - name: Install test dependencies
         run: uv sync --frozen
