@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.44.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.43.0...city-infrastructure-platform-v1.44.0) (2026-08-20)
+
+
+### Features
+
+* Management command to set additional sign real parents based on mount ([44ae7a7](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/44ae7a7fce4d521fac8e715d8c223f02be05ea6f))
+
+
+### Bug Fixes
+
+* Add missing validation to location fields ([106e71f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/106e71f365498e4b71f565da658e41d5b5087dfb))
+* Better errors for unexpected IDs in bulk-plan-insert ([7ff2ae9](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7ff2ae90a4aaec12ad55dcf9c9188777b39b4144))
+
 ## [1.43.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.42.0...city-infrastructure-platform-v1.43.0) (2026-08-17)
 
 
