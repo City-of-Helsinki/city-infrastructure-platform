@@ -117,10 +117,10 @@ def test_empty_report_no_deactivations(db, admin_notification_recipient):
 
     output = out.getvalue()
     assert "Found 0 deactivated users" in output
-    assert "No deactivated users to report" in output
 
-    # No email should be sent
-    assert len(mail.outbox) == 0
+    assert len(mail.outbox) == 1, "Email should be sent even when there are no deactivated users"
+    email_body = mail.outbox[0].body
+    assert "No deactivated users this month." in email_body, "Email should be clear about no deactivated users"
 
 
 @pytest.mark.django_db
@@ -137,7 +137,10 @@ def test_exclude_current_month_deactivations(deactivated_user_in_month, admin_no
     output = out.getvalue()
     # Should find 0 users (current month excluded)
     assert "Found 0 deactivated users" in output
-    assert len(mail.outbox) == 0
+
+    assert len(mail.outbox) == 1, "Email should be sent even when there are no deactivated users"
+    email_body = mail.outbox[0].body
+    assert "No deactivated users this month." in email_body, "Email should be clear about no deactivated users"
 
 
 @pytest.mark.django_db
@@ -154,7 +157,10 @@ def test_exclude_older_month_deactivations(deactivated_user_in_month, admin_noti
     output = out.getvalue()
     # Should find 0 users (too old)
     assert "Found 0 deactivated users" in output
-    assert len(mail.outbox) == 0
+
+    assert len(mail.outbox) == 1, "Email should be sent even when there are no deactivated users"
+    email_body = mail.outbox[0].body
+    assert "No deactivated users this month." in email_body, "Email should be clear about no deactivated users"
 
 
 @pytest.mark.django_db
@@ -484,10 +490,10 @@ def test_report_custom_month_no_users(admin_notification_recipient):
 
     output = out.getvalue()
     assert "Found 0 deactivated users in January 2020" in output
-    assert "No deactivated users to report" in output
 
-    # No email should be sent
-    assert len(mail.outbox) == 0
+    assert len(mail.outbox) == 1, "Email should be sent even when there are no deactivated users"
+    email_body = mail.outbox[0].body
+    assert "No deactivated users this month." in email_body, "Email should be clear about no deactivated users"
 
 
 @pytest.mark.django_db

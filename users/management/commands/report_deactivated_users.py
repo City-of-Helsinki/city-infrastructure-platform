@@ -161,10 +161,6 @@ class Command(TrackableCommand):
                 f"{first_day_report_month.year}"
             )
 
-            if user_count == 0:
-                self.stdout.write(self.style.SUCCESS("No deactivated users to report."))
-                return
-
             # Prepare context for email
             context = {
                 "deactivated_users": deactivated_users,
