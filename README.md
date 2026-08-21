@@ -45,7 +45,7 @@ pipx install "uv==0.12.1"
 
 #### Common dependencies - python environment
 
-Check whether you have the minimum required version of python (3.11.15)
+Check whether you have the minimum required version of python (3.12)
 
 ```bash
 python --version
@@ -59,28 +59,28 @@ python3 --version
 
 ##### Common dependencies - python environment - use correct python version (optional)
 
-If your version of python is equal to or newer than 3.11.15, you may skip this section.
+If your version of python is equal to or newer than 3.12, you may skip this section.
 
-If your python version is older, we recommend you install [pyenv](https://github.com/pyenv/pyenv) to manage the installation of a newer version, follow the instructions to set up the [suggested build environment](https://github.com/pyenv/pyenv/wiki#suggested-build-environment) for your system, and then finally install and activate python 3.11.15.
+If your python version is older, we recommend you install [pyenv](https://github.com/pyenv/pyenv) to manage the installation of a newer version, follow the instructions to set up the [suggested build environment](https://github.com/pyenv/pyenv/wiki#suggested-build-environment) for your system, and then finally install and activate python 3.12.
 
 
 ```bash
-# This command will build python version 3.11.15, it is a lengthy process
+# This command will build python version 3.12, it is a lengthy process
 # so make sure you have followed the steps for setting up the suggested
 # build environment linked above.
-pyenv install 3.11.15
+pyenv install 3.12
 ```
 
-If you encounter trouble building python 3.11.15 even after setting up the suggested build environment, you should consult the [pyenv common problems FAQ](https://github.com/pyenv/pyenv/wiki/Common-build-problems) to proceed.
+If you encounter trouble building python 3.12 even after setting up the suggested build environment, you should consult the [pyenv common problems FAQ](https://github.com/pyenv/pyenv/wiki/Common-build-problems) to proceed.
 
 ```bash
-# This command will activate python 3.11.15
-pyenv global 3.11.15
+# This command will activate python 3.12
+pyenv global 3.12
 ```
 
 ##### Common dependencies - python environment - virtual environment
 
-Ensure you are using python 3.11.15 or newer and at the root of this project run
+Ensure you are using python 3.12 or newer and at the root of this project run
 
 
 ```bash
