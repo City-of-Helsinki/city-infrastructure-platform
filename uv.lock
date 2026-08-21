@@ -703,16 +703,16 @@ wheels = [
 
 [[package]]
 name = "django-import-export"
-version = "3.3.9"
+version = "3.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "diff-match-patch" },
     { name = "django" },
-    { name = "tablib", extra = ["html", "ods", "xls", "xlsx", "yaml"] },
+    { name = "tablib", extra = ["ods", "xls", "xlsx", "yaml"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/96/dc/915a0df2b9006cfd6870e04967964eacdfed0db3d5edf61a72b0d199407a/django_import_export-3.3.9.tar.gz", hash = "sha256:16797965e93a8001fe812c61e3b71fb858c57c1bd16da195fe276d6de685348e", size = 64625, upload-time = "2024-04-28T14:53:23.379Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f3/5d/ac971fb19d2b88af46e712e600c7d625f762fb6498d7b69a3e7501ebc029/django-import-export-3.2.0.tar.gz", hash = "sha256:38fd7b9439b9e3aa1a4747421c1087a5bc194e915a28d795fb8429a5f8028f2d", size = 60282, upload-time = "2023-04-12T18:04:37.93Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a4/06/2b474ddf52d5e2e46ea821789de6a76bc50996f0a592fdd29af1891d20af/django_import_export-3.3.9-py3-none-any.whl", hash = "sha256:dd6cabc08ed6d1bd37a392e7fb542bd7d196b615c800168f5c69f0f55f49b103", size = 112693, upload-time = "2024-04-28T14:53:20.972Z" },
+    { url = "https://files.pythonhosted.org/packages/fd/b1/982bf0d7710f101a214e78c54630f84933da25a65c1bd2a754f37e363dd5/django_import_export-3.2.0-py3-none-any.whl", hash = "sha256:1d3f2cb2ee3cca0386ed60651fa1623be989f130d9fbdf98a67f7dc3a94b8a37", size = 107139, upload-time = "2023-04-12T18:04:36.238Z" },
 ]
 
 [[package]]
@@ -1087,15 +1087,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5a/0b/e30236aafe31b4247aa9ae61ba8aac6dde75c3ea0e47a8fb7eef53f6d5ce/lru_dict-1.3.0-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:0e88dba16695f17f41701269fa046197a3fd7b34a8dba744c8749303ddaa18df", size = 37143, upload-time = "2023-11-06T01:39:19.571Z" },
     { url = "https://files.pythonhosted.org/packages/1c/28/b59bcebb8d76ba8147a784a8be7eab6a4ad3395b9236e73740ff675a5a52/lru_dict-1.3.0-cp312-cp312-win32.whl", hash = "sha256:6ffaf595e625b388babc8e7d79b40f26c7485f61f16efe76764e32dce9ea17fc", size = 12653, upload-time = "2023-11-06T01:39:20.574Z" },
     { url = "https://files.pythonhosted.org/packages/bd/18/06d9710cb0a0d3634f8501e4bdcc07abe64a32e404d82895a6a36fab97f6/lru_dict-1.3.0-cp312-cp312-win_amd64.whl", hash = "sha256:cf9da32ef2582434842ab6ba6e67290debfae72771255a8e8ab16f3e006de0aa", size = 13811, upload-time = "2023-11-06T01:39:21.599Z" },
-]
-
-[[package]]
-name = "markuppy"
-version = "1.14"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4e/ca/f43541b41bd17fc945cfae7ea44f1661dc21ea65ecc944a6fa138eead94c/MarkupPy-1.14.tar.gz", hash = "sha256:1adee2c0a542af378fe84548ff6f6b0168f3cb7f426b46961038a2bcfaad0d5f", size = 6815, upload-time = "2017-08-01T22:50:19.282Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/cc/e5403fe82ad2720dd8f821270c5cfe14007b97f9d0c906a834eb613608b2/markuppy-1.14-py3-none-any.whl", hash = "sha256:dc893880c5551d8388b688eef1d425dd48bb0b7d5bc74414fae86764ff4660ee", size = 8449, upload-time = "2025-03-13T01:40:40.687Z" },
 ]
 
 [[package]]
@@ -1779,17 +1770,14 @@ wheels = [
 
 [[package]]
 name = "tablib"
-version = "3.5.0"
+version = "3.10.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/95/6a/d62bb27ecd6371cd10fc7f68fa9b06cf46e4771582f2aae94fb56c24add7/tablib-3.5.0.tar.gz", hash = "sha256:f6661dfc45e1d4f51fa8a6239f9c8349380859a5bfaa73280645f046d6c96e33", size = 94795, upload-time = "2023-06-11T17:09:35.956Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/b9/59d9c8b9c34642e7a718e8a1a7a91af3eb9b48f79bac794263702d41519c/tablib-3.10.0.tar.gz", hash = "sha256:781cfa9a42de8f33c52aff857fd0a04e483de4fd1c53eaaa9a6aeac62bad11de", size = 127128, upload-time = "2026-07-31T17:30:15.577Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cf/02/404b9a79578e1a3512bf3ae5e1fb0766859ccf3b55a83ab1e7ac4aeb7bed/tablib-3.5.0-py3-none-any.whl", hash = "sha256:9821caa9eca6062ff7299fa645e737aecff982e6b2b42046928a6413c8dabfd9", size = 45479, upload-time = "2023-06-11T17:08:43.883Z" },
+    { url = "https://files.pythonhosted.org/packages/fc/0f/3ae17545ff976687f679ed3a101df7017135ee04769e858a4ccea0cc3f3e/tablib-3.10.0-py3-none-any.whl", hash = "sha256:5721bf3a52d491f8f843628a3a3200db164f6ad9e92fb6eaa64dc3f945f30ad9", size = 50170, upload-time = "2026-07-31T17:30:04.925Z" },
 ]
 
 [package.optional-dependencies]
-html = [
-    { name = "markuppy" },
-]
 ods = [
     { name = "odfpy" },
 ]
