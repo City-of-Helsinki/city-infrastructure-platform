@@ -13,22 +13,21 @@
             <strong>Total deactivated users:</strong> {{ user_count }}
         </p>
         {% if user_count > 0 %}
-            <table border="1"
-                   cellpadding="10"
-                   style="width: 100%;
+            <table style="width: 100%;
+                          border: 1px solid #000000;
                           border-collapse: collapse">
                 <tr style="background-color: #f0f0f0">
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Deactivated</th>
+                    <th style="padding: 10px">Username</th>
+                    <th style="padding: 10px">Name</th>
+                    <th style="padding: 10px">Email</th>
+                    <th style="padding: 10px">Deactivated</th>
                 </tr>
                 {% for status in deactivated_users %}
                     <tr>
-                        <td>{{ status.user.username }}</td>
-                        <td>{{ status.user.first_name }} {{ status.user.last_name }}</td>
-                        <td>{{ status.user.email|default:"No email" }}</td>
-                        <td>{{ status.deactivated_at|date:"d.m.Y H:i" }}</td>
+                        <td style="padding: 10px">{{ status.user.username }}</td>
+                        <td style="padding: 10px">{{ status.user.first_name }} {{ status.user.last_name }}</td>
+                        <td style="padding: 10px">{{ status.user.email|default:"No email" }}</td>
+                        <td style="padding: 10px">{{ status.deactivated_at|date:"d.m.Y H:i" }}</td>
                     </tr>
                 {% endfor %}
             </table>
