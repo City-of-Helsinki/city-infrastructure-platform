@@ -2,8 +2,10 @@ from datetime import timedelta
 
 import pytest
 from django.contrib.admin.sites import AdminSite
+from django.contrib.auth.models import Permission
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import RequestFactory
+from django.urls import reverse
 from django.utils import timezone
 from social_django.models import UserSocialAuth
 
@@ -238,12 +240,16 @@ class TestUserAdmin:
 
         assert "auth_type_display" in user_admin.list_display
 
-    def test_auth_type_in_readonly_fields(self):
+    def test_auth_type_in_readonly_fields(self, rf, admin_user):
         """Test that auth_type_display is in readonly_fields."""
         admin_site = AdminSite()
         user_admin = UserAdmin(User, admin_site)
 
-        assert "auth_type_display" in user_admin.readonly_fields
+        request = rf.get("/")
+        request.user = admin_user
+        readonly_fields = user_admin.get_readonly_fields(request)
+
+        assert "auth_type_display" in readonly_fields
 
     def test_auth_filter_in_list_filter(self):
         """Test that AuthenticationTypeFilter is in list_filter."""
@@ -432,6 +438,57 @@ class TestReactivateSelectedUsersAction:
         # Verify deactivation statuses are deleted
         assert not UserDeactivationStatus.objects.filter(user=user1).exists()
         assert not UserDeactivationStatus.objects.filter(user=user2).exists()
+
+    @pytest.mark.django_db
+    @pytest.mark.parametrize(
+        "is_active_new, is_superuser, should_reactivate",
+        [
+            (False, True, False),  # If superuser doesn't touch is_active, nothing happens
+            (True, False, False),  # If regular admin tries to enable is_active, nothing happens
+            (True, True, True),  # If superuser enables is_active, deactivation status is removed
+        ],
+    )
+    def test_save_model_deletes_deactivation_status(
+        self, rf, admin_user, is_active_new, is_superuser, should_reactivate
+    ):
+        """Check that UserAdmin.save_model properly reactivates a user"""
+        target_user = UserFactory.create(is_active=False)
+        UserDeactivationStatus.objects.create(user=target_user, deactivated_at=timezone.now() - timedelta(days=5))
+        assert UserDeactivationStatus.objects.filter(user=target_user).exists()  # Sanity check
+
+        admin_user.is_superuser = is_superuser
+        admin_user.save()
+
+        admin_site = AdminSite()
+        user_admin = UserAdmin(User, admin_site)
+
+        target_user.is_active = is_active_new
+        request = rf.post("/")
+        request.user = admin_user
+        request.session = {}
+        request._messages = FallbackStorage(request)
+        user_admin.save_model(request, obj=target_user, form=None, change=True)
+        messages = list(request._messages)
+
+        target_user.refresh_from_db()
+
+        if is_active_new:
+            if is_superuser:
+                assert target_user.is_active is True
+                assert target_user.reactivated_at is not None
+                assert not UserDeactivationStatus.objects.filter(user=target_user).exists()
+                assert len(messages) == 0
+            else:
+                assert target_user.is_active is False
+                assert target_user.reactivated_at is None
+                assert UserDeactivationStatus.objects.filter(user=target_user).exists()
+                assert len(messages) == 1
+                assert "You don't have permission to reactivate users" in messages[0].message
+        else:
+            assert target_user.is_active is False
+            assert target_user.reactivated_at is None
+            assert UserDeactivationStatus.objects.filter(user=target_user).exists()
+            assert len(messages) == 0
 
     def test_reactivate_users_sets_timestamp(self):
         """Test that reactivation sets the reactivated_at timestamp."""
@@ -623,17 +680,46 @@ class TestReactivateSelectedUsersAction:
         assert user1.is_active is True
         assert user2.is_active is True
 
+    @pytest.mark.parametrize(
+        "make_superuser, expected_in_readonly",
+        [
+            (True, False),
+            (False, True),
+        ],
+    )
+    def test_is_active_readonly_on_admin_page(self, client, make_superuser, expected_in_readonly):
+        acting_user = UserFactory.create(is_staff=True, is_superuser=make_superuser)
+        target_user = UserFactory.create()
+
+        # Need to ensure non-superuser admins will have the required permissions to edit a user
+        change_perm = Permission.objects.get(codename="change_user", content_type__app_label="users")
+        view_perm = Permission.objects.get(codename="view_user", content_type__app_label="users")
+        acting_user.user_permissions.add(change_perm, view_perm)
+
+        # Login and fetch the admin page
+        client.force_login(acting_user)
+        url = reverse("admin:users_user_change", args=[target_user.pk])
+        response = client.get(url)
+        assert response.status_code == 200
+
+        admin_form = response.context["adminform"]
+        assert ("is_active" in admin_form.readonly_fields) is expected_in_readonly
+
 
 @pytest.mark.django_db
 class TestUserAdminDeactivationFields:
     """Tests for deactivation-related admin fields and display."""
 
-    def test_reactivated_at_in_readonly_fields(self):
+    def test_reactivated_at_in_readonly_fields(self, rf, admin_user):
         """Test that reactivated_at is in readonly_fields."""
         admin_site = AdminSite()
         user_admin = UserAdmin(User, admin_site)
 
-        assert "reactivated_at" in user_admin.readonly_fields
+        request = rf.get("/")
+        request.user = admin_user
+        readonly_fields = user_admin.get_readonly_fields(request)
+
+        assert "reactivated_at" in readonly_fields
 
     def test_reactivated_at_in_list_display(self):
         """Test that reactivated_at is in list_display."""
