@@ -82,6 +82,9 @@ class User(AbstractUser):
     def has_bypass_responsible_entity_permission(self):
         return self.is_superuser or self.bypass_responsible_entity
 
+    def has_reactivate_user_permission(self):
+        return self.is_superuser
+
     def can_create_responsible_entity_devices(self):
         from traffic_control.models import GroupResponsibleEntity
 
