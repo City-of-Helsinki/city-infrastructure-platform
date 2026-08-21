@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.45.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.44.0...city-infrastructure-platform-v1.45.0) (2026-08-21)
+
+
+### Features
+
+* Update python version to 3.12 ([b586587](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b58658722034d43c92b60ad7c51ac534b642bf11))
+
+
+### Bug Fixes
+
+* Replace deprecated properties on deactivated users email HTML ([57d3097](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/57d309782c209e2c9019701a6acc866759907f2e))
+* Send admin notifications for months with 0 deactivated users ([bb28817](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/bb28817cfec864e37ea8c526e11e513cb3ece35e))
+
 ## [1.44.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.43.0...city-infrastructure-platform-v1.44.0) (2026-08-20)
 
 
