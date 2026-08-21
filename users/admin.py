@@ -422,6 +422,28 @@ class UserAdmin(BaseUserAdmin):
 
         return render_to_string("admin/users/user/relations_table.html", context)
 
+    def save_model(self, request, obj, form, change):
+        """Perform proper user reactivation if we're updating the is_active flag via the user detail page
+
+        https://docs.djangoproject.com/en/5.2/ref/contrib/admin/#django.contrib.admin.ModelAdmin.save_model
+        """
+        old_obj = User.objects.get(pk=obj.pk)
+
+        with transaction.atomic():
+            if obj.is_active and not old_obj.is_active:  # reactivation case
+                if self._check_reactivation_permission(request):
+                    obj.reactivated_at = timezone.now()
+                    self._guarantee_deactivation_status_deletion(obj)
+                else:
+                    obj.active = False
+                    self.message_user(
+                        request,
+                        "You don't have permission to reactivate this user. TBH this shouldn't have shown as UI for you",
+                        level="warning",
+                    )
+
+            super().save_model(request, obj, form, change)
+
     @admin.action(permissions=["change"], description=_("Reactivate selected users"))
     def reactivate_selected_users(self, request, queryset) -> None:
         """
@@ -434,12 +456,7 @@ class UserAdmin(BaseUserAdmin):
             request: The current HTTP request object.
             queryset: The queryset of selected users.
         """
-        if not request.user.is_superuser:
-            self.message_user(
-                request,
-                _("Only superusers can reactivate users."),
-                level="error",
-            )
+        if not self._check_reactivation_permission(request):
             return
 
         count = 0
@@ -448,15 +465,7 @@ class UserAdmin(BaseUserAdmin):
                 user.is_active = True
                 user.reactivated_at = timezone.now()
                 user.save(update_fields=["is_active", "reactivated_at"])
-
-                # Delete deactivation status if exists
-                # Note: Signal may have already deleted it when reactivated_at was set
-                try:
-                    if hasattr(user, "deactivation_status"):
-                        user.deactivation_status.delete()
-                except (AttributeError, ValueError):
-                    # Already deleted by signal or doesn't exist
-                    pass
+                self._guarantee_deactivation_status_deletion(user)
 
                 count += 1
 
@@ -465,6 +474,27 @@ class UserAdmin(BaseUserAdmin):
             _("Successfully reactivated %(count)d user(s).") % {"count": count},
             level="success",
         )
+
+    def _check_reactivation_permission(self, request) -> bool:
+        if not request.user.is_superuser:
+            self.message_user(
+                request,
+                _("Only superusers can reactivate users."),
+                level="error",
+            )
+            return False
+        return True
+
+    @staticmethod
+    def _guarantee_deactivation_status_deletion(user: User):
+        # Delete deactivation status if exists
+        # Note: Signal may have already deleted it when reactivated_at was set
+        try:
+            if hasattr(user, "deactivation_status"):
+                user.deactivation_status.delete()
+        except (AttributeError, ValueError):
+            # Already deleted by signal or doesn't exist
+            pass
 
     actions = ["reactivate_selected_users"]
 
