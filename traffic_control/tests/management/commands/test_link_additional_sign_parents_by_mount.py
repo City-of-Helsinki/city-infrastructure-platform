@@ -693,7 +693,6 @@ class TestLinkAdditionalSignParentsByMountCommand:
         ads.refresh_from_db()
         assert ads.parent == active_traffic_sign
 
-    # JF TODO thiagon kommentti ??
     def test_command_selects_latest_active_traffic_sign(self, additional_sign_device_type, traffic_sign_device_type):
         """Test selection when several active traffic signs share a mount at different z-coordinates.
 
