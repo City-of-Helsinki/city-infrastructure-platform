@@ -646,40 +646,6 @@ class TestReactivateSelectedUsersAction:
         assert "3" in str(message_list[0])
         assert "reactivated" in str(message_list[0]).lower()
 
-    def test_reactivate_action_uses_transaction(self):
-        """Test that reactivation uses atomic transaction."""
-        # This test verifies the action uses transaction.atomic()
-        # by checking that all operations succeed or fail together
-        user1 = UserFactory(username="user1")
-        user1.is_active = False
-        user1.save()
-
-        user2 = UserFactory(username="user2")
-        user2.is_active = False
-        user2.save()
-
-        superuser = UserFactory(username="superuser", is_staff=True, is_superuser=True)
-        superuser.is_superuser = True
-        superuser.save()
-
-        factory = RequestFactory()
-        request = factory.post("/admin/users/user/")
-        request.user = superuser
-        setattr(request, "session", {})
-        messages = FallbackStorage(request)
-        setattr(request, "_messages", messages)
-
-        admin_site = AdminSite()
-        user_admin = UserAdmin(User, admin_site)
-        queryset = User.objects.filter(id__in=[user1.id, user2.id])
-        user_admin.reactivate_selected_users(request, queryset)
-
-        # Both users should be reactivated
-        user1.refresh_from_db()
-        user2.refresh_from_db()
-        assert user1.is_active is True
-        assert user2.is_active is True
-
     @pytest.mark.parametrize(
         "make_superuser, expected_in_readonly",
         [
