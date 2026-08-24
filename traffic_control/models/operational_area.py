@@ -57,7 +57,12 @@ class OperationalArea(BoundaryCheckedLocationMixin, SourceControlModel):
     class Meta:
         verbose_name = _("Operational area")
         verbose_name_plural = _("Operational areas")
-        unique_together = ["source_name", "source_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_name", "source_id"],
+                name="%(app_label)s_%(class)s_unique_source_name_id",
+            ),
+        ]
 
     def __str__(self):
         return f"OperationalArea {self.name}"

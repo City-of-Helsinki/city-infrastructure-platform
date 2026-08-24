@@ -93,7 +93,12 @@ class PortalType(models.Model):
         db_table = "portal_type"
         verbose_name = _("Portal type")
         verbose_name_plural = _("Portal types")
-        unique_together = ("structure", "build_type", "model")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["structure", "build_type", "model"],
+                name="%(app_label)s_%(class)s_unique_structure_build_type_model",
+            ),
+        ]
 
     @requires_fields("build_type", "model", "structure")
     def __str__(self):
