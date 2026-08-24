@@ -320,6 +320,8 @@ class UserAdmin(BaseUserAdmin):
         readonly_fields = ["auth_type_display", "last_api_use", "reactivated_at", "show_relations_table"]
         if not request.user.has_reactivate_user_permission():
             readonly_fields.append("is_active")
+        if not request.user.is_superuser:
+            readonly_fields.append("is_superuser")
         return readonly_fields
 
     @admin.display(description=_("last login"), ordering="last_login")
