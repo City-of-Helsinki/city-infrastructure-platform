@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from traffic_control.admin.utils import PermissionInlineMixin
-from traffic_control.enums import TRAFFIC_SIGN_TYPE_CHOICES
+from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.models import OperationalArea, OperationType
 from traffic_control.services.common import get_all_not_replaced_plans, get_all_replaced_plans
 
@@ -368,4 +368,38 @@ class DeviceTypeSignTypeListFilter(TrafficSignTypeListFilterBase):
         value = self.value()
         if value:
             return queryset.filter(device_type__code__startswith=value)
+        return queryset
+
+
+class DeviceTypeTargetModelFilter(SimpleListFilter):
+    title = _("Device type target model")
+    parameter_name = "device_type_target_model"
+
+    def lookups(self, request, model_admin):
+        """
+        Return possible target model choices.
+
+        Args:
+            request: The HTTP request object.
+            model_admin: The model admin instance.
+
+        Returns:
+            tuple: Device type target model choices (value, description).
+        """
+        return DeviceTypeTargetModel.choices
+
+    def queryset(self, request, queryset):
+        """
+        Filter queryset by device type target_model
+
+        Args:
+            request: The HTTP request object.
+            queryset: The queryset to filter.
+
+        Returns:
+            QuerySet: Filtered queryset or original if no filter value.
+        """
+        value = self.value()
+        if value:
+            return queryset.filter(target_model=value)
         return queryset
