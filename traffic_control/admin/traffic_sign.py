@@ -17,6 +17,7 @@ from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     DeviceTypeSignTypeListFilter,
+    DeviceTypeTargetModelFilter,
     OperationalAreaListFilter,
     PlanReplacementListFilterMixin,
     ReplacedByInline,
@@ -150,7 +151,10 @@ class TrafficControlDeviceTypeAdmin(
         "target_model",
     )
     list_select_related = ("icon_file",)
-    list_filter = (TrafficSignTypeCodeFilter,)
+    list_filter = (
+        TrafficSignTypeCodeFilter,
+        DeviceTypeTargetModelFilter,
+    )
     search_fields = (
         "code",
         "legacy_code",
