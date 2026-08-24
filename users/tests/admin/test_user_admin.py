@@ -754,3 +754,30 @@ class TestUserAdminDeactivationFields:
         user_admin = UserAdmin(User, admin_site)
 
         assert "reactivate_selected_users" in user_admin.actions
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "make_superuser, expected_in_readonly",
+    [
+        (True, False),
+        (False, True),
+    ],
+)
+def test_is_superuser_readonly_on_admin_page(client, make_superuser, expected_in_readonly):
+    acting_user = UserFactory.create(is_staff=True, is_superuser=make_superuser)
+    target_user = UserFactory.create()
+
+    # Need to ensure non-superuser admins will have the required permissions to edit a user
+    change_perm = Permission.objects.get(codename="change_user", content_type__app_label="users")
+    view_perm = Permission.objects.get(codename="view_user", content_type__app_label="users")
+    acting_user.user_permissions.add(change_perm, view_perm)
+
+    # Login and fetch the admin page
+    client.force_login(acting_user)
+    url = reverse("admin:users_user_change", args=[target_user.pk])
+    response = client.get(url)
+    assert response.status_code == 200
+
+    admin_form = response.context["adminform"]
+    assert ("is_superuser" in admin_form.readonly_fields) is expected_in_readonly
