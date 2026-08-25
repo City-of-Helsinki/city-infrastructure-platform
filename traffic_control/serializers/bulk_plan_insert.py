@@ -234,18 +234,19 @@ class BulkPlanInputSerializer(serializers.Serializer):
         # NOTE (2026-06-25 thiago)
         # Because django-rest-framework's object existence validation has been bypassed, we have to explicitly resolve
         # the FK references into objects ourselves
+        dependency_errors = {}
         for dependency_field in DEPENDENCY_ID_FIELDS:
             if dependency_field in object_data and object_data[dependency_field]:
                 dependency_pk = object_data[dependency_field]
                 if dependency_pk not in created_objects_by_pk:
-                    raise serializers.ValidationError(
-                        {
-                            dependency_field: [
-                                f"Dependency {dependency_field} ({dependency_pk}) was not created by " "this request."
-                            ]
-                        }
-                    )
+                    dependency_errors[dependency_field] = [
+                        f"Dependency {dependency_field} ({dependency_pk}) was not created by " "this request."
+                    ]
+                    continue
                 object_data[dependency_field] = created_objects_by_pk[dependency_pk]
+
+        if dependency_errors:
+            raise serializers.ValidationError(detail=dependency_errors)
 
         return object_serializer.create(object_data)
 
