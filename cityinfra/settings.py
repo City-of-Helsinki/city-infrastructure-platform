@@ -529,6 +529,13 @@ if SENTRY_DSN:
 # Custom settings
 SRID = 3879  # the spatial reference id used for geometries
 
+# django-gisserver 2.1+ mimics GeoServer by rendering the legacy CRS notations ("EPSG:4326" and
+# "http://www.opengis.net/gml/srs/epsg.xml#<srid>") in x/y (longitude/latitude) order.
+# This WFS service has always rendered those in the authority (latitude/longitude) order,
+# so the GeoServer compatibility behaviour is disabled to keep the output stable for clients.
+GISSERVER_FORCE_XY_EPSG_4326 = False
+GISSERVER_FORCE_XY_OLD_CRS = False
+
 # Format for invidual SRID boundary box is:
 # x0,y0, x1, y1
 # for 3879 this is actually subset of it, bounding box is for Helsinki area only

@@ -64,8 +64,9 @@ _base_fields = (
         FeatureField(
             "content_s_rows",
             model_attribute="id",
-            # this is a workaround, as django-gisserver check that model attribute is an actual field
-            # property is not enough, needs to be checked if this is needed anymore when we update gisserver version.
+            # This is a workaround, as django-gisserver checks that the model attribute is an
+            # actual model field; a property is not enough. Still required in django-gisserver
+            # 2.x, see FeatureField.bind() which resolves it through Model._meta.get_field().
             xsd_class=ContentSRowSElement,
             abstract="Rows of structured content of the additional sign in priority order.",
         ),

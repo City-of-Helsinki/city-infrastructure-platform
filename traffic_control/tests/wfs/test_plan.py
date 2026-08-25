@@ -16,6 +16,8 @@ from traffic_control.tests.wfs.wfs_utils import (
     wfs_get_features_gml,
 )
 
+# The GML output exposes the Plan location as the convex hull of the related devices,
+# but the GeoJSON output returns the exact stored location geometry.
 EXPECTED_MULTIPOLYGON_COORDINATES = [
     [
         [
