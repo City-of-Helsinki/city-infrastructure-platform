@@ -496,6 +496,7 @@ def test_plan_bulk_insert_expects_new_objects(
             signpost_plan_payload(
                 id=ALT_MOUNT_PLAN_ID,
                 owner=owner.pk,
+                plan=NON_EXISTENT_ID,
                 mount_plan=NON_EXISTENT_ID,
                 device_type=signpost_sign_device_type.pk,
             ),
@@ -525,3 +526,8 @@ def test_plan_bulk_insert_expects_new_objects(
         f"Dependency mount_plan ({NON_EXISTENT_ID}) was not created by this request."
         in signpost_plan_errors[1]["mount_plan"]
     )
+
+    # Multiple missing references in the same object will result in multiple complaints
+    assert len(signpost_plan_errors[1]) == 2
+    assert "plan" in signpost_plan_errors[1]
+    assert f"Dependency plan ({NON_EXISTENT_ID}) was not created by this request." in signpost_plan_errors[1]["plan"]
