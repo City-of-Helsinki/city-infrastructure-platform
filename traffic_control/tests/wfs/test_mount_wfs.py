@@ -21,30 +21,38 @@ from traffic_control.tests.wfs.wfs_utils import (
     gml_feature_geometry,
     gml_feature_id,
     gml_get_features,
+    swapped_coordinates,
     test_point_helsinki,
     wfs_get_features_geojson,
     wfs_get_features_gml,
 )
-from traffic_control.views.wfs.utils import YXGML32Renderer
 
 TEST_MULTI_POINT = MultiPoint(test_point, test_point_2)
 EXPECTED_MULTIPOINT = (
-    '<ns0:MultiGeometry xmlns:ns0="http://www.opengis.net/gml/3.2" ns0:id="{object_id}"'
+    '<ns0:MultiPoint xmlns:ns0="http://www.opengis.net/gml/3.2" ns0:id="{object_id}"'
     ' srsName="urn:ogc:def:crs:EPSG::3879">'
+    "<ns0:pointMember>"
     '<ns0:Point><ns0:pos srsDimension="3">6645449.071 25487927.144 0.0</ns0:pos></ns0:Point>'
-    '<ns0:Point><ns0:pos srsDimension="3">6645445.071 25487923.144 0.0</ns0:pos></ns0:Point></ns0:MultiGeometry>'
+    "</ns0:pointMember>"
+    "<ns0:pointMember>"
+    '<ns0:Point><ns0:pos srsDimension="3">6645445.071 25487923.144 0.0</ns0:pos></ns0:Point>'
+    "</ns0:pointMember></ns0:MultiPoint>"
 )
 
 TEST_MULTI_LINE = MultiLineString(test_line, test_line_2)
 EXPECTED_MULTILINE = (
-    '<ns0:MultiGeometry xmlns:ns0="http://www.opengis.net/gml/3.2" ns0:id="{object_id}"'
+    '<ns0:MultiLineString xmlns:ns0="http://www.opengis.net/gml/3.2" ns0:id="{object_id}"'
     ' srsName="urn:ogc:def:crs:EPSG::3879">'
+    "<ns0:lineStringMember>"
     '<ns0:LineString><ns0:posList srsDimension="3">'
     "6645440.071 25487918.144 0.0 6645440.071 25487967.144 0.0"
     "</ns0:posList></ns0:LineString>"
+    "</ns0:lineStringMember>"
+    "<ns0:lineStringMember>"
     '<ns0:LineString><ns0:posList srsDimension="3">'
     "6645459.071 25487937.144 0.0 6645469.071 25487947.144 0.0</ns0:posList></ns0:LineString>"
-    "</ns0:MultiGeometry>"
+    "</ns0:lineStringMember>"
+    "</ns0:MultiLineString>"
 )
 
 TEST_GEOMETRY_COLLECTION = GeometryCollection(test_point, test_multi_polygon)
@@ -52,7 +60,7 @@ EXPECTED_GEOMETRY_COLLECTION = (
     '<ns0:MultiGeometry xmlns:ns0="http://www.opengis.net/gml/3.2" ns0:id="{object_id}"'
     ' srsName="urn:ogc:def:crs:EPSG::3879">'
     '<ns0:Point><ns0:pos srsDimension="3">6645449.071 25487927.144 0.0</ns0:pos></ns0:Point>'
-    "<ns0:MultiGeometry><ns0:Polygon><ns0:exterior>"
+    "<ns0:MultiPolygon><ns0:Polygon><ns0:exterior>"
     '<ns0:LinearRing><ns0:posList srsDimension="3">'
     "6645440.071 25487918.144 0.0 6645489.071 25487918.144 0.0 6645489.071 25487967.144 0.0 "
     "6645440.071 25487967.144 0.0 6645440.071 25487918.144 0.0"
@@ -63,7 +71,7 @@ EXPECTED_GEOMETRY_COLLECTION = (
     "6646439.071 25488967.144 0.0 6646439.071 25488917.144 0.0"
     "</ns0:posList></ns0:LinearRing>"
     "</ns0:exterior></ns0:Polygon>"
-    "</ns0:MultiGeometry></ns0:MultiGeometry>"
+    "</ns0:MultiPolygon></ns0:MultiGeometry>"
 )
 
 
@@ -76,7 +84,7 @@ EXPECTED_POLYGON_LOCATION = (
 )
 
 EXPECTED_MULTIPOLYGON = (
-    '<ns0:MultiGeometry xmlns:ns0="http://www.opengis.net/gml/3.2" ns0:id="{object_id}"'
+    '<ns0:MultiPolygon xmlns:ns0="http://www.opengis.net/gml/3.2" ns0:id="{object_id}"'
     ' srsName="urn:ogc:def:crs:EPSG::3879">'
     '<ns0:Polygon><ns0:exterior><ns0:LinearRing><ns0:posList srsDimension="3">'
     "6645440.071 25487918.144 0.0 6645489.071 25487918.144 0.0 "
@@ -87,7 +95,7 @@ EXPECTED_MULTIPOLYGON = (
     "6646439.071 25488917.144 0.0 6646489.071 25488917.144 0.0 "
     "6646489.071 25488967.144 0.0 6646439.071 25488967.144 0.0 "
     "6646439.071 25488917.144 0.0</ns0:posList>"
-    "</ns0:LinearRing></ns0:exterior></ns0:Polygon></ns0:MultiGeometry>"
+    "</ns0:LinearRing></ns0:exterior></ns0:Polygon></ns0:MultiPolygon>"
 )
 
 
@@ -170,7 +178,7 @@ def _get_expected_centroid_location(geometry):
             test_multi_polygon,
             _get_expected_centroid_location(test_multi_polygon),
         ),
-        ("mountplan", MountPlanFactory, test_line, " ".join(YXGML32Renderer.get_swapped_coordinates(test_line)[0])),
+        ("mountplan", MountPlanFactory, test_line, " ".join(swapped_coordinates(test_line))),
         (
             "mountplancentroid",
             MountPlanFactory,
@@ -181,7 +189,7 @@ def _get_expected_centroid_location(geometry):
             "mountreal",
             MountRealFactory,
             test_line,
-            " ".join(YXGML32Renderer.get_swapped_coordinates(test_line)[0]),
+            " ".join(swapped_coordinates(test_line)),
         ),
         (
             "mountrealcentroid",
@@ -278,7 +286,7 @@ def test__wfs_mount__gml(model_name: str, factory, location: GEOSGeometry, expec
     assert gml_feature_id(feature) == f"{model_name}.{device.id}"
     # Ensure the coordinate order is [Y,X,Z] EPSG:3879
     assert gml_feature_geometry(feature, geometry_type_str) == expected_location_value.format(
-        object_id=f"{model_name}.{device.id}.1"
+        object_id=f"{device._meta.object_name}.{device.id}.1"
     )
     assert gml_feature_crs(feature, geometry_type_str) == EPSG_3879_URN
     _assert_envelope(feature)

@@ -1,3 +1,4 @@
+import itertools
 import json
 from typing import List, Optional, Union
 from urllib.parse import urlencode
@@ -46,6 +47,21 @@ namespaces = {
 }
 
 MULTI_GEOMETRIES = ["MultiPolygon", "MultiPoint", "MultiLineString", "GeometryCollection"]
+
+# GEOS geometry class name -> GML 3.2 element name. Only GeometryCollection differs.
+GML_TAG_BY_GEOMETRY_TYPE = {"GeometryCollection": "MultiGeometry"}
+
+
+def gml_tag_for(geometry_type: str) -> str:
+    """Return the GML 3.2 element name used for a GEOS geometry class name.
+
+    Args:
+        geometry_type (str): The GEOS geometry class name, e.g. ``"MultiPolygon"``.
+
+    Returns:
+        str: The matching GML element local name, e.g. ``"MultiPolygon"``.
+    """
+    return GML_TAG_BY_GEOMETRY_TYPE.get(geometry_type, geometry_type)
 
 
 def wfs_url_get_features(
@@ -109,6 +125,29 @@ def get_response_content(response) -> str:
     return content.decode("utf8")
 
 
+def swapped_coordinates(geometry) -> List[str]:
+    """Return the geometry coordinates as strings in the north/east (y, x) axis order.
+
+    EPSG:3879 is an authority-ordered (latitude, longitude) coordinate reference system, so GML
+    output lists the y coordinate before the x coordinate.
+
+    Args:
+        geometry: A GEOS geometry whose ``tuple`` yields the coordinates in (x, y[, z]) order.
+
+    Returns:
+        List[str]: The coordinate values as strings, with x and y swapped per coordinate.
+    """
+    dimensions = 3 if geometry.hasz else 2
+    coordinates = list(map(str, itertools.chain.from_iterable(geometry.tuple)))
+
+    swapped = []
+    for start in range(0, len(coordinates), dimensions):
+        chunk = coordinates[start : start + dimensions]
+        swapped.extend([chunk[1], chunk[0], *chunk[2:]])
+
+    return swapped
+
+
 # --- GML ---#
 
 
@@ -127,9 +166,7 @@ def gml_feature_geometry(feature_element: ElementTree.Element, geometry_type="Po
 
 
 def gml_feature_crs(feature_element: ElementTree.Element, geometry_type="Point"):
-    return feature_element.find(
-        f"./app:location/gml:{'MultiGeometry' if geometry_type in MULTI_GEOMETRIES else geometry_type}", namespaces
-    ).get("srsName")
+    return feature_element.find(f"./app:location/gml:{gml_tag_for(geometry_type)}", namespaces).get("srsName")
 
 
 def gml_envelope(feature_element: ElementTree.Element):
@@ -144,7 +181,7 @@ def _get_xpath_for_geometry_position(geometry_type: str):
     elif geometry_type == "Polygon":
         return "./app:location/gml:Polygon/gml:exterior/gml:LinearRing/gml:posList"
     elif geometry_type in MULTI_GEOMETRIES:
-        return "./app:location/gml:MultiGeometry"
+        return f"./app:location/gml:{gml_tag_for(geometry_type)}"
     elif geometry_type == "LineString":
         return "./app:location/gml:LineString/gml:posList"
 

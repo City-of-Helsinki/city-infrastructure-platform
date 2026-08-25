@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.db import transaction
+from django.utils.decorators import method_decorator
 from gisserver.features import ServiceDescription
 from gisserver.operations import wfs20
 from gisserver.views import WFSView
@@ -20,6 +22,12 @@ from traffic_control.views.wfs import (
 from traffic_control.views.wfs.common import CustomGetFeature
 
 
+# GetFeature responses are streamed with StreamingHttpResponse while a server-side (named)
+# cursor is still open. With the project-wide ATOMIC_REQUESTS the transaction is committed as
+# soon as the view returns, which closes that cursor before the response body is consumed
+# ("named cursor isn't valid anymore"). WFS is read-only, so opting out of ATOMIC_REQUESTS
+# keeps the connection in autocommit and the cursor alive for the whole stream.
+@method_decorator(transaction.non_atomic_requests, name="dispatch")
 class CityInfrastructureWFSView(WFSView):
     service_description = ServiceDescription(title="City Infra WFS API")
 

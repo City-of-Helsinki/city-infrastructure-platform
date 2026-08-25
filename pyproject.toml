@@ -14,7 +14,7 @@ dependencies = [
     "django-environ",
     "django-extensions",
     "django-filter",
-    "django-gisserver",
+    "django-gisserver>=2.4.0,<3",
     "django-health-check",
     "django-helusers",
     "django-import-export",
