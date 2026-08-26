@@ -7,6 +7,7 @@ from django.core.management import call_command
 from traffic_control.models import (
     AdditionalSignReal,
     MountReal,
+    RevertStreetScanImportRun,
     SignpostReal,
     TrafficSignReal,
 )
@@ -461,3 +462,39 @@ def test_dry_run(tmp_path, user, base_time_created, base_time_updated):
     assert signpost.updated_at == base_time_updated
     assert traffic_sign.updated_at == base_time_updated
     assert additional_sign.updated_at == base_time_updated
+
+
+@pytest.mark.django_db
+def test_command_execution_produces_execution_log(tmp_path, user, base_time_created, base_time_updated):
+    """Running the command produces a RevertStreetScanImportRun object with execution log."""
+    mount = MountRealFactory(id=UUID_1, created_by=user, updated_by=user)
+    signpost = SignpostRealFactory(id=UUID_2, created_by=user, updated_by=user, condition=1, mount_real=mount)
+    TrafficSignRealFactory(id=UUID_3, created_by=user, updated_by=user, condition=1, mount_real=mount)
+    AdditionalSignRealFactory(id=UUID_4, created_by=user, updated_by=user, condition=1, signpost_real=signpost)
+
+    MountReal.objects.filter(id=UUID_1).update(updated_at=base_time_updated, created_at=base_time_created)
+    SignpostReal.objects.filter(id=UUID_2).update(updated_at=base_time_updated, created_at=base_time_created)
+    TrafficSignReal.objects.filter(id=UUID_3).update(updated_at=base_time_updated, created_at=base_time_created)
+    AdditionalSignReal.objects.filter(id=UUID_4).update(updated_at=base_time_updated, created_at=base_time_created)
+
+    file_path = write_jsonl(
+        tmp_path,
+        [
+            {"action": "create", "object_type": "MountReal", "db_id": UUID_1},
+            {"action": "create", "object_type": "SignpostReal", "db_id": UUID_2},
+            {"action": "create", "object_type": "SignpostReal", "db_id": UUID_8},  # non-existing object
+            {"action": "update", "object_type": "TrafficSignReal", "db_id": UUID_3, "old": {"condition": 5}},
+            {"action": "update", "object_type": "AdditionalSignReal", "db_id": UUID_4, "old": {"condition": 5}},
+        ],
+    )
+
+    assert RevertStreetScanImportRun.objects.exists() is False  # Sanity check
+
+    call_command("revert_import_streetscan_signs_v2", file_path=file_path, dry_run=True)
+    assert RevertStreetScanImportRun.objects.count() == 1
+    run = RevertStreetScanImportRun.objects.first()
+
+    # Check that some expected messages are in the execution log
+    assert "Reverting 1 update operations for TrafficSignReal" in run.execution_log
+    assert f"SignpostReal {UUID_8} does not exist" in run.execution_log
+    assert "No secondary AdditionalSignReal objects orphaned" in run.execution_log
