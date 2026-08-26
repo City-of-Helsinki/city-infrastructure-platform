@@ -12,6 +12,7 @@ from django.utils import timezone
 
 from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models import AdditionalSignReal, MountReal, SignpostReal, TrafficSignReal
+from traffic_control.models.revert_streetscan_import import RevertStreetScanImportRun
 from users.models import User
 from users.utils import get_system_user
 
@@ -47,6 +48,10 @@ class SplitStringsAction(argparse.Action):
 
 class Command(TrackableCommand):
     help = "Revert the effects of an import_streetscan_signs_v2 run"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.execution_log: list[str] = []
 
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
@@ -96,13 +101,13 @@ class Command(TrackableCommand):
         model_names: list[str],
         **_kwargs: dict,
     ) -> None:
-        timestamp = timezone.now()
+        start_timestamp = timezone.now()
         user = get_system_user()
         if dry_run:
-            self.stdout.write("Running in --dry-run mode, all operations will be reverted at the end of the process")
+            self._log("Running in --dry-run mode, all operations will be reverted at the end of the process")
 
-        self.stdout.write(f"Models to revert: {', '.join(model_names)}")
-        self.stdout.write(f"Object IDs to revert: {', '.join(ids) if ids else 'all'}")
+        self._log(f"Models to revert: {', '.join(model_names)}")
+        self._log(f"Object IDs to revert: {', '.join(ids) if ids else 'all'}")
 
         # [MODEL][ACTION_TYPE] -> [...ACTIONS]
         actions_by_model_and_action_type: dict[type[ModelAffectedByImport], dict[str, list]] = defaultdict(
@@ -137,14 +142,15 @@ class Command(TrackableCommand):
                     continue
                 actions = actions_by_model_and_action_type[model][action_type]
                 actions.reverse()
-                self.stdout.write(f"Reverting {len(actions)} {action_type} operations for {model.__name__}...")
+                message = f"Reverting {len(actions)} {action_type} operations for {model.__name__}..."
+                self._log(message)
                 new_orphaned_pks_per_model = self.reverse_actions(
                     model=model,
                     action_type=action_type,
                     actions=actions,
                     limit_to_pks=ids,
                     user=user,
-                    timestamp=timestamp,
+                    timestamp=start_timestamp,
                 )
                 for key, values in new_orphaned_pks_per_model.items():
                     orphaned_pks_per_model[key].update(values)
@@ -154,12 +160,23 @@ class Command(TrackableCommand):
                 orphaned_pks_per_model=orphaned_pks_per_model,
                 update_by_model_and_pk=update_by_model_and_pk,
                 user=user,
-                timestamp=timestamp,
+                timestamp=start_timestamp,
             )
 
             if dry_run:
-                self.stdout.write("Running in --dry-run mode, cancelling transaction.")
+                self._log("Running in --dry-run mode, cancelling transaction.")
                 transaction.set_rollback(True)
+
+        # Register RevertStreetScanImportRun object at the end of the operation
+        RevertStreetScanImportRun.objects.create(
+            started_at=start_timestamp,
+            completed_at=timezone.now(),
+            dry_run=dry_run,
+            file_path=file_path,
+            ids_param=ids,
+            models_param=model_names,
+            execution_log="\n".join(self.execution_log),
+        )
 
     def reverse_actions(
         self,
@@ -188,11 +205,8 @@ class Command(TrackableCommand):
             deleted_qs.delete()
             missing_pks = pks - deleted_pks
             for pk in missing_pks:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"{model.__name__} {pk} does not exist, unable to revert {action_type} operation"
-                    )
-                )
+                message = f"{model.__name__} {pk} does not exist, unable to revert {action_type} operation"
+                self._log(message)
             return orphaned_pks_by_model
 
         entries = []
@@ -207,11 +221,8 @@ class Command(TrackableCommand):
                     entries.append(entry)
                 except model.DoesNotExist:
                     pk = action["db_id"]
-                    self.stdout.write(
-                        self.style.WARNING(
-                            f"{model.__name__} {pk} does not exist, unable to revert {action_type} operation"
-                        )
-                    )
+                    message = f"{model.__name__} {pk} does not exist, unable to revert {action_type} operation"
+                    self._log(message)
                     continue
         fields = set(actions[0]["old"]) | {"updated_by", "updated_at"}
         model.objects.bulk_update(entries, fields, BATCH_SIZE)
@@ -282,33 +293,36 @@ class Command(TrackableCommand):
         """Handles the final updates for secondary objects affected by reverted creates."""
         for model, pks in orphaned_pks_per_model.items():
             # We need to force a last update for secondary objects that have been affected by reverted create (left
-            # operator of intersection) and have an available update operation to be reverted (right operator of
-            # intersection)
+            # operator of set intersection) and have an available update operation to be reverted (right operator of
+            # set intersection)
             revertible_orphaned_pks = pks & set(update_by_model_and_pk[model])
             non_revertible_orphaned_pks = pks - revertible_orphaned_pks
 
             if non_revertible_orphaned_pks:
                 sorted_pks = ", ".join(sorted(non_revertible_orphaned_pks))
-                self.stdout.write(
+                message = (
                     f"{len(non_revertible_orphaned_pks)} secondary {model.__name__} objects orphaned by reverted "
-                    f"CREATE operations do not have pending UPDATE operations and cannot be reverted: "
-                    f"{sorted_pks}"
+                    f"CREATE operations do not have pending UPDATE operations and cannot be reverted: {sorted_pks}"
                 )
+                self._log(message)
 
             entries = model.objects.filter(
                 pk__in=revertible_orphaned_pks,
                 updated_at__lt=timestamp,  # Skip anything we have already updated during this revert operation
             )
             if len(entries) == 0:
-                self.stdout.write(
+                message = (
                     f"No secondary {model.__name__} objects orphaned by reverted CREATE operations have pending "
                     "UPDATE operations to be reverted."
                 )
+                self._log(message)
                 continue
-            self.stdout.write(
+
+            message = (
                 f"{len(entries)} secondary {model.__name__} objects orphaned by reverted CREATE operations have "
                 "pending UPDATE operations to be reverted."
             )
+            self._log(message)
 
             for entry in entries:
                 row = update_by_model_and_pk[model][str(entry.pk)]
@@ -318,3 +332,7 @@ class Command(TrackableCommand):
                 "updated_at",
             }
             model.objects.bulk_update(entries, fields, BATCH_SIZE)
+
+    def _log(self, message: str):
+        self.stdout.write(message)
+        self.execution_log.append(message)

@@ -21,6 +21,7 @@ from traffic_control.admin.mount import (
 from traffic_control.admin.owner import OwnerAdmin
 from traffic_control.admin.parking_zone_update_info import ParkingZoneUpdateInfoAdmin
 from traffic_control.admin.plan import PlanAdmin
+from traffic_control.admin.revert_streetscan_import_v2 import RevertStreetScanImportRunAdmin
 from traffic_control.admin.road_marking import (
     RoadMarkingPlanAdmin,
     RoadMarkingPlanFileInline,

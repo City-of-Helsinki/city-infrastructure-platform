@@ -37,6 +37,7 @@ from traffic_control.models.operational_area import GroupOperationalArea, Operat
 from traffic_control.models.parking_zone_update_info import ParkingZoneUpdateInfo
 from traffic_control.models.plan import Plan, PlanGeometryImportLog
 from traffic_control.models.responsible_entity import GroupResponsibleEntity, ResponsibleEntity
+from traffic_control.models.revert_streetscan_import import RevertStreetScanImportRun
 from traffic_control.models.road_marking import (
     ArrowDirection,
     LineDirection,
