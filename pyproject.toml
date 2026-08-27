@@ -5,70 +5,69 @@ description = ""
 authors = []
 requires-python = ">=3.12,<4"
 dependencies = [
-    "django>=5.2.16,<6",
-    "cairosvg>=2.9.0,<3",
-    "django-auditlog>=3.0.0,<4",
-    "django-colorfield>=0.11.0,<0.12",
-    "django-cors-headers>=4.3.1,<5",
-    "django-enumfields2>=3.0.2,<4",
-    "django-environ>=0.11.2,<0.12",
-    "django-extensions>=4.1,<5",
-    "django-filter>=23.5,<24",
-    "django-gisserver>=1.5.0,<2",
-    "django-health-check>=3.18.3,<4",
-    "django-helusers==1.1.0",
-    "django-import-export>=3.2.0,<4",
-    "django-mptt>=0.18.0,<0.19",
-    "django-storages[azure]>=1.13.2,<2",
-    "djangorestframework>=3.15.2,<4",
-    "djangorestframework-gis>=1.0.0,<2",
-    "docutils>=0.19,<0.20",
-    "drf-nested-routers>=0.93.4,<0.94",
-    "drf-oidc-auth>=3.0.0,<4",
-    "drf-spectacular>=0.29.0,<0.30",
-    "jsonschema>=4.19.0,<5",
-    "psycopg2>=2.9.6,<3",
-    "python-dateutil>=2.8.2,<3",
-    "pytz==2023.3.post1",
-    "requests>=2.33.0,<3",
-    "rsa>=4.6,<5",
-    "sentry-sdk>=2.8.0,<3",
-    "social-auth-app-django>=5.6.0,<6",
-    "uWSGI>=2.0.22,<3",
-    "django-advanced-password-validation>=1.2.0,<2",
-    "django-axes>=7.0.0,<8",
-    "django-admin-confirm>=1.0.1,<2",
-    "django-guardian>=3.2.0,<4",
-    "django-admin-rangefilter>=0.13.5,<0.14",
+    "django~=5.2",
+    "cairosvg",
+    "django-auditlog",
+    "django-colorfield",
+    "django-cors-headers",
+    "django-enumfields2",
+    "django-environ",
+    "django-extensions",
+    "django-filter",
+    "django-gisserver",
+    "django-health-check",
+    "django-helusers",
+    "django-import-export",
+    "django-mptt",
+    "django-storages[azure]",
+    "djangorestframework",
+    "djangorestframework-gis",
+    "docutils",
+    "drf-nested-routers",
+    "drf-oidc-auth",
+    "drf-spectacular",
+    "jsonschema",
+    "psycopg2~=2.9",
+    "python-dateutil",
+    "pytz",
+    "requests",
+    "rsa",
+    "sentry-sdk",
+    "social-auth-app-django",
+    "uWSGI",
+    "django-advanced-password-validation",
+    "django-axes",
+    "django-admin-confirm",
+    "django-guardian",
+    "django-admin-rangefilter",
 ]
 
 [dependency-groups]
 dev = [
-    "bump2version>=1.0.1,<2",
-    "coverage==7.4.0",
-    "django-debug-toolbar>=4.1.0,<5",
-    "djlint>=1.32.1,<2",
-    "factory-boy>=3.2.1,<4",
-    "ipython>=8.10.0,<9",
-    "jedi>=0.18.1,<0.19",
-    "pyobjc-core>=8.2,<9 ; sys_platform == 'darwin'",
-    "pyobjc-framework-Cocoa>=8.2,<9 ; sys_platform == 'darwin'",
-    "pyobjc-framework-FSEvents>=8.2,<9 ; sys_platform == 'darwin'",
-    "pytest>=7.3.1,<8",
-    "pytest-cov>=4.0.0,<5",
-    "pytest-django>=4.5.2,<5",
-    "pytest-watch>=4.2.0,<5",
-    "rope>=1.7.0,<2",
-    "ruff>=0.1.9,<0.2",
-    "requests-mock>=1.11.0,<2",
-    "django-zeal>=2.1.0",
+    "bump2version",
+    "coverage",
+    "django-debug-toolbar",
+    "djlint",
+    "factory-boy",
+    "ipython",
+    "jedi",
+    "pyobjc-core; sys_platform == 'darwin'",
+    "pyobjc-framework-Cocoa; sys_platform == 'darwin'",
+    "pyobjc-framework-FSEvents; sys_platform == 'darwin'",
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+    "pytest-watch",
+    "rope",
+    "ruff",
+    "requests-mock",
+    "django-zeal",
 ]
 
 [tool.uv]
 default-groups = "all"
 exclude-newer = "P7D"
 package = false
-required-version = "0.12.1"
 
 [tool.ruff]
 extend-select = [
@@ -80,6 +79,7 @@ extend-select = [
 ]
 extend-exclude = ["migrations"]
 line-length = 120
+target-version = "py312"
 
 [tool.ruff.extend-per-file-ignores]
 "__init__.py" = ["F401"]
