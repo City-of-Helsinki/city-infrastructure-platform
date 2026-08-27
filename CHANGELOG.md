@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.45.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.44.0...city-infrastructure-platform-v1.45.0) (2026-08-27)
+
+
+### Features
+
+* Add execution log for revert_import_streetscan_signs_v2 ([53cc24d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/53cc24de0e9e6368a9438bf85d839aaf359d1e97))
+* Add filtering by target model to devicetype admin list page ([d9b2928](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d9b2928d9c018da0cb380f509c8e7ec4c8e00842))
+* Replace old style unique_together with constraints + UniqueConstraint ([0939ce3](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0939ce3b8f19f9936c415da93dd9d8f785c0f1c1))
+* Support user reactivation through user detail page ([0315bd6](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0315bd6c489207ada4b585ca73dcf021743c3136))
+* Update python version to 3.12 ([b586587](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b58658722034d43c92b60ad7c51ac534b642bf11))
+
+
+### Bug Fixes
+
+* Bulk plan insert endpoint bails out too soon on missing references ([e91148b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e91148b7cbbb88fbcbf917803e3ac24dd0982120))
+* Replace deprecated properties on deactivated users email HTML ([57d3097](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/57d309782c209e2c9019701a6acc866759907f2e))
+* Send admin notifications for months with 0 deactivated users ([bb28817](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/bb28817cfec864e37ea8c526e11e513cb3ece35e))
+
 ## [1.44.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.43.0...city-infrastructure-platform-v1.44.0) (2026-08-20)
 
 
