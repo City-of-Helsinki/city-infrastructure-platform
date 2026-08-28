@@ -21,7 +21,6 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size
 from traffic_control.forms import (
@@ -123,7 +122,6 @@ class SignpostPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Geometry3DFieldAdminMixin,
-    MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
@@ -131,8 +129,10 @@ class SignpostPlanAdmin(
     CustomImportExportActionModelAdmin,
     PreviewDeviceTypeRelationMixin,
 ):
-    resource_class = SignpostPlanResource
-    extra_export_resource_classes = [SignpostPlanToRealTemplateResource]
+    resource_classes = (
+        SignpostPlanResource,
+        SignpostPlanToRealTemplateResource,
+    )
     form = SignpostPlanModelForm
     fieldsets = (
         (
@@ -302,7 +302,7 @@ class SignpostRealAdmin(
     PreviewDeviceTypeRelationMixin,
 ):
     plan_model_field_name = "signpost_plan"
-    resource_class = SignpostRealResource
+    resource_classes = (SignpostRealResource,)
     form = SignpostRealModelForm
     fieldsets = (
         (

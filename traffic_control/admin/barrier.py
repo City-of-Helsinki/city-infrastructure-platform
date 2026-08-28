@@ -21,7 +21,6 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType
 from traffic_control.forms import (
@@ -124,7 +123,6 @@ class BarrierPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Geometry3DFieldAdminMixin,
-    MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
@@ -132,8 +130,10 @@ class BarrierPlanAdmin(
     CustomImportExportActionModelAdmin,
     PreviewDeviceTypeRelationMixin,
 ):
-    resource_class = BarrierPlanResource
-    extra_export_resource_classes = [BarrierPlanToRealTemplateResource]
+    resource_classes = (
+        BarrierPlanResource,
+        BarrierPlanToRealTemplateResource,
+    )
     form = BarrierPlanModelForm
     fieldsets = (
         (
@@ -285,7 +285,7 @@ class BarrierRealAdmin(
     PreviewDeviceTypeRelationMixin,
 ):
     plan_model_field_name = "barrier_plan"
-    resource_class = BarrierRealResource
+    resource_classes = (BarrierRealResource,)
     form = BarrierRealModelForm
     fieldsets = (
         (

@@ -22,7 +22,6 @@ from traffic_control.admin.traffic_sign import OrderedTrafficSignRealInline
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.forms import (
@@ -121,15 +120,16 @@ class MountPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Geometry3DFieldAdminMixin,
-    MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
     CustomImportExportActionModelAdmin,
 ):
-    resource_class = MountPlanResource
-    extra_export_resource_classes = [MountPlanToRealTemplateResource]
+    resource_classes = (
+        MountPlanResource,
+        MountPlanToRealTemplateResource,
+    )
     form = MountPlanModelForm
     fieldsets = (
         (
@@ -271,7 +271,7 @@ class MountRealAdmin(
     CustomImportExportActionModelAdmin,
 ):
     plan_model_field_name = "mount_plan"
-    resource_class = MountRealResource
+    resource_classes = (MountRealResource,)
     form = MountRealModelForm
     fieldsets = (
         (

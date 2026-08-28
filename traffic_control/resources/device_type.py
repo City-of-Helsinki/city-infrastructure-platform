@@ -64,8 +64,9 @@ class TrafficControlDeviceTypeResource(EnumFieldResourceMixin, ModelResource):
     def dehydrate_icon_file(self, obj: TrafficControlDeviceType):
         return obj.icon_file.file.name if obj.icon_file and obj.icon_file.file else ""
 
-    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+    def before_import(self, dataset, **kwargs):
         """ID field is just informative when creating export file"""
+        super().before_import(dataset, **kwargs)
         if "id" in dataset.headers:
             del dataset["id"]
 

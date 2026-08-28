@@ -79,7 +79,11 @@ class MountPlanResource(AbstractMountResource):
     class Meta(AbstractMountResource.Meta):
         model = MountPlan
 
-        fields = AbstractMountResource.Meta.common_fields + ("plan__decision_id",)
+        fields = AbstractMountResource.Meta.common_fields + (
+            "plan__decision_id",
+            "replaces",
+            "replaced_by",
+        )
         export_order = fields
 
 

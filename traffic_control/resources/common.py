@@ -28,7 +28,7 @@ class EnumWidget(widgets.Widget):
     def __init__(self, enum=None):
         self.enum = enum
 
-    def clean(self, value, row=None, *args, **kwargs):
+    def clean(self, value, row=None, **kwargs):
         if value in [None, ""]:
             return None
         try:
@@ -41,8 +41,10 @@ class EnumWidget(widgets.Widget):
             )
             raise ValueError(message)
 
-    def render(self, value, obj=None):
-        return force_str(value.name)
+    def render(self, value, obj=None, **kwargs):
+        if value is not None:
+            return force_str(value.name)
+        return ""
 
 
 class EnumFieldResourceMixin:
@@ -68,7 +70,7 @@ class EnumFieldResourceMixin:
 
 
 class UUIDWidget(widgets.Widget):
-    def clean(self, value, row=None, *args, **kwargs):
+    def clean(self, value, row=None, **kwargs):
         if value in [None, ""]:
             return None
         if isinstance(value, UUID):
@@ -82,7 +84,6 @@ class UUIDWidget(widgets.Widget):
 class ResourceUUIDField(fields.Field):
     def get_value(self, obj):
         """Convert UUID to string to prevent the importer from thinking the value is changed, when it's not"""
-
         value = super().get_value(obj)
         if isinstance(value, UUID):
             value = str(value)
@@ -90,7 +91,7 @@ class ResourceUUIDField(fields.Field):
 
 
 class ReplacementWidget(widgets.ForeignKeyWidget):
-    def render(self, value, obj=None):
+    def render(self, value, obj=None, **kwargs):
         val = super().render(value, obj)
         if val:
             return str(val)
@@ -109,17 +110,17 @@ class ReplacementField(fields.Field):
         self.unreplace_method = unreplace_method
         super().__init__(**kwargs)
 
-    def save(self, obj, data, is_m2m=False, **kwargs):
+    def save(self, instance, row, is_m2m=False, **kwargs):
         if not self.readonly:
-            replaces_id = data.get("replaces")
-            newer_replaced = obj._meta.model.objects.get(pk=replaces_id) if replaces_id else None
-            if obj.replaces == newer_replaced:
+            replaces_id = row.get("replaces")
+            newer_replaced = instance._meta.model.objects.get(pk=replaces_id) if replaces_id else None
+            if instance.replaces == newer_replaced:
                 # No change
                 return
             if newer_replaced:
-                self.replace_method(old=newer_replaced, new=obj)
+                self.replace_method(old=newer_replaced, new=instance)
             else:
-                self.unreplace_method(obj)
+                self.unreplace_method(instance)
 
 
 class GenericDeviceBaseResource(EnumFieldResourceMixin, ModelResource):
@@ -128,7 +129,7 @@ class GenericDeviceBaseResource(EnumFieldResourceMixin, ModelResource):
     def get_queryset(self):
         return self._meta.model.objects.active()
 
-    def after_import_instance(self, instance, new, row_number=None, **kwargs):
+    def after_init_instance(self, instance, new, row, **kwargs):
         """Set created_by and updated_by users"""
         user = kwargs.pop("user", None)
         if user is None:
@@ -138,7 +139,7 @@ class GenericDeviceBaseResource(EnumFieldResourceMixin, ModelResource):
         if new:
             instance.created_by = user
 
-        super().after_import_instance(instance, new, row_number=None, **kwargs)
+        super().after_init_instance(instance, new, row, **kwargs)
 
     class Meta:
         skip_unchanged = True
@@ -160,8 +161,8 @@ class GenericDeviceBaseResource(EnumFieldResourceMixin, ModelResource):
 class ParentChildReplacementImportMixin:
     """Mixing for replacing non-UUID id values with UUIDs in parent-child relations before import"""
 
-    def before_import(self, dataset: Dataset, using_transactions, dry_run, **kwargs):
-        super().before_import(dataset, using_transactions, dry_run, **kwargs)
+    def before_import(self, dataset: Dataset, **kwargs):
+        super().before_import(dataset, **kwargs)
         self._link_children_to_parents(dataset)
 
     def _link_children_to_parents(self, dataset: Dataset):
@@ -231,9 +232,9 @@ class ParentChildReplacementPlanToRealExportMixin:
     Any UUID references to existing real devices are retained.
     """
 
-    def after_export(self, queryset: SoftDeleteQuerySet, data: Dataset, *args, **kwargs):
-        super().after_export(queryset, data, *args, **kwargs)
-        self._replace_ids_with_replaceable_values(queryset, data)
+    def after_export(self, queryset: SoftDeleteQuerySet, dataset: Dataset, **kwargs):
+        super().after_export(queryset, dataset, **kwargs)
+        self._replace_ids_with_replaceable_values(queryset, dataset)
 
     def _replace_ids_with_replaceable_values(self, queryset: SoftDeleteQuerySet, dataset: Dataset):
         id_header = self._meta.id_header
@@ -332,8 +333,8 @@ class ParentChildReplacementPlanToRealExportMixin:
 
 
 class ResponsibleEntityPermissionImportMixin:
-    def before_import(self, dataset: Dataset, using_transactions: bool, dry_run: bool, **kwargs):
-        super().before_import(dataset, using_transactions, dry_run, **kwargs)
+    def before_import(self, dataset: Dataset, **kwargs):
+        super().before_import(dataset, **kwargs)
         user: User = kwargs.pop("user", None)
 
         if user is None:

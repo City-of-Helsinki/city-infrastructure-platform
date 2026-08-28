@@ -234,7 +234,7 @@ dependencies = [
     { name = "django-guardian" },
     { name = "django-health-check" },
     { name = "django-helusers" },
-    { name = "django-import-export" },
+    { name = "django-import-export", extra = ["xlsx"] },
     { name = "django-mptt" },
     { name = "django-storages", extra = ["azure"] },
     { name = "djangorestframework" },
@@ -295,7 +295,7 @@ requires-dist = [
     { name = "django-guardian" },
     { name = "django-health-check" },
     { name = "django-helusers" },
-    { name = "django-import-export" },
+    { name = "django-import-export", extras = ["xlsx"] },
     { name = "django-mptt" },
     { name = "django-storages", extras = ["azure"] },
     { name = "djangorestframework" },
@@ -485,11 +485,11 @@ wheels = [
 
 [[package]]
 name = "diff-match-patch"
-version = "20230430"
+version = "20241021"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/48/40/7f0b68e3578453d1ccd3638cfd9682b515b9d22730903a88615f1ee92352/diff-match-patch-20230430.tar.gz", hash = "sha256:953019cdb9c9d2c9e47b5b12bcff3cf4746fc4598eb406076fa1fc27e6a1f15c", size = 43324, upload-time = "2023-04-30T21:54:01.35Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0e/ad/32e1777dd57d8e85fa31e3a243af66c538245b8d64b7265bec9a61f2ca33/diff_match_patch-20241021.tar.gz", hash = "sha256:beae57a99fa48084532935ee2968b8661db861862ec82c6f21f4acdd6d835073", size = 39962, upload-time = "2024-10-21T19:41:21.094Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/96/19/2654bccc833c946d94b84e4fa02d1ad1d2ff216bacad2e014a3dd820c735/diff_match_patch-20230430-py3-none-any.whl", hash = "sha256:dce43505fb7b1b317de7195579388df0746d90db07015ed47a85e5e44930ef93", size = 42831, upload-time = "2023-04-30T21:53:58.193Z" },
+    { url = "https://files.pythonhosted.org/packages/f7/bb/2aa9b46a01197398b901e458974c20ed107935c26e44e37ad5b0e5511e44/diff_match_patch-20241021-py3-none-any.whl", hash = "sha256:93cea333fb8b2bc0d181b0de5e16df50dd344ce64828226bda07728818936782", size = 43252, upload-time = "2024-10-21T19:41:19.914Z" },
 ]
 
 [[package]]
@@ -704,16 +704,21 @@ wheels = [
 
 [[package]]
 name = "django-import-export"
-version = "3.3.9"
+version = "4.4.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "diff-match-patch" },
     { name = "django" },
-    { name = "tablib", extra = ["html", "ods", "xls", "xlsx", "yaml"] },
+    { name = "tablib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/96/dc/915a0df2b9006cfd6870e04967964eacdfed0db3d5edf61a72b0d199407a/django_import_export-3.3.9.tar.gz", hash = "sha256:16797965e93a8001fe812c61e3b71fb858c57c1bd16da195fe276d6de685348e", size = 64625, upload-time = "2024-04-28T14:53:23.379Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/92/32/5b83cc46a70ac94c1d17144097bf8aee7d9bb401d0863652c8d5ce1d2e50/django_import_export-4.4.1.tar.gz", hash = "sha256:165dc7fdcd56a6356342eef3f88f3f3682b64b6f67e9a259a137e8b57aeff10c", size = 2238690, upload-time = "2026-05-05T12:42:44.295Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a4/06/2b474ddf52d5e2e46ea821789de6a76bc50996f0a592fdd29af1891d20af/django_import_export-3.3.9-py3-none-any.whl", hash = "sha256:dd6cabc08ed6d1bd37a392e7fb542bd7d196b615c800168f5c69f0f55f49b103", size = 112693, upload-time = "2024-04-28T14:53:20.972Z" },
+    { url = "https://files.pythonhosted.org/packages/91/d1/110aeb2acffea56d4222861b5678c2643f0bda00081e40d687077348bb7c/django_import_export-4.4.1-py3-none-any.whl", hash = "sha256:8be2782e505ae303ccb02070a1b4c528995922126fca9ee449eb28666835dd4b", size = 157691, upload-time = "2026-05-05T12:42:42.554Z" },
+]
+
+[package.optional-dependencies]
+xlsx = [
+    { name = "tablib", extra = ["xlsx"] },
 ]
 
 [[package]]
@@ -1130,15 +1135,6 @@ wheels = [
 ]
 
 [[package]]
-name = "markuppy"
-version = "1.14"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4e/ca/f43541b41bd17fc945cfae7ea44f1661dc21ea65ecc944a6fa138eead94c/MarkupPy-1.14.tar.gz", hash = "sha256:1adee2c0a542af378fe84548ff6f6b0168f3cb7f426b46961038a2bcfaad0d5f", size = 6815, upload-time = "2017-08-01T22:50:19.282Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/cc/e5403fe82ad2720dd8f821270c5cfe14007b97f9d0c906a834eb613608b2/markuppy-1.14-py3-none-any.whl", hash = "sha256:dc893880c5551d8388b688eef1d425dd48bb0b7d5bc74414fae86764ff4660ee", size = 8449, upload-time = "2025-03-13T01:40:40.687Z" },
-]
-
-[[package]]
 name = "matplotlib-inline"
 version = "0.1.7"
 source = { registry = "https://pypi.org/simple" }
@@ -1158,15 +1154,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/6d/fa/fbf40010379040316
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7e/80/cab10959dc1faead58dc8384a781dfbf93cb4d33d50988f7a69f1b7c9bbe/oauthlib-3.2.2-py3-none-any.whl", hash = "sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca", size = 151688, upload-time = "2022-10-17T20:04:24.037Z" },
 ]
-
-[[package]]
-name = "odfpy"
-version = "1.4.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "defusedxml" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/97/73/8ade73f6749177003f7ce3304f524774adda96e6aaab30ea79fd8fda7934/odfpy-1.4.1.tar.gz", hash = "sha256:db766a6e59c5103212f3cc92ec8dd50a0f3a02790233ed0b52148b70d3c438ec", size = 717045, upload-time = "2020-01-18T16:55:48.852Z" }
 
 [[package]]
 name = "openpyxl"
@@ -1877,29 +1864,16 @@ wheels = [
 
 [[package]]
 name = "tablib"
-version = "3.5.0"
+version = "3.10.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/95/6a/d62bb27ecd6371cd10fc7f68fa9b06cf46e4771582f2aae94fb56c24add7/tablib-3.5.0.tar.gz", hash = "sha256:f6661dfc45e1d4f51fa8a6239f9c8349380859a5bfaa73280645f046d6c96e33", size = 94795, upload-time = "2023-06-11T17:09:35.956Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/b9/59d9c8b9c34642e7a718e8a1a7a91af3eb9b48f79bac794263702d41519c/tablib-3.10.0.tar.gz", hash = "sha256:781cfa9a42de8f33c52aff857fd0a04e483de4fd1c53eaaa9a6aeac62bad11de", size = 127128, upload-time = "2026-07-31T17:30:15.577Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cf/02/404b9a79578e1a3512bf3ae5e1fb0766859ccf3b55a83ab1e7ac4aeb7bed/tablib-3.5.0-py3-none-any.whl", hash = "sha256:9821caa9eca6062ff7299fa645e737aecff982e6b2b42046928a6413c8dabfd9", size = 45479, upload-time = "2023-06-11T17:08:43.883Z" },
+    { url = "https://files.pythonhosted.org/packages/fc/0f/3ae17545ff976687f679ed3a101df7017135ee04769e858a4ccea0cc3f3e/tablib-3.10.0-py3-none-any.whl", hash = "sha256:5721bf3a52d491f8f843628a3a3200db164f6ad9e92fb6eaa64dc3f945f30ad9", size = 50170, upload-time = "2026-07-31T17:30:04.925Z" },
 ]
 
 [package.optional-dependencies]
-html = [
-    { name = "markuppy" },
-]
-ods = [
-    { name = "odfpy" },
-]
-xls = [
-    { name = "xlrd" },
-    { name = "xlwt" },
-]
 xlsx = [
     { name = "openpyxl" },
-]
-yaml = [
-    { name = "pyyaml" },
 ]
 
 [[package]]
@@ -2014,22 +1988,4 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/0b/02/ae6ceac1baeda530866a85075641cec12989bd8d31af6d5ab4a3e8c92f47/webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923", size = 9721, upload-time = "2017-04-05T20:21:34.189Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f4/24/2a3e3df732393fed8b3ebf2ec078f05546de641fe1b667ee316ec1dcf3b7/webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78", size = 11774, upload-time = "2017-04-05T20:21:32.581Z" },
-]
-
-[[package]]
-name = "xlrd"
-version = "2.0.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a6/b3/19a2540d21dea5f908304375bd43f5ed7a4c28a370dc9122c565423e6b44/xlrd-2.0.1.tar.gz", hash = "sha256:f72f148f54442c6b056bf931dbc34f986fd0c3b0b6b5a58d013c9aef274d0c88", size = 100259, upload-time = "2020-12-11T10:14:22.201Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a6/0c/c2a72d51fe56e08a08acc85d13013558a2d793028ae7385448a6ccdfae64/xlrd-2.0.1-py2.py3-none-any.whl", hash = "sha256:6a33ee89877bd9abc1158129f6e94be74e2679636b8a205b43b85206c3f0bbdd", size = 96531, upload-time = "2020-12-11T10:14:20.877Z" },
-]
-
-[[package]]
-name = "xlwt"
-version = "1.3.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/06/97/56a6f56ce44578a69343449aa5a0d98eefe04085d69da539f3034e2cd5c1/xlwt-1.3.0.tar.gz", hash = "sha256:c59912717a9b28f1a3c2a98fd60741014b06b043936dcecbc113eaaada156c88", size = 153929, upload-time = "2017-08-22T06:47:16.498Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/44/48/def306413b25c3d01753603b1a222a011b8621aed27cd7f89cbc27e6b0f4/xlwt-1.3.0-py2.py3-none-any.whl", hash = "sha256:a082260524678ba48a297d922cc385f58278b8aa68741596a87de01a9c628b2e", size = 99981, upload-time = "2017-08-22T06:47:15.281Z" },
 ]

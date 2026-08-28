@@ -28,7 +28,6 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import (
     Condition,
@@ -122,7 +121,7 @@ class TrafficSignRealFileAdmin(GuardedModelAdmin, UploadsFileProxyMixin):
 
 @admin.register(TrafficControlDeviceTypeIcon)
 class TrafficControlDeviceTypeIconAdmin(CustomImportExportActionModelAdmin, PreviewImageFileFieldMixin):
-    resource_class = TrafficControlDeviceTypeIconResource
+    resource_classes = (TrafficControlDeviceTypeIconResource,)
     form = TrafficControlDeviceTypeIconForm
     list_display = ("id", "image_file_preview", "file")
     readonly_fields = ("image_file_preview",)
@@ -137,7 +136,7 @@ class TrafficControlDeviceTypeAdmin(
     PreviewIconFileRelationMixin,
 ):
     form = TrafficControlDeviceTypeForm
-    resource_class = TrafficControlDeviceTypeResource
+    resource_classes = (TrafficControlDeviceTypeResource,)
     list_display = (
         "code",
         "icon_preview",
@@ -216,7 +215,6 @@ class TrafficSignPlanAdmin(
     SoftDeleteAdminMixin,
     UserStampedAdminMixin,
     Geometry3DFieldAdminMixin,
-    MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
@@ -224,8 +222,7 @@ class TrafficSignPlanAdmin(
     CustomImportExportActionModelAdmin,
     PreviewDeviceTypeRelationMixin,
 ):
-    resource_class = TrafficSignPlanResource
-    extra_export_resource_classes = [TrafficSignPlanToRealTemplateResource]
+    resource_classes = (TrafficSignPlanResource, TrafficSignPlanToRealTemplateResource)
     form = TrafficSignPlanModelForm
     fieldsets = (
         (
@@ -431,7 +428,7 @@ class TrafficSignRealAdmin(
     PreviewDeviceTypeRelationMixin,
 ):
     plan_model_field_name = "traffic_sign_plan"
-    resource_class = TrafficSignRealResource
+    resource_classes = (TrafficSignRealResource,)
     form = TrafficSignRealModelForm
     fieldsets = (
         (
