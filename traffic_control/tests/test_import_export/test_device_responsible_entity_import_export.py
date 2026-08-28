@@ -1,5 +1,6 @@
 import pytest
 from django.core.exceptions import ValidationError
+from import_export import exceptions
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.resources import FurnitureSignpostPlanResource, FurnitureSignpostRealResource
@@ -31,7 +32,7 @@ def test__import__device__responsible_entity__user_cannot_import_without_re(
 
     user = get_user()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         resource().import_data(dataset, raise_errors=True, user=user)
     assert model.objects.all().count() == 0
 
@@ -108,7 +109,7 @@ def test__import__device__responsible_entity__user_cannot_import_new_devices_to_
     dataset = get_import_dataset(resource, format=format, delete_columns=["id"])
     model.objects.all().delete()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         resource().import_data(dataset, raise_errors=True, user=user)
     assert model.objects.all().count() == 0
 
@@ -134,7 +135,7 @@ def test__import__device__responsible_entity__user_cannot_move_device_from_anoth
     device.responsible_entity = another_re_project
     device.save()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         resource().import_data(dataset, raise_errors=True, user=user)
     assert model.objects.filter(responsible_entity=re_project).count() == 0
 
@@ -159,7 +160,7 @@ def test__import__device__responsible_entity__user_cannot_move_device_from_non_r
     device.responsible_entity = None
     device.save()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         resource().import_data(dataset, raise_errors=True, user=user)
     assert model.objects.filter(responsible_entity=re_project).count() == 0
 
@@ -185,7 +186,7 @@ def test__import__device__responsible_entity__user_cannot_move_device_from_non_r
     device.responsible_entity = None
     device.save()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         resource().import_data(dataset, raise_errors=True, user=user)
     assert model.objects.filter(responsible_entity=another_re_project).count() == 0
 
@@ -210,7 +211,7 @@ def test__import__device__responsible_entity__user_cannot_remove_device_from_the
     device.responsible_entity = re_project
     device.save()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         resource().import_data(dataset, raise_errors=True, user=user)
     assert model.objects.filter(responsible_entity=re_project).count() == 1
 
@@ -236,7 +237,7 @@ def test__import__device__responsible_entity__user_cannot_remove_device_from_ano
     device.responsible_entity = another_re_project
     device.save()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         resource().import_data(dataset, raise_errors=True, user=user)
     assert model.objects.filter(responsible_entity=another_re_project).count() == 1
 
@@ -263,7 +264,7 @@ def test__import__device__responsible_entity__user_cannot_move_device_to_their_p
     device.responsible_entity = re_project
     device.save()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         resource().import_data(dataset, raise_errors=True, user=user)
     assert model.objects.filter(responsible_entity=re_parent).count() == 0
 

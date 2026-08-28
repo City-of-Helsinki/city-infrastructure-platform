@@ -95,6 +95,8 @@ class TrafficSignPlanResource(AbstractTrafficSignResource):
         fields = AbstractTrafficSignResource.Meta.common_fields + (
             "mount_plan__id",
             "plan__decision_id",
+            "replaces",
+            "replaced_by",
         )
         export_order = fields
 

@@ -23,7 +23,6 @@ from traffic_control.admin.common import (
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    MultiResourceExportActionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus, LaneNumber, LaneType, Reflection, Size, Surface
 from traffic_control.forms import (
@@ -181,7 +180,6 @@ class AdditionalSignPlanAdmin(
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
     Geometry3DFieldAdminMixin,
-    MultiResourceExportActionAdminMixin,
     AdminFieldInitialValuesMixin,
     UpdatePlanLocationAdminMixin,
     admin.GISModelAdmin,
@@ -190,8 +188,7 @@ class AdditionalSignPlanAdmin(
     PreviewDeviceTypeRelationMixin,
     FormattedContentsAdminMixin,
 ):
-    resource_class = AdditionalSignPlanResource
-    extra_export_resource_classes = [AdditionalSignPlanToRealTemplateResource]
+    resource_classes = (AdditionalSignPlanResource, AdditionalSignPlanToRealTemplateResource)
     form = AdditionalSignPlanModelForm
     fieldsets = (
         (
@@ -354,7 +351,7 @@ class AdditionalSignRealAdmin(
     FormattedContentsAdminMixin,
 ):
     plan_model_field_name = "additional_sign_plan"
-    resource_class = AdditionalSignRealResource
+    resource_classes = (AdditionalSignRealResource,)
     form = AdditionalSignRealModelForm
     fieldsets = (
         (

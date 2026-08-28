@@ -95,6 +95,8 @@ class RoadMarkingPlanResource(AbstractRoadMarkingResource):
         fields = AbstractRoadMarkingResource.Meta.common_fields + (
             "traffic_sign_plan__id",
             "plan__decision_id",
+            "replaces",
+            "replaced_by",
         )
         export_order = fields
 

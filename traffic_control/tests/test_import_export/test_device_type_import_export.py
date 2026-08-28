@@ -116,7 +116,7 @@ def test__traffic_control_device_type__export(  # noqa: C901
     if content_schema:
         assert json.loads(added_data["content_schema"]) == dt.content_schema
     else:
-        assert added_data["content_schema"] == ""
+        assert added_data["content_schema"] is None
 
 
 @pytest.mark.parametrize(

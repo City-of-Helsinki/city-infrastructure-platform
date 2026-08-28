@@ -3,6 +3,7 @@ from uuid import UUID
 import pytest
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
+from import_export import exceptions
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.resources.furniture_signpost import (
@@ -232,7 +233,7 @@ def test__furniture_signpost_real__import__responsible_entity_permission__group(
     dataset = FurnitureSignpostRealResource().export()
 
     user = get_user()
-    with pytest.raises(ValidationError):
+    with pytest.raises(exceptions.ImportError), pytest.raises(ValidationError):
         FurnitureSignpostRealResource().import_data(dataset, raise_errors=True, user=user)
 
     group = Group.objects.create(name="test group")

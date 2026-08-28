@@ -77,7 +77,11 @@ class BarrierPlanResource(AbstractBarrierResource):
     class Meta(AbstractBarrierResource.Meta):
         model = BarrierPlan
 
-        fields = AbstractBarrierResource.Meta.common_fields + ("plan__decision_id",)
+        fields = AbstractBarrierResource.Meta.common_fields + (
+            "plan__decision_id",
+            "replaces",
+            "replaced_by",
+        )
         export_order = fields
 
 

@@ -29,7 +29,6 @@ from traffic_control.admin.common import OperationalAreaListFilter, TrafficContr
 from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
-    MultiResourceExportActionAdminMixin,
     ResponsibleEntityPermissionAdminMixin,
 )
 from traffic_control.enums import Condition, InstallationStatus
@@ -211,14 +210,10 @@ class AbstractFurnitureSignpostAdmin(
 
 @admin.register(FurnitureSignpostPlan)
 class FurnitureSignpostPlanAdmin(
-    MultiResourceExportActionAdminMixin,
     UpdatePlanLocationAdminMixin,
     AbstractFurnitureSignpostAdmin,
 ):
-    resource_class = FurnitureSignpostPlanResource
-    extra_export_resource_classes = [
-        FurnitureSignpostPlanTemplateResource,
-    ]
+    resource_classes = (FurnitureSignpostPlanResource, FurnitureSignpostPlanTemplateResource)
     form = FurnitureSignpostPlanModelForm
     fieldsets = (
         AbstractFurnitureSignpostAdmin._fieldset_general_information,
@@ -299,7 +294,7 @@ class FurnitureSignpostRealAdmin(
     AbstractFurnitureSignpostAdmin,
 ):
     plan_model_field_name = "furniture_signpost_plan"
-    resource_class = FurnitureSignpostRealResource
+    resource_classes = (FurnitureSignpostRealResource,)
     form = FurnitureSignpostRealModelForm
     fieldsets = (
         AbstractFurnitureSignpostAdmin._fieldset_general_information,

@@ -125,10 +125,10 @@ def _is_none(value) -> bool:
 
 
 class StructuredContentWidget(Widget):
-    def clean(self, value, row=None, *args, **kwargs):
+    def clean(self, value, row=None, **kwargs):
         return value
 
-    def render(self, value, obj=None):
+    def render(self, value, obj=None, **kwargs):
         # Render value as raw value, not string
         return value
 
@@ -180,14 +180,15 @@ class AbstractAdditionalSignResource(GenericDeviceBaseResource):
             "parent__id",
             "additional_information",
             "missing_content",
+            "content_s",
         ) + SOURCE_NAME_ID_FIELDS
 
-    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
-        super().before_import(dataset, using_transactions, dry_run, **kwargs)
+    def before_import(self, dataset, **kwargs):
+        super().before_import(dataset, **kwargs)
         self._content_s_from_columns(dataset)
 
-    def after_export(self, queryset, data, *args, **kwargs):
-        self._content_s_to_columns(data)
+    def after_export(self, queryset, dataset, **kwargs):
+        self._content_s_to_columns(dataset)
 
     def _content_s_from_columns(self, dataset: Dataset):
         """
@@ -283,32 +284,21 @@ class AbstractAdditionalSignResource(GenericDeviceBaseResource):
 
         else:
             content_rows = data["content_s"]
-            # Collect all content_s properties names from every row.
-            # Use dict to retain properties order as they appear in data.
-            content_properties = {}
+
+            # Find all possible content_s columns
+            content_properties = []
             for row in content_rows:
-                for key in row:
-                    content_properties[key] = None
-
-            for property in content_properties:
-                values = self._get_values_for_property(property, content_rows)
-
-                # Convert arrays and objects to JSON strings
+                content_properties.extend((row or {}).keys())
+            content_properties = set(content_properties)
+            for property_name in content_properties:
+                # Populate all extracted columns
+                values = [(row or {}).get(property_name) for row in content_rows]
+                # Convert column values to JSON strings
                 values = self._structured_values_to_string(values)
+                data.append_col(values, header=f"content_s.{property_name}")
 
-                data.append_col(values, header=f"content_s.{property}")
-
+        # Remove the original content_s column from the export output
         del data["content_s"]
-
-    @staticmethod
-    def _get_values_for_property(property, content_rows):
-        values = []
-        for row in content_rows:
-            if isinstance(row, str):
-                values.append(None)
-            else:
-                values.append(row.get(property))
-        return values
 
     @staticmethod
     def _structured_values_to_string(values: list):
@@ -357,6 +347,8 @@ class AdditionalSignPlanResource(AbstractAdditionalSignResource):
         fields = AbstractAdditionalSignResource.Meta.common_fields + (
             "mount_plan__id",
             "plan__decision_id",
+            "replaces",
+            "replaced_by",
         )
         export_order = fields
         clean_model_instances = True
