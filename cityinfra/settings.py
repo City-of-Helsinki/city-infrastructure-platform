@@ -397,6 +397,9 @@ STORAGES = {
             "allow_overwrite": True,
         },
     },
+    "import_export": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
 }
 STATICFILES_DIRS = [checkout_dir("map-view/build/static")]
@@ -549,6 +552,17 @@ ADDRESS_SEARCH_BASE_URL = env.str("ADDRESS_SEARCH_BASE_URL")
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 # Require view permission even to export template
 IMPORT_EXPORT_EXPORT_PERMISSION_CODE = "view"
+
+# Ensure we're testing import-export with postgresql
+# https://django-import-export.readthedocs.io/en/3.3.9/testing.html#mysql-postgres-tests
+IMPORT_EXPORT_TEST_TYPE = "postgres"
+
+# https://django-import-export.readthedocs.io/en/4.4.1/admin_integration.html#import-confirmation
+# https://django-import-export.readthedocs.io/en/4.4.1/installation.html#import-export-tmp-storage-class
+# https://deepwiki.com/django-import-export/django-import-export/6.1-temporary-storage-systems
+# Avoid TempStorage
+IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.MediaStorage"
+
 
 # WFS
 GISSERVER_USE_DB_RENDERING = False
