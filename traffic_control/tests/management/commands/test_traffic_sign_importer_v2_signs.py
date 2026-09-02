@@ -1,6 +1,7 @@
 """Tests for TrafficSignImporterV2 traffic sign phases: create, update, deactivate."""
 import csv
 import datetime
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -911,3 +912,70 @@ def test_deactivate_signs_phase_result_recorded(tmp_path: Path, default_owner, d
     result = summary.get("phase_results", {}).get("signs", {}).get("deactivate")
     assert result is not None
     assert result["deactivated"] == 1
+
+
+# ===========================================================================
+# _get_sign_value — number_code (numerokoodi) to Decimal conversion
+# ===========================================================================
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "number_code,expected",
+    [
+        ("15,3 t", Decimal("15.3")),
+        ("15.3 t", Decimal("15.3")),
+        ("15,3t", Decimal("15.3")),
+        ("15.3t", Decimal("15.3")),
+        ("  15,3 t  ", Decimal("15.3")),
+        ("3,50 t", Decimal("3.50")),
+        ("30", Decimal("30")),
+        ("30 t", Decimal("30")),
+        ("60 km/h", Decimal("60")),
+        ("15, t", Decimal("15")),
+        ("15. t", Decimal("15")),
+    ],
+)
+def test_get_sign_value_parses_decimal_values(tmp_path: Path, number_code: str, expected: Decimal) -> None:
+    """_get_sign_value keeps the decimal part regardless of the decimal separator used.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+        number_code (str): Raw numerokoodi value from the CSV.
+        expected (Decimal): Expected parsed value.
+    """
+    importer = _make_importer(tmp_path, [])
+    details: list[dict] = []
+
+    assert importer._get_sign_value(number_code, "s1", details, device_type_code="344") == expected
+    assert details == []
+
+
+@pytest.mark.parametrize("number_code", ["", None])
+@pytest.mark.django_db
+def test_get_sign_value_returns_none_for_empty_number_code(tmp_path: Path, number_code: str | None) -> None:
+    """_get_sign_value returns None and warns when number_code is missing for a dependent code.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+        number_code (str | None): Empty or missing numerokoodi value.
+    """
+    importer = _make_importer(tmp_path, [])
+    details: list[dict] = []
+
+    assert importer._get_sign_value(number_code, "s1", details, device_type_code="344") is None
+    assert details[0]["level"] == "warning"
+
+
+@pytest.mark.django_db
+def test_get_sign_value_returns_none_for_non_numeric_number_code(tmp_path: Path) -> None:
+    """_get_sign_value returns None when number_code has no leading number.
+
+    Args:
+        tmp_path (Path): Pytest tmp_path fixture.
+    """
+    importer = _make_importer(tmp_path, [])
+    details: list[dict] = []
+
+    assert importer._get_sign_value("no number here", "s1", details, device_type_code="344") is None
+    assert details == []

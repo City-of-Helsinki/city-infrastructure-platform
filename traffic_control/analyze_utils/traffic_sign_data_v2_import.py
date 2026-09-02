@@ -25,7 +25,7 @@ from traffic_control.analyze_utils.traffic_sign_data_v2_code_transform import Co
 from traffic_control.analyze_utils.traffic_sign_data_v2_constants import (
     CSVHeadersV2,
     NUMBER_CODE_DEPENDENT_NEW_CODES,
-    NUMBER_CODE_PATTERN,
+    SIGN_VALUE_PATTERN,
 )
 from traffic_control.analyze_utils.traffic_sign_data_v2_data_loading import DataLoadingMixin
 from traffic_control.analyze_utils.traffic_sign_data_v2_db_builders import DbBuilderMixin
@@ -1103,6 +1103,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
     ) -> Decimal | None:
         """Extract the leading numeric value from number_code field as Decimal.
 
+        Both decimal separators are supported, so values such as ``"15,3 t"``,
+        ``"15.3 t"``, ``"15,3t"`` and ``"15.3t"`` all yield ``Decimal("15.3")``.
+
         Args:
             number_code_str (str | None): Raw number_code string from CSV, or None.
             source_id (str): Source identifier used for warning messages.
@@ -1124,9 +1127,9 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
                     }
                 )
             return None
-        match = NUMBER_CODE_PATTERN.match(number_code_str.strip())
+        match = SIGN_VALUE_PATTERN.match(number_code_str.strip())
         try:
-            return Decimal(match.group(1)) if match else None
+            return Decimal(match.group(1).replace(",", ".")) if match else None
         except Exception:
             details.append(
                 {
