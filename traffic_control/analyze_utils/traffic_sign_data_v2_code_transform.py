@@ -15,6 +15,7 @@ from .traffic_sign_data_v2_constants import (
     NUMBER_CODE_DEPENDENT_CODES,
     NUMBER_CODE_DEPENDENT_NEW_CODES,
     NUMBER_CODE_PATTERN,
+    SIGN_VALUE_PATTERN,
     SKIPPABLE_CODES,
 )
 
@@ -417,8 +418,9 @@ class CodeTransformMixin:
         """Enrich number_code from the teksti field when code is a NUMBER_CODE_DEPENDENT_NEW_CODES value.
 
         If the row's code is one of the new_code values produced by NUMBER_CODE_DEPENDENT_CODES
-        and the number_code field is not already set, extract a leading integer from the teksti
-        field (e.g. "32 t" -> "32") and use it as the number_code value.
+        and the number_code field is not already set, extract a leading number from the teksti
+        field (e.g. "32 t" -> "32") and use it as the number_code value. Decimals are preserved
+        and normalised to use a dot as the separator (e.g. "15,3 t" -> "15.3").
 
         Args:
             row (dict): CSV row dictionary (modified in place).
@@ -429,10 +431,10 @@ class CodeTransformMixin:
         if row.get(CSVHeadersV2.number_code, ""):
             return
         teksti = row.get(CSVHeadersV2.txt, "") or ""
-        match = NUMBER_CODE_PATTERN.match(teksti)
+        match = SIGN_VALUE_PATTERN.match(teksti)
         if not match:
             return
-        extracted = match.group(1)
+        extracted = match.group(1).replace(",", ".")
         self.enriched_signs.append(
             {
                 "source_id": row.get(CSVHeadersV2.id),

@@ -8,8 +8,14 @@ ZEBRA_CROSSING_RIGHT_CODES = ["5111", "E1"]
 ZEBRA_CROSSING_ALL_CODES = ZEBRA_CROSSING_LEFT_CODES + ZEBRA_CROSSING_RIGHT_CODES
 DIRECTION_TOLERANCE = 20  # degrees tolerance for 180° difference
 
-# Compiled regex pattern for extracting numeric part from number_code / teksti fields
+# Compiled regex pattern for matching the leading integer of number_code / teksti fields.
+# Used for code mapping and validation, where the compared values are always integers.
 NUMBER_CODE_PATTERN = re.compile(r"^\s*(\d+)")
+
+# Compiled regex pattern for extracting a sign value (stored as Decimal) from
+# number_code / teksti fields. Unlike NUMBER_CODE_PATTERN this keeps the decimal part,
+# accepting both decimal separators, e.g. "15,3 t" and "15.3t" -> "15,3" / "15.3".
+SIGN_VALUE_PATTERN = re.compile(r"^\s*(\d+(?:[.,]\d+)?)")
 
 
 # Code transformation configuration constants

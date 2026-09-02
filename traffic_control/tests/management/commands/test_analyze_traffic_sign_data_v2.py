@@ -1953,3 +1953,32 @@ def test_enrich_number_code_from_teksti_records_correct_enriched_sign_entry() ->
     assert entry["field"] == "number_code"
     assert entry["old_value"] is None
     assert entry["new_value"] == "8"
+
+
+@pytest.mark.parametrize(
+    "teksti,expected",
+    [
+        ("15,3 t", "15.3"),
+        ("15.3 t", "15.3"),
+        ("15,3t", "15.3"),
+        ("15.3t", "15.3"),
+        ("  15,3 t", "15.3"),
+        ("3,50 t", "3.50"),
+        ("15, t", "15"),
+        ("15. t", "15"),
+    ],
+)
+def test_enrich_number_code_from_teksti_preserves_decimals(teksti: str, expected: str) -> None:
+    """_enrich_number_code_from_teksti keeps decimals and normalises the separator to a dot.
+
+    Args:
+        teksti (str): teksti field value from the CSV row.
+        expected (str): Expected normalised number_code value.
+
+    Returns: None
+    """
+    stub = _MixinStub()
+    row = _stub_row_with_teksti("344", teksti=teksti)
+    stub._enrich_number_code_from_teksti(row)
+    assert row[CSVHeadersV2.number_code] == expected
+    assert stub.enriched_signs[0]["new_value"] == expected
