@@ -309,7 +309,7 @@ def test__signposts_not_imported(code):
 def test__mount_update():
     existing_mount = MountRealFactory(
         mount_type__code="Existing",
-        scanned_at=datetime.datetime.utcnow(),
+        scanned_at=datetime.datetime.now(datetime.UTC),
         location_specifier=None,
         source_id="mount_pylväs1",
         source_name=TrafficSignImporter.SOURCE_NAME,
@@ -333,7 +333,7 @@ def test__sign_update():
         source_id="sign",
         source_name=TrafficSignImporter.SOURCE_NAME,
         device_type__code="Existing",
-        scanned_at=datetime.datetime.utcnow(),
+        scanned_at=datetime.datetime.now(datetime.UTC),
     )
 
     _create_db_entries(["C39"])
@@ -367,7 +367,7 @@ def test__additional_sign_update():
         source_id="sign",
         source_name=TrafficSignImporter.SOURCE_NAME,
         device_type=dt,
-        scanned_at=datetime.datetime.utcnow(),
+        scanned_at=datetime.datetime.now(datetime.UTC),
     )
     _create_db_entries(["C39", "H24S"])
     mount_data = _get_mount_dict({})
