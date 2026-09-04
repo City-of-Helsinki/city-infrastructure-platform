@@ -440,21 +440,14 @@ class TestReactivateSelectedUsersAction:
         assert not UserDeactivationStatus.objects.filter(user=user2).exists()
 
     @pytest.mark.django_db
-    @pytest.mark.parametrize(
-        "is_active_new, is_superuser, should_reactivate",
-        [
-            (False, True, False),  # If superuser doesn't touch is_active, nothing happens
-            (True, False, False),  # If regular admin tries to enable is_active, nothing happens
-            (True, True, True),  # If superuser enables is_active, deactivation status is removed
-        ],
-    )
-    def test_save_model_deletes_deactivation_status(
-        self, rf, admin_user, is_active_new, is_superuser, should_reactivate
-    ):
-        """Check that UserAdmin.save_model properly reactivates a user"""
-        target_user = UserFactory.create(is_active=False)
-        UserDeactivationStatus.objects.create(user=target_user, deactivated_at=timezone.now() - timedelta(days=5))
-        assert UserDeactivationStatus.objects.filter(user=target_user).exists()  # Sanity check
+    @pytest.mark.parametrize("was_inactive", [True, False], ids=["was_active", "was_inactive"])
+    @pytest.mark.parametrize("is_active", [True, False], ids=["is_active", "is_inactive"])
+    @pytest.mark.parametrize("is_superuser", [True, False], ids=["superuser", "not_superuser"])
+    def test_save_model_affects_deactivation_status(self, rf, admin_user, was_inactive, is_active, is_superuser):
+        target_user = UserFactory.create(is_active=was_inactive)
+        if not was_inactive:
+            UserDeactivationStatus.objects.create(user=target_user, deactivated_at=timezone.now() - timedelta(days=5))
+        assert UserDeactivationStatus.objects.filter(user=target_user).exists() is not was_inactive  # Sanity check
 
         admin_user.is_superuser = is_superuser
         admin_user.save()
@@ -462,33 +455,39 @@ class TestReactivateSelectedUsersAction:
         admin_site = AdminSite()
         user_admin = UserAdmin(User, admin_site)
 
-        target_user.is_active = is_active_new
+        target_user.is_active = is_active
         request = rf.post("/")
         request.user = admin_user
         request.session = {}
         request._messages = FallbackStorage(request)
         user_admin.save_model(request, obj=target_user, form=None, change=True)
         messages = list(request._messages)
-
         target_user.refresh_from_db()
 
-        if is_active_new:
-            if is_superuser:
-                assert target_user.is_active is True
-                assert target_user.reactivated_at is not None
-                assert not UserDeactivationStatus.objects.filter(user=target_user).exists()
-                assert len(messages) == 0
-            else:
-                assert target_user.is_active is False
-                assert target_user.reactivated_at is None
-                assert UserDeactivationStatus.objects.filter(user=target_user).exists()
-                assert len(messages) == 1
-                assert "You don't have permission to reactivate users" in messages[0].message
+        # Figure out how the test case should fork
+        is_active_flipped = is_active != was_inactive
+        is_operation_permitted = admin_user.has_activation_status_change_permission() or not is_active_flipped
+
+        # Check for expected result is_active value, request warning message
+        if is_operation_permitted:
+            assert len(messages) == 0, "The user update was authorized, so there should have been no error messages."
+            # Note: if not is_active_flipped, then is_active == was_active, so the assertion below still holds true
+            assert target_user.is_active == is_active, "User update permitted, so should have new is_active value."
         else:
-            assert target_user.is_active is False
-            assert target_user.reactivated_at is None
-            assert UserDeactivationStatus.objects.filter(user=target_user).exists()
-            assert len(messages) == 0
+            assert len(messages) == 1, "The user update was rejected, so there should have been an error message."
+            assert target_user.is_active == was_inactive, "The user update rejected, should have old is_active vlaue."
+            assert (
+                "You don't have permission to edit user activation status" in messages[0].message
+            ), "Should have complained about permission to flip user activation status."
+
+        # Resolve expectation of UserDeactivationStatus
+        if admin_user.has_activation_status_change_permission():
+            # If the user has permission, the user should always be able to set activation status
+            should_deactivation_status_exist = not is_active
+        else:
+            # If the user doesn't have permission for it, the old activation status should always be preserved
+            should_deactivation_status_exist = not was_inactive
+        assert UserDeactivationStatus.objects.filter(user=target_user).exists() == should_deactivation_status_exist
 
     def test_reactivate_users_sets_timestamp(self):
         """Test that reactivation sets the reactivated_at timestamp."""
