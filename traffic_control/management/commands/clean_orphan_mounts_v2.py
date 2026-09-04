@@ -16,8 +16,9 @@ class Command(TrackableCommand):
     """Hard-delete orphan MountReal records scoped to the V2 StreetScan import source.
 
     An orphan is a MountReal with source_name matching the V2 import source name
-    that is not referenced by any TrafficSignReal, AdditionalSignReal, or SignpostReal
-    with the same source_name.
+    that is not referenced by any TrafficSignReal, AdditionalSignReal, SignpostReal,
+    TrafficLightReal or MountRealOperation, regardless of the referencing object's
+    source_name.
 
     Use --dry-run to preview the mounts that would be deleted without making any
     database changes. Combine with --dry-run-detail to choose between a count summary
