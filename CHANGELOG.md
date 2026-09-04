@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.46.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.45.0...city-infrastructure-platform-v1.46.0) (2026-09-04)
+
+
+### Features
+
+* Update django-gisserver to the latest 2.x version ([7060cab](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/7060cab58437080c848b9f3cc0a9da24418d1e02))
+
+
+### Bug Fixes
+
+* Get_orphan_mount_ids-function did not count other source_name objects as references ([340f153](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/340f1531a14fec6bb82ff3b6e9378d6850ebaf38))
+* Importer did not preserve decimals when reading numbercode column from csv ([bb04915](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/bb04915523abf9dfd8166a6d4b7dd08acde42fad))
+* Revert back to the first option ([09d3514](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/09d35140a25c279267852d1ec0bcd0e2365e7e7c))
+
 ## [1.45.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.44.0...city-infrastructure-platform-v1.45.0) (2026-08-27)
 
 
