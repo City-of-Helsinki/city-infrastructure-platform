@@ -318,7 +318,7 @@ class UserAdmin(BaseUserAdmin):
         https://docs.djangoproject.com/en/5.2/ref/contrib/admin/#django.contrib.admin.ModelAdmin.get_readonly_fields
         """
         readonly_fields = ["auth_type_display", "last_api_use", "reactivated_at", "show_relations_table"]
-        if not request.user.has_reactivate_user_permission():
+        if not request.user.has_activation_status_change_permission():
             readonly_fields.append("is_active")
         if not request.user.is_superuser:
             readonly_fields.append("is_superuser")
@@ -440,21 +440,47 @@ class UserAdmin(BaseUserAdmin):
         https://docs.djangoproject.com/en/5.2/ref/contrib/admin/#django.contrib.admin.ModelAdmin.save_model
         """
         old_obj = User.objects.get(pk=obj.pk)
-
         with transaction.atomic():
-            if obj.is_active and not old_obj.is_active:  # reactivation case
-                if request.user.has_reactivate_user_permission():
-                    obj.reactivated_at = timezone.now()
-                    self._guarantee_deactivation_status_deletion(obj)
-                else:
-                    obj.is_active = False
-                    self.message_user(
-                        request,
-                        _("You don't have permission to reactivate users. User reactivation skipped."),
-                        level="warning",
-                    )
-
+            self._evaluate_activation_status_update(request, obj, old_obj)
             super().save_model(request, obj, form, change)
+
+    def _evaluate_activation_status_update(self, request, obj: User, old_obj: User):
+        """
+        Check if the user activation status is getting flipped, check permissions and create/delete deactivation status
+
+        If an attempt at flipping user activation status is made without the permissions, roll back the flag edit.
+        If an authorized user flips the flag, ensure we have a UserDeactivationStatus for the user if-and-only-if the
+        user has been deactivated.
+        """
+        is_active_new = obj.is_active
+        is_active_old = old_obj.is_active
+
+        # Don't touch anything else if we didn't flip the activation status
+        if is_active_new == is_active_old:
+            return
+
+        # Reject is_active changes if we don't have permission to change, send error message
+        if not request.user.has_activation_status_change_permission():
+            obj.is_active = is_active_old
+            self.message_user(
+                request,
+                _("You don't have permission to edit user activation status."),
+                level="warning",
+            )
+            return
+
+        # If we can go ahead with flipping the activation status, ensure the existence of a UserDeactivationStatu if
+        # and only if the user is getting deactivated
+        if is_active_new:
+            obj.reactivated_at = timezone.now()
+            self._guarantee_deactivation_status_deletion(obj)
+        else:
+            UserDeactivationStatus.objects.get_or_create(
+                user=obj,
+                defaults={
+                    "deactivated_at": timezone.now(),
+                },
+            )
 
     @admin.action(permissions=["change"], description=_("Reactivate selected users"))
     def reactivate_selected_users(self, request, queryset) -> None:
@@ -468,7 +494,7 @@ class UserAdmin(BaseUserAdmin):
             request: The current HTTP request object.
             queryset: The queryset of selected users.
         """
-        if not request.user.has_reactivate_user_permission():
+        if not request.user.has_activation_status_change_permission():
             return
 
         count = 0

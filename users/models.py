@@ -82,7 +82,7 @@ class User(AbstractUser):
     def has_bypass_responsible_entity_permission(self):
         return self.is_superuser or self.bypass_responsible_entity
 
-    def has_reactivate_user_permission(self):
+    def has_activation_status_change_permission(self):
         return self.is_superuser
 
     def can_create_responsible_entity_devices(self):
