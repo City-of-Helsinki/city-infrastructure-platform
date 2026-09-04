@@ -8,9 +8,11 @@ import pytest
 from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAME, TrafficSignImporterV2
 from traffic_control.models import MountReal
 from traffic_control.tests.factories import (
+    add_mount_real_operation,
     AdditionalSignRealFactory,
     MountRealFactory,
     SignpostRealFactory,
+    TrafficLightRealFactory,
     TrafficSignRealFactory,
 )
 
@@ -30,7 +32,11 @@ _OTHER_SOURCE = "other_source"
         (TrafficSignRealFactory, SOURCE_NAME, False),
         (AdditionalSignRealFactory, SOURCE_NAME, False),
         (SignpostRealFactory, SOURCE_NAME, False),
-        (TrafficSignRealFactory, _OTHER_SOURCE, True),
+        (TrafficLightRealFactory, SOURCE_NAME, False),
+        (TrafficSignRealFactory, _OTHER_SOURCE, False),
+        (AdditionalSignRealFactory, _OTHER_SOURCE, False),
+        (SignpostRealFactory, _OTHER_SOURCE, False),
+        (TrafficLightRealFactory, _OTHER_SOURCE, False),
     ),
 )
 def test_mount_orphan_status_by_referencing_sign(
@@ -38,13 +44,16 @@ def test_mount_orphan_status_by_referencing_sign(
     sign_source_name: str | None,
     expected_orphan: bool,
 ) -> None:
-    """Mount orphan status depends on the referencing sign factory and its source_name.
+    """Mount orphan status depends only on whether any object references the mount.
 
-    Covers: no referencing sign, each sign type with SOURCE_NAME (not orphan),
-    and a TrafficSignReal with a different source_name (still orphan).
+    Covers: no referencing object (orphan) and every referencing device type with both
+    SOURCE_NAME and a foreign source_name (never an orphan). The reference check is
+    source-agnostic because every ``mount_real`` FK uses ``on_delete=PROTECT``.
 
-    The signpost_same_source case is a regression test for the old bug where
-    AdditionalSignReal was checked twice instead of SignpostReal.
+    The signpost cases are a regression test for the old bug where AdditionalSignReal
+    was checked twice instead of SignpostReal. The ``_OTHER_SOURCE`` cases are a
+    regression test for the bug where the referencing subqueries were filtered by
+    ``source_name=SOURCE_NAME``.
 
     Args:
         sign_factory (type | None): Factory class for the referencing sign, or None.
@@ -61,6 +70,35 @@ def test_mount_orphan_status_by_referencing_sign(
         assert mount.id in result
     else:
         assert mount.id not in result
+
+
+@pytest.mark.django_db
+def test_mount_with_operation_not_orphan() -> None:
+    """A mount referenced by a MountRealOperation is not an orphan.
+
+    MountRealOperation.mount_real is a PROTECT FK, so such a mount cannot be deleted.
+    """
+    mount = MountRealFactory(source_name=SOURCE_NAME)
+    add_mount_real_operation(mount_real=mount)
+
+    result = TrafficSignImporterV2.get_orphan_mount_ids()
+
+    assert mount.id not in result
+
+
+@pytest.mark.django_db
+def test_mount_with_soft_deleted_sign_not_orphan() -> None:
+    """A mount referenced by a soft-deleted sign is not an orphan.
+
+    Soft-deleted rows still exist in the database and still trigger the PROTECT
+    constraint, so they must count as references.
+    """
+    mount = MountRealFactory(source_name=SOURCE_NAME)
+    TrafficSignRealFactory(source_name=SOURCE_NAME, mount_real=mount, is_active=False)
+
+    result = TrafficSignImporterV2.get_orphan_mount_ids()
+
+    assert mount.id not in result
 
 
 # ---------------------------------------------------------------------------
@@ -88,24 +126,27 @@ def test_mount_with_other_source_name_not_included() -> None:
 
 @pytest.mark.django_db
 def test_mixed_mounts_only_true_orphans_returned() -> None:
-    """Only mounts with no matching-source reference appear in the orphan set.
+    """Only mounts with no reference at all appear in the orphan set.
 
-    Creates four mounts covering the distinct cases and verifies each lands in
+    Creates five mounts covering the distinct cases and verifies each lands in
     the correct bucket.
     """
     mount_orphan = MountRealFactory(source_name=SOURCE_NAME)
     mount_with_traffic_sign = MountRealFactory(source_name=SOURCE_NAME)
     mount_with_signpost = MountRealFactory(source_name=SOURCE_NAME)
+    mount_with_other_source_sign = MountRealFactory(source_name=SOURCE_NAME)
     mount_other_source = MountRealFactory(source_name=_OTHER_SOURCE)
 
     TrafficSignRealFactory(source_name=SOURCE_NAME, mount_real=mount_with_traffic_sign)
     SignpostRealFactory(source_name=SOURCE_NAME, mount_real=mount_with_signpost)
+    TrafficSignRealFactory(source_name=_OTHER_SOURCE, mount_real=mount_with_other_source_sign)
 
     result = TrafficSignImporterV2.get_orphan_mount_ids()
 
     assert mount_orphan.id in result
     assert mount_with_traffic_sign.id not in result
     assert mount_with_signpost.id not in result
+    assert mount_with_other_source_sign.id not in result
     assert mount_other_source.id not in result
 
 
@@ -170,6 +211,26 @@ def test_clean_orphan_mounts_preserves_other_source_mount() -> None:
     TrafficSignImporterV2.clean_orphan_mounts()
 
     assert MountReal.objects.filter(id=other_mount.id).exists()
+
+
+@pytest.mark.django_db
+def test_clean_orphan_mounts_survives_other_source_reference(orphan_mount: MountReal) -> None:
+    """A SOURCE_NAME mount referenced by an other-source sign is kept and does not abort the delete.
+
+    Regression test: previously such a mount was classified as an orphan, and the
+    PROTECT FK made the bulk delete raise ProtectedError, leaving every real orphan
+    in place.
+
+    Args:
+        orphan_mount (MountReal): A genuinely unreferenced mount that must still be deleted.
+    """
+    referenced = MountRealFactory(source_name=SOURCE_NAME)
+    TrafficSignRealFactory(source_name=_OTHER_SOURCE, mount_real=referenced)
+
+    TrafficSignImporterV2.clean_orphan_mounts()
+
+    assert MountReal.objects.filter(id=referenced.id).exists()
+    assert not MountReal.objects.filter(id=orphan_mount.id).exists()
 
 
 # ---------------------------------------------------------------------------
