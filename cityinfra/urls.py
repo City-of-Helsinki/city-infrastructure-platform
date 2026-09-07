@@ -14,7 +14,7 @@ from city_furniture.views import (
     city_furniture_target as city_furniture_target_views,
     furniture_signpost as furniture_signpost_views,
 )
-from cityinfra.admin.views import MyAccountView
+from cityinfra.admin.views import FeatureDisabledView, MyAccountView
 from cityinfra.views import FileProxyView, HealthCheckView
 from map import views as map_views
 from traffic_control.views import (
@@ -109,6 +109,7 @@ furniture_signpost_operations_router.register(
     basename="furniture-signpost-real-operations",
 )
 
+
 urlpatterns = [
     path("healthz", HealthCheckView.as_view(), name="health-check"),
     path("readiness", HealthCheckView.as_view(), name="readiness-check"),
@@ -175,6 +176,15 @@ if settings.SENTRY_DEBUG:
     ]
 
 urlpatterns += i18n_patterns(
+    # Disable edit own password endpoints (django.contrib.auth.urls)
+    path("admin/password_change/", FeatureDisabledView.as_view()),
+    path("admin/password_change/done/", FeatureDisabledView.as_view()),
+    # Disable password reset endpoints (django.contrib.auth.urls)
+    path("admin/password_reset/", FeatureDisabledView.as_view()),
+    path("admin/password_reset/done/", FeatureDisabledView.as_view()),
+    path("admin/reset/<uidb64>/<token>/", FeatureDisabledView.as_view()),
+    path("admin/reset/done/", FeatureDisabledView.as_view()),
+    # Non-password views
     path("admin/account/", MyAccountView.as_view(), name="my-account"),
     path("admin/doc/", include("city_infra_instructions.urls")),
     path("admin/", admin.site.urls),
