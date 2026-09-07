@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-06 12:18+0300\n"
+"POT-Creation-Date: 2026-09-08 10:48+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -547,6 +547,9 @@ msgstr "Tämä kenttä vaaditaan"
 msgid "My account"
 msgstr "Omat tiedot"
 
+msgid "Disabled feature"
+msgstr ""
+
 #, python-brace-format
 msgid ""
 "Number of results to return per page. Maximum number of results is "
@@ -586,6 +589,9 @@ msgstr "Kieli"
 msgid "Home"
 msgstr "Etusivu"
 
+msgid "This feature is disabled"
+msgstr ""
+
 msgid "Personal info"
 msgstr "Henkilökohtaiset tiedot"
 
@@ -600,12 +606,6 @@ msgstr "sukunimi"
 
 msgid "email address"
 msgstr "sähköposti"
-
-msgid "actions"
-msgstr "toiminnot"
-
-msgid "Change password"
-msgstr "Vaihda salasana"
 
 msgid "Maintenance Mode"
 msgstr "Huoltotila"
@@ -767,6 +767,15 @@ msgstr "Pohjakartat"
 
 msgid "Overlays"
 msgstr "Tasot"
+
+msgid "Change"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "View on site"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Configuration"
@@ -946,6 +955,9 @@ msgstr "Kyllä"
 msgid "Traffic sign type"
 msgstr "Liikennemerkkityyppi"
 
+msgid "Device type target model"
+msgstr ""
+
 msgid "Mount Reals"
 msgstr "Kiinnityskohde (toteumat)"
 
@@ -1013,6 +1025,15 @@ msgstr "Piirustusnumerot epäyhtenäisyydet"
 
 msgid "Responsible entities"
 msgstr "Vastuutahot"
+
+msgid "Schedule"
+msgstr ""
+
+msgid "params"
+msgstr ""
+
+msgid "Execution log"
+msgstr ""
 
 msgid "Road Marking Real"
 msgstr "Tiemerkintä (toteuma)"
@@ -1200,12 +1221,6 @@ msgstr "Liikennemerkki (toteuma)"
 
 msgid "Traffic Sign Reals"
 msgstr "Liikennemerkki (toteumat)"
-
-msgid "Format"
-msgstr "Tiedostomuoto"
-
-msgid "Export type"
-msgstr "Viennin tyyppi"
 
 msgid "Traffic control"
 msgstr "Liikenteenohjauslaitteet"
@@ -2300,6 +2315,21 @@ msgstr "Ryhmän vastuutaho"
 
 msgid "Group responsible entities"
 msgstr "Ryhmän vastuutahot"
+
+msgid "Revert file"
+msgstr ""
+
+msgid "Path or name of the JSON file containing the operations to be reverted."
+msgstr ""
+
+msgid "--ids parameter of the run."
+msgstr ""
+
+msgid "--models parameter of the run."
+msgstr ""
+
+msgid "Detailed log information of the command run."
+msgstr ""
 
 msgid "Forward"
 msgstr "Eteenpäin"
@@ -3709,13 +3739,12 @@ msgstr "Tallenna käyttäjä ensin nähdäksesi suhteet."
 msgid "No relations found."
 msgstr "Suhteita ei löytynyt."
 
+msgid "You don't have permission to edit user activation status."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Reactivate selected users"
 msgstr "Aktivoi valitut käyttäjät uudelleen"
-
-# AI translation - needs human review
-msgid "Only superusers can reactivate users."
-msgstr "Vain pääkäyttäjät voivat aktivoida käyttäjiä uudelleen."
 
 # AI translation - needs human review
 #, python-format

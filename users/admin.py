@@ -205,58 +205,65 @@ class DeactivationStageFilter(admin.SimpleListFilter):
 
 
 class UserAdmin(BaseUserAdmin):
-    fieldsets = BaseUserAdmin.fieldsets + (
-        (
-            _("Authentication Type"),
-            {
-                "fields": ("auth_type_display",),
-            },
-        ),
-        (_("Additional user information"), {"fields": ("additional_information",)}),
-        (
-            _("Activity Tracking"),
-            {
-                "fields": ("last_api_use",),
-                "description": _(
-                    "Track user's API usage activity. This field is automatically updated when the user uses the API."
-                ),
-            },
-        ),
-        (
-            _("Reactivation"),
-            {
-                "fields": ("reactivated_at",),
-            },
-        ),
-        (
-            _("Admin Notifications"),
-            {
-                "fields": ("receives_admin_notification_emails",),
-                "description": _(
-                    "Configure whether this user receives admin notification emails about "
-                    "user deactivations and system events."
-                ),
-            },
-        ),
-        (
-            _("Operational area"),
-            {
-                "fields": (
-                    "bypass_operational_area",
-                    "operational_areas",
-                )
-            },
-        ),
-        (
-            _("Responsible Entity"),
-            {
-                "fields": (
-                    "bypass_responsible_entity",
-                    "responsible_entities",
-                )
-            },
-        ),
-        (_("Relations table"), {"fields": ("show_relations_table",)}),
+    fieldsets = (
+        [
+            (None, {"fields": ("username",)}),
+        ]
+        + [fieldset for fieldset in BaseUserAdmin.fieldsets if "password" not in fieldset[1]["fields"]]
+        + [
+            (
+                _("Authentication Type"),
+                {
+                    "fields": ("auth_type_display",),
+                },
+            ),
+            (_("Additional user information"), {"fields": ("additional_information",)}),
+            (
+                _("Activity Tracking"),
+                {
+                    "fields": ("last_api_use",),
+                    "description": _(
+                        "Track user's API usage activity. This field is automatically updated when the user uses the "
+                        "API."
+                    ),
+                },
+            ),
+            (
+                _("Reactivation"),
+                {
+                    "fields": ("reactivated_at",),
+                },
+            ),
+            (
+                _("Admin Notifications"),
+                {
+                    "fields": ("receives_admin_notification_emails",),
+                    "description": _(
+                        "Configure whether this user receives admin notification emails about "
+                        "user deactivations and system events."
+                    ),
+                },
+            ),
+            (
+                _("Operational area"),
+                {
+                    "fields": (
+                        "bypass_operational_area",
+                        "operational_areas",
+                    )
+                },
+            ),
+            (
+                _("Responsible Entity"),
+                {
+                    "fields": (
+                        "bypass_responsible_entity",
+                        "responsible_entities",
+                    )
+                },
+            ),
+            (_("Relations table"), {"fields": ("show_relations_table",)}),
+        ]
     )
     filter_horizontal = BaseUserAdmin.filter_horizontal + (
         "operational_areas",
@@ -318,6 +325,11 @@ class UserAdmin(BaseUserAdmin):
         https://docs.djangoproject.com/en/5.2/ref/contrib/admin/#django.contrib.admin.ModelAdmin.get_readonly_fields
         """
         readonly_fields = ["auth_type_display", "last_api_use", "reactivated_at", "show_relations_table"]
+        # Make it impossible to edit username in already-existing users. Will become dead code when/if user adding via
+        # admin is blocked
+        if obj:
+            readonly_fields.append("username")
+        # Check permissions to toggle is_active, is_superuser flags
         if not request.user.has_activation_status_change_permission():
             readonly_fields.append("is_active")
         if not request.user.is_superuser:

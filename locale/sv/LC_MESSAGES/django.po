@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-06 12:18+0300\n"
+"POT-Creation-Date: 2026-09-08 10:48+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -555,6 +555,9 @@ msgstr "Fältet är obligatoriskt."
 msgid "My account"
 msgstr "Egna uppgifter"
 
+msgid "Disabled feature"
+msgstr ""
+
 #, python-brace-format
 msgid ""
 "Number of results to return per page. Maximum number of results is "
@@ -594,6 +597,9 @@ msgstr "Språk"
 msgid "Home"
 msgstr "Hem"
 
+msgid "This feature is disabled"
+msgstr ""
+
 msgid "Personal info"
 msgstr "Personliga uppgifter"
 
@@ -608,12 +614,6 @@ msgstr "efternamn"
 
 msgid "email address"
 msgstr "e-post"
-
-msgid "actions"
-msgstr "funktioner"
-
-msgid "Change password"
-msgstr "Byt lösenord"
 
 # AI translation - needs human review
 msgid "Maintenance Mode"
@@ -787,6 +787,15 @@ msgstr "Grundkartor"
 
 msgid "Overlays"
 msgstr "Överlägg"
+
+msgid "Change"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "View on site"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Configuration"
@@ -972,6 +981,9 @@ msgstr "Ja"
 msgid "Traffic sign type"
 msgstr "Typ av trafikskylt"
 
+msgid "Device type target model"
+msgstr ""
+
 msgid "Mount Reals"
 msgstr "Montering (implementeringar)"
 
@@ -1056,6 +1068,15 @@ msgstr "Avvikelser i ritningsnummer"
 
 msgid "Responsible entities"
 msgstr "Ansvariga enheter"
+
+msgid "Schedule"
+msgstr ""
+
+msgid "params"
+msgstr ""
+
+msgid "Execution log"
+msgstr ""
 
 msgid "Road Marking Real"
 msgstr "Vägmarkering (implementering)"
@@ -1250,12 +1271,6 @@ msgstr "Trafikskylt (implementering)"
 
 msgid "Traffic Sign Reals"
 msgstr "Trafikskylt (implementeringar)"
-
-msgid "Format"
-msgstr "Format"
-
-msgid "Export type"
-msgstr "Utförseltyp"
 
 msgid "Traffic control"
 msgstr "Trafikstyrning"
@@ -2363,6 +2378,21 @@ msgstr "Gruppansvarig enhet"
 
 msgid "Group responsible entities"
 msgstr "Gruppansvariga enheter"
+
+msgid "Revert file"
+msgstr ""
+
+msgid "Path or name of the JSON file containing the operations to be reverted."
+msgstr ""
+
+msgid "--ids parameter of the run."
+msgstr ""
+
+msgid "--models parameter of the run."
+msgstr ""
+
+msgid "Detailed log information of the command run."
+msgstr ""
 
 msgid "Forward"
 msgstr "Framåt"
@@ -3784,13 +3814,12 @@ msgstr "Spara användaren först för att visa relationer."
 msgid "No relations found."
 msgstr "Inga relationer hittades."
 
+msgid "You don't have permission to edit user activation status."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Reactivate selected users"
 msgstr "Återaktivera valda användare"
-
-# AI translation - needs human review
-msgid "Only superusers can reactivate users."
-msgstr "Endast superanvändare kan återaktivera användare."
 
 # AI translation - needs human review
 #, python-format
