@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.46.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.46.0...city-infrastructure-platform-v1.46.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* Disable editing of username and password ([9b232d7](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9b232d7f16101a7c70ca9a0abfb77c5059602fa5))
+
 ## [1.46.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.45.0...city-infrastructure-platform-v1.46.0) (2026-09-07)
 
 
