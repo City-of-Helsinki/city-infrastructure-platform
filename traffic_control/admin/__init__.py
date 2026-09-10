@@ -28,6 +28,7 @@ from traffic_control.admin.road_marking import (
     RoadMarkingRealAdmin,
     RoadMarkingRealFileInline,
 )
+from traffic_control.admin.search_orphan_files_run_info import SearchOrphanFilesRunInfoAdmin
 from traffic_control.admin.signpost import (
     SignpostPlanAdmin,
     SignpostPlanFileInline,
