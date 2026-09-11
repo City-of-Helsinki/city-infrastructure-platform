@@ -422,7 +422,7 @@ class TestImportPlanGeometriesCommand:
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "6593", "2024-100", ""])  # Missing diary
+            writer.writerow([wkt, "101", "6593", "", ""])  # Missing diary number and decision id
             writer.writerow(["INVALID", "102", "6593", "2024-100", "HEL 2024-99999"])  # Invalid WKT
 
         output_dir = tmp_path / "output"

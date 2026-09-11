@@ -109,12 +109,35 @@ class TestPlanGeometryImporter:
         assert importer.results[0]["geometry"] is not None
 
     def test_parse_csv_missing_diary_number(self, tmp_path):
-        """Test CSV with missing diary number.
+        """Test CSV row with neither diary number nor decision id.
 
         Args:
             tmp_path: Pytest temporary path fixture.
         """
         csv_path = tmp_path / "missing_diary.csv"
+        wkt = (
+            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
+            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
+        )
+
+        with open(csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f, delimiter=";")
+            writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
+            writer.writerow([wkt, "101", "6593", "", ""])
+
+        importer = PlanGeometryImporter(str(csv_path))
+        importer.parse_csv()
+
+        assert len(importer.results) == 1
+        assert importer.results[0]["result_type"] == "missing_diary_number"
+
+    def test_parse_csv_missing_diary_number_with_decision_id(self, tmp_path):
+        """Test CSV row without diary number is accepted when decision id is given.
+
+        Args:
+            tmp_path: Pytest temporary path fixture.
+        """
+        csv_path = tmp_path / "decision_id_only.csv"
         wkt = (
             "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
             "25493859.07 6679719.85, 25493824.78 6679773.23)))"
@@ -129,7 +152,34 @@ class TestPlanGeometryImporter:
         importer.parse_csv()
 
         assert len(importer.results) == 1
-        assert importer.results[0]["result_type"] == "missing_diary_number"
+        assert importer.results[0]["result_type"] is None
+        assert importer.results[0]["geometry"] is not None
+
+    def test_parse_csv_duplicate_decision_id_without_diary_number(self, tmp_path):
+        """Test duplicate decision ids are detected for rows without diary numbers.
+
+        Args:
+            tmp_path: Pytest temporary path fixture.
+        """
+        csv_path = tmp_path / "duplicate_decision_id.csv"
+        wkt = (
+            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
+            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
+        )
+
+        with open(csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f, delimiter=";")
+            writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
+            writer.writerow([wkt, "101", "6593", "2024-100", ""])
+            writer.writerow([wkt, "102", "6594", "2024-100", ""])
+
+        importer = PlanGeometryImporter(str(csv_path))
+        importer.parse_csv()
+
+        assert len(importer.results) == 2
+        assert importer.results[0]["result_type"] is None
+        assert importer.results[1]["result_type"] == "duplicate_diary_number"
+        assert "2024-100" in importer.results[1]["error_message"]
 
     def test_parse_csv_duplicate_diary_number(self, tmp_path):
         """Test CSV with duplicate diary numbers.
@@ -238,6 +288,172 @@ class TestPlanGeometryImporter:
         importer.validate_and_process_rows()
 
         assert importer.results[0]["result_type"] == "decision_id_mismatch"
+
+    def test_validate_plan_matched_by_decision_id(self, valid_csv_file, test_plan):
+        """Test plan is matched by decision_id when diary_number does not match.
+
+        Args:
+            valid_csv_file: Valid CSV file fixture.
+            test_plan: Test plan fixture.
+        """
+        test_plan.diary_number = "HEL 2024-99999"
+        test_plan.save()
+
+        importer = PlanGeometryImporter(valid_csv_file)
+        importer.parse_csv()
+        importer.validate_and_process_rows()
+
+        assert importer.results[0]["result_type"] == "success"
+        assert importer.results[0]["matched_by"] == "decision_id"
+        assert importer.results[0]["plan_id"] == str(test_plan.id)
+
+    def test_validate_decision_id_only_row_matches_plan(self, tmp_path, test_plan):
+        """Test row without diary number is matched by decision_id.
+
+        Args:
+            tmp_path: Pytest temporary path fixture.
+            test_plan: Test plan fixture.
+        """
+        csv_path = tmp_path / "decision_id_only.csv"
+        wkt = (
+            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
+            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
+        )
+        with open(csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f, delimiter=";")
+            writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
+            writer.writerow([wkt, "101", "6593", "2024-100", ""])
+
+        importer = PlanGeometryImporter(str(csv_path))
+        importer.parse_csv()
+        importer.validate_and_process_rows()
+
+        assert importer.results[0]["result_type"] == "success"
+        assert importer.results[0]["matched_by"] == "decision_id"
+        assert importer.results[0]["plan_id"] == str(test_plan.id)
+
+    def test_validate_decision_id_only_row_plan_not_found(self, tmp_path, test_plan):
+        """Test row without diary number does not match plans with blank diary number.
+
+        Args:
+            tmp_path: Pytest temporary path fixture.
+            test_plan: Test plan fixture.
+        """
+        test_plan.diary_number = ""
+        test_plan.save()
+
+        csv_path = tmp_path / "decision_id_only_not_found.csv"
+        wkt = (
+            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
+            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
+        )
+        with open(csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f, delimiter=";")
+            writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
+            writer.writerow([wkt, "101", "6593", "2024-999", ""])
+
+        importer = PlanGeometryImporter(str(csv_path))
+        importer.parse_csv()
+        importer.validate_and_process_rows()
+
+        assert importer.results[0]["result_type"] == "plan_not_found"
+        assert importer.results[0]["error_message"] == "No active Plan found with decision_id: 2024-999"
+
+    def test_validate_diary_number_match_takes_precedence(self, valid_csv_file, test_plan, test_user):
+        """Test diary_number match is preferred over decision_id match.
+
+        Args:
+            valid_csv_file: Valid CSV file fixture.
+            test_plan: Test plan fixture.
+            test_user: Test user fixture.
+        """
+        PlanFactory(
+            diary_number="HEL 2024-99999",
+            decision_id="2024-100",
+            drawing_numbers=["6593-3"],
+            created_by=test_user,
+            updated_by=test_user,
+        )
+
+        importer = PlanGeometryImporter(valid_csv_file)
+        importer.parse_csv()
+        importer.validate_and_process_rows()
+
+        assert importer.results[0]["result_type"] == "success"
+        assert importer.results[0]["matched_by"] == "diary_number"
+        assert importer.results[0]["plan_id"] == str(test_plan.id)
+
+    def test_validate_multiple_plans_found_by_decision_id(self, valid_csv_file, test_plan, test_user):
+        """Test ambiguous decision_id match is reported as an error.
+
+        Args:
+            valid_csv_file: Valid CSV file fixture.
+            test_plan: Test plan fixture.
+            test_user: Test user fixture.
+        """
+        test_plan.diary_number = "HEL 2024-99999"
+        test_plan.save()
+        PlanFactory(
+            diary_number="HEL 2024-88888",
+            decision_id="2024-100",
+            drawing_numbers=["6593-3"],
+            created_by=test_user,
+            updated_by=test_user,
+        )
+
+        importer = PlanGeometryImporter(valid_csv_file)
+        importer.parse_csv()
+        importer.validate_and_process_rows()
+
+        assert importer.results[0]["result_type"] == "multiple_plans_found"
+        assert "2024-100" in importer.results[0]["error_message"]
+        assert importer.results[0]["plan_id"] is None
+
+    def test_validate_plan_not_found_by_diary_number_or_decision_id(self, valid_csv_file, test_plan):
+        """Test plan not found when neither diary_number nor decision_id match.
+
+        Args:
+            valid_csv_file: Valid CSV file fixture.
+            test_plan: Test plan fixture.
+        """
+        test_plan.diary_number = "HEL 2024-99999"
+        test_plan.decision_id = "2024-999"
+        test_plan.save()
+
+        importer = PlanGeometryImporter(valid_csv_file)
+        importer.parse_csv()
+        importer.validate_and_process_rows()
+
+        assert importer.results[0]["result_type"] == "plan_not_found"
+        assert "HEL 2024-12345" in importer.results[0]["error_message"]
+        assert "2024-100" in importer.results[0]["error_message"]
+
+    def test_validate_plan_not_found_without_csv_decision_id(self, tmp_path, test_plan):
+        """Test no decision_id fallback is done when CSV decision_id is empty.
+
+        Args:
+            tmp_path: Pytest temporary path fixture.
+            test_plan: Test plan fixture.
+        """
+        test_plan.diary_number = "HEL 2024-99999"
+        test_plan.save()
+
+        csv_path = tmp_path / "no_decision_id.csv"
+        wkt = (
+            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
+            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
+        )
+        with open(csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f, delimiter=";")
+            writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
+            writer.writerow([wkt, "101", "6593", "", "HEL 2024-12345"])
+
+        importer = PlanGeometryImporter(str(csv_path))
+        importer.parse_csv()
+        importer.validate_and_process_rows()
+
+        assert importer.results[0]["result_type"] == "plan_not_found"
+        assert importer.results[0]["error_message"] == "No active Plan found with diary_number: HEL 2024-12345"
 
     def test_validate_drawing_number_partial_match(self, valid_csv_file, test_plan):
         """Test drawing number partial match (first 4 chars).

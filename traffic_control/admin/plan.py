@@ -209,6 +209,7 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
         "missing_diary_number_details",
         "duplicate_diary_number_details",
         "plan_not_found_details",
+        "multiple_plans_found_details",
         "decision_id_mismatch_details",
         "drawing_number_mismatch_details",
         "invalid_wkt_details",
@@ -257,6 +258,7 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
                     "missing_diary_number_details",
                     "duplicate_diary_number_details",
                     "plan_not_found_details",
+                    "multiple_plans_found_details",
                     "decision_id_mismatch_details",
                     "drawing_number_mismatch_details",
                 ),
@@ -561,6 +563,18 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
             str: HTML formatted table with plan not found errors.
         """
         return self._format_results(obj, "plan_not_found")
+
+    @admin.display(description=_("Multiple Plans Found"))
+    def multiple_plans_found_details(self, obj: PlanGeometryImportLog) -> str:
+        """Get formatted HTML table of rows matching several Plans by decision_id.
+
+        Args:
+            obj (PlanGeometryImportLog): The import log instance.
+
+        Returns:
+            str: HTML formatted table with ambiguous plan match errors.
+        """
+        return self._format_results(obj, "multiple_plans_found")
 
     @admin.display(description=_("Decision ID Mismatches"))
     def decision_id_mismatch_details(self, obj: PlanGeometryImportLog) -> str:
