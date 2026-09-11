@@ -16,8 +16,7 @@ from traffic_control.tests.wfs.wfs_utils import (
     wfs_get_features_gml,
 )
 
-# The GML output exposes the Plan location as the convex hull of the related devices,
-# but the GeoJSON output returns the exact stored location geometry.
+# Both the GML and the GeoJSON output return the exact stored location geometry of the Plan.
 EXPECTED_MULTIPOLYGON_COORDINATES = [
     [
         [
@@ -30,12 +29,16 @@ EXPECTED_MULTIPOLYGON_COORDINATES = [
     ]
 ]
 
-EXPECTED_POLYGON_LOCATION = (
+EXPECTED_MULTIPOLYGON_LOCATION = (
+    '<ns0:MultiPolygon xmlns:ns0="http://www.opengis.net/gml/3.2" ns0:id="Plan.{object_id}.1"'
+    ' srsName="urn:ogc:def:crs:EPSG::3879">'
+    '<ns0:Polygon><ns0:exterior><ns0:LinearRing><ns0:posList srsDimension="3">'
     "6645450.071 25487920.144 0.0 "
     "6645451.071 25487920.144 0.0 "
     "6645451.071 25487921.144 0.0 "
     "6645450.071 25487921.144 0.0 "
     "6645450.071 25487920.144 0.0"
+    "</ns0:posList></ns0:LinearRing></ns0:exterior></ns0:Polygon></ns0:MultiPolygon>"
 )
 
 
@@ -51,8 +54,8 @@ def test__wfs_plan__gml():
     assert gml_feature_id(feature) == f"plan.{plan.id}"
 
     # Ensure the coordinate order is [Y,X,Z] EPSG:3879
-    assert gml_feature_geometry(feature, "Polygon") == EXPECTED_POLYGON_LOCATION
-    assert gml_feature_crs(feature, "Polygon") == EPSG_3879_URN
+    assert gml_feature_geometry(feature, "MultiPolygon") == EXPECTED_MULTIPOLYGON_LOCATION.format(object_id=plan.id)
+    assert gml_feature_crs(feature, "MultiPolygon") == EPSG_3879_URN
     _assert_envelope(feature)
 
 
