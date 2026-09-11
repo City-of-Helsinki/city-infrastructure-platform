@@ -51,10 +51,12 @@ class PlanGeometryImporter:
 
         identifier = diary_number or f"decision_id:{decision_id}"
         if identifier in self._seen_row_identifiers:
-            result["result_type"] = "duplicate_diary_number"
-            result["error_message"] = (
-                f"Duplicate diary number: {diary_number}" if diary_number else f"Duplicate decision id: {decision_id}"
-            )
+            if diary_number:
+                result["result_type"] = "duplicate_diary_number"
+                result["error_message"] = f"Duplicate diary number: {diary_number}"
+            else:
+                result["result_type"] = "duplicate_decision_id"
+                result["error_message"] = f"Duplicate decision id: {decision_id}"
             return False
 
         self._seen_row_identifiers.add(identifier)
@@ -65,7 +67,8 @@ class PlanGeometryImporter:
 
         Reads semicolon-delimited CSV file and validates each row for:
         - Missing diary numbers and decision ids
-        - Duplicate diary numbers (or decision ids) within CSV
+        - Duplicate diary numbers within CSV
+        - Duplicate decision ids within CSV (when diary number is missing)
         - Empty geometries
         - Invalid WKT format
 
@@ -304,6 +307,7 @@ class PlanGeometryImporter:
                 In that case result_type and error_message are set on the result.
         """
         diary_number = result["diaari"]
+        # query will never return more than one plan because diary_number is unique among active plans
         plan = Plan.objects.filter(is_active=True, diary_number=diary_number).first() if diary_number else None
 
         if plan:
@@ -615,6 +619,7 @@ class PlanGeometryImporter:
         - multiple_plans_found.csv: Ambiguous decision_id matches
         - missing_diary_number.csv: Rows with missing diary numbers
         - duplicate_diary_number.csv: Duplicate diary numbers
+        - duplicate_decision_id.csv: Duplicate decision ids
         - invalid_geometries.csv: Invalid WKT errors
         - invalid_geometry_type.csv: Wrong geometry type
         - invalid_geometry_bounds.csv: Out of bounds geometries
@@ -641,6 +646,7 @@ class PlanGeometryImporter:
             "multiple_plans_found": "multiple_plans_found.csv",
             "missing_diary_number": "missing_diary_number.csv",
             "duplicate_diary_number": "duplicate_diary_number.csv",
+            "duplicate_decision_id": "duplicate_decision_id.csv",
             "invalid_wkt": "invalid_geometries.csv",
             "invalid_geometry_type": "invalid_geometry_type.csv",
             "invalid_geometry_topology": "invalid_geometry_topology.csv",

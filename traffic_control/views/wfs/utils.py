@@ -54,11 +54,6 @@ class CentroidLocationXsdElement(GeometryXsdElement):
         return getattr(instance, "centroid_location", None)
 
 
-class ConvexHullLocationXsdElement(GeometryXsdElement):
-    def get_value(self, instance: models.Model):
-        return getattr(instance, "convex_hull_location", None)
-
-
 class IconXsdElement(XsdElement):
     def get_value(self, instance: models.Model):
         # instance needs to have device_type field

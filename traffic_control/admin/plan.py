@@ -208,6 +208,7 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
         "skipped_no_changes_details",
         "missing_diary_number_details",
         "duplicate_diary_number_details",
+        "duplicate_decision_id_details",
         "plan_not_found_details",
         "multiple_plans_found_details",
         "decision_id_mismatch_details",
@@ -257,6 +258,7 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
                 "fields": (
                     "missing_diary_number_details",
                     "duplicate_diary_number_details",
+                    "duplicate_decision_id_details",
                     "plan_not_found_details",
                     "multiple_plans_found_details",
                     "decision_id_mismatch_details",
@@ -491,6 +493,18 @@ class PlanGeometryImportLogAdmin(admin.ModelAdmin):
             str: HTML formatted table with duplicate diary number errors.
         """
         return self._format_results(obj, "duplicate_diary_number")
+
+    @admin.display(description=_("Duplicate Decision IDs"))
+    def duplicate_decision_id_details(self, obj: PlanGeometryImportLog) -> str:
+        """Get formatted HTML table of rows with duplicate decision ids in CSV.
+
+        Args:
+            obj (PlanGeometryImportLog): The import log instance.
+
+        Returns:
+            str: HTML formatted table with duplicate decision id errors.
+        """
+        return self._format_results(obj, "duplicate_decision_id")
 
     @admin.display(description=_("Invalid WKT Geometry"))
     def invalid_wkt_details(self, obj: PlanGeometryImportLog) -> str:

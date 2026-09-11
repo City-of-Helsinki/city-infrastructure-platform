@@ -1,4 +1,3 @@
-import operator
 from typing import Optional, Type
 
 from django.conf import settings
@@ -13,11 +12,7 @@ from gisserver.output import GeoJsonRenderer, GML32Renderer
 from gisserver.projection import FeatureProjection
 from gisserver.types import XsdElement
 
-from traffic_control.views.wfs.utils import (
-    ConvexHullLocationXsdElement,
-    EnumIntegerNameXsdElement,
-    IconXsdElement,
-)
+from traffic_control.views.wfs.utils import EnumIntegerNameXsdElement, IconXsdElement
 from traffic_control.views.wfs.workarounds import patch_gml_filter_axis_order
 
 patch_gml_filter_axis_order()
@@ -97,10 +92,6 @@ class CustomGeoJsonRenderer(GeoJsonRenderer):
         bypasses elements such as ``CentroidLocationXsdElement`` that expose a model property
         instead of a database field.
 
-        Convex hull elements are deliberately not resolved through ``get_value()``: GeoJSON has
-        always returned the exact stored geometry (e.g. the Plan ``location`` MultiPolygon), while
-        only the GML output presents the convex hull.
-
         Args:
             projection: The feature projection that is being rendered.
             instance: The Django model instance to render the geometry for.
@@ -130,8 +121,6 @@ class CustomGeoJsonRenderer(GeoJsonRenderer):
         geo_element = projection.main_geometry_element
         if geo_element is None:
             return None
-        if isinstance(geo_element, ConvexHullLocationXsdElement):
-            return operator.attrgetter(geo_element.orm_path)(instance)
         return geo_element.get_value(instance)
 
 
@@ -140,7 +129,7 @@ class CustomGetFeature(GetFeature):
         """List the supported output formats for ``GetFeature``.
 
         Database-side rendering is intentionally not used, because the custom geometry elements
-        (centroid and convex hull) resolve their value in Python through ``get_value()``.
+        (e.g. centroid) resolve their value in Python through ``get_value()``.
 
         Returns:
             list[OutputFormat]: The output formats offered by this operation.
