@@ -10,12 +10,11 @@ from traffic_control.views.wfs.common import (
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
-from traffic_control.views.wfs.utils import ConvexHullLocationXsdElement
 
 _fields = (
     [
         FeatureField("id", abstract="ID of the Plan."),
-        FeatureField("location", xsd_class=ConvexHullLocationXsdElement, abstract="Location of the Plan."),
+        FeatureField("location", abstract="Location of the Plan."),
         FeatureField("name", abstract="Name of the Plan."),
         FeatureField("decision_id", abstract="Decision ID of the Plan."),
         FeatureField("diary_number", abstract="Diary numbger of the Plan."),

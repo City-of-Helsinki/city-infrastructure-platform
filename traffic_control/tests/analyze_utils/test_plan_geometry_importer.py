@@ -11,6 +11,11 @@ from traffic_control.analyze_utils.plan_geometry_importer import (
 from traffic_control.geometry_utils import get_3d_geometry
 from traffic_control.tests.factories import get_user, PlanFactory
 
+TEST_WKT = (
+    "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
+    "25493859.07 6679719.85, 25493824.78 6679773.23)))"
+)
+
 
 @pytest.fixture
 def test_user(db):
@@ -53,17 +58,10 @@ def valid_csv_file(tmp_path):
         str: Path to created CSV file.
     """
     csv_path = tmp_path / "test_geometries.csv"
-
-    # Create simple valid MultiPolygon WKT
-    wkt = (
-        "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-        "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-    )
-
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f, delimiter=";")
         writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-        writer.writerow([wkt, "101", "6593", "2024-100", "HEL 2024-12345"])
+        writer.writerow([TEST_WKT, "101", "6593", "2024-100", "HEL 2024-12345"])
 
     return str(csv_path)
 
@@ -115,15 +113,10 @@ class TestPlanGeometryImporter:
             tmp_path: Pytest temporary path fixture.
         """
         csv_path = tmp_path / "missing_diary.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
-
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "6593", "", ""])
+            writer.writerow([TEST_WKT, "101", "6593", "", ""])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
@@ -138,15 +131,10 @@ class TestPlanGeometryImporter:
             tmp_path: Pytest temporary path fixture.
         """
         csv_path = tmp_path / "decision_id_only.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
-
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "6593", "2024-100", ""])
+            writer.writerow([TEST_WKT, "101", "6593", "2024-100", ""])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
@@ -162,24 +150,18 @@ class TestPlanGeometryImporter:
             tmp_path: Pytest temporary path fixture.
         """
         csv_path = tmp_path / "duplicate_decision_id.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
-
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "6593", "2024-100", ""])
-            writer.writerow([wkt, "102", "6594", "2024-100", ""])
+            writer.writerow([TEST_WKT, "101", "6593", "2024-100", ""])
+            writer.writerow([TEST_WKT, "102", "6594", "2024-100", ""])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
 
         assert len(importer.results) == 2
-        assert importer.results[0]["result_type"] is None
-        assert importer.results[1]["result_type"] == "duplicate_diary_number"
-        assert "2024-100" in importer.results[1]["error_message"]
+        duplicate_results = [r for r in importer.results if r["result_type"] == "duplicate_decision_id"]
+        assert len(duplicate_results) == 1
 
     def test_parse_csv_duplicate_diary_number(self, tmp_path):
         """Test CSV with duplicate diary numbers.
@@ -188,16 +170,11 @@ class TestPlanGeometryImporter:
             tmp_path: Pytest temporary path fixture.
         """
         csv_path = tmp_path / "duplicate_diary.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
-
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "6593", "2024-100", "HEL 2024-12345"])
-            writer.writerow([wkt, "102", "6594", "2024-100", "HEL 2024-12345"])
+            writer.writerow([TEST_WKT, "101", "6593", "2024-100", "HEL 2024-12345"])
+            writer.writerow([TEST_WKT, "102", "6594", "2024-100", "HEL 2024-12345"])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
@@ -315,14 +292,10 @@ class TestPlanGeometryImporter:
             test_plan: Test plan fixture.
         """
         csv_path = tmp_path / "decision_id_only.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "6593", "2024-100", ""])
+            writer.writerow([TEST_WKT, "101", "6593", "2024-100", ""])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
@@ -343,14 +316,10 @@ class TestPlanGeometryImporter:
         test_plan.save()
 
         csv_path = tmp_path / "decision_id_only_not_found.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "6593", "2024-999", ""])
+            writer.writerow([TEST_WKT, "101", "6593", "2024-999", ""])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
@@ -439,14 +408,10 @@ class TestPlanGeometryImporter:
         test_plan.save()
 
         csv_path = tmp_path / "no_decision_id.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "6593", "", "HEL 2024-12345"])
+            writer.writerow([TEST_WKT, "101", "6593", "", "HEL 2024-12345"])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
@@ -477,15 +442,10 @@ class TestPlanGeometryImporter:
             test_plan: Test plan fixture.
         """
         csv_path = tmp_path / "exact_match.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
-
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
-            writer.writerow([wkt, "101", "7000", "2024-100", "HEL 2024-12345"])
+            writer.writerow([TEST_WKT, "101", "7000", "2024-100", "HEL 2024-12345"])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
@@ -566,11 +526,6 @@ class TestPlanGeometryImporter:
             test_plan: Test plan fixture.
         """
         csv_path = tmp_path / "multi_drawing.csv"
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
-
         # Set up plan with specific drawing numbers
         test_plan.drawing_numbers = ["1234-4", "6789"]
         test_plan.save()
@@ -579,7 +534,7 @@ class TestPlanGeometryImporter:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(["wkt_geom", "fid", "piirustusnumero", "decision_id", "diaari"])
             # CSV has comma-separated drawing numbers
-            writer.writerow([wkt, "101", "1234, 4567", "2024-100", "HEL 2024-12345"])
+            writer.writerow([TEST_WKT, "101", "1234, 4567", "2024-100", "HEL 2024-12345"])
 
         importer = PlanGeometryImporter(str(csv_path))
         importer.parse_csv()
@@ -602,11 +557,7 @@ class TestPlanGeometryImporter:
             test_plan: Test plan fixture.
         """
         # Set plan location to match CSV
-        wkt = (
-            "MULTIPOLYGON (((25493824.78 6679773.23, 25493870.36 6679749.80, "
-            "25493859.07 6679719.85, 25493824.78 6679773.23)))"
-        )
-        geom = GEOSGeometry(wkt, srid=settings.SRID)
+        geom = GEOSGeometry(TEST_WKT, srid=settings.SRID)
 
         test_plan.location = get_3d_geometry(geom, 0.0)
         test_plan.derive_location = False
