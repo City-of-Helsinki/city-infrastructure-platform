@@ -1,6 +1,6 @@
 import csv
 import os
-from typing import Dict, List, Set
+from typing import Dict, List, Optional, Set
 
 from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
@@ -14,8 +14,9 @@ from users.utils import get_system_user
 class PlanGeometryImporter:
     """Imports plan geometries from CSV file containing WKT MultiPolygon data.
 
-    Validates geometries and matches plans by diary_number, then updates
-    location and derive_location fields.
+    Validates geometries and matches plans primarily by diary_number, with
+    decision_id used as a secondary match, then updates location and
+    derive_location fields.
     """
 
     def __init__(self, csv_file_path: str) -> None:
@@ -26,14 +27,45 @@ class PlanGeometryImporter:
         """
         self.csv_file_path = csv_file_path
         self.results: List[Dict] = []
-        self._seen_diary_numbers: Set[str] = set()
+        self._seen_row_identifiers: Set[str] = set()
+
+    def _validate_row_identifiers(self, result: Dict) -> bool:
+        """Validate that a CSV row has a usable, non-duplicate Plan identifier.
+
+        A row is identified either by its diary number or, when that is missing,
+        by its decision id.
+
+        Args:
+            result (Dict): Result dictionary to update.
+
+        Returns:
+            bool: True if validation passed, False if error was set.
+        """
+        diary_number = result["diaari"]
+        decision_id = result["decision_id"]
+
+        if not diary_number and not decision_id:
+            result["result_type"] = "missing_diary_number"
+            result["error_message"] = "Missing diary number and decision id in CSV"
+            return False
+
+        identifier = diary_number or f"decision_id:{decision_id}"
+        if identifier in self._seen_row_identifiers:
+            result["result_type"] = "duplicate_diary_number"
+            result["error_message"] = (
+                f"Duplicate diary number: {diary_number}" if diary_number else f"Duplicate decision id: {decision_id}"
+            )
+            return False
+
+        self._seen_row_identifiers.add(identifier)
+        return True
 
     def parse_csv(self) -> None:
         """Parse CSV file and build intermediate data structure with validation.
 
         Reads semicolon-delimited CSV file and validates each row for:
-        - Missing diary numbers
-        - Duplicate diary numbers within CSV
+        - Missing diary numbers and decision ids
+        - Duplicate diary numbers (or decision ids) within CSV
         - Empty geometries
         - Invalid WKT format
 
@@ -48,28 +80,18 @@ class PlanGeometryImporter:
                     "diaari": row.get("diaari", "").strip(),
                     "fid": row.get("fid", ""),
                     "piirustusnumero": row.get("piirustusnumero", ""),
-                    "decision_id": row.get("decision_id", ""),
+                    "decision_id": row.get("decision_id", "").strip(),
                     "result_type": None,
                     "error_message": None,
                     "plan_id": None,
+                    "matched_by": None,
                     "geometry": None,
                 }
 
-                # Check for missing diary number
-                if not result["diaari"]:
-                    result["result_type"] = "missing_diary_number"
-                    result["error_message"] = "Missing diary number in CSV"
+                # Check that the row can be matched to a Plan and is not a duplicate
+                if not self._validate_row_identifiers(result):
                     self.results.append(result)
                     continue
-
-                # Check for duplicate diary number in CSV
-                if result["diaari"] in self._seen_diary_numbers:
-                    result["result_type"] = "duplicate_diary_number"
-                    result["error_message"] = f"Duplicate diary number: {result['diaari']}"
-                    self.results.append(result)
-                    continue
-
-                self._seen_diary_numbers.add(result["diaari"])
 
                 # Get WKT geometry
                 wkt_geom = row.get("wkt_geom", "").strip()
@@ -227,6 +249,69 @@ class PlanGeometryImporter:
         result["csv_drawing_numbers"] = csv_drawing_numbers
         return True
 
+    def _set_plan_not_found(self, result: Dict) -> None:
+        """Set plan not found error in result.
+
+        Args:
+            result (Dict): Result dictionary to update.
+        """
+        identifiers = []
+        if result["diaari"]:
+            identifiers.append(f"diary_number: {result['diaari']}")
+        if result["decision_id"]:
+            identifiers.append(f"decision_id: {result['decision_id']}")
+
+        result["result_type"] = "plan_not_found"
+        result["error_message"] = f"No active Plan found with {' or '.join(identifiers)}"
+
+    def _find_plan_by_decision_id(self, result: Dict) -> Optional[Plan]:
+        """Find an active Plan by the CSV decision_id.
+
+        Args:
+            result (Dict): Result dictionary containing the CSV decision_id.
+
+        Returns:
+            Optional[Plan]: Matching Plan, or None if no unambiguous match was found.
+                In that case result_type and error_message are set on the result.
+        """
+        decision_id = result["decision_id"]
+        plans = list(Plan.objects.filter(is_active=True, decision_id=decision_id)) if decision_id else []
+
+        if len(plans) > 1:
+            result["result_type"] = "multiple_plans_found"
+            result["error_message"] = f"Found {len(plans)} active Plans with decision_id '{decision_id}'"
+            return None
+
+        if not plans:
+            self._set_plan_not_found(result)
+            return None
+
+        result["matched_by"] = "decision_id"
+        return plans[0]
+
+    def _find_plan(self, result: Dict) -> Optional[Plan]:
+        """Find the Plan matching a CSV row.
+
+        Plans are matched primarily by diary_number, which is unique among active
+        plans. When the row has no diary number, or no plan matches it, the CSV
+        decision_id is used as a secondary match.
+
+        Args:
+            result (Dict): Result dictionary containing the CSV diary number and decision_id.
+
+        Returns:
+            Optional[Plan]: Matching Plan, or None if no unambiguous match was found.
+                In that case result_type and error_message are set on the result.
+        """
+        diary_number = result["diaari"]
+        plan = Plan.objects.filter(is_active=True, diary_number=diary_number).first() if diary_number else None
+
+        if plan:
+            result["matched_by"] = "diary_number"
+            return plan
+
+        return self._find_plan_by_decision_id(result)
+
     def validate_and_process_rows(self) -> None:
         """Validate geometries and match with Plan records.
 
@@ -235,7 +320,7 @@ class PlanGeometryImporter:
         - Empty geometry detection
         - 3D geometry conversion
         - Projection boundary validation
-        - Plan matching by diary_number
+        - Plan matching by diary_number, with decision_id as a secondary match
         - Decision ID validation
         - Drawing number validation
 
@@ -251,22 +336,15 @@ class PlanGeometryImporter:
 
             # Find matching Plan and validate
             try:
-                plan = Plan.objects.filter(is_active=True, diary_number=result["diaari"]).first()
+                plan = self._find_plan(result)
 
                 if not plan:
-                    result["result_type"] = "plan_not_found"
-                    result["error_message"] = f"No active Plan found with diary_number: {result['diaari']}"
                     continue
 
                 result["plan_id"] = str(plan.id)
 
-                # Validate decision_id match
-                if result["decision_id"] and plan.decision_id != result["decision_id"]:
-                    result["result_type"] = "decision_id_mismatch"
-                    result["error_message"] = (
-                        f"CSV decision_id '{result['decision_id']}' does not match "
-                        f"Plan decision_id '{plan.decision_id}'"
-                    )
+                # Validate decision_id match, plans matched by decision_id always match
+                if not self._validate_decision_id(result, plan):
                     continue
 
                 # Validate drawing number
@@ -278,6 +356,28 @@ class PlanGeometryImporter:
             except Exception as e:
                 result["result_type"] = "plan_not_found"
                 result["error_message"] = f"Error querying Plan: {str(e)}"
+
+    def _validate_decision_id(self, result: Dict, plan: Plan) -> bool:
+        """Validate that the CSV decision_id matches the matched Plan.
+
+        Args:
+            result (Dict): Result dictionary containing the CSV decision_id.
+            plan (Plan): Plan matched for the row.
+
+        Returns:
+            bool: True if validation passed, False if error was set.
+        """
+        if result["matched_by"] == "decision_id":
+            return True
+
+        if result["decision_id"] and plan.decision_id != result["decision_id"]:
+            csv_decision_id = result["decision_id"]
+            message = f"CSV decision_id '{csv_decision_id}' does not match Plan decision_id '{plan.decision_id}'"
+            result["result_type"] = "decision_id_mismatch"
+            result["error_message"] = message
+            return False
+
+        return True
 
     def _merge_drawing_numbers(self, plan_drawing_numbers: List[str], csv_drawing_numbers: List[str]) -> List[str]:
         """Merge CSV drawing numbers with existing plan drawing numbers.
@@ -400,12 +500,13 @@ class PlanGeometryImporter:
         """
         plan = Plan.objects.get(pk=result["plan_id"])
         update_fields, fields_changed = self._build_update_fields(plan, result)
+        diary_number = result["diaari"] or plan.diary_number or ""
 
         if update_fields:
             result["update_details"] = {
                 "csv_row": result["row_number"],
                 "plan_id": result["plan_id"],
-                "diary_number": result["diaari"],
+                "diary_number": diary_number,
                 "fields_changed": fields_changed,
             }
             Plan.objects.filter(pk=result["plan_id"]).update(**update_fields, updated_by=get_system_user())
@@ -417,7 +518,7 @@ class PlanGeometryImporter:
         result["update_details"] = {
             "csv_row": result["row_number"],
             "plan_id": result["plan_id"],
-            "diary_number": result["diaari"],
+            "diary_number": diary_number,
             "fields_changed": [],
         }
         return False
@@ -510,7 +611,8 @@ class PlanGeometryImporter:
         Creates an output directory and writes multiple CSV files:
         - all_results.csv: All processed rows
         - plans_updated.csv: Successfully updated rows
-        - plans_not_found.csv: Plans not found by diary_number
+        - plans_not_found.csv: Plans not found by diary_number or decision_id
+        - multiple_plans_found.csv: Ambiguous decision_id matches
         - missing_diary_number.csv: Rows with missing diary numbers
         - duplicate_diary_number.csv: Duplicate diary numbers
         - invalid_geometries.csv: Invalid WKT errors
@@ -536,6 +638,7 @@ class PlanGeometryImporter:
             "success": "plans_updated.csv",
             "skipped_no_changes": "plans_skipped_no_changes.csv",
             "plan_not_found": "plans_not_found.csv",
+            "multiple_plans_found": "multiple_plans_found.csv",
             "missing_diary_number": "missing_diary_number.csv",
             "duplicate_diary_number": "duplicate_diary_number.csv",
             "invalid_wkt": "invalid_geometries.csv",
