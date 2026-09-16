@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 16:25+0300\n"
+"POT-Creation-Date: 2026-09-16 16:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3269,12 +3269,6 @@ msgstr "Tidsstämpel när e-posten med 7-dagarsvarning skickades."
 # AI translation - needs human review
 msgid "Timestamp when the import run finished."
 msgstr "Tidsstämpel när importkörningen slutfördes."
-
-# AI translation - needs human review
-#, fuzzy
-#| msgid "Timestamp when the import run was started."
-msgid "Timestamp when the import run was started"
-msgstr "Tidsstämpel när importkörningen startades."
 
 # AI translation - needs human review
 msgid "Timestamp when the import run was started."
