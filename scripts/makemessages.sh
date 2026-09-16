@@ -1,1 +1,1 @@
-uv run manage.py makemessages -i ".venv/*" -i "map-view/*" -l fi -l sv --no-location
+uv run manage.py makemessages_organized -i ".venv/*" -i "map-view/*" -l fi -l sv --no-location
