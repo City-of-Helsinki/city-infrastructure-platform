@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 10:48+0300\n"
+"POT-Creation-Date: 2026-09-16 16:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,470 +16,107 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Furniture Signpost Real"
-msgstr "Lokaliseringsmärke (implementering)"
-
-msgid "General information"
-msgstr "Allmän information"
-
-msgid "Location information"
-msgstr "Platsinformation"
-
-msgid "Content and physical properties"
-msgstr "Innehåll och fysiska egenskaper"
-
-msgid "Validity"
-msgstr "Giltighet"
-
-msgid "Metadata"
-msgstr "Metadata"
-
-msgid "Related models"
-msgstr "Relaterade modeller"
-
-msgid "Installation information"
-msgstr "Information om installation"
-
-msgid "City furniture"
-msgstr "Stadsmöbler"
-
-msgid "Furniture signpost"
-msgstr "Lokaliseringsmärke"
-
-msgid "Traffic"
-msgstr "Trafik"
-
-msgid "Communication"
-msgstr "Kommunikation"
-
-msgid "Security"
-msgstr "Säkerhet"
-
-msgid "Others"
-msgstr "Övrigt"
-
-msgid "Communication fixture"
-msgstr "Kommunikationsanordning"
-
-msgid "Telephone box"
-msgstr "Telefonkiosk"
-
-msgid "Postbox"
-msgstr "Brevlåda"
-
-msgid "Emergency call fixture"
-msgstr "Nödsamtalsanordning"
-
-msgid "Fire detector"
-msgstr "Branddetektor"
-
-msgid "Police call post"
-msgstr "Offentlig polistelefon"
-
-msgid "Switching unit"
-msgstr "Växlingsenhet"
-
-msgid "Road sign"
-msgstr "Vägmärke"
-
-msgid "Traffic light"
-msgstr "Trafiksignal"
-
-msgid "Free-standing sign"
-msgstr "Fristående märke"
-
-msgid "Free-standing warning sign"
-msgstr "Fristående varningsmärke"
-
-msgid "Bus stop"
-msgstr "Busshållplats"
-
-msgid "Milestone"
-msgstr "Milsten"
-
-msgid "Rail level crossing"
-msgstr "Spårvägsplankorsning"
-
-msgid "Gate"
-msgstr "Grind"
-
-msgid "Streetlamp, latern or candelabra"
-msgstr "Gatubelysning, gatlykta"
-
-msgid "Column"
-msgstr "Pelare"
-
-msgid "Lamp post"
-msgstr "Belysningsstolpe"
-
-msgid "Flagpole"
-msgstr "Flaggstång"
-
-msgid "Street sink box"
-msgstr "Gatubrunn"
-
-msgid "Rubbish bin"
-msgstr "Papperskorg"
-
-msgid "Clock"
-msgstr "Ur"
-
-msgid "Directional spot light"
-msgstr "Riktad strålkastare"
-
-msgid "Floodlight mast"
-msgstr "Belysningsmast"
-
-msgid "Windmill"
-msgstr "Väderkvarn"
-
-msgid "Solar cell"
-msgstr "Solpanel"
-
-msgid "Water wheel"
-msgstr "Vattenhjul"
-
-msgid "Pole"
-msgstr "Stolpe"
-
-msgid "Radio mast"
-msgstr "Radiomast"
-
-msgid "Aerial"
-msgstr "Antenn"
-
-msgid "Radio telescope"
-msgstr "Radioteleskop"
-
-msgid "Chimney"
-msgstr "Skorsten"
-
-msgid "Marker"
-msgstr "Märke"
-
-msgid "Hydrant"
-msgstr "Brandpost"
-
-msgid "Upper corridor fire-hydrant"
-msgstr "Väggbrandpost"
-
-msgid "Lower floor panel fire-hydrant"
-msgstr "Golvpanelbrandpost"
-
-msgid "Slidegate valve cap"
-msgstr "Lock till skjutspjällventil"
-
-msgid "Entrance shaft"
-msgstr "Ingångsschakt"
-
-msgid "Converter"
-msgstr "Transformator"
-
-msgid "Stair"
-msgstr "Trappa"
-
-msgid "Outside staircase"
-msgstr "Utomhustrappa"
-
-msgid "Escalator"
-msgstr "Hiss"
-
-msgid "Ramp"
-msgstr "Ramp"
-
-msgid "Patio"
-msgstr "Terrass"
-
-msgid "Fence"
-msgstr "Staket"
-
-msgid "Memorial/monument"
-msgstr "Minnessten/staty"
-
-msgid "Wayside shrine"
-msgstr "Helgedom vid vägkant"
-
-msgid "Crossroads"
-msgstr "Korsning"
-
-msgid "Cross on the summit of a mountain"
-msgstr "Kors på bergstopp"
-
-msgid "Fountain"
-msgstr "Fontän"
-
-msgid "Block mark"
-msgstr "Spärrmärke"
-
-msgid "Boundary post"
-msgstr "Gränsstolpe"
-
-msgid "Bench"
-msgstr "Bänk"
-
-msgid "File"
-msgstr "Fil"
-
-msgid "City Furniture Device Type Icon"
-msgstr "Ikon för stadsmöbelns typ"
-
-msgid "City Furniture Device Type Icons"
-msgstr "Ikon för stadsmöblernas typer"
-
-msgid "Code"
-msgstr "Kod"
-
-msgid "Code of the Device Type in the Helsinki Design Manual."
-msgstr "Kod för anordningstypen i Helsingfors designmanual."
-
-msgid "City Furniture Class type"
-msgstr "Stadsmöbler - klasstyp"
-
-msgid "OGC CityGML City Furniture Class"
-msgstr "OGC CityGML-kategori för stadsmöbel"
-
-msgid "City Furniture Function or Usage type"
-msgstr "Stadsmöbler - funktion eller användningstyp"
-
-msgid "OGC CityGML City Furniture Function or Usage type"
-msgstr "Stadsmöbler - funktion eller användningstyp"
+# AI translation - needs human review
+#, python-format
+msgid " By %(filter_title)s "
+msgstr " Efter %(filter_title)s "
+
+msgid ""
+"'Missing content' cannot be enabled when the content field (content_s) is "
+"not empty."
+msgstr ""
+"Kan inte vara 'innehåll saknas' när 'innehållet' (content_s) inte är tomt."
+
+msgid "--ids parameter of the run."
+msgstr ""
+
+msgid "--models parameter of the run."
+msgstr ""
 
 # AI translation - needs human review
-msgid "Icon file"
-msgstr "Ikonfil"
+msgid "1-day warning sent"
+msgstr "1-dagsvarning skickad"
 
-msgid "Icon of the actual device"
-msgstr "Ikon för egentlig anordning"
+# AI translation - needs human review
+msgid "30-day warning sent"
+msgstr "30-dagarsvarning skickad"
 
-msgid "Finnish Description"
-msgstr "Finsk beskrivning"
+# AI translation - needs human review
+msgid "7-day warning sent"
+msgstr "7-dagarsvarning skickad"
 
-msgid "Description of the Device Type in Finnish."
-msgstr "Beskrivning av anordningstypen på finska."
+msgid "A drawing number must not contain special characters"
+msgstr "Ritningsnumret får inte innehålla specialtecken"
 
-msgid "Swedish Description"
-msgstr "Svensk beskrivning"
+msgid "Above"
+msgstr "Ovanför"
 
-msgid "Description of the Device Type in Swedish."
-msgstr "Beskrivning av anordningstypen på svenska."
+msgid "Above the lanes"
+msgstr "Ovanför körfälten"
 
-msgid "English Description"
-msgstr "Engelsk beskrivning"
+msgid "Active"
+msgstr "Aktiv"
 
-msgid "Description of the Device Type in English."
-msgstr "Beskrivning av anordningstypen på engelska."
+# AI translation - needs human review
+msgid "Activity Tracking"
+msgstr "Aktivitetsspårning"
 
-msgid "Size"
-msgstr "Storlek"
+msgid "Additional Sign Plan"
+msgstr "Tilläggsskylt (plan)"
 
-msgid "Standard size of the Device Type."
-msgstr "Anordningstypens standardstorlek."
+msgid "Additional Sign Plan File"
+msgstr "Tilläggsskylt planfil"
 
-msgid "Target data model"
-msgstr "Måldatamodell"
+msgid "Additional Sign Plan Files"
+msgstr "Tilläggsskylt planfiler"
 
-msgid "City Furniture model that this Device Type is usable for."
-msgstr "Stadsmöbelmodell som denna anordningstyp kan användas för."
+msgid "Additional Sign Plan Replacement"
+msgstr "Ersättning för tilläggsskyltplan"
 
-msgid "City Furniture Device Type"
-msgstr "Stadsmöbler - anordningstyp"
+msgid "Additional Sign Plan Replacements"
+msgstr "Ersättningar för tilläggsskyltplaner"
 
-msgid "City Furniture Device Types"
-msgstr "Stadsmöbler - anordningstyper"
+msgid "Additional Sign Plans"
+msgstr "Tilläggsskylt (planer)"
 
-msgid "Name"
-msgstr "Namn"
+msgid "Additional Sign Real"
+msgstr "Tilläggsskylt (implementering)"
 
-msgid "Name of the color in Helsinki Design System or Manual."
-msgstr ""
-"Färgens namn i Helsinki Design System eller i Helsingfors designmanual."
+msgid "Additional Sign Real File"
+msgstr "Tilläggsskylt utfallsfil"
 
-msgid "RGB Hex value of the color"
-msgstr "Färgens RGB Hex-värde"
+msgid "Additional Sign Real Files"
+msgstr "Tilläggsskylt utfallsfiler"
 
-msgid "City Furniture Color"
-msgstr "Stadsmöbler - färg"
+msgid "Additional Sign Reals"
+msgstr "Tilläggsskylt (implementeringar)"
 
-msgid "City Furniture Colors"
-msgstr "Stadsmöbler - färger"
+msgid "Additional Signs"
+msgstr "Tilläggsskyltar"
 
-msgid "Finnish name"
-msgstr "Finskt namn"
+msgid "Additional details about the installation."
+msgstr "Ytterligare detaljer om installationen."
 
-msgid "Name of the target in Finnish."
-msgstr "Objektets namn på finska."
+msgid "Additional device type codes specific to the local public authorities."
+msgstr "Ytterligare anordningstypkoder specifika för de lokala myndigheterna."
 
-msgid "Swedish name"
-msgstr "Svenskt namn"
+msgid "Additional info"
+msgstr "Ytterligare info"
 
-msgid "Name of the target in Swedish."
-msgstr "Objektets namn på svenska."
-
-msgid "English name"
-msgstr "Engelskt namn"
-
-msgid "Name of the target in English."
-msgstr "Objektets namn på engelska."
-
-msgid "Description"
-msgstr "Beskrivning"
-
-msgid "Description of the target."
-msgstr "Beskrivning av objektet."
-
-msgid "City Furniture Target"
-msgstr "Stadsmöbler - mål"
-
-msgid "City Furniture Targets"
-msgstr "Stadsmöbler - mål"
-
-msgid "Up"
-msgstr "Upp"
-
-msgid "Down"
-msgstr "Ned"
-
-msgid "Left"
-msgstr "Vänster"
-
-msgid "Right"
-msgstr "Höger"
-
-msgid "Top right"
-msgstr "Övre högra"
-
-msgid "Bottom right"
-msgstr "Nedre högra"
-
-msgid "Top left"
-msgstr "Övre vänstra"
-
-msgid "Bottom left"
-msgstr "Nedre vänstra"
-
-msgid "Location (3D)"
-msgstr "Plats (3D)"
-
-msgid "Finnish location name"
-msgstr "Finskt platsnamn"
-
-msgid ""
-"Verbose name for the furniture signposts location in Finnish, e.g. street, "
-"park or island."
-msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
-
-msgid "Swedish location name"
-msgstr "Svenskt platsnamn"
-
-msgid ""
-"Verbose name for the furniture signposts location in Swedish, e.g. street, "
-"park or island."
-msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
-
-msgid "English location name"
-msgstr "Engelskt platsnamn"
-
-msgid ""
-"Verbose name for the furniture signposts location in English, e.g. street, "
-"park or island."
-msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
-
-msgid "Additional location info"
-msgstr "Ytterligare platsinfo"
+msgid "Additional information"
+msgstr "Tilläggsuppgifter"
 
 msgid "Additional information about the install location."
 msgstr "Ytterligare information om installationsplatsen."
 
-msgid "City Furniture Device type"
-msgstr "Stadsmöbler - anordningstyp"
+msgid "Additional information related to this device."
+msgstr "Tilläggsuppgifter om denna anordning."
 
-msgid "Type of the device from Helsinki Design Manual."
-msgstr "Anordningstyp i Helsingfors designmanual."
+msgid "Additional information related to this user."
+msgstr "Mer information om denna användare."
 
-msgid "Size of the signpost. Enter only if device has a non-standard size."
-msgstr ""
-"Skyltens storlek. Ange enbart om anordningen inte är av standardstorlek."
-
-msgid "Height"
-msgstr "Höjd"
-
-msgid ""
-"The height of the sign from the ground, measured from the bottom in "
-"centimeters."
-msgstr "Skyltens höjd över marken i centimeter, mätt från den övre kanten."
-
-msgid "Mount type"
-msgstr "Monteringstyp"
-
-msgid "Type of the mount this device is attached to."
-msgstr "Typen av den fästpunkt som anordningen är kopplad till."
-
-msgid "Arrow direction"
-msgstr "Pilens riktning"
-
-msgid "Direction of the arrow on this device in relation to the sign."
-msgstr ""
-"Riktning av den pil som finns i anordningen i förhållande till skylten."
-
-msgid "Color"
-msgstr "Färg"
-
-msgid "Color of the device from Helsinki Design Manual."
-msgstr "Anordningens färg i Helsingfors designmanual."
-
-msgid "Pictogram"
-msgstr "Piktogram"
-
-msgid "Description of the pictogram on the sign."
-msgstr "Beskrivning av den bildsymbol som finns i skylten."
-
-msgid "Furniture signpost value"
-msgstr "Lokaliseringsmärkets värde"
-
-msgid "Numeric value on the sign."
-msgstr "Nummervärde i skylten."
-
-msgid "Finnish text content"
-msgstr "Finskt textinnehåll"
-
-msgid "Content of the sign in Finnish."
-msgstr "Innehållet i skylten på finska."
-
-msgid "Swedish text content"
-msgstr "Svenskt textinnehåll"
-
-msgid "Content of the sign in Swedish."
-msgstr "Innehållet i skylten på svenska."
-
-msgid "English text content"
-msgstr "Engelskt textinnehåll"
-
-msgid "Content of the sign in English."
-msgstr "Innehållet i skylten på engelska."
-
-msgid "Content's responsible entity"
-msgstr "Ansvarig enhet för innehållet"
-
-msgid "Entity responsible for the device's content."
-msgstr "Ansvarig för innehållet i anordningen."
-
-msgid "Target"
-msgstr "Mål"
-
-msgid "Target subject, which this device relates to."
-msgstr "Objekt som anordningen gäller."
-
-msgid "Validity period start"
-msgstr "Giltighetsperiodens start"
-
-msgid "Date on which this device becomes active."
-msgstr "Datum då anordningen tas i bruk."
-
-msgid "Validity period end"
-msgstr "Giltighetsperiodens slut"
-
-msgid "Date after which this device becomes inactive."
-msgstr "Datum då anordningen tas ur bruk."
+msgid "Additional location info"
+msgstr "Ytterligare platsinfo"
 
 msgid "Additional material URL"
 msgstr "URL för ytterligare material"
@@ -489,1002 +126,205 @@ msgid ""
 msgstr ""
 "Ytterligare material om anordningen. Detta bör vara allmänt tillgängligt."
 
-msgid "Mount Plan"
-msgstr "Montering (plan)"
+msgid "Additional sign"
+msgstr "Tilläggsskylt"
 
-msgid "Mount that this device is mounted on."
-msgstr "Fästpunkt som anordningen är installerad i."
+msgid "Additional sign content as JSON document"
+msgstr "Innehållet i tilläggsskylten i form av JSON-dokument"
 
-msgid "Parent Furniture Signpost Plan"
-msgstr "Överordnat lokaliseringsmärke (plan)"
+msgid "Additional sign real operation"
+msgstr "Tilläggsskylt (implementeringsåtgärd)"
 
-msgid "Furniture Signpost inside which this device is located."
-msgstr "Skylttavla inom vilken anordningen finns."
-
-msgid "Plan"
-msgstr "Plan"
-
-msgid "Plan which this Device Plan is a part of."
-msgstr "Plan som denna anordningsplan ingår i."
-
-msgid "Furniture Signpost Plan"
-msgstr "Lokaliseringsmärke (plan)"
-
-msgid "Furniture Signpost Plans"
-msgstr "Lokaliseringsmärke (planer)"
-
-msgid "The plan for this device."
-msgstr "Plan för denna anordning."
-
-msgid "Parent Furniture Signpost Real"
-msgstr "Överordnat lokaliseringsmärke (implementering)"
-
-msgid "Mount Real"
-msgstr "Montering (implementering)"
-
-msgid "Furniture Signpost Reals"
-msgstr "Lokaliseringsmärke (implementeringar)"
-
-msgid "operation type"
-msgstr "typ av åtgärd"
-
-msgid "Furniture Signpost Real operation"
-msgstr "Lokaliseringsmärke (implementeringsåtgärd)"
-
-msgid "Furniture Signpost Real operations"
-msgstr "Lokaliseringsmärke (implementeringsåtgärder)"
-
-msgid "Furniture Signpost Plan File"
-msgstr "Lokaliseringsmärke (planfil)"
-
-msgid "Furniture Signpost Plan Files"
-msgstr "Lokaliseringsmärke (planfiler)"
-
-msgid "Furniture Signpost Real File"
-msgstr "Lokaliseringsmärke (implementeringsfil)"
-
-msgid "Furniture Signpost Real Files"
-msgstr "Lokaliseringsmärke (implementeringsfiler)"
-
-msgid "Template for Real Import"
-msgstr "Modellfil för införsel av utfall"
-
-msgid "This field is required."
-msgstr "Fältet är obligatoriskt."
-
-msgid "My account"
-msgstr "Egna uppgifter"
-
-msgid "Disabled feature"
-msgstr ""
-
-#, python-brace-format
-msgid ""
-"Number of results to return per page. Maximum number of results is "
-"{max_limit}."
-msgstr "Resultat per sida. Maximalt är {max_limit}"
-
-msgid "City Infrastructure Platform"
-msgstr "Stadsinfrastrukturplattform"
-
-msgid "Finnish"
-msgstr "Finska"
-
-msgid "English"
-msgstr "Engelska"
-
-msgid "Swedish"
-msgstr "Svenska"
-
-msgid "View map"
-msgstr "Visa karta"
-
-msgid "Documentation"
-msgstr "Dokumentation"
-
-msgid "View API"
-msgstr "Visa API"
-
-msgid "View API documentation"
-msgstr "Visa API-dokumentation"
-
-msgid "Log out"
-msgstr "Logga ut"
-
-msgid "Language"
-msgstr "Språk"
-
-msgid "Home"
-msgstr "Hem"
-
-msgid "This feature is disabled"
-msgstr ""
-
-msgid "Personal info"
-msgstr "Personliga uppgifter"
-
-msgid "username"
-msgstr "användarnamn"
-
-msgid "first name"
-msgstr "förnamn"
-
-msgid "last name"
-msgstr "efternamn"
-
-msgid "email address"
-msgstr "e-post"
-
-# AI translation - needs human review
-msgid "Maintenance Mode"
-msgstr "Underhållsläge"
-
-# AI translation - needs human review
-msgid "We apologize for the inconvenience. Please check back soon."
-msgstr "Vi ber om ursäkt för besväret. Kom tillbaka snart."
-
-# AI translation - needs human review
-msgid "Management Command Usage Tracker"
-msgstr "Användningsspårare för hanteringskommando"
-
-# AI translation - needs human review
-msgid ""
-"Notes on tracking the command or clarifications about the command's purpose"
-msgstr ""
-"Anteckningar om spårning av kommandot eller förtydliganden om kommandots "
-"syfte"
-
-# AI translation - needs human review
-msgid "When was usage tracking for this command started"
-msgstr "När påbörjades användningsspårningen för detta kommando"
-
-# AI translation - needs human review
-msgid ""
-"When was this command last executed. Unknown if it happened before tracking "
-"started"
-msgstr ""
-"När kördes detta kommando senast. Okänt om det skedde innan spårningen "
-"påbörjades"
-
-# AI translation - needs human review
-msgid "Maintenance mode active"
-msgstr "Underhållsläge aktivt"
-
-# AI translation - needs human review
-msgid ""
-"When active, all requests (except admin for admin users) will be blocked "
-"with 503 status."
-msgstr ""
-"När aktivt blockeras alla förfrågningar (utom admin för administratörer) med"
-" status 503."
-
-# AI translation - needs human review
-msgid "Message (Finnish)"
-msgstr "Meddelande (finska)"
-
-# AI translation - needs human review
-msgid "Message to display on the maintenance page in Finnish."
-msgstr "Meddelande som visas på underhållssidan på finska."
-
-# AI translation - needs human review
-msgid "Message (English)"
-msgstr "Meddelande (engelska)"
-
-# AI translation - needs human review
-msgid "Message to display on the maintenance page in English."
-msgstr "Meddelande som visas på underhållssidan på engelska."
-
-# AI translation - needs human review
-msgid "Message (Swedish)"
-msgstr "Meddelande (svenska)"
-
-# AI translation - needs human review
-msgid "Message to display on the maintenance page in Swedish."
-msgstr "Meddelande som visas på underhållssidan på svenska."
-
-msgid "Updated at"
-msgstr "Uppdaterades den"
-
-msgid "Updated by"
-msgstr "Uppdaterades av"
-
-# AI translation - needs human review
-msgid "Maintenance mode configuration cannot be deleted."
-msgstr "Konfigurationen för underhållsläge kan inte tas bort."
-
-msgid "Map"
-msgstr "Karta"
-
-msgid "Identifier"
-msgstr "Identifier"
-
-msgid "App Name"
-msgstr "Appnamn"
-
-msgid "Is basemap"
-msgstr "Grundkarta"
-
-msgid "Order"
-msgstr "Ordning"
-
-msgid "Filter fields"
-msgstr "Filtrera fält"
-
-msgid "Use Traffic Sign Icons"
-msgstr "Använd trafikskyltsymboler"
-
-msgid "Clustered"
-msgstr "Klustrad"
-
-msgid "Extra feature info"
-msgstr "Extra objektinformation"
-
-msgid "Fields added here need to be included in the corresponding WFS Feature"
-msgstr "Fält som läggs till här måste ingå i motsvarande WFS‑objekt."
-
-msgid "Layer"
-msgstr "Skikt"
-
-msgid "Layers"
-msgstr "Skikt"
-
-msgid "Name of feature type"
-msgstr "Objekttypens namn"
-
-# AI translation - needs human review
-msgid "Edit name"
-msgstr "Redigera namn"
-
-msgid "Name used in the edit link of the map's FeatureInfo component "
-msgstr "Namn som används i kartans FeatureInfo‑komponentens redigeringslänk"
-
-# AI translation - needs human review
-msgid "Feature Type Edit Mapping"
-msgstr "Redigeringsmappning för objekttyp"
-
-# AI translation - needs human review
-msgid "Feature Type Edit Mappings"
-msgstr "Redigeringsmappningar för objekttyp"
-
-msgid "png"
-msgstr "png"
-
-msgid "svg"
-msgstr "svg"
-
-msgid "Small"
-msgstr "Liten"
-
-msgid "Medium"
-msgstr "Medelstor"
-
-msgid "Large"
-msgstr "Stor"
-
-msgid "Extra Large"
-msgstr "Extrastor"
-
-msgid "Enabled"
-msgstr "Aktiverad"
-
-msgid "Image Type"
-msgstr "Bildtyp"
-
-msgid "PNG Size"
-msgstr "PNG Storlek"
-
-msgid "Scale"
-msgstr "Skala"
-
-msgid "IconDrawingConfig"
-msgstr "Ikonens ritningskonfiguration"
-
-msgid "IconDrawingConfigs"
-msgstr "Ikonernas ritningskonfigurationer"
-
-msgid "Basemaps"
-msgstr "Grundkartor"
-
-msgid "Overlays"
-msgstr "Överlägg"
-
-msgid "Change"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "View on site"
-msgstr ""
-
-# AI translation - needs human review
-msgid "Configuration"
-msgstr "Konfiguration"
-
-msgid "Content"
-msgstr "Innehåll"
-
-# AI translation - needs human review
-msgid "Scheduling"
-msgstr "Schemaläggning"
-
-# AI translation - needs human review
-msgid "Message Preview"
-msgstr "Förhandsgranskning av meddelande"
-
-# AI translation - needs human review
-msgid "Site Alerts"
-msgstr "Webbplatsvarningar"
-
-# AI translation - needs human review
-msgid "Info"
-msgstr "Information"
-
-# AI translation - needs human review
-msgid "Warning"
-msgstr "Varning"
-
-# AI translation - needs human review
-msgid "Critical"
-msgstr "Kritisk"
-
-# AI translation - needs human review
-msgid "Message active"
-msgstr "Meddelande aktivt"
-
-# AI translation - needs human review
-msgid "When enabled, display this message to users in the admin pages."
-msgstr ""
-"När aktiverat visas detta meddelande för användare på "
-"administrationssidorna."
-
-# AI translation - needs human review
-msgid "Alert level"
-msgstr "Varningsnivå"
-
-# AI translation - needs human review
-msgid "Select a style of warning to reflect how critical it is"
-msgstr "Välj en varningsstil som återspeglar hur kritisk den är"
-
-# AI translation - needs human review
-msgid "Start time"
-msgstr "Starttid"
-
-# AI translation - needs human review
-msgid "End time"
-msgstr "Sluttid"
-
-msgid "Created at"
-msgstr "Skapades den"
-
-# AI translation - needs human review
-msgid "Site Alert"
-msgstr "Webbplatsvarning"
-
-# AI translation - needs human review
-msgid "Dismiss"
-msgstr "Avfärda"
-
-msgid "Additional Sign Real"
-msgstr "Tilläggsskylt (implementering)"
-
-msgid "Additional Sign Reals"
-msgstr "Tilläggsskylt (implementeringar)"
-
-msgid "Physical properties"
-msgstr "Fysiska egenskaper"
-
-msgid "Additional Sign Plan"
-msgstr "Tilläggsskylt (plan)"
-
-msgid "Additional Sign Plans"
-msgstr "Tilläggsskylt (planer)"
-
-msgid "Any date"
-msgstr "Valfritt datum"
-
-msgid "Today"
-msgstr "Idag"
-
-msgid "Last 7 days"
-msgstr "Senaste 7 dagarna"
-
-msgid "Last month"
-msgstr "Förra månaden"
-
-msgid "Last 6 months"
-msgstr "Senaste 6 månaderna"
-
-msgid "Last year"
-msgstr "Förra året"
-
-msgid "No date"
-msgstr "Inget datum"
-
-msgid "Has date"
-msgstr "Har datum"
-
-msgid "Responsible Entity Permission"
-msgstr "Tillstånd från ansvarig enhet"
-
-# AI translation - needs human review
-msgid "Height is null"
-msgstr "Höjd är tom"
-
-msgid "Height = 0m"
-msgstr "Höjd = 0m"
-
-msgid "Height < 1.5m"
-msgstr "Höjd < 1.5m"
-
-msgid "Height >= 1.5m"
-msgstr "Höjd >= 1.5m"
-
-msgid "User"
-msgstr "Användare"
-
-msgid "Barrier real"
-msgstr "Bom (implementering)"
-
-msgid "Barrier reals"
-msgstr "Bom (implementeringar)"
-
-# AI translation - needs human review
-msgid "Field Population - Appearance"
-msgstr "Fältifyllnad – Utseende"
-
-# AI translation - needs human review
-msgid "Field Population - Location"
-msgstr "Fältifyllnad – Plats"
-
-# AI translation - needs human review
-msgid "Original ID"
-msgstr "Ursprungligt ID"
-
-# AI translation - needs human review
-msgid "New ID"
-msgstr "Nytt ID"
-
-# AI translation - needs human review
-msgid "Fields Populated"
-msgstr "Ifyllda fält"
-
-# AI translation - needs human review
-msgid "Duration"
-msgstr "Varaktighet"
-
-# AI translation - needs human review
-msgid "Mode"
-msgstr "Läge"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Operational area"
-msgstr "Åtgärdsområde"
-
-msgid "Replaces"
-msgstr "Ersätter"
-
-msgid "Replaced by"
-msgstr "Ersättare"
-
-msgid "Replaced"
-msgstr "Ersatt"
-
-msgid "No"
-msgstr "Nej"
-
-msgid "Yes"
-msgstr "Ja"
-
-msgid "Traffic sign type"
-msgstr "Typ av trafikskylt"
-
-msgid "Device type target model"
-msgstr ""
-
-msgid "Mount Reals"
-msgstr "Montering (implementeringar)"
-
-msgid "Operational areas"
-msgstr "Åtgärdsområden"
-
-#, python-format
-msgid "Set related plans for plan %s"
-msgstr "Ange relaterade planer för planen %s"
-
-# AI translation - needs human review
-msgid "Import Information"
-msgstr "Importinformation"
-
-# AI translation - needs human review
-msgid "Results Summary"
-msgstr "Resultatsammanfattning"
-
-# AI translation - needs human review
-msgid "Successful Imports"
-msgstr "Lyckade importer"
-
-# AI translation - needs human review
-msgid "Data Validation Errors"
-msgstr "Datavalideringsfel"
-
-# AI translation - needs human review
-msgid "Geometry Errors"
-msgstr "Geometrifel"
-
-# AI translation - needs human review
-msgid "Raw JSON Results"
-msgstr "Rå JSON-resultat"
-
-# AI translation - needs human review
-msgid "Successfully Imported Plans"
-msgstr "Framgångsrikt importerade planer"
-
-# AI translation - needs human review
-msgid "Skipped (No Changes Needed)"
-msgstr "Överhoppade (inga ändringar behövs)"
-
-# AI translation - needs human review
-msgid "Missing Diary Numbers"
-msgstr "Saknade diarienummer"
-
-# AI translation - needs human review
-msgid "Duplicate Diary Numbers"
-msgstr "Dubbletter av diarienummer"
-
-# AI translation - needs human review
-msgid "Invalid WKT Geometry"
-msgstr "Ogiltig WKT-geometri"
-
-# AI translation - needs human review
-msgid "Invalid Geometry Type"
-msgstr "Ogiltig geometrityp"
-
-# AI translation - needs human review
-msgid "Invalid Geometry Topology"
-msgstr "Ogiltig geometritopologi"
-
-# AI translation - needs human review
-msgid "Out of Bounds Geometries"
-msgstr "Geometrier utanför gränserna"
-
-# AI translation - needs human review
-msgid "Empty Geometries"
-msgstr "Tomma geometrier"
-
-# AI translation - needs human review
-msgid "Plans Not Found"
-msgstr "Planer hittades inte"
-
-# AI translation - needs human review
-msgid "Decision ID Mismatches"
-msgstr "Avvikelser i besluts-ID"
-
-# AI translation - needs human review
-msgid "Drawing Number Mismatches"
-msgstr "Avvikelser i ritningsnummer"
-
-msgid "Responsible entities"
-msgstr "Ansvariga enheter"
-
-msgid "Schedule"
-msgstr ""
-
-msgid "params"
-msgstr ""
-
-msgid "Execution log"
-msgstr ""
-
-msgid "Road Marking Real"
-msgstr "Vägmarkering (implementering)"
-
-msgid "Signpost Real"
-msgstr "Vägvisare (implementering)"
-
-msgid "Signpost Reals"
-msgstr "Vägvisare (implementeringar)"
-
-# AI translation - needs human review
-msgid "Run Information"
-msgstr "Körningsinformation"
-
-# AI translation - needs human review
-msgid "Plan Migration Statistics"
-msgstr "Migreringsstatistik för planer"
-
-# AI translation - needs human review
-msgid "Real Migration Statistics"
-msgstr "Migreringsstatistik för implementeringar"
-
-# AI translation - needs human review
-msgid "Device Types"
-msgstr "Enhetstyper"
-
-# AI translation - needs human review
-msgid "Lost Data"
-msgstr "Förlorade data"
-
-# AI translation - needs human review
-msgid "Error Information"
-msgstr "Felinformation"
-
-msgid "Plans"
-msgstr "Planer"
-
-# AI translation - needs human review
-msgid "Reals"
-msgstr "Implementeringar"
-
-# AI translation - needs human review
-msgid "Plan Records"
-msgstr "Planposter"
-
-# AI translation - needs human review
-msgid "Real Records"
-msgstr "Implementeringsposter"
-
-# AI translation - needs human review
-msgid "Lost Field Values"
-msgstr "Förlorade fältvärden"
-
-# AI translation - needs human review
-msgid "Migration Information"
-msgstr "Migreringsinformation"
-
-# AI translation - needs human review
-msgid "Object IDs"
-msgstr "Objekt-ID:n"
-
-# AI translation - needs human review
-msgid "Field Population - Basic"
-msgstr "Fältifyllnad – Grundläggande"
-
-# AI translation - needs human review
-msgid "Field Population - Other"
-msgstr "Fältifyllnad – Övrigt"
-
-# AI translation - needs human review
-msgid "Lost Fields"
-msgstr "Förlorade fält"
-
-# AI translation - needs human review
-msgid "Files"
-msgstr "Filer"
-
-# AI translation - needs human review
-msgid "Migration Run"
-msgstr "Migreringskörning"
-
-# AI translation - needs human review
-msgid "Plan Mapping"
-msgstr "Planmappning"
-
-# AI translation - needs human review
-msgid "Field Population - Installation"
-msgstr "Fältifyllnad – Installation"
-
-# AI translation - needs human review
-msgid "Import run"
-msgstr "Importkörning"
-
-# AI translation - needs human review
-msgid "Mounts"
-msgstr "Fästen"
-
-# AI translation - needs human review
-msgid "Traffic Signs"
-msgstr "Trafikmärken"
-
-# AI translation - needs human review
-msgid "Signposts"
-msgstr "Lokaliseringsmärken"
-
-msgid "Additional Signs"
-msgstr "Tilläggsskyltar"
-
-# AI translation - needs human review
-msgid "Event Summary"
-msgstr "Händelsesammanfattning"
-
-# AI translation - needs human review
-msgid "Event Details"
-msgstr "Händelsedetaljer"
-
-# AI translation - needs human review
-msgid "Phase Durations"
-msgstr "Fasernas varaktighet"
-
-# AI translation - needs human review
-msgid "Mount file"
-msgstr "Fästesfil"
-
-# AI translation - needs human review
-msgid "Sign file"
-msgstr "Märkesfil"
-
-# AI translation - needs human review
-msgid "Signs"
-msgstr "Märken"
+msgid "Additional sign real operations"
+msgstr "Tilläggsskylt (implementeringsåtgärder)"
 
 msgid "Additional signs"
 msgstr "Tilläggsskyltar"
 
 # AI translation - needs human review
-msgid "Processed mount source IDs (count)"
-msgstr "Bearbetade käll-ID:n för fästen (antal)"
+msgid "Additional signs created"
+msgstr "Skapade tilläggsmärken"
 
 # AI translation - needs human review
-msgid "Processed sign source IDs (count)"
-msgstr "Bearbetade käll-ID:n för märken (antal)"
+msgid "Additional signs deactivated"
+msgstr "Inaktiverade tilläggsmärken"
 
 # AI translation - needs human review
-msgid "Processed signpost source IDs (count)"
-msgstr "Bearbetade käll-ID:n för lokaliseringsmärken (antal)"
+msgid "Additional signs updated"
+msgstr "Uppdaterade tilläggsmärken"
+
+msgid "Additional user information"
+msgstr "Ytterligare information om användaren"
 
 # AI translation - needs human review
-msgid "Processed additional sign source IDs (count)"
-msgstr "Bearbetade käll-ID:n för tilläggsmärken (antal)"
+msgid "Admin Notifications"
+msgstr "Administratörsaviseringar"
+
+msgid "Aerial"
+msgstr "Antenn"
+
+msgid "Affect area (2D)"
+msgstr "Påverkansområde (2D)"
 
 # AI translation - needs human review
-msgid "Phase durations"
-msgstr "Fasernas varaktighet"
+msgid "Alert level"
+msgstr "Varningsnivå"
+
+msgid "Amount"
+msgstr "Mängd"
+
+msgid "Any date"
+msgstr "Valfritt datum"
 
 # AI translation - needs human review
-msgid "Event details"
-msgstr "Händelsedetaljer"
+msgid "App"
+msgstr "Applikation"
 
-# AI translation - needs human review
-msgid "Parent Assignment"
-msgstr "Tilldelning av överordnad"
+msgid "App Name"
+msgstr "Appnamn"
 
-# AI translation - needs human review
-msgid "Default Values Set"
-msgstr "Standardvärden inställda"
-
-# AI translation - needs human review
-msgid "Parent"
-msgstr "Överordnad"
-
-msgid "Traffic Light Real"
-msgstr "Trafiksignal (implementering)"
-
-msgid "Traffic Light Reals"
-msgstr "Trafiksignal (implementeringar)"
-
-msgid "Ordered traffic sign"
-msgstr "Ordnad trafikskylt"
-
-msgid "Ordered traffic signs"
-msgstr "Ordnade trafikskyltar"
-
-msgid "Location (z)"
-msgstr "Plats (z)"
-
-msgid "has additional signs"
-msgstr "har tilläggsskyltar"
-
-msgid "Traffic Sign Real"
-msgstr "Trafikskylt (implementering)"
-
-msgid "Traffic Sign Reals"
-msgstr "Trafikskylt (implementeringar)"
-
-msgid "Traffic control"
-msgstr "Trafikstyrning"
-
-msgid "Direction"
-msgstr "Riktning"
+#, python-format
+msgid "Are you sure you want to add the %(model_name)s?"
+msgstr "Är du säker på att du vill lägga till %(model_name)s"
 
 msgid ""
-"The orientation of the device’s front side in degrees (0–359): 0 = north, 90"
-" = east, 180 = south, 270 = west. The direction indicates from which side "
-"the device is correctly visible."
+"Are you sure you want to continue, without first disabling the 'derive "
+"location' option?"
 msgstr ""
-"Anordningens framsidas riktning i grader (0–359): 0 = norr, 90 = öster, 180 "
-"= söder, 270 = väster. Riktningen anger från vilken sida anordningen syns "
-"rättvänd."
+"Är du säker på att du vill fortsätta utan att först stänga av "
+"lägeshärledning?"
 
-msgid "Warning sign"
-msgstr "Varningsmärke"
+msgid "Area type"
+msgstr "Områdestyp"
 
-msgid "Priority or give-way sign"
-msgstr "Väjningspliktskylt"
+msgid "Arrow direction"
+msgstr "Pilens riktning"
 
-msgid "Prohibitory or restrictive sign"
-msgstr "Förbuds- eller restriktiv skylt"
+# AI translation - needs human review
+msgid "Attachment URL"
+msgstr "Bilagans URL"
 
-msgid "Mandatory sign"
-msgstr "Påbudsskylt"
+msgid "Attachment class"
+msgstr ""
+"Klass för skyltens fäste enligt standarden SFS-EN 12899-1. De möjliga "
+"värdena är P1, P2 och P3."
 
-msgid "Regulatory sign"
-msgstr "Reglerande skylt"
+msgid "Attachment url"
+msgstr "Bilagas URL"
 
-msgid "Information sign"
-msgstr "Upplysningsskylt"
-
-msgid "Service sign"
-msgstr "Serviceskylt"
-
-msgid "Additional sign"
-msgstr "Tilläggsskylt"
-
-msgid "Other road sign"
-msgstr "Annat vägmärke"
-
-msgid "Very bad"
-msgstr "Mycket dåligt"
-
-msgid "Bad"
-msgstr "Dåligt"
-
-msgid "Average"
-msgstr "Medelgott"
-
-msgid "Good"
-msgstr "Gott"
-
-msgid "Very good"
-msgstr "Mycket gott"
-
-msgid "Barrier"
-msgstr "Bom"
-
-msgid "Road marking"
-msgstr "Vägmarkering"
-
-msgid "Signpost"
-msgstr "Vägvisare"
-
-msgid "Traffic sign"
-msgstr "Trafikskylt"
-
-msgid "Other"
-msgstr "Annat"
-
-msgid "In use"
-msgstr "I bruk"
-
-msgid "Covered"
-msgstr "Övertäckt"
-
-msgid "Fallen"
-msgstr "Nedfallen"
-
-msgid "Missing"
-msgstr "Saknas"
-
-msgid "Main lane"
-msgstr "Huvudled"
-
-msgid "First left additional lane"
-msgstr "Första extra körfält vänster"
-
-msgid "First right additional lane"
-msgstr "Första extra körfält höger"
-
-msgid "Second left additional lane"
-msgstr "Andra extra körfält vänster"
-
-msgid "Second right additional lane"
-msgstr "Andra extra körfält höger"
-
-msgid "Third left additional lane"
-msgstr "Tredje extra körfält vänster"
-
-msgid "Third right additional lane"
-msgstr "Tredje extra körfält höger"
-
-msgid "Fourth left additional lane"
-msgstr "Fjärde extra körfält vänster"
-
-msgid "Fourth right additional lane"
-msgstr "Fjärde extra körfält höger"
-
-msgid "Fast lane"
-msgstr "Omkörningsfil"
-
-msgid "Turn right lane"
-msgstr "Påbjuden högersväng"
-
-msgid "Turn left lane"
-msgstr "Påbjuden vänstersväng"
+# AI translation - needs human review
+msgid "Authentication Type"
+msgstr "Autentiseringstyp"
 
 msgid "Auxiliary straight lane"
 msgstr "Påbjuden körriktning rakt fram"
 
-msgid "Merge lane"
-msgstr "Väganslutning"
+msgid "Average"
+msgstr "Medelgott"
 
-msgid "Exit lane"
-msgstr "Avfartskörfält"
+# AI translation - needs human review
+msgid "Azure AD"
+msgstr "Azure AD"
 
-msgid "Weaving lane"
-msgstr "Sammanvävning"
+msgid "Backward"
+msgstr "Bakåt"
 
-msgid "Public transport lane / taxi lane"
-msgstr "Körfält för kollektivtrafik/taxi"
+msgid "Bad"
+msgstr "Dåligt"
 
-msgid "Heavy vehicle lane"
-msgstr "Körfält för tung trafik"
+msgid "Barrier"
+msgstr "Bom"
 
-msgid "Reversible lane"
-msgstr "Reversibelt körfält"
+msgid "Barrier Plan"
+msgstr "Bom (plan)"
 
-msgid "Pedestrian and bike lane"
-msgstr "Gång- och cykelbana"
+msgid "Barrier Plan File"
+msgstr "Bom (planfil)"
 
-msgid "Pedestrian lane"
-msgstr "Gångbana"
+msgid "Barrier Plan Files"
+msgstr "Bom (planfiler)"
+
+msgid "Barrier Plan Replacement"
+msgstr "Ersättning för körhinderplan"
+
+msgid "Barrier Plan Replacements"
+msgstr "Ersättningar för körhinderplaner"
+
+msgid "Barrier Plans"
+msgstr "Bom (planer)"
+
+msgid "Barrier Real File"
+msgstr "Bom (implementeringsfil)"
+
+msgid "Barrier Real Files"
+msgstr "Bom (implementeringsfiler)"
+
+msgid "Barrier real"
+msgstr "Bom (implementering)"
+
+msgid "Barrier real operation"
+msgstr "Bom (implementeringsåtgärd)"
+
+msgid "Barrier real operations"
+msgstr "Bom (implementeringsåtgärder)"
+
+msgid "Barrier reals"
+msgstr "Bom (implementeringar)"
+
+msgid "Base"
+msgstr "Bas"
+
+msgid "Basemaps"
+msgstr "Grundkartor"
+
+msgid "Bench"
+msgstr "Bänk"
+
+msgid "Bicycle signal"
+msgstr "Cykelsignal"
+
+msgid "Bicycle turn arrow signal"
+msgstr "Pilsignal cykelsväng"
 
 msgid "Bike lane"
 msgstr "Cykelbana"
 
-msgid "Active"
-msgstr "Aktiv"
+msgid "Block mark"
+msgstr "Spärrmärke"
 
-msgid "Temporarily active"
-msgstr "Temporärt aktiv"
+msgid "Blue"
+msgstr "Blå"
 
-msgid "Temporarily inactive"
-msgstr "Temporärt inaktiv"
+# AI translation - needs human review
+msgid "Both"
+msgstr "Båda"
 
-msgid "Inactive"
-msgstr "Inaktiv"
+msgid "Both sides of lane"
+msgstr "Båda sidor av körfält "
 
-msgid "r1"
-msgstr "r1"
+msgid "Both sides of road"
+msgstr "Båda sidor av vägen"
 
-msgid "r2"
-msgstr "r2"
+msgid "Bottom left"
+msgstr "Nedre vänstra"
 
-msgid "r3"
-msgstr "r3"
+msgid "Bottom right"
+msgstr "Nedre högra"
 
-msgid "Convex"
-msgstr "Konvex"
+msgid "Boundary post"
+msgstr "Gränsstolpe"
 
-msgid "Flat"
-msgstr "Platt"
+msgid "Bus stop"
+msgstr "Busshållplats"
 
-msgid "Longitudinal"
-msgstr "Längsgående"
+msgid "Bypass operational area"
+msgstr "Förbigå åtgärdsområde"
 
-msgid "Transverse"
-msgstr "Tvärgående"
+msgid "Bypass responsible entity"
+msgstr "Förbigå ansvarig enhet"
 
-msgid "Other road marking"
-msgstr "Annan vägmarkering"
-
-msgid "division"
-msgstr "separering"
-
-msgid "service"
-msgstr "service"
-
-msgid "unit"
-msgstr "enhet"
-
-msgid "project"
-msgstr "projekt"
-
-msgid ""
-"If set to true, returns only plans that have been superseded by a new plan."
-msgstr "Om sant, återställ endast planer, som är upphävda."
-
-msgid ""
-"'Missing content' cannot be enabled when the content field (content_s) is "
-"not empty."
+msgid "Change"
 msgstr ""
-"Kan inte vara 'innehåll saknas' när 'innehållet' (content_s) inte är tomt."
-
-msgid "Location (EWKT)"
-msgstr "Plats (EWKT)"
-
-msgid "Location (x,y)"
-msgstr "Plats (x, y)"
 
 #, python-format
 msgid ""
@@ -1493,803 +333,247 @@ msgstr ""
 "Att ändra platsen från kartan är inte tillåtet för geometrin "
 "'%(geometry_type)s'"
 
-msgid "Icon with name '{', '.join(existing_icons)}' already exists."
-msgstr "Ikon med namnet '{', '.join(existing_icons)}' finns redan."
+msgid "Chimney"
+msgstr "Skorsten"
 
-msgid "Illegal file types: {', '.join(illegal_file_types)}"
-msgstr "Otillåtna filtyper: {', '.join(illegal_file_types)}"
+msgid "City Furniture Class type"
+msgstr "Stadsmöbler - klasstyp"
 
-msgid "Virus scan failure: {get_error_details_message(virus_scan_errors)}"
+msgid "City Furniture Color"
+msgstr "Stadsmöbler - färg"
+
+msgid "City Furniture Colors"
+msgstr "Stadsmöbler - färger"
+
+msgid "City Furniture Device Type"
+msgstr "Stadsmöbler - anordningstyp"
+
+msgid "City Furniture Device Type Icon"
+msgstr "Ikon för stadsmöbelns typ"
+
+msgid "City Furniture Device Type Icons"
+msgstr "Ikon för stadsmöblernas typer"
+
+msgid "City Furniture Device Types"
+msgstr "Stadsmöbler - anordningstyper"
+
+msgid "City Furniture Device type"
+msgstr "Stadsmöbler - anordningstyp"
+
+msgid "City Furniture Function or Usage type"
+msgstr "Stadsmöbler - funktion eller användningstyp"
+
+msgid "City Furniture Target"
+msgstr "Stadsmöbler - mål"
+
+msgid "City Furniture Targets"
+msgstr "Stadsmöbler - mål"
+
+msgid "City Furniture model that this Device Type is usable for."
+msgstr "Stadsmöbelmodell som denna anordningstyp kan användas för."
+
+msgid "City Infrastructure Platform"
+msgstr "Stadsinfrastrukturplattform"
+
+msgid "City furniture"
+msgstr "Stadsmöbler"
+
+msgid "Clock"
+msgstr "Ur"
+
+msgid "Closed"
+msgstr "Stängd"
+
+msgid "Clustered"
+msgstr "Klustrad"
+
+msgid "Code"
+msgstr "Kod"
+
+msgid "Code of the Device Type in the Helsinki Design Manual."
+msgstr "Kod för anordningstypen i Helsingfors designmanual."
+
+# AI translation - needs human review
+msgid "Code of the device type being migrated."
+msgstr "Kod för enhetstypen som migreras."
+
+msgid "Color"
+msgstr "Färg"
+
+msgid "Color of the device from Helsinki Design Manual."
+msgstr "Anordningens färg i Helsingfors designmanual."
+
+msgid "Column"
+msgstr "Pelare"
+
+msgid "Communication"
+msgstr "Kommunikation"
+
+msgid "Communication fixture"
+msgstr "Kommunikationsanordning"
+
+# AI translation - needs human review
+msgid "Completed at"
+msgstr "Slutförd"
+
+msgid "Condition"
+msgstr "Skick"
+
+# AI translation - needs human review
+msgid "Configuration"
+msgstr "Konfiguration"
+
+# AI translation - needs human review
+msgid ""
+"Configure whether this user receives admin notification emails about user "
+"deactivations and system events."
 msgstr ""
-"Viruskontroll misslyckades: {get_error_details_message(virus_scan_errors)}"
+"Konfigurera om denna användare tar emot administratörsaviseringar via e-post "
+"om användarinaktiveringar och systemhändelser."
 
-msgid "Barrier Plans"
-msgstr "Bom (planer)"
+msgid "Connection type"
+msgstr "Anslutningstyp"
 
-msgid "Mount Plans"
-msgstr "Montering (planer)"
+msgid "Content"
+msgstr "Innehåll"
 
-msgid "Road Marking Plans"
-msgstr "Vägmarkering (planer)"
+msgid ""
+"Content (content_s) is not available although the device type content schema "
+"requires it."
+msgstr ""
+"Innehållet (content_s) är inte tillgängligt, trots att schemat för "
+"anordningstypens innehåll kräver det."
 
-msgid "Signpost Plans"
-msgstr "Skylt (planer)"
+msgid "Content and physical properties"
+msgstr "Innehåll och fysiska egenskaper"
 
-msgid "Traffic Light Plans"
-msgstr "Trafiksignal (planer)"
+msgid "Content of the sign in English."
+msgstr "Innehållet i skylten på engelska."
 
-msgid "Traffic Sign Plans"
-msgstr "Trafikskylt (planer)"
+msgid "Content of the sign in Finnish."
+msgstr "Innehållet i skylten på finska."
+
+msgid "Content of the sign in Swedish."
+msgstr "Innehållet i skylten på svenska."
+
+msgid "Content schema"
+msgstr "Schema för innehållet"
+
+msgid "Content's responsible entity"
+msgstr "Ansvarig enhet för innehållet"
+
+msgid "Contractor"
+msgstr "Entreprenör"
+
+msgid "Converter"
+msgstr "Transformator"
+
+msgid "Convex"
+msgstr "Konvex"
+
+msgid "Count"
+msgstr "Antal"
+
+msgid "Covered"
+msgstr "Övertäckt"
+
+msgid "Created at"
+msgstr "Skapades den"
+
+msgid "Created by"
+msgstr "Skapades av"
 
 # AI translation - needs human review
-msgid "Image file preview"
-msgstr "Förhandsgranskning av bildfil"
+msgid "Critical"
+msgstr "Kritisk"
+
+msgid "Cross bar length"
+msgstr "Tvärbalkens längd"
+
+msgid "Cross on the summit of a mountain"
+msgstr "Kors på bergstopp"
+
+msgid "Crossroads"
+msgstr "Korsning"
 
 # AI translation - needs human review
-msgid "Icon preview"
-msgstr "Förhandsgranskning av ikon"
+msgid "Data Validation Errors"
+msgstr "Datavalideringsfel"
+
+msgid "Date after which this barrier becomes inactive."
+msgstr "Datum efter vilket körhindret inte är i bruk."
+
+msgid "Date after which this device becomes inactive."
+msgstr "Datum då anordningen tas ur bruk."
+
+msgid "Date after which this sign becomes inactive."
+msgstr "Datum efter vilket skylten inte är i bruk."
+
+msgid "Date after which this traffic light becomes inactive."
+msgstr "Datum efter vilket trafikljuset inte är i bruk."
+
+msgid "Date and time on which this mount was last inspected at."
+msgstr "Datum och klockslag för föregående kontroll av fästpunkten."
+
+msgid "Date and time on which this mount was last scanned at."
+msgstr "Datum och klockslag för föregående skanning av denna fästpunkt."
+
+msgid "Date and time on which this sign was last scanned at."
+msgstr "Datum och klockslag för föregående skanning av denna skylt."
+
+msgid "Date and time on which this signpost was last scanned at."
+msgstr "Datum och klockslag för föregående skanning av denna skyltplan."
+
+msgid "Date on which a decision was made on the plan."
+msgstr "Datum då ett beslut fattades om planen."
+
+msgid "Date on which this barrier becomes active."
+msgstr "Datum då körhindret tas i bruk."
+
+msgid "Date on which this device becomes active."
+msgstr "Datum då anordningen tas i bruk."
+
+msgid "Date on which this device was installed on."
+msgstr "Datum då denna anordning installerades."
+
+msgid "Date on which this sign becomes active."
+msgstr "Datum då skylten tas i bruk."
+
+msgid "Date on which this traffic light becomes active."
+msgstr "Datum då trafikljuset tas i bruk."
+
+msgid "Deactivated"
+msgstr "Inaktiv"
 
 # AI translation - needs human review
-msgid "File proxy"
-msgstr "Filproxy"
+msgid "Deactivated at"
+msgstr "Inaktiverad"
 
 # AI translation - needs human review
-msgid "Device type preview"
-msgstr "Förhandsgranskning av enhetstyp"
+msgid "Decision ID Mismatches"
+msgstr "Avvikelser i besluts-ID"
 
-msgid "Marked as deleted (hidden from API)"
-msgstr "Markerad som borttagen (dold från API)"
+msgid "Decision date"
+msgstr "Beslutsdatum"
 
-msgid "Mark selected objects as deleted"
-msgstr "Markera valda objekt som borttagna"
+msgid "Decision id"
+msgstr "Beslutsnummer"
+
+msgid "Decision url"
+msgstr "Beslutslänk"
+
+# AI translation - needs human review
+msgid "Default Values Set"
+msgstr "Standardvärden inställda"
+
+msgid "Defines which model this device type describes."
+msgstr "Definierar vilken modell denna anordningstyp beskriver."
 
 msgid "Deleted at"
 msgstr "Togs bort den"
 
 msgid "Deleted by"
 msgstr "Togs bort av"
-
-msgid "Created by"
-msgstr "Skapades av"
-
-msgid "Responsible entity"
-msgstr "Ansvarig enhet"
-
-msgid "Organization or project that this device is assigned to."
-msgstr "Organisation eller projekt som denna anordning är tilldelad."
-
-msgid "Owner"
-msgstr "Ägare"
-
-msgid "Owner who orders and is responsible for the maintenance of the device."
-msgstr "Ägare som beställer och ansvarar för underhåll av anordningen."
-
-msgid "Lifecycle"
-msgstr "Livscykel"
-
-msgid ""
-"Lifecycle of the device, which describes the activity status of the device."
-msgstr "Anordningens livscykel som beskriver anordningens aktivitetsstatus."
-
-msgid "Installation date"
-msgstr "Installationsdatum"
-
-msgid "Date on which this device was installed on."
-msgstr "Datum då denna anordning installerades."
-
-msgid "Installation status"
-msgstr "Installationsstatus"
-
-msgid "Describes this devices installation status."
-msgstr "Beskriver anordningens installationsstatus."
-
-msgid "Condition"
-msgstr "Skick"
-
-msgid "Describes the condition of this device."
-msgstr "Beskriver anordningens skick."
-
-msgid "Source id"
-msgstr "Käll-id"
-
-msgid "ID of the device in the source where this device was imported from."
-msgstr "Id för anordningen i källan som denna anordning importerats från."
-
-msgid "Source name"
-msgstr "Källnamn"
-
-msgid "Name of the source for where this device was imported from."
-msgstr "Namn på källan varifrån denna anordning importerades."
-
-msgid "Is public"
-msgstr "Är offentlig"
-
-msgid ""
-"If unchecked, access is restricted to users/groups with appropriate table or"
-" file permissions"
-msgstr ""
-"Om ej markerad begränsas åtkomsten till användare/grupper med lämpliga "
-"tabell‑ eller filbehörigheter"
-
-msgid "Date on which this sign becomes active."
-msgstr "Datum då skylten tas i bruk."
-
-msgid "Date after which this sign becomes inactive."
-msgstr "Datum efter vilket skylten inte är i bruk."
-
-msgid "Seasonal validity period information"
-msgstr "Säsongsbunden giltighetsinformation"
-
-msgid "Seasonal validity period information related to this device."
-msgstr "Säsongsbunden giltighetsinformation för denna anordning"
-
-msgid "Blue"
-msgstr "Blå"
-
-msgid "Yellow"
-msgstr "Gul"
-
-msgid "Device type"
-msgstr "Anordningstyp"
-
-msgid "Additional sign content as JSON document"
-msgstr "Innehållet i tilläggsskylten i form av JSON-dokument"
-
-msgid "Missing content"
-msgstr "Innehåll saknas"
-
-msgid ""
-"Content (content_s) is not available although the device type content schema"
-" requires it."
-msgstr ""
-"Innehållet (content_s) är inte tillgängligt, trots att schemat för "
-"anordningstypens innehåll kräver det."
-
-msgid "Additional information"
-msgstr "Tilläggsuppgifter"
-
-msgid "Additional information related to this device."
-msgstr "Tilläggsuppgifter om denna anordning."
-
-msgid "Reflection"
-msgstr "Reflex"
-
-msgid "Surface"
-msgstr "Yta"
-
-msgid "Type of the mount this sign is attached to."
-msgstr "Typen av den fästpunkt som denna skylt är kopplad till."
-
-msgid "Road name"
-msgstr "Vägnamn"
-
-msgid "Name of the road this sign is installed at."
-msgstr "Namn på den väg där skylten är installerad."
-
-msgid "Lane number"
-msgstr "Körfält nummer"
-
-msgid "Describes which lane of the road this sign affects."
-msgstr "Anger vilken fil på vägen skylten inverkar på."
-
-msgid "Lane type"
-msgstr "Typ av körfält"
-
-msgid "The type of lane which this sign affects."
-msgstr "Typ av körfält"
-
-msgid "Location specifier"
-msgstr "Platsspecifikation"
-
-msgid "Specifies where the sign is in relation to the road."
-msgstr "Fastställer skyltens läge i förhållande till vägen."
-
-# AI translation - needs human review
-msgid ""
-"Parent is required for additional signs that are not ticket machines. Set "
-"either parent (TrafficSign), signpost_plan, or signpost_real."
-msgstr ""
-"Överordnad krävs för tilläggsmärken som inte är biljettautomater. Ange "
-"antingen överordnad (TrafficSign), signpost_plan eller signpost_real."
-
-msgid "Parent Traffic Sign Plan"
-msgstr "Överordnad trafikskylt (plan)"
-
-msgid "The traffic sign to which this additional sign is associated."
-msgstr "Vägmärke som denna tilläggsskylt gäller."
-
-msgid "Parent Signpost Plan"
-msgstr "Överordnad vägvisare (plan)"
-
-# AI translation - needs human review
-msgid ""
-"The signpost plan to which this additional sign is associated (set after "
-"signpost migration)."
-msgstr ""
-"Lokaliseringsmärkets plan som detta tilläggsmärke är kopplat till (anges "
-"efter migrering av lokaliseringsmärken)."
-
-msgid "Mount that this sign is mounted on."
-msgstr "Fästpunkt som denna skylt är installerad i."
-
-msgid "Plan which this Additional Sign Plan is a part of."
-msgstr "Plan som denna tilläggsskyltplan ingår i."
-
-msgid "Additional Sign Plan Replacement"
-msgstr "Ersättning för tilläggsskyltplan"
-
-msgid "Additional Sign Plan Replacements"
-msgstr "Ersättningar för tilläggsskyltplaner"
-
-msgid "Parent Traffic Sign Real"
-msgstr "Överordnad trafikskylt (implementering)"
-
-msgid "Parent Signpost Real"
-msgstr "Överordnad vägvisare (implementering)"
-
-# AI translation - needs human review
-msgid ""
-"The signpost real to which this additional sign is associated (set after "
-"signpost migration)."
-msgstr ""
-"Lokaliseringsmärkets implementering som detta tilläggsmärke är kopplat till "
-"(anges efter migrering av lokaliseringsmärken)."
-
-msgid "The plan for this Additional Sign."
-msgstr "Plan för denna tilläggsskyltplan."
-
-msgid "Installation id"
-msgstr "Installations-id"
-
-msgid "The id number of the installation record."
-msgstr "Id-nummer för installationsregistreringen."
-
-msgid "Installation details"
-msgstr "Installationsdetaljer"
-
-msgid "Additional details about the installation."
-msgstr "Ytterligare detaljer om installationen."
-
-msgid "Installed by"
-msgstr "Installerades av"
-
-msgid "Name of the organization who installed this sign."
-msgstr "Namn på den organisation som har installerat denna skylt."
-
-msgid "Manufacturer"
-msgstr "Tillverkare"
-
-msgid "Name of the organization that manufactured this sign."
-msgstr "Namn på den organisation som har tillverkat denna anordning."
-
-msgid "RFID"
-msgstr "RFID"
-
-msgid "RFID tag of the sign (if any)."
-msgstr "RFID-tagg på skylten (i förekommande fall)."
-
-msgid "Legacy Traffic Sign Code"
-msgstr "Äldre trafikskyltkod"
-
-msgid "The sign type code of the sign in the old Finnish road traffic law."
-msgstr "Anordningstypkod för skylten i Finlands gamla vägtrafiklag."
-
-msgid "Permit decision id"
-msgstr "Tillståndsbeslut-id"
-
-msgid "The id number of the installation permit."
-msgstr "Id-nummer för installationstillståndet."
-
-msgid "Operation"
-msgstr "Åtgärd"
-
-msgid ""
-"Maintenance operations done to the sign, e.g. washing, straightening or "
-"painting."
-msgstr ""
-"Underhållsåtgärder som utförts på skylten, t.ex. rengöring, uträtning eller "
-"målning."
-
-msgid "Scanned at"
-msgstr "Skannades den"
-
-msgid "Date and time on which this sign was last scanned at."
-msgstr "Datum och klockslag för föregående skanning av denna skylt."
-
-msgid "Attachment url"
-msgstr "Bilagas URL"
-
-msgid "URL to a file attachment related to this sign."
-msgstr "URL för filbilagan om denna skylt."
-
-msgid "additional sign real"
-msgstr "Tilläggsskylt (implementering)"
-
-msgid "Additional sign real operation"
-msgstr "Tilläggsskylt (implementeringsåtgärd)"
-
-msgid "Additional sign real operations"
-msgstr "Tilläggsskylt (implementeringsåtgärder)"
-
-msgid "Additional Sign Plan File"
-msgstr "Tilläggsskylt planfil"
-
-msgid "Additional Sign Plan Files"
-msgstr "Tilläggsskylt planfiler"
-
-msgid "Additional Sign Real File"
-msgstr "Tilläggsskylt utfallsfil"
-
-msgid "Additional Sign Real Files"
-msgstr "Tilläggsskylt utfallsfiler"
-
-msgid "Closed"
-msgstr "Stängd"
-
-msgid "Open out"
-msgstr "Öppnas utåt"
-
-msgid "Red-yellow"
-msgstr "Röd-gul"
-
-msgid "Middle of road or lane"
-msgstr "I mitten av väg eller körfält"
-
-msgid "Right of road or lane"
-msgstr "Till höger om väg eller körfält"
-
-msgid "Left of road or lane"
-msgstr "Till vänster om väg eller körfält"
-
-msgid "Name of the road this barrier is installed at."
-msgstr "Namn på den väg där detta körhinder är installerat."
-
-msgid "Describes which lane of the road this barrier affects."
-msgstr "Anger vilken fil på vägen körhindret inverkar på."
-
-msgid "The type of lane which this barrier affects."
-msgstr "Typ av den fil som körhindret inverkar på."
-
-msgid "Specifies where the barrier is in relation to the road."
-msgstr "Fastställer körhindrets läge i förhållande till vägen."
-
-msgid "Connection type"
-msgstr "Anslutningstyp"
-
-msgid "Describes if the barrier is open or closed."
-msgstr "Anger om bommen är öppen eller stängd."
-
-msgid "Material"
-msgstr "Material"
-
-msgid "Describes the material that the barrier is made of."
-msgstr "Anger om bommen är öppen eller stängd."
-
-msgid "Is electric"
-msgstr "Elektrisk"
-
-msgid "Reflective"
-msgstr "Reflekterande"
-
-msgid "Date on which this barrier becomes active."
-msgstr "Datum då körhindret tas i bruk."
-
-msgid "Date after which this barrier becomes inactive."
-msgstr "Datum efter vilket körhindret inte är i bruk."
-
-msgid "Length"
-msgstr "Längd"
-
-msgid "Length of the barrier in centimeters."
-msgstr "Bommens längd i centimeter."
-
-msgid "Count"
-msgstr "Antal"
-
-msgid "Txt"
-msgstr "Txt"
-
-msgid "Text written on the barrier."
-msgstr "Text som är skriven på körhindret."
-
-msgid "Plan which this Barrier Plan is a part of."
-msgstr "Plan som denna körhinderplan ingår i."
-
-msgid "Barrier Plan"
-msgstr "Bom (plan)"
-
-msgid "Barrier Plan Replacement"
-msgstr "Ersättning för körhinderplan"
-
-msgid "Barrier Plan Replacements"
-msgstr "Ersättningar för körhinderplaner"
-
-msgid "The plan for this barrier."
-msgstr "Plan för detta körhinder."
-
-msgid "barrier real"
-msgstr "bom (implementering)"
-
-msgid "Barrier real operation"
-msgstr "Bom (implementeringsåtgärd)"
-
-msgid "Barrier real operations"
-msgstr "Bom (implementeringsåtgärder)"
-
-msgid "Barrier Plan File"
-msgstr "Bom (planfil)"
-
-msgid "Barrier Plan Files"
-msgstr "Bom (planfiler)"
-
-msgid "Barrier Real File"
-msgstr "Bom (implementeringsfil)"
-
-msgid "Barrier Real Files"
-msgstr "Bom (implementeringsfiler)"
-
-msgid "New"
-msgstr "Nytt"
-
-msgid "Old"
-msgstr "Gammalt"
-
-msgid "Schema must be type of JSON object"
-msgstr "Schemat ska vara ett JSON-objekt"
-
-msgid "Name (fi)"
-msgstr "Namn (fi)"
-
-msgid "Name (en)"
-msgstr "Namn (en)"
-
-msgid "Owners"
-msgstr "Ägare"
-
-msgid "Traffic Control Device Type Icon"
-msgstr "Ikon för trafikstyrningsanordningstypen"
-
-msgid "Traffic Control Device Type Icons"
-msgstr "Ikoner för trafikstyrningsanordningstyperna"
-
-msgid "Standardised code of the device type."
-msgstr "Standardiserad kod för anordningstypen."
-
-msgid "Value"
-msgstr "Värde"
-
-msgid "Unit"
-msgstr "Enhet"
-
-msgid "Unit, in which the numeric value is in."
-msgstr "Enhet för det numeriska värdet."
-
-msgid "Legacy code"
-msgstr "Äldre kod"
-
-msgid "Legacy description"
-msgstr "Äldre beskrivning"
-
-msgid "Defines which model this device type describes."
-msgstr "Definierar vilken modell denna anordningstyp beskriver."
-
-msgid "Type"
-msgstr "Typ"
-
-msgid "Content schema"
-msgstr "Schema för innehållet"
-
-msgid "Traffic Control Device Type"
-msgstr "Typ av trafikstyrningsanordning"
-
-msgid "Traffic Control Device Types"
-msgstr "Typer av trafikstyrningsanordning"
-
-#, python-format
-msgid "Target model '%(target_model)s' does not support content schema"
-msgstr ""
-"Datamodellen för objektet '%(target_model)s' stöder inte schemat för "
-"innehållet"
-
-msgid "Name of the operation."
-msgstr "Namn på åtgärden."
-
-msgid "Mount"
-msgstr "Montering"
-
-msgid "Operation type"
-msgstr "typ av åtgärd"
-
-msgid "Operation types"
-msgstr "Åtgärdstyper"
-
-msgid "Operation date"
-msgstr "Åtgärdsdatum"
-
-msgid "Straightness value"
-msgstr "Rakhetsvärde"
-
-msgid "Quality requirements fulfilled"
-msgstr "Kvalitetskrav uppfyllda"
-
-# AI translation - needs human review
-msgid "Had height"
-msgstr "Hade höjd"
-
-# AI translation - needs human review
-msgid "Had size"
-msgstr "Hade storlek"
-
-# AI translation - needs human review
-msgid "Had direction"
-msgstr "Hade riktning"
-
-# AI translation - needs human review
-msgid "Had reflection_class"
-msgstr "Hade reflection_class"
-
-# AI translation - needs human review
-msgid "Had surface_class"
-msgstr "Hade surface_class"
-
-# AI translation - needs human review
-msgid "Had mount_type"
-msgstr "Hade mount_type"
-
-# AI translation - needs human review
-msgid "Had road_name"
-msgstr "Hade road_name"
-
-# AI translation - needs human review
-msgid "Had lane_number"
-msgstr "Hade lane_number"
-
-# AI translation - needs human review
-msgid "Had lane_type"
-msgstr "Hade lane_type"
-
-# AI translation - needs human review
-msgid "Had location_specifier"
-msgstr "Hade location_specifier"
-
-# AI translation - needs human review
-msgid "Had validity_period_start"
-msgstr "Hade validity_period_start"
-
-# AI translation - needs human review
-msgid "Had validity_period_end"
-msgstr "Hade validity_period_end"
-
-# AI translation - needs human review
-msgid "Had source_name"
-msgstr "Hade source_name"
-
-# AI translation - needs human review
-msgid "Had source_id"
-msgstr "Hade source_id"
-
-# AI translation - needs human review
-msgid "Files migrated"
-msgstr "Migrerade filer"
-
-# AI translation - needs human review
-msgid "Number of file attachments migrated."
-msgstr "Antal migrerade filbilagor."
-
-# AI translation - needs human review
-msgid "Lost value"
-msgstr "Förlorat värde"
-
-# AI translation - needs human review
-msgid "Lost txt"
-msgstr "Förlorad txt"
-
-# AI translation - needs human review
-msgid "Lost double_sided"
-msgstr "Förlorad double_sided"
-
-# AI translation - needs human review
-msgid "Lost peak_fastened"
-msgstr "Förlorad peak_fastened"
-
-# AI translation - needs human review
-msgid "Set color to BLUE"
-msgstr "Ange färg till BLÅ"
-
-# AI translation - needs human review
-msgid "Set content_s to null"
-msgstr "Ange content_s till tom"
-
-# AI translation - needs human review
-msgid "Set missing_content to false"
-msgstr "Ange missing_content till falskt"
-
-# AI translation - needs human review
-msgid "Set additional_information to empty"
-msgstr "Ange additional_information till tom"
-
-msgid "Right side"
-msgstr "Höger sida"
-
-msgid "Left side"
-msgstr "Vänster sida"
-
-msgid "Above"
-msgstr "Ovanför"
-
-msgid "Middle"
-msgstr "I mitten"
-
-msgid "Outside"
-msgstr "Utomhus"
-
-msgid "Description (fi)"
-msgstr "Beskrivning (fi)"
-
-msgid "Description (sv)"
-msgstr "Beskrivning (sv)"
-
-msgid "Digiroad code"
-msgstr "Digiroad-kod"
-
-msgid "Digiroad description"
-msgstr "Digiroad-beskrivning"
-
-msgid "Mount types"
-msgstr "Monteringstyper"
-
-msgid "Portal structure"
-msgstr "Portalstruktur"
-
-msgid "Portal build type"
-msgstr "Portalbyggnadstyp"
-
-msgid "Portal model"
-msgstr "Portalmodell"
-
-msgid "Portal type"
-msgstr "Portaltyp"
-
-msgid "Portal types"
-msgstr "Portaltyper"
-
-msgid ""
-"The height of the mount from the ground, measured from the top in "
-"centimeters."
-msgstr ""
-"Fästpunktens höjd över marken i centimeter, mätt från den övre kanten."
-
-msgid "Base"
-msgstr "Bas"
-
-msgid "Id number of the portal type in the portal_type table."
-msgstr "Id-nummer för portaltypen i portaltyptabellen."
-
-msgid "Describes the material that the mount is made of."
-msgstr "Anger det material av vilket fästpunkten är tillverkad."
-
-msgid "Text written on the mount."
-msgstr "Text som är skriven på fästpunkten."
-
-msgid "Electric accountable"
-msgstr "Elektriskt ansvarig"
-
-msgid "The entity responsible for the mount (if electric)."
-msgstr "Den enhet som ansvarar för monteringen (om elektrisk)."
-
-msgid "Is foldable"
-msgstr "Fällbar/vikbar"
-
-msgid "Cross bar length"
-msgstr "Tvärbalkens längd"
-
-msgid "Length of the cross bar for this mount in centimeters."
-msgstr "Längd på fästpunktens tvärslå i centimeter."
-
-msgid "Name of the road this mount is installed at."
-msgstr "Namn på den väg där fästpunkten är installerad."
-
-msgid "Specifies where the mount is in relation to the road."
-msgstr "Fastställer fästpunktens läge i förhållande till vägen."
-
-msgid "Plan which this mount plan is a part of."
-msgstr "Plan som denna fästpunktplan ingår i."
-
-msgid "Mount Plan Replacement"
-msgstr "Ersättning för fästpunktplan"
-
-msgid "Mount Plan Replacements"
-msgstr "Ersättningar för fästpunktplaner"
-
-msgid "The plan for this mount."
-msgstr "Plan för denna fästpunkt."
-
-msgid "Inspected at"
-msgstr "Inspekterades den"
-
-msgid "Date and time on which this mount was last inspected at."
-msgstr "Datum och klockslag för föregående kontroll av fästpunkten."
-
-msgid "Diameter"
-msgstr "Diameter"
-
-msgid "Diameter of the mount in centimeters."
-msgstr "Monteringens diameter i centimeter."
-
-msgid "Date and time on which this mount was last scanned at."
-msgstr "Datum och klockslag för föregående skanning av denna fästpunkt."
-
-msgid "URL to a file attachment related to this mount."
-msgstr "URL för filbilagan om denna fästpunkt."
-
-msgid "mount real"
-msgstr "montering (implementering)"
-
-msgid "Mount real operation"
-msgstr "Montering (implementeringsåtgärd)"
-
-msgid "Mount real operations"
-msgstr "Montering (implementeringsåtgärder)"
-
-msgid "Mount Plan File"
-msgstr "Montering (planfil)"
-
-msgid "Mount Plan Files"
-msgstr "Montering (planfiler)"
-
-msgid "Mount Real File"
-msgstr "Montering (implementeringsfil)"
-
-msgid "Mount Real Files"
-msgstr "Montering (implementeringsfiler)"
-
-msgid "Group"
-msgstr "Grupp"
-
-msgid "Group operational area"
-msgstr "Grupp (åtgärdsområde)"
-
-msgid "Group operational areas"
-msgstr "Grupp (åtgärdsområden)"
-
-msgid "Name short"
-msgstr "Namn (kort)"
-
-msgid "Area type"
-msgstr "Områdestyp"
-
-msgid "Contractor"
-msgstr "Entreprenör"
-
-msgid "Start date"
-msgstr "Startdatum"
-
-msgid "End date"
-msgstr "Slutdatum"
-
-msgid "Updated date"
-msgstr "Uppdateringsdatum"
-
-msgid "Task"
-msgstr "Arbetsuppgift"
-
-msgid "Decision id"
-msgstr "Beslutsnummer"
-
-msgid "Year and verdict section separated with a dash"
-msgstr "År och beslutsektion åtskilda av snedstreck"
-
-msgid "Diary number"
-msgstr "Diarienummer"
-
-msgid "A drawing number must not contain special characters"
-msgstr "Ritningsnumret får inte innehålla specialtecken"
-
-msgid "Drawing numbers"
-msgstr "Ritningsnummer"
-
-msgid "Drawing numbers related to the plan separated with a comma"
-msgstr "Nummer på de ritningar som omfattas av planen, separerade med komma"
 
 msgid "Derive location from devices"
 msgstr "Härled läge från anordningar"
@@ -2301,37 +585,1738 @@ msgstr ""
 "Härled planens läge (geometriområde) från de relaterade anordningarnas "
 "lägen. Ta i bruk detta, om planen saknar ett på förhand fastställt läge."
 
-msgid "Decision date"
-msgstr "Beslutsdatum"
+msgid "Describes if the barrier is open or closed."
+msgstr "Anger om bommen är öppen eller stängd."
 
-msgid "Date on which a decision was made on the plan."
-msgstr "Datum då ett beslut fattades om planen."
+msgid "Describes if this traffic light has a push button attached."
+msgstr "Anger om denna trafiksignal har en tryckknapp ansluten."
 
-msgid "Decision url"
-msgstr "Beslutslänk"
+msgid "Describes if this traffic light has a sound beacon attached."
+msgstr "Anger om denna trafiksignal har en ljudsignal ansluten."
 
-msgid "URL to decision web page"
-msgstr "Länk till webbplatsen för beslutet"
+msgid "Describes the condition of this device."
+msgstr "Beskriver anordningens skick."
+
+msgid "Describes the level of organization this is."
+msgstr "Beskriver vilken nivå av organisationen detta är."
+
+msgid "Describes the material that the barrier is made of."
+msgstr "Anger om bommen är öppen eller stängd."
+
+msgid "Describes the material that the device is made of."
+msgstr "Beskriver av vilket material anordningen är tillverkad."
+
+msgid "Describes the material that the mount is made of."
+msgstr "Anger det material av vilket fästpunkten är tillverkad."
+
+msgid "Describes the type of traffic light this device is."
+msgstr "Beskriver vilken typ av trafiksignal anordningen är."
+
+msgid "Describes the type of vehicle recognition this traffic light has."
+msgstr "Beskriver typen av fordonsidentifiering denna trafiksignal har."
+
+msgid "Describes this devices installation status."
+msgstr "Beskriver anordningens installationsstatus."
+
+msgid "Describes which lane of the road this barrier affects."
+msgstr "Anger vilken fil på vägen körhindret inverkar på."
+
+msgid "Describes which lane of the road this road marking affects."
+msgstr "Anger vilken fil på vägen vägmarkeringen inverkar på."
+
+msgid "Describes which lane of the road this sign affects."
+msgstr "Anger vilken fil på vägen skylten inverkar på."
+
+msgid "Describes which lane of the road this traffic light affects."
+msgstr "Anger vilken fil på vägen trafikljuset inverkar på."
+
+msgid "Description"
+msgstr "Beskrivning"
+
+msgid "Description (fi)"
+msgstr "Beskrivning (fi)"
+
+msgid "Description (sv)"
+msgstr "Beskrivning (sv)"
+
+msgid "Description of the Device Type in English."
+msgstr "Beskrivning av anordningstypen på engelska."
+
+msgid "Description of the Device Type in Finnish."
+msgstr "Beskrivning av anordningstypen på finska."
+
+msgid "Description of the Device Type in Swedish."
+msgstr "Beskrivning av anordningstypen på svenska."
+
+msgid "Description of the pictogram on the sign."
+msgstr "Beskrivning av den bildsymbol som finns i skylten."
+
+msgid "Description of the target."
+msgstr "Beskrivning av objektet."
+
+msgid "Detailed log information of the command run."
+msgstr ""
 
 # AI translation - needs human review
-msgid "File path"
-msgstr "Filsökväg"
+msgid "Details"
+msgstr "Detaljer"
 
 # AI translation - needs human review
-msgid "Output directory"
-msgstr "Utdatakatalog"
+msgid "Device Types"
+msgstr "Enhetstyper"
+
+msgid "Device type"
+msgstr "Anordningstyp"
+
+#, python-format
+msgid "Device type '%(device_type)s' accepts no structured content"
+msgstr "Anordningstypen '%(device_type)s' använder inte strukturerat innehåll"
+
+# AI translation - needs human review
+msgid "Device type code"
+msgstr "Enhetstypskod"
+
+# AI translation - needs human review
+msgid "Device type code of the parent sign (E2 or 521)."
+msgstr "Enhetstypskod för det överordnade märket (E2 eller 521)."
+
+# AI translation - needs human review
+msgid "Device type code of the ticket machine."
+msgstr "Enhetstypskod för biljettautomaten."
+
+# AI translation - needs human review
+msgid "Device type preview"
+msgstr "Förhandsgranskning av enhetstyp"
+
+msgid "Device type target model"
+msgstr ""
+
+# AI translation - needs human review
+msgid "Device types updated"
+msgstr "Uppdaterade enhetstyper"
+
+msgid "Diameter"
+msgstr "Diameter"
+
+msgid "Diameter of the mount in centimeters."
+msgstr "Monteringens diameter i centimeter."
+
+msgid "Diary number"
+msgstr "Diarienummer"
+
+# AI translation - needs human review
+msgid ""
+"Dictionary of field names to sets of unique values that were lost during "
+"migration. Example: {'surface_class': ['FLAT', 'CONVEX'], 'affect_area': "
+"['had_polygon'], 'peak_fastened': ['True', 'False']}"
+msgstr ""
+"Ordbok med fältnamn kopplade till uppsättningar av unika värden som "
+"förlorades under migreringen. Exempel: {'surface_class': ['FLAT', 'CONVEX'], "
+"'affect_area': ['had_polygon'], 'peak_fastened': ['True', 'False']}"
+
+# AI translation - needs human review
+msgid ""
+"Dictionary of field names to sets of unique values that were lost during "
+"migration. Example: {'value': ['10', '20'], 'txt': ['Info text'], "
+"'affect_area': ['had_polygon']}"
+msgstr ""
+"Ordbok med fältnamn kopplade till uppsättningar av unika värden som "
+"förlorades under migreringen. Exempel: {'value': ['10', '20'], 'txt': ['Info "
+"text'], 'affect_area': ['had_polygon']}"
+
+msgid "Digiroad code"
+msgstr "Digiroad-kod"
+
+msgid "Digiroad description"
+msgstr "Digiroad-beskrivning"
+
+msgid "Direction"
+msgstr "Riktning"
+
+msgid "Direction of the arrow on the road."
+msgstr "Pilens riktning på vägen."
+
+msgid "Direction of the arrow on this device in relation to the sign."
+msgstr ""
+"Riktning av den pil som finns i anordningen i förhållande till skylten."
+
+msgid "Directional spot light"
+msgstr "Riktad strålkastare"
+
+msgid "Disable operational area permission checks for this user."
+msgstr "Inaktivera tillståndskontroller för åtgärdsområde för denna användare."
+
+msgid "Disable responsible entity permission checks for this user."
+msgstr ""
+"Inaktivera tillståndskontroller för ansvarig enhet för denna användare."
+
+msgid "Disabled feature"
+msgstr ""
+
+# AI translation - needs human review
+msgid "Dismiss"
+msgstr "Avfärda"
+
+msgid "Documentation"
+msgstr "Dokumentation"
+
+msgid "Double sided"
+msgstr "Dubbelsidig"
+
+msgid "Down"
+msgstr "Ned"
+
+# AI translation - needs human review
+msgid "Drawing Number Mismatches"
+msgstr "Avvikelser i ritningsnummer"
+
+msgid "Drawing numbers"
+msgstr "Ritningsnummer"
+
+msgid "Drawing numbers related to the plan separated with a comma"
+msgstr "Nummer på de ritningar som omfattas av planen, separerade med komma"
 
 # AI translation - needs human review
 msgid "Dry run"
 msgstr "Testkörning"
 
 # AI translation - needs human review
-msgid "Results"
-msgstr "Resultat"
+msgid "Duplicate Diary Numbers"
+msgstr "Dubbletter av diarienummer"
+
+# AI translation - needs human review
+msgid "Duration"
+msgstr "Varaktighet"
+
+# AI translation - needs human review
+msgid "Edit name"
+msgstr "Redigera namn"
+
+msgid "Electric accountable"
+msgstr "Elektriskt ansvarig"
+
+msgid "Electric maintainer"
+msgstr "Elektriskt underhåll"
+
+msgid "Emergency call fixture"
+msgstr "Nödsamtalsanordning"
+
+# AI translation - needs human review
+msgid "Empty Geometries"
+msgstr "Tomma geometrier"
+
+msgid "Enabled"
+msgstr "Aktiverad"
+
+msgid "End date"
+msgstr "Slutdatum"
+
+# AI translation - needs human review
+msgid "End time"
+msgstr "Sluttid"
+
+msgid "English"
+msgstr "Engelska"
+
+msgid "English Description"
+msgstr "Engelsk beskrivning"
+
+msgid "English location name"
+msgstr "Engelskt platsnamn"
+
+msgid "English name"
+msgstr "Engelskt namn"
+
+msgid "English text content"
+msgstr "Engelskt textinnehåll"
+
+msgid "Entity responsible for the device's content."
+msgstr "Ansvarig för innehållet i anordningen."
+
+msgid "Entrance shaft"
+msgstr "Ingångsschakt"
+
+# AI translation - needs human review
+msgid "Error Information"
+msgstr "Felinformation"
+
+# AI translation - needs human review
+msgid "Error count"
+msgstr "Antal fel"
+
+# AI translation - needs human review
+msgid "Error message"
+msgstr "Felmeddelande"
+
+# AI translation - needs human review
+msgid "Error message if migration failed."
+msgstr "Felmeddelande om migreringen misslyckades."
+
+# AI translation - needs human review
+msgid "Error message if the migration failed."
+msgstr "Felmeddelande om migreringen misslyckades."
+
+#, python-format
+msgid "Error: Could not find %(model_name)s with id %(id)s."
+msgstr "Fel: Kunde inte hittas med koden %(model_name)s %(id)s."
+
+msgid "Escalator"
+msgstr "Hiss"
+
+# AI translation - needs human review
+msgid "Event Details"
+msgstr "Händelsedetaljer"
+
+# AI translation - needs human review
+msgid "Event Summary"
+msgstr "Händelsesammanfattning"
+
+# AI translation - needs human review
+msgid "Event details"
+msgstr "Händelsedetaljer"
+
+# AI translation - needs human review
+msgid "Executed by"
+msgstr "Utförd av"
+
+msgid "Execution log"
+msgstr ""
+
+msgid "Exit lane"
+msgstr "Avfartskörfält"
+
+msgid "Export template"
+msgstr "Exportmall"
+
+msgid "External ID"
+msgstr "Externt id"
+
+msgid "Extra Large"
+msgstr "Extrastor"
+
+msgid "Extra feature info"
+msgstr "Extra objektinformation"
+
+msgid "Fallen"
+msgstr "Nedfallen"
+
+msgid "Fast lane"
+msgstr "Omkörningsfil"
+
+# AI translation - needs human review
+msgid "Feature Type Edit Mapping"
+msgstr "Redigeringsmappning för objekttyp"
+
+# AI translation - needs human review
+msgid "Feature Type Edit Mappings"
+msgstr "Redigeringsmappningar för objekttyp"
+
+msgid "Fence"
+msgstr "Staket"
+
+# AI translation - needs human review
+msgid "Field Population - Appearance"
+msgstr "Fältifyllnad – Utseende"
+
+# AI translation - needs human review
+msgid "Field Population - Basic"
+msgstr "Fältifyllnad – Grundläggande"
+
+# AI translation - needs human review
+msgid "Field Population - Installation"
+msgstr "Fältifyllnad – Installation"
+
+# AI translation - needs human review
+msgid "Field Population - Location"
+msgstr "Fältifyllnad – Plats"
+
+# AI translation - needs human review
+msgid "Field Population - Other"
+msgstr "Fältifyllnad – Övrigt"
+
+# AI translation - needs human review
+msgid "Fields Populated"
+msgstr "Ifyllda fält"
+
+msgid "Fields added here need to be included in the corresponding WFS Feature"
+msgstr "Fält som läggs till här måste ingå i motsvarande WFS‑objekt."
+
+msgid "File"
+msgstr "Fil"
+
+msgid "File not found."
+msgstr "Fil hittades inte."
+
+# AI translation - needs human review
+msgid "File path"
+msgstr "Filsökväg"
+
+# AI translation - needs human review
+msgid "File proxy"
+msgstr "Filproxy"
+
+# AI translation - needs human review
+msgid "Files"
+msgstr "Filer"
+
+# AI translation - needs human review
+msgid "Files migrated"
+msgstr "Migrerade filer"
+
+msgid "Filter fields"
+msgstr "Filtrera fält"
+
+msgid "Finnish"
+msgstr "Finska"
+
+msgid "Finnish Description"
+msgstr "Finsk beskrivning"
+
+msgid "Finnish location name"
+msgstr "Finskt platsnamn"
+
+msgid "Finnish name"
+msgstr "Finskt namn"
+
+msgid "Finnish text content"
+msgstr "Finskt textinnehåll"
+
+msgid "Fire detector"
+msgstr "Branddetektor"
+
+msgid "First left additional lane"
+msgstr "Första extra körfält vänster"
+
+msgid "First right additional lane"
+msgstr "Första extra körfält höger"
+
+msgid "Flagpole"
+msgstr "Flaggstång"
+
+msgid "Flat"
+msgstr "Platt"
+
+msgid "Floodlight mast"
+msgstr "Belysningsmast"
+
+msgid ""
+"For as long as the 'derive location' option is active, the location of the "
+"plan will always be derived anew, whenever a traffic control device plan is "
+"assigned to this plan."
+msgstr ""
+"Så länge lägeshärledning är aktiverad kommer planplatsen alltid att härledas "
+"på nytt, om någon plan är inställd att hänvisa till denna plan."
+
+msgid "Forward"
+msgstr "Framåt"
+
+msgid "Fountain"
+msgstr "Fontän"
+
+msgid "Fourth left additional lane"
+msgstr "Fjärde extra körfält vänster"
+
+msgid "Fourth right additional lane"
+msgstr "Fjärde extra körfält höger"
+
+msgid ""
+"Free-form text description of the target the sign is guiding to, if the "
+"target has no id number."
+msgstr ""
+"Fritt formulerad textbeskrivning av det objekt som skylten dirigerar till. "
+"Används, om objektet saknar kodnummer."
+
+msgid ""
+"Free-form text description of the traffic sign the road marking is connected "
+"to, if the road marking doesn't have a traffic sign real id."
+msgstr ""
+"Fritextbeskrivning av trafikskylten som vägmarkeringen hör till om "
+"trafikskylten inte har något id för trafikskyltimplementering."
+
+msgid "Free-standing sign"
+msgstr "Fristående märke"
+
+msgid "Free-standing warning sign"
+msgstr "Fristående varningsmärke"
+
+# AI translation - needs human review
+msgid ""
+"Full list of per-row skip, warning and error entries. Each entry has at "
+"minimum: level ('skip'/'warning'/'error'), source_id, reason."
+msgstr ""
+"Fullständig lista över rader som hoppats över samt varnings- och felposter "
+"per rad. Varje post har minst: nivå ('skip'/'warning'/'error'), source_id, "
+"orsak."
+
+msgid "Furniture Signpost Plan"
+msgstr "Lokaliseringsmärke (plan)"
+
+msgid "Furniture Signpost Plan File"
+msgstr "Lokaliseringsmärke (planfil)"
+
+msgid "Furniture Signpost Plan Files"
+msgstr "Lokaliseringsmärke (planfiler)"
+
+msgid "Furniture Signpost Plans"
+msgstr "Lokaliseringsmärke (planer)"
+
+msgid "Furniture Signpost Real"
+msgstr "Lokaliseringsmärke (implementering)"
+
+msgid "Furniture Signpost Real File"
+msgstr "Lokaliseringsmärke (implementeringsfil)"
+
+msgid "Furniture Signpost Real Files"
+msgstr "Lokaliseringsmärke (implementeringsfiler)"
+
+msgid "Furniture Signpost Real operation"
+msgstr "Lokaliseringsmärke (implementeringsåtgärd)"
+
+msgid "Furniture Signpost Real operations"
+msgstr "Lokaliseringsmärke (implementeringsåtgärder)"
+
+msgid "Furniture Signpost Reals"
+msgstr "Lokaliseringsmärke (implementeringar)"
+
+msgid "Furniture Signpost inside which this device is located."
+msgstr "Skylttavla inom vilken anordningen finns."
+
+msgid "Furniture signpost"
+msgstr "Lokaliseringsmärke"
+
+msgid "Furniture signpost value"
+msgstr "Lokaliseringsmärkets värde"
+
+msgid "Gate"
+msgstr "Grind"
+
+msgid "General information"
+msgstr "Allmän information"
+
+# AI translation - needs human review
+msgid "Geometry Errors"
+msgstr "Geometrifel"
+
+msgid "Good"
+msgstr "Gott"
+
+msgid "Group"
+msgstr "Grupp"
+
+msgid "Group operational area"
+msgstr "Grupp (åtgärdsområde)"
+
+msgid "Group operational areas"
+msgstr "Grupp (åtgärdsområden)"
+
+msgid "Group responsible entities"
+msgstr "Gruppansvariga enheter"
+
+msgid "Group responsible entity"
+msgstr "Gruppansvarig enhet"
+
+# AI translation - needs human review
+msgid "Had affect_area"
+msgstr "Hade affect_area"
+
+# AI translation - needs human review
+msgid "Had attachment_url"
+msgstr "Hade attachment_url"
+
+# AI translation - needs human review
+msgid "Had condition"
+msgstr "Hade condition"
+
+# AI translation - needs human review
+msgid "Had direction"
+msgstr "Hade riktning"
+
+# AI translation - needs human review
+msgid "Had height"
+msgstr "Hade höjd"
+
+# AI translation - needs human review
+msgid "Had installation_date"
+msgstr "Hade installation_date"
+
+# AI translation - needs human review
+msgid "Had installation_details"
+msgstr "Hade installation_details"
+
+# AI translation - needs human review
+msgid "Had installation_id"
+msgstr "Hade installation_id"
+
+# AI translation - needs human review
+msgid "Had installation_status"
+msgstr "Hade installation_status"
+
+# AI translation - needs human review
+msgid "Had installation_status_note"
+msgstr "Hade installation_status_note"
+
+# AI translation - needs human review
+msgid "Had lane_number"
+msgstr "Hade lane_number"
+
+# AI translation - needs human review
+msgid "Had lane_type"
+msgstr "Hade lane_type"
+
+# AI translation - needs human review
+msgid "Had legacy_code"
+msgstr "Hade legacy_code"
+
+# AI translation - needs human review
+msgid "Had location_specifier"
+msgstr "Hade location_specifier"
+
+# AI translation - needs human review
+msgid "Had manufacturer"
+msgstr "Hade manufacturer"
+
+# AI translation - needs human review
+msgid "Had mount_plan"
+msgstr "Hade mount_plan"
+
+# AI translation - needs human review
+msgid "Had mount_real"
+msgstr "Hade mount_real"
+
+# AI translation - needs human review
+msgid "Had mount_type"
+msgstr "Hade mount_type"
+
+# AI translation - needs human review
+msgid "Had operation"
+msgstr "Hade operation"
+
+# AI translation - needs human review
+msgid "Had permit_decision_id"
+msgstr "Hade permit_decision_id"
+
+# AI translation - needs human review
+msgid "Had plan"
+msgstr "Hade plan"
+
+# AI translation - needs human review
+msgid "Had reflection_class"
+msgstr "Hade reflection_class"
+
+# AI translation - needs human review
+msgid "Had rfid"
+msgstr "Hade rfid"
+
+# AI translation - needs human review
+msgid "Had road_name"
+msgstr "Hade road_name"
+
+# AI translation - needs human review
+msgid "Had scanned_at"
+msgstr "Hade scanned_at"
+
+# AI translation - needs human review
+msgid "Had size"
+msgstr "Hade storlek"
+
+# AI translation - needs human review
+msgid "Had source_id"
+msgstr "Hade source_id"
+
+# AI translation - needs human review
+msgid "Had source_name"
+msgstr "Hade source_name"
+
+# AI translation - needs human review
+msgid "Had surface_class"
+msgstr "Hade surface_class"
+
+# AI translation - needs human review
+msgid "Had traffic_sign_plan"
+msgstr "Hade traffic_sign_plan"
+
+# AI translation - needs human review
+msgid "Had validity_period_end"
+msgstr "Hade validity_period_end"
+
+# AI translation - needs human review
+msgid "Had validity_period_start"
+msgstr "Hade validity_period_start"
+
+# AI translation - needs human review
+msgid "Hard delete"
+msgstr "Permanent borttagning"
+
+msgid "Has date"
+msgstr "Har datum"
+
+msgid "Heavy vehicle lane"
+msgstr "Körfält för tung trafik"
+
+msgid "Height"
+msgstr "Höjd"
+
+msgid "Height < 1.5m"
+msgstr "Höjd < 1.5m"
+
+msgid "Height = 0m"
+msgstr "Höjd = 0m"
+
+msgid "Height >= 1.5m"
+msgstr "Höjd >= 1.5m"
+
+# AI translation - needs human review
+msgid "Height is null"
+msgstr "Höjd är tom"
+
+msgid "Home"
+msgstr "Hem"
+
+msgid "Hydrant"
+msgstr "Brandpost"
+
+msgid "ID of the device in the source where this device was imported from."
+msgstr "Id för anordningen i källan som denna anordning importerats från."
+
+# AI translation - needs human review
+msgid "ID of the new SignpostPlan (null for dry-run)."
+msgstr "ID för den nya SignpostPlan (tom vid testkörning)."
+
+# AI translation - needs human review
+msgid "ID of the new SignpostReal (null for dry-run)."
+msgstr "ID för den nya SignpostReal (tom vid testkörning)."
+
+# AI translation - needs human review
+msgid "ID of the original TrafficSignPlan."
+msgstr "ID för den ursprungliga TrafficSignPlan."
+
+# AI translation - needs human review
+msgid "ID of the original TrafficSignReal."
+msgstr "ID för den ursprungliga TrafficSignReal."
+
+# AI translation - needs human review
+msgid "Icon file"
+msgstr "Ikonfil"
+
+msgid "Icon of the actual device"
+msgstr "Ikon för egentlig anordning"
+
+# AI translation - needs human review
+msgid "Icon preview"
+msgstr "Förhandsgranskning av ikon"
+
+msgid "Icon with name '{', '.join(existing_icons)}' already exists."
+msgstr "Ikon med namnet '{', '.join(existing_icons)}' finns redan."
+
+msgid "IconDrawingConfig"
+msgstr "Ikonens ritningskonfiguration"
+
+msgid "IconDrawingConfigs"
+msgstr "Ikonernas ritningskonfigurationer"
+
+msgid "Id number of the portal type in the portal_type table."
+msgstr "Id-nummer för portaltypen i portaltyptabellen."
+
+msgid "Identifier"
+msgstr "Identifier"
+
+# AI translation - needs human review
+msgid ""
+"If enabled, this user will receive admin notification emails about user "
+"deactivations and system events. Only users with valid email addresses will "
+"receive notifications."
+msgstr ""
+"Om aktiverat tar denna användare emot administratörsaviseringar via e-post "
+"om användarinaktiveringar och systemhändelser. Endast användare med giltiga "
+"e-postadresser tar emot aviseringar."
+
+msgid ""
+"If set to true, returns only plans that have been superseded by a new plan."
+msgstr "Om sant, återställ endast planer, som är upphävda."
+
+msgid ""
+"If unchecked, access is restricted to users/groups with appropriate table or "
+"file permissions"
+msgstr ""
+"Om ej markerad begränsas åtkomsten till användare/grupper med lämpliga "
+"tabell‑ eller filbehörigheter"
+
+msgid "Illegal file types: {', '.join(illegal_file_types)}"
+msgstr "Otillåtna filtyper: {', '.join(illegal_file_types)}"
+
+msgid "Image Type"
+msgstr "Bildtyp"
+
+# AI translation - needs human review
+msgid "Image file preview"
+msgstr "Förhandsgranskning av bildfil"
+
+# AI translation - needs human review
+msgid "Import Information"
+msgstr "Importinformation"
+
+# AI translation - needs human review
+msgid "Import run"
+msgstr "Importkörning"
+
+msgid "In use"
+msgstr "I bruk"
+
+msgid "Inactive"
+msgstr "Inaktiv"
+
+msgid "Indicates if this object is double sided"
+msgstr "Anger om objektet är dubbelsidigt"
+
+msgid "Indicates if this object is peak fastened"
+msgstr "Anger om objektet är toppmonterat"
+
+# AI translation - needs human review
+msgid "Info"
+msgstr "Information"
+
+msgid "Information sign"
+msgstr "Upplysningsskylt"
+
+msgid "Infrared sensor"
+msgstr "Infraröd detektor"
+
+msgid "Inspected at"
+msgstr "Inspekterades den"
+
+msgid "Installation date"
+msgstr "Installationsdatum"
+
+msgid "Installation details"
+msgstr "Installationsdetaljer"
+
+msgid "Installation id"
+msgstr "Installations-id"
+
+msgid "Installation information"
+msgstr "Information om installation"
+
+msgid "Installation status"
+msgstr "Installationsstatus"
+
+msgid "Installed by"
+msgstr "Installerades av"
+
+# AI translation - needs human review
+msgid "Invalid Geometry Topology"
+msgstr "Ogiltig geometritopologi"
+
+# AI translation - needs human review
+msgid "Invalid Geometry Type"
+msgstr "Ogiltig geometrityp"
+
+# AI translation - needs human review
+msgid "Invalid WKT Geometry"
+msgstr "Ogiltig WKT-geometri"
+
+msgid "Invalid location_ewkt value"
+msgstr "Ogiltigt värde för location_ewkt"
+
+msgid "Is basemap"
+msgstr "Grundkarta"
+
+msgid "Is electric"
+msgstr "Elektrisk"
+
+msgid "Is foldable"
+msgstr "Fällbar/vikbar"
+
+msgid "Is grinded"
+msgstr "Urtag"
+
+msgid "Is public"
+msgstr "Är offentlig"
+
+msgid "Is raised"
+msgstr "Upphöjd"
+
+msgid "Island"
+msgstr "Refug"
+
+# AI translation - needs human review
+msgid ""
+"JSONL file containing pre-update snapshots and created-object IDs for this "
+"run."
+msgstr ""
+"JSONL-fil som innehåller ögonblicksbilder före uppdatering och ID:n för "
+"skapade objekt för denna körning."
+
+msgid "Lamp post"
+msgstr "Belysningsstolpe"
+
+msgid "Lane ends"
+msgstr "Körfält upphör"
+
+msgid "Lane number"
+msgstr "Körfält nummer"
+
+msgid "Lane signal"
+msgstr "Körfältsignal"
+
+msgid "Lane type"
+msgstr "Typ av körfält"
+
+msgid "Language"
+msgstr "Språk"
+
+msgid "Large"
+msgstr "Stor"
+
+msgid "Last 180 days"
+msgstr "Senaste 180 dagarna"
+
+msgid "Last 30 days"
+msgstr "Senaste 30 dagarna"
+
+msgid "Last 6 months"
+msgstr "Senaste 6 månaderna"
+
+msgid "Last 7 days"
+msgstr "Senaste 7 dagarna"
+
+msgid "Last 90 days"
+msgstr "Senaste 90 dagarna"
+
+msgid "Last month"
+msgstr "Förra månaden"
+
+msgid "Last year"
+msgstr "Förra året"
+
+msgid "Layer"
+msgstr "Skikt"
+
+msgid "Layers"
+msgstr "Skikt"
+
+msgid "Left"
+msgstr "Vänster"
+
+msgid "Left and straight"
+msgstr "Till vänster och rakt fram"
+
+msgid "Left of road or lane"
+msgstr "Till vänster om väg eller körfält"
+
+msgid "Left side"
+msgstr "Vänster sida"
+
+msgid "Left side of lane"
+msgstr "Vänster sida av körfält"
+
+msgid "Left side of lane or road"
+msgstr "Vänster sida av körfält eller väg"
+
+msgid "Left-turn arrow signal"
+msgstr "Pilsignal vänstersväng"
+
+msgid "Legacy Traffic Sign Code"
+msgstr "Äldre trafikskyltkod"
+
+msgid "Legacy code"
+msgstr "Äldre kod"
+
+msgid "Legacy description"
+msgstr "Äldre beskrivning"
+
+msgid "Length"
+msgstr "Längd"
+
+msgid "Length of the barrier in centimeters."
+msgstr "Bommens längd i centimeter."
+
+msgid "Length of the cross bar for this mount in centimeters."
+msgstr "Längd på fästpunktens tvärslå i centimeter."
+
+msgid "Length of the road marking in centimeters."
+msgstr "Vägmarkeringens längd i centimeter."
+
+msgid "Lifecycle"
+msgstr "Livscykel"
+
+msgid ""
+"Lifecycle of the device, which describes the activity status of the device."
+msgstr "Anordningens livscykel som beskriver anordningens aktivitetsstatus."
+
+msgid "Line direction"
+msgstr "Linjeriktning"
+
+# AI translation - needs human review
+msgid ""
+"List of AdditionalSignReal source_ids successfully upserted in this run."
+msgstr ""
+"Lista över AdditionalSignReal source_id som framgångsrikt infogades eller "
+"uppdaterades i denna körning."
+
+# AI translation - needs human review
+msgid "List of MountReal source_ids successfully upserted in this run."
+msgstr ""
+"Lista över MountReal source_id som framgångsrikt infogades eller "
+"uppdaterades i denna körning."
+
+# AI translation - needs human review
+msgid "List of SignpostReal source_ids successfully upserted in this run."
+msgstr ""
+"Lista över SignpostReal source_id som framgångsrikt infogades eller "
+"uppdaterades i denna körning."
+
+# AI translation - needs human review
+msgid "List of TrafficSignReal source_ids successfully upserted in this run."
+msgstr ""
+"Lista över TrafficSignReal source_id som framgångsrikt infogades eller "
+"uppdaterades i denna körning."
 
 # AI translation - needs human review
 msgid "List of import results for each CSV row"
 msgstr "Lista över importresultat för varje CSV-rad"
+
+# AI translation - needs human review
+msgid ""
+"List of source_ids for MountReal records hard-deleted as orphans in this run."
+msgstr ""
+"Lista över source_id för MountReal-poster som togs bort permanent som "
+"föräldralösa i denna körning."
+
+# AI translation - needs human review
+msgid "Local"
+msgstr "Lokal"
+
+msgid "Location (3D)"
+msgstr "Plats (3D)"
+
+msgid "Location (EWKT)"
+msgstr "Plats (EWKT)"
+
+msgid "Location (x,y)"
+msgstr "Plats (x, y)"
+
+msgid "Location (z)"
+msgstr "Plats (z)"
+
+msgid "Location information"
+msgstr "Platsinformation"
+
+msgid "Location specifier"
+msgstr "Platsspecifikation"
+
+msgid "Log out"
+msgstr "Logga ut"
+
+msgid "Longitudinal"
+msgstr "Längsgående"
+
+msgid "Loop sensor"
+msgstr "Loop-detektor"
+
+# AI translation - needs human review
+msgid "Lost Data"
+msgstr "Förlorade data"
+
+# AI translation - needs human review
+msgid "Lost Field Values"
+msgstr "Förlorade fältvärden"
+
+# AI translation - needs human review
+msgid "Lost Fields"
+msgstr "Förlorade fält"
+
+# AI translation - needs human review
+msgid "Lost attachment_url"
+msgstr "Förlorad attachment_url"
+
+# AI translation - needs human review
+msgid "Lost double_sided"
+msgstr "Förlorad double_sided"
+
+# AI translation - needs human review
+msgid "Lost field values"
+msgstr "Förlorade fältvärden"
+
+# AI translation - needs human review
+msgid "Lost installation_details"
+msgstr "Förlorad installation_details"
+
+# AI translation - needs human review
+msgid "Lost installation_id"
+msgstr "Förlorad installation_id"
+
+# AI translation - needs human review
+msgid "Lost operation"
+msgstr "Förlorad operation"
+
+# AI translation - needs human review
+msgid "Lost peak_fastened"
+msgstr "Förlorad peak_fastened"
+
+# AI translation - needs human review
+msgid "Lost permit_decision_id"
+msgstr "Förlorad permit_decision_id"
+
+# AI translation - needs human review
+msgid "Lost rfid"
+msgstr "Förlorad rfid"
+
+# AI translation - needs human review
+msgid "Lost surface_class"
+msgstr "Förlorad surface_class"
+
+# AI translation - needs human review
+msgid "Lost txt"
+msgstr "Förlorad txt"
+
+# AI translation - needs human review
+msgid "Lost value"
+msgstr "Förlorat värde"
+
+msgid "Lower floor panel fire-hydrant"
+msgstr "Golvpanelbrandpost"
+
+msgid "Main lane"
+msgstr "Huvudled"
+
+# AI translation - needs human review
+msgid "Maintenance Mode"
+msgstr "Underhållsläge"
+
+# AI translation - needs human review
+msgid "Maintenance mode active"
+msgstr "Underhållsläge aktivt"
+
+# AI translation - needs human review
+msgid "Maintenance mode configuration cannot be deleted."
+msgstr "Konfigurationen för underhållsläge kan inte tas bort."
+
+msgid ""
+"Maintenance operations done to the sign, e.g. washing, straightening or "
+"painting."
+msgstr ""
+"Underhållsåtgärder som utförts på skylten, t.ex. rengöring, uträtning eller "
+"målning."
+
+# AI translation - needs human review
+msgid "Management Command Usage Tracker"
+msgstr "Användningsspårare för hanteringskommando"
+
+msgid "Mandatory sign"
+msgstr "Påbudsskylt"
+
+msgid "Manufacturer"
+msgstr "Tillverkare"
+
+msgid "Map"
+msgstr "Karta"
+
+msgid "Mark selected objects as deleted"
+msgstr "Markera valda objekt som borttagna"
+
+msgid "Marked as deleted (hidden from API)"
+msgstr "Markerad som borttagen (dold från API)"
+
+msgid "Marker"
+msgstr "Märke"
+
+msgid "Material"
+msgstr "Material"
+
+msgid "Medium"
+msgstr "Medelstor"
+
+msgid "Memorial/monument"
+msgstr "Minnessten/staty"
+
+msgid "Merge lane"
+msgstr "Väganslutning"
+
+# AI translation - needs human review
+msgid "Message (English)"
+msgstr "Meddelande (engelska)"
+
+# AI translation - needs human review
+msgid "Message (Finnish)"
+msgstr "Meddelande (finska)"
+
+# AI translation - needs human review
+msgid "Message (Swedish)"
+msgstr "Meddelande (svenska)"
+
+# AI translation - needs human review
+msgid "Message Preview"
+msgstr "Förhandsgranskning av meddelande"
+
+# AI translation - needs human review
+msgid "Message active"
+msgstr "Meddelande aktivt"
+
+# AI translation - needs human review
+msgid "Message to display on the maintenance page in English."
+msgstr "Meddelande som visas på underhållssidan på engelska."
+
+# AI translation - needs human review
+msgid "Message to display on the maintenance page in Finnish."
+msgstr "Meddelande som visas på underhållssidan på finska."
+
+# AI translation - needs human review
+msgid "Message to display on the maintenance page in Swedish."
+msgstr "Meddelande som visas på underhållssidan på svenska."
+
+msgid "Metadata"
+msgstr "Metadata"
+
+msgid "Middle"
+msgstr "I mitten"
+
+msgid "Middle of lane"
+msgstr "Mitten av körfält"
+
+msgid "Middle of road or lane"
+msgstr "I mitten av väg eller körfält"
+
+# AI translation - needs human review
+msgid "Migration Information"
+msgstr "Migreringsinformation"
+
+# AI translation - needs human review
+msgid "Migration Run"
+msgstr "Migreringskörning"
+
+# AI translation - needs human review
+msgid "Migration run"
+msgstr "Migreringskörning"
+
+msgid "Milestone"
+msgstr "Milsten"
+
+msgid "Missing"
+msgstr "Saknas"
+
+# AI translation - needs human review
+msgid "Missing Diary Numbers"
+msgstr "Saknade diarienummer"
+
+msgid "Missing Traffic Sign Real txt"
+msgstr "Trafikskylt saknas (implementering-txt)"
+
+msgid "Missing content"
+msgstr "Innehåll saknas"
+
+msgid "Missing icon graphics. Description: "
+msgstr "Märkets grafik saknas. Märkets beskrivning:"
+
+# AI translation - needs human review
+msgid "Mode"
+msgstr "Läge"
+
+# AI translation - needs human review
+msgid "Model"
+msgstr "Modell"
+
+msgid "Mount"
+msgstr "Montering"
+
+msgid "Mount Plan"
+msgstr "Montering (plan)"
+
+msgid "Mount Plan Centroid"
+msgstr "Montering_medelpunkt (plan)"
+
+msgid "Mount Plan File"
+msgstr "Montering (planfil)"
+
+msgid "Mount Plan Files"
+msgstr "Montering (planfiler)"
+
+msgid "Mount Plan Replacement"
+msgstr "Ersättning för fästpunktplan"
+
+msgid "Mount Plan Replacements"
+msgstr "Ersättningar för fästpunktplaner"
+
+msgid "Mount Plans"
+msgstr "Montering (planer)"
+
+msgid "Mount Real"
+msgstr "Montering (implementering)"
+
+msgid "Mount Real Centroid"
+msgstr "Montering_medelpunkt (implementering)"
+
+msgid "Mount Real File"
+msgstr "Montering (implementeringsfil)"
+
+msgid "Mount Real Files"
+msgstr "Montering (implementeringsfiler)"
+
+msgid "Mount Reals"
+msgstr "Montering (implementeringar)"
+
+# AI translation - needs human review
+msgid "Mount file"
+msgstr "Fästesfil"
+
+msgid "Mount real operation"
+msgstr "Montering (implementeringsåtgärd)"
+
+msgid "Mount real operations"
+msgstr "Montering (implementeringsåtgärder)"
+
+msgid "Mount that this device is mounted on."
+msgstr "Fästpunkt som anordningen är installerad i."
+
+msgid "Mount that this sign is mounted on."
+msgstr "Fästpunkt som denna skylt är installerad i."
+
+msgid "Mount that this traffic light is mounted on."
+msgstr "Fästpunkt som trafikljuset är installerat i."
+
+msgid "Mount type"
+msgstr "Monteringstyp"
+
+msgid "Mount types"
+msgstr "Monteringstyper"
+
+# AI translation - needs human review
+msgid "Mounts"
+msgstr "Fästen"
+
+# AI translation - needs human review
+msgid "Mounts created"
+msgstr "Skapade fästen"
+
+# AI translation - needs human review
+msgid "Mounts updated"
+msgstr "Uppdaterade fästen"
+
+# AI translation - needs human review
+msgid "Multiple parents found"
+msgstr "Flera överordnade hittades"
+
+msgid "My account"
+msgstr "Egna uppgifter"
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "Name (en)"
+msgstr "Namn (en)"
+
+msgid "Name (fi)"
+msgstr "Namn (fi)"
+
+msgid "Name of feature type"
+msgstr "Objekttypens namn"
+
+msgid "Name of the color in Helsinki Design System or Manual."
+msgstr ""
+"Färgens namn i Helsinki Design System eller i Helsingfors designmanual."
+
+msgid "Name of the operation."
+msgstr "Namn på åtgärden."
+
+msgid "Name of the organization that manufactured this device."
+msgstr "Namn på organisationen som tillverkade denna anordning."
+
+msgid "Name of the organization that manufactured this sign."
+msgstr "Namn på den organisation som har tillverkat denna anordning."
+
+msgid "Name of the organization who installed this sign."
+msgstr "Namn på den organisation som har installerat denna skylt."
+
+msgid "Name of the road this barrier is installed at."
+msgstr "Namn på den väg där detta körhinder är installerat."
+
+msgid "Name of the road this mount is installed at."
+msgstr "Namn på den väg där fästpunkten är installerad."
+
+msgid "Name of the road this road marking is installed at."
+msgstr "Namn på den väg där denna vägmarkering är installerad."
+
+msgid "Name of the road this sign is installed at."
+msgstr "Namn på den väg där skylten är installerad."
+
+msgid "Name of the road this traffic light is installed at."
+msgstr "Namn på den väg där detta trafikljus är installerat."
+
+msgid "Name of the road this traffic sign is installed at."
+msgstr "Namn på den väg där detta vägmärke är installerat."
+
+msgid "Name of the source for where this device was imported from."
+msgstr "Namn på källan varifrån denna anordning importerades."
+
+msgid "Name of the target in English."
+msgstr "Objektets namn på engelska."
+
+msgid "Name of the target in Finnish."
+msgstr "Objektets namn på finska."
+
+msgid "Name of the target in Swedish."
+msgstr "Objektets namn på svenska."
+
+msgid "Name short"
+msgstr "Namn (kort)"
+
+msgid "Name used in the edit link of the map's FeatureInfo component "
+msgstr "Namn som används i kartans FeatureInfo‑komponentens redigeringslänk"
+
+# AI translation - needs human review
+msgid ""
+"Nested dict of seconds spent in each phase: {object_type: {phase: "
+"duration_s}}. Also contains a 'preprocessing' key for CSV loading and DB map "
+"building time. Populated progressively as phases complete."
+msgstr ""
+"Nästlad ordbok över sekunder som spenderats i varje fas: {object_type: "
+"{phase: duration_s}}. Innehåller även en 'preprocessing'-nyckel för tiden "
+"för CSV-inläsning och uppbyggnad av databaskarta. Fylls i successivt "
+"allteftersom faserna slutförs."
+
+msgid "New"
+msgstr "Nytt"
+
+# AI translation - needs human review
+msgid "New AdditionalSignPlan"
+msgstr "Ny AdditionalSignPlan"
+
+# AI translation - needs human review
+msgid "New AdditionalSignReal"
+msgstr "Ny AdditionalSignReal"
+
+# AI translation - needs human review
+msgid "New ID"
+msgstr "Nytt ID"
+
+# AI translation - needs human review
+msgid "New SignpostPlan"
+msgstr "Ny SignpostPlan"
+
+# AI translation - needs human review
+msgid "New SignpostReal"
+msgstr "Ny SignpostReal"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "No additional signs"
+msgstr "Inga tilläggsskyltar"
+
+msgid "No date"
+msgstr "Inget datum"
+
+msgid "No mount"
+msgstr "Ej fästpunkt"
+
+# AI translation - needs human review
+msgid "No relations found."
+msgstr "Inga relationer hittades."
+
+msgid "No, continue to edit"
+msgstr "Nej, fortsätt redigera"
+
+# AI translation - needs human review
+msgid "None"
+msgstr "Ingen"
+
+# AI translation - needs human review
+msgid ""
+"Notes on tracking the command or clarifications about the command's purpose"
+msgstr ""
+"Anteckningar om spårning av kommandot eller förtydliganden om kommandots "
+"syfte"
+
+# AI translation - needs human review
+msgid "Number of TrafficSignPlan objects successfully migrated."
+msgstr "Antal TrafficSignPlan-objekt som migrerades framgångsrikt."
+
+# AI translation - needs human review
+msgid "Number of TrafficSignReal objects successfully migrated."
+msgstr "Antal TrafficSignReal-objekt som migrerades framgångsrikt."
+
+# AI translation - needs human review
+msgid "Number of device types with target_model updated."
+msgstr "Antal enhetstyper vars target_model uppdaterades."
+
+# AI translation - needs human review
+msgid "Number of file attachments migrated."
+msgstr "Antal migrerade filbilagor."
+
+# AI translation - needs human review
+msgid ""
+"Number of orphan MountReal records hard-deleted after the import phases."
+msgstr ""
+"Antal föräldralösa MountReal-poster som togs bort permanent efter "
+"importfaserna."
+
+# AI translation - needs human review
+msgid "Number of plans that had no parent sign found."
+msgstr "Antal planer där inget överordnat märke hittades."
+
+# AI translation - needs human review
+msgid "Number of plans that were assigned a parent sign (E2/521)."
+msgstr "Antal planer som tilldelades ett överordnat märke (E2/521)."
+
+# AI translation - needs human review
+msgid "Number of reals that had no parent sign found."
+msgstr "Antal implementeringar där inget överordnat märke hittades."
+
+# AI translation - needs human review
+msgid "Number of reals that were assigned a parent sign (E2/521)."
+msgstr "Antal implementeringar som tilldelades ett överordnat märke (E2/521)."
+
+#, python-brace-format
+msgid ""
+"Number of results to return per page. Maximum number of results is "
+"{max_limit}."
+msgstr "Resultat per sida. Maximalt är {max_limit}"
+
+msgid "Numeric value on the marking."
+msgstr "Numeriskt värde på märket."
+
+msgid "Numeric value on the sign."
+msgstr "Nummervärde i skylten."
+
+msgid "OGC CityGML City Furniture Class"
+msgstr "OGC CityGML-kategori för stadsmöbel"
+
+msgid "OGC CityGML City Furniture Function or Usage type"
+msgstr "Stadsmöbler - funktion eller användningstyp"
+
+# AI translation - needs human review
+msgid "Object IDs"
+msgstr "Objekt-ID:n"
+
+msgid "Old"
+msgstr "Gammalt"
+
+# AI translation - needs human review
+msgid "One day warning email sent at"
+msgstr "E-post med endagsvarning skickad"
+
+# AI translation - needs human review
+msgid "One month warning email sent at"
+msgstr "E-post med enmånadersvarning skickad"
+
+# AI translation - needs human review
+msgid "One week warning email sent at"
+msgstr "E-post med enveckasvarning skickad"
+
+msgid "Open out"
+msgstr "Öppnas utåt"
+
+msgid "Operation"
+msgstr "Åtgärd"
+
+msgid "Operation date"
+msgstr "Åtgärdsdatum"
+
+msgid "Operation type"
+msgstr "typ av åtgärd"
+
+msgid "Operation types"
+msgstr "Åtgärdstyper"
+
+msgid "Operational area"
+msgstr "Åtgärdsområde"
+
+msgid "Operational areas"
+msgstr "Åtgärdsområden"
+
+msgid ""
+"Operational areas, on which this user has permission to modify devices in."
+msgstr ""
+"Åtgärdsområden för vilka denna användare har tillstånd att modifiera "
+"anordningar."
+
+msgid "Order"
+msgstr "Ordning"
+
+msgid "Ordered traffic sign"
+msgstr "Ordnad trafikskylt"
+
+msgid "Ordered traffic signs"
+msgstr "Ordnade trafikskyltar"
+
+msgid "Organization"
+msgstr "Organisation"
+
+msgid "Organization in charge of electric maintenance of the device."
+msgstr "Organisation som ansvarar för elektriskt underhåll av anordningen."
+
+msgid "Organization level"
+msgstr "Organisationsnivå"
+
+msgid "Organization or project that this device is assigned to."
+msgstr "Organisation eller projekt som denna anordning är tilldelad."
+
+msgid ""
+"Organization under which this object belongs to. This objects organizational "
+"level must be lower than its parents."
+msgstr ""
+"Organisation som detta objekt tillhör. Detta objekts organisationsnivå måste "
+"vara lägre än de överordnade."
+
+# AI translation - needs human review
+msgid "Original ID"
+msgstr "Ursprungligt ID"
+
+# AI translation - needs human review
+msgid "Original TrafficSignPlan"
+msgstr "Ursprunglig TrafficSignPlan"
+
+# AI translation - needs human review
+msgid "Original TrafficSignReal"
+msgstr "Ursprunglig TrafficSignReal"
+
+# AI translation - needs human review
+msgid "Orphan mount source IDs"
+msgstr "Käll-ID:n för föräldralösa fästen"
+
+# AI translation - needs human review
+msgid "Orphans deleted"
+msgstr "Borttagna föräldralösa poster"
+
+msgid "Other"
+msgstr "Annat"
+
+msgid "Other road marking"
+msgstr "Annan vägmarkering"
+
+msgid "Other road sign"
+msgstr "Annat vägmärke"
+
+msgid "Others"
+msgstr "Övrigt"
+
+# AI translation - needs human review
+msgid "Out of Bounds Geometries"
+msgstr "Geometrier utanför gränserna"
+
+# AI translation - needs human review
+msgid "Output directory"
+msgstr "Utdatakatalog"
+
+msgid "Outside"
+msgstr "Utomhus"
+
+msgid "Outside staircase"
+msgstr "Utomhustrappa"
+
+msgid "Overlays"
+msgstr "Överlägg"
+
+msgid "Owner"
+msgstr "Ägare"
+
+msgid "Owner who orders and is responsible for the maintenance of the device."
+msgstr "Ägare som beställer och ansvarar för underhåll av anordningen."
+
+msgid "Owners"
+msgstr "Ägare"
+
+msgid "PNG Size"
+msgstr "PNG Storlek"
+
+# AI translation - needs human review
+msgid "Parent"
+msgstr "Överordnad"
+
+# AI translation - needs human review
+msgid "Parent Assignment"
+msgstr "Tilldelning av överordnad"
+
+msgid "Parent Furniture Signpost Plan"
+msgstr "Överordnat lokaliseringsmärke (plan)"
+
+msgid "Parent Furniture Signpost Real"
+msgstr "Överordnat lokaliseringsmärke (implementering)"
+
+msgid "Parent Responsible Entity"
+msgstr "Överordnad ansvarig enhet"
+
+msgid "Parent Signpost Plan"
+msgstr "Överordnad vägvisare (plan)"
+
+msgid "Parent Signpost Real"
+msgstr "Överordnad vägvisare (implementering)"
+
+msgid "Parent Traffic Sign Plan"
+msgstr "Överordnad trafikskylt (plan)"
+
+msgid "Parent Traffic Sign Real"
+msgstr "Överordnad trafikskylt (implementering)"
+
+# AI translation - needs human review
+msgid "Parent found"
+msgstr "Överordnad hittad"
+
+# AI translation - needs human review
+msgid ""
+"Parent is required for additional signs that are not ticket machines. Set "
+"either parent (TrafficSign), signpost_plan, or signpost_real."
+msgstr ""
+"Överordnad krävs för tilläggsmärken som inte är biljettautomater. Ange "
+"antingen överordnad (TrafficSign), signpost_plan eller signpost_real."
+
+# AI translation - needs human review
+msgid "Parent sign ID"
+msgstr "Överordnat märkes-ID"
+
+# AI translation - needs human review
+msgid "Parent sign code"
+msgstr "Överordnat märkes kod"
+
+msgid "Path or name of the JSON file containing the operations to be reverted."
+msgstr ""
+
+# AI translation - needs human review
+msgid "Path or name of the mount CSV file used for this run."
+msgstr ""
+"Sökväg eller namn på CSV-filen för fästen som användes för denna körning."
+
+# AI translation - needs human review
+msgid "Path or name of the sign CSV file used for this run."
+msgstr ""
+"Sökväg eller namn på CSV-filen för märken som användes för denna körning."
+
+msgid "Patio"
+msgstr "Terrass"
+
+msgid "Peak fastened"
+msgstr "Toppmonterad"
+
+msgid "Pedestrian and bike lane"
+msgstr "Gång- och cykelbana"
+
+msgid "Pedestrian lane"
+msgstr "Gångbana"
+
+msgid "Pedestrian signal"
+msgstr "Fotgängarsignal"
+
+msgid "Permit decision id"
+msgstr "Tillståndsbeslut-id"
+
+msgid "Personal info"
+msgstr "Personliga uppgifter"
+
+# AI translation - needs human review
+msgid "Phase Durations"
+msgstr "Fasernas varaktighet"
+
+# AI translation - needs human review
+msgid "Phase durations"
+msgstr "Fasernas varaktighet"
+
+msgid "Physical properties"
+msgstr "Fysiska egenskaper"
+
+msgid "Pictogram"
+msgstr "Piktogram"
+
+msgid "Plan"
+msgstr "Plan"
 
 # AI translation - needs human review
 msgid "Plan Geometry Import Log"
@@ -2341,175 +2326,312 @@ msgstr "Importlogg för plangeometri"
 msgid "Plan Geometry Import Logs"
 msgstr "Importloggar för plangeometri"
 
-msgid "External ID"
-msgstr "Externt id"
+# AI translation - needs human review
+msgid "Plan Mapping"
+msgstr "Planmappning"
 
-msgid ""
-"Use Projectwise ID for projects, can also be an abbreviation if entity has "
-"no ID"
-msgstr ""
-"Använd ProjectWise-id för projekt, kan även vara en förkortning om enheten "
-"saknar id"
+# AI translation - needs human review
+msgid "Plan Migration Statistics"
+msgstr "Migreringsstatistik för planer"
 
-msgid "Organization level"
-msgstr "Organisationsnivå"
+# AI translation - needs human review
+msgid "Plan Records"
+msgstr "Planposter"
 
-msgid "Describes the level of organization this is."
-msgstr "Beskriver vilken nivå av organisationen detta är."
+# AI translation - needs human review
+msgid "Plan files migrated"
+msgstr "Migrerade planfiler"
 
-msgid "Parent Responsible Entity"
-msgstr "Överordnad ansvarig enhet"
+# AI translation - needs human review
+msgid "Plan mapping found"
+msgstr "Planmappning hittad"
 
-msgid ""
-"Organization under which this object belongs to. This objects organizational"
-" level must be lower than its parents."
-msgstr ""
-"Organisation som detta objekt tillhör. Detta objekts organisationsnivå måste"
-" vara lägre än de överordnade."
+msgid "Plan which this Additional Sign Plan is a part of."
+msgstr "Plan som denna tilläggsskyltplan ingår i."
 
-msgid "Responsible Entity"
-msgstr "Ansvarig enhet"
+msgid "Plan which this Barrier Plan is a part of."
+msgstr "Plan som denna körhinderplan ingår i."
+
+msgid "Plan which this Device Plan is a part of."
+msgstr "Plan som denna anordningsplan ingår i."
+
+msgid "Plan which this mount plan is a part of."
+msgstr "Plan som denna fästpunktplan ingår i."
+
+msgid "Plan which this road marking plan is a part of."
+msgstr "Plan som denna vägmarkeringsplan ingår i."
+
+msgid "Plan which this signpost plan is a part of."
+msgstr "Plan som denna skyltplan ingår i."
+
+msgid "Plan which this traffic light plan is a part of."
+msgstr "Plan som denna trafikljusplan ingår i."
+
+msgid "Plan which this traffic sign plan is a part of."
+msgstr "Plan som denna vägmärkesplan ingår i."
+
+msgid "Plans"
+msgstr "Planer"
+
+# AI translation - needs human review
+msgid "Plans Not Found"
+msgstr "Planer hittades inte"
+
+# AI translation - needs human review
+msgid "Plans migrated"
+msgstr "Migrerade planer"
+
+# AI translation - needs human review
+msgid "Plans processed"
+msgstr "Bearbetade planer"
+
+# AI translation - needs human review
+msgid "Plans with parent"
+msgstr "Planer med överordnad"
+
+# AI translation - needs human review
+msgid "Plans without parent"
+msgstr "Planer utan överordnad"
+
+msgid "Pole"
+msgstr "Stolpe"
+
+msgid "Police call post"
+msgstr "Offentlig polistelefon"
+
+msgid "Portal build type"
+msgstr "Portalbyggnadstyp"
+
+msgid "Portal model"
+msgstr "Portalmodell"
+
+msgid "Portal structure"
+msgstr "Portalstruktur"
+
+msgid "Portal type"
+msgstr "Portaltyp"
+
+msgid "Portal types"
+msgstr "Portaltyper"
+
+msgid "Postbox"
+msgstr "Brevlåda"
+
+msgid "Priority or give-way sign"
+msgstr "Väjningspliktskylt"
+
+# AI translation - needs human review
+msgid "Processed additional sign source IDs"
+msgstr "Bearbetade käll-ID:n för tilläggsmärken"
+
+# AI translation - needs human review
+msgid "Processed additional sign source IDs (count)"
+msgstr "Bearbetade käll-ID:n för tilläggsmärken (antal)"
+
+# AI translation - needs human review
+msgid "Processed mount source IDs"
+msgstr "Bearbetade käll-ID:n för fästen"
+
+# AI translation - needs human review
+msgid "Processed mount source IDs (count)"
+msgstr "Bearbetade käll-ID:n för fästen (antal)"
+
+# AI translation - needs human review
+msgid "Processed sign source IDs"
+msgstr "Bearbetade käll-ID:n för märken"
+
+# AI translation - needs human review
+msgid "Processed sign source IDs (count)"
+msgstr "Bearbetade käll-ID:n för märken (antal)"
+
+# AI translation - needs human review
+msgid "Processed signpost source IDs"
+msgstr "Bearbetade käll-ID:n för lokaliseringsmärken"
+
+# AI translation - needs human review
+msgid "Processed signpost source IDs (count)"
+msgstr "Bearbetade käll-ID:n för lokaliseringsmärken (antal)"
+
+msgid "Prohibitory or restrictive sign"
+msgstr "Förbuds- eller restriktiv skylt"
+
+msgid "Public transport lane / taxi lane"
+msgstr "Körfält för kollektivtrafik/taxi"
+
+msgid "Public transport signal"
+msgstr "Kollektivtrafiksignal"
+
+msgid "Push button"
+msgstr "Tryckknapp"
+
+msgid "Quality requirements fulfilled"
+msgstr "Kvalitetskrav uppfyllda"
+
+msgid "RFID"
+msgstr "RFID"
+
+msgid "RFID tag of the sign (if any)."
+msgstr "RFID-tagg på skylten (i förekommande fall)."
+
+msgid "RGB Hex value of the color"
+msgstr "Färgens RGB Hex-värde"
+
+msgid "Radar i.e. microwave sensor"
+msgstr "Radar d.v.s. mikrovågdetektor"
+
+msgid "Radio mast"
+msgstr "Radiomast"
+
+msgid "Radio telescope"
+msgstr "Radioteleskop"
+
+msgid "Rail level crossing"
+msgstr "Spårvägsplankorsning"
+
+msgid "Ramp"
+msgstr "Ramp"
+
+# AI translation - needs human review
+msgid "Raw JSON Results"
+msgstr "Rå JSON-resultat"
+
+# AI translation - needs human review
+msgid "Reactivate selected users"
+msgstr "Återaktivera valda användare"
+
+# AI translation - needs human review
+msgid "Reactivated at"
+msgstr "Återaktiverad"
+
+# AI translation - needs human review
+msgid "Reactivation"
+msgstr "Återaktivering"
+
+# AI translation - needs human review
+msgid "Real Migration Statistics"
+msgstr "Migreringsstatistik för implementeringar"
+
+# AI translation - needs human review
+msgid "Real Records"
+msgstr "Implementeringsposter"
+
+# AI translation - needs human review
+msgid "Real files migrated"
+msgstr "Migrerade implementeringsfiler"
+
+# AI translation - needs human review
+msgid "Reals"
+msgstr "Implementeringar"
+
+# AI translation - needs human review
+msgid "Reals migrated"
+msgstr "Migrerade implementeringar"
+
+# AI translation - needs human review
+msgid "Reals processed"
+msgstr "Bearbetade implementeringar"
+
+# AI translation - needs human review
+msgid "Reals with parent"
+msgstr "Implementeringar med överordnad"
+
+# AI translation - needs human review
+msgid "Reals without parent"
+msgstr "Implementeringar utan överordnad"
+
+# AI translation - needs human review
+msgid "Receives admin notification emails"
+msgstr "Tar emot administratörsaviseringar via e-post"
+
+msgid "Red-yellow"
+msgstr "Röd-gul"
+
+msgid "Reflection"
+msgstr "Reflex"
+
+msgid "Reflective"
+msgstr "Reflekterande"
+
+msgid "Regulatory sign"
+msgstr "Reglerande skylt"
+
+msgid "Related models"
+msgstr "Relaterade modeller"
+
+# AI translation - needs human review
+msgid "Relations table"
+msgstr "Relationstabell"
+
+msgid "Replaced"
+msgstr "Ersatt"
+
+msgid "Replaced by"
+msgstr "Ersättare"
+
+msgid "Replaces"
+msgstr "Ersätter"
 
 msgid "Responsible Entities"
 msgstr "Ansvariga enheter"
 
-msgid "Group responsible entity"
-msgstr "Gruppansvarig enhet"
+msgid "Responsible Entity"
+msgstr "Ansvarig enhet"
 
-msgid "Group responsible entities"
-msgstr "Gruppansvariga enheter"
+msgid "Responsible Entity Permission"
+msgstr "Tillstånd från ansvarig enhet"
+
+msgid "Responsible entities"
+msgstr "Ansvariga enheter"
+
+msgid ""
+"Responsible entities that this user is belongs to. This gives the users "
+"write permission to devices that belong to the Responsible Entities or any "
+"Responsible Entity that's hierarchically under the selected ones."
+msgstr ""
+"Ansvariga enheter som denna användare hör till. Detta ger användarna "
+"skrivåtkomst till anordningar som tillhör ansvarsenheterna eller till en "
+"ansvarsenhet som är hierarkiskt underordnad de som valts."
+
+msgid "Responsible entity"
+msgstr "Ansvarig enhet"
+
+# AI translation - needs human review
+msgid "Results"
+msgstr "Resultat"
+
+# AI translation - needs human review
+msgid "Results Summary"
+msgstr "Resultatsammanfattning"
+
+msgid "Reversible lane"
+msgstr "Reversibelt körfält"
 
 msgid "Revert file"
 msgstr ""
 
-msgid "Path or name of the JSON file containing the operations to be reverted."
-msgstr ""
-
-msgid "--ids parameter of the run."
-msgstr ""
-
-msgid "--models parameter of the run."
-msgstr ""
-
-msgid "Detailed log information of the command run."
-msgstr ""
-
-msgid "Forward"
-msgstr "Framåt"
-
-msgid "Backward"
-msgstr "Bakåt"
-
-msgid "Straight"
-msgstr "Rakt fram"
-
-msgid "Right and straight"
-msgstr "Till höger och rakt fram"
-
-msgid "Left and straight"
-msgstr "Till vänster och rakt fram"
-
-msgid "Lane ends"
-msgstr "Körfält upphör"
+msgid "Right"
+msgstr "Höger"
 
 msgid "Right and left"
 msgstr "Höger och vänster"
 
-msgid "Straight, right and left"
-msgstr "Rakt fram, höger och vänster"
+msgid "Right and straight"
+msgstr "Till höger och rakt fram"
 
-msgid "White"
-msgstr "Vitt"
+msgid "Right of road or lane"
+msgstr "Till höger om väg eller körfält"
 
-msgid "Both sides of road"
-msgstr "Båda sidor av vägen"
+msgid "Right side"
+msgstr "Höger sida"
 
 msgid "Right side of lane"
 msgstr "Höger sida av körfält"
 
-msgid "Left side of lane"
-msgstr "Vänster sida av körfält"
+msgid "Right side of the road (relative to traffic direction)"
+msgstr "Höger sida av vägen (i trafikriktningen)"
 
-msgid "Both sides of lane"
-msgstr "Båda sidor av körfält "
-
-msgid "Middle of lane"
-msgstr "Mitten av körfält"
-
-msgid "Left side of lane or road"
-msgstr "Vänster sida av körfält eller väg"
-
-msgid "Name of the road this road marking is installed at."
-msgstr "Namn på den väg där denna vägmarkering är installerad."
-
-msgid "Describes which lane of the road this road marking affects."
-msgstr "Anger vilken fil på vägen vägmarkeringen inverkar på."
-
-msgid "The type of lane which this road marking affects."
-msgstr "Typ av den fil som vägmarkeringen inverkar på."
-
-msgid "Specifies where the road marking is in relation to the lane."
-msgstr "Fastställer vägmarkeringens läge i förhållande till filen."
-
-msgid "Line direction"
-msgstr "Linjeriktning"
-
-msgid "Direction of the arrow on the road."
-msgstr "Pilens riktning på vägen."
-
-msgid "Road Marking value"
-msgstr "Vägmarkeringsvärde"
-
-msgid "Numeric value on the marking."
-msgstr "Numeriskt värde på märket."
-
-msgid "Describes the material that the device is made of."
-msgstr "Beskriver av vilket material anordningen är tillverkad."
-
-msgid "Type specifier"
-msgstr "Typspecifikation"
-
-msgid "Additional device type codes specific to the local public authorities."
-msgstr "Ytterligare anordningstypkoder specifika för de lokala myndigheterna."
-
-msgid "Symbol"
-msgstr "Symbol"
-
-msgid "Symbol on the road marking."
-msgstr "Symbol på vägmarkeringen."
-
-msgid "Size of the road marking."
-msgstr "Vägmarkeringens storlek."
-
-msgid "Length of the road marking in centimeters."
-msgstr "Vägmarkeringens längd i centimeter."
-
-msgid "Width"
-msgstr "Bredd"
-
-msgid "Width of the road marking in centimeters."
-msgstr "Vägmarkeringens bredd i centimeter."
-
-msgid "Is raised"
-msgstr "Upphöjd"
-
-msgid "Is grinded"
-msgstr "Urtag"
-
-msgid "Additional info"
-msgstr "Ytterligare info"
-
-msgid "Amount"
-msgstr "Mängd"
-
-msgid "Traffic Sign Plan"
-msgstr "Trafikskylt (plan)"
-
-msgid "Traffic Sign related to this road marking."
-msgstr "Trafikskylt relaterad till denna vägmarkering."
-
-msgid "Plan which this road marking plan is a part of."
-msgstr "Plan som denna vägmarkeringsplan ingår i."
+msgid "Right-turn arrow signal"
+msgstr "Pilsignal högersväng"
 
 msgid "Road Marking Plan"
 msgstr "Vägmarkering (plan)"
@@ -2520,30 +2642,32 @@ msgstr "Ersättning för vägmarkeringsplan"
 msgid "Road Marking Plan Replacements"
 msgstr "Ersättningar för vägmarkeringsplaner"
 
-msgid "The plan for this road marking."
-msgstr "Plan för denna vägmarkering."
+msgid "Road Marking Plans"
+msgstr "Vägmarkering (planer)"
 
-msgid "Missing Traffic Sign Real txt"
-msgstr "Trafikskylt saknas (implementering-txt)"
-
-msgid ""
-"Free-form text description of the traffic sign the road marking is connected"
-" to, if the road marking doesn't have a traffic sign real id."
-msgstr ""
-"Fritextbeskrivning av trafikskylten som vägmarkeringen hör till om "
-"trafikskylten inte har något id för trafikskyltimplementering."
+msgid "Road Marking Real"
+msgstr "Vägmarkering (implementering)"
 
 msgid "Road Marking Reals"
 msgstr "Vägmarkering (implementeringar)"
 
-msgid "road marking real"
-msgstr "vägmarkering (implementering)"
+msgid "Road Marking value"
+msgstr "Vägmarkeringsvärde"
+
+msgid "Road marking"
+msgstr "Vägmarkering"
 
 msgid "Road marking real operation"
 msgstr "Vägmarkering (implementeringsåtgärd)"
 
 msgid "Road marking real operations"
 msgstr "Vägmarkering (implementeringsåtgärder)"
+
+msgid "Road name"
+msgstr "Vägnamn"
+
+msgid "Road sign"
+msgstr "Vägmärke"
 
 msgid "RoadMarking Plan File"
 msgstr "Vägmarkering (planfil)"
@@ -2557,280 +2681,94 @@ msgstr "Vägmarkering (implementeringsfil)"
 msgid "RoadMarking Real Files"
 msgstr "Vägmarkering (implementeringsfiler)"
 
-msgid "Signpost value"
-msgstr "Vägvisarens värde"
+msgid "Rubbish bin"
+msgstr "Papperskorg"
 
-msgid "Signpost txt"
-msgstr "Vägvisar-txt"
+# AI translation - needs human review
+msgid "Run Information"
+msgstr "Körningsinformation"
 
-msgid "Text written on the device."
-msgstr "Text skriven på anordningen."
+msgid "Save"
+msgstr "Spara"
 
-msgid "Attachment class"
+msgid "Save and continue editing"
+msgstr "Spara och fortsätt redigera"
+
+# AI translation - needs human review
+msgid "Save the user first to view relations."
+msgstr "Spara användaren först för att visa relationer."
+
+msgid "Scale"
+msgstr "Skala"
+
+msgid "Scanned at"
+msgstr "Skannades den"
+
+msgid "Schedule"
 msgstr ""
-"Klass för skyltens fäste enligt standarden SFS-EN 12899-1. De möjliga "
-"värdena är P1, P2 och P3."
-
-msgid ""
-"The attachment class of the sign according to the standard SFS-EN "
-"12899-1.The possible values are P1, P2 and P3."
-msgstr ""
-"Klass för skyltens fäste enligt standarden SFS-EN 12899-1.De möjliga värdena"
-" är P1, P2 och P3."
-
-msgid "Target ID"
-msgstr "Mål-id"
-
-msgid "The id number of the target the sign is guiding to (if available)."
-msgstr ""
-"Kodnummer på det objekt som skylten dirigerar till (om ett kodnummer "
-"används)."
-
-msgid "Target txt"
-msgstr "Mål-txt"
-
-msgid ""
-"Free-form text description of the target the sign is guiding to, if the "
-"target has no id number."
-msgstr ""
-"Fritt formulerad textbeskrivning av det objekt som skylten dirigerar till. "
-"Används, om objektet saknar kodnummer."
-
-msgid "Electric maintainer"
-msgstr "Elektriskt underhåll"
-
-msgid "Organization in charge of electric maintenance of the device."
-msgstr "Organisation som ansvarar för elektriskt underhåll av anordningen."
-
-msgid "Double sided"
-msgstr "Dubbelsidig"
-
-msgid "Indicates if this object is double sided"
-msgstr "Anger om objektet är dubbelsidigt"
-
-msgid "Signpost inside which this device is located."
-msgstr "Skylt i vilken denna anordning finns."
-
-msgid "Plan which this signpost plan is a part of."
-msgstr "Plan som denna skyltplan ingår i."
-
-msgid "Signpost Plan"
-msgstr "Vägvisare (plan)"
-
-msgid "Signpost Plan Replacement"
-msgstr "Ersättning för skyltplan"
-
-msgid "Signpost Plan Replacements"
-msgstr "Ersättningar för skyltplaner"
-
-msgid "The plan for this signpost."
-msgstr "Plan för denna skylt."
-
-msgid "Organization"
-msgstr "Organisation"
-
-msgid "The organization that installed the signpost."
-msgstr "Namn på den organisation som har installerat skylten."
-
-msgid "Name of the organization that manufactured this device."
-msgstr "Namn på organisationen som tillverkade denna anordning."
-
-msgid "Date and time on which this signpost was last scanned at."
-msgstr "Datum och klockslag för föregående skanning av denna skyltplan."
 
 # AI translation - needs human review
-msgid "Attachment URL"
-msgstr "Bilagans URL"
+msgid "Scheduling"
+msgstr "Schemaläggning"
+
+msgid "Schema must be type of JSON object"
+msgstr "Schemat ska vara ett JSON-objekt"
+
+msgid "Seasonal validity period information"
+msgstr "Säsongsbunden giltighetsinformation"
+
+msgid "Seasonal validity period information related to this device."
+msgstr "Säsongsbunden giltighetsinformation för denna anordning"
+
+msgid "Second left additional lane"
+msgstr "Andra extra körfält vänster"
+
+msgid "Second right additional lane"
+msgstr "Andra extra körfält höger"
+
+msgid "Security"
+msgstr "Säkerhet"
 
 # AI translation - needs human review
-msgid "URL of the attachment associated with this signpost."
-msgstr "URL för bilagan som är kopplad till detta lokaliseringsmärke."
+msgid "Select a style of warning to reflect how critical it is"
+msgstr "Välj en varningsstil som återspeglar hur kritisk den är"
 
-msgid "signpost real"
-msgstr "vägvisare (implementering)"
-
-msgid "Signpost real operation"
-msgstr "Vägvisare (implementeringsåtgärd)"
-
-msgid "Signpost real operations"
-msgstr "Vägvisare (implementeringsåtgärder)"
-
-msgid "Signpost Plan File"
-msgstr "Vägvisare (planfil)"
-
-msgid "Signpost Plan Files"
-msgstr "Vägvisare (planfiler)"
-
-msgid "Signpost Real File"
-msgstr "Vägvisare (implementeringsfil)"
-
-msgid "Signpost Real Files"
-msgstr "Vägvisare (implementeringsfiler)"
+msgid "Service sign"
+msgstr "Serviceskylt"
 
 # AI translation - needs human review
-msgid "Executed by"
-msgstr "Utförd av"
+msgid "Set additional_information to empty"
+msgstr "Ange additional_information till tom"
 
 # AI translation - needs human review
-msgid "User who executed the migration command."
-msgstr "Användare som utförde migreringskommandot."
+msgid "Set color to BLUE"
+msgstr "Ange färg till BLÅ"
 
 # AI translation - needs human review
-msgid "Started at"
-msgstr "Startad"
+msgid "Set content_s to null"
+msgstr "Ange content_s till tom"
 
 # AI translation - needs human review
-msgid "Timestamp when the migration was started."
-msgstr "Tidsstämpel när migreringen startades."
+msgid "Set installed_by to null"
+msgstr "Ange installed_by till tom"
 
 # AI translation - needs human review
-msgid "Completed at"
-msgstr "Slutförd"
+msgid "Set missing_content to false"
+msgstr "Ange missing_content till falskt"
+
+msgid "Set related plans"
+msgstr "Ange relaterade planer"
+
+#, python-format
+msgid "Set related plans for plan %s"
+msgstr "Ange relaterade planer för planen %s"
 
 # AI translation - needs human review
-msgid ""
-"Timestamp when the migration was completed (successfully or with error)."
-msgstr "Tidsstämpel när migreringen slutfördes (framgångsrikt eller med fel)."
+msgid "Sign file"
+msgstr "Märkesfil"
 
-# AI translation - needs human review
-msgid "Whether this was a dry run (no actual changes made)."
-msgstr "Om detta var en testkörning (inga faktiska ändringar gjordes)."
-
-# AI translation - needs human review
-msgid "Hard delete"
-msgstr "Permanent borttagning"
-
-# AI translation - needs human review
-msgid ""
-"Whether original objects were permanently deleted (True) or soft-deleted "
-"(False)."
-msgstr "Om ursprungsobjekten togs bort permanent (True) eller mjukt (False)."
-
-# AI translation - needs human review
-msgid "Success"
-msgstr "Lyckades"
-
-# AI translation - needs human review
-msgid "Whether the migration completed successfully."
-msgstr "Om migreringen slutfördes framgångsrikt."
-
-# AI translation - needs human review
-msgid "Error message"
-msgstr "Felmeddelande"
-
-# AI translation - needs human review
-msgid "Error message if migration failed."
-msgstr "Felmeddelande om migreringen misslyckades."
-
-# AI translation - needs human review
-msgid "Plans processed"
-msgstr "Bearbetade planer"
-
-# AI translation - needs human review
-msgid "Plans migrated"
-msgstr "Migrerade planer"
-
-# AI translation - needs human review
-msgid "Reals processed"
-msgstr "Bearbetade implementeringar"
-
-# AI translation - needs human review
-msgid "Reals migrated"
-msgstr "Migrerade implementeringar"
-
-# AI translation - needs human review
-msgid "Plan files migrated"
-msgstr "Migrerade planfiler"
-
-# AI translation - needs human review
-msgid "Real files migrated"
-msgstr "Migrerade implementeringsfiler"
-
-# AI translation - needs human review
-msgid "Device types updated"
-msgstr "Uppdaterade enhetstyper"
-
-# AI translation - needs human review
-msgid "Lost field values"
-msgstr "Förlorade fältvärden"
-
-# AI translation - needs human review
-msgid ""
-"Dictionary of field names to sets of unique values that were lost during "
-"migration. Example: {'surface_class': ['FLAT', 'CONVEX'], 'affect_area': "
-"['had_polygon'], 'peak_fastened': ['True', 'False']}"
-msgstr ""
-"Ordbok med fältnamn kopplade till uppsättningar av unika värden som "
-"förlorades under migreringen. Exempel: {'surface_class': ['FLAT', 'CONVEX'],"
-" 'affect_area': ['had_polygon'], 'peak_fastened': ['True', 'False']}"
-
-# AI translation - needs human review
-msgid "Signpost Migration Run"
-msgstr "Migreringskörning för lokaliseringsmärken"
-
-# AI translation - needs human review
-msgid "Signpost Migration Runs"
-msgstr "Migreringskörningar för lokaliseringsmärken"
-
-# AI translation - needs human review
-msgid "Migration run"
-msgstr "Migreringskörning"
-
-# AI translation - needs human review
-msgid "The migration run this record belongs to."
-msgstr "Migreringskörningen som denna post tillhör."
-
-# AI translation - needs human review
-msgid "Original TrafficSignPlan"
-msgstr "Ursprunglig TrafficSignPlan"
-
-# AI translation - needs human review
-msgid "New SignpostPlan"
-msgstr "Ny SignpostPlan"
-
-# AI translation - needs human review
-msgid "ID of the original TrafficSignPlan."
-msgstr "ID för den ursprungliga TrafficSignPlan."
-
-# AI translation - needs human review
-msgid "ID of the new SignpostPlan (null for dry-run)."
-msgstr "ID för den nya SignpostPlan (tom vid testkörning)."
-
-# AI translation - needs human review
-msgid "Device type code"
-msgstr "Enhetstypskod"
-
-# AI translation - needs human review
-msgid "Code of the device type being migrated."
-msgstr "Kod för enhetstypen som migreras."
-
-# AI translation - needs human review
-msgid "Had mount_plan"
-msgstr "Hade mount_plan"
-
-# AI translation - needs human review
-msgid "Had plan"
-msgstr "Hade plan"
-
-# AI translation - needs human review
-msgid "Lost surface_class"
-msgstr "Förlorad surface_class"
-
-# AI translation - needs human review
-msgid "Value of surface_class field that was lost."
-msgstr "Värdet på surface_class-fältet som förlorades."
-
-# AI translation - needs human review
-msgid "Value of peak_fastened field that was lost."
-msgstr "Värdet på peak_fastened-fältet som förlorades."
-
-# AI translation - needs human review
-msgid "Had affect_area"
-msgstr "Hade affect_area"
-
-# AI translation - needs human review
-msgid "Whether the original had an affect_area polygon."
-msgstr "Om ursprunget hade en affect_area-polygon."
+msgid "Signpost"
+msgstr "Vägvisare"
 
 # AI translation - needs human review
 msgid "Signpost Migration Plan Record"
@@ -2841,113 +2779,6 @@ msgid "Signpost Migration Plan Records"
 msgstr "Planposter för migrering av lokaliseringsmärken"
 
 # AI translation - needs human review
-msgid "Original TrafficSignReal"
-msgstr "Ursprunglig TrafficSignReal"
-
-# AI translation - needs human review
-msgid "New SignpostReal"
-msgstr "Ny SignpostReal"
-
-# AI translation - needs human review
-msgid "ID of the original TrafficSignReal."
-msgstr "ID för den ursprungliga TrafficSignReal."
-
-# AI translation - needs human review
-msgid "ID of the new SignpostReal (null for dry-run)."
-msgstr "ID för den nya SignpostReal (tom vid testkörning)."
-
-# AI translation - needs human review
-msgid "Plan mapping found"
-msgstr "Planmappning hittad"
-
-# AI translation - needs human review
-msgid ""
-"Whether a corresponding SignpostPlan was found for the traffic_sign_plan "
-"reference."
-msgstr ""
-"Om en motsvarande SignpostPlan hittades för referensen traffic_sign_plan."
-
-# AI translation - needs human review
-msgid "Had mount_real"
-msgstr "Hade mount_real"
-
-# AI translation - needs human review
-msgid "Had traffic_sign_plan"
-msgstr "Hade traffic_sign_plan"
-
-# AI translation - needs human review
-msgid "Had legacy_code"
-msgstr "Hade legacy_code"
-
-# AI translation - needs human review
-msgid "Had scanned_at"
-msgstr "Hade scanned_at"
-
-# AI translation - needs human review
-msgid "Had manufacturer"
-msgstr "Hade manufacturer"
-
-# AI translation - needs human review
-msgid "Had installation_status"
-msgstr "Hade installation_status"
-
-# AI translation - needs human review
-msgid "Had installation_date"
-msgstr "Hade installation_date"
-
-# AI translation - needs human review
-msgid "Had condition"
-msgstr "Hade condition"
-
-# AI translation - needs human review
-msgid "Lost installation_id"
-msgstr "Förlorad installation_id"
-
-# AI translation - needs human review
-msgid "Value of installation_id field that was lost."
-msgstr "Värdet på installation_id-fältet som förlorades."
-
-# AI translation - needs human review
-msgid "Lost installation_details"
-msgstr "Förlorad installation_details"
-
-# AI translation - needs human review
-msgid "Value of installation_details field that was lost."
-msgstr "Värdet på installation_details-fältet som förlorades."
-
-# AI translation - needs human review
-msgid "Lost permit_decision_id"
-msgstr "Förlorad permit_decision_id"
-
-# AI translation - needs human review
-msgid "Value of permit_decision_id field that was lost."
-msgstr "Värdet på permit_decision_id-fältet som förlorades."
-
-# AI translation - needs human review
-msgid "Lost rfid"
-msgstr "Förlorad rfid"
-
-# AI translation - needs human review
-msgid "Value of rfid field that was lost."
-msgstr "Värdet på rfid-fältet som förlorades."
-
-# AI translation - needs human review
-msgid "Lost operation"
-msgstr "Förlorad operation"
-
-# AI translation - needs human review
-msgid "Value of operation field that was lost."
-msgstr "Värdet på operation-fältet som förlorades."
-
-# AI translation - needs human review
-msgid "Lost attachment_url"
-msgstr "Förlorad attachment_url"
-
-# AI translation - needs human review
-msgid "Value of attachment_url field that was lost."
-msgstr "Värdet på attachment_url-fältet som förlorades."
-
-# AI translation - needs human review
 msgid "Signpost Migration Real Record"
 msgstr "Implementeringspost för migrering av lokaliseringsmärken"
 
@@ -2956,217 +2787,183 @@ msgid "Signpost Migration Real Records"
 msgstr "Implementeringsposter för migrering av lokaliseringsmärken"
 
 # AI translation - needs human review
-msgid "Timestamp when the import run was started."
-msgstr "Tidsstämpel när importkörningen startades."
+msgid "Signpost Migration Run"
+msgstr "Migreringskörning för lokaliseringsmärken"
 
 # AI translation - needs human review
-msgid "Timestamp when the import run finished."
-msgstr "Tidsstämpel när importkörningen slutfördes."
+msgid "Signpost Migration Runs"
+msgstr "Migreringskörningar för lokaliseringsmärken"
+
+msgid "Signpost Plan"
+msgstr "Vägvisare (plan)"
+
+msgid "Signpost Plan File"
+msgstr "Vägvisare (planfil)"
+
+msgid "Signpost Plan Files"
+msgstr "Vägvisare (planfiler)"
+
+msgid "Signpost Plan Replacement"
+msgstr "Ersättning för skyltplan"
+
+msgid "Signpost Plan Replacements"
+msgstr "Ersättningar för skyltplaner"
+
+msgid "Signpost Plans"
+msgstr "Skylt (planer)"
+
+msgid "Signpost Real"
+msgstr "Vägvisare (implementering)"
+
+msgid "Signpost Real File"
+msgstr "Vägvisare (implementeringsfil)"
+
+msgid "Signpost Real Files"
+msgstr "Vägvisare (implementeringsfiler)"
+
+msgid "Signpost Reals"
+msgstr "Vägvisare (implementeringar)"
+
+msgid "Signpost inside which this device is located."
+msgstr "Skylt i vilken denna anordning finns."
+
+msgid "Signpost real operation"
+msgstr "Vägvisare (implementeringsåtgärd)"
+
+msgid "Signpost real operations"
+msgstr "Vägvisare (implementeringsåtgärder)"
+
+msgid "Signpost txt"
+msgstr "Vägvisar-txt"
+
+msgid "Signpost value"
+msgstr "Vägvisarens värde"
 
 # AI translation - needs human review
-msgid "True if the run was executed with --dry-run (no DB writes performed)."
-msgstr ""
-"Sant om körningen utfördes med --dry-run (inga skrivningar till databasen "
-"utfördes)."
-
-# AI translation - needs human review
-msgid "Path or name of the mount CSV file used for this run."
-msgstr ""
-"Sökväg eller namn på CSV-filen för fästen som användes för denna körning."
-
-# AI translation - needs human review
-msgid "Path or name of the sign CSV file used for this run."
-msgstr ""
-"Sökväg eller namn på CSV-filen för märken som användes för denna körning."
-
-# AI translation - needs human review
-msgid "Mounts created"
-msgstr "Skapade fästen"
-
-# AI translation - needs human review
-msgid "Mounts updated"
-msgstr "Uppdaterade fästen"
-
-# AI translation - needs human review
-msgid "Signs created"
-msgstr "Skapade märken"
-
-# AI translation - needs human review
-msgid "Signs updated"
-msgstr "Uppdaterade märken"
-
-# AI translation - needs human review
-msgid "Signs deactivated"
-msgstr "Inaktiverade märken"
-
-# AI translation - needs human review
-msgid "TrafficSignReal records whose lifecycle was set to INACTIVE."
-msgstr "TrafficSignReal-poster vars livscykel sattes till INACTIVE."
+msgid "Signposts"
+msgstr "Lokaliseringsmärken"
 
 # AI translation - needs human review
 msgid "Signposts created"
 msgstr "Skapade lokaliseringsmärken"
 
 # AI translation - needs human review
-msgid "Signposts updated"
-msgstr "Uppdaterade lokaliseringsmärken"
-
-# AI translation - needs human review
 msgid "Signposts deactivated"
 msgstr "Inaktiverade lokaliseringsmärken"
 
 # AI translation - needs human review
-msgid "Additional signs created"
-msgstr "Skapade tilläggsmärken"
+msgid "Signposts updated"
+msgstr "Uppdaterade lokaliseringsmärken"
 
 # AI translation - needs human review
-msgid "Additional signs updated"
-msgstr "Uppdaterade tilläggsmärken"
+msgid "Signs"
+msgstr "Märken"
 
 # AI translation - needs human review
-msgid "Additional signs deactivated"
-msgstr "Inaktiverade tilläggsmärken"
+msgid "Signs created"
+msgstr "Skapade märken"
 
 # AI translation - needs human review
-msgid "Orphans deleted"
-msgstr "Borttagna föräldralösa poster"
+msgid "Signs deactivated"
+msgstr "Inaktiverade märken"
 
 # AI translation - needs human review
-msgid ""
-"Number of orphan MountReal records hard-deleted after the import phases."
+msgid "Signs updated"
+msgstr "Uppdaterade märken"
+
+# AI translation - needs human review
+msgid "Site Alert"
+msgstr "Webbplatsvarning"
+
+# AI translation - needs human review
+msgid "Site Alerts"
+msgstr "Webbplatsvarningar"
+
+msgid "Size"
+msgstr "Storlek"
+
+msgid "Size of the road marking."
+msgstr "Vägmarkeringens storlek."
+
+msgid "Size of the signpost. Enter only if device has a non-standard size."
 msgstr ""
-"Antal föräldralösa MountReal-poster som togs bort permanent efter "
-"importfaserna."
+"Skyltens storlek. Ange enbart om anordningen inte är av standardstorlek."
 
 # AI translation - needs human review
-msgid "Orphan mount source IDs"
-msgstr "Käll-ID:n för föräldralösa fästen"
-
-# AI translation - needs human review
-msgid ""
-"List of source_ids for MountReal records hard-deleted as orphans in this "
-"run."
-msgstr ""
-"Lista över source_id för MountReal-poster som togs bort permanent som "
-"föräldralösa i denna körning."
+msgid "Skipped (No Changes Needed)"
+msgstr "Överhoppade (inga ändringar behövs)"
 
 # AI translation - needs human review
 msgid "Skipped count"
 msgstr "Antal överhoppade"
 
-# AI translation - needs human review
-msgid ""
-"Total rows skipped due to invalid geometry, unreadable text, missing device "
-"type code, etc."
-msgstr ""
-"Totalt antal rader som hoppades över på grund av ogiltig geometri, oläslig "
-"text, saknad enhetstypskod osv."
+msgid "Slidegate valve cap"
+msgstr "Lock till skjutspjällventil"
+
+msgid "Small"
+msgstr "Liten"
+
+msgid "Solar cell"
+msgstr "Solpanel"
+
+msgid "Sound beacon"
+msgstr "Ljudsignal"
+
+msgid "Source id"
+msgstr "Käll-id"
+
+msgid "Source name"
+msgstr "Källnamn"
+
+msgid "Specifies where the barrier is in relation to the road."
+msgstr "Fastställer körhindrets läge i förhållande till vägen."
+
+msgid "Specifies where the mount is in relation to the road."
+msgstr "Fastställer fästpunktens läge i förhållande till vägen."
+
+msgid "Specifies where the road marking is in relation to the lane."
+msgstr "Fastställer vägmarkeringens läge i förhållande till filen."
+
+msgid "Specifies where the sign is in relation to the road."
+msgstr "Fastställer skyltens läge i förhållande till vägen."
+
+msgid "Specifies where the traffic light is in relation to the road."
+msgstr "Fastställer trafikljusets läge i förhållande till vägen."
+
+msgid "Stair"
+msgstr "Trappa"
+
+msgid "Standard size of the Device Type."
+msgstr "Anordningstypens standardstorlek."
+
+msgid "Standardised code of the device type."
+msgstr "Standardiserad kod för anordningstypen."
+
+msgid "Start date"
+msgstr "Startdatum"
 
 # AI translation - needs human review
-msgid "Warning count"
-msgstr "Antal varningar"
+msgid "Start time"
+msgstr "Starttid"
 
 # AI translation - needs human review
-msgid ""
-"Total warning-level events: imported without a mount, without a parent, "
-"traffic sign with ignored parent value, etc."
-msgstr ""
-"Totalt antal händelser på varningsnivå: importerad utan fäste, utan "
-"överordnad, trafikmärke med ignorerat överordnat värde osv."
+msgid "Started at"
+msgstr "Startad"
 
-# AI translation - needs human review
-msgid "Error count"
-msgstr "Antal fel"
+msgid "Status"
+msgstr "Status"
 
-# AI translation - needs human review
-msgid "Total error-level events (unexpected exceptions during the run)."
-msgstr ""
-"Totalt antal händelser på felnivå (oväntade undantag under körningen)."
+msgid "Straight"
+msgstr "Rakt fram"
 
-# AI translation - needs human review
-msgid ""
-"Nested dict of seconds spent in each phase: {object_type: {phase: "
-"duration_s}}. Also contains a 'preprocessing' key for CSV loading and DB map"
-" building time. Populated progressively as phases complete."
-msgstr ""
-"Nästlad ordbok över sekunder som spenderats i varje fas: {object_type: "
-"{phase: duration_s}}. Innehåller även en 'preprocessing'-nyckel för tiden "
-"för CSV-inläsning och uppbyggnad av databaskarta. Fylls i successivt "
-"allteftersom faserna slutförs."
+msgid "Straight, right and left"
+msgstr "Rakt fram, höger och vänster"
 
-# AI translation - needs human review
-msgid "Details"
-msgstr "Detaljer"
+msgid "Straightness value"
+msgstr "Rakhetsvärde"
 
-# AI translation - needs human review
-msgid ""
-"Full list of per-row skip, warning and error entries. Each entry has at "
-"minimum: level ('skip'/'warning'/'error'), source_id, reason."
-msgstr ""
-"Fullständig lista över rader som hoppats över samt varnings- och felposter "
-"per rad. Varje post har minst: nivå ('skip'/'warning'/'error'), source_id, "
-"orsak."
-
-# AI translation - needs human review
-msgid "Processed mount source IDs"
-msgstr "Bearbetade käll-ID:n för fästen"
-
-# AI translation - needs human review
-msgid "List of MountReal source_ids successfully upserted in this run."
-msgstr ""
-"Lista över MountReal source_id som framgångsrikt infogades eller "
-"uppdaterades i denna körning."
-
-# AI translation - needs human review
-msgid "Processed sign source IDs"
-msgstr "Bearbetade käll-ID:n för märken"
-
-# AI translation - needs human review
-msgid "List of TrafficSignReal source_ids successfully upserted in this run."
-msgstr ""
-"Lista över TrafficSignReal source_id som framgångsrikt infogades eller "
-"uppdaterades i denna körning."
-
-# AI translation - needs human review
-msgid "Processed signpost source IDs"
-msgstr "Bearbetade käll-ID:n för lokaliseringsmärken"
-
-# AI translation - needs human review
-msgid "List of SignpostReal source_ids successfully upserted in this run."
-msgstr ""
-"Lista över SignpostReal source_id som framgångsrikt infogades eller "
-"uppdaterades i denna körning."
-
-# AI translation - needs human review
-msgid "Processed additional sign source IDs"
-msgstr "Bearbetade käll-ID:n för tilläggsmärken"
-
-# AI translation - needs human review
-msgid ""
-"List of AdditionalSignReal source_ids successfully upserted in this run."
-msgstr ""
-"Lista över AdditionalSignReal source_id som framgångsrikt infogades eller "
-"uppdaterades i denna körning."
-
-# AI translation - needs human review
-msgid "StreetScan import run"
-msgstr "StreetScan-importkörning"
-
-# AI translation - needs human review
-msgid "StreetScan import runs"
-msgstr "StreetScan-importkörningar"
-
-# AI translation - needs human review
-msgid ""
-"JSONL file containing pre-update snapshots and created-object IDs for this "
-"run."
-msgstr ""
-"JSONL-fil som innehåller ögonblicksbilder före uppdatering och ID:n för "
-"skapade objekt för denna körning."
-
-# AI translation - needs human review
-msgid "The import run this revert file belongs to."
-msgstr "Importkörningen som denna återställningsfil tillhör."
+msgid "Street sink box"
+msgstr "Gatubrunn"
 
 # AI translation - needs human review
 msgid "StreetScan import revert file"
@@ -3177,149 +2974,253 @@ msgid "StreetScan import revert files"
 msgstr "StreetScan-importåterställningsfiler"
 
 # AI translation - needs human review
-msgid "Timestamp when the migration command started."
-msgstr "Tidsstämpel när migreringskommandot startade."
+msgid "StreetScan import run"
+msgstr "StreetScan-importkörning"
 
 # AI translation - needs human review
-msgid "Timestamp when the migration command completed successfully."
-msgstr "Tidsstämpel när migreringskommandot slutfördes framgångsrikt."
+msgid "StreetScan import runs"
+msgstr "StreetScan-importkörningar"
+
+msgid "Streetlamp, latern or candelabra"
+msgstr "Gatubelysning, gatlykta"
 
 # AI translation - needs human review
-msgid "Whether hard-delete mode was used (true) or soft-delete (false)."
+msgid "Success"
+msgstr "Lyckades"
+
+# AI translation - needs human review
+msgid "Successful Imports"
+msgstr "Lyckade importer"
+
+# AI translation - needs human review
+msgid "Successfully Imported Plans"
+msgstr "Framgångsrikt importerade planer"
+
+# AI translation - needs human review
+#, python-format
+msgid "Successfully reactivated %(count)d user(s)."
+msgstr "Återaktiverade %(count)d användare."
+
+msgid "Surface"
+msgstr "Yta"
+
+msgid "Swedish"
+msgstr "Svenska"
+
+msgid "Swedish Description"
+msgstr "Svensk beskrivning"
+
+msgid "Swedish location name"
+msgstr "Svenskt platsnamn"
+
+msgid "Swedish name"
+msgstr "Svenskt namn"
+
+msgid "Swedish text content"
+msgstr "Svenskt textinnehåll"
+
+msgid "Switching unit"
+msgstr "Växlingsenhet"
+
+msgid "Symbol"
+msgstr "Symbol"
+
+msgid "Symbol on the road marking."
+msgstr "Symbol på vägmarkeringen."
+
+msgid "Target"
+msgstr "Mål"
+
+msgid "Target ID"
+msgstr "Mål-id"
+
+msgid "Target data model"
+msgstr "Måldatamodell"
+
+#, python-format
+msgid "Target model '%(target_model)s' does not support content schema"
 msgstr ""
-"Om läget för permanent borttagning användes (true) eller mjuk borttagning "
-"(false)."
+"Datamodellen för objektet '%(target_model)s' stöder inte schemat för "
+"innehållet"
 
-# AI translation - needs human review
-msgid "Total number of TrafficSignPlan objects processed."
-msgstr "Totalt antal bearbetade TrafficSignPlan-objekt."
+msgid "Target subject, which this device relates to."
+msgstr "Objekt som anordningen gäller."
 
-# AI translation - needs human review
-msgid "Number of TrafficSignPlan objects successfully migrated."
-msgstr "Antal TrafficSignPlan-objekt som migrerades framgångsrikt."
+msgid "Target txt"
+msgstr "Mål-txt"
 
-# AI translation - needs human review
-msgid "Plans with parent"
-msgstr "Planer med överordnad"
+msgid "Task"
+msgstr "Arbetsuppgift"
 
-# AI translation - needs human review
-msgid "Number of plans that were assigned a parent sign (E2/521)."
-msgstr "Antal planer som tilldelades ett överordnat märke (E2/521)."
+msgid "Telephone box"
+msgstr "Telefonkiosk"
 
-# AI translation - needs human review
-msgid "Plans without parent"
-msgstr "Planer utan överordnad"
+msgid "Template for Real Import"
+msgstr "Modellfil för införsel av utfall"
 
-# AI translation - needs human review
-msgid "Number of plans that had no parent sign found."
-msgstr "Antal planer där inget överordnat märke hittades."
+msgid "Temporarily active"
+msgstr "Temporärt aktiv"
 
-# AI translation - needs human review
-msgid "Total number of TrafficSignReal objects processed."
-msgstr "Totalt antal bearbetade TrafficSignReal-objekt."
+msgid "Temporarily inactive"
+msgstr "Temporärt inaktiv"
 
-# AI translation - needs human review
-msgid "Number of TrafficSignReal objects successfully migrated."
-msgstr "Antal TrafficSignReal-objekt som migrerades framgångsrikt."
+msgid "Text on the traffic light."
+msgstr "Text som är skriven på trafikljuset."
 
-# AI translation - needs human review
-msgid "Reals with parent"
-msgstr "Implementeringar med överordnad"
+msgid "Text written on the barrier."
+msgstr "Text som är skriven på körhindret."
 
-# AI translation - needs human review
-msgid "Number of reals that were assigned a parent sign (E2/521)."
-msgstr "Antal implementeringar som tilldelades ett överordnat märke (E2/521)."
+msgid "Text written on the device."
+msgstr "Text skriven på anordningen."
 
-# AI translation - needs human review
-msgid "Reals without parent"
-msgstr "Implementeringar utan överordnad"
+msgid "Text written on the mount."
+msgstr "Text som är skriven på fästpunkten."
 
-# AI translation - needs human review
-msgid "Number of reals that had no parent sign found."
-msgstr "Antal implementeringar där inget överordnat märke hittades."
+msgid "Text written on the sign."
+msgstr "Text som är skriven på skylten."
 
-# AI translation - needs human review
-msgid "Number of device types with target_model updated."
-msgstr "Antal enhetstyper vars target_model uppdaterades."
-
-# AI translation - needs human review
-msgid "Error message if the migration failed."
-msgstr "Felmeddelande om migreringen misslyckades."
-
-# AI translation - needs human review
 msgid ""
-"Dictionary of field names to sets of unique values that were lost during "
-"migration. Example: {'value': ['10', '20'], 'txt': ['Info text'], "
-"'affect_area': ['had_polygon']}"
+"The attachment class of the sign according to the standard SFS-EN 12899-1."
+"The possible values are P1, P2 and P3."
 msgstr ""
-"Ordbok med fältnamn kopplade till uppsättningar av unika värden som "
-"förlorades under migreringen. Exempel: {'value': ['10', '20'], 'txt': ['Info"
-" text'], 'affect_area': ['had_polygon']}"
+"Klass för skyltens fäste enligt standarden SFS-EN 12899-1.De möjliga värdena "
+"är P1, P2 och P3."
+
+msgid "The device type code of the sign in the old Finnish road traffic law."
+msgstr "Anordningstypkoden för skylten i den äldre finska väglagstiftningen."
+
+msgid "The entity responsible for the mount (if electric)."
+msgstr "Den enhet som ansvarar för monteringen (om elektrisk)."
+
+msgid ""
+"The height of the mount from the ground, measured from the top in "
+"centimeters."
+msgstr "Fästpunktens höjd över marken i centimeter, mätt från den övre kanten."
+
+msgid ""
+"The height of the sign from the ground, measured from the bottom in "
+"centimeters."
+msgstr "Skyltens höjd över marken i centimeter, mätt från den övre kanten."
+
+msgid "The id number of the installation permit."
+msgstr "Id-nummer för installationstillståndet."
+
+msgid "The id number of the installation record."
+msgstr "Id-nummer för installationsregistreringen."
+
+msgid "The id number of the target the sign is guiding to (if available)."
+msgstr ""
+"Kodnummer på det objekt som skylten dirigerar till (om ett kodnummer "
+"används)."
 
 # AI translation - needs human review
-msgid "Ticket Machine Migration Run"
-msgstr "Migreringskörning för biljettautomater"
+msgid "The import run this revert file belongs to."
+msgstr "Importkörningen som denna återställningsfil tillhör."
 
 # AI translation - needs human review
-msgid "Ticket Machine Migration Runs"
-msgstr "Migreringskörningar för biljettautomater"
-
-# AI translation - needs human review
-msgid "The original TrafficSignPlan that was migrated."
-msgstr "Den ursprungliga TrafficSignPlan som migrerades."
-
-# AI translation - needs human review
-msgid "New AdditionalSignPlan"
-msgstr "Ny AdditionalSignPlan"
+msgid "The migration run this record belongs to."
+msgstr "Migreringskörningen som denna post tillhör."
 
 # AI translation - needs human review
 msgid "The newly created AdditionalSignPlan."
 msgstr "Den nyskapade AdditionalSignPlan."
 
 # AI translation - needs human review
-msgid "UUID of the original TrafficSignPlan (preserved even if deleted)."
+msgid "The newly created AdditionalSignReal."
+msgstr "Den nyskapade AdditionalSignReal."
+
+msgid "The organization that installed the signpost."
+msgstr "Namn på den organisation som har installerat skylten."
+
+msgid ""
+"The orientation of the device’s front side in degrees (0–359): 0 = north, 90 "
+"= east, 180 = south, 270 = west. The direction indicates from which side the "
+"device is correctly visible."
 msgstr ""
-"UUID för den ursprungliga TrafficSignPlan (bevaras även om den tas bort)."
+"Anordningens framsidas riktning i grader (0–359): 0 = norr, 90 = öster, 180 "
+"= söder, 270 = väster. Riktningen anger från vilken sida anordningen syns "
+"rättvänd."
 
 # AI translation - needs human review
-msgid "UUID of the new AdditionalSignPlan."
-msgstr "UUID för den nya AdditionalSignPlan."
+msgid "The original TrafficSignPlan that was migrated."
+msgstr "Den ursprungliga TrafficSignPlan som migrerades."
 
 # AI translation - needs human review
-msgid "Device type code of the ticket machine."
-msgstr "Enhetstypskod för biljettautomaten."
+msgid "The original TrafficSignReal that was migrated."
+msgstr "Den ursprungliga TrafficSignReal som migrerades."
+
+msgid "The plan for this Additional Sign."
+msgstr "Plan för denna tilläggsskyltplan."
+
+msgid "The plan for this barrier."
+msgstr "Plan för detta körhinder."
+
+msgid "The plan for this device."
+msgstr "Plan för denna anordning."
+
+msgid "The plan for this mount."
+msgstr "Plan för denna fästpunkt."
+
+msgid "The plan for this road marking."
+msgstr "Plan för denna vägmarkering."
+
+msgid "The plan for this signpost."
+msgstr "Plan för denna skylt."
+
+msgid "The plan for this traffic light."
+msgstr "Plan för detta trafikljus."
+
+msgid "The plan for this traffic sign."
+msgstr "Plan för detta vägmärke."
+
+msgid "The sign type code of the sign in the old Finnish road traffic law."
+msgstr "Anordningstypkod för skylten i Finlands gamla vägtrafiklag."
 
 # AI translation - needs human review
-msgid "Parent found"
-msgstr "Överordnad hittad"
+msgid ""
+"The signpost plan to which this additional sign is associated (set after "
+"signpost migration)."
+msgstr ""
+"Lokaliseringsmärkets plan som detta tilläggsmärke är kopplat till (anges "
+"efter migrering av lokaliseringsmärken)."
 
 # AI translation - needs human review
-msgid "Whether a parent sign (E2/521) was found and assigned."
-msgstr "Om ett överordnat märke (E2/521) hittades och tilldelades."
+msgid ""
+"The signpost real to which this additional sign is associated (set after "
+"signpost migration)."
+msgstr ""
+"Lokaliseringsmärkets implementering som detta tilläggsmärke är kopplat till "
+"(anges efter migrering av lokaliseringsmärken)."
 
-# AI translation - needs human review
-msgid "Parent sign ID"
-msgstr "Överordnat märkes-ID"
+msgid "The traffic sign to which this additional sign is associated."
+msgstr "Vägmärke som denna tilläggsskylt gäller."
 
-# AI translation - needs human review
-msgid "UUID of the parent TrafficSignPlan if found."
-msgstr "UUID för den överordnade TrafficSignPlan om den hittades."
+msgid "The type of lane which this barrier affects."
+msgstr "Typ av den fil som körhindret inverkar på."
 
-# AI translation - needs human review
-msgid "Parent sign code"
-msgstr "Överordnat märkes kod"
+msgid "The type of lane which this road marking affects."
+msgstr "Typ av den fil som vägmarkeringen inverkar på."
 
-# AI translation - needs human review
-msgid "Device type code of the parent sign (E2 or 521)."
-msgstr "Enhetstypskod för det överordnade märket (E2 eller 521)."
+msgid "The type of lane which this sign affects."
+msgstr "Typ av körfält"
 
-# AI translation - needs human review
-msgid "Multiple parents found"
-msgstr "Flera överordnade hittades"
+msgid "The type of lane which this traffic light affects."
+msgstr "Typ av den fil som trafikljuset inverkar på."
 
-# AI translation - needs human review
-msgid "Whether multiple E2/521 signs were found on the same mount."
-msgstr "Om flera E2/521-märken hittades på samma fäste."
+msgid "Third left additional lane"
+msgstr "Tredje extra körfält vänster"
+
+msgid "Third right additional lane"
+msgstr "Tredje extra körfält höger"
+
+msgid "This feature is disabled"
+msgstr ""
+
+msgid "This field is required."
+msgstr "Fältet är obligatoriskt."
+
+msgid "This field may not be null."
+msgstr "Fältet får inte vara tomt."
 
 # AI translation - needs human review
 msgid "Ticket Machine Migration Plan Record"
@@ -3330,68 +3231,6 @@ msgid "Ticket Machine Migration Plan Records"
 msgstr "Planposter för migrering av biljettautomater"
 
 # AI translation - needs human review
-msgid "The original TrafficSignReal that was migrated."
-msgstr "Den ursprungliga TrafficSignReal som migrerades."
-
-# AI translation - needs human review
-msgid "New AdditionalSignReal"
-msgstr "Ny AdditionalSignReal"
-
-# AI translation - needs human review
-msgid "The newly created AdditionalSignReal."
-msgstr "Den nyskapade AdditionalSignReal."
-
-# AI translation - needs human review
-msgid "UUID of the original TrafficSignReal (preserved even if deleted)."
-msgstr ""
-"UUID för den ursprungliga TrafficSignReal (bevaras även om den tas bort)."
-
-# AI translation - needs human review
-msgid "UUID of the new AdditionalSignReal."
-msgstr "UUID för den nya AdditionalSignReal."
-
-# AI translation - needs human review
-msgid "UUID of the parent TrafficSignReal if found."
-msgstr "UUID för den överordnade TrafficSignReal om den hittades."
-
-# AI translation - needs human review
-msgid ""
-"Whether a corresponding AdditionalSignPlan was found for traffic_sign_plan."
-msgstr "Om en motsvarande AdditionalSignPlan hittades för traffic_sign_plan."
-
-# AI translation - needs human review
-msgid "Had installation_id"
-msgstr "Hade installation_id"
-
-# AI translation - needs human review
-msgid "Had installation_details"
-msgstr "Hade installation_details"
-
-# AI translation - needs human review
-msgid "Had permit_decision_id"
-msgstr "Hade permit_decision_id"
-
-# AI translation - needs human review
-msgid "Had rfid"
-msgstr "Hade rfid"
-
-# AI translation - needs human review
-msgid "Had operation"
-msgstr "Hade operation"
-
-# AI translation - needs human review
-msgid "Had attachment_url"
-msgstr "Hade attachment_url"
-
-# AI translation - needs human review
-msgid "Had installation_status_note"
-msgstr "Hade installation_status_note"
-
-# AI translation - needs human review
-msgid "Set installed_by to null"
-msgstr "Ange installed_by till tom"
-
-# AI translation - needs human review
 msgid "Ticket Machine Migration Real Record"
 msgstr "Implementeringspost för migrering av biljettautomater"
 
@@ -3399,122 +3238,134 @@ msgstr "Implementeringspost för migrering av biljettautomater"
 msgid "Ticket Machine Migration Real Records"
 msgstr "Implementeringsposter för migrering av biljettautomater"
 
-msgid "Right side of the road (relative to traffic direction)"
-msgstr "Höger sida av vägen (i trafikriktningen)"
+# AI translation - needs human review
+msgid "Ticket Machine Migration Run"
+msgstr "Migreringskörning för biljettautomater"
 
-msgid "Above the lanes"
-msgstr "Ovanför körfälten"
+# AI translation - needs human review
+msgid "Ticket Machine Migration Runs"
+msgstr "Migreringskörningar för biljettautomater"
 
-msgid "Island"
-msgstr "Refug"
+# AI translation - needs human review
+msgid ""
+"Timestamp when admin manually reactivated this user account. Prevents "
+"automatic deactivation."
+msgstr ""
+"Tidsstämpel när administratören manuellt återaktiverade detta användarkonto. "
+"Förhindrar automatisk inaktivering."
 
-msgid "Traffic signal"
-msgstr "Trafiksignal"
+# AI translation - needs human review
+msgid "Timestamp when the 1-day warning email was sent."
+msgstr "Tidsstämpel när e-posten med 1-dagsvarning skickades."
 
-msgid "Right-turn arrow signal"
-msgstr "Pilsignal högersväng"
+# AI translation - needs human review
+msgid "Timestamp when the 30-day warning email was sent."
+msgstr "Tidsstämpel när e-posten med 30-dagarsvarning skickades."
 
-msgid "Left-turn arrow signal"
-msgstr "Pilsignal vänstersväng"
+# AI translation - needs human review
+msgid "Timestamp when the 7-day warning email was sent."
+msgstr "Tidsstämpel när e-posten med 7-dagarsvarning skickades."
 
-msgid "Triangle signal"
-msgstr "Triangelsignal"
+# AI translation - needs human review
+msgid "Timestamp when the import run finished."
+msgstr "Tidsstämpel när importkörningen slutfördes."
 
-msgid "Public transport signal"
-msgstr "Kollektivtrafiksignal"
+# AI translation - needs human review
+#, fuzzy
+#| msgid "Timestamp when the import run was started."
+msgid "Timestamp when the import run was started"
+msgstr "Tidsstämpel när importkörningen startades."
 
-msgid "Bicycle signal"
-msgstr "Cykelsignal"
+# AI translation - needs human review
+msgid "Timestamp when the import run was started."
+msgstr "Tidsstämpel när importkörningen startades."
 
-msgid "Bicycle turn arrow signal"
-msgstr "Pilsignal cykelsväng"
+# AI translation - needs human review
+msgid "Timestamp when the migration command completed successfully."
+msgstr "Tidsstämpel när migreringskommandot slutfördes framgångsrikt."
 
-msgid "Pedestrian signal"
-msgstr "Fotgängarsignal"
+# AI translation - needs human review
+msgid "Timestamp when the migration command started."
+msgstr "Tidsstämpel när migreringskommandot startade."
 
-msgid "Lane signal"
-msgstr "Körfältsignal"
+# AI translation - needs human review
+msgid ""
+"Timestamp when the migration was completed (successfully or with error)."
+msgstr "Tidsstämpel när migreringen slutfördes (framgångsrikt eller med fel)."
 
-msgid "Loop sensor"
-msgstr "Loop-detektor"
+# AI translation - needs human review
+msgid "Timestamp when the migration was started."
+msgstr "Tidsstämpel när migreringen startades."
 
-msgid "Infrared sensor"
-msgstr "Infraröd detektor"
+# AI translation - needs human review
+msgid "Timestamp when the user was deactivated."
+msgstr "Tidsstämpel när användaren inaktiverades."
 
-msgid "Radar i.e. microwave sensor"
-msgstr "Radar d.v.s. mikrovågdetektor"
+msgid "Today"
+msgstr "Idag"
 
-msgid "Name of the road this traffic light is installed at."
-msgstr "Namn på den väg där detta trafikljus är installerat."
+msgid "Top left"
+msgstr "Övre vänstra"
 
-msgid "Describes which lane of the road this traffic light affects."
-msgstr "Anger vilken fil på vägen trafikljuset inverkar på."
+msgid "Top right"
+msgstr "Övre högra"
 
-msgid "The type of lane which this traffic light affects."
-msgstr "Typ av den fil som trafikljuset inverkar på."
+# AI translation - needs human review
+msgid "Total error-level events (unexpected exceptions during the run)."
+msgstr "Totalt antal händelser på felnivå (oväntade undantag under körningen)."
 
-msgid "Type of the mount this traffic light is attached to."
-msgstr "Typen av den fästpunkt som trafikljuset är kopplat till."
+# AI translation - needs human review
+msgid "Total number of TrafficSignPlan objects processed."
+msgstr "Totalt antal bearbetade TrafficSignPlan-objekt."
 
-msgid "Describes the type of traffic light this device is."
-msgstr "Beskriver vilken typ av trafiksignal anordningen är."
+# AI translation - needs human review
+msgid "Total number of TrafficSignReal objects processed."
+msgstr "Totalt antal bearbetade TrafficSignReal-objekt."
 
-msgid "Text on the traffic light."
-msgstr "Text som är skriven på trafikljuset."
+# AI translation - needs human review
+msgid ""
+"Total rows skipped due to invalid geometry, unreadable text, missing device "
+"type code, etc."
+msgstr ""
+"Totalt antal rader som hoppades över på grund av ogiltig geometri, oläslig "
+"text, saknad enhetstypskod osv."
 
-msgid "Push button"
-msgstr "Tryckknapp"
+# AI translation - needs human review
+msgid ""
+"Total warning-level events: imported without a mount, without a parent, "
+"traffic sign with ignored parent value, etc."
+msgstr ""
+"Totalt antal händelser på varningsnivå: importerad utan fäste, utan "
+"överordnad, trafikmärke med ignorerat överordnat värde osv."
 
-msgid "Describes if this traffic light has a push button attached."
-msgstr "Anger om denna trafiksignal har en tryckknapp ansluten."
+# AI translation - needs human review
+msgid ""
+"Track user's API usage activity. This field is automatically updated when "
+"the user uses the API."
+msgstr ""
+"Spåra användarens API-användningsaktivitet. Detta fält uppdateras "
+"automatiskt när användaren använder API:et."
 
-msgid "Sound beacon"
-msgstr "Ljudsignal"
+msgid "Traffic"
+msgstr "Trafik"
 
-msgid "Describes if this traffic light has a sound beacon attached."
-msgstr "Anger om denna trafiksignal har en ljudsignal ansluten."
+msgid "Traffic Control Device Type"
+msgstr "Typ av trafikstyrningsanordning"
 
-msgid "Vehicle recognition"
-msgstr "Fordonsidentifiering"
+msgid "Traffic Control Device Type Icon"
+msgstr "Ikon för trafikstyrningsanordningstypen"
 
-msgid "Describes the type of vehicle recognition this traffic light has."
-msgstr "Beskriver typen av fordonsidentifiering denna trafiksignal har."
+msgid "Traffic Control Device Type Icons"
+msgstr "Ikoner för trafikstyrningsanordningstyperna"
 
-msgid "Date on which this traffic light becomes active."
-msgstr "Datum då trafikljuset tas i bruk."
+msgid "Traffic Control Device Types"
+msgstr "Typer av trafikstyrningsanordning"
 
-msgid "Date after which this traffic light becomes inactive."
-msgstr "Datum efter vilket trafikljuset inte är i bruk."
-
-msgid "Specifies where the traffic light is in relation to the road."
-msgstr "Fastställer trafikljusets läge i förhållande till vägen."
-
-msgid "Mount that this traffic light is mounted on."
-msgstr "Fästpunkt som trafikljuset är installerat i."
-
-msgid "Plan which this traffic light plan is a part of."
-msgstr "Plan som denna trafikljusplan ingår i."
+msgid "Traffic Control Plan"
+msgstr "Trafikledningsplan"
 
 msgid "Traffic Light Plan"
 msgstr "Trafiksignal (plan)"
-
-msgid "Traffic Light Plan Replacement"
-msgstr "Ersättning för trafikljusplan"
-
-msgid "Traffic Light Plan Replacements"
-msgstr "Ersättningar för trafikljusplaner"
-
-msgid "The plan for this traffic light."
-msgstr "Plan för detta trafikljus."
-
-msgid "traffic light real"
-msgstr "trafiksignal (implementering)"
-
-msgid "Traffic light real operation"
-msgstr "Trafiksignal (implementeringsåtgärd)"
-
-msgid "Traffic light real operations"
-msgstr "Trafiksignal (implementeringsåtgärder)"
 
 msgid "Traffic Light Plan File"
 msgstr "Trafiksignal (planfil)"
@@ -3522,56 +3373,32 @@ msgstr "Trafiksignal (planfil)"
 msgid "Traffic Light Plan Files"
 msgstr "Trafiksignal (planfiler)"
 
+msgid "Traffic Light Plan Replacement"
+msgstr "Ersättning för trafikljusplan"
+
+msgid "Traffic Light Plan Replacements"
+msgstr "Ersättningar för trafikljusplaner"
+
+msgid "Traffic Light Plans"
+msgstr "Trafiksignal (planer)"
+
+msgid "Traffic Light Real"
+msgstr "Trafiksignal (implementering)"
+
 msgid "Traffic Light Real File"
 msgstr "Trafiksignal (implementeringsfil)"
 
 msgid "Traffic Light Real Files"
 msgstr "Trafiksignal (implementeringsfiler)"
 
-msgid "Vertical"
-msgstr "Vertikal"
-
-msgid "Name of the road this traffic sign is installed at."
-msgstr "Namn på den väg där detta vägmärke är installerat."
+msgid "Traffic Light Reals"
+msgstr "Trafiksignal (implementeringar)"
 
 msgid "Traffic Sign Code value"
 msgstr "Kodvärde för trafikskylt"
 
-msgid "Text written on the sign."
-msgstr "Text som är skriven på skylten."
-
-msgid "Peak fastened"
-msgstr "Toppmonterad"
-
-msgid "Indicates if this object is peak fastened"
-msgstr "Anger om objektet är toppmonterat"
-
-msgid "Affect area (2D)"
-msgstr "Påverkansområde (2D)"
-
-msgid "Plan which this traffic sign plan is a part of."
-msgstr "Plan som denna vägmärkesplan ingår i."
-
-msgid "Traffic Sign Plan Replacement"
-msgstr "Ersättning för vägmärkesplan"
-
-msgid "Traffic Sign Plan Replacements"
-msgstr "Ersättningar för vägmärkesplaner"
-
-msgid "The plan for this traffic sign."
-msgstr "Plan för detta vägmärke."
-
-msgid "The device type code of the sign in the old Finnish road traffic law."
-msgstr "Anordningstypkoden för skylten i den äldre finska väglagstiftningen."
-
-msgid "traffic sign real"
-msgstr "trafikskylt (implementering)"
-
-msgid "Traffic sign real operation"
-msgstr "Trafikskylt (implementeringsåtgärd)"
-
-msgid "Traffic sign real operations"
-msgstr "Trafikskylt (implementeringsåtgärder)"
+msgid "Traffic Sign Plan"
+msgstr "Trafikskylt (plan)"
 
 msgid "Traffic Sign Plan File"
 msgstr "Trafikskylt (planfil)"
@@ -3579,11 +3406,209 @@ msgstr "Trafikskylt (planfil)"
 msgid "Traffic Sign Plan Files"
 msgstr "Trafikskylt (planfiler)"
 
+msgid "Traffic Sign Plan Replacement"
+msgstr "Ersättning för vägmärkesplan"
+
+msgid "Traffic Sign Plan Replacements"
+msgstr "Ersättningar för vägmärkesplaner"
+
+msgid "Traffic Sign Plans"
+msgstr "Trafikskylt (planer)"
+
+msgid "Traffic Sign Real"
+msgstr "Trafikskylt (implementering)"
+
 msgid "Traffic Sign Real File"
 msgstr "Trafikskylt (implementeringsfil)"
 
 msgid "Traffic Sign Real Files"
 msgstr "Trafikskylt (implementeringsfiler)"
+
+msgid "Traffic Sign Reals"
+msgstr "Trafikskylt (implementeringar)"
+
+msgid "Traffic Sign related to this road marking."
+msgstr "Trafikskylt relaterad till denna vägmarkering."
+
+# AI translation - needs human review
+msgid "Traffic Signs"
+msgstr "Trafikmärken"
+
+msgid "Traffic control"
+msgstr "Trafikstyrning"
+
+msgid "Traffic light"
+msgstr "Trafiksignal"
+
+msgid "Traffic light real operation"
+msgstr "Trafiksignal (implementeringsåtgärd)"
+
+msgid "Traffic light real operations"
+msgstr "Trafiksignal (implementeringsåtgärder)"
+
+msgid "Traffic sign"
+msgstr "Trafikskylt"
+
+msgid "Traffic sign real operation"
+msgstr "Trafikskylt (implementeringsåtgärd)"
+
+msgid "Traffic sign real operations"
+msgstr "Trafikskylt (implementeringsåtgärder)"
+
+msgid "Traffic sign type"
+msgstr "Typ av trafikskylt"
+
+msgid "Traffic signal"
+msgstr "Trafiksignal"
+
+# AI translation - needs human review
+msgid "TrafficSignReal records whose lifecycle was set to INACTIVE."
+msgstr "TrafficSignReal-poster vars livscykel sattes till INACTIVE."
+
+msgid "Transverse"
+msgstr "Tvärgående"
+
+msgid "Triangle signal"
+msgstr "Triangelsignal"
+
+# AI translation - needs human review
+msgid "True if the run was executed with --dry-run (no DB writes performed)."
+msgstr ""
+"Sant om körningen utfördes med --dry-run (inga skrivningar till databasen "
+"utfördes)."
+
+msgid "Turn left lane"
+msgstr "Påbjuden vänstersväng"
+
+msgid "Turn right lane"
+msgstr "Påbjuden högersväng"
+
+msgid "Txt"
+msgstr "Txt"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Type of the device from Helsinki Design Manual."
+msgstr "Anordningstyp i Helsingfors designmanual."
+
+msgid "Type of the mount this device is attached to."
+msgstr "Typen av den fästpunkt som anordningen är kopplad till."
+
+msgid "Type of the mount this sign is attached to."
+msgstr "Typen av den fästpunkt som denna skylt är kopplad till."
+
+msgid "Type of the mount this traffic light is attached to."
+msgstr "Typen av den fästpunkt som trafikljuset är kopplat till."
+
+msgid "Type specifier"
+msgstr "Typspecifikation"
+
+# AI translation - needs human review
+msgid "URL of the attachment associated with this signpost."
+msgstr "URL för bilagan som är kopplad till detta lokaliseringsmärke."
+
+msgid "URL to a file attachment related to this mount."
+msgstr "URL för filbilagan om denna fästpunkt."
+
+msgid "URL to a file attachment related to this sign."
+msgstr "URL för filbilagan om denna skylt."
+
+msgid "URL to decision web page"
+msgstr "Länk till webbplatsen för beslutet"
+
+# AI translation - needs human review
+msgid "UUID of the new AdditionalSignPlan."
+msgstr "UUID för den nya AdditionalSignPlan."
+
+# AI translation - needs human review
+msgid "UUID of the new AdditionalSignReal."
+msgstr "UUID för den nya AdditionalSignReal."
+
+# AI translation - needs human review
+msgid "UUID of the original TrafficSignPlan (preserved even if deleted)."
+msgstr ""
+"UUID för den ursprungliga TrafficSignPlan (bevaras även om den tas bort)."
+
+# AI translation - needs human review
+msgid "UUID of the original TrafficSignReal (preserved even if deleted)."
+msgstr ""
+"UUID för den ursprungliga TrafficSignReal (bevaras även om den tas bort)."
+
+# AI translation - needs human review
+msgid "UUID of the parent TrafficSignPlan if found."
+msgstr "UUID för den överordnade TrafficSignPlan om den hittades."
+
+# AI translation - needs human review
+msgid "UUID of the parent TrafficSignReal if found."
+msgstr "UUID för den överordnade TrafficSignReal om den hittades."
+
+msgid "Unit"
+msgstr "Enhet"
+
+msgid "Unit, in which the numeric value is in."
+msgstr "Enhet för det numeriska värdet."
+
+msgid "Up"
+msgstr "Upp"
+
+msgid "Updated at"
+msgstr "Uppdaterades den"
+
+msgid "Updated by"
+msgstr "Uppdaterades av"
+
+msgid "Updated date"
+msgstr "Uppdateringsdatum"
+
+msgid "Upper corridor fire-hydrant"
+msgstr "Väggbrandpost"
+
+msgid ""
+"Use Projectwise ID for projects, can also be an abbreviation if entity has "
+"no ID"
+msgstr ""
+"Använd ProjectWise-id för projekt, kan även vara en förkortning om enheten "
+"saknar id"
+
+msgid "Use Traffic Sign Icons"
+msgstr "Använd trafikskyltsymboler"
+
+msgid "User"
+msgstr "Användare"
+
+# AI translation - needs human review
+msgid "User Deactivation Status"
+msgstr "Status för användarinaktivering"
+
+# AI translation - needs human review
+msgid "User Deactivation Statuses"
+msgstr "Statusar för användarinaktivering"
+
+#, python-format
+msgid "User is active, but last login was %(days)d days ago"
+msgstr ""
+"Användarnamnet är gällande, men den senaste inloggningen skedde för %(days)d "
+"dagar sedan"
+
+# AI translation - needs human review
+msgid "User who executed the migration command."
+msgstr "Användare som utförde migreringskommandot."
+
+msgid "Users"
+msgstr "Användare"
+
+msgid "Validity"
+msgstr "Giltighet"
+
+msgid "Validity period end"
+msgstr "Giltighetsperiodens slut"
+
+msgid "Validity period start"
+msgstr "Giltighetsperiodens start"
+
+msgid "Value"
+msgstr "Värde"
 
 #, python-format
 msgid ""
@@ -3592,17 +3617,207 @@ msgstr ""
 "Värdet '%(value)s' är inte godtagbart. Godtagbara värden är %(enum_values)s "
 "(%(enum)s)."
 
-msgid ""
-"You do not have a permission to modify devices without a responsible entity."
-msgstr "Du har inte rätt att redigera anordningar utan den ansvariga parten."
+# AI translation - needs human review
+msgid "Value of attachment_url field that was lost."
+msgstr "Värdet på attachment_url-fältet som förlorades."
 
-#, python-format
+# AI translation - needs human review
+msgid "Value of installation_details field that was lost."
+msgstr "Värdet på installation_details-fältet som förlorades."
+
+# AI translation - needs human review
+msgid "Value of installation_id field that was lost."
+msgstr "Värdet på installation_id-fältet som förlorades."
+
+# AI translation - needs human review
+msgid "Value of operation field that was lost."
+msgstr "Värdet på operation-fältet som förlorades."
+
+# AI translation - needs human review
+msgid "Value of peak_fastened field that was lost."
+msgstr "Värdet på peak_fastened-fältet som förlorades."
+
+# AI translation - needs human review
+msgid "Value of permit_decision_id field that was lost."
+msgstr "Värdet på permit_decision_id-fältet som förlorades."
+
+# AI translation - needs human review
+msgid "Value of rfid field that was lost."
+msgstr "Värdet på rfid-fältet som förlorades."
+
+# AI translation - needs human review
+msgid "Value of surface_class field that was lost."
+msgstr "Värdet på surface_class-fältet som förlorades."
+
+msgid "Vehicle recognition"
+msgstr "Fordonsidentifiering"
+
 msgid ""
-"You do not have a permission to modify devices of responsible entity "
-"'%(responsible_entity)s'."
+"Verbose name for the furniture signposts location in English, e.g. street, "
+"park or island."
+msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
+
+msgid ""
+"Verbose name for the furniture signposts location in Finnish, e.g. street, "
+"park or island."
+msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
+
+msgid ""
+"Verbose name for the furniture signposts location in Swedish, e.g. street, "
+"park or island."
+msgstr "Långt namn för vägvisarens plats, t.ex. gata, park eller refug."
+
+msgid "Vertical"
+msgstr "Vertikal"
+
+msgid "Very bad"
+msgstr "Mycket dåligt"
+
+msgid "Very good"
+msgstr "Mycket gott"
+
+msgid "View"
 msgstr ""
-"Du har inte rätt att redigera den ansvariga partens '%(responsible_entity)s'"
-" anordningar."
+
+msgid "View API"
+msgstr "Visa API"
+
+msgid "View API documentation"
+msgstr "Visa API-dokumentation"
+
+msgid "View map"
+msgstr "Visa karta"
+
+msgid "View on site"
+msgstr ""
+
+# AI translation - needs human review
+msgid "View related"
+msgstr "Visa relaterade"
+
+msgid "Virus scan failure: {get_error_details_message(virus_scan_errors)}"
+msgstr ""
+"Viruskontroll misslyckades: {get_error_details_message(virus_scan_errors)}"
+
+msgid "Visual representation"
+msgstr "Visuell presentation"
+
+# AI translation - needs human review
+msgid "Warning"
+msgstr "Varning"
+
+# AI translation - needs human review
+msgid "Warning count"
+msgstr "Antal varningar"
+
+msgid "Warning sign"
+msgstr "Varningsmärke"
+
+msgid "Water wheel"
+msgstr "Vattenhjul"
+
+msgid "Wayside shrine"
+msgstr "Helgedom vid vägkant"
+
+# AI translation - needs human review
+msgid "We apologize for the inconvenience. Please check back soon."
+msgstr "Vi ber om ursäkt för besväret. Kom tillbaka snart."
+
+msgid "Weaving lane"
+msgstr "Sammanvävning"
+
+# AI translation - needs human review
+msgid ""
+"When active, all requests (except admin for admin users) will be blocked "
+"with 503 status."
+msgstr ""
+"När aktivt blockeras alla förfrågningar (utom admin för administratörer) med "
+"status 503."
+
+# AI translation - needs human review
+msgid "When enabled, display this message to users in the admin pages."
+msgstr ""
+"När aktiverat visas detta meddelande för användare på administrationssidorna."
+
+# AI translation - needs human review
+msgid ""
+"When was this command last executed. Unknown if it happened before tracking "
+"started"
+msgstr ""
+"När kördes detta kommando senast. Okänt om det skedde innan spårningen "
+"påbörjades"
+
+# AI translation - needs human review
+msgid "When was usage tracking for this command started"
+msgstr "När påbörjades användningsspårningen för detta kommando"
+
+# AI translation - needs human review
+msgid ""
+"Whether a corresponding AdditionalSignPlan was found for traffic_sign_plan."
+msgstr "Om en motsvarande AdditionalSignPlan hittades för traffic_sign_plan."
+
+# AI translation - needs human review
+msgid ""
+"Whether a corresponding SignpostPlan was found for the traffic_sign_plan "
+"reference."
+msgstr ""
+"Om en motsvarande SignpostPlan hittades för referensen traffic_sign_plan."
+
+# AI translation - needs human review
+msgid "Whether a parent sign (E2/521) was found and assigned."
+msgstr "Om ett överordnat märke (E2/521) hittades och tilldelades."
+
+# AI translation - needs human review
+msgid "Whether hard-delete mode was used (true) or soft-delete (false)."
+msgstr ""
+"Om läget för permanent borttagning användes (true) eller mjuk borttagning "
+"(false)."
+
+# AI translation - needs human review
+msgid "Whether multiple E2/521 signs were found on the same mount."
+msgstr "Om flera E2/521-märken hittades på samma fäste."
+
+# AI translation - needs human review
+msgid ""
+"Whether original objects were permanently deleted (True) or soft-deleted "
+"(False)."
+msgstr "Om ursprungsobjekten togs bort permanent (True) eller mjukt (False)."
+
+# AI translation - needs human review
+msgid "Whether the migration completed successfully."
+msgstr "Om migreringen slutfördes framgångsrikt."
+
+# AI translation - needs human review
+msgid "Whether the original had an affect_area polygon."
+msgstr "Om ursprunget hade en affect_area-polygon."
+
+# AI translation - needs human review
+msgid "Whether this was a dry run (no actual changes made)."
+msgstr "Om detta var en testkörning (inga faktiska ändringar gjordes)."
+
+msgid "White"
+msgstr "Vitt"
+
+msgid "Width"
+msgstr "Bredd"
+
+msgid "Width of the road marking in centimeters."
+msgstr "Vägmarkeringens bredd i centimeter."
+
+msgid "Windmill"
+msgstr "Väderkvarn"
+
+msgid "Year and verdict section separated with a dash"
+msgstr "År och beslutsektion åtskilda av snedstreck"
+
+msgid "Yellow"
+msgstr "Gul"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Yes, I’m sure"
+msgstr "Ja, jag är säker"
 
 msgid ""
 "You do not have a permission to create devices without a responsible entity "
@@ -3619,17 +3834,20 @@ msgstr ""
 "Du har inte rätt att skapa och redigera anordningar med den angivna "
 "ansvariga parten (%(responsible_entity)s)."
 
-# AI translation - needs human review
 #, python-format
-msgid " By %(filter_title)s "
-msgstr " Efter %(filter_title)s "
+msgid ""
+"You do not have a permission to modify devices of responsible entity "
+"'%(responsible_entity)s'."
+msgstr ""
+"Du har inte rätt att redigera den ansvariga partens '%(responsible_entity)s' "
+"anordningar."
 
-msgid "Export template"
-msgstr "Exportmall"
+msgid ""
+"You do not have a permission to modify devices without a responsible entity."
+msgstr "Du har inte rätt att redigera anordningar utan den ansvariga parten."
 
-#, python-format
-msgid "Are you sure you want to add the %(model_name)s?"
-msgstr "Är du säker på att du vill lägga till %(model_name)s"
+msgid "You don't have permission to edit user activation status."
+msgstr ""
 
 msgid ""
 "You have manually changed the location of the plan, while the 'derive "
@@ -3638,303 +3856,86 @@ msgstr ""
 "Du har manuellt ändrat platsen för planen medan alternativet 'härled läget' "
 "är aktiverat."
 
-msgid ""
-"For as long as the 'derive location' option is active, the location of the "
-"plan will always be derived anew, whenever a traffic control device plan is "
-"assigned to this plan."
-msgstr ""
-"Så länge lägeshärledning är aktiverad kommer planplatsen alltid att härledas"
-" på nytt, om någon plan är inställd att hänvisa till denna plan."
-
-msgid ""
-"Are you sure you want to continue, without first disabling the 'derive "
-"location' option?"
-msgstr ""
-"Är du säker på att du vill fortsätta utan att först stänga av "
-"lägeshärledning?"
-
-msgid "Yes, I’m sure"
-msgstr "Ja, jag är säker"
-
-msgid "No, continue to edit"
-msgstr "Nej, fortsätt redigera"
-
-msgid "Set related plans"
-msgstr "Ange relaterade planer"
-
-msgid "Save"
-msgstr "Spara"
-
-msgid "Save and continue editing"
-msgstr "Spara och fortsätt redigera"
-
-msgid "Visual representation"
-msgstr "Visuell presentation"
-
-msgid "Missing icon graphics. Description: "
-msgstr "Märkets grafik saknas. Märkets beskrivning:"
-
-msgid "No additional signs"
-msgstr "Inga tilläggsskyltar"
-
-msgid "No mount"
-msgstr "Ej fästpunkt"
-
-msgid "This field may not be null."
-msgstr "Fältet får inte vara tomt."
-
-#, python-format
-msgid "Device type '%(device_type)s' accepts no structured content"
-msgstr "Anordningstypen '%(device_type)s' använder inte strukturerat innehåll"
-
-msgid "Invalid location_ewkt value"
-msgstr "Ogiltigt värde för location_ewkt"
-
-msgid "File not found."
-msgstr "Fil hittades inte."
-
-#, python-format
-msgid "Error: Could not find %(model_name)s with id %(id)s."
-msgstr "Fel: Kunde inte hittas med koden %(model_name)s %(id)s."
-
-msgid "Mount Real Centroid"
-msgstr "Montering_medelpunkt (implementering)"
-
-msgid "Mount Plan Centroid"
-msgstr "Montering_medelpunkt (plan)"
-
-msgid "Traffic Control Plan"
-msgstr "Trafikledningsplan"
+msgid "additional sign real"
+msgstr "Tilläggsskylt (implementering)"
 
 # AI translation - needs human review
 msgid "authentication type"
 msgstr "autentiseringstyp"
 
-# AI translation - needs human review
-msgid "Local"
-msgstr "Lokal"
-
-# AI translation - needs human review
-msgid "Azure AD"
-msgstr "Azure AD"
-
-# AI translation - needs human review
-msgid "Both"
-msgstr "Båda"
-
-# AI translation - needs human review
-msgid "None"
-msgstr "Ingen"
-
-# AI translation - needs human review
-msgid "reactivated"
-msgstr "återaktiverad"
-
-msgid "Last 30 days"
-msgstr "Senaste 30 dagarna"
-
-msgid "Last 90 days"
-msgstr "Senaste 90 dagarna"
-
-msgid "Last 180 days"
-msgstr "Senaste 180 dagarna"
+msgid "barrier real"
+msgstr "bom (implementering)"
 
 # AI translation - needs human review
 msgid "deactivation stage"
 msgstr "inaktiveringssteg"
 
-# AI translation - needs human review
-msgid "30-day warning sent"
-msgstr "30-dagarsvarning skickad"
+msgid "division"
+msgstr "separering"
 
-# AI translation - needs human review
-msgid "7-day warning sent"
-msgstr "7-dagarsvarning skickad"
+msgid "email address"
+msgstr "e-post"
 
-# AI translation - needs human review
-msgid "1-day warning sent"
-msgstr "1-dagsvarning skickad"
+msgid "first name"
+msgstr "förnamn"
 
-msgid "Deactivated"
-msgstr "Inaktiv"
-
-# AI translation - needs human review
-msgid "Authentication Type"
-msgstr "Autentiseringstyp"
-
-msgid "Additional user information"
-msgstr "Ytterligare information om användaren"
-
-# AI translation - needs human review
-msgid "Activity Tracking"
-msgstr "Aktivitetsspårning"
-
-# AI translation - needs human review
-msgid ""
-"Track user's API usage activity. This field is automatically updated when "
-"the user uses the API."
-msgstr ""
-"Spåra användarens API-användningsaktivitet. Detta fält uppdateras "
-"automatiskt när användaren använder API:et."
-
-# AI translation - needs human review
-msgid "Reactivation"
-msgstr "Återaktivering"
-
-# AI translation - needs human review
-msgid "Admin Notifications"
-msgstr "Administratörsaviseringar"
-
-# AI translation - needs human review
-msgid ""
-"Configure whether this user receives admin notification emails about user "
-"deactivations and system events."
-msgstr ""
-"Konfigurera om denna användare tar emot administratörsaviseringar via e-post"
-" om användarinaktiveringar och systemhändelser."
-
-# AI translation - needs human review
-msgid "Relations table"
-msgstr "Relationstabell"
+msgid "has additional signs"
+msgstr "har tilläggsskyltar"
 
 msgid "last login"
 msgstr "senast inloggad"
 
-#, python-format
-msgid "User is active, but last login was %(days)d days ago"
-msgstr ""
-"Användarnamnet är gällande, men den senaste inloggningen skedde för %(days)d"
-" dagar sedan"
+msgid "last name"
+msgstr "efternamn"
 
-# AI translation - needs human review
-msgid "Save the user first to view relations."
-msgstr "Spara användaren först för att visa relationer."
+msgid "mount real"
+msgstr "montering (implementering)"
 
-# AI translation - needs human review
-msgid "No relations found."
-msgstr "Inga relationer hittades."
+msgid "operation type"
+msgstr "typ av åtgärd"
 
-msgid "You don't have permission to edit user activation status."
+msgid "params"
 msgstr ""
 
-# AI translation - needs human review
-msgid "Reactivate selected users"
-msgstr "Återaktivera valda användare"
+msgid "png"
+msgstr "png"
+
+msgid "project"
+msgstr "projekt"
+
+msgid "r1"
+msgstr "r1"
+
+msgid "r2"
+msgstr "r2"
+
+msgid "r3"
+msgstr "r3"
 
 # AI translation - needs human review
-#, python-format
-msgid "Successfully reactivated %(count)d user(s)."
-msgstr "Återaktiverade %(count)d användare."
+msgid "reactivated"
+msgstr "återaktiverad"
 
-msgid "Users"
-msgstr "Användare"
+msgid "road marking real"
+msgstr "vägmarkering (implementering)"
 
-msgid "Bypass operational area"
-msgstr "Förbigå åtgärdsområde"
+msgid "service"
+msgstr "service"
 
-msgid "Disable operational area permission checks for this user."
-msgstr ""
-"Inaktivera tillståndskontroller för åtgärdsområde för denna användare."
+msgid "signpost real"
+msgstr "vägvisare (implementering)"
 
-msgid ""
-"Operational areas, on which this user has permission to modify devices in."
-msgstr ""
-"Åtgärdsområden för vilka denna användare har tillstånd att modifiera "
-"anordningar."
+msgid "svg"
+msgstr "svg"
 
-msgid "Bypass responsible entity"
-msgstr "Förbigå ansvarig enhet"
+msgid "traffic light real"
+msgstr "trafiksignal (implementering)"
 
-msgid "Disable responsible entity permission checks for this user."
-msgstr ""
-"Inaktivera tillståndskontroller för ansvarig enhet för denna användare."
+msgid "traffic sign real"
+msgstr "trafikskylt (implementering)"
 
-msgid ""
-"Responsible entities that this user is belongs to. This gives the users "
-"write permission to devices that belong to the Responsible Entities or any "
-"Responsible Entity that's hierarchically under the selected ones."
-msgstr ""
-"Ansvariga enheter som denna användare hör till. Detta ger användarna "
-"skrivåtkomst till anordningar som tillhör ansvarsenheterna eller till en "
-"ansvarsenhet som är hierarkiskt underordnad de som valts."
+msgid "unit"
+msgstr "enhet"
 
-msgid "Additional information related to this user."
-msgstr "Mer information om denna användare."
-
-# AI translation - needs human review
-msgid "Reactivated at"
-msgstr "Återaktiverad"
-
-# AI translation - needs human review
-msgid ""
-"Timestamp when admin manually reactivated this user account. Prevents "
-"automatic deactivation."
-msgstr ""
-"Tidsstämpel när administratören manuellt återaktiverade detta användarkonto."
-" Förhindrar automatisk inaktivering."
-
-# AI translation - needs human review
-msgid "Receives admin notification emails"
-msgstr "Tar emot administratörsaviseringar via e-post"
-
-# AI translation - needs human review
-msgid ""
-"If enabled, this user will receive admin notification emails about user "
-"deactivations and system events. Only users with valid email addresses will "
-"receive notifications."
-msgstr ""
-"Om aktiverat tar denna användare emot administratörsaviseringar via e-post "
-"om användarinaktiveringar och systemhändelser. Endast användare med giltiga "
-"e-postadresser tar emot aviseringar."
-
-# AI translation - needs human review
-msgid "One month warning email sent at"
-msgstr "E-post med enmånadersvarning skickad"
-
-# AI translation - needs human review
-msgid "Timestamp when the 30-day warning email was sent."
-msgstr "Tidsstämpel när e-posten med 30-dagarsvarning skickades."
-
-# AI translation - needs human review
-msgid "One week warning email sent at"
-msgstr "E-post med enveckasvarning skickad"
-
-# AI translation - needs human review
-msgid "Timestamp when the 7-day warning email was sent."
-msgstr "Tidsstämpel när e-posten med 7-dagarsvarning skickades."
-
-# AI translation - needs human review
-msgid "One day warning email sent at"
-msgstr "E-post med endagsvarning skickad"
-
-# AI translation - needs human review
-msgid "Timestamp when the 1-day warning email was sent."
-msgstr "Tidsstämpel när e-posten med 1-dagsvarning skickades."
-
-# AI translation - needs human review
-msgid "Deactivated at"
-msgstr "Inaktiverad"
-
-# AI translation - needs human review
-msgid "Timestamp when the user was deactivated."
-msgstr "Tidsstämpel när användaren inaktiverades."
-
-# AI translation - needs human review
-msgid "User Deactivation Status"
-msgstr "Status för användarinaktivering"
-
-# AI translation - needs human review
-msgid "User Deactivation Statuses"
-msgstr "Statusar för användarinaktivering"
-
-# AI translation - needs human review
-msgid "App"
-msgstr "Applikation"
-
-# AI translation - needs human review
-msgid "Model"
-msgstr "Modell"
-
-# AI translation - needs human review
-msgid "View related"
-msgstr "Visa relaterade"
+msgid "username"
+msgstr "användarnamn"
