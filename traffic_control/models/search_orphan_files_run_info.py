@@ -7,7 +7,7 @@ class SearchOrphanFilesRunInfo(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     started_at = models.DateTimeField(
-        _("Started at"), auto_now_add=True, help_text=_("Timestamp when the import run was started")
+        _("Started at"), auto_now_add=True, help_text=_("Timestamp when the import run was started.")
     )
     completed_at = models.DateTimeField(
         _("Completed at"),

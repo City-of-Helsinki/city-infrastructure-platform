@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 16:25+0300\n"
+"POT-Creation-Date: 2026-09-16 16:47+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3194,12 +3194,6 @@ msgstr "Aikaleima, jolloin 7 päivän varoitussähköposti lähetettiin."
 # AI translation - needs human review
 msgid "Timestamp when the import run finished."
 msgstr "Aikaleima, jolloin tuontiajo päättyi."
-
-# AI translation - needs human review
-#, fuzzy
-#| msgid "Timestamp when the import run was started."
-msgid "Timestamp when the import run was started"
-msgstr "Aikaleima, jolloin tuontiajo aloitettiin."
 
 # AI translation - needs human review
 msgid "Timestamp when the import run was started."
