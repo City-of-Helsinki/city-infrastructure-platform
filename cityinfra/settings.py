@@ -204,6 +204,7 @@ RESILIENT_LOGGER = {
     "chunk_size": 500,
     "submit_unsent_entries": True,
     "clear_sent_entries": True,
+    "actor_resolver": lambda u: u.pk,
 }
 
 # https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-LOGGING
