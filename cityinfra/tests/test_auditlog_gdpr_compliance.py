@@ -1,3 +1,4 @@
+from pprint import pprint
 from typing import Any
 
 import pytest
@@ -65,6 +66,14 @@ def user_pii_leaks(user: User | UserFactory, logentry: LogEntry):
             # enough, plus "leaking" of None values is irrelevant for the tests.
             if str(getattr(user, user_field)) in str(getattr(logentry, logentry_field)):
                 leaks.append(f"User {user_field} found in LogEntry '{logentry_field}' field")
+    if leaks:
+        print("LEAKY AUDIT EVENT DOCUMENT")
+        pprint(logentry.__dict__)
+        print("LEAKY AUDIT EVENT DOCUMENT")
+    else:
+        print("good audit log event document")
+        pprint(logentry.__dict__)
+        print("good audit log event document")
     return leaks
 
 
@@ -72,6 +81,13 @@ def value_referenced(value: Any, logentry: LogEntry):
     """
     Checks for references to a particular value in a LogEntry object
     """
+    result = str(value) in str(logentry.__dict__)
+    if result:
+        print(f">>> value {value} referenced in")
+        pprint(logentry.__dict__)
+    else:
+        print(f">>> VALUE {value} NOT REFERENCED IN")
+        pprint(logentry.__dict__)
     return str(value) in str(logentry.__dict__)
 
 
@@ -82,9 +98,6 @@ def value_referenced(value: Any, logentry: LogEntry):
 def test__user_created_auditlog_does_not_leak_user_pii(user):
     logentries = LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.CREATE)
     assert logentries.count() == 1
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(logentries[0])
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     assert user_pii_leaks(user, logentries[0]) == [], "log entry should not store user PII"
     assert value_referenced(user.pk, logentries[0]), "log entry should reference user PK"
 
@@ -130,9 +143,6 @@ def test__object_updated_does_not_leak_actor_pii(actor, user, traffic_sign_real)
 
     logentries = LogEntry.objects.get_for_object(traffic_sign_real).filter(action=LogEntry.Action.UPDATE)
     assert logentries.count() == 1
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(logentries[0])
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     assert user_pii_leaks(actor, logentries[0]) == [], "log entry should not store actor PII"
     assert value_referenced(actor.pk, logentries[0]), "log entry should reference actor PK"
     assert user_pii_leaks(user, logentries[0]) == [], "log entry should not store user PII"
@@ -172,9 +182,6 @@ def test__m2m_relations_do_not_leak_user_pii(actor, user, get_related_obj, actor
     actor.save()
     logentries = LogEntry.objects.get_for_object(actor).filter(action=LogEntry.Action.UPDATE)
     assert logentries.count() == 1
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(logentries[0])
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     assert user_pii_leaks(actor, logentries[0]) == [], "log entry should not store actor PII"
     assert value_referenced(actor.pk, logentries[0]), "log entry should reference actor PK"
     assert value_referenced(related_obj, logentries[0]), "log entry should reference related object"
@@ -183,9 +190,6 @@ def test__m2m_relations_do_not_leak_user_pii(actor, user, get_related_obj, actor
     related_obj.save()
     logentries = LogEntry.objects.get_for_object(related_obj).filter(action=LogEntry.Action.UPDATE)
     assert logentries.count() == 1
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(logentries[0])
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     assert user_pii_leaks(user, logentries[0]) == [], "log entry should not store user PII"
     assert value_referenced(user.pk, logentries[0]), "log entry should reference user PK"
     assert value_referenced(related_obj, logentries[0]), "log entry should reference related object"
