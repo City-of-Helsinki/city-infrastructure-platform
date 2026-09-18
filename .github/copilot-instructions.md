@@ -14,6 +14,19 @@
 - **Line Length**: The maximum allowed line length is 120 characters.
 - **Style**: Follow single responsibility principle.
 
+## Django Models
+- **String fields**: Never use `null=True` on string-based fields (`CharField`, `TextField`, `SlugField`, `EmailField`, `URLField`). Use `blank=True` alone so the "no value" state is always the empty string `""` and not two distinct empty states. This follows the Django documentation's convention for `Field.null`.
+- **Exceptions**: Only use `null=True` on a string field when `NULL` must be distinguishable from `""` (e.g. a `unique=True` field where multiple rows need "no value"). Document the reason in a comment.
+- **Non-string fields**: `null=True` is fine and expected for optional non-string fields (dates, numbers, foreign keys), paired with `blank=True` when the field is optional in forms.
+
+```python
+# Good
+description = models.CharField(_("Description"), max_length=254, blank=True)
+
+# Bad - creates two empty states ("" and None)
+description = models.CharField(_("Description"), max_length=254, blank=True, null=True)
+```
+
 ## Linting (Ruff)
 All generated Python code must comply with the project's ruff configuration (`pyproject.toml`):
 - **Pyflakes (`F`)**: No unused imports, undefined names, or other pyflakes violations. Note: unused imports in `__init__.py` files are allowed (`F401` is ignored there).
