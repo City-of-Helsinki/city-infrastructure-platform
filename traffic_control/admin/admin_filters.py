@@ -1,13 +1,15 @@
 import datetime
 
 from dateutil.relativedelta import relativedelta
-from django.contrib.admin import DateFieldListFilter, RelatedFieldListFilter, SimpleListFilter
+from django.contrib.admin import DateFieldListFilter, ListFilter, RelatedFieldListFilter, SimpleListFilter
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from traffic_control.enums import TagMatchMode
 from traffic_control.models import ResponsibleEntity
+from traffic_control.models.common import TrafficControlDeviceTypeTag
 
 
 class CustomDateFieldListFilter(DateFieldListFilter):
@@ -173,6 +175,115 @@ class HeightFilter(SimpleListFilter):
             return queryset.filter(height__gte=150)
 
         return queryset
+
+
+class DeviceTypeTagFilter(ListFilter):
+    """Sidebar filter allowing several device type tags to be selected at once.
+
+    Supports repeated query parameters (``?tags=<uuid>&tags=<uuid>``) and a match mode
+    parameter (``?tags_match=any|all``) that switches between OR and AND semantics.
+    """
+
+    title = _("Tags")
+    parameter_name = "tags"
+    match_parameter_name = "tags_match"
+    template = "admin/multiselect_filter.html"
+
+    MATCH_ANY = TagMatchMode.ANY
+    MATCH_ALL = TagMatchMode.ALL
+
+    def __init__(self, request, params, model, model_admin):
+        super().__init__(request, params, model, model_admin)
+        # Django keeps only the last value of a repeated parameter, so read the full list here.
+        if self.parameter_name in params:
+            self.used_parameters[self.parameter_name] = params.pop(self.parameter_name)
+        if self.match_parameter_name in params:
+            self.used_parameters[self.match_parameter_name] = params.pop(self.match_parameter_name)[-1]
+        self.lookup_choices = list(self.lookups(model_admin))
+
+    def lookups(self, model_admin) -> list[tuple[str, str]]:
+        """
+        List the tags that are actually assigned to at least one device type.
+
+        Args:
+            model_admin: The admin instance the filter is rendered for.
+
+        Returns:
+            list[tuple[str, str]]: Tag id and name pairs, ordered by name.
+        """
+        tags = TrafficControlDeviceTypeTag.objects.filter(device_types__isnull=False).distinct().order_by("name")
+        return [(str(tag.pk), tag.name) for tag in tags]
+
+    def has_output(self) -> bool:
+        return bool(self.lookup_choices)
+
+    def expected_parameters(self) -> list[str]:
+        return [self.parameter_name, self.match_parameter_name]
+
+    def value(self) -> list[str]:
+        """
+        Return the selected tag ids.
+
+        Returns:
+            list[str]: Selected tag ids, empty when the filter is unused.
+        """
+        return self.used_parameters.get(self.parameter_name, [])
+
+    def match_mode(self) -> str:
+        """
+        Return the active match mode, defaulting to matching any selected tag.
+
+        Returns:
+            str: Either ``any`` or ``all``.
+        """
+        mode = self.used_parameters.get(self.match_parameter_name)
+        return mode if mode == self.MATCH_ALL else self.MATCH_ANY
+
+    def choices(self, changelist):
+        """
+        Build the context consumed by the multiselect filter template.
+
+        Args:
+            changelist: The admin changelist currently being rendered.
+
+        Yields:
+            dict: A single context entry holding tag options and match mode options.
+        """
+        selected = self.value()
+        yield {
+            "reset_query_string": changelist.get_query_string(remove=[self.parameter_name, self.match_parameter_name]),
+            "base_query_string": changelist.get_query_string(remove=[self.parameter_name, self.match_parameter_name]),
+            "parameter_name": self.parameter_name,
+            "match_parameter_name": self.match_parameter_name,
+            "match_mode": self.match_mode(),
+            "selected": selected,
+            "options": [
+                {"value": value, "display": display, "selected": value in selected}
+                for value, display in self.lookup_choices
+            ],
+        }
+
+    def queryset(self, request, queryset):
+        """
+        Narrow the changelist to device types carrying the selected tags.
+
+        Args:
+            request: The current admin request.
+            queryset (QuerySet): The changelist queryset to filter.
+
+        Returns:
+            QuerySet: Filtered queryset, unchanged when no tag is selected.
+        """
+        values = self.value()
+        if not values:
+            return queryset
+
+        if self.match_mode() == self.MATCH_ALL:
+            for value in values:
+                queryset = queryset.filter(tags__pk=value)
+            return queryset
+
+        return queryset.filter(tags__pk__in=values).distinct()
 
 
 def as_dropdown(filter_class):

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 16:47+0300\n"
+"POT-Creation-Date: 2026-09-18 15:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,11 +170,17 @@ msgstr "Påverkansområde (2D)"
 msgid "Alert level"
 msgstr "Varningsnivå"
 
+msgid "All of the selected tags"
+msgstr ""
+
 msgid "Amount"
 msgstr "Mängd"
 
 msgid "Any date"
 msgstr "Valfritt datum"
+
+msgid "Any of the selected tags"
+msgstr ""
 
 # AI translation - needs human review
 msgid "App"
@@ -182,6 +188,9 @@ msgstr "Applikation"
 
 msgid "App Name"
 msgstr "Appnamn"
+
+msgid "Apply"
+msgstr ""
 
 #, python-format
 msgid "Are you sure you want to add the %(model_name)s?"
@@ -323,9 +332,6 @@ msgstr "Förbigå åtgärdsområde"
 msgid "Bypass responsible entity"
 msgstr "Förbigå ansvarig enhet"
 
-msgid "Change"
-msgstr ""
-
 #, python-format
 msgid ""
 "Changing location from map is not allowed for geometry '%(geometry_type)s'"
@@ -377,6 +383,9 @@ msgstr "Stadsinfrastrukturplattform"
 
 msgid "City furniture"
 msgstr "Stadsmöbler"
+
+msgid "Clear"
+msgstr ""
 
 msgid "Clock"
 msgstr "Ur"
@@ -779,6 +788,9 @@ msgstr "Nummer på de ritningar som omfattas av planen, separerade med komma"
 # AI translation - needs human review
 msgid "Dry run"
 msgstr "Testkörning"
+
+msgid "Duplicate Decision IDs"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Duplicate Diary Numbers"
@@ -1720,6 +1732,9 @@ msgstr "Markerad som borttagen (dold från API)"
 msgid "Marker"
 msgstr "Märke"
 
+msgid "Match"
+msgstr ""
+
 msgid "Material"
 msgstr "Material"
 
@@ -1891,6 +1906,9 @@ msgstr "Skapade fästen"
 msgid "Mounts updated"
 msgstr "Uppdaterade fästen"
 
+msgid "Multiple Plans Found"
+msgstr ""
+
 # AI translation - needs human review
 msgid "Multiple parents found"
 msgstr "Flera överordnade hittades"
@@ -1946,6 +1964,9 @@ msgstr "Namn på den väg där detta vägmärke är installerat."
 
 msgid "Name of the source for where this device was imported from."
 msgstr "Namn på källan varifrån denna anordning importerades."
+
+msgid "Name of the tag."
+msgstr ""
 
 msgid "Name of the target in English."
 msgstr "Objektets namn på engelska."
@@ -3028,6 +3049,18 @@ msgstr "Symbol"
 msgid "Symbol on the road marking."
 msgstr "Symbol på vägmarkeringen."
 
+msgid "Tag name"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Tags describing this device type."
+msgstr ""
+
+msgid "Tags match mode"
+msgstr ""
+
 msgid "Target"
 msgstr "Mål"
 
@@ -3352,6 +3385,12 @@ msgstr "Ikon för trafikstyrningsanordningstypen"
 msgid "Traffic Control Device Type Icons"
 msgstr "Ikoner för trafikstyrningsanordningstyperna"
 
+msgid "Traffic Control Device Type Tag"
+msgstr ""
+
+msgid "Traffic Control Device Type Tags"
+msgstr ""
+
 msgid "Traffic Control Device Types"
 msgstr "Typer av trafikstyrningsanordning"
 
@@ -3670,9 +3709,6 @@ msgstr "Mycket dåligt"
 msgid "Very good"
 msgstr "Mycket gott"
 
-msgid "View"
-msgstr ""
-
 msgid "View API"
 msgstr "Visa API"
 
@@ -3681,9 +3717,6 @@ msgstr "Visa API-dokumentation"
 
 msgid "View map"
 msgstr "Visa karta"
-
-msgid "View on site"
-msgstr ""
 
 # AI translation - needs human review
 msgid "View related"
