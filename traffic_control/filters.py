@@ -1,11 +1,11 @@
 from django.contrib.gis.db.models import GeometryField
 from django.utils.translation import gettext_lazy as _
-from django_filters import CharFilter, ChoiceFilter, Filter, UUIDFilter
+from django_filters import CharFilter, ChoiceFilter, Filter, ModelMultipleChoiceFilter, UUIDFilter
 from django_filters.rest_framework import FilterSet
 from rest_framework.exceptions import NotFound
 from rest_framework_gis.filters import GeometryFilter
 
-from traffic_control.enums import DeviceTypeTargetModel, TRAFFIC_SIGN_TYPE_CHOICES
+from traffic_control.enums import DeviceTypeTargetModel, TagMatchMode, TRAFFIC_SIGN_TYPE_CHOICES
 from traffic_control.models import (
     AdditionalSignPlan,
     AdditionalSignReal,
@@ -36,7 +36,7 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealOperation,
 )
-from traffic_control.models.common import OperationType
+from traffic_control.models.common import OperationType, TrafficControlDeviceTypeTag
 from traffic_control.services.common import get_all_not_replaced_plans, get_all_replaced_plans
 
 
@@ -181,6 +181,8 @@ class TrafficLightRealFilterSet(FilterSet):
 
 
 class TrafficControlDeviceTypeFilterSet(FilterSet):
+    TAGS_MATCH_PARAM = "tags_match"
+
     traffic_sign_type = ChoiceFilter(
         label=_("Traffic sign type"),
         choices=TRAFFIC_SIGN_TYPE_CHOICES,
@@ -192,6 +194,25 @@ class TrafficControlDeviceTypeFilterSet(FilterSet):
         choices=DeviceTypeTargetModel.choices,
     )
 
+    tags = ModelMultipleChoiceFilter(
+        label=_("Tags"),
+        field_name="tags",
+        queryset=TrafficControlDeviceTypeTag.objects.all(),
+        method="filter_tags",
+    )
+
+    tags_match = ChoiceFilter(
+        label=_("Tags match mode"),
+        choices=TagMatchMode.choices,
+        method="filter_tags_match",
+    )
+
+    tag_name = CharFilter(
+        label=_("Tag name"),
+        field_name="tags__name",
+        lookup_expr="iexact",
+    )
+
     class Meta(GenericMeta):
         model = TrafficControlDeviceType
         exclude = ["content_schema"]
@@ -199,6 +220,45 @@ class TrafficControlDeviceTypeFilterSet(FilterSet):
     def filter_traffic_sign_type(self, queryset, name, value):
         if value:
             queryset = queryset.filter(code__startswith=value)
+        return queryset
+
+    def filter_tags(self, queryset, name, value):
+        """
+        Filter device types by the selected tags using the requested match mode.
+
+        Args:
+            queryset (QuerySet): Device type queryset being filtered.
+            name (str): Name of the filtered field.
+            value (list): Tag instances selected via repeated ``tags`` parameters.
+
+        Returns:
+            QuerySet: Device types matching any or all of the selected tags.
+        """
+        if not value:
+            return queryset
+
+        if self.data.get(self.TAGS_MATCH_PARAM) == TagMatchMode.ALL:
+            for tag in value:
+                queryset = queryset.filter(tags=tag)
+            return queryset
+
+        return queryset.filter(tags__in=value).distinct()
+
+    def filter_tags_match(self, queryset, name, value):
+        """
+        Keep the queryset untouched, ``tags_match`` only selects the mode used by ``filter_tags``.
+
+        Without this no-op django-filter would try to filter on a ``tags_match`` model field,
+        which does not exist, and the request would fail with a ``FieldError``.
+
+        Args:
+            queryset (QuerySet): Device type queryset being filtered.
+            name (str): Name of the filtered field.
+            value (str): Selected match mode.
+
+        Returns:
+            QuerySet: The queryset unchanged.
+        """
         return queryset
 
 

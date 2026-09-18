@@ -107,6 +107,36 @@ class TrafficControlDeviceTypeIcon(AbstractFileModel):
 auditlog.register(TrafficControlDeviceTypeIcon)
 
 
+class TrafficControlDeviceTypeTag(models.Model):
+    """Freely maintained tag that can be attached to traffic control device types."""
+
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    name = models.CharField(
+        _("Name"),
+        unique=True,
+        max_length=64,
+        help_text=_("Name of the tag."),
+    )
+    description = models.CharField(
+        _("Description"),
+        max_length=254,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "traffic_control_device_type_tag"
+        verbose_name = _("Traffic Control Device Type Tag")
+        verbose_name_plural = _("Traffic Control Device Type Tags")
+        ordering = ("name",)
+
+    @requires_fields("name")
+    def __str__(self):
+        return self.name
+
+
+auditlog.register(TrafficControlDeviceTypeTag)
+
+
 class AbstractDeviceTypeMixin:
     SVG_ICON_DESTINATION = None
     PNG_ICON_DESTINATION = None
@@ -208,6 +238,14 @@ class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
         verbose_name=_("Content schema"),
         null=True,
         blank=True,
+    )
+    tags = models.ManyToManyField(
+        TrafficControlDeviceTypeTag,
+        verbose_name=_("Tags"),
+        related_name="device_types",
+        blank=True,
+        db_table="traffic_control_device_type_tags",
+        help_text=_("Tags describing this device type."),
     )
 
     objects = TrafficControlDeviceTypeQuerySet.as_manager()
@@ -325,7 +363,7 @@ class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
         return True
 
 
-auditlog.register(TrafficControlDeviceType)
+auditlog.register(TrafficControlDeviceType, m2m_fields={"tags"})
 
 
 class OperationType(models.Model):

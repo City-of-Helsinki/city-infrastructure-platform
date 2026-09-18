@@ -38,6 +38,7 @@ from traffic_control.models import (
     SignpostRealOperation,
     TrafficControlDeviceType,
     TrafficControlDeviceTypeIcon,
+    TrafficControlDeviceTypeTag,
     TrafficLightPlan,
     TrafficLightReal,
     TrafficLightRealOperation,
@@ -137,6 +138,15 @@ class TrafficControlDeviceTypeIconFactory(factory.django.DjangoModelFactory):
     )
 
 
+class TrafficControlDeviceTypeTagFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TrafficControlDeviceTypeTag
+        django_get_or_create = ("name",)
+
+    name = factory.sequence(lambda n: f"tag_{n}")
+    description = factory.sequence(lambda n: f"tag_description_{n}")
+
+
 class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TrafficControlDeviceType
@@ -153,6 +163,12 @@ class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
     target_model = None
     type = None
     content_schema = None
+
+    @factory.post_generation
+    def tags(obj, create, extracted, **kwargs):
+        if not create or not extracted:
+            return
+        obj.tags.set(extracted)
 
 
 class BarrierPlanFactory(factory.django.DjangoModelFactory):

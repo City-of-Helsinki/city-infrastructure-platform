@@ -13,6 +13,7 @@ from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import DeviceTypeTargetModel
 from traffic_control.geometry_utils import geometry_is_legit
 from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceType
+from traffic_control.models.common import TrafficControlDeviceTypeTag
 from traffic_control.schema import IconsType, TrafficSignType
 from traffic_control.validators import validate_structured_content
 
@@ -379,6 +380,12 @@ class StructuredContentValidator:
             raise serializers.ValidationError({"content_s": raised_errors})
 
 
+class TrafficControlDeviceTypeTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrafficControlDeviceTypeTag
+        fields = ("id", "name", "description")
+
+
 class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     traffic_sign_type = serializers.SerializerMethodField(
         method_name="get_traffic_sign_type",
@@ -388,6 +395,16 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
         method_name="get_icon_urls",
         read_only=True,
         required=False,
+    )
+
+    tags = TrafficControlDeviceTypeTagSerializer(many=True, read_only=True)
+
+    tag_ids = serializers.PrimaryKeyRelatedField(
+        many=True,
+        source="tags",
+        queryset=TrafficControlDeviceTypeTag.objects.all(),
+        required=False,
+        write_only=True,
     )
 
     class Meta:

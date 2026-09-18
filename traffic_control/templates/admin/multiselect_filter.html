@@ -1,0 +1,71 @@
+{% load i18n %}
+{% for choice in choices %}
+    <details data-filter-title="{{ title }}" open>
+        <summary>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</summary>
+        <ul>
+            <li>
+                <div class="multiselect-tag-filter"
+                     data-base-query="{{ choice.base_query_string }}"
+                     data-param="{{ choice.parameter_name }}"
+                     data-match-param="{{ choice.match_parameter_name }}">
+                    <label style="display: block; margin: 6px 0 2px">
+                        {% translate "Match" %}
+                        <select class="multiselect-tag-filter-match" style="width: 95%; padding: 4px">
+                            <option value="any" {% if choice.match_mode == "any" %}selected{% endif %}>
+                                {% translate "Any of the selected tags" %}
+                            </option>
+                            <option value="all" {% if choice.match_mode == "all" %}selected{% endif %}>
+                                {% translate "All of the selected tags" %}
+                            </option>
+                        </select>
+                    </label>
+                    <div class="multiselect-tag-filter-values"
+                         style="max-height: 180px; overflow-y: auto; margin: 6px 0; padding: 2px 0">
+                        {% for option in choice.options %}
+                            <label style="display: block; padding: 1px 0; font-weight: normal">
+                                <input type="checkbox"
+                                       class="multiselect-tag-filter-value"
+                                       value="{{ option.value }}"
+                                       {% if option.selected %}checked{% endif %}>
+                                {{ option.display }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <p style="margin: 6px 0">
+                        <button type="button" class="button multiselect-tag-filter-apply">{% translate "Apply" %}</button>
+                        <a href="{{ choice.reset_query_string }}" style="margin-left: 8px">{% translate "Clear" %}</a>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </details>
+{% endfor %}
+<script defer>
+    (function () {
+        function applyFilter(container) {
+            var base = container.dataset.baseQuery || "?";
+            var param = container.dataset.param;
+            var matchParam = container.dataset.matchParam;
+            var values = Array.from(container.querySelectorAll(".multiselect-tag-filter-value:checked"));
+            var match = container.querySelector(".multiselect-tag-filter-match").value;
+
+            var params = new URLSearchParams(base.startsWith("?") ? base.slice(1) : base);
+            params.delete(param);
+            params.delete(matchParam);
+            values.forEach(function (option) {
+                params.append(param, option.value);
+            });
+            if (values.length && match === "all") {
+                params.set(matchParam, match);
+            }
+            var query = params.toString();
+            window.location.href = query ? "?" + query : window.location.pathname;
+        }
+
+        document.querySelectorAll(".multiselect-tag-filter").forEach(function (container) {
+            container.querySelector(".multiselect-tag-filter-apply").addEventListener("click", function () {
+                applyFilter(container);
+            });
+        });
+    })();
+</script>

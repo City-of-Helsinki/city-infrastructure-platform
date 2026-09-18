@@ -74,7 +74,7 @@ class TrafficControlDeviceTypeViewSet(ModelViewSet, AuditLoggingMixin):
     ordering = ["code"]
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = TrafficControlDeviceTypeSerializer
-    queryset = TrafficControlDeviceType.objects.select_related("icon_file")
+    queryset = TrafficControlDeviceType.objects.select_related("icon_file").prefetch_related("tags")
     filterset_class = TrafficControlDeviceTypeFilterSet
 
 
