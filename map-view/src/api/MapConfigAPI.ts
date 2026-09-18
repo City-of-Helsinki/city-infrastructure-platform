@@ -22,7 +22,7 @@ class MapConfigAPI {
             return this.mapConfig;
           } catch (error) {
             console.error("Failed to parse MapConfig JSON. Response was:", responseText.substring(0, 500));
-            throw new Error(`Invalid JSON response from server: ${error}`);
+            throw new Error("Invalid JSON response from server", { cause: error });
           }
         })
         .catch((error) => {

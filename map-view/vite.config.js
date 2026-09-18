@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import eslint from "vite-plugin-eslint";
+// import eslint from "vite-plugin-eslint";
 
 export default defineConfig(() => {
   return {
@@ -8,7 +8,8 @@ export default defineConfig(() => {
       outDir: "build",
       assetsDir: "static",
     },
-    plugins: [react(), eslint()],
+    // plugins: [react(), eslint()],
+    plugins: [react()],
     css: {
       modules: {
         localsConvention: "camelCase",
