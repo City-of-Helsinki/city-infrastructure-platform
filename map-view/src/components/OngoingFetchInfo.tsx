@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 import React from "react";
 import { Box, Typography, List, ListItem, CircularProgress } from "@mui/material";
 import styles from "./OngoingFetchInfo.module.css";

@@ -67,7 +67,7 @@ export function buildWFSQuery(
     return undefined; // No new areas to fetch
   }
 
-  let searchParams = new URLSearchParams({
+  const searchParams = new URLSearchParams({
     SERVICE: "WFS",
     VERSION: "2.0.0", // Ensure your WFS server supports 2.0.0 for advanced filters
     REQUEST: "GetFeature",

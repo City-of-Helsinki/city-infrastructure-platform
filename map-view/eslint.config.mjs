@@ -1,24 +1,24 @@
-import { defineConfig } from "eslint/config";
-import { fixupConfigRules } from "@eslint/compat";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import pluginReact from "eslint-plugin-react";
+import { defineConfig } from "eslint/config";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
-
-export default defineConfig([
-  {
-    extends: fixupConfigRules(compat.extends("react-app")),
-    rules: {
-      "import/no-anonymous-default-export": "off",
-    },
-    ignores: ["build/**"],
+export default defineConfig({
+  files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+  ignores: ["build/**"],
+  plugins: { js },
+  extends: ["js/recommended", tseslint.configs.recommended, pluginReact.configs.flat.recommended],
+  languageOptions: {
+    globals: globals.browser,
   },
-]);
+  rules: {
+    "@typescript-eslint/no-explicit-any": 1, // Set to warning
+    "@typescript-eslint/no-unused-vars": 1, // Set to warning
+  },
+  settings: {
+    react: {
+      version: "19",
+    },
+  },
+});

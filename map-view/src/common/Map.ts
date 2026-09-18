@@ -7,7 +7,7 @@ import { createStringXY } from "ol/coordinate";
 import ScaleLine from "ol/control/ScaleLine";
 import { defaults as defaultControls, OverviewMap } from "ol/control";
 import View from "ol/View";
-import { Feature, IconSize, LayerConfig, MapConfig, buildIconUrl } from "../models";
+import { Feature, IconSize, Layer, LayerConfig, MapConfig, buildIconUrl } from "../models";
 import ImageLayer from "ol/layer/Image";
 import TileLayer from "ol/layer/Tile";
 import LayerGroup from "ol/layer/Group";
@@ -45,7 +45,7 @@ type TurfPolygonFeature = TurfFeature<TurfPolygon | TurfMultiPolygon>;
 function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null;
   return function (this: any, ...args: Parameters<T>): void {
-    const context = this;
+    const context = this; // eslint-disable-line @typescript-eslint/no-this-alias
     const later = () => {
       timeout = null;
       func.apply(context, args);
@@ -115,12 +115,14 @@ class Map {
    *
    * @param features Features returned from GetFeatureInfo requests
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private featureInfoCallback: (features: Feature[]) => void = (features: Feature[]) => {};
 
   /**
 
    * Callback function to handle showing of features being loaded
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private ongoingFeatureFetchesCallback: (fetches: Set<string>) => void = (fetches: Set<string>) => {};
   /**
    *  Array to store ongoing feature fetches
@@ -221,7 +223,7 @@ class Map {
   /**
    * Setup map click handlers for feature selection
    */
-  private setupMapClickHandlers(overlayConfig: any) {
+  private setupMapClickHandlers(overlayConfig: LayerConfig) {
     /**
      * Return all features that exist in the position that user clicked the map
      * This is ran once per visible layer
@@ -240,7 +242,7 @@ class Map {
               "features",
               clusterFeatures.map((feature: Feature) => {
                 const featureType: string = feature["id_"].split(".")[0];
-                const feature_layer = overlayConfig["layers"].find((l: any) => l.identifier === featureType);
+                const feature_layer = overlayConfig["layers"].find((l: Layer) => l.identifier === featureType);
                 feature["app_name"] = feature_layer ? feature_layer["app_name"] : "traffic_control";
                 return feature;
               }),
@@ -413,17 +415,14 @@ class Map {
   }
 
   showAllPlanAndRealDifferences(realLayer: VectorLayer<VectorSource>, planLayer: VectorLayer<VectorSource>) {
-    let realFeatures: FeatureLike[],
-      planFeatures: FeatureLike[] = [];
-
     const realLayerFeatures = realLayer.getSource()?.getFeatures();
     const planLayerFeatures = planLayer.getSource()?.getFeatures();
     if (realLayerFeatures !== undefined && planLayerFeatures !== undefined) {
       // Get all features to single flat lists
-      realFeatures = realLayerFeatures
+      const realFeatures = realLayerFeatures
         .map((feature) => (isLayerClustered(realLayer) ? feature.get("features") : feature))
         .flat(1);
-      planFeatures = planLayerFeatures
+      const planFeatures = planLayerFeatures
         .map((feature) => (isLayerClustered(planLayer) ? feature.get("features") : feature))
         .flat(1);
 
