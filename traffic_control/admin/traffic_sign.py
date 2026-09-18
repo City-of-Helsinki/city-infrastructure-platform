@@ -13,7 +13,7 @@ from rangefilter.filters import DateRangeFilterBuilder
 
 from admin_helper.decorators import requires_annotation
 from traffic_control.admin.additional_sign import AdditionalSignPlanInline, AdditionalSignRealInline
-from traffic_control.admin.admin_filters import as_dropdown, HeightFilter
+from traffic_control.admin.admin_filters import as_dropdown, DeviceTypeTagFilter, HeightFilter
 from traffic_control.admin.audit_log import AuditLogHistoryAdmin
 from traffic_control.admin.common import (
     DeviceTypeSignTypeListFilter,
@@ -68,7 +68,7 @@ from traffic_control.models import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
-from traffic_control.models.common import TrafficControlDeviceTypeIcon
+from traffic_control.models.common import TrafficControlDeviceTypeIcon, TrafficControlDeviceTypeTag
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignRealOperation
 from traffic_control.models.utils import order_queryset_by_z_coord_desc
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
@@ -85,6 +85,7 @@ from traffic_control.resources.traffic_sign import (
 __all__ = (
     "OrderedTrafficSignRealInline",
     "TrafficControlDeviceTypeAdmin",
+    "TrafficControlDeviceTypeTagAdmin",
     "TrafficSignPlanAdmin",
     "TrafficSignPlanFileInline",
     "TrafficSignRealAdmin",
@@ -128,6 +129,14 @@ class TrafficControlDeviceTypeIconAdmin(CustomImportExportActionModelAdmin, Prev
     search_fields = ("id", "file")
 
 
+@admin.register(TrafficControlDeviceTypeTag)
+class TrafficControlDeviceTypeTagAdmin(AuditLogHistoryAdmin):
+    list_display = ("id", "name", "description")
+    list_display_links = ("id", "name")
+    search_fields = ("name", "description")
+    ordering = ("name",)
+
+
 @admin.register(TrafficControlDeviceType)
 class TrafficControlDeviceTypeAdmin(
     EnumChoiceValueDisplayAdminMixin,
@@ -148,22 +157,33 @@ class TrafficControlDeviceTypeAdmin(
         "legacy_code",
         "legacy_description",
         "target_model",
+        "tag_list",
     )
     list_select_related = ("icon_file",)
     list_filter = (
         TrafficSignTypeCodeFilter,
         DeviceTypeTargetModelFilter,
+        DeviceTypeTagFilter,
     )
+    filter_horizontal = ("tags",)
     search_fields = (
         "code",
         "legacy_code",
         "id",
         "description",
         "legacy_description",
+        "tags__name",
     )
-    search_help_text = "Searches from code and legacy_code fields"
+    search_help_text = "Searches from code, legacy_code and tag name fields"
     ordering = ("code",)
     actions = None
+
+    def get_queryset(self, request) -> QuerySet:
+        return super().get_queryset(request).prefetch_related("tags")
+
+    @admin.display(description=_("Tags"))
+    def tag_list(self, obj: TrafficControlDeviceType) -> str:
+        return ", ".join(tag.name for tag in obj.tags.all())
 
 
 class TrafficSignPlanFileInline(admin.TabularInline):

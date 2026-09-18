@@ -21,6 +21,7 @@ from traffic_control.models.common import (
     Owner,
     TrafficControlDeviceType,
     TrafficControlDeviceTypeIcon,
+    TrafficControlDeviceTypeTag,
 )
 from traffic_control.models.link_additional_sign_parents_run_info import LinkAdditionalSignParentsRunInfo
 from traffic_control.models.mount import (

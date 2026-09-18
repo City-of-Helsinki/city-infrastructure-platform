@@ -23,6 +23,13 @@ class Condition(models.IntegerChoices):
     VERY_GOOD = 5, _("Very good")
 
 
+class TagMatchMode(models.TextChoices):
+    """Match semantics used when filtering device types by several tags at once."""
+
+    ANY = "any", _("Any of the selected tags")
+    ALL = "all", _("All of the selected tags")
+
+
 class DeviceTypeTargetModel(models.TextChoices):
     BARRIER = "barrier", _("Barrier")
     ROAD_MARKING = "road_marking", _("Road marking")

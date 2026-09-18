@@ -11169,6 +11169,33 @@ paths:
         schema:
           type: string
       - in: query
+        name: tag_name
+        schema:
+          type: string
+        description: Tag name
+      - in: query
+        name: tags
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Tags
+        explode: true
+        style: form
+      - in: query
+        name: tags_match
+        schema:
+          type: string
+          enum:
+          - all
+          - any
+        description: |-
+          Tags match mode
+
+          * `any` - Any of the selected tags
+          * `all` - All of the selected tags
+      - in: query
         name: target_model
         schema:
           type: string
@@ -25648,6 +25675,13 @@ components:
     PatchedTrafficControlDeviceTypeRequest:
       type: object
       properties:
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
         code:
           type: string
           minLength: 1
@@ -30452,6 +30486,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/IconsType'
           readOnly: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrafficControlDeviceTypeTag'
+          readOnly: true
         code:
           type: string
           description: Standardised code of the device type.
@@ -30529,10 +30568,18 @@ components:
       - code
       - icons
       - id
+      - tags
       - traffic_sign_type
     TrafficControlDeviceTypeRequest:
       type: object
       properties:
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
         code:
           type: string
           minLength: 1
@@ -30609,6 +30656,36 @@ components:
           description: Icon of the actual device
       required:
       - code
+    TrafficControlDeviceTypeTag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Name of the tag.
+          maxLength: 64
+        description:
+          type: string
+          maxLength: 254
+      required:
+      - id
+      - name
+    TrafficControlDeviceTypeTagRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Name of the tag.
+          maxLength: 64
+        description:
+          type: string
+          maxLength: 254
+      required:
+      - name
     TrafficLightPlanFile:
       type: object
       properties:

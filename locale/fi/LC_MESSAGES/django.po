@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 16:47+0300\n"
+"POT-Creation-Date: 2026-09-18 15:34+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -165,11 +165,17 @@ msgstr "Vaikutusalue (2D)"
 msgid "Alert level"
 msgstr "Ilmoitustaso"
 
+msgid "All of the selected tags"
+msgstr ""
+
 msgid "Amount"
 msgstr "Määrä"
 
 msgid "Any date"
 msgstr "Mikä tahansa päivä"
+
+msgid "Any of the selected tags"
+msgstr ""
 
 # AI translation - needs human review
 msgid "App"
@@ -177,6 +183,9 @@ msgstr "Sovellus"
 
 msgid "App Name"
 msgstr "Sovelluksen nimi"
+
+msgid "Apply"
+msgstr ""
 
 #, python-format
 msgid "Are you sure you want to add the %(model_name)s?"
@@ -314,9 +323,6 @@ msgstr "Ohita toiminta-alue"
 msgid "Bypass responsible entity"
 msgstr "Ohita vastuutaho"
 
-msgid "Change"
-msgstr ""
-
 #, python-format
 msgid ""
 "Changing location from map is not allowed for geometry '%(geometry_type)s'"
@@ -368,6 +374,9 @@ msgstr "Infraomaisuuden hallinta-alusta"
 
 msgid "City furniture"
 msgstr "Kaupunkikalusteet"
+
+msgid "Clear"
+msgstr ""
 
 msgid "Clock"
 msgstr "Kello"
@@ -765,6 +774,9 @@ msgstr "Suunnitelmaan liittyvien piirustusten numerot pilkulla erotettuna"
 
 msgid "Dry run"
 msgstr "Testiajo"
+
+msgid "Duplicate Decision IDs"
+msgstr ""
 
 msgid "Duplicate Diary Numbers"
 msgstr "Diaarinumerot kaksoiskappaleina"
@@ -1687,6 +1699,9 @@ msgstr "Merkitty poistetuksi (piilotettu rajapinnasta)"
 msgid "Marker"
 msgstr "Merkintä"
 
+msgid "Match"
+msgstr ""
+
 msgid "Material"
 msgstr "Materiaali"
 
@@ -1850,6 +1865,9 @@ msgstr "Luodut kiinnikkeet"
 msgid "Mounts updated"
 msgstr "Päivitetyt kiinnikkeet"
 
+msgid "Multiple Plans Found"
+msgstr ""
+
 # AI translation - needs human review
 msgid "Multiple parents found"
 msgstr "Useita ylätasoja löytyi"
@@ -1905,6 +1923,9 @@ msgstr "Sen tien nimi, jolle tämä liikennemerkki on asennettu."
 
 msgid "Name of the source for where this device was imported from."
 msgstr "Sen lähteen nimi, josta tämä laite on tuotu."
+
+msgid "Name of the tag."
+msgstr ""
 
 msgid "Name of the target in English."
 msgstr "Kohteen nimi englanniksi."
@@ -2958,6 +2979,18 @@ msgstr "Symboli"
 msgid "Symbol on the road marking."
 msgstr "Tiemerkinnän symboli."
 
+msgid "Tag name"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Tags describing this device type."
+msgstr ""
+
+msgid "Tags match mode"
+msgstr ""
+
 msgid "Target"
 msgstr "Kohde"
 
@@ -3279,6 +3312,12 @@ msgstr "Liikenteenohjauslaitteen tyypin kuvake"
 msgid "Traffic Control Device Type Icons"
 msgstr "Liikenteenohjauslaitteiden tyyppien kuvakkeet"
 
+msgid "Traffic Control Device Type Tag"
+msgstr ""
+
+msgid "Traffic Control Device Type Tags"
+msgstr ""
+
 msgid "Traffic Control Device Types"
 msgstr "Liikenteenohjauslaitteiden tyypit"
 
@@ -3597,9 +3636,6 @@ msgstr "Erittäin huono"
 msgid "Very good"
 msgstr "Erittäin hyvä"
 
-msgid "View"
-msgstr ""
-
 msgid "View API"
 msgstr "Rajapinta"
 
@@ -3608,9 +3644,6 @@ msgstr "Rajapinnan dokumentaatio"
 
 msgid "View map"
 msgstr "Näytä kartta"
-
-msgid "View on site"
-msgstr ""
 
 # AI translation - needs human review
 msgid "View related"
