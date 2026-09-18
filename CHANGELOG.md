@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.47.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.46.0...city-infrastructure-platform-v1.47.0) (2026-09-18)
+
+
+### Features
+
+* Command to list orphan files and dangling file references ([2f06052](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/2f0605217076dd24d89e921dd8c0021aeb6c56cd))
+* For Plans return exact location instead of convex also in xml output ([1aa4c3e](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1aa4c3e007eb71da0100d8b4670f3cae398442e4))
+* PlanGeometryImporter now matches plans also with decision_id ([fc425ef](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/fc425ef5a908b2a46b8c8facbd2e9006bcecf449))
+
+
+### Bug Fixes
+
+* Disable editing of username and password ([9b232d7](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/9b232d7f16101a7c70ca9a0abfb77c5059602fa5))
+
 ## [1.46.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.45.0...city-infrastructure-platform-v1.46.0) (2026-09-07)
 
 
