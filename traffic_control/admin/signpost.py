@@ -410,7 +410,7 @@ class SignpostRealAdmin(
     )
     raw_id_fields = ("parent", "signpost_plan", "mount_real")
     ordering = ("-created_at",)
-    inline = (SignpostRealFileInline, SignpostRealOperationInline)
+    inlines = (SignpostRealFileInline, SignpostRealOperationInline)
     initial_values = {
         **shared_initial_values,
         "installation_status": InstallationStatus.IN_USE,
