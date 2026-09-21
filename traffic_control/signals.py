@@ -46,6 +46,7 @@ def register_auditlog_signals():
         AdditionalSignPlanReplacement,
         AdditionalSignReal,
         AdditionalSignRealFile,
+        AdditionalSignRealOperation,
     )
     from traffic_control.models.barrier import (
         BarrierPlan,
@@ -53,6 +54,7 @@ def register_auditlog_signals():
         BarrierPlanReplacement,
         BarrierReal,
         BarrierRealFile,
+        BarrierRealOperation,
     )
     from traffic_control.models.mount import (
         MountPlan,
@@ -60,6 +62,7 @@ def register_auditlog_signals():
         MountPlanReplacement,
         MountReal,
         MountRealFile,
+        MountRealOperation,
     )
     from traffic_control.models.road_marking import (
         RoadMarkingPlan,
@@ -67,6 +70,7 @@ def register_auditlog_signals():
         RoadMarkingPlanReplacement,
         RoadMarkingReal,
         RoadMarkingRealFile,
+        RoadMarkingRealOperation,
     )
     from traffic_control.models.signpost import (
         SignpostPlan,
@@ -74,6 +78,7 @@ def register_auditlog_signals():
         SignpostPlanReplacement,
         SignpostReal,
         SignpostRealFile,
+        SignpostRealOperation,
     )
     from traffic_control.models.traffic_light import (
         TrafficLightPlan,
@@ -81,12 +86,14 @@ def register_auditlog_signals():
         TrafficLightPlanReplacement,
         TrafficLightReal,
         TrafficLightRealFile,
+        TrafficLightRealOperation,
     )
     from traffic_control.models.traffic_sign import (
         TrafficSignPlan,
         TrafficSignPlanFile,
         TrafficSignReal,
         TrafficSignRealFile,
+        TrafficSignRealOperation,
     )
     from traffic_control.signal_utils import create_auditlog_signals_for_parent_model
 
@@ -96,18 +103,31 @@ def register_auditlog_signals():
     create_auditlog_signals_for_parent_model(AdditionalSignPlanFile, "additional_sign_plan")
     create_auditlog_signals_for_parent_model(AdditionalSignReal, "parent")
     create_auditlog_signals_for_parent_model(AdditionalSignPlan, "parent")
+    create_auditlog_signals_for_parent_model(AdditionalSignRealOperation, "additional_sign_real")
+
     create_auditlog_signals_for_parent_model(TrafficSignRealFile, "traffic_sign_real")
     create_auditlog_signals_for_parent_model(TrafficSignPlanFile, "traffic_sign_plan")
+    create_auditlog_signals_for_parent_model(TrafficSignRealOperation, "traffic_sign_real")
+
     create_auditlog_signals_for_parent_model(SignpostRealFile, "signpost_real")
     create_auditlog_signals_for_parent_model(SignpostPlanFile, "signpost_plan")
+    create_auditlog_signals_for_parent_model(SignpostRealOperation, "signpost_real")
+
     create_auditlog_signals_for_parent_model(TrafficLightRealFile, "traffic_light_real")
     create_auditlog_signals_for_parent_model(TrafficLightPlanFile, "traffic_light_plan")
+    create_auditlog_signals_for_parent_model(TrafficLightRealOperation, "traffic_light_real")
+
     create_auditlog_signals_for_parent_model(BarrierRealFile, "barrier_real")
     create_auditlog_signals_for_parent_model(BarrierPlanFile, "barrier_plan")
+    create_auditlog_signals_for_parent_model(BarrierRealOperation, "barrier_real")
+
     create_auditlog_signals_for_parent_model(RoadMarkingRealFile, "road_marking_real")
     create_auditlog_signals_for_parent_model(RoadMarkingPlanFile, "road_marking_plan")
+    create_auditlog_signals_for_parent_model(RoadMarkingRealOperation, "road_marking_real")
+
     create_auditlog_signals_for_parent_model(MountRealFile, "mount_real")
     create_auditlog_signals_for_parent_model(MountPlanFile, "mount_plan")
+    create_auditlog_signals_for_parent_model(MountRealOperation, "mount_real")
 
     # Register models with auditlog AFTER our custom signals
     auditlog.register(AdditionalSignPlan)
@@ -115,41 +135,48 @@ def register_auditlog_signals():
     auditlog.register(AdditionalSignReal)
     auditlog.register(AdditionalSignRealFile)
     auditlog.register(AdditionalSignPlanReplacement)
+    auditlog.register(AdditionalSignRealOperation)
 
     auditlog.register(TrafficSignPlan)
     auditlog.register(TrafficSignPlanFile)
     auditlog.register(TrafficSignReal)
     auditlog.register(TrafficSignRealFile)
+    auditlog.register(TrafficSignRealOperation)
 
     auditlog.register(SignpostPlan)
     auditlog.register(SignpostPlanFile)
     auditlog.register(SignpostReal)
     auditlog.register(SignpostRealFile)
     auditlog.register(SignpostPlanReplacement)
+    auditlog.register(SignpostRealOperation)
 
     auditlog.register(TrafficLightPlan)
     auditlog.register(TrafficLightPlanFile)
     auditlog.register(TrafficLightReal)
     auditlog.register(TrafficLightRealFile)
     auditlog.register(TrafficLightPlanReplacement)
+    auditlog.register(TrafficLightRealOperation)
 
     auditlog.register(BarrierPlan)
     auditlog.register(BarrierPlanFile)
     auditlog.register(BarrierReal)
     auditlog.register(BarrierRealFile)
     auditlog.register(BarrierPlanReplacement)
+    auditlog.register(BarrierRealOperation)
 
     auditlog.register(RoadMarkingPlan)
     auditlog.register(RoadMarkingPlanFile)
     auditlog.register(RoadMarkingReal)
     auditlog.register(RoadMarkingRealFile)
     auditlog.register(RoadMarkingPlanReplacement)
+    auditlog.register(RoadMarkingRealOperation)
 
     auditlog.register(MountPlan)
     auditlog.register(MountPlanFile)
     auditlog.register(MountReal)
     auditlog.register(MountRealFile)
     auditlog.register(MountPlanReplacement)
+    auditlog.register(MountRealOperation)
 
     auditlog.register(OperationalArea)
 
