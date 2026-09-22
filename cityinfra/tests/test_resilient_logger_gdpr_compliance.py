@@ -7,11 +7,12 @@ from auditlog.models import LogEntry
 from django.contrib.auth.models import Group, Permission
 from django.test import override_settings
 from helusers.models import ADGroup
-from resilient_logger.resilient_logger import ResilientLogger
-from resilient_logger.sources import AbstractLogSource, DjangoAuditLogSource
+from resilient_logger.sources import AbstractLogSource
 from resilient_logger.sources.abstract_log_source_entry import AbstractLogSourceEntry
 from resilient_logger.sources.django_audit_log_source_entry import DjangoAuditLogSourceEntry
-from resilient_logger.utils import get_resilient_logger_config, parse_actor_resolver
+from resilient_logger.utils import get_resilient_logger_config
+from resilient_logger.workarounds.models import DjangoAuditLogEntryManager
+from resilient_logger.workarounds.utils import safe_object_repr
 
 from traffic_control.models import AdditionalSignPlan
 from traffic_control.tests.factories import (
@@ -22,11 +23,19 @@ from traffic_control.tests.factories import (
 )
 from users.models import User
 
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_auditlog_manager():
+    restore = DjangoAuditLogEntryManager.patch()
+    yield
+    restore()
+
+
 def actor_resolver(actor):
-    print(f"ACTOR_RESOLVED_CALLED WITH {actor} ({type(actor)})")
     if actor:
         return actor.pk
     return None
+
 
 # Adapted from django-resilient-logger's own tests:
 VALID_CONFIG_ALL_FIELDS = {
@@ -48,6 +57,7 @@ VALID_CONFIG_ALL_FIELDS = {
     "clear_sent_entries": True,
     "actor_resolver": actor_resolver,
 }
+
 
 @pytest.fixture
 def actor():
@@ -116,14 +126,15 @@ def value_referenced(value: Any, logentry: AbstractLogSource):
     """
     Checks for references to a particular value in a LogEntry object
     """
-    result = str(value) in str(logentry.get_document())
+    value_repr = safe_object_repr(value)
+    result = value_repr in str(logentry.get_document())
     if result:
-        print(f">>> value {value} referenced in")
+        print(f">>> value {value_repr} referenced in")
         pprint(logentry.get_document())
     else:
-        print(f">>> VALUE {value} NOT REFERENCED IN")
+        print(f">>> VALUE {value_repr} NOT REFERENCED IN")
         pprint(logentry.get_document())
-    return str(value) in str(logentry.get_document())
+    return result
 
 
 # Operations on User objects

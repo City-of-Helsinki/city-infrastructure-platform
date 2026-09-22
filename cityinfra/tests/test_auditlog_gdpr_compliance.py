@@ -6,6 +6,7 @@ from auditlog.context import set_actor
 from auditlog.models import LogEntry
 from django.contrib.auth.models import Group, Permission
 from helusers.models import ADGroup
+from resilient_logger.workarounds.models import DjangoAuditLogEntryManager
 
 from traffic_control.models import TrafficSignReal
 from traffic_control.tests.factories import (
@@ -15,6 +16,14 @@ from traffic_control.tests.factories import (
     UserFactory,
 )
 from users.models import User
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_auditlog_manager():
+    """Runs once per test session before any tests execute."""
+    restore = DjangoAuditLogEntryManager.patch()
+    yield
+    restore()
 
 
 @pytest.fixture
