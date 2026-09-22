@@ -10,7 +10,6 @@ cascade-soft-deleted alongside the TrafficSign.
 This command uses SignpostMigrationRun records to identify affected AdditionalSign objects
 and restores them, re-pointing their parent FK to the appropriate SignpostPlan/SignpostReal.
 """
-import logging
 from dataclasses import dataclass
 from datetime import timedelta
 from typing import Any, Optional, Type
@@ -27,8 +26,6 @@ from traffic_control.models.signpost_migration import (
     SignpostMigrationRun,
 )
 from users.utils import get_system_user
-
-logger = logging.getLogger(__name__)
 
 # Default tolerance window: additional signs deleted within this many seconds of the
 # migration run's completed_at are considered cascade victims rather than intentional deletions.

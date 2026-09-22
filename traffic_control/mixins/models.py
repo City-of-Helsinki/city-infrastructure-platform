@@ -287,7 +287,7 @@ class DecimalValueFromDeviceTypeMixin:
             try:
                 self.value = Decimal(self.device_type.value)
             except InvalidOperation:
-                logger.warning("Cannot convert device type value to Decimal")
+                logger.warning("Cannot convert device type value '%s' to Decimal", self.device_type.value)
         super().save(*args, **kwargs)
 
 
