@@ -4,7 +4,6 @@ This command migrates traffic sign objects with specific device type codes
 (6211-62324, 6511-6524, F24.x, F7.2, F8.1) from TrafficSignPlan/TrafficSignReal
 to SignpostPlan/SignpostReal tables.
 """
-import logging
 from datetime import datetime
 from typing import Any, Optional
 
@@ -26,8 +25,6 @@ from traffic_control.models.traffic_sign import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
-
-logger = logging.getLogger(__name__)
 
 
 class Command(BaseMigrationCommand):

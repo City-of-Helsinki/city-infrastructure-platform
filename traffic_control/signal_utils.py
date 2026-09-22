@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db.models.signals import post_delete, post_save, pre_save
 
-logger = logging.getLogger("django")
+logger = logging.getLogger(__name__)
 
 # Sentinel used to distinguish "attribute not set" from an explicitly stored None.
 _DB_VALUE_UNSET = object()
@@ -25,8 +25,8 @@ def generate_pngs_on_svg_save(*, instance, png_folder):
         try:
             with instance.file.open("rb") as svg_file:
                 svg_bytestring = svg_file.read()
-        except IOError as e:
-            logger.error(f"Unable to read {instance.file.name}: {e}")
+        except IOError as error:
+            logger.exception("Unable to read %s: %s", instance.file.name, error)
             return
 
         for size in settings.PNG_ICON_SIZES:
@@ -36,14 +36,14 @@ def generate_pngs_on_svg_save(*, instance, png_folder):
 
             try:
                 png_data = cairosvg.svg2png(bytestring=svg_bytestring, output_width=size, output_height=size)
-            except Exception as e:
-                logger.error("Unable to convert %s to PNG: %s", png_file_name, e)
+            except Exception as error:
+                logger.exception("Unable to convert %s to PNG: %s", png_file_name, error)
                 return
             try:
                 png_file_content = ContentFile(png_data)
                 instance.file.storage.save(png_file_path, png_file_content)
-            except Exception as e:
-                logger.error("Unable to store %s: %s", png_file_path, e)
+            except Exception as error:
+                logger.exception("Unable to store %s: %s", png_file_path, error)
                 return
 
             logger.debug("PNG icon generated: %s", png_file_path)
@@ -67,15 +67,15 @@ def delete_icon_files_on_row_delete(*, instance, png_folder):
                     try:
                         instance.file.storage.delete(png_file_path)
                         logger.debug("PNG file deleted: %s", png_file_path)
-                    except Exception as e:
-                        logger.error("Unable to delete %s: %s", png_file_path, e)
+                    except Exception as error:
+                        logger.exception("Unable to delete %s: %s", png_file_path, error)
 
             # Delete the main SVG file
             instance.file.storage.delete(instance.file.name)
             logger.debug("SVG file deleted: %s", instance.file.name)
 
-    except Exception as e:
-        logger.error("Error deleting files for instance %s: %s", instance.pk, e)
+    except Exception as error:
+        logger.exception("Error deleting files for instance %s: %s", instance.pk, error)
 
 
 def _create_parent_log_entry(parent, message, action=None):
@@ -94,8 +94,8 @@ def _create_parent_log_entry(parent, message, action=None):
             changes=changes,
         )
         logger.debug("Successfully created log entry for %s: %s", parent, message)
-    except Exception as e:
-        logger.error("Failed to create log entry for %s: %s", parent, e, exc_info=True)
+    except Exception as error:
+        logger.exception("Failed to create log entry for %s: %s", parent, error)
 
 
 def _extend_model_from_db(model: type, loaded_attr: str, source_id_attr: str) -> None:

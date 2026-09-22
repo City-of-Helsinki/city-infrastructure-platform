@@ -81,18 +81,19 @@ def _get_extra_feature_info(language_code: str, layer: Layer) -> dict:
     layer_extra_info = layer.extra_feature_info
     localized_extra_info = {}
     if layer_extra_info:
-        for k, v in layer_extra_info.items():
-            localized_title = v.get(f"title_{language_code}", None)
-            extra_field_data = {"order": v.get("order", 0)}
+        for field_name, field_data in layer_extra_info.items():
+            localized_title = field_data.get(f"title_{language_code}", None)
+            extra_field_data = {"order": field_data.get("order", 0)}
             if not localized_title:
                 logger.warning(
-                    f"localized title not found from layer info for field {k}: {v}: {language_code},"
-                    f" defaulting to fi"
+                    "Localized title not found from layer info for field %(field_name)s: %(field_value)s with language "
+                    "code %(language_code)s, defaulting to Finnish.",
+                    {"field_name": field_name, "field_value": localized_title, "language_code": language_code},
                 )
-                extra_field_data["title"] = v.get("title_fi")
+                extra_field_data["title"] = field_data.get("title_fi")
             else:
                 extra_field_data["title"] = localized_title
-            localized_extra_info[k] = extra_field_data
+            localized_extra_info[field_name] = extra_field_data
     return localized_extra_info
 
 
@@ -108,6 +109,8 @@ def _get_language_code(request):
     """Get language code from request. If not allowed then defaults to en."""
     language_from_request = request.LANGUAGE_CODE
     if language_from_request not in ALLOWED_MAP_LANGUAGE_CODES:
-        logger.warning(f"Not allowed: {language_from_request} defaulting to fi")
+        logger.warning(
+            "Language code not allowed '%(language_code)s' from request", {"language_code": language_from_request}
+        )
         return "fi"
     return language_from_request

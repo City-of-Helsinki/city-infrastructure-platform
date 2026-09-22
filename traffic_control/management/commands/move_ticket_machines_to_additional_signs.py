@@ -4,7 +4,6 @@ Management command to move ticket machines from traffic_sign tables to additiona
 This command migrates ticket machine objects (device type codes H20.91, H20.92, H20.93, 8591, 8592, 8593)
 from TrafficSignReal/TrafficSignPlan to AdditionalSignReal/AdditionalSignPlan.
 """
-import logging
 from datetime import datetime
 from typing import Any, Optional
 
@@ -31,8 +30,6 @@ from traffic_control.models.traffic_sign import (
     TrafficSignReal,
     TrafficSignRealFile,
 )
-
-logger = logging.getLogger(__name__)
 
 PARENT_SIGN_CODES = ["E2", "521"]
 

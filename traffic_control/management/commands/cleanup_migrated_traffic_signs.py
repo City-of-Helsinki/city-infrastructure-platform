@@ -8,7 +8,6 @@ Cleans up TrafficSignPlan and TrafficSignReal objects that were soft-deleted by:
 Candidates are identified through the respective migration run records.
 Supports --dry-run for safe previewing and --migration-run for partial cleanup.
 """
-import logging
 from typing import Optional, Type
 
 from auditlog.context import set_actor
@@ -36,8 +35,6 @@ _PLAN_DEPENDENTS: list[tuple[type, str]] = [
     (AdditionalSignPlan, "parent_id"),
     (RoadMarkingPlan, "traffic_sign_plan_id"),
 ]
-
-logger = logging.getLogger(__name__)
 
 
 class Command(TrackableCommand):
@@ -226,10 +223,10 @@ class Command(TrackableCommand):
         plan_ids = set(plans_qs.values_list("id", flat=True))
 
         deleted, _ = reals_qs.filter(id__in=real_ids - blocked_real_ids).delete()
-        logger.info("Hard-deleted %d TrafficSignReal objects", deleted)
+        self.stdout.write(f"Hard-deleted {deleted} TrafficSignReal objects")
 
         deleted, _ = plans_qs.filter(id__in=plan_ids - blocked_plan_ids).delete()
-        logger.info("Hard-deleted %d TrafficSignPlan objects", deleted)
+        self.stdout.write(f"Hard-deleted {deleted} TrafficSignPlan objects")
 
     def _report_skipped(self, reals_skipped: int, plans_skipped: int) -> None:
         """Write skipped counts to stdout if any instances are blocked.

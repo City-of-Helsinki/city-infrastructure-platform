@@ -154,9 +154,9 @@ class AbstractDeviceTypeMixin:
         png_sizes = [32, 64, 128, 256]
         try:
             base_url = get_azure_storage_base_url(settings.STORAGES["icons"]["OPTIONS"])
-        except KeyError as e:
+        except KeyError as error:
             # this is a misconfiguration
-            logger.warning(f"icon base url could not be fetched: {e}")
+            logger.exception("Icon base url could not be fetched: %s.", error)
             return None
         icons = {"svg": f"{base_url}{self.SVG_ICON_DESTINATION}{svg_name}"}
         for size in png_sizes:
