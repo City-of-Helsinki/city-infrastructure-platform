@@ -88,3 +88,4 @@ from traffic_control.models.traffic_sign import (
     TrafficSignRealFile,
     TrafficSignRealOperation,
 )
+from traffic_control.models.traffic_sign_value_check_run_info import TrafficSignValueCheckRunInfo

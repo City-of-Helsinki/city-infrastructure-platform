@@ -59,5 +59,6 @@ from traffic_control.admin.traffic_sign import (
     TrafficSignRealAdmin,
     TrafficSignRealFileInline,
 )
+from traffic_control.admin.traffic_sign_value_check_run_info import TrafficSignValueCheckRunInfoAdmin
 
 admin.site.unregister(UserSocialAuth)
