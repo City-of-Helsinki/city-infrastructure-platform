@@ -4,9 +4,10 @@ from typing import Any
 import pytest
 from auditlog.context import set_actor
 from auditlog.models import LogEntry
+from django.apps import apps
 from django.contrib.auth.models import Group, Permission
 from helusers.models import ADGroup
-from resilient_logger.workarounds.models import DjangoAuditLogEntryManager
+from resilient_logger.workarounds.utils import safe_object_repr
 
 from traffic_control.models import TrafficSignReal
 from traffic_control.tests.factories import (
@@ -18,12 +19,36 @@ from traffic_control.tests.factories import (
 from users.models import User
 
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_auditlog_manager():
-    """Runs once per test session before any tests execute."""
-    restore = DjangoAuditLogEntryManager.patch()
-    yield
-    restore()
+def actor_resolver(actor):
+    if actor:
+        return actor.pk
+    return None
+
+
+@pytest.fixture(autouse=True)
+def configure(settings):
+    settings.RESILIENT_LOGGER = {
+        "origin": "test",
+        "environment": "dev",
+        "sources": [
+            {"class": "resilient_logger.sources.ResilientLogSource"},
+            {"class": "resilient_logger.sources.DjangoAuditLogSource"},
+        ],
+        "targets": [
+            {
+                "class": "resilient_logger.targets.ProxyLogTarget",
+                "name": "proxy-target",
+            }
+        ],
+        "batch_limit": 5000,
+        "chunk_size": 500,
+        "submit_unsent_entries": True,
+        "clear_sent_entries": True,
+        "actor_resolver": actor_resolver,
+    }
+    settings.RESILIENT_LOGGER_PATCH_DJANGO_AUDITLOG = True
+    app_config = apps.get_app_config("resilient_logger")
+    app_config.ready()
 
 
 @pytest.fixture
@@ -90,14 +115,15 @@ def value_referenced(value: Any, logentry: LogEntry):
     """
     Checks for references to a particular value in a LogEntry object
     """
-    result = str(value) in str(logentry.__dict__)
+    value_repr = safe_object_repr(value)
+    result = value_repr in str(logentry.__dict__)
     if result:
         print(f">>> value {value} referenced in")
         pprint(logentry.__dict__)
     else:
         print(f">>> VALUE {value} NOT REFERENCED IN")
         pprint(logentry.__dict__)
-    return str(value) in str(logentry.__dict__)
+    return result
 
 
 # Operations on User objects
