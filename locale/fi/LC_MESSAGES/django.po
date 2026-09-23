@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-18 15:34+0300\n"
+"POT-Creation-Date: 2026-09-29 10:25+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -330,6 +330,12 @@ msgstr ""
 "Sijainnin muuttaminen kartalta ei ole sallittya geometrialle "
 "'%(geometry_type)s'"
 
+msgid "Checked codes"
+msgstr ""
+
+msgid "Checked count"
+msgstr ""
+
 msgid "Chimney"
 msgstr "Savupiippu"
 
@@ -498,6 +504,9 @@ msgstr "Risteys"
 
 msgid "Data Validation Errors"
 msgstr "Validointivirheet"
+
+msgid "Database updated"
+msgstr ""
 
 msgid "Date after which this barrier becomes inactive."
 msgstr "Päivämäärä, jonka jälkeen tämä ajoeste on poissa käytöstä."
@@ -682,6 +691,9 @@ msgstr "Ylätason merkin laitetyypin koodi (E2 tai 521)."
 # AI translation - needs human review
 msgid "Device type code of the ticket machine."
 msgstr "Lippuautomaatin laitetyypin koodi."
+
+msgid "Device type codes that were included in the run."
+msgstr ""
 
 msgid "Device type preview"
 msgstr "Laitteen tyyppin esikatselu"
@@ -981,6 +993,9 @@ msgstr "Ensimmäinen lisäkaista pääkaistan vasemmalla puolella"
 
 msgid "First right additional lane"
 msgstr "Ensimmäinen lisäkaista pääkaistan oikealla puolella"
+
+msgid "Fixed count"
+msgstr ""
 
 msgid "Flagpole"
 msgstr "Lippusalko"
@@ -2032,6 +2047,14 @@ msgstr "Suunnitelmien lukumäärä, joille ei löytynyt ylätason merkkiä."
 msgid "Number of plans that were assigned a parent sign (E2/521)."
 msgstr "Suunnitelmien lukumäärä, joille määritettiin ylätason merkki (E2/521)."
 
+msgid "Number of problems that could not be corrected."
+msgstr ""
+
+msgid ""
+"Number of problems that were corrected, or that would be corrected on a dry "
+"run."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Number of reals that had no parent sign found."
 msgstr "Toteumien lukumäärä, joille ei löytynyt ylätason merkkiä."
@@ -2045,6 +2068,12 @@ msgid ""
 "Number of results to return per page. Maximum number of results is "
 "{max_limit}."
 msgstr "Tuloksia sivua kohden. Enimmäismäärä on {max_limit}"
+
+msgid "Number of traffic sign reals that had a value problem."
+msgstr ""
+
+msgid "Number of traffic sign reals that were checked."
+msgstr ""
 
 msgid "Numeric value on the marking."
 msgstr "Merkinnässä oleva numeroarvo."
@@ -2382,6 +2411,12 @@ msgstr "Postilaatikko"
 
 msgid "Priority or give-way sign"
 msgstr "Etuajo-oikeus- tai väistämismerkki"
+
+msgid "Problem count"
+msgstr ""
+
+msgid "Problems"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Processed additional sign source IDs"
@@ -2850,6 +2885,9 @@ msgstr "Ohitettu (muutoksia ei tarvita)"
 msgid "Skipped count"
 msgstr "Ohitettujen lukumäärä"
 
+msgid "Skipped fix count"
+msgstr ""
+
 msgid "Slidegate valve cap"
 msgstr "Venttilihattu"
 
@@ -3249,6 +3287,12 @@ msgstr "Aikaleima, jolloin migraatio valmistui (onnistuneesti tai virheellä)."
 msgid "Timestamp when the migration was started."
 msgstr "Aikaleima, jolloin migraatio aloitettiin."
 
+msgid "Timestamp when the run finished."
+msgstr ""
+
+msgid "Timestamp when the run was started."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Timestamp when the user was deactivated."
 msgstr "Aikaleima, jolloin käyttäjä poistettiin käytöstä."
@@ -3416,6 +3460,12 @@ msgstr "Liikennemerkin toimenpiteet"
 
 msgid "Traffic sign type"
 msgstr "Liikennemerkkityyppi"
+
+msgid "Traffic sign value check run info"
+msgstr ""
+
+msgid "Traffic sign value check run infos"
+msgstr ""
 
 msgid "Traffic signal"
 msgstr "Valo-opastin"
@@ -3609,6 +3659,10 @@ msgstr "Menetetyn rfid-kentän arvo."
 msgid "Value of surface_class field that was lost."
 msgstr "Menetetyn surface_class-kentän arvo."
 
+msgid ""
+"Value problems that were found, including what was done about each of them."
+msgstr ""
+
 msgid "Vehicle recognition"
 msgstr "Ajoneuvon tunnistin"
 
@@ -3739,6 +3793,9 @@ msgstr "Valmistuiko migraatio onnistuneesti."
 # AI translation - needs human review
 msgid "Whether the original had an affect_area polygon."
 msgstr "Oliko alkuperäisellä affect_area-polygoni."
+
+msgid "Whether the run actually updated traffic sign reals."
+msgstr ""
 
 # AI translation - needs human review
 msgid "Whether this was a dry run (no actual changes made)."

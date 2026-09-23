@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-18 15:34+0300\n"
+"POT-Creation-Date: 2026-09-29 10:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -339,6 +339,12 @@ msgstr ""
 "Att ändra platsen från kartan är inte tillåtet för geometrin "
 "'%(geometry_type)s'"
 
+msgid "Checked codes"
+msgstr ""
+
+msgid "Checked count"
+msgstr ""
+
 msgid "Chimney"
 msgstr "Skorsten"
 
@@ -508,6 +514,9 @@ msgstr "Korsning"
 # AI translation - needs human review
 msgid "Data Validation Errors"
 msgstr "Datavalideringsfel"
+
+msgid "Database updated"
+msgstr ""
 
 msgid "Date after which this barrier becomes inactive."
 msgstr "Datum efter vilket körhindret inte är i bruk."
@@ -692,6 +701,9 @@ msgstr "Enhetstypskod för det överordnade märket (E2 eller 521)."
 # AI translation - needs human review
 msgid "Device type code of the ticket machine."
 msgstr "Enhetstypskod för biljettautomaten."
+
+msgid "Device type codes that were included in the run."
+msgstr ""
 
 # AI translation - needs human review
 msgid "Device type preview"
@@ -1001,6 +1013,9 @@ msgstr "Första extra körfält vänster"
 
 msgid "First right additional lane"
 msgstr "Första extra körfält höger"
+
+msgid "Fixed count"
+msgstr ""
 
 msgid "Flagpole"
 msgstr "Flaggstång"
@@ -2078,6 +2093,14 @@ msgstr "Antal planer där inget överordnat märke hittades."
 msgid "Number of plans that were assigned a parent sign (E2/521)."
 msgstr "Antal planer som tilldelades ett överordnat märke (E2/521)."
 
+msgid "Number of problems that could not be corrected."
+msgstr ""
+
+msgid ""
+"Number of problems that were corrected, or that would be corrected on a dry "
+"run."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Number of reals that had no parent sign found."
 msgstr "Antal implementeringar där inget överordnat märke hittades."
@@ -2091,6 +2114,12 @@ msgid ""
 "Number of results to return per page. Maximum number of results is "
 "{max_limit}."
 msgstr "Resultat per sida. Maximalt är {max_limit}"
+
+msgid "Number of traffic sign reals that had a value problem."
+msgstr ""
+
+msgid "Number of traffic sign reals that were checked."
+msgstr ""
 
 msgid "Numeric value on the marking."
 msgstr "Numeriskt värde på märket."
@@ -2440,6 +2469,12 @@ msgstr "Brevlåda"
 
 msgid "Priority or give-way sign"
 msgstr "Väjningspliktskylt"
+
+msgid "Problem count"
+msgstr ""
+
+msgid "Problems"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Processed additional sign source IDs"
@@ -2918,6 +2953,9 @@ msgstr "Överhoppade (inga ändringar behövs)"
 msgid "Skipped count"
 msgstr "Antal överhoppade"
 
+msgid "Skipped fix count"
+msgstr ""
+
 msgid "Slidegate valve cap"
 msgstr "Lock till skjutspjällventil"
 
@@ -3324,6 +3362,12 @@ msgstr "Tidsstämpel när migreringen slutfördes (framgångsrikt eller med fel)
 msgid "Timestamp when the migration was started."
 msgstr "Tidsstämpel när migreringen startades."
 
+msgid "Timestamp when the run finished."
+msgstr ""
+
+msgid "Timestamp when the run was started."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Timestamp when the user was deactivated."
 msgstr "Tidsstämpel när användaren inaktiverades."
@@ -3490,6 +3534,12 @@ msgstr "Trafikskylt (implementeringsåtgärder)"
 
 msgid "Traffic sign type"
 msgstr "Typ av trafikskylt"
+
+msgid "Traffic sign value check run info"
+msgstr ""
+
+msgid "Traffic sign value check run infos"
+msgstr ""
 
 msgid "Traffic signal"
 msgstr "Trafiksignal"
@@ -3682,6 +3732,10 @@ msgstr "Värdet på rfid-fältet som förlorades."
 msgid "Value of surface_class field that was lost."
 msgstr "Värdet på surface_class-fältet som förlorades."
 
+msgid ""
+"Value problems that were found, including what was done about each of them."
+msgstr ""
+
 msgid "Vehicle recognition"
 msgstr "Fordonsidentifiering"
 
@@ -3817,6 +3871,9 @@ msgstr "Om migreringen slutfördes framgångsrikt."
 # AI translation - needs human review
 msgid "Whether the original had an affect_area polygon."
 msgstr "Om ursprunget hade en affect_area-polygon."
+
+msgid "Whether the run actually updated traffic sign reals."
+msgstr ""
 
 # AI translation - needs human review
 msgid "Whether this was a dry run (no actual changes made)."
