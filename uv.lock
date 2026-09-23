@@ -298,7 +298,7 @@ requires-dist = [
     { name = "django-helusers" },
     { name = "django-import-export", extras = ["xlsx"] },
     { name = "django-mptt" },
-    { name = "django-resilient-logger", git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=fa063f08b04bdcb6ab650b582a72ef752f46faa9" },
+    { name = "django-resilient-logger", git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=176832d5f0be2cf7d73139fc645376e67f949ea2" },
     { name = "django-storages", extras = ["azure"] },
     { name = "djangorestframework" },
     { name = "djangorestframework-gis" },
@@ -747,7 +747,7 @@ wheels = [
 [[package]]
 name = "django-resilient-logger"
 version = "3.0.0"
-source = { git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=fa063f08b04bdcb6ab650b582a72ef752f46faa9#fa063f08b04bdcb6ab650b582a72ef752f46faa9" }
+source = { git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=176832d5f0be2cf7d73139fc645376e67f949ea2#176832d5f0be2cf7d73139fc645376e67f949ea2" }
 dependencies = [
     { name = "django" },
     { name = "elasticsearch8" },

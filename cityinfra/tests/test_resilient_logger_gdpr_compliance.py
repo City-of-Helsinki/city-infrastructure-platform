@@ -4,14 +4,13 @@ from typing import Any
 import pytest
 from auditlog.context import set_actor
 from auditlog.models import LogEntry
+from django.apps import apps
 from django.contrib.auth.models import Group, Permission
-from django.test import override_settings
 from helusers.models import ADGroup
 from resilient_logger.sources import AbstractLogSource
 from resilient_logger.sources.abstract_log_source_entry import AbstractLogSourceEntry
 from resilient_logger.sources.django_audit_log_source_entry import DjangoAuditLogSourceEntry
 from resilient_logger.utils import get_resilient_logger_config
-from resilient_logger.workarounds.models import DjangoAuditLogEntryManager
 from resilient_logger.workarounds.utils import safe_object_repr
 
 from traffic_control.models import AdditionalSignPlan
@@ -24,39 +23,36 @@ from traffic_control.tests.factories import (
 from users.models import User
 
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_auditlog_manager():
-    restore = DjangoAuditLogEntryManager.patch()
-    yield
-    restore()
-
-
 def actor_resolver(actor):
     if actor:
         return actor.pk
     return None
 
 
-# Adapted from django-resilient-logger's own tests:
-VALID_CONFIG_ALL_FIELDS = {
-    "origin": "test",
-    "environment": "dev",
-    "sources": [
-        {"class": "resilient_logger.sources.ResilientLogSource"},
-        {"class": "resilient_logger.sources.DjangoAuditLogSource"},
-    ],
-    "targets": [
-        {
-            "class": "resilient_logger.targets.ProxyLogTarget",
-            "name": "proxy-target",
-        }
-    ],
-    "batch_limit": 5000,
-    "chunk_size": 500,
-    "submit_unsent_entries": True,
-    "clear_sent_entries": True,
-    "actor_resolver": actor_resolver,
-}
+@pytest.fixture(autouse=True)
+def configure(settings):
+    settings.RESILIENT_LOGGER = {
+        "origin": "test",
+        "environment": "dev",
+        "sources": [
+            {"class": "resilient_logger.sources.ResilientLogSource"},
+            {"class": "resilient_logger.sources.DjangoAuditLogSource"},
+        ],
+        "targets": [
+            {
+                "class": "resilient_logger.targets.ProxyLogTarget",
+                "name": "proxy-target",
+            }
+        ],
+        "batch_limit": 5000,
+        "chunk_size": 500,
+        "submit_unsent_entries": True,
+        "clear_sent_entries": True,
+        "actor_resolver": actor_resolver,
+    }
+    settings.RESILIENT_LOGGER_PATCH_DJANGO_AUDITLOG = True
+    app_config = apps.get_app_config("resilient_logger")
+    app_config.ready()
 
 
 @pytest.fixture
@@ -141,7 +137,6 @@ def value_referenced(value: Any, logentry: AbstractLogSource):
 
 
 @pytest.mark.django_db
-@override_settings(RESILIENT_LOGGER=VALID_CONFIG_ALL_FIELDS)
 def test__user_created_resilient_logger_does_not_leak_user_pii(user):
     auditlog_entry = LogEntry.objects.get_for_object(user).filter(action=LogEntry.Action.CREATE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
@@ -150,7 +145,6 @@ def test__user_created_resilient_logger_does_not_leak_user_pii(user):
 
 
 @pytest.mark.django_db
-@override_settings(RESILIENT_LOGGER=VALID_CONFIG_ALL_FIELDS)
 def test__user_updated_resilient_logger_does_not_leak_user_pii(user):
     user.email = "xavier.example@example.com"
     user.first_name = "Xavier"
@@ -164,7 +158,6 @@ def test__user_updated_resilient_logger_does_not_leak_user_pii(user):
 
 
 @pytest.mark.django_db
-@override_settings(RESILIENT_LOGGER=VALID_CONFIG_ALL_FIELDS)
 def test__user_deleted_resilient_logger_does_not_leak_user_pii(user):
     user.delete()
     auditlog_entry = LogEntry.objects.get_for_model(User).filter(action=LogEntry.Action.DELETE).last()
@@ -177,7 +170,6 @@ def test__user_deleted_resilient_logger_does_not_leak_user_pii(user):
 
 
 @pytest.mark.django_db
-@override_settings(RESILIENT_LOGGER=VALID_CONFIG_ALL_FIELDS)
 def test__object_created_resilient_logger_does_not_leak_actor_pii(actor, additional_sign_plan):
     auditlog_entry = LogEntry.objects.get_for_object(additional_sign_plan).filter(action=LogEntry.Action.CREATE).last()
     resilient_log_entry = DjangoAuditLogSourceEntry(auditlog_entry)
@@ -186,7 +178,6 @@ def test__object_created_resilient_logger_does_not_leak_actor_pii(actor, additio
 
 
 @pytest.mark.django_db
-@override_settings(RESILIENT_LOGGER=VALID_CONFIG_ALL_FIELDS)
 def test__object_updated_resilient_logger_does_not_leak_actor_pii(actor, user, additional_sign_plan):
     with set_actor(actor):
         additional_sign_plan.updated_by = user
@@ -200,7 +191,6 @@ def test__object_updated_resilient_logger_does_not_leak_actor_pii(actor, user, a
 
 
 @pytest.mark.django_db
-@override_settings(RESILIENT_LOGGER=VALID_CONFIG_ALL_FIELDS)
 def test__object_deleted_resilient_logger_does_not_leak_actor_pii(actor, additional_sign_plan):
     with set_actor(actor):
         additional_sign_plan.delete()
@@ -214,7 +204,6 @@ def test__object_deleted_resilient_logger_does_not_leak_actor_pii(actor, additio
 
 
 @pytest.mark.django_db
-@override_settings(RESILIENT_LOGGER=VALID_CONFIG_ALL_FIELDS)
 @pytest.mark.parametrize(
     "get_related_obj, actor_relation, related_relation",
     [

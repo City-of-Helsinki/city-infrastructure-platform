@@ -71,7 +71,7 @@ exclude-newer = "P7D"
 package = false
 
 [tool.uv.sources]
-django-resilient-logger = { git = "https://github.com/City-of-Helsinki/django-resilient-logger", rev = "fa063f08b04bdcb6ab650b582a72ef752f46faa9" }
+django-resilient-logger = { git = "https://github.com/City-of-Helsinki/django-resilient-logger", rev = "176832d5f0be2cf7d73139fc645376e67f949ea2" }
 
 [tool.ruff]
 extend-select = [
