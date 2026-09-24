@@ -182,6 +182,7 @@ else:
 # Base URL for the application (used in emails, management commands, etc.)
 BASE_URL = env("BASE_URL")
 
+
 # https://github.com/City-of-Helsinki/django-resilient-logger
 RESILIENT_LOGGER = {
     "origin": "cityinfra",
@@ -204,8 +205,10 @@ RESILIENT_LOGGER = {
     "chunk_size": 500,
     "submit_unsent_entries": True,
     "clear_sent_entries": True,
-    "actor_resolver": lambda u: u.pk,
+    "actor_resolver": "cityinfra.audit_log.resolve_actor",
 }
+
+RESILIENT_LOGGER_DJANGO_AUDITLOG_REPR_FN = "cityinfra.audit_log.safe_object_repr"
 
 # https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-LOGGING
 # https://docs.djangoproject.com/en/5.2/topics/logging/#configuring-logging
