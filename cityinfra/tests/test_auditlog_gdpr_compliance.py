@@ -2,7 +2,7 @@ from pprint import pprint
 from typing import Any
 
 import pytest
-from auditlog_custom.context import set_actor
+from auditlog.context import set_actor
 from auditlog.models import LogEntry
 from django.apps import apps
 from django.contrib.auth.models import Group, Permission
