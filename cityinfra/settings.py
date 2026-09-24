@@ -325,7 +325,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "drf_custom_auth.middleware.DRFCustomAuthMiddleware",
-    "auditlog.middleware.AuditlogMiddleware",
+    "auditlog_custom.middleware.AuditlogMiddleware",
     "axes.middleware.AxesMiddleware",
 ]
 
