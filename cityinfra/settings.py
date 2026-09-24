@@ -281,6 +281,7 @@ LOCAL_APPS = [
     "site_alert.apps.SiteAlertConfig",
     "admin_helper.apps.AdminHelperConfig",
     "command_tracker.apps.CommandTrackerConfig",
+    "cityinfra.apps.CityInfraConfig",
 ]
 INSTALLED_APPS = LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
