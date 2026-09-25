@@ -14,17 +14,7 @@
         <div>
             <b>{% translate "Visual representation" %}</b>
         </div>
-        {% if object.device_type.icon_file %}
-            <img class="traffic-sign-icon"
-                 src="{{ object.device_type.get_icons.svg }}"
-                 alt="{{ object.device_type.description }}"
-                 width="120"
-                 height="120" />
-        {% else %}
-            {% if object.device_type.description %}
-                <div>{% translate "Missing icon graphics. Description: " %}{{ object.device_type.description }}</div>
-            {% endif %}
-        {% endif %}
+        {% include "embed/_device_icon.html" with device=object css_class="traffic-sign-icon" size=120 %}
         {% if object.value %}<div>{{ object.value }}</div>{% endif %}
         {% if object.txt %}<div>{{ object.txt }}</div>{% endif %}
 
@@ -32,17 +22,7 @@
             {% for additional_sign in additional_signs %}
                 <li class="additional-sign">
                     <div>
-                        {% if additional_sign.object.device_type.icon_file %}
-                            <img class="additional-sign-icon"
-                                 src="{{ additional_sign.object.device_type.get_icons.svg }}"
-                                 alt="{{ additional_sign.object.device_type.description }}"
-                                 width="100"
-                                 height="100" />
-                        {% else %}
-                            {% if additional_sign.object.device_type.description %}
-                                <div>{% translate "Missing icon graphics. Description: " %}{{ additional_sign.object.device_type.description }}</div>
-                            {% endif %}
-                        {% endif %}
+                        {% include "embed/_device_icon.html" with device=additional_sign.object css_class="additional-sign-icon" size=100 %}
                         {% include "embed/_content_s_rows.html" with content_s_rows=additional_sign.object.get_content_s_rows %}
                         {% if additional_sign.object.additional_information %}
                             <div>{{ additional_sign.object.additional_information }}</div>
@@ -51,18 +31,8 @@
                 </li>
             {% endfor %}
         </ul>
-        <dl>
-            {% for field, value in traffic_sign_fields %}
-                <dt>{{ field.verbose_name }}</dt>
-                <dd>
-                    {% if value != "" %}
-                        {{ value|default_if_none:"-" }}
-                    {% else %}
-                        &nbsp;
-                    {% endif %}
-                </dd>
-            {% endfor %}
-        </dl>
+
+        {% include "embed/_field_list.html" with fields_and_values=traffic_sign_fields object=object %}
 
         <h2>{% translate "Additional signs" %}</h2>
 
@@ -70,36 +40,8 @@
             {% for additional_sign in additional_signs %}
                 <li class="additional-sign">
                     <div>
-                        {% if additional_sign.object.device_type.icon_file %}
-                            <img class="additional-sign-icon"
-                                 src="{{ additional_sign.object.device_type.get_icons.svg }}"
-                                 alt="{{ additional_sign.object.device_type.description }}"
-                                 width="100"
-                                 height="100" />
-                        {% else %}
-                            {% if additional_sign.object.device_type.description %}
-                                <div>{% translate "Missing icon graphics. Description: " %}{{ additional_sign.object.device_type.description }}</div>
-                            {% endif %}
-                        {% endif %}
-                        <dl>
-                            {% for field, value in additional_sign.fields %}
-                                {% if field.name == 'content_s' %}
-                                    <dt>{{ field.verbose_name }}</dt>
-                                    <dd>
-                                        {% include "embed/_content_s_rows.html" with content_s_rows=additional_sign.object.get_content_s_rows css_class="content-s-nested" %}
-                                    </dd>
-                                {% else %}
-                                    <dt>{{ field.verbose_name }}</dt>
-                                    <dd>
-                                        {% if value != "" %}
-                                            {{ value|default_if_none:"-" }}
-                                        {% else %}
-                                            &nbsp;
-                                        {% endif %}
-                                    </dd>
-                                {% endif %}
-                            {% endfor %}
-                        </dl>
+                        {% include "embed/_device_icon.html" with device=additional_sign.object css_class="additional-sign-icon" size=100 %}
+                        {% include "embed/_field_list.html" with fields_and_values=additional_sign.fields object=additional_sign.object %}
                     </div>
                 </li>
             {% empty %}
@@ -110,18 +52,7 @@
         <h2>{% translate "Mount" %}</h2>
 
         {% if mount_fields %}
-            <dl>
-                {% for field, value in mount_fields %}
-                    <dt>{{ field.verbose_name }}</dt>
-                    <dd>
-                        {% if value != "" %}
-                            {{ value|default_if_none:"-" }}
-                        {% else %}
-                            &nbsp;
-                        {% endif %}
-                    </dd>
-                {% endfor %}
-            </dl>
+            {% include "embed/_field_list.html" with fields_and_values=mount_fields object=object %}
         {% else %}
             <p>{% translate "No mount" %}</p>
         {% endif %}

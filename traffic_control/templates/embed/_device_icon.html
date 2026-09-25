@@ -1,0 +1,18 @@
+{% load i18n %}
+{% comment %}
+Renders the device type icon of a device, falling back to its description when there is no icon.
+
+Arguments:
+    device: object with a device_type.
+    css_class: CSS class of the image.
+    size: width and height of the image in pixels.
+{% endcomment %}
+{% if device.device_type.icon_file %}
+    <img class="{{ css_class }}"
+         src="{{ device.device_type.get_icons.svg }}"
+         alt="{{ device.device_type.description }}"
+         width="{{ size }}"
+         height="{{ size }}" />
+{% elif device.device_type.description %}
+    <div>{% translate "Missing icon graphics. Description: " %}{{ device.device_type.description }}</div>
+{% endif %}
