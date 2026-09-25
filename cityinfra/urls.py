@@ -32,7 +32,14 @@ from traffic_control.views import (
     traffic_sign as traffic_sign_views,
 )
 from traffic_control.views.device_catalog import AdditionalSignCatalog, SignpostCatalog, TrafficSignCatalog
-from traffic_control.views.embed import TrafficSignPlanEmbed, TrafficSignRealEmbed
+from traffic_control.views.embed import (
+    AdditionalSignPlanEmbed,
+    AdditionalSignRealEmbed,
+    MountPlanEmbed,
+    MountRealEmbed,
+    TrafficSignPlanEmbed,
+    TrafficSignRealEmbed,
+)
 from traffic_control.views.wfs.views import CityInfrastructureWFSView
 
 router = routers.DefaultRouter()
@@ -192,6 +199,18 @@ urlpatterns += i18n_patterns(
     path("map-config/", map_views.map_config, name="map-config"),
     path("embed/traffic-sign-plans/<uuid:pk>/", TrafficSignPlanEmbed.as_view(), name="traffic-sign-plan-embed"),
     path("embed/traffic-sign-reals/<uuid:pk>/", TrafficSignRealEmbed.as_view(), name="traffic-sign-real-embed"),
+    path(
+        "embed/additional-sign-plans/<uuid:pk>/",
+        AdditionalSignPlanEmbed.as_view(),
+        name="additional-sign-plan-embed",
+    ),
+    path(
+        "embed/additional-sign-reals/<uuid:pk>/",
+        AdditionalSignRealEmbed.as_view(),
+        name="additional-sign-real-embed",
+    ),
+    path("embed/mount-plans/<uuid:pk>/", MountPlanEmbed.as_view(), name="mount-plan-embed"),
+    path("embed/mount-reals/<uuid:pk>/", MountRealEmbed.as_view(), name="mount-real-embed"),
 )
 
 urlpatterns += [

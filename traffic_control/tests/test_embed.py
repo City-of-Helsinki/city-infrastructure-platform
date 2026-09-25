@@ -1,6 +1,8 @@
 import uuid
 
 import pytest
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 from django.utils.translation import activate
 
@@ -385,3 +387,176 @@ def test__get_content_s_rows__returns_tuples(as_factory):
     assert len(rows[0]) == 2
     assert rows[0][0] == "Field 1"
     assert rows[0][1] == "value1"
+
+
+@pytest.mark.parametrize(
+    ("as_factory", "mount_factory", "mount_parameter", "url_name"),
+    (
+        (AdditionalSignPlanFactory, MountPlanFactory, "mount_plan", "additional-sign-plan-embed"),
+        (AdditionalSignRealFactory, MountRealFactory, "mount_real", "additional-sign-real-embed"),
+    ),
+)
+@pytest.mark.django_db
+def test__embed__additional_sign__context(client, as_factory, mount_factory, mount_parameter, url_name):
+    """Test that the additional sign embed view shows the sign's own fields."""
+    mount = mount_factory()
+    device_type = TrafficControlDeviceTypeFactory(code="AS1", target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)
+    additional_sign = as_factory(device_type=device_type, **{mount_parameter: mount})
+
+    response = client.get(reverse(url_name, kwargs={"pk": additional_sign.id}))
+    assert response.status_code == 200
+    # Must not deny frame-embedding embedded views
+    assert response.headers.get("x-frame-options") != "DENY"
+
+    context = response.context
+    assert context.get("object") == additional_sign
+    assert context.get("additional_sign_fields")[0][1] == device_type.code
+    assert context.get("additional_sign_fields")[3][1] == additional_sign.id
+
+
+@pytest.mark.parametrize("url_name", ("additional-sign-plan-embed", "additional-sign-real-embed"))
+@pytest.mark.django_db
+def test__embed__additional_sign__not_found(client, url_name):
+    """Test that the additional sign embed view returns 404 when the object is not found."""
+    response = client.get(reverse(url_name, kwargs={"pk": uuid.uuid4()}))
+    assert response.status_code == 404
+
+
+@pytest.mark.parametrize("url_name", ("mount-plan-embed", "mount-real-embed"))
+@pytest.mark.django_db
+def test__embed__mount__not_found(client, url_name):
+    """Test that the mount embed view returns 404 when the object is not found."""
+    response = client.get(reverse(url_name, kwargs={"pk": uuid.uuid4()}))
+    assert response.status_code == 404
+
+
+def _build_mount_with_devices(ts_factory, as_factory, mount_factory, mount_parameter):
+    """Build a mount with two traffic signs, a child additional sign and a parentless one.
+
+    Args:
+        ts_factory: Traffic sign plan or real factory.
+        as_factory: Additional sign plan or real factory.
+        mount_factory: Mount plan or real factory.
+        mount_parameter (str): Name of the mount field on the devices.
+
+    Returns:
+        tuple: The mount, both traffic signs, the child additional sign and the parentless one.
+    """
+    mount = mount_factory()
+    ts_type = TrafficControlDeviceTypeFactory(code="TS1", target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
+    as_type = TrafficControlDeviceTypeFactory(code="AS1", target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)
+
+    upper_sign = ts_factory(device_type=ts_type, **{mount_parameter: mount})
+    lower_sign = ts_factory(device_type=ts_type, **{mount_parameter: mount})
+    child_sign = as_factory(device_type=as_type, parent=upper_sign, height=2, **{mount_parameter: mount})
+    parentless_sign = as_factory(device_type=as_type, parent=None, height=1, **{mount_parameter: mount})
+
+    return mount, upper_sign, lower_sign, child_sign, parentless_sign
+
+
+@pytest.mark.parametrize(
+    ("ts_factory", "as_factory", "mount_factory", "mount_parameter", "url_name"),
+    (
+        (TrafficSignPlanFactory, AdditionalSignPlanFactory, MountPlanFactory, "mount_plan", "mount-plan-embed"),
+        (TrafficSignRealFactory, AdditionalSignRealFactory, MountRealFactory, "mount_real", "mount-real-embed"),
+    ),
+)
+@pytest.mark.django_db
+def test__embed__mount__context(client, ts_factory, as_factory, mount_factory, mount_parameter, url_name):
+    """Test that the mount embed view lists the mount's fields, traffic signs and additional signs."""
+    mount, upper_sign, lower_sign, child_sign, parentless_sign = _build_mount_with_devices(
+        ts_factory, as_factory, mount_factory, mount_parameter
+    )
+
+    response = client.get(reverse(url_name, kwargs={"pk": mount.id}))
+    assert response.status_code == 200
+    # Must not deny frame-embedding embedded views
+    assert response.headers.get("x-frame-options") != "DENY"
+
+    context = response.context
+    assert context.get("object") == mount
+    assert context.get("mount_fields")[0][1] == mount.mount_type.code
+    assert context.get("mount_fields")[5][1] == mount.id
+
+    traffic_signs = context.get("traffic_signs")
+    assert {entry["object"] for entry in traffic_signs} == {upper_sign, lower_sign}
+
+    by_object = {entry["object"]: entry for entry in traffic_signs}
+    assert by_object[upper_sign]["fields"][3][1] == upper_sign.id
+    assert [entry["object"] for entry in by_object[upper_sign]["additional_signs"]] == [child_sign]
+    assert by_object[lower_sign]["additional_signs"] == []
+
+
+@pytest.mark.parametrize(
+    ("ts_factory", "as_factory", "mount_factory", "mount_parameter", "url_name"),
+    (
+        (TrafficSignPlanFactory, AdditionalSignPlanFactory, MountPlanFactory, "mount_plan", "mount-plan-embed"),
+        (TrafficSignRealFactory, AdditionalSignRealFactory, MountRealFactory, "mount_real", "mount-real-embed"),
+    ),
+)
+@pytest.mark.django_db
+def test__embed__mount__lists_parentless_additional_signs(
+    client, ts_factory, as_factory, mount_factory, mount_parameter, url_name
+):
+    """Test that the additional sign section is scoped by mount, so parentless signs are listed."""
+    mount, _, _, child_sign, parentless_sign = _build_mount_with_devices(
+        ts_factory, as_factory, mount_factory, mount_parameter
+    )
+
+    response = client.get(reverse(url_name, kwargs={"pk": mount.id}))
+
+    additional_signs = response.context.get("additional_signs")
+    # Ordered from top down by height
+    assert [entry["object"] for entry in additional_signs] == [child_sign, parentless_sign]
+    assert additional_signs[0]["fields"][3][1] == child_sign.id
+
+
+def _build_mount_with_traffic_signs(ts_factory, as_factory, mount_factory, mount_parameter, count):
+    """Build a mount carrying a given number of traffic signs, each with one additional sign.
+
+    Args:
+        ts_factory: Traffic sign plan or real factory.
+        as_factory: Additional sign plan or real factory.
+        mount_factory: Mount plan or real factory.
+        mount_parameter (str): Name of the mount field on the devices.
+        count (int): Number of traffic signs to attach to the mount.
+
+    Returns:
+        MountPlan | MountReal: The created mount.
+    """
+    mount = mount_factory()
+    ts_type = TrafficControlDeviceTypeFactory(code="TS1", target_model=DeviceTypeTargetModel.TRAFFIC_SIGN)
+    as_type = TrafficControlDeviceTypeFactory(code="AS1", target_model=DeviceTypeTargetModel.ADDITIONAL_SIGN)
+
+    for _unused in range(count):
+        traffic_sign = ts_factory(device_type=ts_type, **{mount_parameter: mount})
+        as_factory(device_type=as_type, parent=traffic_sign, height=1, **{mount_parameter: mount})
+
+    return mount
+
+
+@pytest.mark.parametrize(
+    ("ts_factory", "as_factory", "mount_factory", "mount_parameter", "url_name"),
+    (
+        (TrafficSignPlanFactory, AdditionalSignPlanFactory, MountPlanFactory, "mount_plan", "mount-plan-embed"),
+        (TrafficSignRealFactory, AdditionalSignRealFactory, MountRealFactory, "mount_real", "mount-real-embed"),
+    ),
+)
+@pytest.mark.django_db
+def test__embed__mount__query_count_does_not_grow_with_traffic_signs(
+    client, ts_factory, as_factory, mount_factory, mount_parameter, url_name
+):
+    """Test that adding traffic signs to a mount does not add queries to the mount page."""
+    small_mount = _build_mount_with_traffic_signs(ts_factory, as_factory, mount_factory, mount_parameter, 1)
+    large_mount = _build_mount_with_traffic_signs(ts_factory, as_factory, mount_factory, mount_parameter, 5)
+
+    # Warm up caches that are only populated on the first request of the process
+    client.get(reverse(url_name, kwargs={"pk": small_mount.id}))
+
+    with CaptureQueriesContext(connection) as small_queries:
+        assert client.get(reverse(url_name, kwargs={"pk": small_mount.id})).status_code == 200
+
+    with CaptureQueriesContext(connection) as large_queries:
+        assert client.get(reverse(url_name, kwargs={"pk": large_mount.id})).status_code == 200
+
+    assert len(large_queries) == len(small_queries)
