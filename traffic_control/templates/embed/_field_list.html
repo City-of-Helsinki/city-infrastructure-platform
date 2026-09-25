@@ -1,0 +1,22 @@
+{% load i18n %}
+{% comment %}
+Renders a list of (field, value) pairs.
+
+Arguments:
+    fields_and_values: iterable of (field, value) tuples.
+    object: object the fields belong to, needed to render content_s rows.
+{% endcomment %}
+<dl>
+    {% for field, value in fields_and_values %}
+        <dt>{{ field.verbose_name }}</dt>
+        <dd>
+            {% if field.name == 'content_s' %}
+                {% include "embed/_content_s_rows.html" with content_s_rows=object.get_content_s_rows css_class="content-s-nested" %}
+            {% elif value != "" %}
+                {{ value|default_if_none:"-" }}
+            {% else %}
+                &nbsp;
+            {% endif %}
+        </dd>
+    {% endfor %}
+</dl>

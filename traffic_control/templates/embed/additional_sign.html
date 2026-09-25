@@ -1,0 +1,24 @@
+{% load tz %}
+{% load i18n %}
+{% load static %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet"
+              href="{% static 'traffic_control/css/embed.css' %}" />
+    </head>
+
+    <body>
+        <div>
+            <b>{% translate "Visual representation" %}</b>
+        </div>
+        {% include "embed/_device_icon.html" with device=object css_class="additional-sign-icon" size=120 %}
+        {% include "embed/_content_s_rows.html" with content_s_rows=object.get_content_s_rows %}
+        {% if object.additional_information %}<div>{{ object.additional_information }}</div>{% endif %}
+
+        {% include "embed/_field_list.html" with fields_and_values=additional_sign_fields object=object %}
+
+    </body>
+</html>
