@@ -2,7 +2,7 @@ from copy import deepcopy
 
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from gisserver.features import FeatureField, FeatureType, field
+from gisserver.features import FeatureField, field
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import MountReal
@@ -14,12 +14,14 @@ from traffic_control.views.wfs.common import (
     OWNED_DEVICE_MODEL_FIELDS,
     REAL_COUNT_FIELDS,
     REPLACEABLE_MODEL_FIELDS,
+    REPLACEMENT_ANNOTATIONS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
 from traffic_control.views.wfs.utils import (
     CentroidLocationXsdElement,
     EnumIntegerNameXsdElement,
+    FullRelationFeatureType,
 )
 
 _base_fields = (
@@ -54,7 +56,7 @@ _mount_centroid_fields = deepcopy(_base_fields) + [
 ]
 
 
-MountRealFeatureType = FeatureType(
+MountRealFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=MountReal.objects.active().filter(
@@ -73,7 +75,7 @@ MountRealFeatureType = FeatureType(
 )
 
 
-MountRealCentroidFeatureType = FeatureType(
+MountRealCentroidFeatureType = FullRelationFeatureType(
     title=_("Mount Real Centroid"),
     name="mountrealcentroid",
     crs=DEFAULT_CRS,
@@ -94,32 +96,38 @@ MountRealCentroidFeatureType = FeatureType(
 )
 
 
-MountPlanFeatureType = FeatureType(
+MountPlanFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=mount_plan_get_current()
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .annotate(real_count=get_real_count_subquery(MountReal, "mount_plan")),
+    .annotate(
+        real_count=get_real_count_subquery(MountReal, "mount_plan"),
+        **REPLACEMENT_ANNOTATIONS,
+    ),
     fields=deepcopy(_mount_fields)
     + [
-        FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
+        FeatureField("plan_id", model_attribute="plan_id", abstract="ID of the plan related to this MountPlan"),
     ]
     + deepcopy(REAL_COUNT_FIELDS)
     + deepcopy(REPLACEABLE_MODEL_FIELDS),
 )
 
 
-MountPlanCentroidFeatureType = FeatureType(
+MountPlanCentroidFeatureType = FullRelationFeatureType(
     title=_("Mount Plan Centroid"),
     name="mountplancentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=mount_plan_get_current()
     .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
-    .annotate(real_count=get_real_count_subquery(MountReal, "mount_plan")),
+    .annotate(
+        real_count=get_real_count_subquery(MountReal, "mount_plan"),
+        **REPLACEMENT_ANNOTATIONS,
+    ),
     fields=deepcopy(_mount_centroid_fields)
     + [
-        FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
+        FeatureField("plan_id", model_attribute="plan_id", abstract="ID of the plan related to this MountPlan"),
     ]
     + deepcopy(REAL_COUNT_FIELDS)
     + deepcopy(REPLACEABLE_MODEL_FIELDS),

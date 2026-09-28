@@ -189,7 +189,10 @@ class UpdatePlanLocationMixin:
             Self: A new model instance with _db_plan_id cached.
         """
         instance = super().from_db(db, field_names, values)
-        instance._db_plan_id = instance.plan_id
+        if field_names is None or "plan_id" in field_names:
+            # Only cache when the FK column was actually loaded. Reading a deferred
+            # plan_id would trigger an extra query for every loaded instance.
+            instance._db_plan_id = instance.plan_id
         return instance
 
     def save(self, *args, **kwargs) -> None:
