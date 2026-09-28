@@ -12,7 +12,12 @@ from gisserver.output import GeoJsonRenderer, GML32Renderer
 from gisserver.projection import FeatureProjection
 from gisserver.types import XsdElement
 
-from traffic_control.views.wfs.utils import EnumIntegerNameXsdElement, IconXsdElement, RealCountXsdElement
+from traffic_control.views.wfs.utils import (
+    AnnotatedIdXsdElement,
+    EnumIntegerNameXsdElement,
+    IconXsdElement,
+    RealCountXsdElement,
+)
 from traffic_control.views.wfs.workarounds import patch_gml_filter_axis_order
 
 patch_gml_filter_axis_order()
@@ -42,16 +47,27 @@ OWNED_DEVICE_MODEL_FIELDS = [
     FeatureField("lifecycle", xsd_class=EnumIntegerNameXsdElement, abstract="Lifecycle of the device."),
 ]
 
+REPLACEMENT_ANNOTATIONS = {
+    "wfs_replaced_by": models.F("replacement_to_new__new"),
+    "wfs_replaces": models.F("replacement_to_old__old"),
+}
+
 REPLACEABLE_MODEL_FIELDS = [
     FeatureField(
         "replaced_by",
-        model_attribute="replacement_to_new.new",
-        abstract="ID of the mount plan which replaces this mount plan",
+        model_attribute="id",
+        # Bound to a local field on purpose; the value comes from the `wfs_replaced_by` annotation.
+        # Binding it to the `replacement_to_new.new` relation makes django-gisserver prefetch the
+        # replacement table with one ID per rendered feature, which produces huge statements.
+        xsd_class=AnnotatedIdXsdElement,
+        abstract="ID of the device plan which replaces this device plan",
     ),
     FeatureField(
         "replaces",
-        model_attribute="replacement_to_old.old",
-        abstract="ID of the mount plan which this mount plan replaces",
+        model_attribute="id",
+        # Value comes from the `wfs_replaces` annotation, see the note above.
+        xsd_class=AnnotatedIdXsdElement,
+        abstract="ID of the device plan which this device plan replaces",
     ),
 ]
 
@@ -79,10 +95,9 @@ DEVICE_TYPE_FIELDS = [
     ),
     FeatureField(
         "device_type_icon",
-        model_attribute="id",
-        # This is a workaround, as django-gisserver checks that the model attribute is an actual
-        # model field; a property is not enough. Still required in django-gisserver 2.x, see
-        # FeatureField.bind() which resolves the attribute through Model._meta.get_field().
+        model_attribute="device_type.icon_file",
+        # Bound to the icon relation so django-gisserver includes it in the projection and resolves
+        # it with the main query. IconXsdElement renders the icon's file name from it.
         xsd_class=IconXsdElement,
         abstract="Device type icon.",
     ),

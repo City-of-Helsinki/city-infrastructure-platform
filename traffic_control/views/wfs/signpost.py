@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from gisserver.features import FeatureField, FeatureType
+from gisserver.features import FeatureField
 
 from traffic_control.models import SignpostReal
 from traffic_control.services.common import get_lifecycle_and_validity_period_queryset, get_real_count_subquery
@@ -12,10 +12,15 @@ from traffic_control.views.wfs.common import (
     OWNED_DEVICE_MODEL_FIELDS,
     REAL_COUNT_FIELDS,
     REPLACEABLE_MODEL_FIELDS,
+    REPLACEMENT_ANNOTATIONS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
-from traffic_control.views.wfs.utils import EnumIntegerNameXsdElement, EnumNameXsdElement
+from traffic_control.views.wfs.utils import (
+    EnumIntegerNameXsdElement,
+    EnumNameXsdElement,
+    FullRelationFeatureType,
+)
 
 _base_fields = (
     [
@@ -64,10 +69,12 @@ _base_fields = (
     + deepcopy(OWNED_DEVICE_MODEL_FIELDS)
 )
 
-SignpostRealFeatureType = FeatureType(
+SignpostRealFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=get_lifecycle_and_validity_period_queryset(SignpostReal.objects.active()).select_related("device_type"),
+    queryset=get_lifecycle_and_validity_period_queryset(SignpostReal.objects.active()).select_related(
+        "device_type__icon_file"
+    ),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("material", abstract="Material that the signpost is made of."),
@@ -88,12 +95,15 @@ SignpostRealFeatureType = FeatureType(
     ],
 )
 
-SignpostPlanFeatureType = FeatureType(
+SignpostPlanFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=get_lifecycle_and_validity_period_queryset(signpost_plan_get_current())
-    .select_related("device_type")
-    .annotate(real_count=get_real_count_subquery(SignpostReal, "signpost_plan")),
+    .select_related("device_type__icon_file")
+    .annotate(
+        real_count=get_real_count_subquery(SignpostReal, "signpost_plan"),
+        **REPLACEMENT_ANNOTATIONS,
+    ),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("plan_id", abstract="ID of the Plan that this Signpost Plan belongs to."),

@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from gisserver.features import FeatureField, FeatureType
+from gisserver.features import FeatureField
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from traffic_control.services.common import get_lifecycle_and_validity_period_queryset, get_real_count_subquery
@@ -13,6 +13,7 @@ from traffic_control.views.wfs.common import (
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
+from traffic_control.views.wfs.utils import FullRelationFeatureType
 
 _base_fields = (
     [
@@ -51,7 +52,7 @@ _base_fields = (
         ),
         FeatureField(
             "parent_id",
-            model_attribute="parent.id",
+            model_attribute="parent_id",
             abstract="ID of the Parent signpost that this signpost is inside of.",
         ),
         FeatureField("pictogram", abstract="Description of the pictogram in this signpost."),
@@ -89,7 +90,7 @@ _base_fields = (
     + deepcopy(OWNED_DEVICE_MODEL_FIELDS)
 )
 
-FurnitureSignpostRealFeatureType = FeatureType(
+FurnitureSignpostRealFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=get_lifecycle_and_validity_period_queryset(FurnitureSignpostReal.objects.active()),
@@ -105,7 +106,7 @@ FurnitureSignpostRealFeatureType = FeatureType(
     ],
 )
 
-FurnitureSignpostPlanFeatureType = FeatureType(
+FurnitureSignpostPlanFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=get_lifecycle_and_validity_period_queryset(FurnitureSignpostPlan.objects.active()).annotate(

@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from gisserver.features import FeatureField, FeatureType
+from gisserver.features import FeatureField
 
 from traffic_control.models import AdditionalSignReal
 from traffic_control.services.additional_sign import additional_sign_plan_get_current
@@ -12,10 +12,16 @@ from traffic_control.views.wfs.common import (
     OWNED_DEVICE_MODEL_FIELDS,
     REAL_COUNT_FIELDS,
     REPLACEABLE_MODEL_FIELDS,
+    REPLACEMENT_ANNOTATIONS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
-from traffic_control.views.wfs.utils import ContentSRowSElement, EnumIntegerNameXsdElement, EnumNameXsdElement
+from traffic_control.views.wfs.utils import (
+    ContentSRowSElement,
+    EnumIntegerNameXsdElement,
+    EnumNameXsdElement,
+    FullRelationFeatureType,
+)
 
 _base_fields = (
     [
@@ -50,7 +56,7 @@ _base_fields = (
         ),
         FeatureField(
             "parent_id",
-            model_attribute="parent.id",
+            model_attribute="parent_id",
             abstract="Parent ID of the sign",
         ),
         FeatureField(
@@ -64,10 +70,10 @@ _base_fields = (
         ),
         FeatureField(
             "content_s_rows",
-            model_attribute="id",
-            # This is a workaround, as django-gisserver checks that the model attribute is an
-            # actual model field; a property is not enough. Still required in django-gisserver
-            # 2.x, see FeatureField.bind() which resolves it through Model._meta.get_field().
+            # django-gisserver requires an actual model field here; binding to the device type's
+            # content schema both satisfies that and keeps the column in the queryset projection,
+            # which get_content_s_rows() needs.
+            model_attribute="device_type.content_schema",
             xsd_class=ContentSRowSElement,
             abstract="Rows of structured content of the additional sign in priority order.",
         ),
@@ -78,11 +84,11 @@ _base_fields = (
     + deepcopy(OWNED_DEVICE_MODEL_FIELDS)
 )
 
-AdditionalSignRealFeatureType = FeatureType(
+AdditionalSignRealFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=get_lifecycle_and_validity_period_queryset(AdditionalSignReal.objects.active()).select_related(
-        "device_type"
+        "device_type__icon_file"
     ),
     fields=deepcopy(_base_fields)
     + [
@@ -104,12 +110,15 @@ AdditionalSignRealFeatureType = FeatureType(
     ],
 )
 
-AdditionalSignPlanFeatureType = FeatureType(
+AdditionalSignPlanFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
     queryset=get_lifecycle_and_validity_period_queryset(additional_sign_plan_get_current())
-    .select_related("device_type")
-    .annotate(real_count=get_real_count_subquery(AdditionalSignReal, "additional_sign_plan")),
+    .select_related("device_type__icon_file")
+    .annotate(
+        real_count=get_real_count_subquery(AdditionalSignReal, "additional_sign_plan"),
+        **REPLACEMENT_ANNOTATIONS,
+    ),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("plan_id", abstract="ID of the Plan that this Additional Sign Plan belongs to."),
