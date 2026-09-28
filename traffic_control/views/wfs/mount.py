@@ -6,11 +6,13 @@ from gisserver.features import FeatureField, FeatureType, field
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import MountReal
+from traffic_control.services.common import get_real_count_subquery
 from traffic_control.services.mount import mount_plan_get_current
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
+    REAL_COUNT_FIELDS,
     REPLACEABLE_MODEL_FIELDS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
@@ -95,11 +97,14 @@ MountRealCentroidFeatureType = FeatureType(
 MountPlanFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=mount_plan_get_current().filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE)),
+    queryset=mount_plan_get_current()
+    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
+    .annotate(real_count=get_real_count_subquery(MountReal, "mount_plan")),
     fields=deepcopy(_mount_fields)
     + [
         FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
     ]
+    + deepcopy(REAL_COUNT_FIELDS)
     + deepcopy(REPLACEABLE_MODEL_FIELDS),
 )
 
@@ -109,10 +114,13 @@ MountPlanCentroidFeatureType = FeatureType(
     name="mountplancentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=mount_plan_get_current().filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE)),
+    queryset=mount_plan_get_current()
+    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
+    .annotate(real_count=get_real_count_subquery(MountReal, "mount_plan")),
     fields=deepcopy(_mount_centroid_fields)
     + [
         FeatureField("plan_id", model_attribute="plan.id", abstract="ID of the plan related to this MountPlan"),
     ]
+    + deepcopy(REAL_COUNT_FIELDS)
     + deepcopy(REPLACEABLE_MODEL_FIELDS),
 )

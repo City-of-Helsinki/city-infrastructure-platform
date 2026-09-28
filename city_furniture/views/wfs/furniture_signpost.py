@@ -3,12 +3,13 @@ from copy import deepcopy
 from gisserver.features import FeatureField, FeatureType
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
-from traffic_control.services.common import get_lifecycle_and_validity_period_queryset
+from traffic_control.services.common import get_lifecycle_and_validity_period_queryset, get_real_count_subquery
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
     EnumIntegerNameXsdElement,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
+    REAL_COUNT_FIELDS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
 )
@@ -107,9 +108,12 @@ FurnitureSignpostRealFeatureType = FeatureType(
 FurnitureSignpostPlanFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=get_lifecycle_and_validity_period_queryset(FurnitureSignpostPlan.objects.active()),
+    queryset=get_lifecycle_and_validity_period_queryset(FurnitureSignpostPlan.objects.active()).annotate(
+        real_count=get_real_count_subquery(FurnitureSignpostReal, "furniture_signpost_plan")
+    ),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("plan_id", abstract="ID of the Plan that this signpost belongs to."),
-    ],
+    ]
+    + deepcopy(REAL_COUNT_FIELDS),
 )

@@ -4,8 +4,8 @@ from uuid import UUID
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.db.models import Model, Q
-from django.utils import timezone
+from django.db.models import Count, IntegerField, Model, OuterRef, Q, Subquery
+from django.db.models.functions import Coalesce, Now
 
 from traffic_control.enums import Lifecycle
 from traffic_control.mixins.models import SoftDeleteModel
@@ -215,17 +215,57 @@ def get_lifecycle_queryset(base_queryset):
     return base_queryset.filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
 
 
+def _model_has_validity_period(model: Type[Model]) -> bool:
+    """Check whether the given model has validity period fields.
+
+    Args:
+        model (Type[Model]): The model to inspect.
+
+    Returns:
+        bool: True when the model defines both validity period fields.
+    """
+    field_names = {field.name for field in model._meta.get_fields()}
+    return {"validity_period_start", "validity_period_end"}.issubset(field_names)
+
+
+def _get_current_validity_period_q(model: Type[Model]) -> Q:
+    """Build a Q object matching rows whose validity period is currently ongoing.
+
+    The current time is resolved by the database (``Now()``) instead of Python, so the condition
+    stays correct also for expressions and querysets that are built once at import time, e.g. the
+    WFS feature types.
+
+    Args:
+        model (Type[Model]): The model the condition is built for.
+
+    Returns:
+        Q: The validity period condition, or an empty Q when the model has no validity period.
+    """
+    if not _model_has_validity_period(model):
+        return Q()
+
+    return _build_current_validity_period_q()
+
+
+def _build_current_validity_period_q() -> Q:
+    """Build the condition matching rows whose validity period is currently ongoing.
+
+    Returns:
+        Q: The validity period condition.
+    """
+    return Q(
+        Q(validity_period_start__isnull=True) | Q(validity_period_start__lte=Now()),
+        Q(validity_period_end__isnull=True) | Q(validity_period_end__gte=Now()),
+    )
+
+
 def get_validity_period_queryset(base_queryset):
     """
     Returns a queryset filtered by validity period:
     - validity_period_start is null or in the past
     - validity_period_end is null or in the future
     """
-    now = timezone.now()
-    return base_queryset.filter(
-        Q(validity_period_start__isnull=True) | Q(validity_period_start__lte=now),
-        Q(validity_period_end__isnull=True) | Q(validity_period_end__gte=now),
-    )
+    return base_queryset.filter(_build_current_validity_period_q())
 
 
 def get_lifecycle_and_validity_period_queryset(base_queryset):
@@ -233,3 +273,33 @@ def get_lifecycle_and_validity_period_queryset(base_queryset):
     Returns a queryset filtered by lifecycle and validity period.
     """
     return get_lifecycle_queryset(get_validity_period_queryset(base_queryset))
+
+
+def get_real_count_subquery(real_model: Type[SoftDeleteModel], plan_relation_name: str) -> Coalesce:
+    """Build an annotation expression counting the reals that realize a device plan.
+
+    Only reals that are not soft deleted, have an active lifecycle and (when the model supports
+    validity periods) an ongoing validity period are counted. Plans without any matching real get
+    a count of 0 instead of NULL.
+
+    Args:
+        real_model (Type[SoftDeleteModel]): The real device model referencing the plan.
+        plan_relation_name (str): Name of the foreign key on the real model pointing to the plan.
+
+    Returns:
+        Coalesce: An expression usable in ``QuerySet.annotate()`` on the plan model.
+    """
+    reals = (
+        real_model.objects.active()
+        .filter(
+            _get_current_validity_period_q(real_model),
+            Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE),
+            **{plan_relation_name: OuterRef("pk")},
+        )
+        .order_by()
+        .values(plan_relation_name)
+        .annotate(real_count=Count("*"))
+        .values("real_count")
+    )
+
+    return Coalesce(Subquery(reals, output_field=IntegerField()), 0)

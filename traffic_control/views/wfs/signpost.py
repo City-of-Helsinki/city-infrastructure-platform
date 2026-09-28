@@ -3,13 +3,14 @@ from copy import deepcopy
 from gisserver.features import FeatureField, FeatureType
 
 from traffic_control.models import SignpostReal
-from traffic_control.services.common import get_lifecycle_and_validity_period_queryset
+from traffic_control.services.common import get_lifecycle_and_validity_period_queryset, get_real_count_subquery
 from traffic_control.services.signpost import signpost_plan_get_current
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
     DEVICE_TYPE_FIELDS,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
+    REAL_COUNT_FIELDS,
     REPLACEABLE_MODEL_FIELDS,
     SOURCE_CONTROLLED_MODEL_FIELDS,
     USER_CONTROLLED_MODEL_FIELDS,
@@ -90,12 +91,15 @@ SignpostRealFeatureType = FeatureType(
 SignpostPlanFeatureType = FeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=get_lifecycle_and_validity_period_queryset(signpost_plan_get_current()).select_related("device_type"),
+    queryset=get_lifecycle_and_validity_period_queryset(signpost_plan_get_current())
+    .select_related("device_type")
+    .annotate(real_count=get_real_count_subquery(SignpostReal, "signpost_plan")),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("plan_id", abstract="ID of the Plan that this Signpost Plan belongs to."),
         FeatureField("mount_plan_id", abstract="ID of the Mount Plan this Signpost Plan belongs to."),
         FeatureField("parent_id", model_attribute="parent", abstract="ID of the parent Signpost Plan."),
     ]
+    + deepcopy(REAL_COUNT_FIELDS)
     + deepcopy(REPLACEABLE_MODEL_FIELDS),
 )
