@@ -159,6 +159,20 @@ def gml_feature_id(feature_element: ElementTree.Element):
     return feature_element.get(f"{{{namespaces['gml']}}}id")
 
 
+def gml_feature_property(feature_element: ElementTree.Element, property_name: str) -> Optional[str]:
+    """Return the text content of a feature's property element.
+
+    Args:
+        feature_element (ElementTree.Element): The GML feature member element.
+        property_name (str): Local name of the property, e.g. ``"real_count"``.
+
+    Returns:
+        Optional[str]: The property's text content, or None when the property is missing.
+    """
+    property_element = feature_element.find(f"./app:{property_name}", namespaces)
+    return None if property_element is None else property_element.text
+
+
 def gml_feature_geometry(feature_element: ElementTree.Element, geometry_type="Point"):
     geom_element = feature_element.find(_get_xpath_for_geometry_position(geometry_type), namespaces)
     text = geom_element.text
@@ -201,6 +215,19 @@ def geojson_crs(geojson) -> str:
 
 def geojson_feature_id(feature: dict) -> str:
     return feature["id"]
+
+
+def geojson_feature_property(feature: dict, property_name: str):
+    """Return the value of a property in a GeoJSON feature.
+
+    Args:
+        feature (dict): The GeoJSON feature.
+        property_name (str): Name of the property, e.g. ``"real_count"``.
+
+    Returns:
+        Any: The property's value, or None when the property is missing.
+    """
+    return feature["properties"].get(property_name)
 
 
 def geojson_feature_point_coordinates(feature: dict) -> List[float]:

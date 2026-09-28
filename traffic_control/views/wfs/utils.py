@@ -68,3 +68,33 @@ class ContentSRowSElement(XsdElement):
         if hasattr(instance, "content_s"):
             return instance.get_content_s_rows()
         return None
+
+
+class RealCountXsdElement(XsdElement):
+    """XsdElement exposing the number of reals that realize a device plan.
+
+    The value is read from the ``real_count`` annotation that the feature type's queryset adds.
+    The XSD type is forced to integer, because the element is bound to the model's ``id`` field
+    as a workaround for django-gisserver requiring an actual model field.
+    """
+
+    def __init__(self, name: str, **kwargs):
+        """Initialize with type forced to XsdTypes.integer.
+
+        Args:
+            name (str): The field name.
+            **kwargs: Additional arguments passed to parent XsdElement.
+        """
+        kwargs["type"] = XsdTypes.integer
+        super().__init__(name, **kwargs)
+
+    def get_value(self, instance: models.Model) -> int:
+        """Return the annotated count of reals for the given plan instance.
+
+        Args:
+            instance (models.Model): The device plan instance.
+
+        Returns:
+            int: Number of reals referencing this plan, 0 when the annotation is missing.
+        """
+        return getattr(instance, "real_count", 0)

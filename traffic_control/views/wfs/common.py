@@ -12,7 +12,7 @@ from gisserver.output import GeoJsonRenderer, GML32Renderer
 from gisserver.projection import FeatureProjection
 from gisserver.types import XsdElement
 
-from traffic_control.views.wfs.utils import EnumIntegerNameXsdElement, IconXsdElement
+from traffic_control.views.wfs.utils import EnumIntegerNameXsdElement, IconXsdElement, RealCountXsdElement
 from traffic_control.views.wfs.workarounds import patch_gml_filter_axis_order
 
 patch_gml_filter_axis_order()
@@ -52,6 +52,17 @@ REPLACEABLE_MODEL_FIELDS = [
         "replaces",
         model_attribute="replacement_to_old.old",
         abstract="ID of the mount plan which this mount plan replaces",
+    ),
+]
+
+REAL_COUNT_FIELDS = [
+    FeatureField(
+        "real_count",
+        model_attribute="id",
+        # This is a workaround, as django-gisserver checks that the model attribute is an actual
+        # model field; the value itself comes from the queryset's `real_count` annotation.
+        xsd_class=RealCountXsdElement,
+        abstract="Number of reals that realize this device plan.",
     ),
 ]
 
