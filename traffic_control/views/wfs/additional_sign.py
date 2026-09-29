@@ -4,10 +4,15 @@ from gisserver.features import FeatureField
 
 from traffic_control.models import AdditionalSignReal
 from traffic_control.services.additional_sign import additional_sign_plan_get_current
-from traffic_control.services.common import get_lifecycle_and_validity_period_queryset, get_real_count_subquery
+from traffic_control.services.common import (
+    get_distance_to_plan_expression,
+    get_lifecycle_and_validity_period_queryset,
+    get_real_count_subquery,
+)
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
     DEVICE_TYPE_FIELDS,
+    DISTANCE_TO_PLAN_FIELDS,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
     REAL_COUNT_FIELDS,
@@ -87,9 +92,9 @@ _base_fields = (
 AdditionalSignRealFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=get_lifecycle_and_validity_period_queryset(AdditionalSignReal.objects.active()).select_related(
-        "device_type__icon_file"
-    ),
+    queryset=get_lifecycle_and_validity_period_queryset(AdditionalSignReal.objects.active())
+    .select_related("device_type__icon_file")
+    .annotate(distance_to_plan=get_distance_to_plan_expression("additional_sign_plan")),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("manufacturer", abstract="Manufacturer of the sign."),
@@ -107,7 +112,8 @@ AdditionalSignRealFeatureType = FullRelationFeatureType(
             abstract="ID of this Additional Sign's plan.",
         ),
         FeatureField("mount_real_id", model_attribute="mount_real", abstract="Mount Real ID"),
-    ],
+    ]
+    + deepcopy(DISTANCE_TO_PLAN_FIELDS),
 )
 
 AdditionalSignPlanFeatureType = FullRelationFeatureType(

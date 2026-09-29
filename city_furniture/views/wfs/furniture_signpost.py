@@ -3,9 +3,14 @@ from copy import deepcopy
 from gisserver.features import FeatureField
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
-from traffic_control.services.common import get_lifecycle_and_validity_period_queryset, get_real_count_subquery
+from traffic_control.services.common import (
+    get_distance_to_plan_expression,
+    get_lifecycle_and_validity_period_queryset,
+    get_real_count_subquery,
+)
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
+    DISTANCE_TO_PLAN_FIELDS,
     EnumIntegerNameXsdElement,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
@@ -93,7 +98,9 @@ _base_fields = (
 FurnitureSignpostRealFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=get_lifecycle_and_validity_period_queryset(FurnitureSignpostReal.objects.active()),
+    queryset=get_lifecycle_and_validity_period_queryset(FurnitureSignpostReal.objects.active()).annotate(
+        distance_to_plan=get_distance_to_plan_expression("furniture_signpost_plan")
+    ),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("installation_date", abstract="Date that the signpost was installed on."),
@@ -103,7 +110,8 @@ FurnitureSignpostRealFeatureType = FullRelationFeatureType(
             model_attribute="furniture_signpost_plan",
             abstract="ID of this Signpost's plan.",
         ),
-    ],
+    ]
+    + deepcopy(DISTANCE_TO_PLAN_FIELDS),
 )
 
 FurnitureSignpostPlanFeatureType = FullRelationFeatureType(

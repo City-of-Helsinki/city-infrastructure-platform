@@ -6,10 +6,11 @@ from gisserver.features import FeatureField, field
 
 from traffic_control.enums import Lifecycle
 from traffic_control.models import MountReal
-from traffic_control.services.common import get_real_count_subquery
+from traffic_control.services.common import get_distance_to_plan_expression, get_real_count_subquery
 from traffic_control.services.mount import mount_plan_get_current
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
+    DISTANCE_TO_PLAN_FIELDS,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
     REAL_COUNT_FIELDS,
@@ -59,9 +60,9 @@ _mount_centroid_fields = deepcopy(_base_fields) + [
 MountRealFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=MountReal.objects.active().filter(
-        Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE)
-    ),
+    queryset=MountReal.objects.active()
+    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
+    .annotate(distance_to_plan=get_distance_to_plan_expression("mount_plan")),
     fields=deepcopy(_mount_fields)
     + [
         FeatureField(
@@ -71,7 +72,8 @@ MountRealFeatureType = FullRelationFeatureType(
         FeatureField("diameter", abstract="Diameter of the mount."),
         FeatureField("scanned_at", abstract="Timestamp when the mount was scanned."),
         FeatureField("attachment_url", abstract="URL of the attachment of the mount."),
-    ],
+    ]
+    + deepcopy(DISTANCE_TO_PLAN_FIELDS),
 )
 
 
@@ -80,9 +82,9 @@ MountRealCentroidFeatureType = FullRelationFeatureType(
     name="mountrealcentroid",
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=MountReal.objects.active().filter(
-        Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE)
-    ),
+    queryset=MountReal.objects.active()
+    .filter(Q(lifecycle=Lifecycle.ACTIVE) | Q(lifecycle=Lifecycle.TEMPORARILY_ACTIVE))
+    .annotate(distance_to_plan=get_distance_to_plan_expression("mount_plan")),
     fields=deepcopy(_mount_centroid_fields)
     + [
         FeatureField(
@@ -92,7 +94,8 @@ MountRealCentroidFeatureType = FullRelationFeatureType(
         FeatureField("diameter", abstract="Diameter of the mount."),
         FeatureField("scanned_at", abstract="Timestamp when the mount was scanned."),
         FeatureField("attachment_url", abstract="URL of the attachment of the mount."),
-    ],
+    ]
+    + deepcopy(DISTANCE_TO_PLAN_FIELDS),
 )
 
 

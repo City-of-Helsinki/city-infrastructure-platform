@@ -14,6 +14,7 @@ from gisserver.types import XsdElement
 
 from traffic_control.views.wfs.utils import (
     AnnotatedIdXsdElement,
+    DistanceToPlanXsdElement,
     EnumIntegerNameXsdElement,
     IconXsdElement,
     RealCountXsdElement,
@@ -81,6 +82,18 @@ REAL_COUNT_FIELDS = [
         abstract="Number of reals that realize this device plan.",
     ),
 ]
+
+DISTANCE_TO_PLAN_FIELDS = [
+    FeatureField(
+        "distance_to_plan",
+        model_attribute="id",
+        # This is a workaround, as django-gisserver checks that the model attribute is an actual
+        # model field; the value itself comes from the queryset's `distance_to_plan` annotation.
+        xsd_class=DistanceToPlanXsdElement,
+        abstract="Distance in meters between this device and the device plan it realizes.",
+    ),
+]
+
 
 DEVICE_TYPE_FIELDS = [
     FeatureField(

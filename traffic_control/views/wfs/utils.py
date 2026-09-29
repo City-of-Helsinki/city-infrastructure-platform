@@ -188,6 +188,43 @@ class AnnotatedIdXsdElement(XsdElement):
         return getattr(instance, f"wfs_{self.name}", None)
 
 
+class DistanceToPlanXsdElement(XsdElement):
+    """XsdElement exposing how far a real device is from the plan instance it realizes.
+
+    The value is read from the ``distance_to_plan`` annotation that the feature type's queryset
+    adds. The XSD type is forced to double, because the element is bound to the model's ``id``
+    field as a workaround for django-gisserver requiring an actual model field.
+    """
+
+    #: Number of decimals the distance is rounded to.
+    precision = 2
+
+    def __init__(self, name: str, **kwargs):
+        """Initialize with type forced to XsdTypes.double and nillability forced on.
+
+        Args:
+            name (str): The field name.
+            **kwargs: Additional arguments passed to parent XsdElement.
+        """
+        kwargs["type"] = XsdTypes.double
+        kwargs["nillable"] = True
+        super().__init__(name, **kwargs)
+
+    def get_value(self, instance: models.Model) -> Optional[float]:
+        """Return the distance in metres between the real and its plan.
+
+        Args:
+            instance (models.Model): The real device instance being rendered.
+
+        Returns:
+            Optional[float]: The rounded distance in metres, or None when the real has no plan.
+        """
+        distance = getattr(instance, "distance_to_plan", None)
+        if distance is None:
+            return None
+        return round(getattr(distance, "m", distance), self.precision)
+
+
 class FullRelationFeatureType(FeatureType):
     """FeatureType that prefetches complete related objects.
 

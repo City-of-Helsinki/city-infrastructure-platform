@@ -3,11 +3,16 @@ from copy import deepcopy
 from gisserver.features import FeatureField
 
 from traffic_control.models import SignpostReal
-from traffic_control.services.common import get_lifecycle_and_validity_period_queryset, get_real_count_subquery
+from traffic_control.services.common import (
+    get_distance_to_plan_expression,
+    get_lifecycle_and_validity_period_queryset,
+    get_real_count_subquery,
+)
 from traffic_control.services.signpost import signpost_plan_get_current
 from traffic_control.views.wfs.common import (
     DEFAULT_CRS,
     DEVICE_TYPE_FIELDS,
+    DISTANCE_TO_PLAN_FIELDS,
     OTHER_CRS,
     OWNED_DEVICE_MODEL_FIELDS,
     REAL_COUNT_FIELDS,
@@ -72,9 +77,9 @@ _base_fields = (
 SignpostRealFeatureType = FullRelationFeatureType(
     crs=DEFAULT_CRS,
     other_crs=OTHER_CRS,
-    queryset=get_lifecycle_and_validity_period_queryset(SignpostReal.objects.active()).select_related(
-        "device_type__icon_file"
-    ),
+    queryset=get_lifecycle_and_validity_period_queryset(SignpostReal.objects.active())
+    .select_related("device_type__icon_file")
+    .annotate(distance_to_plan=get_distance_to_plan_expression("signpost_plan")),
     fields=deepcopy(_base_fields)
     + [
         FeatureField("material", abstract="Material that the signpost is made of."),
@@ -92,7 +97,8 @@ SignpostRealFeatureType = FullRelationFeatureType(
         ),
         FeatureField("mount_real_id", model_attribute="mount_real", abstract="Mount Real ID."),
         FeatureField("parent_id", model_attribute="parent", abstract="ID of the parent Signpost Real."),
-    ],
+    ]
+    + deepcopy(DISTANCE_TO_PLAN_FIELDS),
 )
 
 SignpostPlanFeatureType = FullRelationFeatureType(
