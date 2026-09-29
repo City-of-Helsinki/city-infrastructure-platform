@@ -2,6 +2,7 @@ from datetime import timedelta
 from typing import Callable, Type
 from uuid import UUID
 
+from django.contrib.gis.db.models.functions import Distance
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Count, IntegerField, Model, OuterRef, Q, Subquery
@@ -303,3 +304,19 @@ def get_real_count_subquery(real_model: Type[SoftDeleteModel], plan_relation_nam
     )
 
     return Coalesce(Subquery(reals, output_field=IntegerField()), 0)
+
+
+def get_distance_to_plan_expression(plan_relation_name: str) -> Distance:
+    """Build an annotation expression measuring how far a real device is from its plan.
+
+    The distance is measured in the coordinate system's units (metres in EPSG:3879) between the
+    full geometries. PostGIS' ``ST_Distance`` is two-dimensional, so the Z coordinate of the 3D
+    location columns is ignored. Reals without a linked plan get NULL.
+
+    Args:
+        plan_relation_name (str): Name of the foreign key on the real model pointing to the plan.
+
+    Returns:
+        Distance: An expression usable in ``QuerySet.annotate()`` on the real model.
+    """
+    return Distance("location", f"{plan_relation_name}__location")
