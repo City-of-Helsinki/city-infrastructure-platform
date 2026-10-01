@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.48.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.47.0...city-infrastructure-platform-v1.48.0) (2026-10-01)
+
+
+### Features
+
+* Add management command for checking traffic sign real values ([4c253ea](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4c253ea8fdfc0573d714b4743e978594e4b8358d))
+* Devicetype tagging support ([4409260](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/44092604539ab8134856330f47664d5e82056ca1))
+* Embed views for additional signs and mounts ([f7d09c0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f7d09c0e078cb94bb7ba1ea98c155ea80e90e644))
+* **wfs:** Add distance_to_plan to real feature types ([05598ec](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/05598ec92afcb109c4a1f47eba2888bf26cf38df))
+* **wfs:** Add real_count to device plan feature types ([0acec84](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0acec84dab5279c22677d848cb539af6cdb70d59))
+
+
+### Bug Fixes
+
+* Add relation auditlogs for all OperationBase models ([59715cd](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/59715cdeeaeb4b88414a4128f54f2ee6130913a3))
+* Broken AD login ([4ecd27b](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/4ecd27b651d66e5748b38006124650675ad04656))
+* Typo in SignpostRealAdmin inlines field ([867f00a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/867f00adc7687081c6bf98159270c926837e3733))
+
+
+### Performance Improvements
+
+* **wfs:** Eliminate N+1 queries and oversized SQL in GetFeature ([473d6ff](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/473d6ff2f24ecf7954df207406b68f295eb9a481))
+
 ## [1.47.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.46.0...city-infrastructure-platform-v1.47.0) (2026-09-18)
 
 
