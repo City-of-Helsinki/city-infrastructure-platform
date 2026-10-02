@@ -3,6 +3,7 @@ from rest_framework_gis.fields import GeometryField
 
 from traffic_control.models import Plan
 from traffic_control.serializers.common import EwktGeometryField, HideFromAnonUserSerializerMixin
+from traffic_control.services.plan import get_plan_decision_url
 
 
 class PlanRelationSerializer(serializers.ModelSerializer):
@@ -82,6 +83,28 @@ class PlanSerializer(HideFromAnonUserSerializerMixin, serializers.ModelSerialize
             "deleted_at",
         )
         exclude = ("is_active", "deleted_at", "deleted_by")
+
+    def validate(self, attrs: dict) -> dict:
+        """Populate `decision_url` from `diary_number` when no URL is available.
+
+        An explicitly given `decision_url` is never overwritten. The URL is only
+        derived when the resulting value would otherwise be empty.
+
+        Args:
+            attrs (dict): Validated field values.
+
+        Returns:
+            dict: Validated field values with `decision_url` populated when applicable.
+        """
+        attrs = super().validate(attrs)
+
+        diary_number = attrs.get("diary_number", getattr(self.instance, "diary_number", None))
+        decision_url = attrs.get("decision_url", getattr(self.instance, "decision_url", None))
+
+        if not decision_url:
+            attrs["decision_url"] = get_plan_decision_url(diary_number)
+
+        return attrs
 
 
 class PlanGeoJSONSerializer(PlanSerializer):
