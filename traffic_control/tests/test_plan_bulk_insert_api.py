@@ -40,6 +40,9 @@ POINT = "SRID=3879;POINT Z (25496751.5 6673129.5 1.5)"
 
 NON_FIELD_ERRORS = api_settings.NON_FIELD_ERRORS_KEY
 
+PLAN_DIARY_NUMBER = "HEL 2023-000001"
+PLAN_DECISION_URL = "https://paatokset.hel.fi/fi/asia/HEL-2023-000001"
+
 
 def additional_sign_plan_payload(
     *,
@@ -531,3 +534,53 @@ def test_plan_bulk_insert_expects_new_objects(
     assert len(signpost_plan_errors[1]) == 2
     assert "plan" in signpost_plan_errors[1]
     assert f"Dependency plan ({NON_EXISTENT_ID}) was not created by this request." in signpost_plan_errors[1]["plan"]
+
+
+@pytest.mark.django_db
+def test_plan_bulk_insert_derives_decision_url_from_diary_number(admin_client):
+    response = _post_insert_plan_bulk(
+        admin_client,
+        plan=plan_payload(diary_number=PLAN_DIARY_NUMBER),
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.json()["plan"]["decision_url"] == PLAN_DECISION_URL
+    assert Plan.objects.get(pk=DEFAULT_PLAN_ID).decision_url == PLAN_DECISION_URL
+
+
+@pytest.mark.django_db
+def test_plan_bulk_insert_does_not_overwrite_given_decision_url(admin_client):
+    given_decision_url = "https://example.com/decision"
+
+    response = _post_insert_plan_bulk(
+        admin_client,
+        plan=plan_payload(diary_number=PLAN_DIARY_NUMBER, decision_url=given_decision_url),
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert Plan.objects.get(pk=DEFAULT_PLAN_ID).decision_url == given_decision_url
+
+
+@pytest.mark.django_db
+def test_plan_bulk_insert_without_diary_number_leaves_decision_url_empty(admin_client):
+    response = _post_insert_plan_bulk(admin_client, plan=plan_payload())
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert Plan.objects.get(pk=DEFAULT_PLAN_ID).decision_url == ""
+
+
+@pytest.mark.django_db
+def test_plan_bulk_insert_keeps_decision_url_without_diary_number(admin_client):
+    given_decision_url = "https://example.com/decision"
+
+    response = _post_insert_plan_bulk(
+        admin_client,
+        plan=plan_payload(decision_url=given_decision_url),
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.json()["plan"]["decision_url"] == given_decision_url
+
+    plan = Plan.objects.get(pk=DEFAULT_PLAN_ID)
+    assert plan.decision_url == given_decision_url
+    assert not plan.diary_number
