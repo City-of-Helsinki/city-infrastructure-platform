@@ -313,3 +313,115 @@ def test__plan__anonymous_user(method, expected_status, view_type):
     assert Plan.objects.first().is_active
     assert Plan.objects.first().name == "Plan 1"
     assert response.status_code == expected_status
+
+
+PLAN_DECISION_URL = "https://paatokset.hel.fi/fi/asia/HEL-2023-000001"
+
+
+def _post_plan(user, **extra_data):
+    api_client = get_api_client(user=user)
+    data = {
+        "name": "Test plan",
+        "decision_id": "2020_1",
+        "location": test_multi_polygon.ewkt,
+        "drawing_numbers": ["1234"],
+    }
+    data.update(extra_data)
+
+    return api_client.post(reverse("v1:plan-list"), data=data, format="json")
+
+
+@pytest.mark.django_db
+def test__plan_create__decision_url_is_derived_from_diary_number():
+    user = get_user(admin=True)
+
+    response = _post_plan(user, diary_number=PLAN_DIARY_NUMBER)
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data.get("decision_url") == PLAN_DECISION_URL
+    assert Plan.objects.get(pk=response.data["id"]).decision_url == PLAN_DECISION_URL
+
+
+@pytest.mark.django_db
+def test__plan_create__given_decision_url_is_not_overwritten():
+    user = get_user(admin=True)
+
+    response = _post_plan(user, diary_number=PLAN_DIARY_NUMBER, decision_url="https://example.com/decision")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert Plan.objects.get(pk=response.data["id"]).decision_url == "https://example.com/decision"
+
+
+@pytest.mark.django_db
+def test__plan_create__no_diary_number_leaves_decision_url_empty():
+    user = get_user(admin=True)
+
+    response = _post_plan(user)
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert Plan.objects.get(pk=response.data["id"]).decision_url == ""
+
+
+@pytest.mark.django_db
+def test__plan_patch__decision_url_is_derived_from_diary_number():
+    user = get_user(admin=True)
+    plan = PlanFactory(diary_number=None, decision_url="")
+    api_client = get_api_client(user=user)
+
+    response = api_client.patch(
+        reverse("v1:plan-detail", kwargs={"pk": plan.pk}),
+        data={"diary_number": PLAN_DIARY_NUMBER},
+        format="json",
+    )
+
+    plan.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert plan.decision_url == PLAN_DECISION_URL
+
+
+@pytest.mark.django_db
+def test__plan_create__decision_url_without_diary_number_is_kept():
+    user = get_user(admin=True)
+
+    response = _post_plan(user, decision_url="https://example.com/decision")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data.get("decision_url") == "https://example.com/decision"
+
+    plan = Plan.objects.get(pk=response.data["id"])
+    assert plan.decision_url == "https://example.com/decision"
+    assert not plan.diary_number
+
+
+@pytest.mark.django_db
+def test__plan_patch__decision_url_without_diary_number_is_kept():
+    user = get_user(admin=True)
+    plan = PlanFactory(diary_number=None, decision_url="")
+    api_client = get_api_client(user=user)
+
+    response = api_client.patch(
+        reverse("v1:plan-detail", kwargs={"pk": plan.pk}),
+        data={"decision_url": "https://example.com/decision"},
+        format="json",
+    )
+
+    plan.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert plan.decision_url == "https://example.com/decision"
+
+
+@pytest.mark.django_db
+def test__plan_patch__existing_decision_url_is_not_overwritten_by_diary_number():
+    user = get_user(admin=True)
+    plan = PlanFactory(diary_number=None, decision_url="https://example.com/decision")
+    api_client = get_api_client(user=user)
+
+    response = api_client.patch(
+        reverse("v1:plan-detail", kwargs={"pk": plan.pk}),
+        data={"diary_number": PLAN_DIARY_NUMBER},
+        format="json",
+    )
+
+    plan.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert plan.decision_url == "https://example.com/decision"
