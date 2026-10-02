@@ -73,6 +73,7 @@ package = false
 
 [tool.uv.sources]
 django-resilient-logger = { git = "https://github.com/City-of-Helsinki/django-resilient-logger", rev = "176832d5f0be2cf7d73139fc645376e67f949ea2" }
+django-logger-extra = { path = "../django-logger-extra", editable = true }
 
 [tool.ruff]
 extend-select = [

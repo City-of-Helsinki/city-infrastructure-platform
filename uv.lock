@@ -298,7 +298,7 @@ requires-dist = [
     { name = "django-health-check" },
     { name = "django-helusers" },
     { name = "django-import-export", extras = ["xlsx"] },
-    { name = "django-logger-extra" },
+    { name = "django-logger-extra", editable = "../django-logger-extra" },
     { name = "django-mptt" },
     { name = "django-resilient-logger", git = "https://github.com/City-of-Helsinki/django-resilient-logger?rev=176832d5f0be2cf7d73139fc645376e67f949ea2" },
     { name = "django-storages", extras = ["azure"] },
@@ -738,14 +738,27 @@ wheels = [
 [[package]]
 name = "django-logger-extra"
 version = "1.1.2"
-source = { registry = "https://pypi.org/simple" }
+source = { editable = "../django-logger-extra" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fa/4a/401ce9c4e3ef8a453f84b198bf6904f9959a7567cdca65d2bff76c9c4cde/django_logger_extra-1.1.2.tar.gz", hash = "sha256:b86e2cbf5266997cceb7acb6b645b6916b9fc72cf466c71ef5b5eed672d5ed8b", size = 15776, upload-time = "2026-04-22T11:25:30.396Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/3b/b9339afaef62610f195ed5349b26a1c498cefcabfc2f58acde02a7ecec93/django_logger_extra-1.1.2-py2.py3-none-any.whl", hash = "sha256:d71004c4956577e7bff2e3745d9432f55172a6cf29de3f11179e015469ab4d26", size = 10222, upload-time = "2026-04-22T11:25:28.795Z" },
+
+[package.metadata]
+requires-dist = [
+    { name = "coverage", extras = ["toml"], marker = "extra == 'test'" },
+    { name = "django", specifier = ">=5.2" },
+    { name = "django-auditlog", marker = "extra == 'auditlog'" },
+    { name = "django-logger-extra", extras = ["auditlog"], marker = "extra == 'all'" },
+    { name = "django-logger-extra", extras = ["resilient-logger"], marker = "extra == 'all'" },
+    { name = "django-logger-extra", extras = ["test"], marker = "extra == 'all'" },
+    { name = "django-resilient-logger", marker = "extra == 'resilient-logger'" },
+    { name = "freezegun", marker = "extra == 'test'" },
+    { name = "pytest", marker = "extra == 'test'" },
+    { name = "pytest-cov", marker = "extra == 'test'" },
+    { name = "pytest-django", marker = "extra == 'test'" },
+    { name = "pytest-randomly", marker = "extra == 'test'" },
 ]
+provides-extras = ["test", "auditlog", "resilient-logger", "all"]
 
 [[package]]
 name = "django-mptt"

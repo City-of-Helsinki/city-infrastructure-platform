@@ -212,11 +212,12 @@ RESILIENT_LOGGER = {
     "chunk_size": 500,
     "submit_unsent_entries": True,
     "clear_sent_entries": True,
-    "actor_resolver": "cityinfra.auditlog_patches.resolve_actor",
+    "actor_resolver": "logger_extra.extras.resilient_logger.resolve_actor_with_masked_email",
 }
 
 # https://github.com/City-of-Helsinki/django-logger-extra#django-auditlog-extra-context
 LOGGER_EXTRA_AUGMENT_DJANGO_AUDITLOG = True
+LOGGER_EXTRA_MASK_ACTOR_EMAIL = True
 
 # https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-LOGGING
 # https://docs.djangoproject.com/en/5.2/topics/logging/#configuring-logging
@@ -302,7 +303,6 @@ LOCAL_APPS = [
     "site_alert.apps.SiteAlertConfig",
     "admin_helper.apps.AdminHelperConfig",
     "command_tracker.apps.CommandTrackerConfig",
-    "cityinfra.apps.CityInfraConfig",
 ]
 INSTALLED_APPS = LOCAL_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
