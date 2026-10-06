@@ -26,6 +26,8 @@
     "Reset Icon Settings": "Återställ ikoninställningar",
     "Are you sure you want to reset all icon settings to their default values from the server?": "Är du säker på att du vill återställa alla ikoninställningar till deras standardvärden från servern?",
     "Cancel": "Avbryt",
-    "Reset": "Återställ"
+    "Reset": "Återställ",
+    "Real-plan distance display threshold (in meters)": "",
+    "Distances below threshold will not be displayed": ""
   }
 }
