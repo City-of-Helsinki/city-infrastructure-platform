@@ -28,6 +28,8 @@ import { IconSize, MapConfig } from "../models";
 import { useTranslation } from "react-i18next";
 import { getDiffLayerIdentifierFromLayerIdentifier } from "../common/MapUtils";
 
+const MINIMUM_REAL_PLAN_DISTANCE_THRESHOLD = 0;
+
 const StyledAppBar = styled(AppBar)({
   position: "static",
   elevation: 0,
@@ -49,9 +51,11 @@ interface LayerSwitcherProps {
   mapConfig: MapConfig;
   onClose: () => void;
   onOverlayToggle: (checked: boolean, diffLayerIdentifier: string, layerIdentifier: string) => void;
+  realPlanDistanceThreshold: number;
   iconScale: number;
   iconType: string;
   iconSize: IconSize;
+  onRealPlanDistanceThresholdChange: (scale: number) => void;
   onIconScaleChange: (scale: number) => void;
   onIconTypeChange: (type: string) => void;
   onIconSizeChange: (size: IconSize) => void;
@@ -62,9 +66,11 @@ const LayerSwitcher = ({
   mapConfig,
   onClose,
   onOverlayToggle,
+  realPlanDistanceThreshold,
   iconScale,
   iconType,
   iconSize,
+  onRealPlanDistanceThresholdChange,
   onIconScaleChange,
   onIconTypeChange,
   onIconSizeChange,
@@ -86,6 +92,9 @@ const LayerSwitcher = ({
   const [displayRealPlanDifference, setDisplayRealPlanDifference] = useState<boolean>(true);
   const [resetDialogOpen, setResetDialogOpen] = useState<boolean>(false);
   const [iconScaleInput, setIconScaleInput] = useState<string>(iconScale.toString());
+  const [realPlanDistanceThresholdInput, setRealPlanDistanceThresholdInput] = useState<string>(
+    realPlanDistanceThreshold.toString(),
+  );
 
   // Sync iconScaleInput with iconScale prop when it changes
   React.useEffect(() => {
@@ -162,6 +171,23 @@ const LayerSwitcher = ({
       setDisplayRealPlanDifference(checked);
     };
 
+    const handleRealPlanDistanceThresholdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setRealPlanDistanceThresholdInput(value);
+
+      const numValue = Number.parseFloat(value);
+      if (!Number.isNaN(numValue) && numValue >= MINIMUM_REAL_PLAN_DISTANCE_THRESHOLD) {
+        onRealPlanDistanceThresholdChange(numValue);
+      }
+    };
+
+    const handleRealPlanDistanceThresholdBlur = () => {
+      const numValue = Number.parseFloat(realPlanDistanceThresholdInput);
+      if (Number.isNaN(numValue) || numValue < MINIMUM_REAL_PLAN_DISTANCE_THRESHOLD) {
+        setRealPlanDistanceThresholdInput(realPlanDistanceThreshold.toString());
+      }
+    };
+
     const changeProjectIdFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
       const text = event.target.value || "";
       Map.applyProjectFilters(overlayConfig, text);
@@ -214,6 +240,20 @@ const LayerSwitcher = ({
             key={"real-plan-difference"}
             control={<Checkbox checked={displayRealPlanDifference} onChange={changeOverlayVisibility} />}
             label={t("Display Plan/Real difference")}
+          />
+          <TextField
+            id="real-plan-difference-threshold"
+            label={t("Real-plan distance display threshold (in meters)")}
+            variant={"standard"}
+            type="number"
+            value={realPlanDistanceThresholdInput}
+            onChange={handleRealPlanDistanceThresholdChange}
+            onBlur={handleRealPlanDistanceThresholdBlur}
+            inputProps={{
+              min: MINIMUM_REAL_PLAN_DISTANCE_THRESHOLD,
+              step: 1,
+            }}
+            helperText={t("Distances below threshold will not be displayed")}
           />
         </FormGroup>
         <FormGroup>
