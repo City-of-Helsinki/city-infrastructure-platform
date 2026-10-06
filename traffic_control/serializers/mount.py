@@ -27,19 +27,37 @@ from traffic_control.services.mount import mount_plan_create, mount_plan_update
 class PortalTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PortalType
-        fields = "__all__"
+        fields = (
+            "id",
+            "structure",
+            "build_type",
+            "model",
+        )
 
 
 class MountTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MountType
-        fields = "__all__"
+        fields = (
+            "id",
+            "code",
+            "description",
+            "description_fi",
+            "description_sv",
+            "digiroad_code",
+            "digiroad_description",
+        )
 
 
 class MountPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MountPlanFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "mount_plan",
+        )
 
 
 class MountPlanInputSerializer(
@@ -64,7 +82,31 @@ class MountPlanInputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "height",
+            "base",
+            "material",
+            "txt",
+            "electric_accountable",
+            "is_foldable",
+            "cross_bar_length",
+            "road_name",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_type",
+            "portal_type",
+            "plan",
+        )
 
 
 class MountPlanGeoJSONInputSerializer(MountPlanInputSerializer):
@@ -88,7 +130,34 @@ class MountPlanOutputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "replaced_by",
+            "is_replaced",
+            "location",
+            "files",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "height",
+            "base",
+            "material",
+            "txt",
+            "electric_accountable",
+            "is_foldable",
+            "cross_bar_length",
+            "road_name",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_type",
+            "portal_type",
+            "plan",
+        )
 
 
 class MountPlanGeoJSONOutputSerializer(MountPlanOutputSerializer):
@@ -98,7 +167,12 @@ class MountPlanGeoJSONOutputSerializer(MountPlanOutputSerializer):
 class MountRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MountRealFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "mount_real",
+        )
 
 
 class MountRealOperationSerializer(serializers.ModelSerializer):
@@ -149,7 +223,41 @@ class MountRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "ordered_traffic_signs",
+            "files",
+            "operations",
+            "plan_decision_id",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "installation_date",
+            "installation_status",
+            "condition",
+            "source_id",
+            "source_name",
+            "height",
+            "base",
+            "material",
+            "txt",
+            "electric_accountable",
+            "is_foldable",
+            "cross_bar_length",
+            "road_name",
+            "location_specifier",
+            "inspected_at",
+            "diameter",
+            "scanned_at",
+            "attachment_url",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_type",
+            "portal_type",
+            "mount_plan",
+        )
 
 
 class MountRealGeoJSONSerializer(MountRealSerializer):

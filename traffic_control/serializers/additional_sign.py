@@ -27,7 +27,12 @@ from traffic_control.services.additional_sign import additional_sign_plan_create
 class AdditionalSignPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = AdditionalSignPlanFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "additional_sign_plan",
+        )
 
 
 class AdditionalSignPlanInputSerializer(
@@ -58,7 +63,40 @@ class AdditionalSignPlanInputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "content_s",
+            "missing_content",
+            "additional_information",
+            "height",
+            "size",
+            "direction",
+            "reflection_class",
+            "surface_class",
+            "color",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+            "parent",
+            "signpost_plan",
+            "mount_plan",
+            "plan",
+        )
         validators = (StructuredContentValidator(),)
 
 
@@ -88,7 +126,43 @@ class AdditionalSignPlanOutputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "replaced_by",
+            "is_replaced",
+            "location",
+            "device_type",
+            "files",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "content_s",
+            "missing_content",
+            "additional_information",
+            "height",
+            "size",
+            "direction",
+            "reflection_class",
+            "surface_class",
+            "color",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+            "parent",
+            "signpost_plan",
+            "mount_plan",
+            "plan",
+        )
 
 
 class AdditionalSignPlanGeoJSONOutputSerializer(AdditionalSignPlanOutputSerializer):
@@ -98,7 +172,12 @@ class AdditionalSignPlanGeoJSONOutputSerializer(AdditionalSignPlanOutputSerializ
 class AdditionalSignRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = AdditionalSignRealFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "additional_sign_real",
+        )
 
 
 class AdditionalSignRealOperationSerializer(serializers.ModelSerializer):
@@ -149,7 +228,54 @@ class AdditionalSignRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "legacy_code", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "files",
+            "device_type",
+            "operations",
+            "plan_decision_id",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "installation_date",
+            "installation_status",
+            "condition",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "content_s",
+            "missing_content",
+            "additional_information",
+            "height",
+            "size",
+            "direction",
+            "reflection_class",
+            "surface_class",
+            "color",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "installation_id",
+            "installation_details",
+            "installed_by",
+            "manufacturer",
+            "rfid",
+            "permit_decision_id",
+            "operation",
+            "scanned_at",
+            "attachment_url",
+            "created_by",
+            "updated_by",
+            "owner",
+            "parent",
+            "signpost_real",
+            "additional_sign_plan",
+            "mount_real",
+        )
         validators = (StructuredContentValidator(),)
 
 

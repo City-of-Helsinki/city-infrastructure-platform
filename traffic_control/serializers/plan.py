@@ -82,7 +82,24 @@ class PlanSerializer(HideFromAnonUserSerializerMixin, serializers.ModelSerialize
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "linked_objects",
+            "created_at",
+            "updated_at",
+            "source_id",
+            "source_name",
+            "name",
+            "decision_id",
+            "diary_number",
+            "drawing_numbers",
+            "derive_location",
+            "decision_date",
+            "decision_url",
+            "created_by",
+            "updated_by",
+        )
 
     def validate(self, attrs: dict) -> dict:
         """Populate `decision_url` from `diary_number` when no URL is available.

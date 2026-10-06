@@ -25,7 +25,12 @@ from traffic_control.services.signpost import signpost_plan_create, signpost_pla
 class SignpostPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = SignpostPlanFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "signpost_plan",
+        )
 
 
 class SignpostPlanInputSerializer(
@@ -55,7 +60,41 @@ class SignpostPlanInputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "value",
+            "txt",
+            "size",
+            "reflection_class",
+            "attachment_class",
+            "target_id",
+            "target_txt",
+            "electric_maintainer",
+            "location_specifier",
+            "double_sided",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_plan",
+            "parent",
+            "plan",
+        )
 
 
 class SignpostPlanGeoJSONInputSerializer(SignpostPlanInputSerializer):
@@ -84,7 +123,44 @@ class SignpostPlanOutputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "replaced_by",
+            "is_replaced",
+            "location",
+            "files",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "value",
+            "txt",
+            "size",
+            "reflection_class",
+            "attachment_class",
+            "target_id",
+            "target_txt",
+            "electric_maintainer",
+            "location_specifier",
+            "double_sided",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_plan",
+            "parent",
+            "plan",
+        )
 
 
 class SignpostPlanGeoJSONOutputSerializer(SignpostPlanOutputSerializer):
@@ -94,7 +170,12 @@ class SignpostPlanGeoJSONOutputSerializer(SignpostPlanOutputSerializer):
 class SignpostRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = SignpostRealFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "signpost_real",
+        )
 
 
 class SignpostRealOperationSerializer(serializers.ModelSerializer):
@@ -144,7 +225,51 @@ class SignpostRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "files",
+            "device_type",
+            "operations",
+            "plan_decision_id",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "installation_date",
+            "installation_status",
+            "condition",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "value",
+            "txt",
+            "size",
+            "reflection_class",
+            "attachment_class",
+            "target_id",
+            "target_txt",
+            "electric_maintainer",
+            "location_specifier",
+            "double_sided",
+            "material",
+            "organization",
+            "manufacturer",
+            "scanned_at",
+            "attachment_url",
+            "created_by",
+            "updated_by",
+            "owner",
+            "signpost_plan",
+            "parent",
+            "mount_real",
+        )
 
 
 class SignpostRealGeoJSONSerializer(SignpostRealSerializer):

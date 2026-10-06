@@ -103,10 +103,73 @@ class BulkPlanInputSerializerAdditionalSignPlanItem(AdditionalSignPlanInputSeria
     parent = serializers.UUIDField(required=False, allow_null=True)
     signpost_plan = serializers.UUIDField(required=False, allow_null=True)
 
+    class Meta(AdditionalSignPlanInputSerializer.Meta):
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "device_type",
+            "plan",
+            "mount_plan",
+            "parent",
+            "signpost_plan",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "content_s",
+            "missing_content",
+            "additional_information",
+            "height",
+            "size",
+            "direction",
+            "reflection_class",
+            "surface_class",
+            "color",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+        )
+
 
 class BulkPlanInputSerializerMountPlanItem(MountPlanInputSerializer):
     id = serializers.UUIDField(required=True)
     plan = serializers.UUIDField(required=True)
+
+    class Meta(MountPlanInputSerializer.Meta):
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "plan",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "height",
+            "base",
+            "material",
+            "txt",
+            "electric_accountable",
+            "is_foldable",
+            "cross_bar_length",
+            "road_name",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_type",
+            "portal_type",
+        )
 
 
 class BulkPlanInputSerializerPlanItem(PlanSerializer):
@@ -119,11 +182,83 @@ class BulkPlanInputSerializerSignpostPlanItem(SignpostPlanInputSerializer):
     mount_plan = serializers.UUIDField(required=False, allow_null=True)
     parent = serializers.UUIDField(required=False, allow_null=True)
 
+    class Meta(SignpostPlanInputSerializer.Meta):
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "device_type",
+            "plan",
+            "mount_plan",
+            "parent",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "value",
+            "txt",
+            "size",
+            "reflection_class",
+            "attachment_class",
+            "target_id",
+            "target_txt",
+            "electric_maintainer",
+            "location_specifier",
+            "double_sided",
+            "created_by",
+            "updated_by",
+            "owner",
+        )
+
 
 class BulkPlanInputSerializerTrafficSignPlanItem(TrafficSignPlanInputSerializer):
     id = serializers.UUIDField(required=True)
     plan = serializers.UUIDField(required=True)
     mount_plan = serializers.UUIDField(required=False, allow_null=True)
+
+    class Meta(TrafficSignPlanInputSerializer.Meta):
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "affect_area",
+            "device_type",
+            "plan",
+            "mount_plan",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "value",
+            "size",
+            "reflection_class",
+            "surface_class",
+            "txt",
+            "location_specifier",
+            "double_sided",
+            "peak_fastened",
+            "created_by",
+            "updated_by",
+            "owner",
+        )
 
 
 DEPENDENCY_ID_FIELDS = {"plan", "mount_plan", "parent", "signpost_plan"}

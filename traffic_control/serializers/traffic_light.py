@@ -25,7 +25,12 @@ from traffic_control.services.traffic_light import traffic_light_plan_create, tr
 class TrafficLightPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = TrafficLightPlanFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "traffic_light_plan",
+        )
 
 
 class TrafficLightPlanInputSerializer(
@@ -55,7 +60,35 @@ class TrafficLightPlanInputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "type",
+            "txt",
+            "push_button",
+            "sound_beacon",
+            "vehicle_recognition",
+            "validity_period_start",
+            "validity_period_end",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_plan",
+            "plan",
+        )
 
 
 class TrafficLightPlanGeoJSONInputSerializer(TrafficLightPlanInputSerializer):
@@ -84,7 +117,38 @@ class TrafficLightPlanOutputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "replaced_by",
+            "is_replaced",
+            "location",
+            "files",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "type",
+            "txt",
+            "push_button",
+            "sound_beacon",
+            "vehicle_recognition",
+            "validity_period_start",
+            "validity_period_end",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_plan",
+            "plan",
+        )
 
 
 class TrafficLightPlanGeoJSONOutputSerializer(TrafficLightPlanOutputSerializer):
@@ -94,7 +158,12 @@ class TrafficLightPlanGeoJSONOutputSerializer(TrafficLightPlanOutputSerializer):
 class TrafficLightRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = TrafficLightRealFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "traffic_light_real",
+        )
 
 
 class TrafficLightRealOperationSerializer(serializers.ModelSerializer):
@@ -144,7 +213,40 @@ class TrafficLightRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "files",
+            "device_type",
+            "operations",
+            "plan_decision_id",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "installation_date",
+            "installation_status",
+            "condition",
+            "source_id",
+            "source_name",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "type",
+            "txt",
+            "push_button",
+            "sound_beacon",
+            "vehicle_recognition",
+            "validity_period_start",
+            "validity_period_end",
+            "location_specifier",
+            "created_by",
+            "updated_by",
+            "owner",
+            "traffic_light_plan",
+            "mount_real",
+        )
 
 
 class TrafficLightRealGeoJSONSerializer(TrafficLightRealSerializer):

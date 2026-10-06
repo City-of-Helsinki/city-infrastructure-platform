@@ -26,7 +26,12 @@ from traffic_control.services.traffic_sign import traffic_sign_plan_create, traf
 class TrafficSignPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = TrafficSignPlanFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "traffic_sign_plan",
+        )
 
 
 class TrafficSignPlanInputSerializer(
@@ -57,7 +62,39 @@ class TrafficSignPlanInputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "affect_area",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "value",
+            "size",
+            "reflection_class",
+            "surface_class",
+            "txt",
+            "location_specifier",
+            "double_sided",
+            "peak_fastened",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_plan",
+            "plan",
+        )
 
 
 class TrafficSignPlanGeoJSONInputSerializer(TrafficSignPlanInputSerializer):
@@ -87,7 +124,42 @@ class TrafficSignPlanOutputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "replaced_by",
+            "is_replaced",
+            "location",
+            "affect_area",
+            "files",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "value",
+            "size",
+            "reflection_class",
+            "surface_class",
+            "txt",
+            "location_specifier",
+            "double_sided",
+            "peak_fastened",
+            "created_by",
+            "updated_by",
+            "owner",
+            "mount_plan",
+            "plan",
+        )
 
 
 class TrafficSignPlanGeoJSONOutputSerializer(TrafficSignPlanInputSerializer):
@@ -97,7 +169,12 @@ class TrafficSignPlanGeoJSONOutputSerializer(TrafficSignPlanInputSerializer):
 class TrafficSignRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = TrafficSignRealFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "traffic_sign_real",
+        )
 
 
 class TrafficSignRealOperationSerializer(serializers.ModelSerializer):
@@ -147,7 +224,51 @@ class TrafficSignRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "legacy_code", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "files",
+            "device_type",
+            "operations",
+            "plan_decision_id",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "installation_date",
+            "installation_status",
+            "condition",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "direction",
+            "height",
+            "value",
+            "size",
+            "reflection_class",
+            "surface_class",
+            "txt",
+            "location_specifier",
+            "double_sided",
+            "peak_fastened",
+            "installation_id",
+            "installation_details",
+            "permit_decision_id",
+            "scanned_at",
+            "manufacturer",
+            "rfid",
+            "operation",
+            "attachment_url",
+            "created_by",
+            "updated_by",
+            "owner",
+            "traffic_sign_plan",
+            "mount_real",
+        )
 
 
 class TrafficSignRealGeoJSONSerializer(TrafficSignRealSerializer):

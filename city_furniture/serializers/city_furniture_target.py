@@ -7,4 +7,12 @@ from city_furniture.models.common import CityFurnitureTarget
 class CityFurnitureTargetSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = CityFurnitureTarget
-        fields = "__all__"
+        fields = (
+            "id",
+            "source_id",
+            "source_name",
+            "name_fi",
+            "name_sw",
+            "name_en",
+            "description",
+        )

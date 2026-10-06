@@ -409,7 +409,24 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
 
     class Meta:
         model = TrafficControlDeviceType
-        fields = "__all__"
+        fields = (
+            "id",
+            "traffic_sign_type",
+            "icons",
+            "tags",
+            "tag_ids",
+            "code",
+            "description",
+            "value",
+            "unit",
+            "size",
+            "legacy_code",
+            "legacy_description",
+            "target_model",
+            "type",
+            "content_schema",
+            "icon_file",
+        )
 
     @extend_schema_field(field=IconsType)
     def get_icon_urls(self, obj: TrafficControlDeviceType):
@@ -443,10 +460,28 @@ class OperationalAreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OperationalArea
-        fields = "__all__"
+        fields = (
+            "id",
+            "location",
+            "source_id",
+            "source_name",
+            "name",
+            "name_short",
+            "area_type",
+            "contractor",
+            "start_date",
+            "end_date",
+            "updated_date",
+            "task",
+            "status",
+        )
 
 
 class OwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Owner
-        fields = "__all__"
+        fields = (
+            "id",
+            "name_fi",
+            "name_en",
+        )
