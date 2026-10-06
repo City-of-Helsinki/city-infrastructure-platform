@@ -11,7 +11,18 @@ from city_furniture.models.common import CityFurnitureDeviceType
 class CityFurnitureDeviceTypeSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = CityFurnitureDeviceType
-        fields = "__all__"
+        fields = (
+            "id",
+            "code",
+            "class_type",
+            "function_type",
+            "description_fi",
+            "description_sw",
+            "description_en",
+            "size",
+            "target_model",
+            "icon_file",
+        )
 
     def validate_target_model(
         self, value: Optional[CityFurnitureDeviceTypeTargetModel]

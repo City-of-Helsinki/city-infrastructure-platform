@@ -7,4 +7,8 @@ from city_furniture.models.common import CityFurnitureColor
 class CityFurnitureColorSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = CityFurnitureColor
-        fields = "__all__"
+        fields = (
+            "id",
+            "name",
+            "rgb",
+        )

@@ -25,7 +25,12 @@ from traffic_control.services.barrier import barrier_plan_create, barrier_plan_u
 class BarrierPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierPlanFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "barrier_plan",
+        )
 
 
 class BarrierPlanInputSerializer(
@@ -55,7 +60,34 @@ class BarrierPlanInputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "connection_type",
+            "material",
+            "is_electric",
+            "reflective",
+            "validity_period_start",
+            "validity_period_end",
+            "length",
+            "count",
+            "txt",
+            "created_by",
+            "updated_by",
+            "owner",
+            "plan",
+        )
 
 
 class BarrierPlanGeoJSONInputSerializer(BarrierPlanInputSerializer):
@@ -84,7 +116,37 @@ class BarrierPlanOutputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "replaced_by",
+            "is_replaced",
+            "location",
+            "files",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "connection_type",
+            "material",
+            "is_electric",
+            "reflective",
+            "validity_period_start",
+            "validity_period_end",
+            "length",
+            "count",
+            "txt",
+            "created_by",
+            "updated_by",
+            "owner",
+            "plan",
+        )
 
 
 class BarrierPlanGeoJSONOutputSerializer(BarrierPlanOutputSerializer):
@@ -94,7 +156,12 @@ class BarrierPlanGeoJSONOutputSerializer(BarrierPlanOutputSerializer):
 class BarrierRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = BarrierRealFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "barrier_real",
+        )
 
 
 class BarrierRealOperationSerializer(serializers.ModelSerializer):
@@ -144,7 +211,39 @@ class BarrierRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "files",
+            "device_type",
+            "operations",
+            "plan_decision_id",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "installation_date",
+            "installation_status",
+            "condition",
+            "source_id",
+            "source_name",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "connection_type",
+            "material",
+            "is_electric",
+            "reflective",
+            "validity_period_start",
+            "validity_period_end",
+            "length",
+            "count",
+            "txt",
+            "created_by",
+            "updated_by",
+            "owner",
+            "barrier_plan",
+        )
 
 
 class BarrierRealGeoJSONSerializer(BarrierRealSerializer):

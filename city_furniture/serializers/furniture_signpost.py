@@ -22,7 +22,12 @@ from traffic_control.serializers.common import (
 class FurnitureSignpostPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = FurnitureSignpostPlanFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "furniture_signpost_plan",
+        )
 
 
 class FurnitureSignpostPlanSerializer(
@@ -46,7 +51,45 @@ class FurnitureSignpostPlanSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "files",
+            "device_type",
+            "target_name",
+            "device_type_description",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "location_name_fi",
+            "location_name_sw",
+            "location_name_en",
+            "direction",
+            "location_additional_info",
+            "size",
+            "height",
+            "arrow_direction",
+            "pictogram",
+            "value",
+            "text_content_fi",
+            "text_content_sw",
+            "text_content_en",
+            "content_responsible_entity",
+            "validity_period_start",
+            "validity_period_end",
+            "additional_material_url",
+            "created_by",
+            "updated_by",
+            "responsible_entity",
+            "owner",
+            "color",
+            "target",
+            "mount_plan",
+            "parent",
+            "plan",
+        )
 
 
 class FurnitureSignpostPlanGeoJSONSerializer(FurnitureSignpostPlanSerializer):
@@ -56,7 +99,12 @@ class FurnitureSignpostPlanGeoJSONSerializer(FurnitureSignpostPlanSerializer):
 class FurnitureSignpostRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = FurnitureSignpostRealFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "furniture_signpost_real",
+        )
 
 
 class FurnitureSignpostRealOperationSerializer(serializers.ModelSerializer):
@@ -110,7 +158,50 @@ class FurnitureSignpostRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("mount_type", "is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "files",
+            "device_type",
+            "operations",
+            "target_name",
+            "device_type_description",
+            "plan_decision_id",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "installation_date",
+            "installation_status",
+            "condition",
+            "source_id",
+            "source_name",
+            "location_name_fi",
+            "location_name_sw",
+            "location_name_en",
+            "direction",
+            "location_additional_info",
+            "size",
+            "height",
+            "arrow_direction",
+            "pictogram",
+            "value",
+            "text_content_fi",
+            "text_content_sw",
+            "text_content_en",
+            "content_responsible_entity",
+            "validity_period_start",
+            "validity_period_end",
+            "additional_material_url",
+            "created_by",
+            "updated_by",
+            "responsible_entity",
+            "owner",
+            "color",
+            "target",
+            "furniture_signpost_plan",
+            "parent",
+            "mount_real",
+        )
 
 
 class FurnitureSignpostRealGeoJSONSerializer(FurnitureSignpostRealSerializer):

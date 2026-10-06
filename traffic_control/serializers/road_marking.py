@@ -25,7 +25,12 @@ from traffic_control.services.road_marking import road_marking_plan_create, road
 class RoadMarkingPlanFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = RoadMarkingPlanFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "road_marking_plan",
+        )
 
 
 class RoadMarkingPlanInputSerializer(
@@ -55,7 +60,43 @@ class RoadMarkingPlanInputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "location",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "line_direction",
+            "arrow_direction",
+            "value",
+            "material",
+            "color",
+            "type_specifier",
+            "symbol",
+            "size",
+            "length",
+            "width",
+            "is_raised",
+            "is_grinded",
+            "additional_info",
+            "amount",
+            "created_by",
+            "updated_by",
+            "owner",
+            "traffic_sign_plan",
+            "plan",
+        )
 
 
 class RoadMarkingPlanGeoJSONInputSerializer(RoadMarkingPlanInputSerializer):
@@ -84,7 +125,46 @@ class RoadMarkingPlanOutputSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "replaces",
+            "replaced_by",
+            "is_replaced",
+            "location",
+            "files",
+            "device_type",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "line_direction",
+            "arrow_direction",
+            "value",
+            "material",
+            "color",
+            "type_specifier",
+            "symbol",
+            "size",
+            "length",
+            "width",
+            "is_raised",
+            "is_grinded",
+            "additional_info",
+            "amount",
+            "created_by",
+            "updated_by",
+            "owner",
+            "traffic_sign_plan",
+            "plan",
+        )
 
 
 class RoadMarkingPlanGeoJSONOutputSerializer(RoadMarkingPlanOutputSerializer):
@@ -94,7 +174,12 @@ class RoadMarkingPlanGeoJSONOutputSerializer(RoadMarkingPlanOutputSerializer):
 class RoadMarkingRealFileSerializer(FileProxySerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = RoadMarkingRealFile
-        fields = "__all__"
+        fields = (
+            "id",
+            "is_public",
+            "file",
+            "road_marking_real",
+        )
 
 
 class RoadMarkingRealOperationSerializer(serializers.ModelSerializer):
@@ -144,7 +229,49 @@ class RoadMarkingRealSerializer(
             "deleted_by",
             "deleted_at",
         )
-        exclude = ("is_active", "deleted_at", "deleted_by")
+        fields = (
+            "id",
+            "location",
+            "files",
+            "device_type",
+            "operations",
+            "plan_decision_id",
+            "created_at",
+            "updated_at",
+            "lifecycle",
+            "installation_date",
+            "installation_status",
+            "condition",
+            "source_id",
+            "source_name",
+            "validity_period_start",
+            "validity_period_end",
+            "seasonal_validity_period_information",
+            "road_name",
+            "lane_number",
+            "lane_type",
+            "location_specifier",
+            "line_direction",
+            "arrow_direction",
+            "value",
+            "material",
+            "color",
+            "type_specifier",
+            "symbol",
+            "size",
+            "length",
+            "width",
+            "is_raised",
+            "is_grinded",
+            "additional_info",
+            "amount",
+            "missing_traffic_sign_real_txt",
+            "created_by",
+            "updated_by",
+            "owner",
+            "road_marking_plan",
+            "traffic_sign_real",
+        )
 
 
 class RoadMarkingRealGeoJSONSerializer(RoadMarkingRealSerializer):
