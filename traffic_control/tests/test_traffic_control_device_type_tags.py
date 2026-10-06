@@ -1,6 +1,7 @@
 import re
 
 import pytest
+from auditlog.models import LogEntry
 from django.contrib.admin import AdminSite
 from django.core.exceptions import ValidationError
 from django.test import RequestFactory
@@ -12,7 +13,9 @@ from traffic_control.admin.traffic_sign import (
     TrafficControlDeviceTypeAdmin,
     TrafficControlDeviceTypeTagAdmin,
 )
+from traffic_control.admin.views import DeviceTypeAutocompleteJsonView
 from traffic_control.filters import TrafficControlDeviceTypeFilterSet
+from traffic_control.forms import TrafficControlDeviceTypeTagForm
 from traffic_control.models import TrafficControlDeviceType, TrafficControlDeviceTypeTag
 from traffic_control.resources.device_type import TrafficControlDeviceTypeResource
 from traffic_control.tests.factories import (
@@ -20,6 +23,7 @@ from traffic_control.tests.factories import (
     get_user,
     TrafficControlDeviceTypeFactory,
     TrafficControlDeviceTypeTagFactory,
+    UserFactory,
 )
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
@@ -89,19 +93,158 @@ def test__device_type_tag_admin__id_is_first_column(rf, tag_admin):
     # Django prepends the bulk action checkbox, the first real column follows it.
     columns = [column for column in changelist.list_display if column != "action_checkbox"]
 
-    assert columns == ["id", "name", "description"]
+    assert columns == ["id", "name", "description", "device_type_count"]
 
 
 @pytest.mark.django_db
-def test__device_type_tag_admin__changelist_renders_id(client):
+def test__device_type_tag_admin__changelist_renders_id(admin_client):
     """Tag id is rendered on the tag admin changelist page."""
     tag = TrafficControlDeviceTypeTagFactory(name="Temporary")
-    client.force_login(get_user(admin=True))
 
-    response = client.get(reverse("admin:traffic_control_trafficcontroldevicetypetag_changelist"))
+    response = admin_client.get(reverse("admin:traffic_control_trafficcontroldevicetypetag_changelist"))
 
     assert response.status_code == status.HTTP_200_OK
     assert str(tag.id) in response.content.decode()
+
+
+@pytest.mark.django_db
+def test__device_type_tag_admin__change_view_contains_device_types_field(admin_client):
+    """Device types can be selected from the tag change page."""
+    tag = TrafficControlDeviceTypeTagFactory(name="Temporary")
+    device_type = TrafficControlDeviceTypeFactory(code="DT-1", tags=[tag])
+
+    response = admin_client.get(reverse("admin:traffic_control_trafficcontroldevicetypetag_change", args=(tag.pk,)))
+    field = response.context["adminform"].form.fields["device_types"]
+
+    assert response.status_code == status.HTTP_200_OK
+    assert list(field.initial) == [device_type]
+
+
+@pytest.mark.django_db
+def test__device_type_tag_admin__change_view_saves_device_types(admin_client):
+    """Saving the tag change form attaches and detaches device types."""
+    tag = TrafficControlDeviceTypeTagFactory(name="Temporary")
+    other_tag = TrafficControlDeviceTypeTagFactory(name="Winter")
+    detached = TrafficControlDeviceTypeFactory(code="DT-1", tags=[tag, other_tag])
+    attached = TrafficControlDeviceTypeFactory(code="DT-2")
+
+    response = admin_client.post(
+        reverse("admin:traffic_control_trafficcontroldevicetypetag_change", args=(tag.pk,)),
+        data={"name": "Temporary", "description": "", "device_types": [str(attached.pk)]},
+    )
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert list(tag.device_types.all()) == [attached]
+    assert list(detached.tags.all()) == [other_tag], "Other tags of a detached device type must be kept"
+
+
+@pytest.mark.django_db
+def test__device_type_tag_admin__add_view_saves_device_types(admin_client):
+    """A new tag can be created with device types already selected."""
+    device_type = TrafficControlDeviceTypeFactory(code="DT-1")
+
+    response = admin_client.post(
+        reverse("admin:traffic_control_trafficcontroldevicetypetag_add"),
+        data={"name": "Temporary", "description": "", "device_types": [str(device_type.pk)]},
+    )
+    created = TrafficControlDeviceTypeTag.objects.get(name="Temporary")
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert list(created.device_types.all()) == [device_type]
+
+
+@pytest.mark.django_db
+def test__device_type_tag_admin__saving_device_types_is_audit_logged(admin_client):
+    """Attaching a device type from the tag page is logged in the device type's history."""
+    tag = TrafficControlDeviceTypeTagFactory(name="Temporary")
+    device_type = TrafficControlDeviceTypeFactory(code="DT-1")
+
+    admin_client.post(
+        reverse("admin:traffic_control_trafficcontroldevicetypetag_change", args=(tag.pk,)),
+        data={"name": "Temporary", "description": "", "device_types": [str(device_type.pk)]},
+    )
+    log_entries = LogEntry.objects.get_for_object(device_type).filter(changes__has_key="tags")
+
+    assert log_entries.count() == 1
+    assert log_entries.first().changes["tags"]["objects"] == [str(tag)]
+
+
+@pytest.mark.django_db
+def test__device_type_tag_admin__device_type_autocomplete(admin_client):
+    """The device type autocomplete endpoint returns device types matching the search term."""
+    expected = TrafficControlDeviceTypeFactory(code="DT-MATCH")
+    TrafficControlDeviceTypeFactory(code="DT-OTHER")
+
+    response = admin_client.get(
+        reverse("admin:traffic_control_trafficcontroldevicetypetag_devicetype_autocomplete"),
+        {"term": "DT-MATCH"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == {
+        "results": [{"id": str(expected.pk), "text": str(expected)}],
+        "pagination": {"more": False},
+    }
+
+
+@pytest.mark.django_db
+def test__device_type_tag_admin__device_type_autocomplete_is_paginated(admin_client):
+    """The autocomplete endpoint pages the results and tells select2 that more results exist."""
+    page_size = DeviceTypeAutocompleteJsonView.paginate_by
+    for index in range(page_size + 1):
+        TrafficControlDeviceTypeFactory(code=f"DT-{index:02d}")
+    url = reverse("admin:traffic_control_trafficcontroldevicetypetag_devicetype_autocomplete")
+
+    first_page = admin_client.get(url, {"term": "DT-"})
+    second_page = admin_client.get(url, {"term": "DT-", "page": 2})
+
+    assert len(first_page.json()["results"]) == page_size
+    assert first_page.json()["pagination"]["more"] is True
+    assert len(second_page.json()["results"]) == 1
+    assert second_page.json()["pagination"]["more"] is False
+
+
+@pytest.mark.django_db
+def test__device_type_tag_admin__device_type_autocomplete_requires_view_permission(client):
+    """A staff user without device type view permission is not allowed to search device types."""
+    TrafficControlDeviceTypeFactory(code="DT-MATCH")
+    client.force_login(UserFactory(is_staff=True))
+
+    response = client.get(
+        reverse("admin:traffic_control_trafficcontroldevicetypetag_devicetype_autocomplete"),
+        {"term": "DT-MATCH"},
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test__device_type_tag_form__autocomplete_widget_renders_only_selected_device_types():
+    """The device type widget renders the selected device types only and points to the endpoint."""
+    selected = TrafficControlDeviceTypeFactory(code="DT-SELECTED")
+    TrafficControlDeviceTypeFactory(code="DT-NOT-SELECTED")
+    form = TrafficControlDeviceTypeTagForm(initial={"device_types": [selected.pk]})
+
+    rendered = str(form["device_types"])
+
+    assert reverse("admin:traffic_control_trafficcontroldevicetypetag_devicetype_autocomplete") in rendered
+    assert "admin-autocomplete" in rendered
+    assert rendered.count("<option") == 1
+    assert str(selected) in rendered
+
+
+@pytest.mark.django_db
+def test__device_type_tag_admin__device_type_count_column(rf, tag_admin):
+    """Tag changelist shows how many device types carry the tag."""
+    tag = TrafficControlDeviceTypeTagFactory(name="Temporary")
+    TrafficControlDeviceTypeFactory(code="DT-1", tags=[tag])
+    TrafficControlDeviceTypeFactory(code="DT-2", tags=[tag])
+    request = rf.get("/")
+    request.user = get_user(admin=True)
+
+    annotated = tag_admin.get_changelist_instance(request).get_queryset(request).get(pk=tag.pk)
+
+    assert tag_admin.device_type_count(annotated) == 2
 
 
 @pytest.mark.django_db
@@ -133,13 +276,14 @@ def test__device_type_admin__search_by_tag_name(rf, device_type_admin):
 
 
 @pytest.mark.django_db
-def test__device_type_admin__change_view_contains_tags_field(client):
+def test__device_type_admin__change_view_contains_tags_field(admin_client):
     """Tags can be assigned from the device type change page."""
     device_type = TrafficControlDeviceTypeFactory(code="DT-1")
     TrafficControlDeviceTypeTagFactory(name="Temporary")
-    client.force_login(get_user(admin=True))
 
-    response = client.get(reverse("admin:traffic_control_trafficcontroldevicetype_change", args=(device_type.pk,)))
+    response = admin_client.get(
+        reverse("admin:traffic_control_trafficcontroldevicetype_change", args=(device_type.pk,))
+    )
 
     assert response.status_code == status.HTTP_200_OK
     assert "tags" in response.context["adminform"].form.fields
@@ -215,13 +359,12 @@ def test__device_type_admin__tag_filter_lookups_only_used_tags(rf, device_type_a
 
 
 @pytest.mark.django_db
-def test__device_type_admin__tag_filter_renders_checkboxes(client):
+def test__device_type_admin__tag_filter_renders_checkboxes(admin_client):
     """Tag filter renders a checkbox for each selectable tag on the changelist page."""
     tag = TrafficControlDeviceTypeTagFactory(name="Temporary")
     TrafficControlDeviceTypeFactory(code="DT-1", tags=[tag])
-    client.force_login(get_user(admin=True))
 
-    response = client.get(reverse("admin:traffic_control_trafficcontroldevicetype_changelist"))
+    response = admin_client.get(reverse("admin:traffic_control_trafficcontroldevicetype_changelist"))
     content = response.content.decode()
 
     assert response.status_code == status.HTTP_200_OK
@@ -231,14 +374,13 @@ def test__device_type_admin__tag_filter_renders_checkboxes(client):
 
 
 @pytest.mark.django_db
-def test__device_type_admin__tag_filter_checkbox_is_checked_when_selected(client):
+def test__device_type_admin__tag_filter_checkbox_is_checked_when_selected(admin_client):
     """Checkbox of an active tag is pre-checked when returning to the filtered changelist."""
     tag = TrafficControlDeviceTypeTagFactory(name="Temporary")
     TrafficControlDeviceTypeFactory(code="DT-1", tags=[tag])
-    client.force_login(get_user(admin=True))
 
     url = reverse("admin:traffic_control_trafficcontroldevicetype_changelist")
-    response = client.get(url, {"tags": str(tag.pk)})
+    response = admin_client.get(url, {"tags": str(tag.pk)})
     content = response.content.decode()
     checkbox = re.search(rf"<input[^>]*multiselect-tag-filter-value[^>]*value=\"{tag.pk}\"[^>]*>", content)
 
