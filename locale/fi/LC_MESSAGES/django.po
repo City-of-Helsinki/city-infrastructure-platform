@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 10:25+0300\n"
+"POT-Creation-Date: 2026-10-06 12:05+0300\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -699,6 +699,12 @@ msgid "Device type preview"
 msgstr "Laitteen tyyppin esikatselu"
 
 msgid "Device type target model"
+msgstr ""
+
+msgid "Device types"
+msgstr ""
+
+msgid "Device types that have this tag."
 msgstr ""
 
 # AI translation - needs human review
@@ -2002,6 +2008,9 @@ msgstr "Ei kiinnityskohdetta"
 # AI translation - needs human review
 msgid "No relations found."
 msgstr "Suhteita ei löytynyt."
+
+msgid "No traffic signs"
+msgstr ""
 
 msgid "No, continue to edit"
 msgstr "En, jatka muokkaamista"
@@ -3469,6 +3478,9 @@ msgstr ""
 
 msgid "Traffic signal"
 msgstr "Valo-opastin"
+
+msgid "Traffic signs"
+msgstr ""
 
 # AI translation - needs human review
 msgid "TrafficSignReal records whose lifecycle was set to INACTIVE."

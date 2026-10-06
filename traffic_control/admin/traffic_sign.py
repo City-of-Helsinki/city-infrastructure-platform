@@ -6,7 +6,8 @@ from django.contrib.admin import (
 )
 from django.contrib.gis import admin
 from django.db import models
-from django.db.models import Exists, OuterRef, QuerySet
+from django.db.models import Count, Exists, OuterRef, QuerySet
+from django.urls import path
 from django.utils.translation import gettext_lazy as _
 from guardian.admin import GuardedModelAdmin
 from rangefilter.filters import DateRangeFilterBuilder
@@ -29,6 +30,7 @@ from traffic_control.admin.utils import (
     AdminFieldInitialValuesMixin,
     DeviceComparisonAdminMixin,
 )
+from traffic_control.admin.views import DeviceTypeAutocompleteJsonView
 from traffic_control.enums import (
     Condition,
     InstallationStatus,
@@ -43,6 +45,7 @@ from traffic_control.forms import (
     CityInfraFileUploadFormset,
     TrafficControlDeviceTypeForm,
     TrafficControlDeviceTypeIconForm,
+    TrafficControlDeviceTypeTagForm,
     TrafficSignPlanModelForm,
     TrafficSignRealModelForm,
 )
@@ -131,10 +134,40 @@ class TrafficControlDeviceTypeIconAdmin(CustomImportExportActionModelAdmin, Prev
 
 @admin.register(TrafficControlDeviceTypeTag)
 class TrafficControlDeviceTypeTagAdmin(AuditLogHistoryAdmin):
-    list_display = ("id", "name", "description")
+    form = TrafficControlDeviceTypeTagForm
+    list_display = ("id", "name", "description", "device_type_count")
     list_display_links = ("id", "name")
     search_fields = ("name", "description")
     ordering = ("name",)
+
+    def get_urls(self) -> list:
+        """Add an autocomplete endpoint for selecting device types on the tag change page.
+
+        Returns:
+            list: Admin urls of this model admin.
+        """
+        custom_urls = [
+            path(
+                "device-type-autocomplete/",
+                self.admin_site.admin_view(
+                    DeviceTypeAutocompleteJsonView.as_view(admin_site=self.admin_site),
+                ),
+                name="traffic_control_trafficcontroldevicetypetag_devicetype_autocomplete",
+            ),
+        ]
+
+        return custom_urls + super().get_urls()
+
+    def get_queryset(self, request) -> QuerySet:
+        return self.annotate_device_type_count(super().get_queryset(request))
+
+    def annotate_device_type_count(self, qs: QuerySet) -> QuerySet:
+        return qs.annotate(_device_type_count=Count("device_types"))
+
+    @admin.display(description=_("Device types"), ordering="_device_type_count")
+    @requires_annotation(annotate_device_type_count)
+    def device_type_count(self, obj: TrafficControlDeviceTypeTag) -> int:
+        return getattr(obj, "_device_type_count", 0)
 
 
 @admin.register(TrafficControlDeviceType)

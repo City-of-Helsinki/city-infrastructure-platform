@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 10:25+0300\n"
+"POT-Creation-Date: 2026-10-06 12:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -710,6 +710,12 @@ msgid "Device type preview"
 msgstr "Förhandsgranskning av enhetstyp"
 
 msgid "Device type target model"
+msgstr ""
+
+msgid "Device types"
+msgstr ""
+
+msgid "Device types that have this tag."
 msgstr ""
 
 # AI translation - needs human review
@@ -2047,6 +2053,9 @@ msgstr "Ej fästpunkt"
 # AI translation - needs human review
 msgid "No relations found."
 msgstr "Inga relationer hittades."
+
+msgid "No traffic signs"
+msgstr ""
 
 msgid "No, continue to edit"
 msgstr "Nej, fortsätt redigera"
@@ -3543,6 +3552,9 @@ msgstr ""
 
 msgid "Traffic signal"
 msgstr "Trafiksignal"
+
+msgid "Traffic signs"
+msgstr ""
 
 # AI translation - needs human review
 msgid "TrafficSignReal records whose lifecycle was set to INACTIVE."

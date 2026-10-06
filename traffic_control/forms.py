@@ -1,4 +1,7 @@
-from django.contrib.admin import widgets
+import json
+
+from django.conf import settings
+from django.contrib.admin import site as admin_site, widgets
 from django.contrib.gis import forms
 from django.contrib.gis.geos import GEOSGeometry, WKTWriter
 from django.core.exceptions import ValidationError
@@ -7,7 +10,7 @@ from django.forms.models import BaseInlineFormSet, ModelChoiceIteratorValue
 from django.forms.widgets import Select
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import get_language, gettext_lazy as _
 from enumfields.forms import EnumChoiceField
 
 from city_furniture.models import FurnitureSignpostPlan
@@ -27,6 +30,7 @@ from traffic_control.models import (
     SignpostReal,
     TrafficControlDeviceType,
     TrafficControlDeviceTypeIcon,
+    TrafficControlDeviceTypeTag,
     TrafficLightPlan,
     TrafficLightReal,
     TrafficSignPlan,
@@ -368,6 +372,196 @@ class TrafficControlDeviceTypeForm(OrderedByIconFileFieldForm):
             "icon_file": AdminTrafficControlDeviceTypeIconSelectWidget,
         }
         fields = "__all__"
+
+
+# English is intentionally missing, because select2 is in English without a translation file.
+SELECT2_LANGUAGES = {"fi": "fi", "sv": "sv"}
+
+
+def get_select2_language() -> str:
+    """Resolve the select2 translation file matching the active language.
+
+    Returns:
+        str: Language code of the select2 translation file, or an empty string when the active
+            language needs no translation file.
+    """
+    return SELECT2_LANGUAGES.get(get_language(), "")
+
+
+class DeviceTypeAutocompleteSelectMultiple(forms.SelectMultiple):
+    """Select2 autocomplete widget for picking device types on the device type tag admin page.
+
+    The widget is self-contained instead of built on Django's undocumented admin autocomplete
+    widgets, because the selection is made through a reverse many-to-many relation, which those
+    widgets and the shared admin autocomplete endpoint do not support. Only the admin's bundled
+    select2 assets are reused, so the rendered user interface is the standard admin one.
+    """
+
+    url_name = "%s:traffic_control_trafficcontroldevicetypetag_devicetype_autocomplete"
+    source_app_label = TrafficControlDeviceTypeTag._meta.app_label
+    source_model_name = TrafficControlDeviceTypeTag._meta.model_name
+    source_field_name = "device_types"
+
+    def __init__(self, admin_site, attrs: dict = None, choices: tuple = ()):
+        """Initialize the widget.
+
+        Args:
+            admin_site (AdminSite): Admin site that registers the autocomplete endpoint.
+            attrs (dict): Extra html attributes of the rendered select element.
+            choices (tuple): Initial choices of the select element.
+        """
+        self.admin_site = admin_site
+        super().__init__(attrs=attrs, choices=choices)
+
+    def get_url(self) -> str:
+        """Resolve the url of the device type autocomplete endpoint.
+
+        Returns:
+            str: Url that select2 queries for the matching device types.
+        """
+        return reverse(self.url_name % self.admin_site.name)
+
+    def build_attrs(self, base_attrs: dict, extra_attrs: dict = None) -> dict:
+        """Add the html attributes that the admin's select2 initialization reads.
+
+        Args:
+            base_attrs (dict): Attributes defined on the widget.
+            extra_attrs (dict): Attributes defined on the rendered field.
+
+        Returns:
+            dict: Html attributes of the rendered select element.
+        """
+        attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
+        css_classes = [css_class for css_class in (attrs.get("class"), "admin-autocomplete") if css_class]
+        attrs.update(
+            {
+                "class": " ".join(css_classes),
+                "data-ajax--cache": "true",
+                "data-ajax--delay": 250,
+                "data-ajax--type": "GET",
+                "data-ajax--url": self.get_url(),
+                "data-app-label": self.source_app_label,
+                "data-model-name": self.source_model_name,
+                "data-field-name": self.source_field_name,
+                "data-theme": "admin-autocomplete",
+                "data-allow-clear": json.dumps(not self.is_required),
+                "data-placeholder": "",
+                "lang": get_select2_language(),
+            }
+        )
+
+        return attrs
+
+    def optgroups(self, name: str, value: list, attr: dict = None) -> list:
+        """Render only the selected device types, as the rest are fetched by select2 on demand.
+
+        Args:
+            name (str): Name of the rendered field.
+            value (list): Primary keys of the selected device types.
+            attr (dict): Html attributes of the rendered select element.
+
+        Returns:
+            list: Single option group holding the selected device types.
+        """
+        selected = {str(pk) for pk in value if str(pk) not in self.choices.field.empty_values}
+        options = [
+            self.create_option(name, device_type.pk, self.choices.field.label_from_instance(device_type), True, index)
+            for index, device_type in enumerate(self.choices.queryset.filter(pk__in=selected))
+        ]
+
+        return [(None, options, 0)]
+
+    @property
+    def media(self) -> forms.Media:
+        """Collect the select2 assets shipped with the Django admin.
+
+        Returns:
+            forms.Media: Javascript and css files needed by the widget.
+        """
+        extra = "" if settings.DEBUG else ".min"
+        language = get_select2_language()
+        i18n_file = (f"admin/js/vendor/select2/i18n/{language}.js",) if language else ()
+
+        return forms.Media(
+            js=(
+                f"admin/js/vendor/jquery/jquery{extra}.js",
+                f"admin/js/vendor/select2/select2.full{extra}.js",
+            )
+            + i18n_file
+            + (
+                "admin/js/jquery.init.js",
+                "admin/js/autocomplete.js",
+            ),
+            css={
+                "screen": (
+                    f"admin/css/vendor/select2/select2{extra}.css",
+                    "admin/css/autocomplete.css",
+                ),
+            },
+        )
+
+
+class TrafficControlDeviceTypeTagForm(forms.ModelForm):
+    """Tag form that allows selecting the device types carrying the tag."""
+
+    device_types = forms.ModelMultipleChoiceField(
+        queryset=TrafficControlDeviceType.objects.all(),
+        required=False,
+        label=_("Device types"),
+        help_text=_("Device types that have this tag."),
+        widget=DeviceTypeAutocompleteSelectMultiple(admin_site),
+    )
+
+    class Meta:
+        model = TrafficControlDeviceTypeTag
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields["device_types"].initial = self.instance.device_types.all()
+
+    def save(self, commit=True) -> TrafficControlDeviceTypeTag:
+        """Save the tag and update the device types it is attached to.
+
+        Args:
+            commit (bool): Whether the tag and its relations are saved immediately.
+
+        Returns:
+            TrafficControlDeviceTypeTag: The saved tag instance.
+        """
+        instance = super().save(commit=commit)
+
+        if commit:
+            self._update_device_types(instance)
+        else:
+            original_save_m2m = self.save_m2m
+
+            def save_m2m() -> None:
+                original_save_m2m()
+                self._update_device_types(instance)
+
+            self.save_m2m = save_m2m
+
+        return instance
+
+    def _update_device_types(self, tag: TrafficControlDeviceTypeTag) -> None:
+        """Attach the tag to the selected device types and detach it from the unselected ones.
+
+        Relations are updated from the device type side, so that the change is written to the
+        audit log of each affected device type.
+
+        Args:
+            tag (TrafficControlDeviceTypeTag): The tag being saved.
+        """
+        selected = set(self.cleaned_data.get("device_types") or [])
+        current = set(tag.device_types.all())
+
+        for device_type in selected - current:
+            device_type.tags.add(tag)
+
+        for device_type in current - selected:
+            device_type.tags.remove(tag)
 
 
 class AbstractDeviceTypeIconForm(forms.ModelForm):
