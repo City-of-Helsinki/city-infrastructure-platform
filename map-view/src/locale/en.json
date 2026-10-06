@@ -26,6 +26,8 @@
     "Reset Icon Settings": "Reset Icon Settings",
     "Are you sure you want to reset all icon settings to their default values from the server?": "Are you sure you want to reset all icon settings to their default values from the server?",
     "Cancel": "Cancel",
-    "Reset": "Reset"
+    "Reset": "Reset",
+    "Real-plan distance display threshold (in meters)": "Real-plan distance display threshold (in meters)",
+    "Distances below threshold will not be displayed": "Distances below threshold will not be displayed"
   }
 }

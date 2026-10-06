@@ -34,7 +34,7 @@ const Spacer = styled("div")(() => ({
 interface FeatureInfoProps {
   features: Feature[];
   mapConfig: MapConfig;
-  onSelectFeatureShowPlan: (feature: Feature) => Promise<any>;
+  onSelectFeatureShowPlan: (feature: Feature) => Promise<number | undefined>;
   onSelectFeatureHighLight: (feature: Feature) => void;
   onClose: () => void;
 }
@@ -70,7 +70,7 @@ const FeatureInfo = ({
         console.warn(`Attempted to select feature at invalid index ${index}. Skipping.`);
         return;
       }
-      onSelectFeatureShowPlan(feature).then((distance: number) => distance && setRealPlanDistance(distance));
+      onSelectFeatureShowPlan(feature).then((distance?: number) => distance && setRealPlanDistance(distance));
       onSelectFeatureHighLight(feature);
     },
     [features, onSelectFeatureShowPlan, onSelectFeatureHighLight, setRealPlanDistance],

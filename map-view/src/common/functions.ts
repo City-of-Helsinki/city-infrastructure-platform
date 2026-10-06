@@ -8,6 +8,12 @@ import {
   FeatureCollection as TurfFeatureCollection,
 } from "geojson";
 import { bboxPolygon, booleanIntersects, union, booleanContains } from "@turf/turf";
+import { Feature as OlFeature } from "ol";
+import { Geometry as OlGeometry } from "ol/geom";
+
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import { Cluster } from "ol/source";
 
 /**
  * The Spatial Reference System (SRS) name used for GML geometries.
@@ -295,4 +301,29 @@ function getCombinedFilter(...filterStrings: (string | undefined)[]): string | u
   const endTag = activeFilters.length > 1 ? "</And></Filter>" : "</Filter>";
 
   return `${startTag}${filterContent}${endTag}`;
+}
+
+/**
+ * Check if a FeatureLike is a device real or device plan
+ *
+ * @param {FeatureLike} feature
+ * @returns {boolean} True if the feature is a device real or device plan
+ */
+export function isFeatureADevice(feature: FeatureLike): boolean {
+  // device reals: have device_plan_id property
+  // device plans: have real_count property
+  return feature.get("device_plan_id") !== undefined || feature.get("real_count") !== undefined;
+}
+
+/**
+ * Return the underlying features of a layer, traversing a clustered layer's source's source to find the features
+ *
+ * @param {VectorLayer<VectorSource> | undefined} layer A clustered or non-clustedred layer. Undefined is treated like a featureless layer
+ * @returns {OlFeature<OlGeometry>[]} The underlying features of a layer
+ */
+export function getUnderlyingLayerFeatures(layer?: VectorLayer<VectorSource>): OlFeature<OlGeometry>[] {
+  if (!layer) return [];
+  let underlyingSource = layer.getSource();
+  if (underlyingSource instanceof Cluster) underlyingSource = underlyingSource.getSource();
+  return underlyingSource?.getFeatures() || [];
 }
