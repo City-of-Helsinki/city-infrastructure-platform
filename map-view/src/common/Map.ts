@@ -16,11 +16,11 @@ import WMTSCapabilities from "ol/format/WMTSCapabilities";
 import WMTSTileGrid from "ol/tilegrid/WMTS";
 import GeoJson from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
+import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { Circle, Fill, Stroke, Style, Text } from "ol/style";
 import { Pixel } from "ol/pixel";
 import { MapBrowserEvent, Feature as OlFeature } from "ol";
-import { LineString, Point } from "ol/geom";
+import { Geometry, LineString, Point } from "ol/geom";
 import { buildWFSQuery, getDistanceBetweenFeatures } from "./functions";
 import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
@@ -470,7 +470,7 @@ class Map {
    *
    * @param feature Target feature to be highlighted
    */
-  highlightFeature(feature: Feature, mapConfig: MapConfig) {
+  highlightFeature(feature: Feature) {
     this.clearHighlightLayer();
     const olFeature = new OlFeature({
       geometry: feature.getProperties().geometry,
@@ -690,8 +690,8 @@ class Map {
     const tempLayer = this.createTemporaryFetchLayer(tempVectorSource);
     this.map.addLayer(tempLayer);
 
-    tempVectorSource.once("featuresloadend", (featureEvent: any) => {
-      this.handleFeaturesLoaded(featureEvent.features, overlayIdentifier, isClustered);
+    tempVectorSource.once("featuresloadend", (featureEvent: VectorSourceEvent) => {
+      this.handleFeaturesLoaded(featureEvent.features || [], overlayIdentifier, isClustered);
       this.map.removeLayer(tempLayer);
       this.ongoingFeatureFetches.delete(overlayIdentifier);
       this.ongoingFeatureFetchesCallback(this.ongoingFeatureFetches);
@@ -715,7 +715,7 @@ class Map {
   /**
    * Handle loaded features and add them to the appropriate layer
    */
-  private handleFeaturesLoaded(features: any[], overlayIdentifier: string, isClustered: boolean) {
+  private handleFeaturesLoaded(features: OlFeature<Geometry>[], overlayIdentifier: string, isClustered: boolean) {
     if (!features || features.length === 0) {
       return;
     }
@@ -739,7 +739,11 @@ class Map {
   /**
    * Add features to an existing layer source
    */
-  private addFeaturesToExistingSource(existingSource: any, features: any[], isClustered: boolean) {
+  private addFeaturesToExistingSource(
+    existingSource: VectorSource<OlFeature<Geometry>>,
+    features: OlFeature<Geometry>[],
+    isClustered: boolean,
+  ) {
     const targetVectorSource = isClustered ? (existingSource as Cluster).getSource() : existingSource;
     if (targetVectorSource) {
       targetVectorSource.addFeatures(features);
@@ -749,7 +753,11 @@ class Map {
   /**
    * Set a new source with features on a layer
    */
-  private setNewSourceWithFeatures(layer: VectorLayer<VectorSource>, features: any[], isClustered: boolean) {
+  private setNewSourceWithFeatures(
+    layer: VectorLayer<VectorSource>,
+    features: OlFeature<Geometry>[],
+    isClustered: boolean,
+  ) {
     if (isClustered) {
       const newVectorSource = new VectorSource({ features: features });
       const newClusterSource = new Cluster({

@@ -173,7 +173,7 @@ const App = () => {
             features={features}
             mapConfig={mapConfig}
             onSelectFeatureShowPlan={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
-            onSelectFeatureHighLight={(feature: Feature) => Map.highlightFeature(feature, mapConfig)}
+            onSelectFeatureHighLight={(feature: Feature) => Map.highlightFeature(feature)}
             onClose={() => {
               setFeatures([]);
               Map.clearPlanOfRealVectorLayer();
