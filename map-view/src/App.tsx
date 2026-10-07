@@ -17,6 +17,11 @@ import { getFeatureType } from "./common/MapUtils";
 
 const drawerWidth = "400px";
 
+const ICON_SCALE_STORAGE_KEY = "mapview_icon_scale";
+const ICON_TYPE_STORAGE_KEY = "mapview_icon_type";
+const ICON_SIZE_STORAGE_KEY = "mapview_icon_size";
+const REAL_PLAN_DISTANCE_THRESHOLD_STORAGE_KEY = "real_plan_distance_threshold";
+
 const StyledSearchFab = styled(Fab)(() => ({
   position: "absolute",
   left: "50px",
@@ -50,36 +55,41 @@ const App = () => {
   const [iconScale, setIconScale] = useState<number>(0.1);
   const [iconType, setIconType] = useState<string>("svg");
   const [iconSize, setIconSize] = useState<IconSize>(128);
+  const [realPlanDistanceThreshold, setRealPlanDistanceThreshold] = useState<number>(0);
 
   useEffect(() => {
     const mapId = "map";
     MapConfigAPI.getMapConfig().then(async (config: MapConfig) => {
       setMapConfig(config);
 
-      // Try to load icon settings from localStorage
-      const savedScale = localStorage.getItem("mapview_icon_scale");
-      const savedType = localStorage.getItem("mapview_icon_type");
-      const savedSize = localStorage.getItem("mapview_icon_size");
+      // Try to load icon / threshold settings from localStorage
+      const savedScale = localStorage.getItem(ICON_SCALE_STORAGE_KEY);
+      const savedType = localStorage.getItem(ICON_TYPE_STORAGE_KEY);
+      const savedSize = localStorage.getItem(ICON_SIZE_STORAGE_KEY);
+      const savedThreshold = localStorage.getItem(REAL_PLAN_DISTANCE_THRESHOLD_STORAGE_KEY);
 
       // Parse and validate saved values
       const scale = savedScale ? Number.parseFloat(savedScale) : config.icon_scale;
       const type = savedType || config.icon_type;
       const size = savedSize ? Number.parseInt(savedSize, 10) : config.icon_size;
+      const threshold = savedThreshold ? Number.parseFloat(savedThreshold) : 1;
 
       // Validate ranges and allowed values
       const validScale = !Number.isNaN(scale) && scale >= 0.01 && scale <= 2 ? scale : config.icon_scale;
       const validType = type === "svg" || type === "png" ? type : config.icon_type;
       const validSize = [32, 64, 128, 256].includes(size) ? (size as IconSize) : (config.icon_size as IconSize);
+      const validThreshold = !Number.isNaN(threshold) && threshold >= 1 && threshold <= 2000 ? threshold : 1;
 
       setIconScale(validScale);
       setIconType(validType);
       setIconSize(validSize);
+      setRealPlanDistanceThreshold(validThreshold);
 
       await Map.initialize(mapId, config);
 
       // Apply loaded settings to map after initialization
       Map.updateIconSettings(validScale, validType, validSize);
-
+      Map.setRealPlanDistanceThreshold(validThreshold);
       Map.registerFeatureInfoCallback((newFeatures: Feature[]) => setFeatures(newFeatures));
       Map.registerOngoingFeatureFetchesCallback((fetches: Set<string>) => {
         setOngoingFeatureFetches(new Set(fetches));
@@ -118,31 +128,40 @@ const App = () => {
 
   const handleIconScaleChange = (scale: number) => {
     setIconScale(scale);
-    localStorage.setItem("mapview_icon_scale", scale.toString());
+    localStorage.setItem(ICON_SCALE_STORAGE_KEY, scale.toString());
     Map.updateIconSettings(scale, iconType, iconSize);
   };
 
   const handleIconTypeChange = (type: string) => {
     setIconType(type);
-    localStorage.setItem("mapview_icon_type", type);
+    localStorage.setItem(ICON_TYPE_STORAGE_KEY, type);
     Map.updateIconSettings(iconScale, type, iconSize);
   };
 
   const handleIconSizeChange = (size: IconSize) => {
     setIconSize(size);
-    localStorage.setItem("mapview_icon_size", size.toString());
+    localStorage.setItem(ICON_SIZE_STORAGE_KEY, size.toString());
     Map.updateIconSettings(iconScale, iconType, size);
   };
 
-  const handleResetIconSettings = () => {
+  const handleRealPlanDistanceThresholdChange = (threshold: number) => {
+    setRealPlanDistanceThreshold(threshold);
+    localStorage.setItem(REAL_PLAN_DISTANCE_THRESHOLD_STORAGE_KEY, threshold.toString());
+    Map.setRealPlanDistanceThreshold(threshold);
+  };
+
+  const handleResetSettings = () => {
     if (!mapConfig) return;
-    localStorage.removeItem("mapview_icon_scale");
-    localStorage.removeItem("mapview_icon_type");
-    localStorage.removeItem("mapview_icon_size");
+    localStorage.removeItem(ICON_SCALE_STORAGE_KEY);
+    localStorage.removeItem(ICON_TYPE_STORAGE_KEY);
+    localStorage.removeItem(ICON_SIZE_STORAGE_KEY);
+    localStorage.removeItem(REAL_PLAN_DISTANCE_THRESHOLD_STORAGE_KEY);
     setIconScale(mapConfig.icon_scale);
     setIconType(mapConfig.icon_type);
     setIconSize(mapConfig.icon_size as IconSize);
+    setRealPlanDistanceThreshold(mapConfig.realPlanDistanceThreshold);
     Map.updateIconSettings(mapConfig.icon_scale, mapConfig.icon_type, mapConfig.icon_size as IconSize);
+    Map.setRealPlanDistanceThreshold(1);
   };
 
   return (
@@ -154,7 +173,7 @@ const App = () => {
             features={features}
             mapConfig={mapConfig}
             onSelectFeatureShowPlan={(feature: Feature) => Map.showPlanOfRealDevice(feature, mapConfig)}
-            onSelectFeatureHighLight={(feature: Feature) => Map.highlightFeature(feature, mapConfig)}
+            onSelectFeatureHighLight={(feature: Feature) => Map.highlightFeature(feature)}
             onClose={() => {
               setFeatures([]);
               Map.clearPlanOfRealVectorLayer();
@@ -210,10 +229,12 @@ const App = () => {
               iconScale={iconScale}
               iconType={iconType}
               iconSize={iconSize}
+              realPlanDistanceThreshold={realPlanDistanceThreshold}
+              onRealPlanDistanceThresholdChange={handleRealPlanDistanceThresholdChange}
               onIconScaleChange={handleIconScaleChange}
               onIconTypeChange={handleIconTypeChange}
               onIconSizeChange={handleIconSizeChange}
-              onResetIconSettings={handleResetIconSettings}
+              onResetIconSettings={handleResetSettings}
             />
           )}
         </StyledDrawer>

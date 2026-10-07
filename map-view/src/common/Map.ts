@@ -16,11 +16,11 @@ import WMTSCapabilities from "ol/format/WMTSCapabilities";
 import WMTSTileGrid from "ol/tilegrid/WMTS";
 import GeoJson from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
+import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { Circle, Fill, Stroke, Style, Text } from "ol/style";
 import { Pixel } from "ol/pixel";
 import { MapBrowserEvent, Feature as OlFeature } from "ol";
-import { LineString, Point } from "ol/geom";
+import { Geometry, LineString, Point } from "ol/geom";
 import { buildWFSQuery, getDistanceBetweenFeatures } from "./functions";
 import { FeatureLike } from "ol/Feature";
 import { Cluster } from "ol/source";
@@ -142,6 +142,16 @@ class Map {
   private iconSizeOverride: IconSize | null = null;
 
   /**
+   * Threshold (in meters) to filter out short real-plan difference lines
+   */
+  private realPlanDistanceThreshold: number = 0;
+
+  /**
+   * Set of plans IDs to hide due to being closer than the visibility threshold
+   */
+  private hiddenPlanIds: Set<string> = new Set();
+
+  /**
    * Stores bounding box polygons from areas from which data has already been fetched.
    * This array might grow as the user explores the map, intersecting area will be merged.
    */
@@ -253,7 +263,7 @@ class Map {
       });
     }
 
-    async function getFeaturesFromLayer(layer: VectorLayer<VectorSource>, event: MapBrowserEvent) {
+    const getFeaturesFromLayer = async (layer: VectorLayer<VectorSource>, event: MapBrowserEvent) => {
       /**
        * Getting features by pixel returns just the topmost one from a single layer, so coordinate check needs to be done
        * separately.
@@ -265,6 +275,14 @@ class Map {
         .getSource()
         ?.getFeatures()
         .filter((feature) => {
+          // Don't allow selecting hidden features
+          if (isLayerClustered(layer)) {
+            const visible = feature.get("features")?.some((f: FeatureLike) => this.isFeatureVisible(f));
+            if (!visible) return false;
+          } else {
+            if (!this.isFeatureVisible(feature)) return false;
+          }
+
           const geometry = feature.getGeometry();
           return isCoordinateInsideFeature(event.coordinate, geometry);
         });
@@ -274,7 +292,7 @@ class Map {
         return !at_coordinate?.map((coord_feat) => coord_feat.getId()).includes(pixel_feat.getId());
       });
       return [...(at_coordinate || []), ...at_pixel];
-    }
+    };
 
     this.map.on("singleclick", (event) => {
       const layers = {
@@ -303,6 +321,74 @@ class Map {
   }
 
   /**
+   * Rebuilds the cache of which Plan features should be hidden based on the current threshold.
+   */
+  private updateVisibilityCaches() {
+    const validPlanIds = new Set<string>();
+    const invalidPlanIds = new Set<string>();
+
+    const allLayers = { ...this.clusteredOverlayLayers, ...this.nonClusteredOverlayLayers };
+    for (const [identifier, layer] of Object.entries(allLayers)) {
+      if (identifier.includes("real")) {
+        const source = layer.getSource();
+        if (!source) continue;
+
+        const features = source.getFeatures() || [];
+        // Safely extract real features, checking if they have the get method
+        const realFeatures = isLayerClustered(layer)
+          ? features.flatMap((f) => (f && typeof f.get === "function" ? f.get("features") || [] : []))
+          : features;
+
+        for (const real of realFeatures) {
+          if (!real || typeof real.get !== "function") continue;
+
+          const dist = real.get("distance_to_plan");
+          const planId = real.get("device_plan_id");
+          if (planId && dist !== undefined && dist !== null) {
+            if (dist <= this.realPlanDistanceThreshold) {
+              validPlanIds.add(planId.toString());
+            } else {
+              invalidPlanIds.add(planId.toString());
+            }
+          }
+        }
+      }
+    }
+
+    this.hiddenPlanIds.clear();
+    // A plan is hidden if it has only distance to reals <= threshold no distance to reals > threshold
+    for (const planId of Array.from(validPlanIds)) {
+      if (!invalidPlanIds.has(planId)) {
+        this.hiddenPlanIds.add(planId);
+      }
+    }
+
+    // Force a visual refresh on all layers
+    Object.values(allLayers).forEach((layer) => layer.changed());
+  }
+
+  /**
+   * Determines if a specific Feature (Real or Plan) should be visible on the map.
+   */
+  private isFeatureVisible(feature: FeatureLike): boolean {
+    if (!feature || typeof feature.get !== "function") return true;
+
+    // 1. If it's a Real feature with a distance, check it against threshold
+    const dist = feature.get("distance_to_plan");
+    if (dist !== undefined && dist !== null) {
+      return dist > this.realPlanDistanceThreshold;
+    }
+
+    // 2. If it's a Plan feature, check if it's in the hidden cache
+    const id = feature.get("id");
+    if (id && this.hiddenPlanIds.has(id.toString())) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
    * Fetch new bounding box data for all visible layers
    */
   private updateVisibleLayers() {
@@ -325,6 +411,11 @@ class Map {
   drawLineBetweenFeatures(feature1: Feature | FeatureLike, feature2: Feature | FeatureLike) {
     const location1 = feature1.getProperties().geometry.getFlatCoordinates();
     const location2 = feature2.getProperties().geometry.getFlatCoordinates();
+
+    if (!this.isFeatureVisible(feature1 as FeatureLike) || !this.isFeatureVisible(feature2 as FeatureLike)) {
+      return;
+    }
+
     const lineString = new LineString([location1, location2]);
     const olFeature = new OlFeature({
       geometry: lineString,
@@ -379,7 +470,7 @@ class Map {
    *
    * @param feature Target feature to be highlighted
    */
-  highlightFeature(feature: Feature, mapConfig: MapConfig) {
+  highlightFeature(feature: Feature) {
     this.clearHighlightLayer();
     const olFeature = new OlFeature({
       geometry: feature.getProperties().geometry,
@@ -463,6 +554,18 @@ class Map {
         layer.getVisible(),
       ),
     );
+  }
+
+  /**
+   * Update the threshold and trigger a redraw of difference lines
+   */
+  setRealPlanDistanceThreshold(threshold: number) {
+    this.realPlanDistanceThreshold = threshold;
+    this.updateVisibilityCaches();
+
+    // Clear and redraw the lines with the new filter
+    Object.values(this.planRealDiffVectorLayers).forEach((layer) => layer.getSource()?.clear());
+    this.handleShowAllPlanAndRealDifferences();
   }
 
   private static createHighLightLayer() {
@@ -587,8 +690,8 @@ class Map {
     const tempLayer = this.createTemporaryFetchLayer(tempVectorSource);
     this.map.addLayer(tempLayer);
 
-    tempVectorSource.once("featuresloadend", (featureEvent: any) => {
-      this.handleFeaturesLoaded(featureEvent.features, overlayIdentifier, isClustered);
+    tempVectorSource.once("featuresloadend", (featureEvent: VectorSourceEvent) => {
+      this.handleFeaturesLoaded(featureEvent.features || [], overlayIdentifier, isClustered);
       this.map.removeLayer(tempLayer);
       this.ongoingFeatureFetches.delete(overlayIdentifier);
       this.ongoingFeatureFetchesCallback(this.ongoingFeatureFetches);
@@ -612,7 +715,7 @@ class Map {
   /**
    * Handle loaded features and add them to the appropriate layer
    */
-  private handleFeaturesLoaded(features: any[], overlayIdentifier: string, isClustered: boolean) {
+  private handleFeaturesLoaded(features: OlFeature<Geometry>[], overlayIdentifier: string, isClustered: boolean) {
     if (!features || features.length === 0) {
       return;
     }
@@ -620,10 +723,6 @@ class Map {
     const layer = isClustered
       ? this.clusteredOverlayLayers[overlayIdentifier]
       : this.nonClusteredOverlayLayers[overlayIdentifier];
-
-    layer.once("postrender", () => {
-      this.handleShowAllPlanAndRealDifferences();
-    });
 
     const existingSource = layer.getSource();
     if (existingSource) {
@@ -633,12 +732,18 @@ class Map {
     }
 
     this.addFetchedArea(overlayIdentifier, this.getCurrentBoundingBox());
+    this.updateVisibilityCaches();
+    this.handleShowAllPlanAndRealDifferences();
   }
 
   /**
    * Add features to an existing layer source
    */
-  private addFeaturesToExistingSource(existingSource: any, features: any[], isClustered: boolean) {
+  private addFeaturesToExistingSource(
+    existingSource: VectorSource<OlFeature<Geometry>>,
+    features: OlFeature<Geometry>[],
+    isClustered: boolean,
+  ) {
     const targetVectorSource = isClustered ? (existingSource as Cluster).getSource() : existingSource;
     if (targetVectorSource) {
       targetVectorSource.addFeatures(features);
@@ -648,7 +753,11 @@ class Map {
   /**
    * Set a new source with features on a layer
    */
-  private setNewSourceWithFeatures(layer: VectorLayer<VectorSource>, features: any[], isClustered: boolean) {
+  private setNewSourceWithFeatures(
+    layer: VectorLayer<VectorSource>,
+    features: OlFeature<Geometry>[],
+    isClustered: boolean,
+  ) {
     if (isClustered) {
       const newVectorSource = new VectorSource({ features: features });
       const newClusterSource = new Cluster({
@@ -1041,6 +1150,8 @@ class Map {
       .map(({ identifier, use_traffic_sign_icons }) => {
         const vectorLayer = new VectorLayer({
           style: (feature: FeatureLike) => {
+            if (!this.isFeatureVisible(feature)) return undefined;
+
             const iconUrl = this.getCurrentIconUrl();
             const iconScale = this.getCurrentIconScale();
             const iconType = this.getCurrentIconType();
@@ -1068,7 +1179,7 @@ class Map {
       .map(({ identifier, use_traffic_sign_icons }) => {
         const styleCache: { [key: string]: Style | Style[] | undefined } = {};
 
-        const getStyleCacheKey = (clusterFeature: FeatureLike, size: number): string | undefined => {
+        const getStyleCacheKey = (visibleFeatures: FeatureLike[], size: number): string | undefined => {
           const iconUrl = this.getCurrentIconUrl();
           const iconScale = this.getCurrentIconScale();
           const iconType = this.getCurrentIconType();
@@ -1078,20 +1189,17 @@ class Map {
             return `${size}::${settingsKey}`;
           }
 
-          const features = clusterFeature.get("features");
-          if (features && features.length === 1) {
-            const feature = features[0];
+          if (size === 1) {
+            const feature = visibleFeatures[0];
             const deviceCode = feature.get("device_type_code");
             const direction = feature.getProperties()["direction"];
             if (deviceCode) {
-              // The key now reflects device, direction, and icon settings:
               return `${deviceCode}::${direction || "0"}::${settingsKey}`;
             }
           }
           return undefined;
         };
-        const getClusterStyle = (clusterFeature: FeatureLike): Style[] => {
-          const text = clusterFeature.get("features").length.toString();
+        const getClusterStyle = (size: number): Style[] => {
           return [
             new Style({
               image: new Circle({
@@ -1100,36 +1208,44 @@ class Map {
                 fill: new Fill({ color: "#3399CC" }),
               }),
               text: new Text({
-                text: text,
+                text: `${size}`,
                 fill: new Fill({ color: "#fff" }),
               }),
             }),
           ];
         };
         const getImageStyle = (clusterFeature: FeatureLike) => {
+          if (typeof clusterFeature.get !== "function") return undefined;
+
           const features = clusterFeature.get("features");
           if (!features || features.length === 0) {
-            return;
+            return undefined;
           }
 
-          const size: number = features.length;
-          const cacheKey = getStyleCacheKey(clusterFeature, size);
+          // Filter out features that are below the distance threshold
+          const visibleFeatures = features.filter((f: FeatureLike) => this.isFeatureVisible(f));
+          const size: number = visibleFeatures.length;
+
+          if (size === 0) return undefined; // Hide cluster entirely if all its contents are hidden
+
+          const cacheKey = getStyleCacheKey(visibleFeatures, size);
 
           let styleResult = cacheKey ? styleCache[cacheKey] : undefined;
           if (styleResult) {
             return styleResult;
           }
+
           const iconUrl = this.getCurrentIconUrl();
           const iconScale = this.getCurrentIconScale();
           const iconType = this.getCurrentIconType();
+
           if (size > 1) {
-            // Cluster style
-            styleResult = getClusterStyle(clusterFeature);
+            styleResult = getClusterStyle(size);
           } else {
-            // Single feature style: getSinglePointStyle already includes the arrow.
-            const feature = features[0];
+            const feature = visibleFeatures[0];
             styleResult = getSinglePointStyle(feature, use_traffic_sign_icons, iconUrl, iconScale, iconType);
           }
+
           if (cacheKey && styleResult) {
             styleCache[cacheKey] = styleResult;
           }

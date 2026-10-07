@@ -29,7 +29,7 @@
     "build": "vite build",
     "test": "vitest",
     "test:ci": "vitest run --coverage --watch=false",
-    "lint": "eslint --max-warnings=15",
+    "lint": "eslint --max-warnings=9",
     "validate-ts": "tsc --noEmit",
     "prettier": "prettier --check .",
     "format": "prettier --write ."
