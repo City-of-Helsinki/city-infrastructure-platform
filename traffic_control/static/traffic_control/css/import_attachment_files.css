@@ -1,0 +1,29 @@
+.attachment-file-list {
+    margin-top: 6px;
+}
+
+.attachment-file-list-heading {
+    margin: 0;
+    font-weight: bold;
+}
+
+.attachment-file-list ul {
+    margin: 4px 0 0;
+    padding-left: 18px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.attachment-file-list li {
+    list-style: disc;
+    line-height: 1.5;
+    word-break: break-all;
+}
+
+.attachment-file-list .attachment-file-name {
+    font-family: monospace;
+}
+
+.attachment-file-list .attachment-file-size {
+    color: var(--body-quiet-color, #666);
+}
