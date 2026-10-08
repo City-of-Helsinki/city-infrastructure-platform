@@ -1,0 +1,28 @@
+{% extends "admin/import_export/import.html" %}
+{% load i18n %}
+{% load admin_urls %}
+
+{% block confirm_import_form %}
+    <form action="{% url opts|admin_urlname:"process_import" %}" method="POST">
+      {% csrf_token %}
+      {{ confirm_form.as_p }}
+      {% if confirm_form.staged_attachment_names %}
+        <div class="attachment-file-list">
+          <p class="attachment-file-list-heading">
+            {% translate "Attachment files to be imported" %} ({{ confirm_form.staged_attachment_names|length }})
+          </p>
+          <ul>
+            {% for filename in confirm_form.staged_attachment_names %}
+              <li><span class="attachment-file-name">{{ filename }}</span></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <p>
+        {% translate "Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'" %}
+      </p>
+      <div class="submit-row">
+        <input type="submit" class="default" name="confirm" value="{% translate "Confirm import" %}">
+      </div>
+    </form>
+{% endblock %}

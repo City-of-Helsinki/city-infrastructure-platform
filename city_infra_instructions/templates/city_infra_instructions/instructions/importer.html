@@ -14,5 +14,11 @@
         <p>
             {% translate "When importing a file, the data will be validated for errors. If there are any errors in the file, you must take steps to correct them before trying again. It is not be possible to import any of the data in the file." %}
         </p>
+        <p>
+            {% translate "Some models, such as City Furniture Signposts, let you upload attachment files together with the data file. Select the files in the 'Attachment files' field of the import form and list the file names you want attached to a device in the 'attachment_filenames' column of that device's row. Separate multiple file names with a semicolon, for example 'photo.jpg;permit.pdf'." %}
+        </p>
+        <p>
+            {% translate "Every file name listed in the 'attachment_filenames' column must be uploaded with the import, otherwise the row fails validation. The listed files replace any attachments the device already has. Leave the column empty to keep a device's current attachments untouched." %}
+        </p>
     {% endspaceless %}
 {% endblock %}
