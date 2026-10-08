@@ -4035,3 +4035,12 @@ msgstr "enhet"
 
 msgid "username"
 msgstr "användarnamn"
+
+msgid "No files selected"
+msgstr "Inga filer valda"
+
+msgid "Selected files"
+msgstr "Valda filer"
+
+msgid "Attachment files to be imported"
+msgstr "Bilagefiler som importeras"

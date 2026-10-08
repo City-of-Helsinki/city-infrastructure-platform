@@ -3957,3 +3957,12 @@ msgstr "yksikkö"
 
 msgid "username"
 msgstr "käyttäjätunnus"
+
+msgid "No files selected"
+msgstr "Ei valittuja tiedostoja"
+
+msgid "Selected files"
+msgstr "Valitut tiedostot"
+
+msgid "Attachment files to be imported"
+msgstr "Tuotavat liitetiedostot"
