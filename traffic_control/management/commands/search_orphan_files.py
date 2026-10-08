@@ -12,6 +12,7 @@ from django.utils import timezone
 
 from command_tracker.management.trackable_command import TrackableCommand
 from traffic_control.models import SearchOrphanFilesRunInfo
+from traffic_control.services.import_attachments import STAGING_ROOT
 
 
 @dataclass
@@ -74,8 +75,11 @@ class Command(TrackableCommand):
 
 
 def analyze_default_storage_utilization(log_function: Callable = print) -> StorageAnalysis:
-    # Scan storage for files
-    default_storage_files: set[str] = set(_list_all_storage_files(storages["default"]))
+    # Scan storage for files. Attachment files that are staged for an ongoing admin import are
+    # transient and intentionally not referenced by the database, so they are left out entirely.
+    default_storage_files: set[str] = {
+        f for f in _list_all_storage_files(storages["default"]) if not f.startswith(f"{STAGING_ROOT}/")
+    }
 
     # Scan models for attachment references
     db_attachment_reference_map: dict[str, list[FileReference]] = defaultdict(list)

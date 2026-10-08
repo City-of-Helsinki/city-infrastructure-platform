@@ -43,6 +43,7 @@ from traffic_control.mixins import (
     UserStampedAdminMixin,
     UserStampedInlineAdminMixin,
 )
+from traffic_control.resources.attachments import AttachmentImportAdminMixin
 from traffic_control.resources.common import CustomImportExportActionModelAdmin
 
 __all__ = (
@@ -110,6 +111,7 @@ class AbstractFurnitureSignpostAdmin(
     AdminFieldInitialValuesMixin,
     admin.GISModelAdmin,
     AuditLogHistoryAdmin,
+    AttachmentImportAdminMixin,
     CustomImportExportActionModelAdmin,
     PreviewDeviceTypeRelationMixin,
 ):

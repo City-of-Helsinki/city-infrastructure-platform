@@ -419,9 +419,15 @@ class CustomImportExportActionModelAdmin(ImportExportActionModelAdmin):
         return my_urls + urls
 
     def import_action(self, request, *args, **kwargs):
-        """Add file type check and virus scan to before actual import"""
-        if request.FILES:
-            illegal_file_types, virus_scan_errors = get_file_upload_obstacles(request.FILES)
+        """Add file type check and virus scan to before actual import.
+
+        Only the data file itself is checked here. Attachment files uploaded alongside the data
+        file are validated and staged by the import form, so that their problems are reported as
+        form errors instead of aborting the request.
+        """
+        import_file = request.FILES.get("import_file") if request.FILES else None
+        if import_file is not None:
+            illegal_file_types, virus_scan_errors = get_file_upload_obstacles({"import_file": import_file})
             if illegal_file_types:
                 raise ValidationError(f"Illegal file types: {illegal_file_types}")
             if virus_scan_errors:
