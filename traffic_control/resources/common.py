@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.urls import path
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -398,12 +398,19 @@ class CustomImportExportActionModelAdmin(ImportExportActionModelAdmin):
     # Set CSV and XLSX as the only available formats
     formats = [f for f in base_formats.DEFAULT_FORMATS if f.__name__ in ["CSV", "XLSX"]]
 
-    def get_empty_csv_template(self, request):
-        """Return a csv file, which contains only column names"""
+    def get_empty_csv_template(self, request: HttpRequest) -> HttpResponse:
+        """
+        Returns a CSV file that contains only the column names of the model's export resource.
 
+        Args:
+            request (HttpRequest): The incoming admin request.
+
+        Returns:
+            HttpResponse: CSV attachment named "<Model>-Template.csv" containing only a header row.
+        """
         file_format = self.get_export_formats()[0]()  # Force CSV Format
         queryset = self.model.objects.none()
-        export_data = self.get_export_data(file_format, queryset, request=request, encoding=self.to_encoding)
+        export_data = self.get_export_data(file_format, request, queryset, encoding=self.to_encoding)
 
         response = HttpResponse(export_data, content_type=file_format.get_content_type())
         response["Content-Disposition"] = 'attachment; filename="%s"' % (
@@ -414,7 +421,11 @@ class CustomImportExportActionModelAdmin(ImportExportActionModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path("export_empty/", self.get_empty_csv_template, name="%s_%s_export_empty" % self.get_model_info()),
+            path(
+                "export_empty/",
+                self.admin_site.admin_view(self.get_empty_csv_template),
+                name="%s_%s_export_empty" % self.get_model_info(),
+            ),
         ]
         return my_urls + urls
 
