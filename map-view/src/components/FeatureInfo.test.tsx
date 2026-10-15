@@ -35,8 +35,8 @@ test("renders feature info", () => {
       features={mockFeatures}
       mapConfig={mockMapConfig}
       onClose={() => {}}
-      onSelectFeatureShowPlan={(feature = mockFeatures[0]) => new Promise((resolve) => resolve(0))}
-      onSelectFeatureHighLight={(feature = mockFeatures[0]) => undefined}
+      onSelectFeatureShowPlan={() => new Promise((resolve) => resolve(0))}
+      onSelectFeatureHighLight={() => undefined}
     />,
   );
   const featureInfoTitle = getByText("Overlay 1");

@@ -35,6 +35,7 @@ export interface MapConfig {
   traffic_sign_icons_url: string;
   address_search_base_url: string;
   featureTypeEditNameMapping: Record<string, string>;
+  realPlanDistanceThreshold: number;
   icon_scale: number;
   icon_type: string;
   icon_size: number;
