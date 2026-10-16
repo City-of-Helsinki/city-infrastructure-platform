@@ -62,6 +62,7 @@ dev = [
     "ruff",
     "requests-mock",
     "django-zeal",
+    "pre-commit>=4.6.2",
 ]
 
 [tool.uv]
@@ -70,7 +71,7 @@ exclude-newer = "P7D"
 package = false
 
 [tool.ruff]
-extend-select = [
+lint.extend-select = [
     "F",   # pyflakes
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -81,10 +82,10 @@ extend-exclude = ["migrations"]
 line-length = 120
 target-version = "py312"
 
-[tool.ruff.extend-per-file-ignores]
+[tool.ruff.lint.extend-per-file-ignores]
 "__init__.py" = ["F401"]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 10
 
 [tool.ruff.lint.isort]
