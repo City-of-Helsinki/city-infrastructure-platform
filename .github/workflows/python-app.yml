@@ -7,72 +7,34 @@ on:
     branches: [master]
 
 jobs:
-  build:
-    # NOTE (2026-05-20 thiago)
-    # Bookworm isn't available as a standard GitHub-provided runner
-    # https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+  # Backend CI using the City-of-Helsinki template Django backend CI template with uv
+  backend:
+    name: Django API CI
+    uses: City-of-Helsinki/.github/.github/workflows/ci-uv-django-api.yml@main
+    with:
+      python-version: "3.12"
+      postgres-major-version: 17
+      use-postgis: true
+      # Run the openapi schema validations as an extra command before the tests
+      extra-commands: "./scripts/check-open-api-schema.sh"
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # Custom frontend CI - at the moment we don't have a frontend CI template with yarn
+  map-view:
+    name: Map View CI
     runs-on: ubuntu-latest
-
-    env:
-      DEBUG: 1
-      # Disable OIDC to allow for minimal test configuration
-      OIDC_AUTHENTICATION_ENABLED: 0
-      # Database for tests
-      DATABASE_URL: postgis://postgres:postgres@localhost/city-infrastructure-platform
-
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # release 6.0.2 (2026-01-09)
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          # https://github.com/SonarSource/sonarqube-scan-action/tree/7006c4492b2e0ee0f816d36501671557c97f5995#3-quick-start-workflow-example-for-sonarqube-cloud
-          # Disabling shallow clones is recommended for improving the relevancy of reporting
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # release 6.2.0 (2026-01-22)
-        with:
-          python-version: "3.12"
 
       - name: Set up NodeJS 24
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # release 6.4.0 (2026-04-20)
         with:
           node-version: "24"
           package-manager-cache: false
-
-      - name: Install required Ubuntu packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install gdal-bin
-
-      # https://github.com/astral-sh/setup-uv?tab=readme-ov-file#usage
-      - name: Install uv
-        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # release 8.0.0 (2026-03-26)
-        with:
-          enable-cache: true
-          version: "0.12.1" # 2026-07-31
-          # checksum for Linux x64: https://github.com/astral-sh/uv/releases/tag/0.12.1
-          checksum: "90b2f223fb69d19db49e117da601f64978593417988530aa733d456141b4bcbb"
-
-      - name: Install test dependencies
-        run: uv sync --frozen
-
-      - name: Add virtual environment to PATH
-        run: echo "$GITHUB_WORKSPACE/.venv/bin" >> $GITHUB_PATH
-
-      - name: Run Python side code neatness tests
-        run: |
-          ruff check --output-format=github .
-          ruff format --check --diff .
-          djlint .
-          djlint --check .
-
-      - name: Run pytest code functionality tests
-        run: |
-          pytest -ra -vvv --cov=. --cov-report=xml --junitxml=test-results.xml
-
-      - name: Run openapi schema validations
-        run: |
-          ./scripts/check-open-api-schema.sh
 
       - name: Install NodeJS dependencies
         run: |
@@ -92,32 +54,3 @@ jobs:
       - name: Run NodeJS code functionality tests
         run: |
           yarn --cwd map-view test:ci
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@59db25f34e16620e48ab4bb9e4a5dce155cb5432 # release 8.0.0 (2026-04-29)
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=City-of-Helsinki_city-infrastructure-platform
-            -Dsonar.organization=city-of-helsinki
-            -Dsonar.python.version=3.8
-
-    # Majority of the tests require database
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgis/postgis:17-master
-        # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-          PGUSER: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
