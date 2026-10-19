@@ -14,8 +14,10 @@ SOURCE_LAYER = "Vastuualue_rya_urakkarajat"
 DATE_FORMAT = "%Y-%m-%d"
 
 
-def parse_date(date_str):
-    return datetime.strptime(date_str, DATE_FORMAT).date()
+def parse_date(date: datetime | str):
+    if isinstance(date, datetime):
+        return date
+    return datetime.strptime(date, DATE_FORMAT).date()
 
 
 class Command(TrackableCommand):
