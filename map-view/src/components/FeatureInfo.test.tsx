@@ -25,6 +25,7 @@ test("renders feature info", () => {
         device_type_description: "Sample description",
         device_type_icon: "",
         device_plan_id: "ABC-123",
+        real_count: 0,
         mount_type_description_fi: "",
       }),
       type: "Feature",
@@ -41,4 +42,5 @@ test("renders feature info", () => {
   );
   const featureInfoTitle = getByText("Overlay 1");
   expect(featureInfoTitle).toBeInTheDocument();
+  expect(getByText("Unused plan")).toBeInTheDocument();
 });

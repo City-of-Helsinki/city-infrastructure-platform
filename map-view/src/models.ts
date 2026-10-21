@@ -51,6 +51,7 @@ export interface FeatureProperties {
   device_type_icon: string;
   device_type_description: string;
   device_plan_id: string;
+  real_count?: number;
   mount_type_description_fi: string;
   content_s: object;
   content_s_rows: Record<string, string>[];

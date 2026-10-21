@@ -90,11 +90,13 @@ function getIconStyle(
   iconScale: number,
   deviceTypeCode: string,
   deviceTypeIcon: string,
+  opacity: number,
 ) {
   return new Style({
     image: new Icon({
       src: getIconSrc(iconsUrl, iconType, deviceTypeCode, deviceTypeIcon),
       scale: iconScale,
+      opacity,
     }),
   });
 }
@@ -107,7 +109,14 @@ export function getHighlightStyle(feature: Feature, mapConfig: MapConfig) {
   let baseStyles: Style[];
 
   if (trafficSignIconsEnabled(feature, overlayConfig) && dtCode) {
-    const iconStyleResult = getIconStyle(traffic_sign_icons_url, icon_type, icon_scale, dtCode, props.device_type_icon);
+    const iconStyleResult = getIconStyle(
+      traffic_sign_icons_url,
+      icon_type,
+      icon_scale,
+      dtCode,
+      props.device_type_icon,
+      1,
+    );
     baseStyles = toStyleArray(iconStyleResult);
   } else {
     baseStyles = toStyleArray(highLightStyle);
@@ -209,22 +218,37 @@ export function getSinglePointStyle(
   icon_scale: number,
   icon_type: string,
 ) {
-  const initialStyleResult =
-    use_traffic_sign_icons && feature.get("device_type_code") !== null
-      ? getIconStyle(
-          traffic_sign_icons_url,
-          icon_type,
-          icon_scale,
-          feature.get("device_type_code"),
-          feature.get("device_type_icon"),
-        )
-      : getStylesForGeometry(feature.getGeometry() as Geometry | undefined);
+  const isIcon = use_traffic_sign_icons && !!feature.get("device_type_code");
+  const isPlanWithoutReal = feature.get("real_count") === 0;
+  const initialStyleResult = isIcon
+    ? getIconStyle(
+        traffic_sign_icons_url,
+        icon_type,
+        icon_scale,
+        feature.get("device_type_code"),
+        feature.get("device_type_icon"),
+        feature.get("real_count") !== undefined ? 0.5 : 1,
+      )
+    : getStylesForGeometry(feature.getGeometry() as Geometry | undefined);
 
   const finalStyles: Style[] = toStyleArray(initialStyleResult);
 
   const arrowStyle = getDirectionArrowStyle(feature, icon_scale);
   if (arrowStyle) {
     finalStyles.push(arrowStyle);
+  }
+
+  if (isPlanWithoutReal) {
+    finalStyles.push(
+      new Style({
+        text: new Text({
+          text: "?",
+          font: "bold 18px sans-serif",
+          fill: new Fill({ color: "#000" }),
+          stroke: new Stroke({ color: "#fff", width: 3 }),
+        }),
+      }),
+    );
   }
 
   return finalStyles;

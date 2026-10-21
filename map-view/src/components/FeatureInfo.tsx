@@ -116,6 +116,7 @@ const FeatureInfo = ({
       direction,
       device_type_code,
       device_type_description,
+      real_count,
       mount_type_description_fi,
       content_s_rows,
       additional_information,
@@ -166,6 +167,12 @@ const FeatureInfo = ({
           <>
             <br />
             <b>{t("Distance to plan")}</b>: {realPlanDistance} m
+          </>
+        )}
+        {real_count === 0 && (
+          <>
+            <br />
+            <b>{t("Unused plan")}</b>
           </>
         )}
       </>
