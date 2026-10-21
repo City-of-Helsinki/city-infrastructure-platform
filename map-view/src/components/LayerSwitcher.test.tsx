@@ -14,10 +14,12 @@ test("renders basemaps and overlays", () => {
       iconScale={0.125}
       iconType="png"
       iconSize={128}
+      realPlanDistanceThreshold={0}
       onIconScaleChange={() => {}}
       onIconTypeChange={() => {}}
       onIconSizeChange={() => {}}
       onResetIconSettings={() => {}}
+      onRealPlanDistanceThresholdChange={() => {}}
     />,
   );
   const basemaps = getByText(/Basemaps/i);

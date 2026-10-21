@@ -4,8 +4,6 @@ import { FeatureLike } from "ol/Feature";
 import RenderFeature from "ol/render/Feature";
 import { Coordinate } from "ol/coordinate";
 import { Feature, Layer, LayerConfig, MapConfig } from "../models";
-import VectorLayer from "ol/layer/Vector";
-import { Cluster } from "ol/source";
 
 const defaultFill = new Fill({ color: "magenta" });
 const defaultStroke = new Stroke({
@@ -336,10 +334,6 @@ export function getFeatureLayerName(feature: Feature, overlayConfig: LayerConfig
 export function getFeatureLayerExtraInfoFields(feature: Feature, overlayConfig: LayerConfig) {
   const feature_layer = getFeatureLayer(getFeatureType(feature), overlayConfig);
   return feature_layer ? feature_layer["extra_feature_info"] : {};
-}
-
-export function isLayerClustered(layer: VectorLayer) {
-  return layer.getSource() instanceof Cluster;
 }
 
 export function getDiffLayerIdentifier(layer: Layer) {
