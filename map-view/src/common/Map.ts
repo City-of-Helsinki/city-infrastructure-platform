@@ -372,6 +372,7 @@ class Map {
   private isFeatureVisible(feature: FeatureLike): boolean {
     if (!isFeatureADevice(feature)) return true; // Non-device plans should never be hidden by this check
     if (this.realPlanDistanceThreshold === 0) return true; // If we don't have a minimum distance, always show
+    if (feature.get("real_count") === 0) return true; // Plan without a real, always show
 
     // Show only items with a valid distance equal or greater to the threshold
     const featureId = feature.get("id");
