@@ -40,6 +40,12 @@ import { bboxPolygon, booleanIntersects, union, featureCollection } from "@turf/
 import { Feature as TurfFeature, Polygon as TurfPolygon, MultiPolygon as TurfMultiPolygon, BBox } from "geojson";
 import { buildAddressSearchQuery } from "./AddressSearchUtils";
 
+export enum ClusterColor {
+  Real = "#6f9edc",
+  Plan = "#afdd7e",
+  PlanWithoutReal = "#e78982",
+}
+
 type TurfPolygonFeature = TurfFeature<TurfPolygon | TurfMultiPolygon>;
 
 type DeviceDistanceMap = {
@@ -380,6 +386,7 @@ class Map {
       const { distance } = this.devicePairAndDistanceMap[featureId];
       return typeof distance === "number" && distance >= this.realPlanDistanceThreshold;
     }
+
     return false;
   }
 
@@ -1161,7 +1168,7 @@ class Map {
             return getSinglePointStyle(feature, use_traffic_sign_icons, iconUrl, iconScale, iconType);
           },
           visible: false,
-          opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
+          opacity: identifier.includes("plan") ? 0.5 : 1,
         });
 
         this.nonClusteredOverlayLayers[identifier] = vectorLayer;
@@ -1181,15 +1188,20 @@ class Map {
       .filter(({ clustered }) => clustered)
       .map(({ identifier, use_traffic_sign_icons }) => {
         const styleCache: { [key: string]: Style | Style[] | undefined } = {};
+        const isPlanLayer = identifier.includes("plan");
 
-        const getStyleCacheKey = (visibleFeatures: FeatureLike[], size: number): string | undefined => {
+        const getStyleCacheKey = (
+          visibleFeatures: FeatureLike[],
+          size: number,
+          hasPlanWithoutReal: boolean,
+        ): string | undefined => {
           const iconUrl = this.getCurrentIconUrl();
           const iconScale = this.getCurrentIconScale();
           const iconType = this.getCurrentIconType();
           const settingsKey = `${iconUrl}::${iconScale}::${iconType}`;
 
           if (size > 1) {
-            return `${size}::${settingsKey}`;
+            return `${size}::${hasPlanWithoutReal}::${settingsKey}`;
           }
 
           if (size === 1) {
@@ -1197,26 +1209,34 @@ class Map {
             const deviceCode = feature.get("device_type_code");
             const direction = feature.getProperties()["direction"];
             if (deviceCode) {
-              return `${deviceCode}::${direction || "0"}::${settingsKey}`;
+              return `${deviceCode}::${direction || "0"}::${hasPlanWithoutReal}::${settingsKey}`;
             }
           }
           return undefined;
         };
-        const getClusterStyle = (size: number): Style[] => {
+
+        const getClusterStyle = (size: number, hasPlanWithoutReal: boolean): Style[] => {
+          const color = isPlanLayer
+            ? hasPlanWithoutReal
+              ? ClusterColor.PlanWithoutReal
+              : ClusterColor.Plan
+            : ClusterColor.Real;
           return [
             new Style({
               image: new Circle({
-                radius: 10,
+                radius: 14,
                 stroke: new Stroke({ color: "#fff" }),
-                fill: new Fill({ color: "#3399CC" }),
+                fill: new Fill({ color }),
               }),
               text: new Text({
                 text: `${size}`,
-                fill: new Fill({ color: "#fff" }),
+                font: "bold 14px sans-serif",
+                fill: new Fill({ color: "#000" }),
               }),
             }),
           ];
         };
+
         const getImageStyle = (clusterFeature: FeatureLike) => {
           if (typeof clusterFeature.get !== "function") return undefined;
 
@@ -1224,14 +1244,14 @@ class Map {
           if (!features || features.length === 0) {
             return undefined;
           }
-
           // Filter out features that are below the distance threshold
           const visibleFeatures = features.filter((f: FeatureLike) => this.isFeatureVisible(f));
           const size: number = visibleFeatures.length;
 
           if (size === 0) return undefined; // Hide cluster entirely if all its contents are hidden
 
-          const cacheKey = getStyleCacheKey(visibleFeatures, size);
+          const hasPlanWithoutReal = isPlanLayer && visibleFeatures.some((f: FeatureLike) => f.get("real_count") === 0);
+          const cacheKey = getStyleCacheKey(visibleFeatures, size, hasPlanWithoutReal);
 
           let styleResult = cacheKey ? styleCache[cacheKey] : undefined;
           if (styleResult) {
@@ -1241,9 +1261,8 @@ class Map {
           const iconUrl = this.getCurrentIconUrl();
           const iconScale = this.getCurrentIconScale();
           const iconType = this.getCurrentIconType();
-
           if (size > 1) {
-            styleResult = getClusterStyle(size);
+            styleResult = getClusterStyle(size, hasPlanWithoutReal);
           } else {
             const feature = visibleFeatures[0];
             styleResult = getSinglePointStyle(feature, use_traffic_sign_icons, iconUrl, iconScale, iconType);
@@ -1260,7 +1279,6 @@ class Map {
             return getImageStyle(clusterFeature);
           },
           visible: false,
-          opacity: identifier.includes("plan") ? 0.5 : 1, // 100% opacity for reals, 50% opacity for plans
         });
 
         this.clusteredOverlayLayers[identifier] = vectorLayer;
