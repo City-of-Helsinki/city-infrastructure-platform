@@ -380,6 +380,7 @@ class Map {
       const { distance } = this.devicePairAndDistanceMap[featureId];
       return typeof distance === "number" && distance >= this.realPlanDistanceThreshold;
     }
+
     return false;
   }
 
@@ -1202,21 +1203,24 @@ class Map {
           }
           return undefined;
         };
-        const getClusterStyle = (size: number): Style[] => {
+
+        const getClusterStyle = (size: number, hasPlanWithoutReal: boolean): Style[] => {
           return [
             new Style({
               image: new Circle({
-                radius: 10,
+                radius: 14,
                 stroke: new Stroke({ color: "#fff" }),
-                fill: new Fill({ color: "#3399CC" }),
+                fill: new Fill({ color: "#39C" }),
               }),
               text: new Text({
-                text: `${size}`,
-                fill: new Fill({ color: "#fff" }),
+                text: hasPlanWithoutReal ? `${size}?` : `${size}`,
+                font: "bold 14px sans-serif",
+                fill: new Fill({ color: "#000" }),
               }),
             }),
           ];
         };
+
         const getImageStyle = (clusterFeature: FeatureLike) => {
           if (typeof clusterFeature.get !== "function") return undefined;
 
@@ -1224,10 +1228,10 @@ class Map {
           if (!features || features.length === 0) {
             return undefined;
           }
-
           // Filter out features that are below the distance threshold
           const visibleFeatures = features.filter((f: FeatureLike) => this.isFeatureVisible(f));
           const size: number = visibleFeatures.length;
+          const hasPlanWithoutReal = visibleFeatures.some((f: FeatureLike) => f.get("real_count") === 0);
 
           if (size === 0) return undefined; // Hide cluster entirely if all its contents are hidden
 
@@ -1243,7 +1247,7 @@ class Map {
           const iconType = this.getCurrentIconType();
 
           if (size > 1) {
-            styleResult = getClusterStyle(size);
+            styleResult = getClusterStyle(size, hasPlanWithoutReal);
           } else {
             const feature = visibleFeatures[0];
             styleResult = getSinglePointStyle(feature, use_traffic_sign_icons, iconUrl, iconScale, iconType);
