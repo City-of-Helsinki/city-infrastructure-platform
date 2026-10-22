@@ -4,6 +4,7 @@ const mockRegisterOngoingFeatureFetchesCallback = vi.fn();
 const mockSetVisibleBasemap = vi.fn();
 const mockSetOverlayVisible = vi.fn();
 const mockUpdateIconSettings = vi.fn();
+const mockSetRealPlanDistanceThreshold = vi.fn();
 const mockMap = {
   initialize: mockInitialize,
   registerFeatureInfoCallback: mockRegisterFeatureInfoCallback,
@@ -11,6 +12,7 @@ const mockMap = {
   setVisibleBasemap: mockSetVisibleBasemap,
   setOverlayVisible: mockSetOverlayVisible,
   updateIconSettings: mockUpdateIconSettings,
+  setRealPlanDistanceThreshold: mockSetRealPlanDistanceThreshold,
 };
 
 export default mockMap;

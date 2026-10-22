@@ -53,4 +53,5 @@ export const mockMapConfig: MapConfig = {
   icon_scale: 0.1,
   icon_type: "svg",
   icon_size: 128,
+  realPlanDistanceThreshold: 0,
 };
