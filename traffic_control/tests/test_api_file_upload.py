@@ -1,12 +1,9 @@
 import io
-import shutil
-import tempfile
 import uuid
 
 import pytest
 import requests_mock
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -60,11 +57,6 @@ from traffic_control.tests.factories import (
     TrafficSignPlanFactory,
     TrafficSignRealFactory,
 )
-
-MEDIA_ROOT = tempfile.mkdtemp()
-
-settings_overrides = override_settings(MEDIA_ROOT=MEDIA_ROOT)
-
 
 DELETE_TEST_PARAMS = (
     (
@@ -170,13 +162,10 @@ def mock_api():
         yield m
 
 
-def setup_module():
-    settings_overrides.enable()
-
-
-def teardown_module():
-    shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
-    settings_overrides.disable()
+@pytest.fixture(autouse=True)
+def settings(settings, tmp_path):
+    settings.MEDIA_ROOT = str(tmp_path)
+    return settings
 
 
 @pytest.mark.django_db

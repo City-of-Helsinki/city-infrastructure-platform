@@ -7,7 +7,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.storage.fallback import FallbackStorage
-from django.test import RequestFactory
 from django.utils import timezone
 
 from traffic_control.admin.ticket_machine_migration import (
@@ -22,12 +21,6 @@ from traffic_control.models.ticket_machine_migration import (
 )
 
 User = get_user_model()
-
-
-@pytest.fixture
-def admin_user(db):
-    """Create an admin user for testing."""
-    return User.objects.create_superuser(username="admin", email="admin@test.com", password="password")
 
 
 @pytest.fixture
@@ -64,15 +57,9 @@ def staff_user_with_delete(db):
 
 
 @pytest.fixture
-def request_factory():
-    """Create a request factory."""
-    return RequestFactory()
-
-
-@pytest.fixture
-def admin_request(request_factory, admin_user):
+def admin_request(rf, admin_user):
     """Create an admin request with authenticated user and message middleware."""
-    request = request_factory.get("/admin/")
+    request = rf.get("/admin/")
     request.user = admin_user
     # Add message middleware support
     setattr(request, "session", "session")
@@ -171,11 +158,9 @@ class TestTicketMachineMigrationRunAdmin:
         admin = TicketMachineTrafficSignMigrationRunAdmin(TicketMachineMigrationRun, AdminSite())
         assert admin.has_delete_permission(admin_request, dry_run_migration) is True
 
-    def test_has_delete_permission_staff_view_only_fails(
-        self, request_factory, staff_user_view_only, dry_run_migration
-    ):
+    def test_has_delete_permission_staff_view_only_fails(self, rf, staff_user_view_only, dry_run_migration):
         """Test that staff user with only view permission cannot delete even dry-run migrations."""
-        request = request_factory.get("/admin/")
+        request = rf.get("/admin/")
         request.user = staff_user_view_only
         setattr(request, "session", "session")
         messages = FallbackStorage(request)
@@ -185,11 +170,9 @@ class TestTicketMachineMigrationRunAdmin:
         # Even though it's a dry-run (which business logic allows), user lacks base delete permission
         assert admin.has_delete_permission(request, dry_run_migration) is False
 
-    def test_has_delete_permission_staff_with_delete_on_dry_run(
-        self, request_factory, staff_user_with_delete, dry_run_migration
-    ):
+    def test_has_delete_permission_staff_with_delete_on_dry_run(self, rf, staff_user_with_delete, dry_run_migration):
         """Test that staff user with delete permission can delete dry-run migrations."""
-        request = request_factory.get("/admin/")
+        request = rf.get("/admin/")
         request.user = staff_user_with_delete
         setattr(request, "session", "session")
         messages = FallbackStorage(request)
@@ -199,11 +182,9 @@ class TestTicketMachineMigrationRunAdmin:
         # Has both base delete permission AND passes business logic check
         assert admin.has_delete_permission(request, dry_run_migration) is True
 
-    def test_has_delete_permission_staff_with_delete_on_success_fails(
-        self, request_factory, staff_user_with_delete, migration_run
-    ):
+    def test_has_delete_permission_staff_with_delete_on_success_fails(self, rf, staff_user_with_delete, migration_run):
         """Test that staff user with delete permission still cannot delete successful migrations."""
-        request = request_factory.get("/admin/")
+        request = rf.get("/admin/")
         request.user = staff_user_with_delete
         setattr(request, "session", "session")
         messages = FallbackStorage(request)
@@ -391,9 +372,7 @@ class TestTicketMachineMigrationPlanRecordAdmin:
         admin = TicketMachineMigrationPlanRecordAdmin(TicketMachineMigrationPlanRecord, AdminSite())
         assert admin.has_delete_permission(admin_request, record) is False
 
-    def test_has_delete_permission_staff_view_only_fails(
-        self, request_factory, staff_user_view_only, dry_run_migration, test_uuid
-    ):
+    def test_has_delete_permission_staff_view_only_fails(self, rf, staff_user_view_only, dry_run_migration, test_uuid):
         """Test that staff user with only view permission cannot delete plan records."""
         record = TicketMachineMigrationPlanRecord.objects.create(
             migration_run=dry_run_migration,
@@ -401,7 +380,7 @@ class TestTicketMachineMigrationPlanRecordAdmin:
             device_type_code="H20.91",
         )
 
-        request = request_factory.get("/admin/")
+        request = rf.get("/admin/")
         request.user = staff_user_view_only
         setattr(request, "session", "session")
         messages = FallbackStorage(request)
@@ -412,7 +391,7 @@ class TestTicketMachineMigrationPlanRecordAdmin:
         assert admin.has_delete_permission(request, record) is False
 
     def test_has_delete_permission_staff_with_delete_on_dry_run(
-        self, request_factory, staff_user_with_delete, dry_run_migration, test_uuid
+        self, rf, staff_user_with_delete, dry_run_migration, test_uuid
     ):
         """Test that staff user with delete permission can delete records from dry-run migrations."""
         record = TicketMachineMigrationPlanRecord.objects.create(
@@ -421,7 +400,7 @@ class TestTicketMachineMigrationPlanRecordAdmin:
             device_type_code="H20.91",
         )
 
-        request = request_factory.get("/admin/")
+        request = rf.get("/admin/")
         request.user = staff_user_with_delete
         setattr(request, "session", "session")
         messages = FallbackStorage(request)
@@ -561,9 +540,7 @@ class TestTicketMachineMigrationRealRecordAdmin:
         admin = TicketMachineTrafficSignMigrationRealRecordAdmin(TicketMachineMigrationRealRecord, AdminSite())
         assert admin.has_add_permission(admin_request) is False
 
-    def test_has_delete_permission_staff_view_only_fails(
-        self, request_factory, staff_user_view_only, dry_run_migration, test_uuid
-    ):
+    def test_has_delete_permission_staff_view_only_fails(self, rf, staff_user_view_only, dry_run_migration, test_uuid):
         """Test that staff user with only view permission cannot delete real records."""
         record = TicketMachineMigrationRealRecord.objects.create(
             migration_run=dry_run_migration,
@@ -571,7 +548,7 @@ class TestTicketMachineMigrationRealRecordAdmin:
             device_type_code="H20.91",
         )
 
-        request = request_factory.get("/admin/")
+        request = rf.get("/admin/")
         request.user = staff_user_view_only
         setattr(request, "session", "session")
         messages = FallbackStorage(request)
@@ -582,7 +559,7 @@ class TestTicketMachineMigrationRealRecordAdmin:
         assert admin.has_delete_permission(request, record) is False
 
     def test_has_delete_permission_staff_with_delete_on_dry_run(
-        self, request_factory, staff_user_with_delete, dry_run_migration, test_uuid
+        self, rf, staff_user_with_delete, dry_run_migration, test_uuid
     ):
         """Test that staff user with delete permission can delete records from dry-run migrations."""
         record = TicketMachineMigrationRealRecord.objects.create(
@@ -591,7 +568,7 @@ class TestTicketMachineMigrationRealRecordAdmin:
             device_type_code="H20.91",
         )
 
-        request = request_factory.get("/admin/")
+        request = rf.get("/admin/")
         request.user = staff_user_with_delete
         setattr(request, "session", "session")
         messages = FallbackStorage(request)

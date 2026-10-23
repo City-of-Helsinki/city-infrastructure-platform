@@ -1,7 +1,5 @@
 import datetime
-import os
 from decimal import Decimal
-from tempfile import TemporaryDirectory
 
 import pytest
 from django.core.management import call_command
@@ -30,9 +28,6 @@ from traffic_control.tests.factories import (
     TrafficSignRealFactory,
 )
 
-BASE_PATH = os.path.dirname(__file__)
-TEST_FILES_DIR = os.path.join(BASE_PATH, "../../test_datas/traffic_sign_import")
-
 
 def _create_db_entries(device_type_codes):
     MountType.objects.get_or_create(code="POLE", description="POLE", description_fi="Pylväs")
@@ -41,17 +36,16 @@ def _create_db_entries(device_type_codes):
 
 
 @pytest.mark.django_db
-def test__import_traffic_scan_data():
+def test__import_traffic_scan_data(datadir, tmp_path):
     _create_db_entries(["C39", "H24S", "645"])
-    with TemporaryDirectory() as tempdir:
-        importer = TrafficSignImporter(None, None, None)
-        call_command(
-            "import_traffic_sign_data",
-            sign_file=os.path.join(TEST_FILES_DIR, "basic_panels.csv"),
-            mount_file=os.path.join(TEST_FILES_DIR, "basic_mounts.csv"),
-            output_dir=tempdir,
-            delete_orphan_mounts=True,
-        )
+    importer = TrafficSignImporter(None, None, None)
+    call_command(
+        "import_traffic_sign_data",
+        sign_file=datadir / "basic_panels.csv",
+        mount_file=datadir / "basic_mounts.csv",
+        output_dir=str(tmp_path),
+        delete_orphan_mounts=True,
+    )
 
     _assert_mount_data(importer)
     _assert_traffic_sign_data(importer)

@@ -5,6 +5,7 @@
 - **Execution**: Always run tests using `pytest` directly (never `python -m pytest`), always including the `--reuse-db` flag to optimize performance.
 - **Style**: Prefer functional tests and fixtures over class-based unit tests where appropriate.
 - **Factory Pattern**: Always use existing factory classes (e.g., `AdditionalSignPlanFactory`, `TrafficSignRealFactory`) instead of `Model.objects.create()` when creating test data. Only use direct model instantiation (e.g., `Model()` constructor) when testing validation with `full_clean()` before saving.
+- **Pytest fixtures**: If a test requires fixtures, then always prefer `pytest-django` and `pytest` utility fixtures if they are applicable. If several modules under the same tree use similar always-on fixtures, consider moving them to a `conftest.py` file at the appropriate level.
 
 ## Code Style & Quality
 - **Type Hinting**: Always use explicit Type Hinting for all Python function signatures (parameters and return types).

@@ -38,9 +38,59 @@ from traffic_control.tests.test_base_api import illegal_test_point
 from traffic_control.tests.test_base_api_3d import (
     point_location_error_test_data_3d,
     point_location_test_data_3d,
-    TrafficControlAPIBaseTestCase3D,
+    test_point_3d,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
+
+# ==============================================================================
+# Fixtures
+# ==============================================================================
+
+
+@pytest.fixture
+def create_traffic_sign_plan(admin_user, test_device_type, test_owner):
+    def _create(**overrides):
+        defaults = {
+            "device_type": test_device_type,
+            "location": test_point_3d,
+            "lifecycle": Lifecycle.ACTIVE,
+            "owner": test_owner,
+            "created_by": admin_user,
+            "updated_by": admin_user,
+            "peak_fastened": False,
+            "double_sided": False,
+        }
+        defaults.update(overrides)
+        return TrafficSignPlanFactory(**defaults)
+
+    return _create
+
+
+@pytest.fixture
+def create_traffic_sign_real(admin_user, test_device_type, test_owner, create_traffic_sign_plan):
+    def _create(traffic_sign_plan=None, **overrides):
+        if traffic_sign_plan is None:
+            traffic_sign_plan = create_traffic_sign_plan()
+
+        defaults = {
+            "traffic_sign_plan": traffic_sign_plan,
+            "device_type": test_device_type,
+            "location": test_point_3d,
+            "installation_date": datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            "lifecycle": Lifecycle.ACTIVE,
+            "owner": test_owner,
+            "created_by": admin_user,
+            "updated_by": admin_user,
+        }
+        defaults.update(overrides)
+        return TrafficSignRealFactory(**defaults)
+
+    return _create
+
+
+# ==============================================================================
+# TrafficSignPlan Tests
+# ==============================================================================
 
 
 @pytest.mark.django_db
@@ -172,164 +222,173 @@ def test__traffic_sign_plan__create_with_invalid_geometry():
     )
 
 
-class TrafficSignPlanTests(TrafficControlAPIBaseTestCase3D):
-    def test_get_all_traffic_sign_plans(self):
-        """
-        Ensure we can get all traffic sign plan objects.
-        """
-        count = 3
-        for i in range(count):
-            self.__create_test_traffic_sign_plan()
-        response = self.client.get(reverse("v1:trafficsignplan-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+@pytest.mark.django_db
+def test_get_all_traffic_sign_plans(admin_api_client, create_traffic_sign_plan):
+    """
+    Ensure we can get all traffic sign plan objects.
+    """
+    count = 3
+    for _ in range(count):
+        create_traffic_sign_plan()
+    response = admin_api_client.get(reverse("v1:trafficsignplan-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-        results = response.data.get("results")
-        for result in results:
-            traffic_sign_plan = TrafficSignPlan.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), traffic_sign_plan.location.ewkt)
+    results = response.data.get("results")
+    for result in results:
+        traffic_sign_plan = TrafficSignPlan.objects.get(id=result.get("id"))
+        assert result.get("location") == traffic_sign_plan.location.ewkt
 
-    def test_get_all_traffic_sign_plans__geojson(self):
-        """
-        Ensure we can get all traffic sign plan objects with GeoJSON location.
-        """
-        count = 3
-        for i in range(count):
-            self.__create_test_traffic_sign_plan()
-        response = self.client.get(reverse("v1:trafficsignplan-list"), data={"geo_format": "geojson"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
 
-        results = response.data.get("results")
-        for result in results:
-            traffic_sign_plan = TrafficSignPlan.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), GeoJsonDict(traffic_sign_plan.location.json))
+@pytest.mark.django_db
+def test_get_all_traffic_sign_plans__geojson(admin_api_client, create_traffic_sign_plan):
+    """
+    Ensure we can get all traffic sign plan objects with GeoJSON location.
+    """
+    count = 3
+    for _ in range(count):
+        create_traffic_sign_plan()
+    response = admin_api_client.get(reverse("v1:trafficsignplan-list"), data={"geo_format": "geojson"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-    def test_get_traffic_sign_plan_detail(self):
-        """
-        Ensure we can get one traffic sign plan object.
-        """
-        traffic_sign_plan = self.__create_test_traffic_sign_plan()
-        response = self.client.get(reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(traffic_sign_plan.id))
-        self.assertEqual(traffic_sign_plan.location.ewkt, response.data.get("location"))
+    results = response.data.get("results")
+    for result in results:
+        traffic_sign_plan = TrafficSignPlan.objects.get(id=result.get("id"))
+        assert result.get("location") == GeoJsonDict(traffic_sign_plan.location.json)
 
-    def test_get_traffic_sign_plan_detail__geojson(self):
-        """
-        Ensure we can get one traffic sign plan object with GeoJSON location.
-        """
-        traffic_sign_plan = self.__create_test_traffic_sign_plan()
-        response = self.client.get(
-            reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
-            data={"geo_format": "geojson"},
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(traffic_sign_plan.id))
-        traffic_sign_plan_geojson = GeoJsonDict(traffic_sign_plan.location.json)
-        self.assertEqual(traffic_sign_plan_geojson, response.data.get("location"))
 
-    def test_create_traffic_sign_plan(self):
-        """
-        Ensure we can create a new traffic sign plan object.
-        """
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner.pk,
-        }
-        response = self.client.post(reverse("v1:trafficsignplan-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(TrafficSignPlan.objects.count(), 1)
-        self.assertEqual(response.data.get("location"), data["location"])
-        traffic_sign_plan = TrafficSignPlan.objects.first()
-        self.assertEqual(traffic_sign_plan.device_type.id, data["device_type"])
-        self.assertEqual(traffic_sign_plan.location.ewkt, data["location"])
-        self.assertEqual(traffic_sign_plan.lifecycle.value, data["lifecycle"])
+@pytest.mark.django_db
+def test_get_traffic_sign_plan_detail(admin_api_client, create_traffic_sign_plan):
+    """
+    Ensure we can get one traffic sign plan object.
+    """
+    traffic_sign_plan = create_traffic_sign_plan()
+    response = admin_api_client.get(reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(traffic_sign_plan.id)
+    assert traffic_sign_plan.location.ewkt == response.data.get("location")
 
-    def test_create_traffic_sign_real_with_existing_plan(self):
-        ts_plan = TrafficSignPlanFactory()
-        TrafficSignRealFactory(traffic_sign_plan=ts_plan)
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner.pk,
-            "traffic_sign_plan": ts_plan.id,
-        }
-        response = self.client.post(reverse("v1:trafficsignreal-list"), data, format="json")
-        response_data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(TrafficSignReal.objects.count(), 1)
-        assert "duplicate key value violates unique constraint" in response_data["detail"]
-        assert "traffic_control_trafficsignreal_unique_traffic_sign_plan" in response_data["detail"]
 
-    def test_update_traffic_sign_plan(self):
-        """
-        Ensure we can update existing traffic sign plan object.
-        """
-        traffic_sign_plan = self.__create_test_traffic_sign_plan()
-        data = {
-            "device_type": self.test_device_type_2.id,
-            "location": self.test_point.ewkt,
-            "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner.pk,
-            "peak_fastened": True,
-            "double_sided": True,
-        }
-        response = self.client.put(
-            reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(TrafficSignPlan.objects.count(), 1)
-        traffic_sign_plan = TrafficSignPlan.objects.first()
-        self.assertEqual(traffic_sign_plan.device_type.id, data["device_type"])
-        self.assertEqual(traffic_sign_plan.location.ewkt, data["location"])
-        self.assertEqual(traffic_sign_plan.lifecycle.value, data["lifecycle"])
-        self.assertTrue(traffic_sign_plan.peak_fastened)
-        self.assertTrue(traffic_sign_plan.double_sided)
+@pytest.mark.django_db
+def test_get_traffic_sign_plan_detail__geojson(admin_api_client, create_traffic_sign_plan):
+    """
+    Ensure we can get one traffic sign plan object with GeoJSON location.
+    """
+    traffic_sign_plan = create_traffic_sign_plan()
+    response = admin_api_client.get(
+        reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
+        data={"geo_format": "geojson"},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(traffic_sign_plan.id)
+    traffic_sign_plan_geojson = GeoJsonDict(traffic_sign_plan.location.json)
+    assert traffic_sign_plan_geojson == response.data.get("location")
 
-    def test_delete_traffic_sign_plan_detail(self):
-        """
-        Ensure we can soft-delete one traffic sign plan object.
-        """
-        traffic_sign_plan = self.__create_test_traffic_sign_plan()
-        response = self.client.delete(
-            reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(TrafficSignPlan.objects.count(), 1)
-        deleted_traffic_sign_plan = TrafficSignPlan.objects.get(id=str(traffic_sign_plan.id))
-        self.assertEqual(deleted_traffic_sign_plan.id, traffic_sign_plan.id)
-        self.assertFalse(deleted_traffic_sign_plan.is_active)
-        self.assertEqual(deleted_traffic_sign_plan.deleted_by, self.user)
-        self.assertTrue(deleted_traffic_sign_plan.deleted_at)
 
-    def test_get_deleted_traffic_sign_plan_returns_not_found(self):
-        traffic_sign_plan = self.__create_test_traffic_sign_plan()
-        response = self.client.delete(
-            reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        response = self.client.get(
-            reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+@pytest.mark.django_db
+def test_create_traffic_sign_plan(admin_api_client, test_device_type, test_owner):
+    """
+    Ensure we can create a new traffic sign plan object.
+    """
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point_3d.ewkt,
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "owner": test_owner.pk,
+    }
+    response = admin_api_client.post(reverse("v1:trafficsignplan-list"), data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert TrafficSignPlan.objects.count() == 1
+    assert response.data.get("location") == data["location"]
+    traffic_sign_plan = TrafficSignPlan.objects.first()
+    assert traffic_sign_plan.device_type.id == data["device_type"]
+    assert traffic_sign_plan.location.ewkt == data["location"]
+    assert traffic_sign_plan.lifecycle.value == data["lifecycle"]
 
-    def __create_test_traffic_sign_plan(self):
-        return TrafficSignPlanFactory(
-            device_type=self.test_device_type,
-            location=self.test_point,
-            lifecycle=self.test_lifecycle,
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
-            peak_fastened=False,
-            double_sided=False,
-        )
+
+@pytest.mark.django_db
+def test_create_traffic_sign_real_with_existing_plan(admin_api_client, test_device_type, test_owner):
+    ts_plan = TrafficSignPlanFactory()
+    TrafficSignRealFactory(traffic_sign_plan=ts_plan)
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point_3d.ewkt,
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "owner": test_owner.pk,
+        "traffic_sign_plan": ts_plan.id,
+    }
+    response = admin_api_client.post(reverse("v1:trafficsignreal-list"), data, format="json")
+    response_data = response.json()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert TrafficSignReal.objects.count() == 1
+    assert "duplicate key value violates unique constraint" in response_data["detail"]
+    assert "traffic_control_trafficsignreal_unique_traffic_sign_plan" in response_data["detail"]
+
+
+@pytest.mark.django_db
+def test_update_traffic_sign_plan(admin_api_client, test_device_type_2, test_owner, create_traffic_sign_plan):
+    """
+    Ensure we can update existing traffic sign plan object.
+    """
+    traffic_sign_plan = create_traffic_sign_plan()
+    data = {
+        "device_type": test_device_type_2.id,
+        "location": test_point_3d.ewkt,
+        "lifecycle": Lifecycle.INACTIVE.value,
+        "owner": test_owner.pk,
+        "peak_fastened": True,
+        "double_sided": True,
+    }
+    response = admin_api_client.put(
+        reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert TrafficSignPlan.objects.count() == 1
+    traffic_sign_plan = TrafficSignPlan.objects.first()
+    assert traffic_sign_plan.device_type.id == data["device_type"]
+    assert traffic_sign_plan.location.ewkt == data["location"]
+    assert traffic_sign_plan.lifecycle.value == data["lifecycle"]
+    assert traffic_sign_plan.peak_fastened is True
+    assert traffic_sign_plan.double_sided is True
+
+
+@pytest.mark.django_db
+def test_delete_traffic_sign_plan_detail(admin_api_client, admin_user, create_traffic_sign_plan):
+    """
+    Ensure we can soft-delete one traffic sign plan object.
+    """
+    traffic_sign_plan = create_traffic_sign_plan()
+    response = admin_api_client.delete(
+        reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert TrafficSignPlan.objects.count() == 1
+    deleted_traffic_sign_plan = TrafficSignPlan.objects.get(id=str(traffic_sign_plan.id))
+    assert deleted_traffic_sign_plan.id == traffic_sign_plan.id
+    assert not deleted_traffic_sign_plan.is_active
+    assert deleted_traffic_sign_plan.deleted_by == admin_user
+    assert deleted_traffic_sign_plan.deleted_at
+
+
+@pytest.mark.django_db
+def test_get_deleted_traffic_sign_plan_returns_not_found(admin_api_client, create_traffic_sign_plan):
+    traffic_sign_plan = create_traffic_sign_plan()
+    response = admin_api_client.delete(
+        reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    response = admin_api_client.get(
+        reverse("v1:trafficsignplan-detail", kwargs={"pk": traffic_sign_plan.id}),
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+# ==============================================================================
+# TrafficSignReal Tests
+# ==============================================================================
 
 
 @pytest.mark.django_db
@@ -463,228 +522,220 @@ def test__traffic_sign_real__create_with_invalid_geometry():
     )
 
 
-class TrafficSignRealTests(TrafficControlAPIBaseTestCase3D):
-    def test_get_all_traffic_sign_reals(self):
-        """
-        Ensure we can get all traffic sign real objects.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+@pytest.mark.django_db
+def test_get_all_traffic_sign_reals(admin_api_client, create_traffic_sign_real):
+    """
+    Ensure we can get all traffic sign real objects.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    count = 3
+    for _ in range(count):
+        tsp = TrafficSignPlanFactory(plan=plan)
+        create_traffic_sign_real(traffic_sign_plan=tsp)
 
-        count = 3
-        for i in range(count):
-            tsp = TrafficSignPlanFactory(plan=plan)
-            self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
-        response = self.client.get(reverse("v1:trafficsignreal-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+    response = admin_api_client.get(reverse("v1:trafficsignreal-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-        results = response.data.get("results")
-        for result in results:
-            traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), traffic_sign_real.location.ewkt)
-            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
+    results = response.data.get("results")
+    for result in results:
+        traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
+        assert result.get("location") == traffic_sign_real.location.ewkt
+        assert result.get("plan_decision_id") == "TEST-DECISION-ID"
 
-    def test_get_all_traffic_sign_reals__geojson(self):
-        """
-        Ensure we can get all traffic sign real objects with GeoJSON location.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
 
-        count = 3
-        for i in range(count):
-            tsp = TrafficSignPlanFactory(plan=plan)
-            self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
-        response = self.client.get(reverse("v1:trafficsignreal-list"), data={"geo_format": "geojson"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+@pytest.mark.django_db
+def test_get_all_traffic_sign_reals__geojson(admin_api_client, create_traffic_sign_real):
+    """
+    Ensure we can get all traffic sign real objects with GeoJSON location.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    count = 3
+    for _ in range(count):
+        tsp = TrafficSignPlanFactory(plan=plan)
+        create_traffic_sign_real(traffic_sign_plan=tsp)
 
-        results = response.data.get("results")
-        for result in results:
-            traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), GeoJsonDict(traffic_sign_real.location.json))
-            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
+    response = admin_api_client.get(reverse("v1:trafficsignreal-list"), data={"geo_format": "geojson"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-    def test_get_traffic_sign_real_detail(self):
-        """
-        Ensure we can get one traffic sign real object.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        tsp = get_traffic_sign_plan(plan=plan)
+    results = response.data.get("results")
+    for result in results:
+        traffic_sign_real = TrafficSignReal.objects.get(id=result.get("id"))
+        assert result.get("location") == GeoJsonDict(traffic_sign_real.location.json)
+        assert result.get("plan_decision_id") == "TEST-DECISION-ID"
 
-        traffic_sign_real = self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
-        operation_1 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 5))
-        operation_2 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 15))
-        operation_3 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 10))
-        response = self.client.get(reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
-        self.assertEqual(traffic_sign_real.location.ewkt, response.data.get("location"))
-        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
-        # verify operations are ordered by operation_date
-        operation_ids = [operation["id"] for operation in response.data["operations"]]
-        self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
 
-    def test_get_traffic_sign_real_detail__geojson(self):
-        """
-        Ensure we can get one traffic sign real object with GeoJSON location.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        tsp = get_traffic_sign_plan(plan=plan)
+@pytest.mark.django_db
+def test_get_traffic_sign_real_detail(admin_api_client, create_traffic_sign_real):
+    """
+    Ensure we can get one traffic sign real object.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    tsp = get_traffic_sign_plan(plan=plan)
+    traffic_sign_real = create_traffic_sign_real(traffic_sign_plan=tsp)
+    operation_1 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 5))
+    operation_2 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 15))
+    operation_3 = add_traffic_sign_real_operation(traffic_sign_real, operation_date=datetime.date(2020, 11, 10))
 
-        traffic_sign_real = self.__create_test_traffic_sign_real(traffic_sign_plan=tsp)
-        response = self.client.get(
-            reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
-            data={"geo_format": "geojson"},
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(traffic_sign_real.id))
-        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
-        traffic_sign_real_geojson = GeoJsonDict(traffic_sign_real.location.json)
-        self.assertEqual(traffic_sign_real_geojson, response.data.get("location"))
+    response = admin_api_client.get(reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(traffic_sign_real.id)
+    assert traffic_sign_real.location.ewkt == response.data.get("location")
+    assert response.data.get("plan_decision_id") == "TEST-DECISION-ID"
 
-    def test_create_traffic_sign_real(self):
-        """
-        Ensure we can create a new traffic sign real object.
-        """
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "installation_date": "2020-01-02",
-            "lifecycle": self.test_lifecycle.value,
-            "installation_id": 123,
-            "permit_decision_id": 456,
-            "owner": self.test_owner.pk,
-        }
-        response = self.client.post(reverse("v1:trafficsignreal-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(TrafficSignReal.objects.count(), 1)
-        self.assertEqual(response.data.get("location"), data["location"])
-        traffic_sign_real = TrafficSignReal.objects.first()
-        self.assertEqual(traffic_sign_real.device_type.id, data["device_type"])
-        self.assertEqual(traffic_sign_real.location.ewkt, data["location"])
-        self.assertEqual(
-            traffic_sign_real.installation_date.strftime("%Y-%m-%d"),
-            data["installation_date"],
-        )
-        self.assertEqual(traffic_sign_real.lifecycle.value, data["lifecycle"])
+    # verify operations are ordered by operation_date
+    operation_ids = [operation["id"] for operation in response.data["operations"]]
+    assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]
 
-    def test_update_traffic_sign_real(self):
-        """
-        Ensure we can update existing traffic sign real object.
-        """
-        traffic_sign_real = self.__create_test_traffic_sign_real()
-        data = {
-            "device_type": self.test_device_type_2.id,
-            "location": self.test_point.ewkt,
-            "installation_date": "2020-01-03",
-            "lifecycle": self.test_lifecycle_2.value,
-            "installation_id": 123,
-            "permit_decision_id": 456,
-            "owner": self.test_owner.pk,
-            "peak_fastened": True,
-            "double_sided": True,
-        }
-        response = self.client.put(
-            reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(TrafficSignReal.objects.count(), 1)
-        traffic_sign_real = TrafficSignReal.objects.first()
-        self.assertEqual(traffic_sign_real.device_type.id, data["device_type"])
-        self.assertEqual(traffic_sign_real.location.ewkt, data["location"])
-        self.assertEqual(
-            traffic_sign_real.installation_date.strftime("%Y-%m-%d"),
-            data["installation_date"],
-        )
-        self.assertEqual(traffic_sign_real.lifecycle.value, data["lifecycle"])
-        self.assertTrue(traffic_sign_real.peak_fastened)
-        self.assertTrue(traffic_sign_real.double_sided)
 
-    def test_delete_traffic_sign_real_detail(self):
-        """
-        Ensure we can soft-delete one traffic sign real object.
-        """
-        traffic_sign_real = self.__create_test_traffic_sign_real()
-        response = self.client.delete(
-            reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(TrafficSignReal.objects.count(), 1)
-        deleted_traffic_sign_real = TrafficSignReal.objects.get(id=str(traffic_sign_real.id))
-        self.assertEqual(deleted_traffic_sign_real.id, traffic_sign_real.id)
-        self.assertFalse(deleted_traffic_sign_real.is_active)
-        self.assertEqual(deleted_traffic_sign_real.deleted_by, self.user)
-        self.assertTrue(deleted_traffic_sign_real.deleted_at)
+@pytest.mark.django_db
+def test_get_traffic_sign_real_detail__geojson(admin_api_client, create_traffic_sign_real):
+    """
+    Ensure we can get one traffic sign real object with GeoJSON location.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    tsp = get_traffic_sign_plan(plan=plan)
+    traffic_sign_real = create_traffic_sign_real(traffic_sign_plan=tsp)
 
-    def test_get_deleted_traffic_sign_real_returns_not_found(self):
-        traffic_sign_real = self.__create_test_traffic_sign_real()
-        response = self.client.delete(
-            reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        response = self.client.get(
-            reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    response = admin_api_client.get(
+        reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
+        data={"geo_format": "geojson"},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(traffic_sign_real.id)
+    assert response.data.get("plan_decision_id") == "TEST-DECISION-ID"
+    traffic_sign_real_geojson = GeoJsonDict(traffic_sign_real.location.json)
+    assert traffic_sign_real_geojson == response.data.get("location")
 
-    def test_create_operation_traffic_sign_real(self):
-        traffic_sign_real = self.__create_test_traffic_sign_real()
-        operation_type = get_operation_type()
-        data = {
-            "operation_date": "2020-01-01",
-            "operation_type_id": operation_type.pk,
-        }
-        url = reverse("traffic-sign-real-operations-list", kwargs={"traffic_sign_real_pk": traffic_sign_real.pk})
-        response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(traffic_sign_real.operations.all().count(), 1)
 
-    def test_update_operation_traffic_sign_real(self):
-        traffic_sign_real = self.__create_test_traffic_sign_real()
-        operation_type = get_operation_type()
-        operation = add_traffic_sign_real_operation(
-            traffic_sign_real=traffic_sign_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
-        )
-        data = {
-            "operation_date": "2020-02-01",
-            "operation_type_id": operation_type.pk,
-        }
-        url = reverse(
-            "traffic-sign-real-operations-detail",
-            kwargs={"traffic_sign_real_pk": traffic_sign_real.pk, "pk": operation.pk},
-        )
-        response = self.client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(traffic_sign_real.operations.all().count(), 1)
-        self.assertEqual(traffic_sign_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
+@pytest.mark.django_db
+def test_create_traffic_sign_real(admin_api_client, test_device_type, test_owner):
+    """
+    Ensure we can create a new traffic sign real object.
+    """
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point_3d.ewkt,
+        "installation_date": "2020-01-02",
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "installation_id": 123,
+        "permit_decision_id": 456,
+        "owner": test_owner.pk,
+    }
+    response = admin_api_client.post(reverse("v1:trafficsignreal-list"), data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert TrafficSignReal.objects.count() == 1
+    assert response.data.get("location") == data["location"]
+    traffic_sign_real = TrafficSignReal.objects.first()
+    assert traffic_sign_real.device_type.id == data["device_type"]
+    assert traffic_sign_real.location.ewkt == data["location"]
+    assert traffic_sign_real.installation_date.strftime("%Y-%m-%d") == data["installation_date"]
+    assert traffic_sign_real.lifecycle.value == data["lifecycle"]
 
-    def __create_test_traffic_sign_real(self, traffic_sign_plan=None):
-        traffic_sign_plan = (
-            TrafficSignPlanFactory(
-                device_type=self.test_device_type,
-                location=self.test_point,
-                lifecycle=self.test_lifecycle,
-                owner=self.test_owner,
-                created_by=self.user,
-                updated_by=self.user,
-                peak_fastened=False,
-                double_sided=False,
-            )
-            if not traffic_sign_plan
-            else traffic_sign_plan
-        )
-        return TrafficSignRealFactory(
-            traffic_sign_plan=traffic_sign_plan,
-            device_type=self.test_device_type,
-            location=self.test_point,
-            installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
-            lifecycle=self.test_lifecycle,
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
-        )
+
+@pytest.mark.django_db
+def test_update_traffic_sign_real(admin_api_client, test_device_type_2, test_owner, create_traffic_sign_real):
+    """
+    Ensure we can update existing traffic sign real object.
+    """
+    traffic_sign_real = create_traffic_sign_real()
+    data = {
+        "device_type": test_device_type_2.id,
+        "location": test_point_3d.ewkt,
+        "installation_date": "2020-01-03",
+        "lifecycle": Lifecycle.INACTIVE.value,
+        "installation_id": 123,
+        "permit_decision_id": 456,
+        "owner": test_owner.pk,
+        "peak_fastened": True,
+        "double_sided": True,
+    }
+    response = admin_api_client.put(
+        reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert TrafficSignReal.objects.count() == 1
+    traffic_sign_real = TrafficSignReal.objects.first()
+    assert traffic_sign_real.device_type.id == data["device_type"]
+    assert traffic_sign_real.location.ewkt == data["location"]
+    assert traffic_sign_real.installation_date.strftime("%Y-%m-%d") == data["installation_date"]
+    assert traffic_sign_real.lifecycle.value == data["lifecycle"]
+    assert traffic_sign_real.peak_fastened is True
+    assert traffic_sign_real.double_sided is True
+
+
+@pytest.mark.django_db
+def test_delete_traffic_sign_real_detail(admin_api_client, admin_user, create_traffic_sign_real):
+    """
+    Ensure we can soft-delete one traffic sign real object.
+    """
+    traffic_sign_real = create_traffic_sign_real()
+    response = admin_api_client.delete(
+        reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert TrafficSignReal.objects.count() == 1
+    deleted_traffic_sign_real = TrafficSignReal.objects.get(id=str(traffic_sign_real.id))
+    assert deleted_traffic_sign_real.id == traffic_sign_real.id
+    assert not deleted_traffic_sign_real.is_active
+    assert deleted_traffic_sign_real.deleted_by == admin_user
+    assert deleted_traffic_sign_real.deleted_at
+
+
+@pytest.mark.django_db
+def test_get_deleted_traffic_sign_real_returns_not_found(admin_api_client, create_traffic_sign_real):
+    traffic_sign_real = create_traffic_sign_real()
+    response = admin_api_client.delete(
+        reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    response = admin_api_client.get(
+        reverse("v1:trafficsignreal-detail", kwargs={"pk": traffic_sign_real.id}),
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_create_operation_traffic_sign_real(admin_api_client, create_traffic_sign_real):
+    traffic_sign_real = create_traffic_sign_real()
+    operation_type = get_operation_type()
+    data = {
+        "operation_date": "2020-01-01",
+        "operation_type_id": operation_type.pk,
+    }
+    url = reverse("traffic-sign-real-operations-list", kwargs={"traffic_sign_real_pk": traffic_sign_real.pk})
+    response = admin_api_client.post(url, data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert traffic_sign_real.operations.all().count() == 1
+
+
+@pytest.mark.django_db
+def test_update_operation_traffic_sign_real(admin_api_client, create_traffic_sign_real):
+    traffic_sign_real = create_traffic_sign_real()
+    operation_type = get_operation_type()
+    operation = add_traffic_sign_real_operation(
+        traffic_sign_real=traffic_sign_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+    )
+    data = {
+        "operation_date": "2020-02-01",
+        "operation_type_id": operation_type.pk,
+    }
+    url = reverse(
+        "traffic-sign-real-operations-detail",
+        kwargs={"traffic_sign_real_pk": traffic_sign_real.pk, "pk": operation.pk},
+    )
+    response = admin_api_client.put(url, data, format="json")
+    assert response.status_code == status.HTTP_200_OK
+    assert traffic_sign_real.operations.all().count() == 1
+    assert traffic_sign_real.operations.all().first().operation_date == datetime.date(2020, 2, 1)
+
+
+# ==============================================================================
+# Anonymous User Tests
+# ==============================================================================
 
 
 @pytest.mark.parametrize(

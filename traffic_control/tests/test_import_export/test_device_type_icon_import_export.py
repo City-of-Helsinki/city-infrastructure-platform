@@ -22,15 +22,8 @@ def test__traffic_control_device_type_icon__export():
 
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
-def test__traffic_control_device_type_icon__import_create(temp_icon_storage, format):
+def test__traffic_control_device_type_icon__import_create(format):
     """Test simple import of a single traffic control device type icon"""
-    # Create a dummy file to be imported
-    # The file needs to exist in the media folder for the import to work
-    # as the post-save signal tries to read it to generate pngs.
-    svg_file_path = Path(temp_icon_storage) / "test.svg"
-    svg_file_path.parent.mkdir(parents=True, exist_ok=True)
-    svg_file_path.touch()
-
     data = {
         "file": "test.svg",
     }
@@ -53,14 +46,14 @@ def test__traffic_control_device_type_icon__import_create(temp_icon_storage, for
 
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
-def test__traffic_control_device_type_icon__import_skip(temp_icon_storage, format):
+def test__traffic_control_device_type_icon__import_skip(format):
     """Test that importing an existing icon is skipped"""
     icon = TrafficControlDeviceTypeIconFactory(file__filename="test.svg")
 
     # The file needs to exist in the media folder for the import to work.
     # The factory will create the file in the right location inside the
-    # temp_icon_storage.
-    assert (Path(temp_icon_storage) / icon.file.name).exists()
+    # icon's storage.
+    assert (Path(icon.file.storage.base_location) / icon.file.name).exists()
 
     data = {
         "file": icon.file.name,
