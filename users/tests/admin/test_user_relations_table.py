@@ -1,27 +1,11 @@
 import pytest
-from django.contrib.auth import get_user_model
-from django.test import override_settings
 from django.urls import reverse
 from django.utils.html import escape
 
-User = get_user_model()
-
-settings_overrides = override_settings(
-    STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
-)
-
-
-def setup_module():
-    settings_overrides.enable()
-
-
-def teardown_module():
-    settings_overrides.disable()
-
 
 @pytest.fixture
-def target_user(db):
-    return User.objects.create(username="target_user")
+def target_user(django_user_model):
+    return django_user_model.objects.create(username="target_user")
 
 
 def test_user_change_page_renders_relations_table(admin_client, target_user):

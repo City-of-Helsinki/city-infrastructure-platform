@@ -29,9 +29,65 @@ from traffic_control.tests.test_base_api import (
     line_location_test_data,
     point_location_error_test_data,
     point_location_test_data,
-    TrafficControlAPIBaseTestCase,
+    test_point,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
+
+# ==============================================================================
+# Fixtures for API tests
+# ==============================================================================
+
+
+@pytest.fixture
+def create_barrier_plan(admin_user, test_device_type, test_owner):
+    def _create(**overrides):
+        defaults = {
+            "device_type": test_device_type,
+            "location": test_point,
+            "lifecycle": Lifecycle.ACTIVE,
+            "material": "Betoni",
+            "reflective": Reflective.YES,
+            "connection_type": ConnectionType.OPEN_OUT,
+            "road_name": "Testingroad",
+            "owner": test_owner,
+            "created_by": admin_user,
+            "updated_by": admin_user,
+        }
+        defaults.update(overrides)
+        return BarrierPlan.objects.create(**defaults)
+
+    return _create
+
+
+@pytest.fixture
+def create_barrier_real(admin_user, test_device_type, test_owner, create_barrier_plan):
+    def _create(barrier_plan=None, **overrides):
+        if barrier_plan is None:
+            barrier_plan = create_barrier_plan()
+
+        defaults = {
+            "device_type": test_device_type,
+            "barrier_plan": barrier_plan,
+            "location": test_point,
+            "installation_date": datetime.datetime.strptime("20012020", "%d%m%Y").date(),
+            "lifecycle": Lifecycle.ACTIVE,
+            "material": "Betoni",
+            "reflective": Reflective.YES,
+            "connection_type": ConnectionType.OPEN_OUT,
+            "road_name": "Testingroad",
+            "owner": test_owner,
+            "created_by": admin_user,
+            "updated_by": admin_user,
+        }
+        defaults.update(overrides)
+        return BarrierReal.objects.create(**defaults)
+
+    return _create
+
+
+# ==============================================================================
+# BarrierPlan Tests
+# ==============================================================================
 
 
 @pytest.mark.django_db
@@ -162,147 +218,163 @@ def test__barrier_plan__create_with_invalid_geometry():
     )
 
 
-class BarrierPlanTests(TrafficControlAPIBaseTestCase):
-    def test_get_all_barrier_plans(self):
-        """
-        Ensure we can get all barrier plan objects.
-        """
-        count = 3
-        for i in range(count):
-            self.__create_test_barrier_plan()
-        response = self.client.get(reverse("v1:barrierplan-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+@pytest.mark.django_db
+def test_get_all_barrier_plans(admin_api_client, create_barrier_plan):
+    """
+    Ensure we can get all barrier plan objects.
+    """
+    count = 3
+    for _ in range(count):
+        create_barrier_plan()
 
-        results = response.data.get("results")
-        for result in results:
-            barrier_plan = BarrierPlan.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), barrier_plan.location.ewkt)
+    response = admin_api_client.get(reverse("v1:barrierplan-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-    def test_get_all_barrier_plans__geojson(self):
-        """
-        Ensure we can get all barrier plan objects with GeoJSON location.
-        """
-        count = 3
-        for i in range(count):
-            self.__create_test_barrier_plan()
-        response = self.client.get(reverse("v1:barrierplan-list"), data={"geo_format": "geojson"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+    results = response.data.get("results")
+    for result in results:
+        barrier_plan = BarrierPlan.objects.get(id=result.get("id"))
+        assert result.get("location") == barrier_plan.location.ewkt
 
-        results = response.data.get("results")
-        for result in results:
-            barrier_plan = BarrierPlan.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), GeoJsonDict(barrier_plan.location.json))
 
-    def test_get_barrier_plan_detail(self):
-        """
-        Ensure we can get one barrier plan object.
-        """
-        barrier_plan = self.__create_test_barrier_plan()
-        response = self.client.get(reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(barrier_plan.id))
-        self.assertEqual(barrier_plan.location.ewkt, response.data.get("location"))
+@pytest.mark.django_db
+def test_get_all_barrier_plans__geojson(admin_api_client, create_barrier_plan):
+    """
+    Ensure we can get all barrier plan objects with GeoJSON location.
+    """
+    count = 3
+    for _ in range(count):
+        create_barrier_plan()
 
-    def test_get_barrier_plan_detail__geojson(self):
-        """
-        Ensure we can get one barrier plan object with GeoJSON location.
-        """
-        barrier_plan = self.__create_test_barrier_plan()
-        response = self.client.get(
-            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
-            data={"geo_format": "geojson"},
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(barrier_plan.id))
-        barrier_plan_geojson = GeoJsonDict(barrier_plan.location.json)
-        self.assertEqual(barrier_plan_geojson, response.data.get("location"))
+    response = admin_api_client.get(reverse("v1:barrierplan-list"), data={"geo_format": "geojson"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-    def test_create_barrier_plan(self):
-        """
-        Ensure we can create a new barrier plan object.
-        """
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner.pk,
-            "road_name": "Test street 1",
-        }
-        response = self.client.post(reverse("v1:barrierplan-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(BarrierPlan.objects.count(), 1)
-        self.assertEqual(response.data.get("location"), data["location"])
-        barrier_plan = BarrierPlan.objects.first()
-        self.assertEqual(barrier_plan.device_type.id, data["device_type"])
-        self.assertEqual(barrier_plan.location.ewkt, data["location"])
-        self.assertEqual(barrier_plan.lifecycle.value, data["lifecycle"])
+    results = response.data.get("results")
+    for result in results:
+        barrier_plan = BarrierPlan.objects.get(id=result.get("id"))
+        assert result.get("location") == GeoJsonDict(barrier_plan.location.json)
 
-    def test_update_barrier_plan(self):
-        """
-        Ensure we can update existing barrier plan object.
-        """
-        barrier_plan = self.__create_test_barrier_plan()
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner.pk,
-            "road_name": "Test street 1",
-        }
-        response = self.client.put(
-            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(BarrierPlan.objects.count(), 1)
-        barrier_plan = BarrierPlan.objects.first()
-        self.assertEqual(barrier_plan.device_type.id, data["device_type"])
-        self.assertEqual(barrier_plan.location.ewkt, data["location"])
-        self.assertEqual(barrier_plan.lifecycle.value, data["lifecycle"])
 
-    def test_delete_barrier_plan_detail(self):
-        """
-        Ensure we can soft-delete one barrier plan object.
-        """
-        barrier_plan = self.__create_test_barrier_plan()
-        response = self.client.delete(
-            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(BarrierPlan.objects.count(), 1)
-        deleted_barrier_plan = BarrierPlan.objects.get(id=str(barrier_plan.id))
-        self.assertEqual(deleted_barrier_plan.id, barrier_plan.id)
-        self.assertFalse(deleted_barrier_plan.is_active)
-        self.assertEqual(deleted_barrier_plan.deleted_by, self.user)
-        self.assertTrue(deleted_barrier_plan.deleted_at)
+@pytest.mark.django_db
+def test_get_barrier_plan_detail(admin_api_client, create_barrier_plan):
+    """
+    Ensure we can get one barrier plan object.
+    """
+    barrier_plan = create_barrier_plan()
+    response = admin_api_client.get(reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}))
 
-    def test_get_deleted_barrier_plan_returns_not_found(self):
-        barrier_plan = self.__create_test_barrier_plan()
-        response = self.client.delete(
-            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        response = self.client.get(
-            reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(barrier_plan.id)
+    assert barrier_plan.location.ewkt == response.data.get("location")
 
-    def __create_test_barrier_plan(self):
-        return BarrierPlan.objects.create(
-            device_type=self.test_device_type,
-            location=self.test_point,
-            lifecycle=self.test_lifecycle,
-            material="Betoni",
-            reflective=Reflective.YES,
-            connection_type=ConnectionType.OPEN_OUT,
-            road_name="Testingroad",
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
-        )
+
+@pytest.mark.django_db
+def test_get_barrier_plan_detail__geojson(admin_api_client, create_barrier_plan):
+    """
+    Ensure we can get one barrier plan object with GeoJSON location.
+    """
+    barrier_plan = create_barrier_plan()
+    response = admin_api_client.get(
+        reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+        data={"geo_format": "geojson"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(barrier_plan.id)
+    barrier_plan_geojson = GeoJsonDict(barrier_plan.location.json)
+    assert barrier_plan_geojson == response.data.get("location")
+
+
+@pytest.mark.django_db
+def test_create_barrier_plan(admin_api_client, test_device_type, test_owner):
+    """
+    Ensure we can create a new barrier plan object.
+    """
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point.ewkt,
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "owner": test_owner.pk,
+        "road_name": "Test street 1",
+    }
+    response = admin_api_client.post(reverse("v1:barrierplan-list"), data, format="json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert BarrierPlan.objects.count() == 1
+    assert response.data.get("location") == data["location"]
+
+    barrier_plan = BarrierPlan.objects.first()
+    assert barrier_plan.device_type.id == data["device_type"]
+    assert barrier_plan.location.ewkt == data["location"]
+    assert barrier_plan.lifecycle.value == data["lifecycle"]
+
+
+@pytest.mark.django_db
+def test_update_barrier_plan(admin_api_client, test_device_type, test_owner, create_barrier_plan):
+    """
+    Ensure we can update existing barrier plan object.
+    """
+    barrier_plan = create_barrier_plan()
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point.ewkt,
+        "lifecycle": Lifecycle.INACTIVE.value,
+        "owner": test_owner.pk,
+        "road_name": "Test street 1",
+    }
+    response = admin_api_client.put(
+        reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+        data,
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert BarrierPlan.objects.count() == 1
+
+    barrier_plan = BarrierPlan.objects.first()
+    assert barrier_plan.device_type.id == data["device_type"]
+    assert barrier_plan.location.ewkt == data["location"]
+    assert barrier_plan.lifecycle.value == data["lifecycle"]
+
+
+@pytest.mark.django_db
+def test_delete_barrier_plan_detail(admin_api_client, admin_user, create_barrier_plan):
+    """
+    Ensure we can soft-delete one barrier plan object.
+    """
+    barrier_plan = create_barrier_plan()
+    response = admin_api_client.delete(
+        reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert BarrierPlan.objects.count() == 1
+
+    deleted_barrier_plan = BarrierPlan.objects.get(id=str(barrier_plan.id))
+    assert deleted_barrier_plan.id == barrier_plan.id
+    assert not deleted_barrier_plan.is_active
+    assert deleted_barrier_plan.deleted_by == admin_user
+    assert deleted_barrier_plan.deleted_at
+
+
+@pytest.mark.django_db
+def test_get_deleted_barrier_plan_returns_not_found(admin_api_client, create_barrier_plan):
+    barrier_plan = create_barrier_plan()
+    response = admin_api_client.delete(
+        reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    response = admin_api_client.get(
+        reverse("v1:barrierplan-detail", kwargs={"pk": barrier_plan.id}),
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+# ==============================================================================
+# BarrierReal Tests
+# ==============================================================================
 
 
 @pytest.mark.django_db
@@ -436,271 +508,265 @@ def test__barrier_real__create_with_invalid_geometry():
     )
 
 
-class BarrierRealTests(TrafficControlAPIBaseTestCase):
-    def test_get_all_barrier_reals(self):
-        """
-        Ensure we can get all real barrier objects.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+@pytest.mark.django_db
+def test_get_all_barrier_reals(admin_api_client, create_barrier_real):
+    """
+    Ensure we can get all real barrier objects.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    count = 3
+    for _ in range(count):
+        bp = BarrierPlanFactory(plan=plan)
+        create_barrier_real(barrier_plan=bp)
 
-        count = 3
-        for i in range(count):
-            bp = BarrierPlanFactory(plan=plan)
-            self.__create_test_barrier_real(barrier_plan=bp)
-        response = self.client.get(reverse("v1:barrierreal-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+    response = admin_api_client.get(reverse("v1:barrierreal-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-        results = response.data.get("results")
-        for result in results:
-            barrier_real = BarrierReal.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), barrier_real.location.ewkt)
-            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
+    results = response.data.get("results")
+    for result in results:
+        barrier_real = BarrierReal.objects.get(id=result.get("id"))
+        assert result.get("location") == barrier_real.location.ewkt
+        assert result.get("plan_decision_id") == "TEST-DECISION-ID"
 
-    def test_get_all_barrier_real__geojson(self):
-        """
-        Ensure we can get all barrier real objects with GeoJSON location.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
 
-        count = 3
-        for i in range(count):
-            bp = BarrierPlanFactory(plan=plan)
-            self.__create_test_barrier_real(barrier_plan=bp)
-        response = self.client.get(reverse("v1:barrierreal-list"), data={"geo_format": "geojson"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+@pytest.mark.django_db
+def test_get_all_barrier_real__geojson(admin_api_client, create_barrier_real):
+    """
+    Ensure we can get all barrier real objects with GeoJSON location.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    count = 3
+    for _ in range(count):
+        bp = BarrierPlanFactory(plan=plan)
+        create_barrier_real(barrier_plan=bp)
 
-        results = response.data.get("results")
-        for result in results:
-            barrier_real = BarrierReal.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), GeoJsonDict(barrier_real.location.json))
-            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
+    response = admin_api_client.get(reverse("v1:barrierreal-list"), data={"geo_format": "geojson"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-    def test_get_barrier_real_detail(self):
-        """
-        Ensure we can get one real barrier object.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        bp = get_barrier_plan(plan=plan)
+    results = response.data.get("results")
+    for result in results:
+        barrier_real = BarrierReal.objects.get(id=result.get("id"))
+        assert result.get("location") == GeoJsonDict(barrier_real.location.json)
+        assert result.get("plan_decision_id") == "TEST-DECISION-ID"
 
-        barrier_real = self.__create_test_barrier_real(barrier_plan=bp)
-        operation_1 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 5))
-        operation_2 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 15))
-        operation_3 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 10))
-        response = self.client.get(reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(barrier_real.id))
-        self.assertEqual(barrier_real.location.ewkt, response.data.get("location"))
-        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
-        # verify operations are ordered by operation_date
-        operation_ids = [operation["id"] for operation in response.data["operations"]]
-        self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
 
-    def test_get_barrier_real_detail__geojson(self):
-        """
-        Ensure we can get one real barrier object with GeoJSON location.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        bp = get_barrier_plan(plan=plan)
+@pytest.mark.django_db
+def test_get_barrier_real_detail(admin_api_client, create_barrier_real):
+    """
+    Ensure we can get one real barrier object.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    bp = get_barrier_plan(plan=plan)
 
-        barrier_real = self.__create_test_barrier_real(barrier_plan=bp)
-        response = self.client.get(
-            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
-            data={"geo_format": "geojson"},
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(barrier_real.id))
-        barrier_real_geojson = GeoJsonDict(barrier_real.location.json)
-        self.assertEqual(barrier_real_geojson, response.data.get("location"))
-        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
+    barrier_real = create_barrier_real(barrier_plan=bp)
+    operation_1 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 5))
+    operation_2 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 15))
+    operation_3 = add_barrier_real_operation(barrier_real, operation_date=datetime.date(2020, 11, 10))
 
-    def test_create_barrier_real(self):
-        """
-        Ensure we can create a new real barrier object.
-        """
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "installation_date": "2020-01-02",
-            "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner.pk,
-            "road_name": "Test street 1",
-        }
-        response = self.client.post(reverse("v1:barrierreal-list"), data, format="json")
-        barrier_real = BarrierReal.objects.first()
-        logs = LogEntry.objects.get_for_object(barrier_real)
-        assert logs.count() == 1
-        log_entry = logs.latest()
-        assert log_entry.action == LogEntry.Action.CREATE
-        assert log_entry.actor == self.user
+    response = admin_api_client.get(reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(barrier_real.id)
+    assert barrier_real.location.ewkt == response.data.get("location")
+    assert response.data.get("plan_decision_id") == "TEST-DECISION-ID"
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(BarrierReal.objects.count(), 1)
-        self.assertEqual(response.data.get("location"), data["location"])
-        barrier_real = BarrierReal.objects.first()
-        self.assertEqual(barrier_real.device_type.id, data["device_type"])
-        self.assertEqual(barrier_real.location.ewkt, data["location"])
-        self.assertEqual(
-            barrier_real.installation_date.strftime("%Y-%m-%d"),
-            data["installation_date"],
-        )
-        self.assertEqual(barrier_real.lifecycle.value, data["lifecycle"])
+    # verify operations are ordered by operation_date
+    operation_ids = [operation["id"] for operation in response.data["operations"]]
+    assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]
 
-    def test_create_barrier_real_existing_with_plan(self):
-        """
-        Test that BarrierReal API does not create a new db row when
-        barrier with the same plan already exists
-        """
-        barrier_plan = BarrierPlanFactory()
-        BarrierRealFactory(barrier_plan=barrier_plan)
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner.pk,
-            "road_name": "Test street 1",
-            "barrier_plan": str(barrier_plan.pk),
-        }
-        response = self.client.post(reverse("v1:barrierreal-list"), data, format="json")
-        response_data = response.json()
 
-        self.assertEqual(BarrierReal.objects.count(), 1)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        assert "duplicate key value violates unique constraint" in response_data["detail"]
-        assert "traffic_control_barrierreal_unique_barrier_plan" in response_data["detail"]
+@pytest.mark.django_db
+def test_get_barrier_real_detail__geojson(admin_api_client, create_barrier_real):
+    """
+    Ensure we can get one real barrier object with GeoJSON location.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    bp = get_barrier_plan(plan=plan)
 
-    def test_update_barrier_real(self):
-        """
-        Ensure we can update existing real barrier object.
-        """
-        barrier_real = self.__create_test_barrier_real()
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "installation_date": "2020-01-21",
-            "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner.pk,
-            "road_name": "Test street 1",
-        }
-        response = self.client.put(
-            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(BarrierReal.objects.count(), 1)
-        barrier_real = BarrierReal.objects.first()
-        self.assertEqual(barrier_real.device_type.id, data["device_type"])
-        self.assertEqual(barrier_real.location.ewkt, data["location"])
-        self.assertEqual(
-            barrier_real.installation_date.strftime("%Y-%m-%d"),
-            data["installation_date"],
-        )
-        self.assertEqual(barrier_real.lifecycle.value, data["lifecycle"])
+    barrier_real = create_barrier_real(barrier_plan=bp)
+    response = admin_api_client.get(
+        reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+        data={"geo_format": "geojson"},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(barrier_real.id)
+    barrier_real_geojson = GeoJsonDict(barrier_real.location.json)
+    assert barrier_real_geojson == response.data.get("location")
+    assert response.data.get("plan_decision_id") == "TEST-DECISION-ID"
 
-    def test_delete_barrier_real_detail(self):
-        """
-        Ensure we can soft-delete one real barrier object.
-        """
-        barrier_real = self.__create_test_barrier_real()
-        logs = LogEntry.objects.get_for_object(barrier_real)
-        assert logs.count() == 1
-        log_entry = logs.latest()
-        assert log_entry.action == LogEntry.Action.CREATE
-        # actor is none as this is created by factory, not via API
-        assert log_entry.actor is None
 
-        response = self.client.delete(
-            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(BarrierPlan.objects.count(), 1)
-        deleted_barrier_real = BarrierReal.objects.get(id=str(barrier_real.id))
-        self.assertEqual(deleted_barrier_real.id, barrier_real.id)
-        self.assertFalse(deleted_barrier_real.is_active)
-        self.assertEqual(deleted_barrier_real.deleted_by, self.user)
-        self.assertTrue(deleted_barrier_real.deleted_at)
-        logs = LogEntry.objects.get_for_object(deleted_barrier_real)
-        assert logs.count() == 2
-        log_entry = logs.latest()
-        assert log_entry.action == LogEntry.Action.UPDATE
-        assert log_entry.actor == self.user
+@pytest.mark.django_db
+def test_create_barrier_real(admin_api_client, admin_user, test_device_type, test_owner):
+    """
+    Ensure we can create a new real barrier object.
+    """
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point.ewkt,
+        "installation_date": "2020-01-02",
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "owner": test_owner.pk,
+        "road_name": "Test street 1",
+    }
+    response = admin_api_client.post(reverse("v1:barrierreal-list"), data, format="json")
+    barrier_real = BarrierReal.objects.first()
+    logs = LogEntry.objects.get_for_object(barrier_real)
+    assert logs.count() == 1
+    log_entry = logs.latest()
+    assert log_entry.action == LogEntry.Action.CREATE
+    assert log_entry.actor == admin_user
 
-    def test_get_deleted_barrier_real_returns_not_found(self):
-        barrier_real = self.__create_test_barrier_real()
-        response = self.client.delete(
-            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        response = self.client.get(
-            reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    assert response.status_code == status.HTTP_201_CREATED
+    assert BarrierReal.objects.count() == 1
+    assert response.data.get("location") == data["location"]
 
-    def test_create_operation_barrier_real(self):
-        barrier_real = self.__create_test_barrier_real()
-        operation_type = get_operation_type()
-        data = {
-            "operation_date": "2020-01-01",
-            "operation_type_id": operation_type.pk,
-        }
-        url = reverse("barrier-real-operations-list", kwargs={"barrier_real_pk": barrier_real.pk})
-        response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(barrier_real.operations.all().count(), 1)
+    barrier_real = BarrierReal.objects.first()
+    assert barrier_real.device_type.id == data["device_type"]
+    assert barrier_real.location.ewkt == data["location"]
+    assert barrier_real.installation_date.strftime("%Y-%m-%d") == data["installation_date"]
+    assert barrier_real.lifecycle.value == data["lifecycle"]
 
-    def test_update_operation_barrier_real(self):
-        barrier_real = self.__create_test_barrier_real()
-        operation_type = get_operation_type()
-        operation = add_barrier_real_operation(
-            barrier_real=barrier_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
-        )
-        data = {
-            "operation_date": "2020-02-01",
-            "operation_type_id": operation_type.pk,
-        }
-        url = reverse(
-            "barrier-real-operations-detail",
-            kwargs={"barrier_real_pk": barrier_real.pk, "pk": operation.pk},
-        )
-        response = self.client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(barrier_real.operations.all().count(), 1)
-        self.assertEqual(barrier_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
-    def __create_test_barrier_real(self, barrier_plan=None):
-        barrier_plan = (
-            BarrierPlan.objects.create(
-                device_type=self.test_device_type,
-                location=self.test_point,
-                lifecycle=self.test_lifecycle,
-                material="Betoni",
-                reflective=Reflective.YES,
-                connection_type=ConnectionType.OPEN_OUT,
-                road_name="Testingroad",
-                owner=self.test_owner,
-                created_by=self.user,
-                updated_by=self.user,
-            )
-            if not barrier_plan
-            else barrier_plan
-        )
+@pytest.mark.django_db
+def test_create_barrier_real_existing_with_plan(admin_api_client, test_device_type, test_owner):
+    """
+    Test that BarrierReal API does not create a new db row when
+    barrier with the same plan already exists
+    """
+    barrier_plan = BarrierPlanFactory()
+    BarrierRealFactory(barrier_plan=barrier_plan)
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point.ewkt,
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "owner": test_owner.pk,
+        "road_name": "Test street 1",
+        "barrier_plan": str(barrier_plan.pk),
+    }
+    response = admin_api_client.post(reverse("v1:barrierreal-list"), data, format="json")
+    response_data = response.json()
 
-        return BarrierReal.objects.create(
-            device_type=self.test_device_type,
-            barrier_plan=barrier_plan,
-            location=self.test_point,
-            installation_date=datetime.datetime.strptime("20012020", "%d%m%Y").date(),
-            lifecycle=self.test_lifecycle,
-            material="Betoni",
-            reflective=Reflective.YES,
-            connection_type=ConnectionType.OPEN_OUT,
-            road_name="Testingroad",
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
-        )
+    assert BarrierReal.objects.count() == 1
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "duplicate key value violates unique constraint" in response_data["detail"]
+    assert "traffic_control_barrierreal_unique_barrier_plan" in response_data["detail"]
+
+
+@pytest.mark.django_db
+def test_update_barrier_real(admin_api_client, test_device_type, test_owner, create_barrier_real):
+    """
+    Ensure we can update existing real barrier object.
+    """
+    barrier_real = create_barrier_real()
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point.ewkt,
+        "installation_date": "2020-01-21",
+        "lifecycle": Lifecycle.INACTIVE.value,
+        "owner": test_owner.pk,
+        "road_name": "Test street 1",
+    }
+    response = admin_api_client.put(
+        reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert BarrierReal.objects.count() == 1
+
+    barrier_real = BarrierReal.objects.first()
+    assert barrier_real.device_type.id == data["device_type"]
+    assert barrier_real.location.ewkt == data["location"]
+    assert barrier_real.installation_date.strftime("%Y-%m-%d") == data["installation_date"]
+    assert barrier_real.lifecycle.value == data["lifecycle"]
+
+
+@pytest.mark.django_db
+def test_delete_barrier_real_detail(admin_api_client, admin_user, create_barrier_real):
+    """
+    Ensure we can soft-delete one real barrier object.
+    """
+    barrier_real = create_barrier_real()
+    logs = LogEntry.objects.get_for_object(barrier_real)
+    assert logs.count() == 1
+    log_entry = logs.latest()
+    assert log_entry.action == LogEntry.Action.CREATE
+    assert log_entry.actor is None
+
+    response = admin_api_client.delete(
+        reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert BarrierPlan.objects.count() == 1
+
+    deleted_barrier_real = BarrierReal.objects.get(id=str(barrier_real.id))
+    assert deleted_barrier_real.id == barrier_real.id
+    assert not deleted_barrier_real.is_active
+    assert deleted_barrier_real.deleted_by == admin_user
+    assert deleted_barrier_real.deleted_at
+
+    logs = LogEntry.objects.get_for_object(deleted_barrier_real)
+    assert logs.count() == 2
+    log_entry = logs.latest()
+    assert log_entry.action == LogEntry.Action.UPDATE
+    assert log_entry.actor == admin_user
+
+
+@pytest.mark.django_db
+def test_get_deleted_barrier_real_returns_not_found(admin_api_client, create_barrier_real):
+    barrier_real = create_barrier_real()
+    response = admin_api_client.delete(
+        reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    response = admin_api_client.get(
+        reverse("v1:barrierreal-detail", kwargs={"pk": barrier_real.id}),
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_create_operation_barrier_real(admin_api_client, create_barrier_real):
+    barrier_real = create_barrier_real()
+    operation_type = get_operation_type()
+    data = {
+        "operation_date": "2020-01-01",
+        "operation_type_id": operation_type.pk,
+    }
+    url = reverse("barrier-real-operations-list", kwargs={"barrier_real_pk": barrier_real.pk})
+    response = admin_api_client.post(url, data, format="json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert barrier_real.operations.all().count() == 1
+
+
+@pytest.mark.django_db
+def test_update_operation_barrier_real(admin_api_client, create_barrier_real):
+    barrier_real = create_barrier_real()
+    operation_type = get_operation_type()
+    operation = add_barrier_real_operation(
+        barrier_real=barrier_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+    )
+    data = {
+        "operation_date": "2020-02-01",
+        "operation_type_id": operation_type.pk,
+    }
+    url = reverse(
+        "barrier-real-operations-detail",
+        kwargs={"barrier_real_pk": barrier_real.pk, "pk": operation.pk},
+    )
+    response = admin_api_client.put(url, data, format="json")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert barrier_real.operations.all().count() == 1
+    assert barrier_real.operations.all().first().operation_date == datetime.date(2020, 2, 1)
+
+
+# ==============================================================================
+# Anonymous User Tests
+# ==============================================================================
 
 
 @pytest.mark.parametrize(

@@ -11,10 +11,11 @@ from traffic_control.constants import TICKET_MACHINE_CODES
 from traffic_control.enums import Condition, InstallationStatus
 from traffic_control.geometry_utils import geometry_is_legit
 from traffic_control.models.additional_sign import AdditionalSignReal, Color
-from traffic_control.models.common import Owner, TrafficControlDeviceType
+from traffic_control.models.common import TrafficControlDeviceType
 from traffic_control.models.mount import LocationSpecifier as MountLocationSpecifier, MountReal, MountType
 from traffic_control.models.signpost import SignpostReal
 from traffic_control.models.traffic_sign import LocationSpecifier as SignLocationSpecifier, TrafficSignReal
+from traffic_control.utils import get_default_owner
 from users.utils import get_system_user
 
 VALUE_PATTERN = re.compile(r"^\d+(\.\d+)?")
@@ -306,7 +307,7 @@ class TrafficSignImporter:
         self.sign_data = sign_data
         self.additional_sign_data = additional_sign_data
         self.mount_types_by_name = self._get_mount_types_by_name()
-        self.default_owner = self._get_default_owner()
+        self.default_owner = get_default_owner()
         self.device_types_by_code = self._get_device_types_by_code()
 
         self.mount_reals_by_source_id = None
@@ -894,10 +895,6 @@ class TrafficSignImporter:
         by_en = {mt.description: mt for mt in mount_types}
         by_fi.update(by_en)
         return by_fi
-
-    @staticmethod
-    def _get_default_owner():
-        return Owner.objects.get(name_fi="Helsingin kaupunki")
 
     @staticmethod
     def _get_device_types_by_code():

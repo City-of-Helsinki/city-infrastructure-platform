@@ -62,6 +62,9 @@ dev = [
     "ruff",
     "requests-mock",
     "django-zeal",
+    "pytest-randomly>=5.0.0",
+    "pytest-datadir>=1.8.0",
+    "pytest-chdir>=0.2.1",
 ]
 
 [tool.uv]
@@ -114,7 +117,24 @@ ignore = ["D100", "D104", "D105", "D200", "D203", "D400"]
 
 
 [tool.pytest.ini_options]
-norecursedirs = ["node_modules", ".git", "venv", ".venv"]
+norecursedirs = [
+    ".git",
+    ".github",
+    ".idea",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "agent_docs",
+    "docs",
+    "locale",
+    "map_view",
+    "node_modules",
+    "pipelines",
+    "scripts",
+    "var",
+    "venv",
+]
 DJANGO_SETTINGS_MODULE = "cityinfra.settings"
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",

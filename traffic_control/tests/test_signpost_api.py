@@ -37,9 +37,57 @@ from traffic_control.tests.test_base_api import (
     illegal_test_point,
     point_location_error_test_data,
     point_location_test_data,
-    TrafficControlAPIBaseTestCase,
+    test_point,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
+
+# ==============================================================================
+# Fixtures
+# ==============================================================================
+
+
+@pytest.fixture
+def create_signpost_plan(admin_user, test_device_type, test_owner):
+    def _create(**overrides):
+        defaults = {
+            "device_type": test_device_type,
+            "location": test_point,
+            "lifecycle": Lifecycle.ACTIVE,
+            "owner": test_owner,
+            "created_by": admin_user,
+            "updated_by": admin_user,
+        }
+        defaults.update(overrides)
+        return SignpostPlanFactory(**defaults)
+
+    return _create
+
+
+@pytest.fixture
+def create_signpost_real(admin_user, test_device_type, test_owner, create_signpost_plan):
+    def _create(signpost_plan=None, **overrides):
+        if signpost_plan is None:
+            signpost_plan = create_signpost_plan()
+
+        defaults = {
+            "signpost_plan": signpost_plan,
+            "device_type": test_device_type,
+            "location": test_point,
+            "installation_date": datetime.datetime.strptime("01012020", "%d%m%Y").date(),
+            "lifecycle": Lifecycle.ACTIVE,
+            "owner": test_owner,
+            "created_by": admin_user,
+            "updated_by": admin_user,
+        }
+        defaults.update(overrides)
+        return SignpostReal.objects.create(**defaults)
+
+    return _create
+
+
+# ==============================================================================
+# SignpostPlan Tests
+# ==============================================================================
 
 
 @pytest.mark.django_db
@@ -169,141 +217,150 @@ def test__signpost_plan__create_with_invalid_geometry():
     )
 
 
-class SignpostPlanTests(TrafficControlAPIBaseTestCase):
-    def test_get_all_signpost_plans(self):
-        """
-        Ensure we can get all signpost plan objects.
-        """
-        count = 3
-        for i in range(count):
-            self.__create_test_signpost_plan()
-        response = self.client.get(reverse("v1:signpostplan-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+@pytest.mark.django_db
+def test_get_all_signpost_plans(admin_api_client, create_signpost_plan):
+    """
+    Ensure we can get all signpost plan objects.
+    """
+    count = 3
+    for _ in range(count):
+        create_signpost_plan()
+    response = admin_api_client.get(reverse("v1:signpostplan-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-        results = response.data.get("results")
-        for result in results:
-            signpost_plan = SignpostPlan.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), signpost_plan.location.ewkt)
+    results = response.data.get("results")
+    for result in results:
+        signpost_plan = SignpostPlan.objects.get(id=result.get("id"))
+        assert result.get("location") == signpost_plan.location.ewkt
 
-    def test_get_all_signpost_plans__geojson(self):
-        """
-        Ensure we can get all signpost plan objects with GeoJSON location.
-        """
-        count = 3
-        for i in range(count):
-            self.__create_test_signpost_plan()
-        response = self.client.get(reverse("v1:signpostplan-list"), data={"geo_format": "geojson"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
 
-        results = response.data.get("results")
-        for result in results:
-            signpost_plan = SignpostPlan.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), GeoJsonDict(signpost_plan.location.json))
+@pytest.mark.django_db
+def test_get_all_signpost_plans__geojson(admin_api_client, create_signpost_plan):
+    """
+    Ensure we can get all signpost plan objects with GeoJSON location.
+    """
+    count = 3
+    for _ in range(count):
+        create_signpost_plan()
+    response = admin_api_client.get(reverse("v1:signpostplan-list"), data={"geo_format": "geojson"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-    def test_get_signpost_plan_detail(self):
-        """
-        Ensure we can get one signpost plan object.
-        """
-        signpost_plan = self.__create_test_signpost_plan()
-        response = self.client.get(reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(signpost_plan.id))
-        self.assertEqual(signpost_plan.location.ewkt, response.data.get("location"))
+    results = response.data.get("results")
+    for result in results:
+        signpost_plan = SignpostPlan.objects.get(id=result.get("id"))
+        assert result.get("location") == GeoJsonDict(signpost_plan.location.json)
 
-    def test_get_signpost_plan_detail__geojson(self):
-        """
-        Ensure we can get one signpost plan object with GeoJSON location.
-        """
-        signpost_plan = self.__create_test_signpost_plan()
-        response = self.client.get(
-            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
-            data={"geo_format": "geojson"},
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(signpost_plan.id))
-        signpost_plan_geojson = GeoJsonDict(signpost_plan.location.json)
-        self.assertEqual(signpost_plan_geojson, response.data.get("location"))
 
-    def test_create_signpost_plan(self):
-        """
-        Ensure we can create a new signpost plan object.
-        """
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner.pk,
-        }
-        response = self.client.post(reverse("v1:signpostplan-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(SignpostPlan.objects.count(), 1)
-        self.assertEqual(response.data.get("location"), data["location"])
-        signpost_plan = SignpostPlan.objects.first()
-        self.assertEqual(signpost_plan.device_type.id, data["device_type"])
-        self.assertEqual(signpost_plan.location.ewkt, data["location"])
-        self.assertEqual(signpost_plan.lifecycle.value, data["lifecycle"])
+@pytest.mark.django_db
+def test_get_signpost_plan_detail(admin_api_client, create_signpost_plan):
+    """
+    Ensure we can get one signpost plan object.
+    """
+    signpost_plan = create_signpost_plan()
+    response = admin_api_client.get(reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(signpost_plan.id)
+    assert signpost_plan.location.ewkt == response.data.get("location")
 
-    def test_update_signpost_plan(self):
-        """
-        Ensure we can update existing signpost plan object.
-        """
-        signpost_plan = self.__create_test_signpost_plan()
-        data = {
-            "device_type": self.test_device_type_2.id,
-            "location": self.test_point.ewkt,
-            "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner.pk,
-        }
-        response = self.client.put(
-            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(SignpostPlan.objects.count(), 1)
-        signpost_plan = SignpostPlan.objects.first()
-        self.assertEqual(signpost_plan.device_type.id, data["device_type"])
-        self.assertEqual(signpost_plan.location.ewkt, data["location"])
-        self.assertEqual(signpost_plan.lifecycle.value, data["lifecycle"])
 
-    def test_delete_signpost_plan_detail(self):
-        """
-        Ensure we can soft-delete one signpost plan object.
-        """
-        signpost_plan = self.__create_test_signpost_plan()
-        response = self.client.delete(
-            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(SignpostPlan.objects.count(), 1)
-        deleted_signpost_plan = SignpostPlan.objects.get(id=str(signpost_plan.id))
-        self.assertEqual(deleted_signpost_plan.id, signpost_plan.id)
-        self.assertFalse(deleted_signpost_plan.is_active)
-        self.assertEqual(deleted_signpost_plan.deleted_by, self.user)
-        self.assertTrue(deleted_signpost_plan.deleted_at)
+@pytest.mark.django_db
+def test_get_signpost_plan_detail__geojson(admin_api_client, create_signpost_plan):
+    """
+    Ensure we can get one signpost plan object with GeoJSON location.
+    """
+    signpost_plan = create_signpost_plan()
+    response = admin_api_client.get(
+        reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+        data={"geo_format": "geojson"},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(signpost_plan.id)
+    signpost_plan_geojson = GeoJsonDict(signpost_plan.location.json)
+    assert signpost_plan_geojson == response.data.get("location")
 
-    def test_get_deleted_signpost_plan_returns_not_found(self):
-        signpost_plan = self.__create_test_signpost_plan()
-        response = self.client.delete(
-            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        response = self.client.get(
-            reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def __create_test_signpost_plan(self):
-        return SignpostPlanFactory(
-            device_type=self.test_device_type,
-            location=self.test_point,
-            lifecycle=self.test_lifecycle,
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
-        )
+@pytest.mark.django_db
+def test_create_signpost_plan(admin_api_client, test_device_type, test_owner):
+    """
+    Ensure we can create a new signpost plan object.
+    """
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point.ewkt,
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "owner": test_owner.pk,
+    }
+    response = admin_api_client.post(reverse("v1:signpostplan-list"), data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert SignpostPlan.objects.count() == 1
+    assert response.data.get("location") == data["location"]
+    signpost_plan = SignpostPlan.objects.first()
+    assert signpost_plan.device_type.id == data["device_type"]
+    assert signpost_plan.location.ewkt == data["location"]
+    assert signpost_plan.lifecycle.value == data["lifecycle"]
+
+
+@pytest.mark.django_db
+def test_update_signpost_plan(admin_api_client, test_device_type_2, test_owner, create_signpost_plan):
+    """
+    Ensure we can update existing signpost plan object.
+    """
+    signpost_plan = create_signpost_plan()
+    data = {
+        "device_type": test_device_type_2.id,
+        "location": test_point.ewkt,
+        "lifecycle": Lifecycle.INACTIVE.value,
+        "owner": test_owner.pk,
+    }
+    response = admin_api_client.put(
+        reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert SignpostPlan.objects.count() == 1
+    signpost_plan = SignpostPlan.objects.first()
+    assert signpost_plan.device_type.id == data["device_type"]
+    assert signpost_plan.location.ewkt == data["location"]
+    assert signpost_plan.lifecycle.value == data["lifecycle"]
+
+
+@pytest.mark.django_db
+def test_delete_signpost_plan_detail(admin_api_client, admin_user, create_signpost_plan):
+    """
+    Ensure we can soft-delete one signpost plan object.
+    """
+    signpost_plan = create_signpost_plan()
+    response = admin_api_client.delete(
+        reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert SignpostPlan.objects.count() == 1
+    deleted_signpost_plan = SignpostPlan.objects.get(id=str(signpost_plan.id))
+    assert deleted_signpost_plan.id == signpost_plan.id
+    assert not deleted_signpost_plan.is_active
+    assert deleted_signpost_plan.deleted_by == admin_user
+    assert deleted_signpost_plan.deleted_at
+
+
+@pytest.mark.django_db
+def test_get_deleted_signpost_plan_returns_not_found(admin_api_client, create_signpost_plan):
+    signpost_plan = create_signpost_plan()
+    response = admin_api_client.delete(
+        reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    response = admin_api_client.get(
+        reverse("v1:signpostplan-detail", kwargs={"pk": signpost_plan.id}),
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+# ==============================================================================
+# SignpostReal Tests
+# ==============================================================================
 
 
 @pytest.mark.django_db
@@ -437,234 +494,232 @@ def test__signpost_real__create_with_invalid_geometry():
     )
 
 
-class SignPostRealTests(TrafficControlAPIBaseTestCase):
-    def test_get_all_signpost_reals(self):
-        """
-        Ensure we can get all sign post real objects.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+@pytest.mark.django_db
+def test_get_all_signpost_reals(admin_api_client, create_signpost_real):
+    """
+    Ensure we can get all sign post real objects.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    count = 3
+    for _ in range(count):
+        spp = SignpostPlanFactory(plan=plan)
+        create_signpost_real(signpost_plan=spp)
 
-        count = 3
-        for i in range(count):
-            spp = SignpostPlanFactory(plan=plan)
-            self.__create_test_signpost_real(signpost_plan=spp)
-        response = self.client.get(reverse("v1:signpostreal-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+    response = admin_api_client.get(reverse("v1:signpostreal-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-        results = response.data.get("results")
-        for result in results:
-            signpost_real = SignpostReal.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), signpost_real.location.ewkt)
-            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
+    results = response.data.get("results")
+    for result in results:
+        signpost_real = SignpostReal.objects.get(id=result.get("id"))
+        assert result.get("location") == signpost_real.location.ewkt
+        assert result.get("plan_decision_id") == "TEST-DECISION-ID"
 
-    def test_get_all_signpost_reals__geojson(self):
-        """
-        Ensure we can get all sign post real objects with GeoJSON location.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
 
-        count = 3
-        for i in range(count):
-            spp = SignpostPlanFactory(plan=plan)
-            self.__create_test_signpost_real(signpost_plan=spp)
-        response = self.client.get(reverse("v1:signpostreal-list"), data={"geo_format": "geojson"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count)
+@pytest.mark.django_db
+def test_get_all_signpost_reals__geojson(admin_api_client, create_signpost_real):
+    """
+    Ensure we can get all sign post real objects with GeoJSON location.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    count = 3
+    for _ in range(count):
+        spp = SignpostPlanFactory(plan=plan)
+        create_signpost_real(signpost_plan=spp)
 
-        results = response.data.get("results")
-        for result in results:
-            signpost_real = SignpostReal.objects.get(id=result.get("id"))
-            self.assertEqual(result.get("location"), GeoJsonDict(signpost_real.location.json))
-            self.assertEqual(result.get("plan_decision_id"), "TEST-DECISION-ID")
+    response = admin_api_client.get(reverse("v1:signpostreal-list"), data={"geo_format": "geojson"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count
 
-    def test_get_signpost_real_detail(self):
-        """
-        Ensure we can get one signpost real object.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        spp = get_signpost_plan(plan=plan)
-        signpost_real = self.__create_test_signpost_real(signpost_plan=spp)
-        operation_1 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 5))
-        operation_2 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 15))
-        operation_3 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 10))
-        response = self.client.get(reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(signpost_real.id))
-        self.assertEqual(signpost_real.location.ewkt, response.data.get("location"))
-        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
-        # verify operations are ordered by operation_date
-        operation_ids = [operation["id"] for operation in response.data["operations"]]
-        self.assertEqual(operation_ids, [operation_1.id, operation_3.id, operation_2.id])
+    results = response.data.get("results")
+    for result in results:
+        signpost_real = SignpostReal.objects.get(id=result.get("id"))
+        assert result.get("location") == GeoJsonDict(signpost_real.location.json)
+        assert result.get("plan_decision_id") == "TEST-DECISION-ID"
 
-    def test_get_signpost_real_detail__geojson(self):
-        """
-        Ensure we can get one signpost real object with GeoJSON location.
-        """
-        plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
-        spp = get_signpost_plan(plan=plan)
-        signpost_real = self.__create_test_signpost_real(signpost_plan=spp)
-        response = self.client.get(
-            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
-            data={"geo_format": "geojson"},
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(signpost_real.id))
-        signpost_real_geojson = GeoJsonDict(signpost_real.location.json)
-        self.assertEqual(signpost_real_geojson, response.data.get("location"))
-        self.assertEqual(response.data.get("plan_decision_id"), "TEST-DECISION-ID")
 
-    def test_create_signpost_real(self):
-        """
-        Ensure we can create a new signpost real object.
-        """
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "installation_date": "2020-01-02",
-            "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner.pk,
-        }
-        response = self.client.post(reverse("v1:signpostreal-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(SignpostReal.objects.count(), 1)
-        self.assertEqual(response.data.get("location"), data["location"])
-        signpost_real = SignpostReal.objects.first()
-        self.assertEqual(signpost_real.device_type.id, data["device_type"])
-        self.assertEqual(signpost_real.location.ewkt, data["location"])
-        self.assertEqual(
-            signpost_real.installation_date.strftime("%Y-%m-%d"),
-            data["installation_date"],
-        )
-        self.assertEqual(signpost_real.lifecycle.value, data["lifecycle"])
+@pytest.mark.django_db
+def test_get_signpost_real_detail(admin_api_client, create_signpost_real):
+    """
+    Ensure we can get one signpost real object.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    spp = get_signpost_plan(plan=plan)
+    signpost_real = create_signpost_real(signpost_plan=spp)
+    operation_1 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 5))
+    operation_2 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 15))
+    operation_3 = add_signpost_real_operation(signpost_real, operation_date=datetime.date(2020, 11, 10))
 
-    def test_create_signpost_real_with_existing_plan(self):
-        spr_plan = SignpostPlanFactory()
-        SignpostRealFactory(signpost_plan=spr_plan)
-        data = {
-            "device_type": self.test_device_type.id,
-            "location": self.test_point.ewkt,
-            "installation_date": "2020-01-02",
-            "lifecycle": self.test_lifecycle.value,
-            "owner": self.test_owner.pk,
-            "signpost_plan": spr_plan.id,
-        }
-        response = self.client.post(reverse("v1:signpostreal-list"), data, format="json")
-        response_data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(SignpostReal.objects.count(), 1)
-        assert "duplicate key value violates unique constraint" in response_data["detail"]
-        assert "traffic_control_signpostreal_unique_signpost_plan_id" in response_data["detail"]
+    response = admin_api_client.get(reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(signpost_real.id)
+    assert signpost_real.location.ewkt == response.data.get("location")
+    assert response.data.get("plan_decision_id") == "TEST-DECISION-ID"
 
-    def test_update_signpost_real(self):
-        """
-        Ensure we can update existing signpost real object.
-        """
-        signpost_real = self.__create_test_signpost_real()
-        data = {
-            "device_type": self.test_device_type_2.id,
-            "location": self.test_point.ewkt,
-            "installation_date": "2020-01-03",
-            "lifecycle": self.test_lifecycle_2.value,
-            "owner": self.test_owner.pk,
-        }
-        response = self.client.put(
-            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(SignpostReal.objects.count(), 1)
-        signpost_real = SignpostReal.objects.first()
-        self.assertEqual(signpost_real.device_type.id, data["device_type"])
-        self.assertEqual(signpost_real.location.ewkt, data["location"])
-        self.assertEqual(
-            signpost_real.installation_date.strftime("%Y-%m-%d"),
-            data["installation_date"],
-        )
-        self.assertEqual(signpost_real.lifecycle.value, data["lifecycle"])
+    # verify operations are ordered by operation_date
+    operation_ids = [operation["id"] for operation in response.data["operations"]]
+    assert operation_ids == [operation_1.id, operation_3.id, operation_2.id]
 
-    def test_delete_signpost_real_detail(self):
-        """
-        Ensure we can soft-delete one signpost real object.
-        """
-        signpost_real = self.__create_test_signpost_real()
-        response = self.client.delete(
-            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(SignpostReal.objects.count(), 1)
-        deleted_signpost_real = SignpostReal.objects.get(id=str(signpost_real.id))
-        self.assertEqual(deleted_signpost_real.id, signpost_real.id)
-        self.assertFalse(deleted_signpost_real.is_active)
-        self.assertEqual(deleted_signpost_real.deleted_by, self.user)
-        self.assertTrue(deleted_signpost_real.deleted_at)
 
-    def test_get_deleted_signpost_real_returns_not_found(self):
-        signpost_real = self.__create_test_signpost_real()
-        response = self.client.delete(
-            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        response = self.client.get(
-            reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+@pytest.mark.django_db
+def test_get_signpost_real_detail__geojson(admin_api_client, create_signpost_real):
+    """
+    Ensure we can get one signpost real object with GeoJSON location.
+    """
+    plan = PlanFactory.create(decision_id="TEST-DECISION-ID")
+    spp = get_signpost_plan(plan=plan)
+    signpost_real = create_signpost_real(signpost_plan=spp)
 
-    def test_create_operation_signpost_real(self):
-        signpost_real = self.__create_test_signpost_real()
-        operation_type = get_operation_type()
-        data = {
-            "operation_date": "2020-01-01",
-            "operation_type_id": operation_type.pk,
-        }
-        url = reverse("signpost-real-operations-list", kwargs={"signpost_real_pk": signpost_real.pk})
-        response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(signpost_real.operations.all().count(), 1)
+    response = admin_api_client.get(
+        reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+        data={"geo_format": "geojson"},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(signpost_real.id)
+    signpost_real_geojson = GeoJsonDict(signpost_real.location.json)
+    assert signpost_real_geojson == response.data.get("location")
+    assert response.data.get("plan_decision_id") == "TEST-DECISION-ID"
 
-    def test_update_operation_signpost_real(self):
-        signpost_real = self.__create_test_signpost_real()
-        operation_type = get_operation_type()
-        operation = add_signpost_real_operation(
-            signpost_real=signpost_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
-        )
-        data = {
-            "operation_date": "2020-02-01",
-            "operation_type_id": operation_type.pk,
-        }
-        url = reverse(
-            "signpost-real-operations-detail",
-            kwargs={"signpost_real_pk": signpost_real.pk, "pk": operation.pk},
-        )
-        response = self.client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(signpost_real.operations.all().count(), 1)
-        self.assertEqual(signpost_real.operations.all().first().operation_date, datetime.date(2020, 2, 1))
 
-    def __create_test_signpost_real(self, signpost_plan=None):
-        signpost_plan = (
-            SignpostPlan.objects.create(
-                device_type=self.test_device_type,
-                location=self.test_point,
-                lifecycle=self.test_lifecycle,
-                owner=self.test_owner,
-                created_by=self.user,
-                updated_by=self.user,
-            )
-            if not signpost_plan
-            else signpost_plan
-        )
-        return SignpostReal.objects.create(
-            signpost_plan=signpost_plan,
-            device_type=self.test_device_type,
-            location=self.test_point,
-            installation_date=datetime.datetime.strptime("01012020", "%d%m%Y").date(),
-            lifecycle=self.test_lifecycle,
-            owner=self.test_owner,
-            created_by=self.user,
-            updated_by=self.user,
-        )
+@pytest.mark.django_db
+def test_create_signpost_real(admin_api_client, test_device_type, test_owner):
+    """
+    Ensure we can create a new signpost real object.
+    """
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point.ewkt,
+        "installation_date": "2020-01-02",
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "owner": test_owner.pk,
+    }
+    response = admin_api_client.post(reverse("v1:signpostreal-list"), data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert SignpostReal.objects.count() == 1
+    assert response.data.get("location") == data["location"]
+    signpost_real = SignpostReal.objects.first()
+    assert signpost_real.device_type.id == data["device_type"]
+    assert signpost_real.location.ewkt == data["location"]
+    assert signpost_real.installation_date.strftime("%Y-%m-%d") == data["installation_date"]
+    assert signpost_real.lifecycle.value == data["lifecycle"]
+
+
+@pytest.mark.django_db
+def test_create_signpost_real_with_existing_plan(admin_api_client, test_device_type, test_owner):
+    spr_plan = SignpostPlanFactory()
+    SignpostRealFactory(signpost_plan=spr_plan)
+    data = {
+        "device_type": test_device_type.id,
+        "location": test_point.ewkt,
+        "installation_date": "2020-01-02",
+        "lifecycle": Lifecycle.ACTIVE.value,
+        "owner": test_owner.pk,
+        "signpost_plan": spr_plan.id,
+    }
+    response = admin_api_client.post(reverse("v1:signpostreal-list"), data, format="json")
+    response_data = response.json()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert SignpostReal.objects.count() == 1
+    assert "duplicate key value violates unique constraint" in response_data["detail"]
+    assert "traffic_control_signpostreal_unique_signpost_plan_id" in response_data["detail"]
+
+
+@pytest.mark.django_db
+def test_update_signpost_real(admin_api_client, test_device_type_2, test_owner, create_signpost_real):
+    """
+    Ensure we can update existing signpost real object.
+    """
+    signpost_real = create_signpost_real()
+    data = {
+        "device_type": test_device_type_2.id,
+        "location": test_point.ewkt,
+        "installation_date": "2020-01-03",
+        "lifecycle": Lifecycle.INACTIVE.value,
+        "owner": test_owner.pk,
+    }
+    response = admin_api_client.put(
+        reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert SignpostReal.objects.count() == 1
+    signpost_real = SignpostReal.objects.first()
+    assert signpost_real.device_type.id == data["device_type"]
+    assert signpost_real.location.ewkt == data["location"]
+    assert signpost_real.installation_date.strftime("%Y-%m-%d") == data["installation_date"]
+    assert signpost_real.lifecycle.value == data["lifecycle"]
+
+
+@pytest.mark.django_db
+def test_delete_signpost_real_detail(admin_api_client, admin_user, create_signpost_real):
+    """
+    Ensure we can soft-delete one signpost real object.
+    """
+    signpost_real = create_signpost_real()
+    response = admin_api_client.delete(
+        reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert SignpostReal.objects.count() == 1
+    deleted_signpost_real = SignpostReal.objects.get(id=str(signpost_real.id))
+    assert deleted_signpost_real.id == signpost_real.id
+    assert not deleted_signpost_real.is_active
+    assert deleted_signpost_real.deleted_by == admin_user
+    assert deleted_signpost_real.deleted_at
+
+
+@pytest.mark.django_db
+def test_get_deleted_signpost_real_returns_not_found(admin_api_client, create_signpost_real):
+    signpost_real = create_signpost_real()
+    response = admin_api_client.delete(
+        reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    response = admin_api_client.get(
+        reverse("v1:signpostreal-detail", kwargs={"pk": signpost_real.id}),
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_create_operation_signpost_real(admin_api_client, create_signpost_real):
+    signpost_real = create_signpost_real()
+    operation_type = get_operation_type()
+    data = {
+        "operation_date": "2020-01-01",
+        "operation_type_id": operation_type.pk,
+    }
+    url = reverse("signpost-real-operations-list", kwargs={"signpost_real_pk": signpost_real.pk})
+    response = admin_api_client.post(url, data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert signpost_real.operations.all().count() == 1
+
+
+@pytest.mark.django_db
+def test_update_operation_signpost_real(admin_api_client, create_signpost_real):
+    signpost_real = create_signpost_real()
+    operation_type = get_operation_type()
+    operation = add_signpost_real_operation(
+        signpost_real=signpost_real, operation_type=operation_type, operation_date=datetime.date(2020, 1, 1)
+    )
+    data = {
+        "operation_date": "2020-02-01",
+        "operation_type_id": operation_type.pk,
+    }
+    url = reverse(
+        "signpost-real-operations-detail",
+        kwargs={"signpost_real_pk": signpost_real.pk, "pk": operation.pk},
+    )
+    response = admin_api_client.put(url, data, format="json")
+    assert response.status_code == status.HTTP_200_OK
+    assert signpost_real.operations.all().count() == 1
+    assert signpost_real.operations.all().first().operation_date == datetime.date(2020, 2, 1)
+
+
+# ==============================================================================
+# Anonymous User Tests
+# ==============================================================================
 
 
 @pytest.mark.parametrize(

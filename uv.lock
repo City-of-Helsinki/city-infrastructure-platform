@@ -269,8 +269,11 @@ dev = [
     { name = "pyobjc-framework-cocoa", marker = "sys_platform == 'darwin'" },
     { name = "pyobjc-framework-fsevents", marker = "sys_platform == 'darwin'" },
     { name = "pytest" },
+    { name = "pytest-chdir" },
     { name = "pytest-cov" },
+    { name = "pytest-datadir" },
     { name = "pytest-django" },
+    { name = "pytest-randomly" },
     { name = "pytest-watch" },
     { name = "requests-mock" },
     { name = "rope" },
@@ -330,8 +333,11 @@ dev = [
     { name = "pyobjc-framework-cocoa", marker = "sys_platform == 'darwin'" },
     { name = "pyobjc-framework-fsevents", marker = "sys_platform == 'darwin'" },
     { name = "pytest" },
+    { name = "pytest-chdir", specifier = ">=0.2.1" },
     { name = "pytest-cov" },
+    { name = "pytest-datadir", specifier = ">=1.8.0" },
     { name = "pytest-django" },
+    { name = "pytest-randomly", specifier = ">=5.0.0" },
     { name = "pytest-watch" },
     { name = "requests-mock" },
     { name = "rope" },
@@ -1536,6 +1542,18 @@ wheels = [
 ]
 
 [[package]]
+name = "pytest-chdir"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f7/20/02421414423fe8cc54c60cb37ca1e6b7aaf36154c0a59b8dfeb789635192/pytest_chdir-0.2.1.tar.gz", hash = "sha256:08cdd00b124d57474eb28c0f88a108ad99d8d9f1e2ba1de0603e701f141fe586", size = 2720, upload-time = "2026-07-10T20:32:55.079Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/08/93/85b9b77c4109027695c9aa59322800ad580f7a168c4953fea3317d5e9d01/pytest_chdir-0.2.1-py3-none-any.whl", hash = "sha256:023d64d6fc67404c1adf2ebae056745bab793dd97af95a24b78293f80c02fd3b", size = 3526, upload-time = "2026-07-10T20:32:55.899Z" },
+]
+
+[[package]]
 name = "pytest-cov"
 version = "4.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1549,6 +1567,18 @@ wheels = [
 ]
 
 [[package]]
+name = "pytest-datadir"
+version = "1.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b4/46/db060b291999ca048edd06d6fa9ee95945d088edc38b1172c59eeb46ec45/pytest_datadir-1.8.0.tar.gz", hash = "sha256:7a15faed76cebe87cc91941dd1920a9a38eba56a09c11e9ddf1434d28a0f78eb", size = 11848, upload-time = "2025-07-30T13:52:12.518Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8f/7a/33895863aec26ac3bb5068a73583f935680d6ab6af2a9567d409430c3ee1/pytest_datadir-1.8.0-py3-none-any.whl", hash = "sha256:5c677bc097d907ac71ca418109adc3abe34cf0bddfe6cf78aecfbabd96a15cf0", size = 6512, upload-time = "2025-07-30T13:52:11.525Z" },
+]
+
+[[package]]
 name = "pytest-django"
 version = "4.8.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1558,6 +1588,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/bd/cf/44510ac5479f281d6663a08dff0d93f56b21f4ee091980ea4d4b64491ad6/pytest-django-4.8.0.tar.gz", hash = "sha256:5d054fe011c56f3b10f978f41a8efb2e5adfc7e680ef36fb571ada1f24779d90", size = 83291, upload-time = "2024-01-30T13:14:19.511Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/93/5b/29555191e903881d05e1f7184205ec534c7021e0ee077d1e6a1ee8f1b1eb/pytest_django-4.8.0-py3-none-any.whl", hash = "sha256:ca1ddd1e0e4c227cf9e3e40a6afc6d106b3e70868fd2ac5798a22501271cd0c7", size = 23432, upload-time = "2024-01-30T13:14:17.953Z" },
+]
+
+[[package]]
+name = "pytest-randomly"
+version = "5.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/01/3b/6a40e1b9d925651e601e056a97f60d8a1daeddeac03d5609be60cb4362ce/pytest_randomly-5.0.0.tar.gz", hash = "sha256:e9c575a5873ef168ddbe340ed9e97ce9edb4492ccc821e4b2ac6bb1f0ed515d2", size = 8542, upload-time = "2026-09-01T22:34:20.441Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/10/b4/47e939285caad9a623d021512912ac08dc92a467ad075d179f43729d2934/pytest_randomly-5.0.0-py3-none-any.whl", hash = "sha256:8a0d4703115c0c25b38b6e129fc16b1947b9643ff26a41bc1d185d7e5a7689c1", size = 8920, upload-time = "2026-09-01T22:34:19.227Z" },
 ]
 
 [[package]]

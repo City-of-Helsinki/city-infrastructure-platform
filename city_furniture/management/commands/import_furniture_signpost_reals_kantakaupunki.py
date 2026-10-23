@@ -23,9 +23,6 @@ SOURCE_NAME = "Kantakaupungin Rantareitti 2022 csv"
 class Command(TrackableCommand):
     help = "Import Kantakaupungin Rantareitti Furniture Signpost reals from a csv file"
     step = 1000
-    user = get_system_user()
-    owner = get_default_owner()
-    target = CityFurnitureTarget.objects.get_or_create(name_fi="Kantakaupungin Rantareitti")[0]
     new_mount_types = {
         "Ristikkopylväs": {
             "code": "LATTICECOLUMN",
@@ -43,6 +40,13 @@ class Command(TrackableCommand):
             "description_fi": "Opaste",
         },
     }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # These operations access the database, so they should be done at the earliest during init
+        self.user = get_system_user()
+        self.owner = get_default_owner()
+        self.target = CityFurnitureTarget.objects.get_or_create(name_fi="Kantakaupungin Rantareitti")[0]
 
     def add_arguments(self, parser):
         parser.add_argument(

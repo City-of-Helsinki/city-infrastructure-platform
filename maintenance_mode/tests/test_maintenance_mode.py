@@ -8,15 +8,9 @@ User = get_user_model()
 
 
 @pytest.fixture
-def regular_user(db):
+def regular_user(db, django_user_model):
     """Create a regular user for testing"""
-    return User.objects.create_user(username="regular", password="testpass123")
-
-
-@pytest.fixture
-def admin_user(db):
-    """Create a superuser for testing"""
-    return User.objects.create_superuser(username="admin", password="adminpass123", email="admin@test.com")
+    return django_user_model.objects.create_user(username="regular", password="testpass123")
 
 
 @pytest.fixture
@@ -53,24 +47,22 @@ class TestMaintenanceModeMiddleware:
         # Check that maintenance page is shown (check for message container)
         assert '<div class="message">' in response.content.decode()
 
-    def test_maintenance_allows_admin_access(self, client, admin_user, maintenance_mode):
+    def test_maintenance_allows_admin_access(self, admin_client, maintenance_mode):
         """Test that superusers can access admin pages during maintenance"""
         maintenance_mode.is_active = True
         maintenance_mode.save()
 
         # Superuser should be able to access admin
-        client.force_login(admin_user)
-        response = client.get("/admin/")
+        response = admin_client.get("/admin/")
         # Should not get 503 (might be redirect to login or 200)
         assert response.status_code != 503
 
-    def test_maintenance_blocks_non_admin_paths(self, client, admin_user, maintenance_mode):
+    def test_maintenance_blocks_non_admin_paths(self, admin_client, maintenance_mode):
         """Test that non-admin paths are blocked even for superusers"""
         maintenance_mode.is_active = True
         maintenance_mode.save()
 
-        client.force_login(admin_user)
-        response = client.get("/api/")
+        response = admin_client.get("/api/")
         assert response.status_code == 503
 
     def test_maintenance_message_in_response(self, client, maintenance_mode):

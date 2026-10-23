@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 import pytest
 from django.core.files.storage import storages
 from django.core.management import call_command
@@ -12,39 +10,33 @@ from traffic_control.models import (
 from traffic_control.tests.factories import AdditionalSignPlanFactory
 
 
-@pytest.fixture
-def mock_default_files():
-    """Mocks list_all() on the existing default storage instance."""
-    # create=True handles test environments where the local storage doesn't natively have list_all()
-    with patch.object(storages["default"], "list_all", create=True, return_value=[]) as mock:
-        yield mock
-
-
-@pytest.fixture
-def mock_icon_files():
-    """Mocks list_all() on the existing icons storage instance."""
-    with patch.object(storages["icons"], "list_all", create=True, return_value=[]) as mock:
-        yield mock
-
-
 @pytest.fixture(autouse=True)
-def force_icon_sizes(settings):
+def settings(settings):
     """Use pytest-django's built-in settings fixture instead of override_settings."""
     settings.PNG_ICON_SIZES = [32, 64]
 
 
-# --- Test Cases ---
+# The tests below override the storage's list_all method, which does not exist in
+# django.core.files.storage.FileSystemStorage, but is treated by the command as if
+# it exists
 
 
 @pytest.mark.django_db
-def test_no_problems_detected(mock_default_files, mock_icon_files):
+def test_no_problems_detected(monkeypatch):
     """Test standard perfect match behavior where storage contents match DB references exactly."""
-    mock_default_files.return_value = ["planfiles/additional_sign/file1.pdf"]
-    mock_icon_files.return_value = [
-        "icons/traffic_control_device_type/svg/icon.svg",
-        "icons/traffic_control_device_type/png/32/icon.png",
-        "icons/traffic_control_device_type/png/64/icon.png",
-    ]
+
+    def default_files():
+        return ["planfiles/additional_sign/file1.pdf"]
+
+    def icon_files():
+        return [
+            "icons/traffic_control_device_type/svg/icon.svg",
+            "icons/traffic_control_device_type/png/32/icon.png",
+            "icons/traffic_control_device_type/png/64/icon.png",
+        ]
+
+    monkeypatch.setattr(storages["default"], "list_all", default_files, raising=False)
+    monkeypatch.setattr(storages["icons"], "list_all", icon_files, raising=False)
 
     plan = AdditionalSignPlanFactory()
     AdditionalSignPlanFile.objects.create(additional_sign_plan=plan, file="planfiles/additional_sign/file1.pdf")
@@ -63,14 +55,15 @@ def test_no_problems_detected(mock_default_files, mock_icon_files):
 
 
 @pytest.mark.django_db
-def test_orphan_and_dangling_attachments(mock_default_files, mock_icon_files):
+def test_orphan_and_dangling_attachments(monkeypatch):
     """
     Test detection of default storage files missing DB references (orphans) and DB entries missing files (dangling).
     """
-    mock_default_files.return_value = [
-        "planfiles/additional_sign/orphan.pdf",
-        "planfiles/additional_sign/valid.pdf",
-    ]
+
+    def default_files():
+        return ["planfiles/additional_sign/orphan.pdf", "planfiles/additional_sign/valid.pdf"]
+
+    monkeypatch.setattr(storages["default"], "list_all", default_files, raising=False)
 
     plan = AdditionalSignPlanFactory()
     dangling = AdditionalSignPlanFile.objects.create(
@@ -97,11 +90,13 @@ def test_orphan_and_dangling_attachments(mock_default_files, mock_icon_files):
 
 
 @pytest.mark.django_db
-def test_orphan_and_dangling_icons(mock_default_files, mock_icon_files):
+def test_orphan_and_dangling_icons(monkeypatch):
     """Test detection of unreferenced SVG icons (orphan) and missing storage files for DB entries (dangling)."""
-    mock_icon_files.return_value = [
-        "icons/traffic_control_device_type/svg/orphan.svg",
-    ]
+
+    def icon_files():
+        return ["icons/traffic_control_device_type/svg/orphan.svg"]
+
+    monkeypatch.setattr(storages["icons"], "list_all", icon_files, raising=False)
 
     dangling_icon = TrafficControlDeviceTypeIcon.objects.create(
         file="icons/traffic_control_device_type/svg/dangling.svg"
@@ -121,14 +116,17 @@ def test_orphan_and_dangling_icons(mock_default_files, mock_icon_files):
 
 
 @pytest.mark.django_db
-def test_missing_and_orphan_pngs(mock_default_files, mock_icon_files):
+def test_missing_and_orphan_pngs(monkeypatch):
     """Test that valid SVGs missing PNG renders are detected, and stranded PNGs missing SVGs are surfaced."""
-    mock_icon_files.return_value = [
-        "icons/traffic_control_device_type/svg/valid.svg",
-        "icons/traffic_control_device_type/png/32/valid.png",
-        # Intentionally missing the 64px render for 'valid.svg'
-        "icons/traffic_control_device_type/png/32/orphan.png",  # No parent SVG exists
-    ]
+
+    def icon_files():
+        return [
+            "icons/traffic_control_device_type/svg/valid.svg",
+            "icons/traffic_control_device_type/png/32/valid.png",
+            "icons/traffic_control_device_type/png/32/orphan.png",
+        ]
+
+    monkeypatch.setattr(storages["icons"], "list_all", icon_files, raising=False)
 
     TrafficControlDeviceTypeIcon.objects.create(file="icons/traffic_control_device_type/svg/valid.svg")
 
@@ -148,13 +146,17 @@ def test_missing_and_orphan_pngs(mock_default_files, mock_icon_files):
 
 
 @pytest.mark.django_db
-def test_odd_files(mock_default_files, mock_icon_files):
+def test_odd_files(monkeypatch):
     """Test that rogue files not fitting prefix rules or matching icon path layouts fall into the odd bucket."""
-    mock_default_files.return_value = ["weird_folder/odd_attachment.pdf"]
-    mock_icon_files.return_value = [
-        "icons/garbage.txt",
-        "icons/traffic_control_device_type/svg/not_svg.jpg",
-    ]
+
+    def default_files():
+        return ["weird_folder/odd_attachment.pdf"]
+
+    def icon_files():
+        return ["icons/garbage.txt", "icons/traffic_control_device_type/svg/not_svg.jpg"]
+
+    monkeypatch.setattr(storages["default"], "list_all", default_files, raising=False)
+    monkeypatch.setattr(storages["icons"], "list_all", icon_files, raising=False)
 
     call_command("search_orphan_files")
 

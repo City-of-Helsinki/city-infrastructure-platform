@@ -1,6 +1,7 @@
-from django.conf import settings
+from types import SimpleNamespace
+
+import pytest
 from django.contrib.gis.geos import Point
-from django.test import TestCase
 
 from traffic_control.models import AdditionalSignPlan, AdditionalSignReal, TrafficSignPlan, TrafficSignReal
 from traffic_control.tests.factories import (
@@ -15,103 +16,93 @@ from traffic_control.tests.factories import (
 from traffic_control.tests.utils import MIN_X, MIN_Y
 
 
-class TrafficSignPlanTestCase(TestCase):
-    def setUp(self):
-        self.user = get_user()
-        self.main_sign = TrafficSignPlanFactory(
-            location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
-            direction=0,
-            device_type=TrafficControlDeviceTypeFactory(code="T123"),
-            created_by=self.user,
-            updated_by=self.user,
-            owner=get_owner(),
-        )
-
-    def test_main_sign_has_additional_signs_return_false(self):
-        self.assertFalse(self.main_sign.has_additional_signs())
-
-    def test_main_sign_has_additional_signs_return_true(self):
-        AdditionalSignPlanFactory(parent=self.main_sign)
-        self.assertTrue(self.main_sign.has_additional_signs())
-
-    def test_has_additional_signs_return_false_with_soft_deleted_additional_sign(self):
-        additional_sign = AdditionalSignPlanFactory(parent=self.main_sign)
-        additional_sign.soft_delete(self.user)
-        self.assertFalse(self.main_sign.has_additional_signs())
-
-    def test_queryset_soft_delete_handles_additional_signs(self):
-        AdditionalSignPlanFactory(parent=TrafficSignPlanFactory())
-        additional_sign = AdditionalSignPlanFactory(parent=self.main_sign)
-        self.assertEqual(TrafficSignPlan.objects.count(), 2)
-        TrafficSignPlan.objects.filter(pk=self.main_sign.pk).soft_delete(self.user)
-        self.main_sign.refresh_from_db()
-        additional_sign.refresh_from_db()
-        self.assertFalse(self.main_sign.is_active)
-        self.assertEqual(self.main_sign.deleted_by, self.user)
-        self.assertFalse(additional_sign.is_active)
-        self.assertEqual(additional_sign.deleted_by, self.user)
-        self.assertEqual(TrafficSignPlan.objects.active().count(), 1)
-        self.assertEqual(AdditionalSignPlan.objects.active().count(), 1)
-
-    def test_soft_delete_without_additional_signs(self):
-        self.main_sign.soft_delete(self.user)
-        self.main_sign.refresh_from_db()
-        self.assertFalse(self.main_sign.is_active)
-
-    def test_soft_delete_main_traffic_sign_also_soft_delete_additional_sign(self):
-        additional_sign = AdditionalSignPlanFactory(parent=self.main_sign)
-        self.main_sign.soft_delete(self.user)
-        additional_sign.refresh_from_db()
-        self.assertFalse(additional_sign.is_active)
-        self.assertEqual(additional_sign.deleted_by, self.user)
+@pytest.fixture
+def user(db):
+    return get_user()
 
 
-class TrafficSignRealTestCase(TestCase):
-    def setUp(self):
-        self.user = get_user()
-        self.main_sign = TrafficSignRealFactory(
-            location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
-            legacy_code="100",
-            direction=0,
-            created_by=self.user,
-            updated_by=self.user,
-            owner=get_owner(),
-        )
+@pytest.fixture(
+    params=[
+        (TrafficSignPlan, AdditionalSignPlan, TrafficSignPlanFactory, AdditionalSignPlanFactory),
+        (TrafficSignReal, AdditionalSignReal, TrafficSignRealFactory, AdditionalSignRealFactory),
+    ],
+    ids=["plan", "real"],
+)
+def sign_suite(request, db, settings, user):
+    """
+    Real / Plan fixtures for main sign, sign class, additional sign class, sign factory, additional sign factory
+    """
+    model_cls, add_model_cls, factory, add_factory = request.param
 
-    def test_main_sign_has_additional_signs_return_false(self):
-        self.assertFalse(self.main_sign.has_additional_signs())
+    # Handle the fact that Plan needs device_type while Real has legacy_code
+    is_plan = model_cls is TrafficSignPlan
+    extra_kwargs = {"device_type": TrafficControlDeviceTypeFactory(code="T123")} if is_plan else {"legacy_code": "100"}
 
-    def test_main_sign_has_additional_signs_return_true(self):
-        AdditionalSignRealFactory(parent=self.main_sign)
-        self.assertTrue(self.main_sign.has_additional_signs())
+    main_sign = factory.create(
+        location=Point(MIN_X + 1, MIN_Y + 1, 10, srid=settings.SRID),
+        direction=0,
+        created_by=user,
+        updated_by=user,
+        owner=get_owner(),
+        **extra_kwargs,
+    )
 
-    def test_has_additional_signs_return_false_with_soft_deleted_additional_sign(self):
-        additional_sign = AdditionalSignRealFactory(parent=self.main_sign)
-        additional_sign.soft_delete(self.user)
-        self.assertFalse(self.main_sign.has_additional_signs())
+    yield SimpleNamespace(
+        main_sign=main_sign,
+        model_cls=model_cls,
+        add_model_cls=add_model_cls,
+        factory=factory,
+        add_factory=add_factory,
+    )
 
-    def test_queryset_soft_delete_handles_additional_signs(self):
-        AdditionalSignRealFactory(parent=TrafficSignRealFactory())
-        additional_sign = AdditionalSignRealFactory(parent=self.main_sign)
-        self.assertEqual(TrafficSignReal.objects.count(), 2)
-        TrafficSignReal.objects.filter(pk=self.main_sign.pk).soft_delete(self.user)
-        self.main_sign.refresh_from_db()
-        additional_sign.refresh_from_db()
-        self.assertFalse(self.main_sign.is_active)
-        self.assertEqual(self.main_sign.deleted_by, self.user)
-        self.assertFalse(additional_sign.is_active)
-        self.assertEqual(additional_sign.deleted_by, self.user)
-        self.assertEqual(TrafficSignReal.objects.active().count(), 1)
-        self.assertEqual(AdditionalSignReal.objects.active().count(), 1)
 
-    def test_soft_delete_without_additional_signs(self):
-        self.main_sign.soft_delete(self.user)
-        self.main_sign.refresh_from_db()
-        self.assertFalse(self.main_sign.is_active)
+@pytest.mark.django_db
+def test_main_sign_has_additional_signs_return_false(sign_suite):
+    assert sign_suite.main_sign.has_additional_signs() is False
 
-    def test_soft_delete_main_traffic_sign_also_soft_delete_additional_sign(self):
-        additional_sign = AdditionalSignRealFactory(parent=self.main_sign)
-        self.main_sign.soft_delete(self.user)
-        additional_sign.refresh_from_db()
-        self.assertFalse(additional_sign.is_active)
-        self.assertEqual(additional_sign.deleted_by, self.user)
+
+@pytest.mark.django_db
+def test_main_sign_has_additional_signs_return_true(sign_suite):
+    sign_suite.add_factory(parent=sign_suite.main_sign)
+    assert sign_suite.main_sign.has_additional_signs() is True
+
+
+@pytest.mark.django_db
+def test_has_additional_signs_return_false_with_soft_deleted_additional_sign(sign_suite, user):
+    additional_sign = sign_suite.add_factory(parent=sign_suite.main_sign)
+    additional_sign.soft_delete(user)
+    assert sign_suite.main_sign.has_additional_signs() is False
+
+
+@pytest.mark.django_db
+def test_queryset_soft_delete_handles_additional_signs(sign_suite, user):
+    sign_suite.add_factory(parent=sign_suite.factory.create())
+    additional_sign = sign_suite.add_factory(parent=sign_suite.main_sign)
+    assert sign_suite.model_cls.objects.count() == 2
+
+    sign_suite.model_cls.objects.filter(pk=sign_suite.main_sign.pk).soft_delete(user)
+    sign_suite.main_sign.refresh_from_db()
+    additional_sign.refresh_from_db()
+
+    assert sign_suite.main_sign.is_active is False
+    assert sign_suite.main_sign.deleted_by == user
+    assert additional_sign.is_active is False
+    assert additional_sign.deleted_by == user
+    assert sign_suite.model_cls.objects.active().count() == 1
+    assert sign_suite.add_model_cls.objects.active().count() == 1
+
+
+@pytest.mark.django_db
+def test_soft_delete_without_additional_signs(sign_suite, user):
+    sign_suite.main_sign.soft_delete(user)
+    sign_suite.main_sign.refresh_from_db()
+    assert sign_suite.main_sign.is_active is False
+
+
+@pytest.mark.django_db
+def test_soft_delete_main_traffic_sign_also_soft_delete_additional_sign(sign_suite, user):
+    additional_sign = sign_suite.add_factory(parent=sign_suite.main_sign)
+    sign_suite.main_sign.soft_delete(user)
+    additional_sign.refresh_from_db()
+    assert additional_sign.is_active is False
+    assert additional_sign.deleted_by == user
