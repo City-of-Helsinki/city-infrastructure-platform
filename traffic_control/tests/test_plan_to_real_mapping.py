@@ -1,6 +1,5 @@
 import csv
 import os
-from tempfile import TemporaryDirectory
 
 import pytest
 from django.contrib.gis.geos import Point
@@ -299,7 +298,7 @@ def test_plan_to_real_mapping__pi_possbile_in_two_reals(
         ),
     ),
 )
-def test_csv_write(real_factory, planinstance_factory, planinstance_field_name, create_params):
+def test_csv_write(tmp_path, real_factory, planinstance_factory, planinstance_field_name, create_params):
     real_factory(**create_params)
     planinstance_factory(**create_params)
     results, _, _ = find_and_update_plan_instances_to_reals(
@@ -309,14 +308,13 @@ def test_csv_write(real_factory, planinstance_factory, planinstance_field_name, 
     result_rows = list(_rows_for_results_csv(results, real_model))
     assert len(result_rows) == 1
 
-    with TemporaryDirectory() as tmpdir:
-        filepath = os.path.join(tmpdir, f"{real_model}_results.csv")
-        write_results_to_csv(results, real_model, os.path.join(filepath))
-        with open(filepath, "r") as f:
-            csv_reader = csv.reader(f, delimiter=";")
-            for i, row in enumerate(csv_reader):
-                if i == 0:
-                    # header row
-                    assert row == _get_csv_headers(real_model)
-                elif i == 1:
-                    assert [row] == result_rows
+    filepath = tmp_path / f"{real_model}_results.csv"
+    write_results_to_csv(results, real_model, os.path.join(filepath))
+    with open(filepath, "r") as f:
+        csv_reader = csv.reader(f, delimiter=";")
+        for i, row in enumerate(csv_reader):
+            if i == 0:
+                # header row
+                assert row == _get_csv_headers(real_model)
+            elif i == 1:
+                assert [row] == result_rows

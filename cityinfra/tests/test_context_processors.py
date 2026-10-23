@@ -1,15 +1,8 @@
 import os
 
 import pytest
-from django.test import RequestFactory
 
 from cityinfra.context_processors import git_version
-
-
-@pytest.fixture
-def req():
-    """Returns a RequestFactory instance."""
-    return RequestFactory().get("/")
 
 
 @pytest.mark.parametrize(
@@ -21,7 +14,7 @@ def req():
         (None, "not found"),
     ],
 )
-def test_git_version_context_processor(req, env_value, expected):
+def test_git_version_context_processor(rf, env_value, expected):
     """
     Tests the git_version context processor with a set and unset
     VERSION environment variable.
@@ -34,7 +27,7 @@ def test_git_version_context_processor(req, env_value, expected):
     if env_value is not None:
         os.environ["VERSION"] = env_value
 
-    result = git_version(req)
+    result = git_version(rf.get("/"))
 
     # Assert that the function returns the correct value
     assert result["GIT_VERSION"] == expected

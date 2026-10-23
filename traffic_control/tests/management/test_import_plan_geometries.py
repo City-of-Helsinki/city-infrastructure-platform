@@ -387,7 +387,7 @@ class TestImportPlanGeometriesCommand:
         assert "Showing first 10 of 15 updates" in output
         assert "See database log for complete details" in output
 
-    def test_command_default_output_dir(self, valid_csv_file, test_plan):
+    def test_command_default_output_dir(self, chtmpdir, valid_csv_file, test_plan):
         """Test command uses default output directory when not specified.
 
         Args:

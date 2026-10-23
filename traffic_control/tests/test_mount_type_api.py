@@ -1,121 +1,129 @@
 import json
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 
 from traffic_control.models import MountType
 from traffic_control.tests.factories import get_api_client, get_mount_type
 
-User = get_user_model()
+# ==============================================================================
+# Fixtures
+# ==============================================================================
 
 
-class MountTypeTests(APITestCase):
-    def setUp(self):
-        MountType.objects.all().delete()
-        self.admin_user = User.objects.create_superuser(username="admin", password="admin", email="admin@example.com")
-        self.user = User.objects.create_user(username="user", password="user")
+@pytest.fixture
+def test_mount_type():
+    return MountType.objects.create(code="POST", description="Post")
 
-    def test__list__as_user__ok(self):
-        self.client.force_login(self.user)
-        types = ["post", "wall", "wire"]
-        for t in types:
-            MountType.objects.create(code=t.upper(), description=t.capitalize())
-        response = self.client.get(reverse("v1:mounttype-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), len(types))
 
-    def test__get_list__as_admin__ok(self):
-        self.client.force_login(self.admin_user)
-        types = ["post", "wall", "wire"]
-        for t in types:
-            MountType.objects.create(code=t.upper(), description=t.capitalize())
-        response = self.client.get(reverse("v1:mounttype-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), len(types))
+# ==============================================================================
+# MountType API Tests
+# ==============================================================================
 
-    def test__retrieve__as_user__ok(self):
-        self.client.force_login(self.user)
-        mount_type = self.__create_test_mount_type()
-        response = self.client.get(reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(mount_type.id))
 
-    def test__retrieve__as_admin__ok(self):
-        self.client.force_login(self.admin_user)
-        mount_type = self.__create_test_mount_type()
-        response = self.client.get(reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(mount_type.id))
+@pytest.mark.django_db
+def test__list__as_user__ok(user_api_client):
+    types = ["post", "wall", "wire"]
+    for t in types:
+        MountType.objects.create(code=t.upper(), description=t.capitalize())
+    response = user_api_client.get(reverse("v1:mounttype-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == len(types)
 
-    def test__create__as_user__forbidden(self):
-        self.client.force_login(self.user)
-        data = {"code": "POST", "description": "Post"}
-        response = self.client.post(reverse("v1:mounttype-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(MountType.objects.count(), 0)
 
-    def test__create__as_admin__created(self):
-        self.client.force_login(self.admin_user)
-        data = {"code": "POST", "description": "Post"}
-        response = self.client.post(reverse("v1:mounttype-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(MountType.objects.count(), 1)
-        mount_type = MountType.objects.first()
-        self.assertEqual(mount_type.code, data["code"])
-        self.assertEqual(mount_type.description, data["description"])
-        self.assertEqual(mount_type.digiroad_code, None)
-        self.assertEqual(mount_type.digiroad_description, "")
+@pytest.mark.django_db
+def test__get_list__as_admin__ok(admin_api_client):
+    types = ["post", "wall", "wire"]
+    for t in types:
+        MountType.objects.create(code=t.upper(), description=t.capitalize())
+    response = admin_api_client.get(reverse("v1:mounttype-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == len(types)
 
-    def test__update__as_user__forbidden(self):
-        self.client.force_login(self.user)
-        mount_type = self.__create_test_mount_type()
-        data = {"code": "POST", "description": "Post"}
-        response = self.client.put(
-            reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test__update__as_admin__ok(self):
-        self.client.force_login(self.admin_user)
-        mount_type = self.__create_test_mount_type()
-        data = {"code": "POST", "description": "Post"}
-        response = self.client.put(
-            reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(MountType.objects.count(), 1)
-        mount_type = MountType.objects.first()
-        self.assertEqual(mount_type.code, data["code"])
-        self.assertEqual(mount_type.description, data["description"])
+@pytest.mark.django_db
+def test__retrieve__as_user__ok(user_api_client, test_mount_type):
+    response = user_api_client.get(reverse("v1:mounttype-detail", kwargs={"pk": test_mount_type.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(test_mount_type.id)
 
-    def test__destroy__as_user__forbidden(self):
-        self.client.force_login(self.user)
-        mount_type = self.__create_test_mount_type()
-        response = self.client.delete(
-            reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(MountType.objects.count(), 1)
 
-    def test__destroy__as_admin__success(self):
-        self.client.force_login(self.admin_user)
-        mount_type = self.__create_test_mount_type()
-        response = self.client.delete(
-            reverse("v1:mounttype-detail", kwargs={"pk": mount_type.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(MountType.objects.count(), 0)
+@pytest.mark.django_db
+def test__retrieve__as_admin__ok(admin_api_client, test_mount_type):
+    response = admin_api_client.get(reverse("v1:mounttype-detail", kwargs={"pk": test_mount_type.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(test_mount_type.id)
 
-    @staticmethod
-    def __create_test_mount_type():
-        return MountType.objects.create(code="POST", description="Post")
+
+@pytest.mark.django_db
+def test__create__as_user__forbidden(user_api_client):
+    data = {"code": "POST", "description": "Post"}
+    response = user_api_client.post(reverse("v1:mounttype-list"), data, format="json")
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert MountType.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test__create__as_admin__created(admin_api_client):
+    data = {"code": "POST", "description": "Post"}
+    response = admin_api_client.post(reverse("v1:mounttype-list"), data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert MountType.objects.count() == 1
+    mount_type = MountType.objects.first()
+    assert mount_type.code == data["code"]
+    assert mount_type.description == data["description"]
+    assert mount_type.digiroad_code is None
+    assert mount_type.digiroad_description == ""
+
+
+@pytest.mark.django_db
+def test__update__as_user__forbidden(user_api_client, test_mount_type):
+    data = {"code": "POST", "description": "Post"}
+    response = user_api_client.put(
+        reverse("v1:mounttype-detail", kwargs={"pk": test_mount_type.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test__update__as_admin__ok(admin_api_client, test_mount_type):
+    data = {"code": "POST", "description": "Post"}
+    response = admin_api_client.put(
+        reverse("v1:mounttype-detail", kwargs={"pk": test_mount_type.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert MountType.objects.count() == 1
+    mount_type = MountType.objects.first()
+    assert mount_type.code == data["code"]
+    assert mount_type.description == data["description"]
+
+
+@pytest.mark.django_db
+def test__destroy__as_user__forbidden(user_api_client, test_mount_type):
+    response = user_api_client.delete(
+        reverse("v1:mounttype-detail", kwargs={"pk": test_mount_type.id}),
+    )
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert MountType.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test__destroy__as_admin__success(admin_api_client, test_mount_type):
+    response = admin_api_client.delete(
+        reverse("v1:mounttype-detail", kwargs={"pk": test_mount_type.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert MountType.objects.count() == 0
+
+
+# ==============================================================================
+# Anonymous User Tests
+# ==============================================================================
 
 
 @pytest.mark.parametrize(

@@ -1,10 +1,12 @@
 import pytest
-from django.test.utils import override_settings
-from django.utils.translation import activate
 
 
 @pytest.fixture(autouse=True)
-def force_english():
-    with override_settings(LANGUAGE_CODE="en"):
-        activate("en")
-        yield
+def settings(settings):
+    settings.LANGUAGE_CODE = "en"
+    settings.STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "icons": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    }
+    return settings

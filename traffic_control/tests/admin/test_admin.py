@@ -35,11 +35,6 @@ def standard_user():
 
 
 @pytest.fixture
-def admin_user():
-    return get_user(admin=True)
-
-
-@pytest.fixture
 def admin_site():
     return AdminSite()
 

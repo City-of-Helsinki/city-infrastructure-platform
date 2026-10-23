@@ -335,7 +335,7 @@ def test_plan_bulk_insert_multiple_object_validation_failures(admin_client, owne
 
     # Expect a single complaint for mount plans
     assert len(response_data.get("mount_plans")) == 1, "Should have one mount plan complaint"
-    assert "owner" in response_data["mount_plans"][0], "Complaint should be about the owner field"
+    assert "owner" in response_data.get("mount_plans")[0], "Complaint should be about the owner field"
     assert len(response_data.get("mount_plans")[0]) == 1, "Should have no other mount plan complaints"
 
     # Expect the correct error count per traffic sign plan

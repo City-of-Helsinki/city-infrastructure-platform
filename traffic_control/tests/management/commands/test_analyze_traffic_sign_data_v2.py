@@ -13,10 +13,6 @@ from traffic_control.analyze_utils.traffic_sign_data_v2_constants import CSVHead
 from traffic_control.models import MountType, TrafficControlDeviceType
 from traffic_control.tests.factories import SignpostRealFactory, TrafficSignRealFactory
 
-BASE_PATH = os.path.dirname(__file__)
-TEST_FILES_DIR = os.path.join(BASE_PATH, "../../test_datas/traffic_sign_import_v2")
-
-
 _MOUNT_CSV_HEADER: list[str] = [
     "OBJECTID",
     "id",
@@ -938,12 +934,12 @@ def test_non_existing_mounts_ssurl_fields(tmp_path: Path, report_type: str, id_k
 
 
 @pytest.mark.django_db
-def test_traffic_sign_analyzer_v2_basic(tmp_path):
+def test_traffic_sign_analyzer_v2_basic(datadir, tmp_path):
     """TrafficSignAnalyzerV2 loads CSV files and segregates by status."""
     _create_db_entries()
     analyzer = TrafficSignAnalyzerV2(
-        os.path.join(TEST_FILES_DIR, "basic_mounts_v2.csv"),
-        os.path.join(TEST_FILES_DIR, "basic_signs_v2.csv"),
+        datadir / "basic_mounts_v2.csv",
+        datadir / "basic_signs_v2.csv",
         delimiter=",",
         output_dir=str(tmp_path),
     )
@@ -955,12 +951,12 @@ def test_traffic_sign_analyzer_v2_basic(tmp_path):
 
 
 @pytest.mark.django_db
-def test_traffic_sign_analyzer_v2_reports(tmp_path):
+def test_traffic_sign_analyzer_v2_reports(datadir, tmp_path):
     """TrafficSignAnalyzerV2.analyze() generates all expected report types."""
     _create_db_entries()
     analyzer = TrafficSignAnalyzerV2(
-        os.path.join(TEST_FILES_DIR, "basic_mounts_v2.csv"),
-        os.path.join(TEST_FILES_DIR, "basic_signs_v2.csv"),
+        datadir / "basic_mounts_v2.csv",
+        datadir / "basic_signs_v2.csv",
         delimiter=",",
         output_dir=str(tmp_path),
     )
@@ -1002,12 +998,12 @@ def test_traffic_sign_analyzer_v2_reports(tmp_path):
 
 
 @pytest.mark.django_db
-def test_traffic_sign_analyzer_v2_status_distribution(tmp_path):
+def test_traffic_sign_analyzer_v2_status_distribution(datadir, tmp_path):
     """Status distribution report results contain required fields."""
     _create_db_entries()
     analyzer = TrafficSignAnalyzerV2(
-        os.path.join(TEST_FILES_DIR, "basic_mounts_v2.csv"),
-        os.path.join(TEST_FILES_DIR, "basic_signs_v2.csv"),
+        datadir / "basic_mounts_v2.csv",
+        datadir / "basic_signs_v2.csv",
         delimiter=",",
         output_dir=str(tmp_path),
     )
@@ -1019,12 +1015,12 @@ def test_traffic_sign_analyzer_v2_status_distribution(tmp_path):
 
 
 @pytest.mark.django_db
-def test_traffic_sign_analyzer_v2_duplicate_detection(tmp_path):
+def test_traffic_sign_analyzer_v2_duplicate_detection(datadir, tmp_path):
     """Duplicate signs on same mount are detected correctly."""
     _create_db_entries()
     analyzer = TrafficSignAnalyzerV2(
-        os.path.join(TEST_FILES_DIR, "basic_mounts_v2.csv"),
-        os.path.join(TEST_FILES_DIR, "basic_signs_v2.csv"),
+        datadir / "basic_mounts_v2.csv",
+        datadir / "basic_signs_v2.csv",
         delimiter=",",
         output_dir=str(tmp_path),
     )
@@ -1038,12 +1034,12 @@ def test_traffic_sign_analyzer_v2_duplicate_detection(tmp_path):
 
 
 @pytest.mark.django_db
-def test_traffic_sign_analyzer_v2_zebra_crossings(tmp_path):
+def test_traffic_sign_analyzer_v2_zebra_crossings(datadir, tmp_path):
     """Double-sided zebra crossings are detected correctly."""
     _create_db_entries()
     analyzer = TrafficSignAnalyzerV2(
-        os.path.join(TEST_FILES_DIR, "basic_mounts_v2.csv"),
-        os.path.join(TEST_FILES_DIR, "basic_signs_v2.csv"),
+        datadir / "basic_mounts_v2.csv",
+        datadir / "basic_signs_v2.csv",
         delimiter=",",
         output_dir=str(tmp_path),
     )
@@ -1055,11 +1051,11 @@ def test_traffic_sign_analyzer_v2_zebra_crossings(tmp_path):
 
 
 @pytest.mark.django_db
-def test_management_command_analyze_traffic_sign_data_v2(tmp_path):
+def test_management_command_analyze_traffic_sign_data_v2(datadir, tmp_path):
     """The management command creates output CSV files for each report."""
     _create_db_entries()
-    mount_file = os.path.join(TEST_FILES_DIR, "basic_mounts_v2.csv")
-    sign_file = os.path.join(TEST_FILES_DIR, "basic_signs_v2.csv")
+    mount_file = datadir / "basic_mounts_v2.csv"
+    sign_file = datadir / "basic_signs_v2.csv"
     call_command(
         "analyze_traffic_sign_data_v2",
         mount_file=mount_file,
@@ -1081,12 +1077,12 @@ def test_management_command_analyze_traffic_sign_data_v2(tmp_path):
 
 
 @pytest.mark.django_db
-def test_status_mismatch_report_includes_csv_ssurl(tmp_path):
+def test_status_mismatch_report_includes_csv_ssurl(datadir, tmp_path):
     """Every result in the status mismatch report must contain csv_ssurl."""
     _create_db_entries()
     analyzer = TrafficSignAnalyzerV2(
-        os.path.join(TEST_FILES_DIR, "basic_mounts_v2.csv"),
-        os.path.join(TEST_FILES_DIR, "basic_signs_v2.csv"),
+        datadir / "basic_mounts_v2.csv",
+        datadir / "basic_signs_v2.csv",
         delimiter=",",
         output_dir=str(tmp_path),
     )
