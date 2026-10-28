@@ -217,7 +217,7 @@ const LayerSwitcher = ({
     };
 
     const handleIconSizeChange = (event: SelectChangeEvent<IconSize>) => {
-      onIconSizeChange(event.target.value);
+      onIconSizeChange(event.target.value as IconSize);
     };
 
     const handleResetClick = () => {
