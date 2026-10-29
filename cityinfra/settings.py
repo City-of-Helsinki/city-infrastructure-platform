@@ -427,6 +427,12 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
     ],
+    # DRF 3.18 changed `many=True` validation errors from a list with one entry per
+    # input item to a dict keyed by the index of the failing items only. The bulk
+    # insert endpoint builds its own index-aligned error lists, and clients depend on
+    # that shape, so keep the list format. Unknown to DRF < 3.18, where it is ignored.
+    # TODO: the setting is removed in DRF 3.20; migrate to the dict format before then.
+    "LIST_SERIALIZER_ERRORS_AS_DICT": False,
 }
 
 SPECTACULAR_SETTINGS = {
