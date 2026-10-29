@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.49.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.48.0...city-infrastructure-platform-v1.49.0) (2026-10-29)
+
+
+### Features
+
+* Assign one devicetypetag to multiple devicetypes from admin view ([16b38ae](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/16b38ae58c90cc44d0060f882cb2653ad46ae15c))
+* Explicitly set fields that are exposed in REST ([092cdf0](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/092cdf0edde7cc8726527579a9f8d530fac63b3d))
+* Filter out real-plan distance lines by threshold setting ([77b40a4](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/77b40a481f88ec826721e45ceacab8cdd965c5d5))
+* Populate plan decision url derived from diary_number ([e1e27d4](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/e1e27d41fae86882e14d5a97bbe1882b8ca1b571))
+
+
+### Bug Fixes
+
+* **api:** Prepare DRF 3.18 compatibility for plan endpoints ([44f67ff](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/44f67ffd8a7001b2abbb023bc8f2cb190d10d969))
+* Export template was not working ([b49552f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/b49552f321406890fc3496a68802942d1399ddba))
+
 ## [1.48.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.47.0...city-infrastructure-platform-v1.48.0) (2026-10-01)
 
 
