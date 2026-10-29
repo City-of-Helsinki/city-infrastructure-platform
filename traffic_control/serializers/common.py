@@ -3,6 +3,8 @@ from uuid import UUID
 
 from django.contrib.gis.geos import GEOSException, GEOSGeometry
 from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema_field, extend_schema_serializer
 from enumfields.drf import EnumSupportSerializerMixin
@@ -16,6 +18,32 @@ from traffic_control.models import OperationalArea, Owner, TrafficControlDeviceT
 from traffic_control.models.common import TrafficControlDeviceTypeTag
 from traffic_control.schema import IconsType, TrafficSignType
 from traffic_control.validators import validate_structured_content
+
+
+def get_unique_error_message(model: type[models.Model], field_name: str) -> str:
+    """Build Django's standard "already exists" message for a model field.
+
+    This reproduces the message that Django uses for uniqueness violations and that
+    `rest_framework` attaches to auto-generated `UniqueValidator` instances, so an
+    explicitly declared validator stays consistent with the implicit ones.
+
+    Args:
+        model (type[models.Model]): Model owning the field.
+        field_name (str): Name of the field the message is built for.
+
+    Returns:
+        str: Localized message, for example "Plan with this Diary number already exists.".
+    """
+    model_field = model._meta.get_field(field_name)
+    return model_field.error_messages["unique"] % {
+        "model_name": model._meta.verbose_name,
+        "field_label": model_field.verbose_name,
+    }
+
+
+# Lazy variant, so the message is rendered in the language active during the request
+# instead of the one active when the serializer class is imported.
+lazy_unique_error_message = lazy(get_unique_error_message, str)
 
 
 def validate_geometry_field(data: GEOSGeometry, geometry_types: list[str]):

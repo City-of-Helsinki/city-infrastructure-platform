@@ -1,8 +1,13 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 from rest_framework_gis.fields import GeometryField
 
 from traffic_control.models import Plan
-from traffic_control.serializers.common import EwktGeometryField, HideFromAnonUserSerializerMixin
+from traffic_control.serializers.common import (
+    EwktGeometryField,
+    HideFromAnonUserSerializerMixin,
+    lazy_unique_error_message,
+)
 from traffic_control.services.plan import get_plan_decision_url
 
 
@@ -100,6 +105,24 @@ class PlanSerializer(HideFromAnonUserSerializerMixin, serializers.ModelSerialize
             "created_by",
             "updated_by",
         )
+        # `Plan` enforces diary number uniqueness with a single-field `UniqueConstraint`
+        # conditioned on `is_active`. Django REST Framework only derives a field-level
+        # `UniqueValidator` from such a constraint while the constraint's fields and the
+        # fields referenced by its condition together name a single field, which stopped
+        # being the case in DRF 3.18.2. Its `UniqueTogetherValidator` replacement is in
+        # turn skipped, because `is_active` is not exposed by this serializer. Declaring
+        # the validator explicitly keeps the duplicate from reaching the database (where
+        # it would surface as an unhelpful `IntegrityError`) on every DRF version.
+        extra_kwargs = {
+            "diary_number": {
+                "validators": [
+                    UniqueValidator(
+                        queryset=Plan.objects.active(),
+                        message=lazy_unique_error_message(Plan, "diary_number"),
+                    )
+                ],
+            },
+        }
 
     def validate(self, attrs: dict) -> dict:
         """Populate `decision_url` from `diary_number` when no URL is available.
