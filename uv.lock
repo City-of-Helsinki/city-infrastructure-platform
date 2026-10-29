@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.12, <4"
 
 [options]
@@ -215,9 +215,8 @@ wheels = [
 
 [[package]]
 name = "city-infrastructure-platform"
-version = "1.48.0"
+version = "1.49.0"
 source = { virtual = "." }
-default-groups = "all"
 dependencies = [
     { name = "cairosvg" },
     { name = "django" },
