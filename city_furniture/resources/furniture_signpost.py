@@ -4,7 +4,9 @@ from import_export.widgets import ForeignKeyWidget
 
 from city_furniture.models import FurnitureSignpostPlan, FurnitureSignpostReal
 from city_furniture.models.common import CityFurnitureColor, CityFurnitureDeviceType, CityFurnitureTarget
+from city_furniture.models.furniture_signpost import FurnitureSignpostPlanFile, FurnitureSignpostRealFile
 from traffic_control.models import MountPlan, MountReal, MountType, Owner, Plan, ResponsibleEntity
+from traffic_control.resources.attachments import ATTACHMENT_COLUMN_NAME, AttachmentImportMixin
 from traffic_control.resources.common import (
     GenericDeviceBaseResource,
     ParentChildReplacementImportMixin,
@@ -17,6 +19,7 @@ from traffic_control.resources.common import (
 class AbstractFurnitureSignpostResource(
     ResponsibleEntityPermissionImportMixin,
     ParentChildReplacementImportMixin,
+    AttachmentImportMixin,
     GenericDeviceBaseResource,
 ):
     owner__name_fi = Field(
@@ -52,6 +55,7 @@ class AbstractFurnitureSignpostResource(
 
     class Meta(
         ParentChildReplacementImportMixin.Meta,
+        AttachmentImportMixin.Meta,
         GenericDeviceBaseResource.Meta,
     ):
         common_fields = (
@@ -82,6 +86,7 @@ class AbstractFurnitureSignpostResource(
             "validity_period_end",
             "additional_material_url",
             "lifecycle",
+            ATTACHMENT_COLUMN_NAME,
         ) + SOURCE_NAME_ID_FIELDS
 
 
@@ -104,6 +109,8 @@ class FurnitureSignpostPlanResource(AbstractFurnitureSignpostResource):
 
     class Meta(AbstractFurnitureSignpostResource.Meta):
         model = FurnitureSignpostPlan
+        attachment_model = FurnitureSignpostPlanFile
+        attachment_fk_field = "furniture_signpost_plan"
 
         fields = AbstractFurnitureSignpostResource.Meta.common_fields + (
             "mount_plan__id",
@@ -131,6 +138,8 @@ class FurnitureSignpostRealResource(AbstractFurnitureSignpostResource):
 
     class Meta(AbstractFurnitureSignpostResource.Meta):
         model = FurnitureSignpostReal
+        attachment_model = FurnitureSignpostRealFile
+        attachment_fk_field = "furniture_signpost_real"
 
         fields = AbstractFurnitureSignpostResource.Meta.common_fields + (
             "condition",
@@ -156,6 +165,20 @@ class FurnitureSignpostPlanTemplateResource(
 
     def dehydrate_furniture_signpost_plan__id(self, obj: FurnitureSignpostPlan):
         return obj.id
+
+    def dehydrate_attachment_filenames(self, obj: FurnitureSignpostPlan) -> str:
+        """Leave the attachment column empty in the real import template.
+
+        The template is meant to be filled in and re-imported as reals, and the attachment files
+        themselves have to be uploaded again with that import.
+
+        Args:
+            obj (FurnitureSignpostPlan): Plan being exported.
+
+        Returns:
+            str: Always an empty string.
+        """
+        return ""
 
     def dehydrate_mount_real__id(self, obj: FurnitureSignpostPlan):
         if not obj.mount_plan:
