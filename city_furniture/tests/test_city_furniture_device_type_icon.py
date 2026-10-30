@@ -1,5 +1,4 @@
 import os
-from tempfile import TemporaryDirectory
 
 import pytest
 from auditlog.models import LogEntry
@@ -9,14 +8,15 @@ from city_furniture.models.common import CityFurnitureDeviceTypeIcon
 from city_furniture.tests.factories import CityFurnitureDeviceTypeIconFactory
 
 
-@pytest.fixture
-def override_settings(settings):
+@pytest.fixture(autouse=True)
+def settings(settings, tmp_path):
     """Override MEDIA_ROOT for tests to avoid cluttering the project's media folder."""
-    settings.MEDIA_ROOT = TemporaryDirectory().name
+    settings.MEDIA_ROOT = str(tmp_path)
+    return settings
 
 
 @pytest.mark.django_db
-def test__city_furniture_device_type_icon__enforces_uniqueness(override_settings):
+def test__city_furniture_device_type_icon__enforces_uniqueness(settings):
     """
     We don't want two separate rows meaning the same file in our table.
     This test ensures the database uniqueness constraint on the 'file' field is active.
@@ -30,7 +30,7 @@ def test__city_furniture_device_type_icon__enforces_uniqueness(override_settings
 
 
 @pytest.mark.django_db
-def test__city_furniture_device_type_icon__custom_signal_handlers(override_settings, settings):
+def test__city_furniture_device_type_icon__custom_signal_handlers(settings):
     """
     Check that creating and deleting CityFurnitureDeviceTypeIcon objects correctly
     triggers the side effect of creating and deleting corresponding PNG icon files.
@@ -65,7 +65,7 @@ def test__city_furniture_device_type_icon__custom_signal_handlers(override_setti
 
 
 @pytest.mark.django_db
-def test__city_furniture_device_type_icon__auditlog_entries(override_settings):
+def test__city_furniture_device_type_icon__auditlog_entries(settings):
     """
     Test that create, change, and delete actions are correctly recorded in the audit log.
     """

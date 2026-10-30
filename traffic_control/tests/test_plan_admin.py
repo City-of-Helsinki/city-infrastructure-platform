@@ -7,7 +7,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.gis.geos import MultiPolygon
-from django.test import override_settings
 from django.urls import reverse
 
 from city_furniture.tests.factories import get_furniture_signpost_plan
@@ -37,21 +36,6 @@ from traffic_control.tests.test_base_api import (
     test_polygon_2,
 )
 from traffic_control.tests.test_base_api_3d import test_point_2_3d, test_point_3d
-
-settings_overrides = override_settings(
-    STORAGES={
-        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
-        "icons": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-    }
-)
-
-
-def setup_module():
-    settings_overrides.enable()
-
-
-def teardown_module():
-    settings_overrides.disable()
 
 
 @pytest.mark.django_db

@@ -1,11 +1,7 @@
 from django.conf import settings
 from django.contrib.gis.geos import LineString, Point, Polygon
-from rest_framework.test import APITestCase
 
-from traffic_control.enums import Lifecycle
-from traffic_control.models import MountType, Owner, TrafficControlDeviceType
-from traffic_control.tests.utils import DummyRequestForAxes, MIN_X, MIN_Y
-from users.models import User
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 test_point_3d = Point(MIN_X + 6, MIN_Y + 6, 0.0, srid=settings.SRID)
 test_point_2_3d = Point(MIN_X + 2, MIN_Y + 2, 0.0, srid=settings.SRID)
@@ -69,18 +65,3 @@ line_location_error_test_data_3d = [
     (test_line_3d, "invalid_test_string", "Invalid geometry value."),
     (test_line_3d, 123123, "Invalid geometry value."),
 ]
-
-
-class TrafficControlAPIBaseTestCase3D(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create_superuser(username="testuser", password="testpw", email="testuser@example.com")
-        self.client.login(request=DummyRequestForAxes(), username="testuser", password="testpw")
-        self.test_lifecycle = Lifecycle.ACTIVE
-        self.test_lifecycle_2 = Lifecycle.INACTIVE
-        self.test_device_type = TrafficControlDeviceType.objects.create(code="A11", description="Speed limit")
-        self.test_device_type_2 = TrafficControlDeviceType.objects.create(code="A12", description="Weight limit")
-        self.test_type = MountType.objects.create(code="PORTAL", description="Portal")
-        self.test_type_2 = MountType.objects.create(code="WALL", description="Wall")
-        self.test_point = test_point_3d
-        self.test_point_2 = test_point_2_3d
-        self.test_owner = Owner.objects.create(name_fi="Helsingin kaupunki", name_en="City of Helsinki")

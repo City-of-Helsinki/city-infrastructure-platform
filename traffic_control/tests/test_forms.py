@@ -1,9 +1,9 @@
 from enum import member
 
+import pytest
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.forms import forms
-from django.test import TestCase
 from enumfields import Enum, EnumIntegerField
 
 from traffic_control.enums import Lifecycle
@@ -46,77 +46,78 @@ def test_admin_enum_choice_field():
     assert options[3][1][0]["label"] == "Blue (3)"
 
 
-class TrafficSignRealModelFormTestCase(TestCase):
-    def test_update_traffic_sign_real_3d_location_location_field(self):
-        user = get_user()
-        owner = get_owner()
-        data = {
-            "location": Point(MIN_X + 5, MIN_Y + 5, 0.0, srid=settings.SRID),
-            "z_coord": 20,
-            "direction": 0,
-            "created_by": user.id,
-            "updated_by": user.id,
-            "owner": owner.pk,
-            "lifecycle": Lifecycle.ACTIVE,
-            "device_type": TrafficControlDeviceTypeFactory().pk,
-        }
-        user = get_user()
-        traffic_sign_real = TrafficSignRealFactory(
-            location=Point(MIN_X + 10, MIN_Y + 10, 5, srid=settings.SRID),
-            direction=0,
-            created_by=user,
-            updated_by=user,
-            owner=owner,
-            lifecycle=Lifecycle.ACTIVE,
-        )
-        form = TrafficSignRealModelForm(data=data, instance=traffic_sign_real)
-        self.assertEqual(form.fields["z_coord"].initial, 5)
-        self.assertTrue(form.is_valid())
+@pytest.mark.django_db
+def test_update_traffic_sign_real_3d_location_location_field():
+    user = get_user()
+    owner = get_owner()
+    data = {
+        "location": Point(MIN_X + 5, MIN_Y + 5, 0.0, srid=settings.SRID),
+        "z_coord": 20,
+        "direction": 0,
+        "created_by": user.id,
+        "updated_by": user.id,
+        "owner": owner.pk,
+        "lifecycle": Lifecycle.ACTIVE,
+        "device_type": TrafficControlDeviceTypeFactory().pk,
+    }
+    traffic_sign_real = TrafficSignRealFactory(
+        location=Point(MIN_X + 10, MIN_Y + 10, 5, srid=settings.SRID),
+        direction=0,
+        created_by=user,
+        updated_by=user,
+        owner=owner,
+        lifecycle=Lifecycle.ACTIVE,
+    )
+    form = TrafficSignRealModelForm(data=data, instance=traffic_sign_real)
+    assert form.fields["z_coord"].initial == 5
+    assert form.is_valid()
 
-    def test_update_traffic_sign_real_3d_location_location_ewkt_field(self):
-        user = get_user()
-        owner = get_owner()
-        data = {
-            "location": Point(MIN_X + 5, MIN_Y + 5, 0.0, srid=settings.SRID),
-            "location_ewkt": Point(MIN_X + 8, MIN_Y + 8, 0.0, srid=settings.SRID).ewkt,
-            "z_coord": 20,
-            "direction": 0,
-            "created_by": user.id,
-            "updated_by": user.id,
-            "owner": owner.pk,
-            "lifecycle": Lifecycle.ACTIVE,
-            "device_type": TrafficControlDeviceTypeFactory().pk,
-        }
-        user = get_user()
-        traffic_sign_real = TrafficSignRealFactory(
-            location=Point(MIN_X + 10, MIN_Y + 10, 5, srid=settings.SRID),
-            direction=0,
-            created_by=user,
-            updated_by=user,
-            owner=owner,
-            lifecycle=Lifecycle.ACTIVE,
-        )
-        form = TrafficSignRealModelForm(data=data, instance=traffic_sign_real)
-        self.assertEqual(form.fields["z_coord"].initial, 5)
-        self.assertTrue(form.is_valid())
 
-        instance = form.save()
-        self.assertEqual(instance.location, Point(MIN_X + 8, MIN_Y + 8, 20, srid=settings.SRID))
+@pytest.mark.django_db
+def test_update_traffic_sign_real_3d_location_location_ewkt_field():
+    user = get_user()
+    owner = get_owner()
+    data = {
+        "location": Point(MIN_X + 5, MIN_Y + 5, 0.0, srid=settings.SRID),
+        "location_ewkt": Point(MIN_X + 8, MIN_Y + 8, 0.0, srid=settings.SRID).ewkt,
+        "z_coord": 20,
+        "direction": 0,
+        "created_by": user.id,
+        "updated_by": user.id,
+        "owner": owner.pk,
+        "lifecycle": Lifecycle.ACTIVE,
+        "device_type": TrafficControlDeviceTypeFactory().pk,
+    }
+    traffic_sign_real = TrafficSignRealFactory(
+        location=Point(MIN_X + 10, MIN_Y + 10, 5, srid=settings.SRID),
+        direction=0,
+        created_by=user,
+        updated_by=user,
+        owner=owner,
+        lifecycle=Lifecycle.ACTIVE,
+    )
+    form = TrafficSignRealModelForm(data=data, instance=traffic_sign_real)
+    assert form.fields["z_coord"].initial == 5
+    assert form.is_valid()
 
-    def test_create_traffic_sign_real_3d_location(self):
-        user = get_user()
-        data = {
-            "location": Point(MIN_X + 10, MIN_Y + 10, 0.0, srid=settings.SRID),
-            "z_coord": 20,
-            "direction": 0,
-            "created_by": user.id,
-            "updated_by": user.id,
-            "owner": get_owner().pk,
-            "lifecycle": Lifecycle.ACTIVE,
-            "device_type": TrafficControlDeviceTypeFactory().pk,
-        }
-        form = TrafficSignRealModelForm(data=data)
-        form.is_valid()
-        self.assertTrue(form.is_valid())
-        instance = form.save()
-        self.assertEqual(instance.location, Point(MIN_X + 10, MIN_Y + 10, 20, srid=settings.SRID))
+    instance = form.save()
+    assert instance.location == Point(MIN_X + 8, MIN_Y + 8, 20, srid=settings.SRID)
+
+
+@pytest.mark.django_db
+def test_create_traffic_sign_real_3d_location():
+    user = get_user()
+    data = {
+        "location": Point(MIN_X + 10, MIN_Y + 10, 0.0, srid=settings.SRID),
+        "z_coord": 20,
+        "direction": 0,
+        "created_by": user.id,
+        "updated_by": user.id,
+        "owner": get_owner().pk,
+        "lifecycle": Lifecycle.ACTIVE,
+        "device_type": TrafficControlDeviceTypeFactory().pk,
+    }
+    form = TrafficSignRealModelForm(data=data)
+    assert form.is_valid()
+    instance = form.save()
+    assert instance.location == Point(MIN_X + 10, MIN_Y + 10, 20, srid=settings.SRID)

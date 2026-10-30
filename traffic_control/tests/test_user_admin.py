@@ -1,5 +1,4 @@
 import pytest
-from django.test import Client, override_settings
 from django.urls import reverse
 
 TOO_CLOSE_TO_USERNAME = "The password is too similar to the username."
@@ -9,19 +8,6 @@ NUMBER_MISSING = "Password must contain at least 1 number."
 UPPERCASE_MISSING = "Password must contain at least 1 uppercase character."
 LOWERCASE_MISSING = "Password must contain at least 1 lowercase character."
 SPECIAL_CHAR_MISSING = "Password must contain at least 1 special character ( !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)."
-
-
-settings_overrides = override_settings(
-    STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
-)
-
-
-def setup_module():
-    settings_overrides.enable()
-
-
-def teardown_module():
-    settings_overrides.disable()
 
 
 @pytest.mark.parametrize(
@@ -65,9 +51,8 @@ def teardown_module():
     ),
 )
 @pytest.mark.django_db
-def test__create_user_password_validation(client: Client, admin_user, username, password, expected_msgs):
-    client.force_login(admin_user)
-    response = client.post(
+def test__create_user_password_validation(admin_client, username, password, expected_msgs):
+    response = admin_client.post(
         reverse("admin:users_user_add"), {"username": username, "password": password, "password2": password}
     )
 

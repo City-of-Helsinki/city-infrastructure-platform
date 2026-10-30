@@ -3,7 +3,6 @@ import json
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 
 from traffic_control.enums import DeviceTypeTargetModel, TrafficControlDeviceTypeType
 from traffic_control.models import TrafficControlDeviceType
@@ -25,199 +24,232 @@ from traffic_control.tests.factories import (
     TrafficControlDeviceTypeFactory,
     TrafficControlDeviceTypeIconFactory,
 )
-from users.models import User
+
+# ==============================================================================
+# Fixtures
+# ==============================================================================
 
 
-class TrafficControlDeviceTypeTests(APITestCase):
-    def setUp(self):
-        self.admin_user = User.objects.create_superuser(
-            username="testadmin", password="testpw", email="testadmin@hel.fi"
+@pytest.fixture
+def admin_user():
+    return get_user(admin=True)
+
+
+@pytest.fixture
+def normal_user():
+    return get_user()
+
+
+@pytest.fixture
+def admin_api_client(admin_user):
+    return get_api_client(user=admin_user)
+
+
+@pytest.fixture
+def user_api_client(normal_user):
+    return get_api_client(user=normal_user)
+
+
+@pytest.fixture
+def test_device_type():
+    return TrafficControlDeviceType.objects.create(
+        code="M16",
+        description="Nopeusrajoitus",
+    )
+
+
+# ==============================================================================
+# TrafficControlDeviceType API Tests
+# ==============================================================================
+
+
+@pytest.mark.django_db
+def test__list__as_user__ok(user_api_client):
+    """
+    Ensure that user can get list of traffic control device type objects.
+    """
+    count = 3
+    for i in range(count):
+        TrafficControlDeviceType.objects.create(
+            code=i,
+            description="Test description %s" % i,
         )
-        self.user = User.objects.create_user(username="testuser", password="testpw")
+    response = user_api_client.get(reverse("v1:trafficcontroldevicetype-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count + DEVICE_TYPE_COUNT_OFFSET
 
-    def test__list__as_user__ok(self):
-        """
-        Ensure that user can get list of traffic control device type objects.
-        """
-        self.client.force_login(self.user)
-        count = 3
-        for i in range(count):
-            TrafficControlDeviceType.objects.create(
-                code=i,
-                description="Test description %s" % i,
-            )
-        response = self.client.get(reverse("v1:trafficcontroldevicetype-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count + DEVICE_TYPE_COUNT_OFFSET)
 
-    def test__list__as_admin__ok(self):
-        """
-        Ensure that admin can get list of traffic control device type objects.
-        """
-        self.client.force_login(self.admin_user)
-        count = 3
-        for i in range(count):
-            TrafficControlDeviceType.objects.create(
-                code=i,
-                description="Test description %s" % i,
-            )
-        response = self.client.get(reverse("v1:trafficcontroldevicetype-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("count"), count + DEVICE_TYPE_COUNT_OFFSET)
-
-    def test__retrieve__as_user__ok(self):
-        """
-        Ensure that user can get one traffic control device type object.
-        """
-        self.client.force_login(self.user)
-        device_type = self.__create_test_traffic_control_device_type()
-        response = self.client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(device_type.id))
-
-    def test__retrieve__as_admin__ok(self):
-        """
-        Ensure that admin can get one traffic control device type object.
-        """
-        self.client.force_login(self.admin_user)
-        device_type = self.__create_test_traffic_control_device_type()
-        response = self.client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get("id"), str(device_type.id))
-
-    def test__create__as_user__forbidden(self):
-        """
-        Ensure that user cannot create a new traffic control device type object.
-        """
-        self.client.force_login(self.user)
-        data = {
-            "code": "L3",
-            "description": "Suojatie",
-        }
-        response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 0 + DEVICE_TYPE_COUNT_OFFSET)
-
-    def test__create__as_admin__created(self):
-        """
-        Ensure admin can create a new traffic control device type object.
-        """
-        self.client.force_login(self.admin_user)
-        data = {
-            "code": "L3",
-            "description": "Suojatie",
-            "target_model": DeviceTypeTargetModel.ADDITIONAL_SIGN.value,
-        }
-        response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET)
-        device_type = TrafficControlDeviceType.objects.get(code="L3")
-        self.assertEqual(device_type.code, data["code"])
-        self.assertEqual(device_type.description, data["description"])
-
-    def test__create_existing__bad_request(self):
-        """
-        Ensure that API will not create a new traffic control device type object with duplicated code-value.
-        """
-        self.client.force_login(self.admin_user)
-        data = {
-            "code": "L3",
-            "description": "Suojatie",
-        }
-        response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response = self.client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET)
-        device_type = TrafficControlDeviceType.objects.get(code="L3")
-        self.assertEqual(device_type.code, data["code"])
-        self.assertEqual(device_type.description, data["description"])
-
-    def test__update__as_user__forbidden(self):
-        """
-        Ensure that user cannot update existing traffic control device type object.
-        """
-        self.client.force_login(self.user)
-        device_type = self.__create_test_traffic_control_device_type()
-        data = {
-            "code": "L3",
-            "description": "Suojatie",
-        }
-        response = self.client.put(
-            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
-            data,
-            format="json",
+@pytest.mark.django_db
+def test__list__as_admin__ok(admin_api_client):
+    """
+    Ensure that admin can get list of traffic control device type objects.
+    """
+    count = 3
+    for i in range(count):
+        TrafficControlDeviceType.objects.create(
+            code=i,
+            description="Test description %s" % i,
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(
-            TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET
-        )  # One device type is created to database in migrations
+    response = admin_api_client.get(reverse("v1:trafficcontroldevicetype-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("count") == count + DEVICE_TYPE_COUNT_OFFSET
 
-    def test__update__as_admin__ok(self):
-        """
-        Ensure that admin can update existing traffic control device type object.
-        """
-        self.client.force_login(self.admin_user)
-        device_type = self.__create_test_traffic_control_device_type()
-        data = {
-            "code": "L3",
-            "description": "Suojatie",
-        }
-        response = self.client.put(
-            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
-            data,
-            format="json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET)
-        device_type = TrafficControlDeviceType.objects.get(code="L3")
-        self.assertEqual(device_type.code, data["code"])
-        self.assertEqual(device_type.description, data["description"])
 
-    def test__destroy__as_user__forbidden(self):
-        """
-        Ensure user cannot delete traffic control device type object.
-        """
-        self.client.force_login(self.user)
-        device_type = self.__create_test_traffic_control_device_type()
-        response = self.client.delete(
-            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 1 + DEVICE_TYPE_COUNT_OFFSET)
+@pytest.mark.django_db
+def test__retrieve__as_user__ok(user_api_client, test_device_type):
+    """
+    Ensure that user can get one traffic control device type object.
+    """
+    response = user_api_client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": test_device_type.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(test_device_type.id)
 
-    def test__destroy__as_admin__success(self):
-        """
-        Ensure that admin can delete traffic control device type object.
-        """
-        self.client.force_login(self.admin_user)
-        device_type = self.__create_test_traffic_control_device_type()
-        response = self.client.delete(
-            reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": device_type.id}),
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(TrafficControlDeviceType.objects.count(), 0 + DEVICE_TYPE_COUNT_OFFSET)
 
-    def test__traffic_sign_type__filtering(self):
-        dt_1 = TrafficControlDeviceTypeFactory(code="A1")
-        dt_2 = TrafficControlDeviceTypeFactory(code="A2")
-        TrafficControlDeviceTypeFactory(code="B1")
-        TrafficControlDeviceTypeFactory(code="C1")
+@pytest.mark.django_db
+def test__retrieve__as_admin__ok(admin_api_client, test_device_type):
+    """
+    Ensure that admin can get one traffic control device type object.
+    """
+    response = admin_api_client.get(reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": test_device_type.id}))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data.get("id") == str(test_device_type.id)
 
-        response = self.client.get(reverse("v1:trafficcontroldevicetype-list"), data={"traffic_sign_type": "A"})
 
-        response_data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response_data["count"], 2)
-        self.assertEqual(response_data["results"][0]["id"], str(dt_1.pk))
-        self.assertEqual(response_data["results"][1]["id"], str(dt_2.pk))
+@pytest.mark.django_db
+def test__create__as_user__forbidden(user_api_client):
+    """
+    Ensure that user cannot create a new traffic control device type object.
+    """
+    data = {
+        "code": "L3",
+        "description": "Suojatie",
+    }
+    response = user_api_client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert TrafficControlDeviceType.objects.count() == 0 + DEVICE_TYPE_COUNT_OFFSET
 
-    @staticmethod
-    def __create_test_traffic_control_device_type():
-        return TrafficControlDeviceType.objects.create(
-            code="M16",
-            description="Nopeusrajoitus",
-        )
+
+@pytest.mark.django_db
+def test__create__as_admin__created(admin_api_client):
+    """
+    Ensure admin can create a new traffic control device type object.
+    """
+    data = {
+        "code": "L3",
+        "description": "Suojatie",
+        "target_model": DeviceTypeTargetModel.ADDITIONAL_SIGN.value,
+    }
+    response = admin_api_client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+    assert TrafficControlDeviceType.objects.count() == 1 + DEVICE_TYPE_COUNT_OFFSET
+    device_type = TrafficControlDeviceType.objects.get(code="L3")
+    assert device_type.code == data["code"]
+    assert device_type.description == data["description"]
+
+
+@pytest.mark.django_db
+def test__create_existing__bad_request(admin_api_client):
+    """
+    Ensure that API will not create a new traffic control device type object with duplicated code-value.
+    """
+    data = {
+        "code": "L3",
+        "description": "Suojatie",
+    }
+    response = admin_api_client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
+    assert response.status_code == status.HTTP_201_CREATED
+
+    response = admin_api_client.post(reverse("v1:trafficcontroldevicetype-list"), data, format="json")
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert TrafficControlDeviceType.objects.count() == 1 + DEVICE_TYPE_COUNT_OFFSET
+    device_type = TrafficControlDeviceType.objects.get(code="L3")
+    assert device_type.code == data["code"]
+    assert device_type.description == data["description"]
+
+
+@pytest.mark.django_db
+def test__update__as_user__forbidden(user_api_client, test_device_type):
+    """
+    Ensure that user cannot update existing traffic control device type object.
+    """
+    data = {
+        "code": "L3",
+        "description": "Suojatie",
+    }
+    response = user_api_client.put(
+        reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": test_device_type.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert TrafficControlDeviceType.objects.count() == 1 + DEVICE_TYPE_COUNT_OFFSET
+
+
+@pytest.mark.django_db
+def test__update__as_admin__ok(admin_api_client, test_device_type):
+    """
+    Ensure that admin can update existing traffic control device type object.
+    """
+    data = {
+        "code": "L3",
+        "description": "Suojatie",
+    }
+    response = admin_api_client.put(
+        reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": test_device_type.id}),
+        data,
+        format="json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert TrafficControlDeviceType.objects.count() == 1 + DEVICE_TYPE_COUNT_OFFSET
+    device_type = TrafficControlDeviceType.objects.get(code="L3")
+    assert device_type.code == data["code"]
+    assert device_type.description == data["description"]
+
+
+@pytest.mark.django_db
+def test__destroy__as_user__forbidden(user_api_client, test_device_type):
+    """
+    Ensure user cannot delete traffic control device type object.
+    """
+    response = user_api_client.delete(
+        reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": test_device_type.id}),
+    )
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert TrafficControlDeviceType.objects.count() == 1 + DEVICE_TYPE_COUNT_OFFSET
+
+
+@pytest.mark.django_db
+def test__destroy__as_admin__success(admin_api_client, test_device_type):
+    """
+    Ensure that admin can delete traffic control device type object.
+    """
+    response = admin_api_client.delete(
+        reverse("v1:trafficcontroldevicetype-detail", kwargs={"pk": test_device_type.id}),
+    )
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert TrafficControlDeviceType.objects.count() == 0 + DEVICE_TYPE_COUNT_OFFSET
+
+
+@pytest.mark.django_db
+def test__traffic_sign_type__filtering():
+    dt_1 = TrafficControlDeviceTypeFactory(code="A1")
+    dt_2 = TrafficControlDeviceTypeFactory(code="A2")
+    TrafficControlDeviceTypeFactory(code="B1")
+    TrafficControlDeviceTypeFactory(code="C1")
+
+    client = get_api_client()
+    response = client.get(reverse("v1:trafficcontroldevicetype-list"), data={"traffic_sign_type": "A"})
+
+    response_data = response.json()
+    assert response.status_code == status.HTTP_200_OK
+    assert response_data["count"] == 2
+    assert response_data["results"][0]["id"] == str(dt_1.pk)
+    assert response_data["results"][1]["id"] == str(dt_2.pk)
+
+
+# ==============================================================================
+# Model & Relationship Tests
+# ==============================================================================
 
 
 @pytest.mark.parametrize(
@@ -300,6 +332,19 @@ def test__device_type__target_model__invalid(target_model, factory):
     assert not device_type.target_model
 
 
+@pytest.fixture
+def settings_with_azure_icons_storage(settings, tmp_path):
+    settings.STORAGES["icons"] = {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "location": str(tmp_path),
+            "azure_container": "media",
+            "connection_string": "DefaultEndpointsProtocol=http;AccountName=teststore1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10/teststore1;",
+        },
+    }
+    return settings
+
+
 @pytest.mark.parametrize(
     ("svg_icon", "png_icon"),
     (
@@ -308,7 +353,7 @@ def test__device_type__target_model__invalid(target_model, factory):
     ),
 )
 @pytest.mark.django_db
-def test__device_type__icons(temp_icon_storage, svg_icon, png_icon):
+def test__device_type__icons(svg_icon, png_icon, settings_with_azure_icons_storage):
     client = get_api_client()
     icon_file = TrafficControlDeviceTypeIconFactory(file__filename=svg_icon) if svg_icon else None
     dt = TrafficControlDeviceTypeFactory(code="X.1", icon_file=icon_file)
@@ -317,7 +362,6 @@ def test__device_type__icons(temp_icon_storage, svg_icon, png_icon):
     response_data = response.json()
     icons = response_data["icons"]
 
-    # expected paths are coming from temp_icon_storage fixture
     if svg_icon:
         assert icons["svg"] == f"http://127.0.0.1:10/teststore1/media/icons/traffic_control_device_type/svg/{svg_icon}"
         assert (

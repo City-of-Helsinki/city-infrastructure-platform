@@ -1,25 +1,9 @@
 from http import HTTPStatus
 
 import pytest
-from django.test import override_settings
 from django.urls import reverse
 
 from traffic_control.tests.factories import get_user
-
-settings_overrides = override_settings(
-    STORAGES={
-        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
-        "icons": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-    },
-)
-
-
-def setup_module():
-    settings_overrides.enable()
-
-
-def teardown_module():
-    settings_overrides.disable()
 
 
 @pytest.mark.parametrize(

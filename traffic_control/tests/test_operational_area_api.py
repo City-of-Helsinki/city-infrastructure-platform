@@ -3,94 +3,120 @@ import json
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 
 from traffic_control.models import OperationalArea
 from traffic_control.tests.api_utils import do_illegal_geometry_test
-from traffic_control.tests.factories import get_api_client, get_user, OperationalAreaFactory
+from traffic_control.tests.factories import get_api_client, OperationalAreaFactory
 from traffic_control.tests.test_base_api import illegal_multipolygon, test_multi_polygon, test_multi_polygon_2
 
+# ==============================================================================
+# Fixtures
+# ==============================================================================
 
-class OperationalAreaAPITestCase(APITestCase):
-    def setUp(self):
-        self.operational_area = OperationalAreaFactory()
-        self.user = get_user()
-        self.admin = get_user(admin=True)
 
-    def test_admin_list_operational_areas_ok(self):
-        url = reverse("v1:operationalarea-list")
-        self.client.force_login(self.admin)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+@pytest.fixture
+def test_operational_area():
+    return OperationalAreaFactory()
 
-    def test_admin_retrieve_operational_area_ok(self):
-        url = reverse("v1:operationalarea-detail", kwargs={"pk": self.operational_area.id})
-        self.client.force_login(self.admin)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_admin_create_operational_area_created(self):
-        url = reverse("v1:operationalarea-list")
-        self.client.force_login(self.admin)
-        data = {"name": "TEST AREA", "location": test_multi_polygon.ewkt}
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(OperationalArea.objects.filter(name="TEST AREA").count(), 1)
+# ==============================================================================
+# Admin Tests
+# ==============================================================================
 
-    def test_admin_update_operational_area_ok(self):
-        url = reverse("v1:operationalarea-detail", kwargs={"pk": self.operational_area.id})
-        self.client.force_login(self.admin)
-        data = {
-            "id": self.operational_area.id,
-            "name": "TEST AREA",
-            "location": test_multi_polygon.ewkt,
-        }
-        response = self.client.put(url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(OperationalArea.objects.filter(name="TEST AREA").count(), 1)
 
-    def test_admin_delete_operational_area_deleted(self):
-        url = reverse("v1:operationalarea-detail", kwargs={"pk": self.operational_area.id})
-        self.client.force_login(self.admin)
-        response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(OperationalArea.objects.count(), 0)
+@pytest.mark.django_db
+def test_admin_list_operational_areas_ok(admin_api_client):
+    url = reverse("v1:operationalarea-list")
+    response = admin_api_client.get(url)
+    assert response.status_code == status.HTTP_200_OK
 
-    def test_user_list_operational_area_forbidden(self):
-        url = reverse("v1:operationalarea-list")
-        self.client.force_login(self.user)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_user_retrieve_operational_area_forbidden(self):
-        url = reverse("v1:operationalarea-detail", kwargs={"pk": self.operational_area.id})
-        self.client.force_login(self.user)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+@pytest.mark.django_db
+def test_admin_retrieve_operational_area_ok(admin_api_client, test_operational_area):
+    url = reverse("v1:operationalarea-detail", kwargs={"pk": test_operational_area.id})
+    response = admin_api_client.get(url)
+    assert response.status_code == status.HTTP_200_OK
 
-    def test_user_create_operational_area_forbidden(self):
-        url = reverse("v1:operationalarea-list")
-        self.client.force_login(self.user)
-        data = {"name": "TEST AREA", "location": test_multi_polygon.ewkt}
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_user_update_operational_area_forbidden(self):
-        url = reverse("v1:operationalarea-detail", kwargs={"pk": self.operational_area.id})
-        self.client.force_login(self.user)
-        data = {
-            "id": self.operational_area.id,
-            "name": "TEST AREA",
-            "location": test_multi_polygon.ewkt,
-        }
-        response = self.client.put(url, data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+@pytest.mark.django_db
+def test_admin_create_operational_area_created(admin_api_client):
+    url = reverse("v1:operationalarea-list")
+    data = {"name": "TEST AREA", "location": test_multi_polygon.ewkt}
+    response = admin_api_client.post(url, data)
+    assert response.status_code == status.HTTP_201_CREATED
+    assert OperationalArea.objects.filter(name="TEST AREA").count() == 1
 
-    def test_user_delete_operational_area_forbidden(self):
-        url = reverse("v1:operationalarea-detail", kwargs={"pk": self.operational_area.id})
-        self.client.force_login(self.user)
-        response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+@pytest.mark.django_db
+def test_admin_update_operational_area_ok(admin_api_client, test_operational_area):
+    url = reverse("v1:operationalarea-detail", kwargs={"pk": test_operational_area.id})
+    data = {
+        "id": test_operational_area.id,
+        "name": "TEST AREA",
+        "location": test_multi_polygon.ewkt,
+    }
+    response = admin_api_client.put(url, data)
+    assert response.status_code == status.HTTP_200_OK
+    assert OperationalArea.objects.filter(name="TEST AREA").count() == 1
+
+
+@pytest.mark.django_db
+def test_admin_delete_operational_area_deleted(admin_api_client, test_operational_area):
+    url = reverse("v1:operationalarea-detail", kwargs={"pk": test_operational_area.id})
+    response = admin_api_client.delete(url)
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert OperationalArea.objects.count() == 0
+
+
+# ==============================================================================
+# Regular User Tests
+# ==============================================================================
+
+
+@pytest.mark.django_db
+def test_user_list_operational_area_forbidden(user_api_client):
+    url = reverse("v1:operationalarea-list")
+    response = user_api_client.get(url)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_user_retrieve_operational_area_forbidden(user_api_client, test_operational_area):
+    url = reverse("v1:operationalarea-detail", kwargs={"pk": test_operational_area.id})
+    response = user_api_client.get(url)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_user_create_operational_area_forbidden(user_api_client):
+    url = reverse("v1:operationalarea-list")
+    data = {"name": "TEST AREA", "location": test_multi_polygon.ewkt}
+    response = user_api_client.post(url, data)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_user_update_operational_area_forbidden(user_api_client, test_operational_area):
+    url = reverse("v1:operationalarea-detail", kwargs={"pk": test_operational_area.id})
+    data = {
+        "id": test_operational_area.id,
+        "name": "TEST AREA",
+        "location": test_multi_polygon.ewkt,
+    }
+    response = user_api_client.put(url, data)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_user_delete_operational_area_forbidden(user_api_client, test_operational_area):
+    url = reverse("v1:operationalarea-detail", kwargs={"pk": test_operational_area.id})
+    response = user_api_client.delete(url)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+# ==============================================================================
+# Anonymous & Geometry Tests
+# ==============================================================================
 
 
 # TODO: Safe methods should return OK

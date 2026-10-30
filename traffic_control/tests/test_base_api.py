@@ -1,11 +1,7 @@
 from django.conf import settings
 from django.contrib.gis.geos import LineString, MultiPolygon, Point, Polygon
-from rest_framework.test import APITestCase
 
-from traffic_control.enums import Lifecycle
-from traffic_control.models import MountType, Owner, TrafficControlDeviceType
-from traffic_control.tests.utils import DummyRequestForAxes, MIN_X, MIN_Y
-from users.models import User
+from traffic_control.tests.utils import MIN_X, MIN_Y
 
 illegal_test_point = Point(0, 0, 0, srid=settings.SRID)
 illegal_test_polygon = Polygon(
@@ -98,18 +94,3 @@ SRID=3879;MULTIPOLYGON Z (((25496415.929282654 6673359.761058535 0, 25496415.638
 25496430.44581493 6673350.877332475 0, 25496430.171727654 6673359.043233639 0,
 25496415.929282654 6673359.761058534 0)))
 """
-
-
-class TrafficControlAPIBaseTestCase(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create_superuser(username="testuser", password="testpw", email="testuser@example.com")
-        self.client.login(request=DummyRequestForAxes(), username="testuser", password="testpw")
-        self.test_lifecycle = Lifecycle.ACTIVE
-        self.test_lifecycle_2 = Lifecycle.INACTIVE
-        self.test_device_type = TrafficControlDeviceType.objects.create(code="A11", description="Speed limit")
-        self.test_device_type_2 = TrafficControlDeviceType.objects.create(code="A12", description="Weight limit")
-        self.test_mount_type = MountType.objects.create(code="PORTAL", description="Portal")
-        self.test_mount_type_2 = MountType.objects.create(code="WALL", description="Wall")
-        self.test_point = test_point
-        self.test_point_2 = test_point_2
-        self.test_owner = Owner.objects.create(name_fi="Helsingin kaupunki", name_en="City of Helsinki")

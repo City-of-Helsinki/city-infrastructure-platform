@@ -1,6 +1,4 @@
 import datetime
-import os
-from tempfile import TemporaryDirectory
 
 import pytest
 from django.core.management import call_command
@@ -9,24 +7,20 @@ from traffic_control.models import Plan
 from traffic_control.tests.factories import PlanFactory
 from users.utils import get_system_user
 
-BASE_PATH = os.path.dirname(__file__)
-TEST_FILES_DIR = os.path.join(BASE_PATH, "../../test_datas/plan_update")
 
-
-def _create_db_entries():
+@pytest.fixture
+def original_plan():
     """Create existing Plan's to database. Currently just one on purpose that matches one row in the test csv"""
     return PlanFactory(decision_id="EXISTS1")
 
 
 @pytest.mark.django_db
-def test__update_plan_information():
-    original_plan = _create_db_entries()
-    with TemporaryDirectory() as tempdir:
-        call_command(
-            "update_plan_information",
-            plan_file=os.path.join(TEST_FILES_DIR, "basic_update_data.csv"),
-            output_dir=tempdir,
-        )
+def test__update_plan_information(datadir, tmp_path, original_plan):
+    call_command(
+        "update_plan_information",
+        plan_file=datadir / "basic_update_data.csv",
+        output_dir=str(tmp_path),
+    )
 
     updated_plan = Plan.objects.get(pk=original_plan.pk)
     # check that not all fields are updated

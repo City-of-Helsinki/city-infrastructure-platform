@@ -1,10 +1,10 @@
-from django.test import TestCase
+import pytest
 
 from users.utils import get_system_user
 
 
-class GetSystemUserTestCase(TestCase):
-    def test_get_system_user_is_not_activated_and_not_staff(self):
-        user = get_system_user()
-        self.assertFalse(user.is_active)
-        self.assertFalse(user.is_staff)
+@pytest.mark.django_db
+def test_get_system_user_is_not_activated_and_not_staff():
+    user = get_system_user()
+    assert user.is_active is False
+    assert user.is_staff is False

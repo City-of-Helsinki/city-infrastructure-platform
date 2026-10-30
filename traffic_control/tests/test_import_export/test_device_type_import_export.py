@@ -153,7 +153,6 @@ def test__traffic_control_device_type__export(  # noqa: C901
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__traffic_control_device_type__import(
-    temp_icon_storage,
     icon_file,
     value,
     unit,
@@ -166,12 +165,14 @@ def test__traffic_control_device_type__import(
     format,
 ):
     """Test simple import of a single traffic control device type with multiple variations"""
-    kwargs = {"code": "123"}
     icon_file_obj = TrafficControlDeviceTypeIconFactory(file__filename=icon_file) if icon_file else None
-    kwargs["icon_file"] = icon_file_obj
-    kwargs["value"] = value or ""
-    kwargs["legacy_code"] = legacy_code or ""
-    kwargs["legacy_description"] = legacy_description or ""
+    kwargs = {
+        "code": "123",
+        "icon_file": icon_file_obj,
+        "value": value or "",
+        "legacy_code": legacy_code or "",
+        "legacy_description": legacy_description or "",
+    }
     if unit:
         kwargs["unit"] = unit
     if size:
@@ -297,7 +298,6 @@ def test__traffic_control_device_type__import__invalid_content_schema(format):
 @pytest.mark.parametrize("format", file_formats)
 @pytest.mark.django_db
 def test__traffic_control_device_type__import__update(
-    temp_icon_storage,
     to_values,
     from_values,
     format,
