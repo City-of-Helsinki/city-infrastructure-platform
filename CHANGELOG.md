@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.49.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.49.0...city-infrastructure-platform-v1.49.1) (2026-10-30)
+
+
+### Bug Fixes
+
+* Revert "build(deps): bump social-auth-core from 5.0.2 to 6.2.0" ([444d15a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/444d15af2dc2c6e3a0e8522cabd1b06862d974dd))
+
 ## [1.49.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.48.0...city-infrastructure-platform-v1.49.0) (2026-10-29)
 
 
