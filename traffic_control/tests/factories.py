@@ -151,6 +151,7 @@ class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TrafficControlDeviceType
         django_get_or_create = ["code"]
+        skip_postgeneration_save = True
 
     code = factory.sequence(lambda n: str(n))
     icon_file = factory.SubFactory(TrafficControlDeviceTypeIconFactory)
