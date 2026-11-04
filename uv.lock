@@ -259,6 +259,7 @@ dependencies = [
     { name = "rsa" },
     { name = "sentry-sdk" },
     { name = "social-auth-app-django" },
+    { name = "social-auth-core" },
     { name = "uwsgi" },
 ]
 
@@ -325,6 +326,7 @@ requires-dist = [
     { name = "rsa" },
     { name = "sentry-sdk" },
     { name = "social-auth-app-django" },
+    { name = "social-auth-core", specifier = ">=5.0.2,<6" },
     { name = "uwsgi" },
 ]
 
