@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.50.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.49.0...city-infrastructure-platform-v1.50.0) (2026-11-05)
+
+
+### Features
+
+* Add elastic support for auditlog, X-Request-ID, patch PII leak ([cc84af5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/cc84af5197ebb94b7a00e2e88ce6caf76aa6e03b))
+
+
+### Bug Fixes
+
+* **deps:** Pin social-auth-core to the 5.x series ([a89df75](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/a89df7574ce651594fdcbccd440d697aa1dc7d8e))
+* Revert "build(deps): bump social-auth-core from 5.0.2 to 6.2.0" ([444d15a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/444d15af2dc2c6e3a0e8522cabd1b06862d974dd))
+
 ## [1.49.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.48.0...city-infrastructure-platform-v1.49.0) (2026-10-29)
 
 
