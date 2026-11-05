@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.12, <4"
 
 [options]
@@ -7,8 +7,8 @@ exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for 
 exclude-newer-span = "P7D"
 
 [options.exclude-newer-package]
-django-logger-extra = false
 django-resilient-logger = false
+django-logger-extra = false
 
 [[package]]
 name = "asgiref"
@@ -219,9 +219,8 @@ wheels = [
 
 [[package]]
 name = "city-infrastructure-platform"
-version = "1.49.0"
+version = "1.50.0"
 source = { virtual = "." }
-default-groups = "all"
 dependencies = [
     { name = "cairosvg" },
     { name = "django" },
