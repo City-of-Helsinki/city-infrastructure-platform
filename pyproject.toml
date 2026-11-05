@@ -37,7 +37,7 @@ dependencies = [
     # Pinned to the 5.x series: social-auth-core 6.x forces social-auth-app-django
     # to 7.x (7.2.0 requires social-auth-core>=6.2.0), which breaks AD/ADFS login
     # as helusers does not work with newer versions of social-auth-core.
-    "social-auth-core>=5.0.2,<6",
+    "social-auth-core>=5.0.2,<7",
     "uWSGI",
     "django-advanced-password-validation",
     "django-axes",
