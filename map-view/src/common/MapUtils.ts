@@ -1,9 +1,16 @@
 import { Circle, Geometry, GeometryCollection, LineString, MultiPolygon, Point, Polygon } from "ol/geom";
 import { Fill, Icon, Stroke, Style, Circle as CircleStyle, Text } from "ol/style";
 import { FeatureLike } from "ol/Feature";
+import ImageState from "ol/ImageState";
 import RenderFeature from "ol/render/Feature";
 import { Coordinate } from "ol/coordinate";
 import { Feature, Layer, LayerConfig, MapConfig } from "../models";
+
+// NOTE (2026-11-06 thiago)
+// We cannot reliably estimate icon height at this point, so we assume an elogated rectangle.
+// This way, we guarantee to hit the inside of the icon when placing a marker at its center
+// when offsetting the marker vertically.
+const SIGN_HEIGHT_TO_WIDTH_RATIO = 9 / 21;
 
 const defaultFill = new Fill({ color: "magenta" });
 const defaultStroke = new Stroke({
@@ -90,13 +97,43 @@ function getIconStyle(
   iconScale: number,
   deviceTypeCode: string,
   deviceTypeIcon: string,
+  opacity: number,
 ) {
   return new Style({
     image: new Icon({
       src: getIconSrc(iconsUrl, iconType, deviceTypeCode, deviceTypeIcon),
       scale: iconScale,
+      opacity,
     }),
   });
+}
+
+function getPlanWithoutRealStyle(icon?: Icon): Style {
+  const text = new Text({
+    text: "?",
+    font: "bold 18px sans-serif",
+    textAlign: "center",
+    textBaseline: "middle",
+    fill: new Fill({ color: "#000" }),
+    stroke: new Stroke({ color: "#fff", width: 3 }),
+  });
+
+  if (icon && text) {
+    const updateOffset = () => {
+      const imageState = icon.getImageState();
+      if (imageState === ImageState.LOADED) {
+        text.setOffsetY(-((icon.getWidth() || 0) * SIGN_HEIGHT_TO_WIDTH_RATIO) / 2);
+        icon.unlistenImageChange(updateOffset);
+      } else if (imageState === ImageState.ERROR) {
+        icon.unlistenImageChange(updateOffset);
+      }
+    };
+
+    icon.listenImageChange(updateOffset);
+    updateOffset();
+  }
+
+  return new Style({ text });
 }
 
 export function getHighlightStyle(feature: Feature, mapConfig: MapConfig) {
@@ -107,7 +144,14 @@ export function getHighlightStyle(feature: Feature, mapConfig: MapConfig) {
   let baseStyles: Style[];
 
   if (trafficSignIconsEnabled(feature, overlayConfig) && dtCode) {
-    const iconStyleResult = getIconStyle(traffic_sign_icons_url, icon_type, icon_scale, dtCode, props.device_type_icon);
+    const iconStyleResult = getIconStyle(
+      traffic_sign_icons_url,
+      icon_type,
+      icon_scale,
+      dtCode,
+      props.device_type_icon,
+      1,
+    );
     baseStyles = toStyleArray(iconStyleResult);
   } else {
     baseStyles = toStyleArray(highLightStyle);
@@ -209,22 +253,30 @@ export function getSinglePointStyle(
   icon_scale: number,
   icon_type: string,
 ) {
-  const initialStyleResult =
-    use_traffic_sign_icons && feature.get("device_type_code") !== null
-      ? getIconStyle(
-          traffic_sign_icons_url,
-          icon_type,
-          icon_scale,
-          feature.get("device_type_code"),
-          feature.get("device_type_icon"),
-        )
-      : getStylesForGeometry(feature.getGeometry() as Geometry | undefined);
+  const isIcon = use_traffic_sign_icons && !!feature.get("device_type_code");
+  const isPlanWithoutReal = feature.get("real_count") === 0;
+  const initialStyleResult = isIcon
+    ? getIconStyle(
+        traffic_sign_icons_url,
+        icon_type,
+        icon_scale,
+        feature.get("device_type_code"),
+        feature.get("device_type_icon"),
+        feature.get("real_count") !== undefined ? 0.5 : 1,
+      )
+    : getStylesForGeometry(feature.getGeometry() as Geometry | undefined);
 
   const finalStyles: Style[] = toStyleArray(initialStyleResult);
 
   const arrowStyle = getDirectionArrowStyle(feature, icon_scale);
   if (arrowStyle) {
     finalStyles.push(arrowStyle);
+  }
+
+  if (isPlanWithoutReal) {
+    const imageStyle = isIcon ? finalStyles[0].getImage() : undefined;
+    const icon = imageStyle instanceof Icon ? imageStyle : undefined;
+    finalStyles.push(getPlanWithoutRealStyle(icon));
   }
 
   return finalStyles;
