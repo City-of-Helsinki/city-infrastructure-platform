@@ -1,9 +1,16 @@
 import { Circle, Geometry, GeometryCollection, LineString, MultiPolygon, Point, Polygon } from "ol/geom";
 import { Fill, Icon, Stroke, Style, Circle as CircleStyle, Text } from "ol/style";
 import { FeatureLike } from "ol/Feature";
+import ImageState from "ol/ImageState";
 import RenderFeature from "ol/render/Feature";
 import { Coordinate } from "ol/coordinate";
 import { Feature, Layer, LayerConfig, MapConfig } from "../models";
+
+// NOTE (2026-11-06 thiago)
+// We cannot reliably estimate icon height at this point, so we assume an elogated rectangle.
+// This way, we guarantee to hit the inside of the icon when placing a marker at its center
+// when offsetting the marker vertically.
+const SIGN_HEIGHT_TO_WIDTH_RATIO = 9 / 21;
 
 const defaultFill = new Fill({ color: "magenta" });
 const defaultStroke = new Stroke({
@@ -99,6 +106,34 @@ function getIconStyle(
       opacity,
     }),
   });
+}
+
+function getPlanWithoutRealStyle(icon?: Icon): Style {
+  const text = new Text({
+    text: "?",
+    font: "bold 18px sans-serif",
+    textAlign: "center",
+    textBaseline: "middle",
+    fill: new Fill({ color: "#000" }),
+    stroke: new Stroke({ color: "#fff", width: 3 }),
+  });
+
+  if (icon && text) {
+    const updateOffset = () => {
+      const imageState = icon.getImageState();
+      if (imageState === ImageState.LOADED) {
+        text.setOffsetY(-((icon.getWidth() || 0) * SIGN_HEIGHT_TO_WIDTH_RATIO) / 2);
+        icon.unlistenImageChange(updateOffset);
+      } else if (imageState === ImageState.ERROR) {
+        icon.unlistenImageChange(updateOffset);
+      }
+    };
+
+    icon.listenImageChange(updateOffset);
+    updateOffset();
+  }
+
+  return new Style({ text });
 }
 
 export function getHighlightStyle(feature: Feature, mapConfig: MapConfig) {
@@ -239,16 +274,9 @@ export function getSinglePointStyle(
   }
 
   if (isPlanWithoutReal) {
-    finalStyles.push(
-      new Style({
-        text: new Text({
-          text: "?",
-          font: "bold 18px sans-serif",
-          fill: new Fill({ color: "#000" }),
-          stroke: new Stroke({ color: "#fff", width: 3 }),
-        }),
-      }),
-    );
+    const imageStyle = isIcon ? finalStyles[0].getImage() : undefined;
+    const icon = imageStyle instanceof Icon ? imageStyle : undefined;
+    finalStyles.push(getPlanWithoutRealStyle(icon));
   }
 
   return finalStyles;
