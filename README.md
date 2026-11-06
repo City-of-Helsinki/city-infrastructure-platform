@@ -24,6 +24,17 @@ cd city-infrastructure-platform
 ./setup-hooks.sh
 ```
 
+The pre-push hook runs `ruff` and `djlint` from the project's python environment, so activate it (`source .venv/bin/activate`) before pushing.
+
+It also checks the frontend with `yarn`, so install [Node.js](https://nodejs.org/), enable yarn and install the frontend dependencies once:
+
+```bash
+corepack enable
+cd map-view && yarn install && cd ..
+```
+
+On macOS, `yarn install` removes the Linux-only packages from `map-view/.yarn/cache` and adds macOS ones. Don't commit those changes; undo the removals with `git restore map-view/.yarn`.
+
 ### Common dependencies
 
 Install required system packages, some of these are needed to build some of the python project dependencies and some of these are used in runtime.
@@ -32,6 +43,34 @@ Install required system packages, some of these are needed to build some of the 
 ```bash
 sudo apt install binutils gdal-bin libpq-dev libproj-dev pipx
 ```
+
+#### Common dependencies - macOS
+
+On macOS, install the Xcode command line tools (the compiler needed to build some python dependencies) and the same dependencies with [Homebrew](https://brew.sh/):
+
+```bash
+xcode-select --install
+brew install gdal geos proj cairo libpq pipx
+```
+
+Use a python 3.12 installed with pyenv (see [use correct python version](#common-dependencies---python-environment---use-correct-python-version-optional)). Homebrew's `python3` is too new to build `psycopg2`, and a python downloaded by uv doesn't find Homebrew's libraries.
+
+`libpq` is not linked into the default paths by Homebrew, but it is needed to build `psycopg2` from source. Add these lines to your `~/.zshrc` and open a new terminal:
+
+```bash
+export PATH="$(brew --prefix libpq)/bin:$PATH"
+export LDFLAGS="-L$(brew --prefix libpq)/lib $LDFLAGS"
+export CPPFLAGS="-I$(brew --prefix libpq)/include $CPPFLAGS"
+```
+
+Django can't find Homebrew's GDAL and GEOS libraries by itself. Add their paths to your `~/.zshrc` as well:
+
+```bash
+export GDAL_LIBRARY_PATH="$(brew --prefix gdal)/lib/libgdal.dylib"
+export GEOS_LIBRARY_PATH="$(brew --prefix geos)/lib/libgeos_c.dylib"
+```
+
+Don't put these in `.env`: the docker `api` service reads `.env` too, and the macOS paths break GDAL inside the container.
 
 Install [uv](https://docs.astral.sh/uv/#installation) for managing python dependencies.
 
@@ -45,7 +84,7 @@ pipx install "uv==0.12.1"
 
 #### Common dependencies - python environment
 
-Check whether you have the minimum required version of python (3.12)
+Check whether you have the required version of python (3.12)
 
 ```bash
 python --version
@@ -59,9 +98,9 @@ python3 --version
 
 ##### Common dependencies - python environment - use correct python version (optional)
 
-If your version of python is equal to or newer than 3.12, you may skip this section.
+If your version of python is 3.12, you may skip this section. Newer versions may fail to build some dependencies (for example `psycopg2` doesn't build with python 3.15).
 
-If your python version is older, we recommend you install [pyenv](https://github.com/pyenv/pyenv) to manage the installation of a newer version, follow the instructions to set up the [suggested build environment](https://github.com/pyenv/pyenv/wiki#suggested-build-environment) for your system, and then finally install and activate python 3.12.
+If your python version is different, we recommend you install [pyenv](https://github.com/pyenv/pyenv) to manage the installation of a newer version, follow the instructions to set up the [suggested build environment](https://github.com/pyenv/pyenv/wiki#suggested-build-environment) for your system, and then finally install and activate python 3.12.
 
 
 ```bash
@@ -80,7 +119,7 @@ pyenv global 3.12
 
 ##### Common dependencies - python environment - virtual environment
 
-Ensure you are using python 3.12 or newer and at the root of this project run
+Ensure you are using python 3.12 and at the root of this project run
 
 
 ```bash
@@ -108,6 +147,12 @@ Install [docker](https://docs.docker.com/engine/install/ubuntu/), their provided
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
+#### Development environment with docker - macOS
+
+On macOS, install [Docker Desktop](https://docs.docker.com/desktop/setup/install/mac-install/) instead.
+
+Some of the images are only published for amd64: `db`, `clamd` and the base image of `api` (these are marked with `platform: linux/amd64` in `docker-compose.yml`). On Apple Silicon, Docker Desktop runs them under emulation, which works but is slower. Make sure "Use Rosetta for x86_64/amd64 emulation on Apple Silicon" is enabled in Docker Desktop's settings.
+
 #### Development environment with docker - rootless mode (optional)
 
 By default, docker needs to be executed with root privileges, which may put your system at risk of malicious docker images, so you may consider setting [rootless mode](https://docs.docker.com/engine/security/rootless/). If you installed docker using the official packages and the commands suggested in the [install instructions](https://docs.docker.com/engine/install/ubuntu/) on a fresh Ubuntu system it will be as easy as running the following command as a regular user:
@@ -130,6 +175,15 @@ Install PostgreSQL and PostGIS.
 # Ubuntu 18.04
 sudo apt-get install python3-dev libpq-dev postgresql postgis
 ```
+
+On macOS:
+
+```bash
+brew install postgresql@17 postgis
+brew services start postgresql@17
+```
+
+Homebrew's PostgreSQL has no `postgres` user: your own user is the database superuser. When preparing the database below, leave out `sudo -u postgres` from the commands.
 
 #### Development environment without docker - GeoDjango extra packages
 
@@ -157,7 +211,7 @@ sudo -u postgres createdb -h localhost -O city-infrastructure-platform city-infr
 Allow user to create test database
 
 ```bash
-sudo -u postgres psql -h localhost -c "ALTER USER city-infrastructure-platform CREATEDB;"
+sudo -u postgres psql -h localhost -c 'ALTER USER "city-infrastructure-platform" CREATEDB;'
 ```
 
 ## Running the project
@@ -211,9 +265,9 @@ docker compose up
 # Run just the DB
 docker compose up db
 
-# Run ClamAV locally (initialize clamd and then launch clamv-api)
+# Run ClamAV locally (initialize clamd and then launch clamav-api)
 docker compose up clamd
-docker compose up clamv-api
+docker compose up clamav-api
 
 # Run azurite (local emulation of azure storage)
 # NOTE: To you use azurite you must also set the EMULATE_AZURE_BLOBSTORAGE variable on your .env file to True
@@ -275,6 +329,8 @@ docker compose run --rm --user root api ./scripts/compilemessages.sh
 ```
 # Ensure gettext is installed
 sudo apt install gettext
+# or on macOS
+brew install gettext
 
 # Run the script
 ./scripts/makemessages.sh
