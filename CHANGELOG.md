@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.51.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.50.0...city-infrastructure-platform-v1.51.0) (2026-11-06)
+
+
+### Features
+
+* **import:** Support attachment files in device imports ([ae1a46a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ae1a46a03794b9ce42512a7e69fd03cb8e2b016f))
+
 ## [1.50.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.49.0...city-infrastructure-platform-v1.50.0) (2026-11-05)
 
 
