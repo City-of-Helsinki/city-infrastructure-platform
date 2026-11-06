@@ -55,6 +55,11 @@ env = environ.Env(
     DATABASE_PASSWORD=(str, ""),  # Composes Django DATABASES["default"]["PASSWORD"]
     # https://django-environ.readthedocs.io/en/latest/types.html#environ-env-cache-url
     CACHE_URL=(str, "locmemcache://"),
+    # --- GeoDjango Libraries ---
+    # Only needed when Django can't find the libraries by itself, e.g. Homebrew on macOS
+    # https://docs.djangoproject.com/en/5.2/ref/contrib/gis/install/geolibs/
+    GDAL_LIBRARY_PATH=(str, ""),
+    GEOS_LIBRARY_PATH=(str, ""),
     # --- Email Configuration ---
     # https://docs.djangoproject.com/en/5.2/ref/settings/#default-from-email
     DEFAULT_FROM_EMAIL=(str, "cityinfra@hel.fi"),
@@ -384,6 +389,11 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 if env("DATABASE_PASSWORD"):
     DATABASES["default"]["PASSWORD"] = env("DATABASE_PASSWORD")
+
+if env("GDAL_LIBRARY_PATH"):
+    GDAL_LIBRARY_PATH = env("GDAL_LIBRARY_PATH")
+if env("GEOS_LIBRARY_PATH"):
+    GEOS_LIBRARY_PATH = env("GEOS_LIBRARY_PATH")
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
