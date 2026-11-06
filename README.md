@@ -11,6 +11,8 @@ City Infrastructure Platform REST-API backend application.
 
 There are multiple ways to prepare the project for development. Described here is a method to run the auxiliary services using docker containers and a method to run these services directly using system packages. For both paths you should go through the common dependencies and setting up the python environment first.
 
+The recommended setup is to run Django and the frontend (yarn) directly on your machine, and the auxiliary services (database, ClamAV, Azurite, Elasticsearch) with docker.
+
 ### Cloning the repository
 
 ```bash
@@ -221,7 +223,7 @@ sudo -u postgres psql -h localhost -c 'ALTER USER "city-infrastructure-platform"
 Environment variables are used to customize configuration in `cityinfra/settings.py`. If you wish to override any
 settings, you can place them in a local `.env` file which will automatically be sourced when Django imports
 the settings file.
-Another way, easiest with Azurite emulation is to copy cityinfra/local_settings_example.py to cityinfra/local_settings.py and modify the settings there.
+Another way, easiest with Azurite emulation is to copy cityinfra/local_settings.py.example to cityinfra/local_settings.py and modify the settings there.
 Example already sets AZURE_BLOBSTORAGE settings to use Azurite emulation.
 
 ```bash
@@ -259,6 +261,8 @@ Run the entire application, with all its auxiliary services.
 docker compose up
 ```
 
+The services use the ports 5432 (`db`) and 8000 (`api`). If you also have a local PostgreSQL or Django server running, stop them first (for example `brew services stop postgresql@17` on macOS).
+
 ##### Running the project - Docker services - individual services
 
 ```bash
@@ -283,6 +287,8 @@ docker compose -f docker-compose.azurite.yml up azurite-delete-storage-container
 # Locally hosted elastic search, helps you see what kind of auditlog entries you produce through resilient-logger
 docker compose -f docker-compose.elastic.yml up
 ```
+
+The `AUDIT_LOG_ES_URL` in `.env.example` (`http://localhost:9200`) works when Django runs directly on your machine. When the API runs in docker, `localhost` points to its own container instead, so set `AUDIT_LOG_ES_URL=http://host.docker.internal:9200` in your `.env`. This works out of the box with Docker Desktop; with Docker Engine on Linux, `host.docker.internal` also needs `extra_hosts: ["host.docker.internal:host-gateway"]` on the `api` service.
 
 ##### Running management tasks in the api - Docker services
 
