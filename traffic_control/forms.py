@@ -38,7 +38,7 @@ from traffic_control.models import (
 )
 from traffic_control.services.virus_scan import add_virus_scan_errors_to_auditlog, get_error_details_message
 from traffic_control.utils import get_file_upload_obstacles, get_icon_upload_obstacles
-from traffic_control.validators import validate_location_ewkt, validate_structured_content
+from traffic_control.validators import get_structured_content_errors, validate_location_ewkt
 
 
 class AdminFileWidgetWithProxy(widgets.AdminFileWidget):
@@ -154,29 +154,22 @@ class StructuredContentModelFormMixin:
     """
     Validate structured content field against device type's content schema.
     Raises `ValidationError` if content is invalid.
+
+    The rules themselves live in `traffic_control.validators.get_structured_content_errors`,
+    which is shared with `AbstractAdditionalSign.clean()`.
     """
 
     def clean(self):
-        validation_errors = {}
-
-        # Validate content according to device type's schema
         cleaned_data = super().clean()
+
         if "content_s" in cleaned_data:
-            content = cleaned_data.get("content_s")
-            device_type = cleaned_data.get("device_type")
-            missing_content = cleaned_data.get("missing_content")
-
-            if missing_content and content is not None:
-                validation_errors["missing_content"] = _(
-                    "'Missing content' cannot be enabled when the content field (content_s) is not empty."
-                )
-            if not missing_content:
-                errors = validate_structured_content(content, device_type)
-                if errors:
-                    validation_errors["content_s"] = errors
-
-        if len(validation_errors) > 0:
-            raise ValidationError(validation_errors)
+            validation_errors = get_structured_content_errors(
+                cleaned_data.get("content_s"),
+                cleaned_data.get("device_type"),
+                bool(cleaned_data.get("missing_content")),
+            )
+            if validation_errors:
+                raise ValidationError(validation_errors)
 
         return cleaned_data
 

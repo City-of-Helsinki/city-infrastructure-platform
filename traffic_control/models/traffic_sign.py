@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -21,6 +20,7 @@ from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
     DecimalValueFromDeviceTypeMixin,
+    DeviceTypeRelationValidationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -75,6 +75,7 @@ class TrafficSignRealQuerySet(SoftDeleteQuerySet):
 
 
 class AbstractTrafficSign(
+    DeviceTypeRelationValidationMixin,
     BoundaryCheckedLocationMixin,
     SourceControlModel,
     SoftDeleteModel,
@@ -85,6 +86,7 @@ class AbstractTrafficSign(
 ):
     ALLOWED_TARGET_MODELS = TRAFFIC_SIGN_ALLOWED_TARGET_MODELS
     """There exists some special codes that are signposts or barriers but we want to have them in trafficsign tables"""
+    DEVICE_TYPE_ERROR_TARGET = "traffic signs"
     SIGNPOST_FK_FIELD: str  # set by each concrete subclass, e.g. "signpost_plan" or "signpost_real"
 
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
@@ -202,15 +204,16 @@ class AbstractTrafficSign(
     def has_additional_signs(self):
         return self.additional_signs.active().exists()
 
-    def save(self, *args, **kwargs):
-        if (
-            self.device_type
-            and self.device_type.target_model
-            and self.device_type.target_model not in AbstractTrafficSign.ALLOWED_TARGET_MODELS
-        ):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for traffic signs')
+    def _device_type_relation_is_valid(self) -> bool:
+        """Check that the device type's target model is allowed for traffic signs.
 
-        super().save(*args, **kwargs)
+        Traffic signs accept several target models, not only ``TRAFFIC_SIGN``.
+
+        Returns:
+            bool: True when the device type may be related to a traffic sign.
+        """
+        target_model = self.device_type.target_model
+        return not target_model or target_model in AbstractTrafficSign.ALLOWED_TARGET_MODELS
 
     @transaction.atomic
     def soft_delete(self, user) -> None:

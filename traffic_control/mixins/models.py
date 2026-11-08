@@ -320,11 +320,103 @@ class BoundaryCheckedLocationMixin:
 
     GEOMETRY_FIELD_NAME = "location"
 
-    def save(self, *args, **kwargs):
-        geom = getattr(self, self.GEOMETRY_FIELD_NAME)
-        if not geometry_is_legit(geom):
-            raise ValidationError(f"Geometry for {self._meta.model_name} {self.location.ewkt} is not legal")
+    def validate_location_boundary(self) -> None:
+        """Validate that the instance geometry is within the SRID boundary.
 
+        Raises:
+            ValidationError: If the geometry is outside of the projection bounds.
+        """
+        geom = getattr(self, self.GEOMETRY_FIELD_NAME, None)
+        if geom is not None and not geometry_is_legit(geom):
+            raise ValidationError(
+                {
+                    self.GEOMETRY_FIELD_NAME: ValidationError(
+                        f"Geometry for {self._meta.model_name} {geom.ewkt} is not legal",
+                        code="illegal_geometry",
+                    )
+                }
+            )
+
+    def clean(self) -> None:
+        """Run model validation, including the geometry boundary check."""
+        super().clean()
+        self.validate_location_boundary()
+
+    def save(self, *args, **kwargs) -> None:
+        """Save the instance after validating the geometry boundary.
+
+        Args:
+            *args: Positional arguments forwarded to the parent save().
+            **kwargs: Keyword arguments forwarded to the parent save().
+        """
+        self.validate_location_boundary()
+        super().save(*args, **kwargs)
+
+
+class DeviceTypeRelationValidationMixin:
+    """A model mixin that validates the related device type against the model's target model.
+
+    The rule is enforced both in ``clean()``, so that the Django admin renders it as an
+    inline field error, and in ``save()``, so that code paths which never call
+    ``full_clean()`` (REST API serializers, importers, ``objects.create()``) keep the guard.
+
+    Subclasses must set ``DEVICE_TYPE_TARGET_MODEL`` and ``DEVICE_TYPE_ERROR_TARGET``.
+    """
+
+    DEVICE_TYPE_TARGET_MODEL: Optional[Any] = None
+    DEVICE_TYPE_ERROR_TARGET: str = ""
+
+    def get_device_type_or_none(self) -> Optional[Any]:
+        """Return the related device type without raising when it is unset.
+
+        Accessing a non-nullable foreign key that has no value raises
+        ``RelatedObjectDoesNotExist``, which must not happen during ``clean()``.
+
+        Returns:
+            Optional[Any]: The related device type, or None when it is not set.
+        """
+        if getattr(self, "device_type_id", None) is None:
+            return None
+        return self.device_type
+
+    def _device_type_relation_is_valid(self) -> bool:
+        """Check whether the assigned device type is allowed for this model.
+
+        Returns:
+            bool: True when the device type may be related to this model.
+        """
+        return self.device_type.validate_relation(self.DEVICE_TYPE_TARGET_MODEL)
+
+    def validate_device_type_relation(self) -> None:
+        """Validate that the assigned device type is allowed for this model.
+
+        Raises:
+            ValidationError: If the device type is not allowed, keyed to the
+                ``device_type`` field so that it is rendered inline in forms.
+        """
+        if self.get_device_type_or_none() and not self._device_type_relation_is_valid():
+            raise ValidationError(
+                {
+                    "device_type": ValidationError(
+                        f'Device type "{self.device_type}" is not allowed for {self.DEVICE_TYPE_ERROR_TARGET}',
+                        code="invalid_device_type",
+                    )
+                }
+            )
+
+    def clean(self) -> None:
+        """Run model validation, including the device type relation check."""
+        super().clean()
+        self.validate_device_type_relation()
+
+    def save(self, *args, **kwargs) -> None:
+        """Save the instance after validating the device type relation.
+
+        Args:
+            *args: Positional arguments forwarded to the parent save().
+            **kwargs: Keyword arguments forwarded to the parent save().
+        """
+        self.validate_device_type_relation()
         super().save(*args, **kwargs)
 
 

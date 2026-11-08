@@ -1,14 +1,14 @@
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
 
-from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, TrafficControlDeviceTypeType
+from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType
 from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
+    DeviceTypeRelationValidationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -63,6 +63,7 @@ class LocationSpecifier(models.IntegerChoices):
 
 
 class AbstractRoadMarking(
+    DeviceTypeRelationValidationMixin,
     BoundaryCheckedLocationMixin,
     SourceControlModel,
     SoftDeleteModel,
@@ -71,6 +72,9 @@ class AbstractRoadMarking(
     ValidityPeriodModel,
     UUIDModel,
 ):
+    DEVICE_TYPE_TARGET_MODEL = DeviceTypeTargetModel.ROAD_MARKING
+    DEVICE_TYPE_ERROR_TARGET = "road markings"
+
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
         _("Road name"),
@@ -186,21 +190,6 @@ class AbstractRoadMarking(
 
     def __str__(self):
         return f"{self.id} {self.device_type} {self.value}"
-
-    def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ROAD_MARKING):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for road markings')
-
-        if (
-            self.device_type
-            and self.device_type.type == TrafficControlDeviceTypeType.TRANSVERSE
-            and self.road_name == ""
-        ):
-            raise ValidationError(
-                f'Road name is required for "{TrafficControlDeviceTypeType.TRANSVERSE.value}" road marking'
-            )
-
-        super().save(*args, **kwargs)
 
 
 class RoadMarkingPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractRoadMarking):
