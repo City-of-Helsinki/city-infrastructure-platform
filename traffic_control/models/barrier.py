@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumField, EnumIntegerField
@@ -10,6 +9,7 @@ from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType
 from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
+    DeviceTypeRelationValidationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -49,8 +49,17 @@ class LocationSpecifier(models.IntegerChoices):
 
 
 class AbstractBarrier(
-    BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, UserControlModel, OwnedDeviceModel, UUIDModel
+    DeviceTypeRelationValidationMixin,
+    BoundaryCheckedLocationMixin,
+    SourceControlModel,
+    SoftDeleteModel,
+    UserControlModel,
+    OwnedDeviceModel,
+    UUIDModel,
 ):
+    DEVICE_TYPE_TARGET_MODEL = DeviceTypeTargetModel.BARRIER
+    DEVICE_TYPE_ERROR_TARGET = "barriers"
+
     location = models.GeometryField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
         _("Road name"),
@@ -146,12 +155,6 @@ class AbstractBarrier(
     @requires_fields("device_type", "id")
     def __str__(self):
         return f"{self.id} {self.device_type}"
-
-    def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.BARRIER):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for barriers')
-
-        super().save(*args, **kwargs)
 
 
 class BarrierPlan(UpdatePlanLocationMixin, ReplaceableDevicePlanMixin, AbstractBarrier):

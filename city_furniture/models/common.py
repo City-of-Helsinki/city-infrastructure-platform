@@ -138,6 +138,11 @@ class CityFurnitureDeviceType(models.Model, AbstractDeviceTypeMixin):
         """Return just the name of the file without full path"""
         return os.path.basename(self.icon_file.file.name) if self.icon_file else ""
 
+    def clean(self) -> None:
+        """Run model validation, mirroring the target model check done in save()."""
+        super().clean()
+        self.validate_change_target_model(self.target_model, raise_exception=True)
+
     def save(self, validate_target_model_change=True, *args, **kwargs) -> None:
         if self.pk:
             self.validate_change_target_model(self.target_model, raise_exception=validate_target_model_change)

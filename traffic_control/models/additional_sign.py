@@ -12,6 +12,7 @@ from traffic_control.enums import DeviceTypeTargetModel, LaneNumber, LaneType, R
 from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
+    DeviceTypeRelationValidationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -35,7 +36,7 @@ from traffic_control.models.mount import MountPlan, MountReal, MountType
 from traffic_control.models.plan import Plan
 from traffic_control.models.signpost import SignpostPlan, SignpostReal
 from traffic_control.models.traffic_sign import LocationSpecifier, TrafficSignPlan, TrafficSignReal
-from traffic_control.validators import validate_structured_content
+from traffic_control.validators import get_structured_content_errors
 
 
 class Color(models.IntegerChoices):
@@ -44,6 +45,7 @@ class Color(models.IntegerChoices):
 
 
 class AbstractAdditionalSign(
+    DeviceTypeRelationValidationMixin,
     BoundaryCheckedLocationMixin,
     SourceControlModel,
     SoftDeleteModel,
@@ -52,6 +54,9 @@ class AbstractAdditionalSign(
     ValidityPeriodModel,
     UUIDModel,
 ):
+    DEVICE_TYPE_TARGET_MODEL = DeviceTypeTargetModel.ADDITIONAL_SIGN
+    DEVICE_TYPE_ERROR_TARGET = "additional signs"
+
     device_type = models.ForeignKey(
         TrafficControlDeviceType,
         verbose_name=_("Device type"),
@@ -206,43 +211,54 @@ class AbstractAdditionalSign(
 
         return content_s_rows
 
-    def clean(self):
-        validation_errors = {}
+    def _get_parent_validation_errors(self) -> dict:
+        """Validate that a parent is set unless the device type is a ticket machine.
 
-        if self.missing_content and self.content_s:
-            validation_errors["missing_content"] = ValidationError(
-                _("'Missing content' cannot be enabled when the content field (content_s) is not empty.")
+        A valid parent is the TrafficSign FK (``parent``), the SignpostPlan FK
+        (``signpost_plan``) or the SignpostReal FK (``signpost_real``).
+
+        Returns:
+            dict: A ``{"parent": ValidationError}`` mapping, or an empty dict when valid.
+        """
+        device_type = self.get_device_type_or_none()
+        if not device_type or device_type.code in TICKET_MACHINE_CODES:
+            return {}
+
+        has_parent = any(
+            (
+                hasattr(self, "parent") and bool(self.parent),
+                hasattr(self, "signpost_plan") and bool(self.signpost_plan),
+                hasattr(self, "signpost_real") and bool(self.signpost_real),
             )
+        )
+        if has_parent:
+            return {}
 
-        if not self.missing_content:
-            content_s_validation_errors = validate_structured_content(self.content_s, self.device_type)
-            if len(content_s_validation_errors) > 0:
-                validation_errors["content_s"] = content_s_validation_errors
+        return {
+            "parent": ValidationError(
+                _(
+                    "Parent is required for additional signs that are not ticket machines. "
+                    "Set either parent (TrafficSign), signpost_plan, or signpost_real."
+                ),
+                code="parent_required",
+            )
+        }
 
-        # Validate that parent can only be null for ticket machine device types.
-        # A valid parent is: the TrafficSign FK (parent), the SignpostPlan FK
-        # (signpost_plan), or the SignpostReal FK (signpost_real).
-        if self.device_type and self.device_type.code not in TICKET_MACHINE_CODES:
-            has_traffic_sign_parent = hasattr(self, "parent") and bool(self.parent)
-            has_signpost_plan_parent = hasattr(self, "signpost_plan") and bool(self.signpost_plan)
-            has_signpost_real_parent = hasattr(self, "signpost_real") and bool(self.signpost_real)
-            if not (has_traffic_sign_parent or has_signpost_plan_parent or has_signpost_real_parent):
-                validation_errors["parent"] = ValidationError(
-                    _(
-                        "Parent is required for additional signs that are not ticket machines. "
-                        "Set either parent (TrafficSign), signpost_plan, or signpost_real."
-                    ),
-                    code="parent_required",
-                )
+    def clean(self) -> None:
+        """Run model validation for structured content and parent requirements.
 
-        if len(validation_errors) > 0:
+        Raises:
+            ValidationError: If the structured content or the parent is invalid.
+        """
+        super().clean()
+
+        validation_errors = get_structured_content_errors(
+            self.content_s, self.get_device_type_or_none(), self.missing_content
+        )
+        validation_errors.update(self._get_parent_validation_errors())
+
+        if validation_errors:
             raise ValidationError(validation_errors)
-
-    def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.ADDITIONAL_SIGN):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for additional signs')
-
-        super().save(*args, **kwargs)
 
     @requires_fields("id")
     def __str__(self):

@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from enumfields import EnumIntegerField
@@ -12,6 +11,7 @@ from traffic_control.common_strings import direction_field_verbose_name, directi
 from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
+    DeviceTypeRelationValidationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ResponsibleEntityModel,
@@ -38,6 +38,7 @@ class ArrowDirection(models.IntegerChoices):
 
 
 class FurnitureAbstractSignpost(
+    DeviceTypeRelationValidationMixin,
     BoundaryCheckedLocationMixin,
     SourceControlModel,
     SoftDeleteModel,
@@ -46,6 +47,9 @@ class FurnitureAbstractSignpost(
     OwnedDeviceModel,
     UUIDModel,
 ):
+    DEVICE_TYPE_TARGET_MODEL = CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST
+    DEVICE_TYPE_ERROR_TARGET = "furniture signposts"
+
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     location_name_fi = models.CharField(
         _("Finnish location name"),
@@ -210,12 +214,6 @@ class FurnitureAbstractSignpost(
     @requires_fields("id", "device_type", "text_content_fi")
     def __str__(self) -> str:
         return f"{self.id} {self.device_type} {self.text_content_fi}"
-
-    def save(self, *args, **kwargs):
-        if not self.device_type.validate_relation(CityFurnitureDeviceTypeTargetModel.FURNITURE_SIGNPOST):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for furniture signposts')
-
-        super().save(*args, **kwargs)
 
 
 class FurnitureSignpostPlan(UpdatePlanLocationMixin, FurnitureAbstractSignpost):

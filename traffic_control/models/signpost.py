@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -13,6 +12,7 @@ from traffic_control.mixins.models import (
     AbstractFileModel,
     BoundaryCheckedLocationMixin,
     DecimalValueFromDeviceTypeMixin,
+    DeviceTypeRelationValidationMixin,
     InstalledDeviceModel,
     OwnedDeviceModel,
     ReplaceableDevicePlanMixin,
@@ -71,6 +71,7 @@ class SignpostRealQuerySet(SoftDeleteQuerySet):
 
 
 class AbstractSignpost(
+    DeviceTypeRelationValidationMixin,
     BoundaryCheckedLocationMixin,
     SourceControlModel,
     SoftDeleteModel,
@@ -79,6 +80,9 @@ class AbstractSignpost(
     UUIDModel,
     ValidityPeriodModel,
 ):
+    DEVICE_TYPE_TARGET_MODEL = DeviceTypeTargetModel.SIGNPOST
+    DEVICE_TYPE_ERROR_TARGET = "signposts"
+
     location = models.PointField(_("Location (3D)"), dim=3, srid=settings.SRID)
     road_name = models.CharField(
         _("Road name"),
@@ -211,12 +215,6 @@ class AbstractSignpost(
     @requires_fields("device_type", "id", "txt")
     def __str__(self):
         return f"{self.id} {self.device_type} {self.txt}"
-
-    def save(self, *args, **kwargs):
-        if self.device_type and not self.device_type.validate_relation(DeviceTypeTargetModel.SIGNPOST):
-            raise ValidationError(f'Device type "{self.device_type}" is not allowed for signposts')
-
-        super().save(*args, **kwargs)
 
 
 class SignpostPlan(
