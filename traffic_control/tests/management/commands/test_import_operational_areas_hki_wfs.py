@@ -5,6 +5,7 @@ from unittest.mock import patch
 import pytest
 from django.core.management import call_command
 
+from traffic_control.management.commands.import_operational_areas_hki_wfs import parse_date
 from traffic_control.models import OperationalArea
 from traffic_control.tests.factories import OperationalAreaFactory
 from traffic_control.tests.management.commands.utils import create_mock_data_source, MockAttribute, MockFeature
@@ -19,7 +20,7 @@ MOCK_FEATURE_0 = MockFeature(
         "urakoitsija": MockAttribute("contractor 0"),
         "alku_pvm": MockAttribute("2019-01-01"),
         "loppu_pvm": MockAttribute("2019-12-31"),
-        "paivitetty_tietopalveluun": MockAttribute("2019-08-01"),
+        "paivitetty_tietopalveluun": MockAttribute(parse_date("2019-08-01")),
         "tehtavakokonaisuus": MockAttribute("KATU"),
         "status": MockAttribute("ready"),
     },
@@ -36,7 +37,7 @@ MOCK_FEATURE_1 = MockFeature(
         "urakoitsija": MockAttribute("contractor 1"),
         "alku_pvm": MockAttribute("2020-01-01"),
         "loppu_pvm": MockAttribute("2020-12-31"),
-        "paivitetty_tietopalveluun": MockAttribute("2020-08-01"),
+        "paivitetty_tietopalveluun": MockAttribute(parse_date("2020-08-01")),
         "tehtavakokonaisuus": MockAttribute("KATU"),
         "status": MockAttribute("ready"),
     },
@@ -52,7 +53,7 @@ MOCK_FEATURE_2 = MockFeature(
         "urakoitsija": MockAttribute("contractor 2"),
         "alku_pvm": MockAttribute("2020-02-01"),
         "loppu_pvm": MockAttribute("2020-11-31"),
-        "paivitetty_tietopalveluun": MockAttribute("2020-07-01"),
+        "paivitetty_tietopalveluun": MockAttribute(parse_date("2020-07-01")),
         "tehtavakokonaisuus": MockAttribute("OTHER-TASK"),
         "status": MockAttribute("not ready"),
     },
