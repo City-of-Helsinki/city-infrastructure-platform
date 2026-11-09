@@ -35,7 +35,7 @@ class Command(TrackableCommand):
                     gdal_geometry.set_3d(True)
                     start_date = parse_date(feature["alku_pvm"].value)
                     end_date = parse_date(feature["loppu_pvm"].value)
-                    updated_date = parse_date(feature["paivitetty_tietopalveluun"].value)
+                    updated_date = feature["paivitetty_tietopalveluun"].value
                     _, created_new = OperationalArea.objects.update_or_create(
                         source_name=SOURCE_NAME,
                         source_id=feature["id"].value,
