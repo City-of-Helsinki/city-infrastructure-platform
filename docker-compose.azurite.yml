@@ -1,6 +1,8 @@
 services:
   azurite:
-    image: mcr.microsoft.com/azure-storage/azurite
+    # Pinned together with azure-cli below: a newer azure-cli sends storage API
+    # versions an older azurite rejects. Bump both together and re-run azurite-init.
+    image: mcr.microsoft.com/azure-storage/azurite:3.37.0
     container_name: "azurite"
     hostname: azurite
     restart: always
@@ -12,7 +14,7 @@ services:
       - azurite-data:/data
   # Utility command to create the media container on azurite
   azurite-init:
-    image: mcr.microsoft.com/azure-cli
+    image: mcr.microsoft.com/azure-cli:2.92.0
     depends_on:
       - azurite
     volumes:
@@ -20,7 +22,7 @@ services:
     entrypoint: /bin/bash /azurite-init.sh
   # Utility command to wipe the media container on azurite
   azurite-delete-storage-containers:
-    image: mcr.microsoft.com/azure-cli
+    image: mcr.microsoft.com/azure-cli:2.92.0
     depends_on:
       - azurite
     volumes:
