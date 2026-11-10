@@ -2,17 +2,22 @@
 
 import re
 from datetime import timedelta
+from io import StringIO
 
 import pytest
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
+from django.core.management import call_command
 from django.utils.html import strip_tags
 from import_export.formats.base_formats import CSV
 
 from city_furniture.models.furniture_signpost import FurnitureSignpostRealFile
 from city_furniture.resources.furniture_signpost import FurnitureSignpostRealResource
 from city_furniture.tests.factories import FurnitureSignpostRealFactory
+from traffic_control.enums import ImportAttachmentCleanupStatus
+from traffic_control.management.commands import clean_stale_import_attachments
+from traffic_control.models import ImportAttachmentCleanupRun
 from traffic_control.resources.attachments import (
     ATTACHMENT_COLUMN_NAME,
     ATTACHMENT_FILENAME_SEPARATOR,
@@ -20,12 +25,13 @@ from traffic_control.resources.attachments import (
     ReplaceAttachmentsStrategy,
 )
 from traffic_control.resources.forms import AttachmentConfirmImportForm, AttachmentImportForm
+from traffic_control.services import import_attachments
 from traffic_control.services.import_attachments import (
     AttachmentStagingError,
     discard_batch,
-    discard_stale_batches,
     list_batch_ids,
     list_staged,
+    list_stale_batches,
     open_staged,
     sanitize_filename,
     stage_files,
@@ -61,6 +67,31 @@ def mock_clamav(requests_mock):
 
 def _content_file(name: str, content: bytes = b"content") -> ContentFile:
     return ContentFile(content, name=name)
+
+
+def _raise_storage_error(*args, **kwargs):
+    raise OSError("storage is down")
+
+
+def _patch_storage_delete_failure(monkeypatch, failing_filename: str) -> None:
+    """Make the staging storage fail to delete a single file.
+
+    Args:
+        monkeypatch: pytest monkeypatch fixture.
+        failing_filename (str): Name of the file whose deletion must fail.
+
+    Returns:
+        None
+    """
+    storage = import_attachments.get_staging_storage()
+    real_delete = storage.delete
+
+    def delete_or_fail(name):
+        if name.endswith(f"/{failing_filename}"):
+            raise OSError("file is locked")
+        return real_delete(name)
+
+    monkeypatch.setattr(storage, "delete", delete_or_fail)
 
 
 # Staging service
@@ -123,16 +154,198 @@ def test__list_staged__invalid_batch_id():
         list_staged("not-a-uuid")
 
 
-def test__discard_stale_batches__keeps_fresh_batches():
+def test__list_stale_batches__keeps_fresh_batches():
     batch_id = stage_files([_content_file("fresh.txt")])
 
     try:
-        assert batch_id not in discard_stale_batches(timedelta(hours=1))
-        assert set(list_staged(batch_id)) == {"fresh.txt"}
-        assert batch_id in discard_stale_batches(timedelta(seconds=0))
-        assert list_staged(batch_id) == {}
+        assert batch_id not in list_stale_batches(timedelta(hours=1))
+        assert batch_id in list_stale_batches(timedelta(seconds=0))
     finally:
         discard_batch(batch_id)
+
+
+def test__discard_batch__reports_deleted_files():
+    batch_id = stage_files([_content_file("first.txt"), _content_file("second.txt")])
+
+    result = discard_batch(batch_id)
+
+    assert sorted(result.deleted) == ["first.txt", "second.txt"]
+    assert result.failed == []
+    assert list_staged(batch_id) == {}
+
+
+def test__discard_batch__reports_undeletable_files(monkeypatch):
+    batch_id = stage_files([_content_file("deletable.txt"), _content_file("stuck.txt")])
+    _patch_storage_delete_failure(monkeypatch, "stuck.txt")
+
+    try:
+        result = discard_batch(batch_id)
+    finally:
+        monkeypatch.undo()
+        discard_batch(batch_id)
+
+    assert result.deleted == ["deletable.txt"]
+    assert result.failed == ["stuck.txt"]
+
+
+@pytest.mark.django_db
+def test__clean_stale_import_attachments__dry_run_lists_files():
+    batch_id = stage_files([_content_file("first.txt"), _content_file("second.pdf")])
+    out = StringIO()
+
+    try:
+        call_command("clean_stale_import_attachments", "--max-age-hours=0", "--dry-run", stdout=out)
+        output = out.getvalue()
+        assert f"Would discard import attachment batch {batch_id} (2 file(s))" in output
+        assert "  - first.txt" in output
+        assert "  - second.pdf" in output
+        assert set(list_staged(batch_id)) == {"first.txt", "second.pdf"}
+    finally:
+        discard_batch(batch_id)
+
+    cleanup_run = ImportAttachmentCleanupRun.objects.get()
+    assert cleanup_run.dry_run is True
+    assert cleanup_run.status == ImportAttachmentCleanupStatus.SUCCESS
+    assert cleanup_run.max_age_hours == 0
+    assert cleanup_run.discarded_batches_count == 1
+    assert cleanup_run.files_discarded == 2
+    assert cleanup_run.discarded_batches == {batch_id: ["first.txt", "second.pdf"]}
+    assert cleanup_run.completed_at is not None
+    assert cleanup_run.error_message == ""
+
+
+@pytest.mark.django_db
+def test__clean_stale_import_attachments__discards_and_lists_files():
+    batch_id = stage_files([_content_file("first.txt")])
+    out = StringIO()
+
+    call_command("clean_stale_import_attachments", "--max-age-hours=0", stdout=out)
+    output = out.getvalue()
+
+    assert f"Discarded import attachment batch {batch_id} (1 file(s))" in output
+    assert "  - first.txt" in output
+    assert list_staged(batch_id) == {}
+
+    cleanup_run = ImportAttachmentCleanupRun.objects.get()
+    assert cleanup_run.dry_run is False
+    assert cleanup_run.status == ImportAttachmentCleanupStatus.SUCCESS
+    assert cleanup_run.discarded_batches_count == 1
+    assert cleanup_run.files_discarded == 1
+    assert cleanup_run.discarded_batches == {batch_id: ["first.txt"]}
+
+    second_out = StringIO()
+    call_command("clean_stale_import_attachments", "--max-age-hours=0", stdout=second_out)
+    assert "No stale import attachment batches found." in second_out.getvalue()
+
+
+@pytest.mark.django_db
+def test__clean_stale_import_attachments__records_run_without_stale_batches():
+    out = StringIO()
+
+    call_command("clean_stale_import_attachments", stdout=out)
+
+    assert "No stale import attachment batches found." in out.getvalue()
+    cleanup_run = ImportAttachmentCleanupRun.objects.get()
+    assert cleanup_run.status == ImportAttachmentCleanupStatus.SUCCESS
+    assert cleanup_run.discarded_batches_count == 0
+    assert cleanup_run.files_discarded == 0
+    assert cleanup_run.discarded_batches == {}
+
+
+@pytest.mark.django_db
+def test__clean_stale_import_attachments__records_empty_batch_directory():
+    batch_id = stage_files([_content_file("gone.txt")])
+    storage = import_attachments.get_staging_storage()
+    storage.delete(f"{import_attachments.get_batch_prefix(batch_id)}/gone.txt")
+    out = StringIO()
+
+    call_command("clean_stale_import_attachments", "--max-age-hours=0", stdout=out)
+
+    assert f"Discarded import attachment batch {batch_id} (0 file(s))" in out.getvalue()
+    assert batch_id not in list_batch_ids()
+
+    cleanup_run = ImportAttachmentCleanupRun.objects.get()
+    assert cleanup_run.status == ImportAttachmentCleanupStatus.SUCCESS
+    assert cleanup_run.discarded_batches == {batch_id: []}
+    assert cleanup_run.discarded_batches_count == 1
+    assert cleanup_run.files_discarded == 0
+
+
+@pytest.mark.django_db
+def test__clean_stale_import_attachments__records_failure(monkeypatch):
+    monkeypatch.setattr(
+        "traffic_control.management.commands.clean_stale_import_attachments.list_stale_batches",
+        _raise_storage_error,
+    )
+
+    with pytest.raises(OSError):
+        call_command("clean_stale_import_attachments")
+
+    cleanup_run = ImportAttachmentCleanupRun.objects.get()
+    assert cleanup_run.status == ImportAttachmentCleanupStatus.FAILED
+    assert cleanup_run.error_message == "storage is down"
+    assert cleanup_run.completed_at is not None
+
+
+@pytest.mark.django_db
+def test__clean_stale_import_attachments__partial_failure_keeps_discarded_batches(monkeypatch):
+    failing_batch_id = stage_files([_content_file("failing.txt")])
+    working_batch_id = stage_files([_content_file("working.txt")])
+    real_discard_batch = clean_stale_import_attachments.discard_batch
+
+    def discard_or_fail(batch_id):
+        if batch_id == failing_batch_id:
+            raise OSError("storage is down")
+        return real_discard_batch(batch_id)
+
+    monkeypatch.setattr(clean_stale_import_attachments, "discard_batch", discard_or_fail)
+
+    try:
+        call_command("clean_stale_import_attachments", "--max-age-hours=0", stderr=StringIO(), stdout=StringIO())
+    finally:
+        discard_batch(failing_batch_id)
+
+    cleanup_run = ImportAttachmentCleanupRun.objects.get()
+    assert cleanup_run.status == ImportAttachmentCleanupStatus.PARTIALLY_FAILED
+    assert cleanup_run.discarded_batches == {working_batch_id: ["working.txt"]}
+    assert cleanup_run.discarded_batches_count == 1
+    assert cleanup_run.files_discarded == 1
+    assert cleanup_run.error_message == f"{failing_batch_id}: storage is down"
+    assert list_staged(working_batch_id) == {}
+
+
+@pytest.mark.django_db
+def test__clean_stale_import_attachments__all_batches_failing_is_failure(monkeypatch):
+    batch_id = stage_files([_content_file("failing.txt")])
+    monkeypatch.setattr(clean_stale_import_attachments, "discard_batch", _raise_storage_error)
+
+    try:
+        call_command("clean_stale_import_attachments", "--max-age-hours=0", stderr=StringIO(), stdout=StringIO())
+    finally:
+        discard_batch(batch_id)
+
+    cleanup_run = ImportAttachmentCleanupRun.objects.get()
+    assert cleanup_run.status == ImportAttachmentCleanupStatus.FAILED
+    assert cleanup_run.discarded_batches == {}
+    assert cleanup_run.error_message == f"{batch_id}: storage is down"
+
+
+@pytest.mark.django_db
+def test__clean_stale_import_attachments__undeletable_file_is_partial_failure(monkeypatch):
+    batch_id = stage_files([_content_file("deletable.txt"), _content_file("stuck.txt")])
+    _patch_storage_delete_failure(monkeypatch, "stuck.txt")
+
+    try:
+        call_command("clean_stale_import_attachments", "--max-age-hours=0", stderr=StringIO(), stdout=StringIO())
+    finally:
+        monkeypatch.undo()
+        discard_batch(batch_id)
+
+    cleanup_run = ImportAttachmentCleanupRun.objects.get()
+    assert cleanup_run.status == ImportAttachmentCleanupStatus.PARTIALLY_FAILED
+    assert cleanup_run.discarded_batches == {batch_id: ["deletable.txt"]}
+    assert cleanup_run.files_discarded == 1
+    assert cleanup_run.error_message == f"{batch_id}: Could not delete file(s): stuck.txt"
 
 
 # Column parsing
@@ -274,6 +487,7 @@ def test__list_staged__works_with_azure_prefix_semantics(monkeypatch, settings):
         discard_batch(batch_id)
 
     assert list_staged(batch_id) == {}
+    assert batch_id not in list_batch_ids()
 
 
 # Already attached files referenced by the attachment column

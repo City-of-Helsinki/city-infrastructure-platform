@@ -13,6 +13,7 @@ guaranteed to be handled by the same process or host.
 import logging
 import os
 import uuid
+from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -36,6 +37,19 @@ STAGING_ROOT = "import_attachments"
 
 class AttachmentStagingError(Exception):
     """Raised when uploaded attachment files cannot be staged."""
+
+
+@dataclass
+class BatchDiscardResult:
+    """Outcome of discarding a single staged attachment batch.
+
+    Attributes:
+        deleted (List[str]): Names of the files that were deleted.
+        failed (List[str]): Names of the files that could not be deleted.
+    """
+
+    deleted: List[str] = field(default_factory=list)
+    failed: List[str] = field(default_factory=list)
 
 
 def get_staging_storage() -> Storage:
@@ -172,26 +186,59 @@ def open_staged(batch_id: str, filename: str) -> File:
     return get_staging_storage().open(staged[name], "rb")
 
 
-def discard_batch(batch_id: Optional[str]) -> None:
-    """Delete every file of a staged batch.
+def discard_batch(batch_id: Optional[str]) -> BatchDiscardResult:
+    """Delete every file of a staged batch and the batch directory itself.
+
+    File deletion errors are logged and collected instead of raised, so that a single unremovable
+    file does not prevent the rest of the batch from being deleted.
 
     Args:
         batch_id (Optional[str]): Identifier of the staged batch.
 
     Returns:
-        None
+        BatchDiscardResult: Names of the deleted files and of the files that could not be deleted.
     """
     if not batch_id:
-        return
+        return BatchDiscardResult()
 
     storage = get_staging_storage()
-    for path in list_staged(batch_id).values():
+    result = BatchDiscardResult()
+    for name, path in list_staged(batch_id).items():
         try:
             storage.delete(path)
         except OSError:
             logger.warning("Could not delete staged attachment file %s", path, exc_info=True)
+            result.failed.append(name)
+        else:
+            result.deleted.append(name)
 
+    _remove_batch_directory(batch_id)
     logger.info("Discarded import attachment batch %s", batch_id)
+    return result
+
+
+def _remove_batch_directory(batch_id: str) -> None:
+    """Remove the emptied batch directory from a directory based storage.
+
+    Storages that have no real directories, such as Azure Blob storage, do not leave anything
+    behind when the files are deleted, so nothing needs to be done for them.
+
+    Args:
+        batch_id (str): Identifier of the staged batch.
+
+    Returns:
+        None
+    """
+    storage = get_staging_storage()
+    try:
+        directory = storage.path(get_batch_prefix(batch_id))
+    except (NotImplementedError, AttributeError):
+        return
+
+    try:
+        os.rmdir(directory)
+    except OSError:
+        logger.debug("Could not remove staged attachment batch directory %s", directory, exc_info=True)
 
 
 def list_batch_ids() -> List[str]:
@@ -204,26 +251,25 @@ def list_batch_ids() -> List[str]:
     return directories
 
 
-def discard_stale_batches(max_age: timedelta) -> List[str]:
-    """Discard staged batches that are older than the given age.
+def list_stale_batches(max_age: timedelta) -> List[str]:
+    """List staged batches that are older than the given age.
 
     Args:
         max_age (timedelta): Maximum age a staged batch may have.
 
     Returns:
-        List[str]: Identifiers of the discarded batches.
+        List[str]: Identifiers of the stale batches.
     """
     cutoff = timezone.now() - max_age
-    discarded = []
+    stale = []
 
     for batch_id in list_batch_ids():
         modified_at = _get_batch_modified_time(batch_id)
         if modified_at is not None and modified_at > cutoff:
             continue
-        discard_batch(batch_id)
-        discarded.append(batch_id)
+        stale.append(batch_id)
 
-    return discarded
+    return stale
 
 
 def _get_batch_modified_time(batch_id: str):
