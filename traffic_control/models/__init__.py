@@ -23,6 +23,7 @@ from traffic_control.models.common import (
     TrafficControlDeviceTypeIcon,
     TrafficControlDeviceTypeTag,
 )
+from traffic_control.models.import_attachment_cleanup import ImportAttachmentCleanupRun
 from traffic_control.models.link_additional_sign_parents_run_info import LinkAdditionalSignParentsRunInfo
 from traffic_control.models.mount import (
     MountPlan,

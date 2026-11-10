@@ -30,6 +30,15 @@ class TagMatchMode(models.TextChoices):
     ALL = "all", _("All of the selected tags")
 
 
+class ImportAttachmentCleanupStatus(models.TextChoices):
+    """Outcome of a stale import attachment cleanup run."""
+
+    IN_PROGRESS = "in_progress", _("In progress")
+    SUCCESS = "success", _("Success")
+    PARTIALLY_FAILED = "partially_failed", _("Partially failed")
+    FAILED = "failed", _("Failed")
+
+
 class DeviceTypeTargetModel(models.TextChoices):
     BARRIER = "barrier", _("Barrier")
     ROAD_MARKING = "road_marking", _("Road marking")
