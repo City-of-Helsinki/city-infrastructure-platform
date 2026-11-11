@@ -19,6 +19,8 @@ from traffic_control.tests.factories import (
     UserFactory,
 )
 
+pytestmark = pytest.mark.usefixtures("settings")
+
 
 @pytest.fixture
 def actor():

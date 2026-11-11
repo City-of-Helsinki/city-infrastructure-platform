@@ -16,6 +16,8 @@ from traffic_control.tests.factories import (
     TrafficControlDeviceTypeFactory,
 )
 
+pytestmark = pytest.mark.usefixtures("guarantee_owners_from_traffic_control_migrations")
+
 # ---------------------------------------------------------------------------
 # CSV helpers  (same layout as the sign tests)
 # ---------------------------------------------------------------------------

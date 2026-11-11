@@ -9,6 +9,8 @@ from traffic_control.analyze_utils.traffic_sign_data_v2_import import SOURCE_NAM
 from traffic_control.models import MountReal
 from traffic_control.tests.factories import MountRealFactory, MountTypeFactory, OwnerFactory
 
+pytestmark = pytest.mark.usefixtures("guarantee_owners_from_traffic_control_migrations")
+
 # ---------------------------------------------------------------------------
 # CSV helpers (reuse the same column layout as the analyzer tests)
 # ---------------------------------------------------------------------------

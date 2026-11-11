@@ -11,6 +11,8 @@ from city_furniture.tests.factories import CityFurnitureDeviceTypeFactory, get_c
 from traffic_control.tests.api_utils import do_filtering_test
 from traffic_control.tests.factories import get_api_client, get_user
 
+pytestmark = pytest.mark.usefixtures("guarantee_device_type_from_city_furniture_migrations")
+
 
 # Read
 @pytest.mark.django_db
