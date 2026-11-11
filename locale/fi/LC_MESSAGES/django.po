@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 12:05+0300\n"
+"POT-Creation-Date: 2026-11-11 12:55+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -209,6 +209,16 @@ msgstr "Liite (url)"
 msgid "Attachment class"
 msgstr "Kiinnitysluokka"
 
+#, python-format
+msgid "Attachment file(s) %(missing)s were not uploaded with this import."
+msgstr ""
+
+msgid "Attachment files"
+msgstr ""
+
+msgid "Attachment files to be imported"
+msgstr "Tuotavat liitetiedostot"
+
 msgid "Attachment url"
 msgstr "Liite (url)"
 
@@ -276,6 +286,14 @@ msgstr "Jalusta"
 
 msgid "Basemaps"
 msgstr "Pohjakartat"
+
+msgid "Batches discarded"
+msgstr ""
+
+msgid ""
+"Below is a preview of data to be imported. If you are satisfied with the "
+"results, click 'Confirm import'"
+msgstr ""
 
 msgid "Bench"
 msgstr "Penkki"
@@ -381,6 +399,9 @@ msgstr "Infraomaisuuden hallinta-alusta"
 msgid "City furniture"
 msgstr "Kaupunkikalusteet"
 
+msgid "Cleanup Statistics"
+msgstr ""
+
 msgid "Clear"
 msgstr ""
 
@@ -436,6 +457,9 @@ msgid ""
 msgstr ""
 "Määritä, saako tämä käyttäjä ylläpidon sähköposti-ilmoituksia käyttäjien "
 "käytöstäpoistoista ja järjestelmätapahtumista."
+
+msgid "Confirm import"
+msgstr ""
 
 msgid "Connection type"
 msgstr "Avattava yhteys"
@@ -768,6 +792,9 @@ msgstr "Poista käytöstä vastuutaho-oikeuksien tarkistukset tältä käyttäj�
 msgid "Disabled feature"
 msgstr ""
 
+msgid "Discarded batches"
+msgstr ""
+
 # AI translation - needs human review
 msgid "Dismiss"
 msgstr "Hylkää"
@@ -864,6 +891,9 @@ msgstr "Virheilmoitus"
 msgid "Error message if migration failed."
 msgstr "Virheilmoitus, jos migraatio epäonnistui."
 
+msgid "Error message if the cleanup failed."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Error message if the migration failed."
 msgstr "Virheilmoitus, jos migraatio epäonnistui."
@@ -908,6 +938,9 @@ msgstr "Erittän suuri"
 
 msgid "Extra feature info"
 msgstr "Kohteesta esitettävän tiedon lisämääritykset"
+
+msgid "Failed"
+msgstr ""
 
 msgid "Fallen"
 msgstr "Kaatunut"
@@ -968,6 +1001,9 @@ msgstr "Tiedostoproxy"
 
 msgid "Files"
 msgstr "Tiedostot"
+
+msgid "Files discarded"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Files migrated"
@@ -1350,6 +1386,10 @@ msgstr ""
 "Jos ei valittuna, pääsy on rajattu käyttäjille/ryhmille, joilla on "
 "asianmukaiset taulu‑ tai tiedosto‑oikeudet"
 
+#, python-format
+msgid "Illegal file types: %(types)s"
+msgstr ""
+
 msgid "Illegal file types: {', '.join(illegal_file_types)}"
 msgstr "Kielletyt tiedostotyypit: {', '.join(illegal_file_types)}"
 
@@ -1359,6 +1399,12 @@ msgstr "Kuvatyyppi"
 msgid "Image file preview"
 msgstr "Kuvatiedoston esikatselu"
 
+msgid "Import Attachment Cleanup Run"
+msgstr ""
+
+msgid "Import Attachment Cleanup Runs"
+msgstr ""
+
 # AI translation - needs human review
 msgid "Import Information"
 msgstr "Tuonnin tiedot"
@@ -1366,6 +1412,9 @@ msgstr "Tuonnin tiedot"
 # AI translation - needs human review
 msgid "Import run"
 msgstr "Tuontiajo"
+
+msgid "In progress"
+msgstr ""
 
 msgid "In use"
 msgstr "Käytössä"
@@ -1711,6 +1760,11 @@ msgstr "Valmistaja"
 msgid "Map"
 msgstr "Kartta"
 
+msgid ""
+"Mapping of discarded batch id to the file names it contained. Example: "
+"{'<batch uuid>': ['first.txt', 'second.pdf']}"
+msgstr ""
+
 msgid "Mark selected objects as deleted"
 msgstr "Merkitse valitut kohteet poistetuksi"
 
@@ -1725,6 +1779,9 @@ msgstr ""
 
 msgid "Material"
 msgstr "Materiaali"
+
+msgid "Max age hours"
+msgstr ""
 
 msgid "Medium"
 msgstr "Normaali"
@@ -2002,6 +2059,9 @@ msgstr "Ei lisäkilpiä"
 msgid "No date"
 msgstr "Ei päivämäärää"
 
+msgid "No files selected"
+msgstr "Ei valittuja tiedostoja"
+
 msgid "No mount"
 msgstr "Ei kiinnityskohdetta"
 
@@ -2078,6 +2138,14 @@ msgid ""
 "{max_limit}."
 msgstr "Tuloksia sivua kohden. Enimmäismäärä on {max_limit}"
 
+msgid ""
+"Number of staged files discarded, or that would be discarded on a dry run."
+msgstr ""
+
+msgid ""
+"Number of stale batches discarded, or that would be discarded on a dry run."
+msgstr ""
+
 msgid "Number of traffic sign reals that had a value problem."
 msgstr ""
 
@@ -2140,6 +2208,12 @@ msgid ""
 "Operational areas, on which this user has permission to modify devices in."
 msgstr "Toiminta-alueet, joilla tällä käyttäjällä on lupa muokata laitteita."
 
+msgid ""
+"Optional files to attach to the imported devices. Reference the uploaded "
+"file names in the import file's attachment file name column. Separate "
+"multiple file names with a semicolon (;)."
+msgstr ""
+
 msgid "Order"
 msgstr "Järjestys"
 
@@ -2200,6 +2274,9 @@ msgstr "Muut"
 
 msgid "Out of Bounds Geometries"
 msgstr "Geometriat kartta-alueen ulkopuolella"
+
+msgid "Outcome of the cleanup run."
+msgstr ""
 
 msgid "Output directory"
 msgstr "Ulostulohakemisto"
@@ -2272,6 +2349,9 @@ msgstr "Ylätason merkin tunnus"
 # AI translation - needs human review
 msgid "Parent sign code"
 msgstr "Ylätason merkin koodi"
+
+msgid "Partially failed"
+msgstr ""
 
 msgid "Path or name of the JSON file containing the operations to be reverted."
 msgstr ""
@@ -2736,6 +2816,9 @@ msgstr "Turvallisuus"
 msgid "Select a style of warning to reflect how critical it is"
 msgstr "Valitse varoituksen tyyli sen mukaan, kuinka kriittinen se on"
 
+msgid "Selected files"
+msgstr "Valitut tiedostot"
+
 msgid "Service sign"
 msgstr "Palvelukohteen opastusmerkki"
 
@@ -2929,6 +3012,9 @@ msgstr "Määrittää kilven sijainnin suhteessa tiehen."
 
 msgid "Specifies where the traffic light is in relation to the road."
 msgstr "Määrittää liikennevalon sijainnin suhteessa tiehen."
+
+msgid "Staged batches older than this many hours were considered stale."
+msgstr ""
 
 msgid "Stair"
 msgstr "Portaat"
@@ -3270,6 +3356,12 @@ msgstr "Aikaleima, jolloin 30 päivän varoitussähköposti lähetettiin."
 # AI translation - needs human review
 msgid "Timestamp when the 7-day warning email was sent."
 msgstr "Aikaleima, jolloin 7 päivän varoitussähköposti lähetettiin."
+
+msgid "Timestamp when the cleanup command completed."
+msgstr ""
+
+msgid "Timestamp when the cleanup command started."
+msgstr ""
 
 # AI translation - needs human review
 msgid "Timestamp when the import run finished."
@@ -3613,6 +3705,9 @@ msgstr ""
 "Käyttäjätunnus on voimassa, mutta viimeisin kirjautuminen on %(days)d päivää "
 "sitten"
 
+msgid "User who executed the cleanup command."
+msgstr ""
+
 # AI translation - needs human review
 msgid "User who executed the migration command."
 msgstr "Käyttäjä, joka suoritti migraatiokomennon."
@@ -3715,6 +3810,10 @@ msgstr "Näytä kartta"
 msgid "View related"
 msgstr "Näytä liittyvät"
 
+#, python-format
+msgid "Virus scan failure: %(details)s"
+msgstr ""
+
 msgid "Virus scan failure: {get_error_details_message(virus_scan_errors)}"
 msgstr ""
 "Virustarkistus epäonnistui: {get_error_details_message(virus_scan_errors)}"
@@ -3812,6 +3911,9 @@ msgstr ""
 # AI translation - needs human review
 msgid "Whether this was a dry run (no actual changes made)."
 msgstr "Oliko tämä koeajo (todellisia muutoksia ei tehty)."
+
+msgid "Whether this was a dry run (no files were deleted)."
+msgstr ""
 
 msgid "White"
 msgstr "Valkoinen"
@@ -3957,12 +4059,3 @@ msgstr "yksikkö"
 
 msgid "username"
 msgstr "käyttäjätunnus"
-
-msgid "No files selected"
-msgstr "Ei valittuja tiedostoja"
-
-msgid "Selected files"
-msgstr "Valitut tiedostot"
-
-msgid "Attachment files to be imported"
-msgstr "Tuotavat liitetiedostot"

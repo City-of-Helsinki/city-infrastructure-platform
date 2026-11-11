@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 12:05+0300\n"
+"POT-Creation-Date: 2026-11-11 12:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,6 +218,16 @@ msgstr ""
 "Klass för skyltens fäste enligt standarden SFS-EN 12899-1. De möjliga "
 "värdena är P1, P2 och P3."
 
+#, python-format
+msgid "Attachment file(s) %(missing)s were not uploaded with this import."
+msgstr ""
+
+msgid "Attachment files"
+msgstr ""
+
+msgid "Attachment files to be imported"
+msgstr "Bilagefiler som importeras"
+
 msgid "Attachment url"
 msgstr "Bilagas URL"
 
@@ -285,6 +295,14 @@ msgstr "Bas"
 
 msgid "Basemaps"
 msgstr "Grundkartor"
+
+msgid "Batches discarded"
+msgstr ""
+
+msgid ""
+"Below is a preview of data to be imported. If you are satisfied with the "
+"results, click 'Confirm import'"
+msgstr ""
 
 msgid "Bench"
 msgstr "Bänk"
@@ -390,6 +408,9 @@ msgstr "Stadsinfrastrukturplattform"
 msgid "City furniture"
 msgstr "Stadsmöbler"
 
+msgid "Cleanup Statistics"
+msgstr ""
+
 msgid "Clear"
 msgstr ""
 
@@ -445,6 +466,9 @@ msgid ""
 msgstr ""
 "Konfigurera om denna användare tar emot administratörsaviseringar via e-post "
 "om användarinaktiveringar och systemhändelser."
+
+msgid "Confirm import"
+msgstr ""
 
 msgid "Connection type"
 msgstr "Anslutningstyp"
@@ -780,6 +804,9 @@ msgstr ""
 msgid "Disabled feature"
 msgstr ""
 
+msgid "Discarded batches"
+msgstr ""
+
 # AI translation - needs human review
 msgid "Dismiss"
 msgstr "Avfärda"
@@ -882,6 +909,9 @@ msgstr "Felmeddelande"
 msgid "Error message if migration failed."
 msgstr "Felmeddelande om migreringen misslyckades."
 
+msgid "Error message if the cleanup failed."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Error message if the migration failed."
 msgstr "Felmeddelande om migreringen misslyckades."
@@ -926,6 +956,9 @@ msgstr "Extrastor"
 
 msgid "Extra feature info"
 msgstr "Extra objektinformation"
+
+msgid "Failed"
+msgstr ""
 
 msgid "Fallen"
 msgstr "Nedfallen"
@@ -988,6 +1021,9 @@ msgstr "Filproxy"
 # AI translation - needs human review
 msgid "Files"
 msgstr "Filer"
+
+msgid "Files discarded"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Files migrated"
@@ -1374,6 +1410,10 @@ msgstr ""
 "Om ej markerad begränsas åtkomsten till användare/grupper med lämpliga "
 "tabell‑ eller filbehörigheter"
 
+#, python-format
+msgid "Illegal file types: %(types)s"
+msgstr ""
+
 msgid "Illegal file types: {', '.join(illegal_file_types)}"
 msgstr "Otillåtna filtyper: {', '.join(illegal_file_types)}"
 
@@ -1384,6 +1424,12 @@ msgstr "Bildtyp"
 msgid "Image file preview"
 msgstr "Förhandsgranskning av bildfil"
 
+msgid "Import Attachment Cleanup Run"
+msgstr ""
+
+msgid "Import Attachment Cleanup Runs"
+msgstr ""
+
 # AI translation - needs human review
 msgid "Import Information"
 msgstr "Importinformation"
@@ -1391,6 +1437,9 @@ msgstr "Importinformation"
 # AI translation - needs human review
 msgid "Import run"
 msgstr "Importkörning"
+
+msgid "In progress"
+msgstr ""
 
 msgid "In use"
 msgstr "I bruk"
@@ -1744,6 +1793,11 @@ msgstr "Tillverkare"
 msgid "Map"
 msgstr "Karta"
 
+msgid ""
+"Mapping of discarded batch id to the file names it contained. Example: "
+"{'<batch uuid>': ['first.txt', 'second.pdf']}"
+msgstr ""
+
 msgid "Mark selected objects as deleted"
 msgstr "Markera valda objekt som borttagna"
 
@@ -1758,6 +1812,9 @@ msgstr ""
 
 msgid "Material"
 msgstr "Material"
+
+msgid "Max age hours"
+msgstr ""
 
 msgid "Medium"
 msgstr "Medelstor"
@@ -2047,6 +2104,9 @@ msgstr "Inga tilläggsskyltar"
 msgid "No date"
 msgstr "Inget datum"
 
+msgid "No files selected"
+msgstr "Inga filer valda"
+
 msgid "No mount"
 msgstr "Ej fästpunkt"
 
@@ -2124,6 +2184,14 @@ msgid ""
 "{max_limit}."
 msgstr "Resultat per sida. Maximalt är {max_limit}"
 
+msgid ""
+"Number of staged files discarded, or that would be discarded on a dry run."
+msgstr ""
+
+msgid ""
+"Number of stale batches discarded, or that would be discarded on a dry run."
+msgstr ""
+
 msgid "Number of traffic sign reals that had a value problem."
 msgstr ""
 
@@ -2188,6 +2256,12 @@ msgstr ""
 "Åtgärdsområden för vilka denna användare har tillstånd att modifiera "
 "anordningar."
 
+msgid ""
+"Optional files to attach to the imported devices. Reference the uploaded "
+"file names in the import file's attachment file name column. Separate "
+"multiple file names with a semicolon (;)."
+msgstr ""
+
 msgid "Order"
 msgstr "Ordning"
 
@@ -2251,6 +2325,9 @@ msgstr "Övrigt"
 # AI translation - needs human review
 msgid "Out of Bounds Geometries"
 msgstr "Geometrier utanför gränserna"
+
+msgid "Outcome of the cleanup run."
+msgstr ""
 
 # AI translation - needs human review
 msgid "Output directory"
@@ -2325,6 +2402,9 @@ msgstr "Överordnat märkes-ID"
 # AI translation - needs human review
 msgid "Parent sign code"
 msgstr "Överordnat märkes kod"
+
+msgid "Partially failed"
+msgstr ""
 
 msgid "Path or name of the JSON file containing the operations to be reverted."
 msgstr ""
@@ -2798,6 +2878,9 @@ msgstr "Säkerhet"
 msgid "Select a style of warning to reflect how critical it is"
 msgstr "Välj en varningsstil som återspeglar hur kritisk den är"
 
+msgid "Selected files"
+msgstr "Valda filer"
+
 msgid "Service sign"
 msgstr "Serviceskylt"
 
@@ -2997,6 +3080,9 @@ msgstr "Fastställer skyltens läge i förhållande till vägen."
 
 msgid "Specifies where the traffic light is in relation to the road."
 msgstr "Fastställer trafikljusets läge i förhållande till vägen."
+
+msgid "Staged batches older than this many hours were considered stale."
+msgstr ""
 
 msgid "Stair"
 msgstr "Trappa"
@@ -3346,6 +3432,12 @@ msgstr "Tidsstämpel när e-posten med 30-dagarsvarning skickades."
 msgid "Timestamp when the 7-day warning email was sent."
 msgstr "Tidsstämpel när e-posten med 7-dagarsvarning skickades."
 
+msgid "Timestamp when the cleanup command completed."
+msgstr ""
+
+msgid "Timestamp when the cleanup command started."
+msgstr ""
+
 # AI translation - needs human review
 msgid "Timestamp when the import run finished."
 msgstr "Tidsstämpel när importkörningen slutfördes."
@@ -3686,6 +3778,9 @@ msgstr ""
 "Användarnamnet är gällande, men den senaste inloggningen skedde för %(days)d "
 "dagar sedan"
 
+msgid "User who executed the cleanup command."
+msgstr ""
+
 # AI translation - needs human review
 msgid "User who executed the migration command."
 msgstr "Användare som utförde migreringskommandot."
@@ -3787,6 +3882,10 @@ msgstr "Visa karta"
 # AI translation - needs human review
 msgid "View related"
 msgstr "Visa relaterade"
+
+#, python-format
+msgid "Virus scan failure: %(details)s"
+msgstr ""
 
 msgid "Virus scan failure: {get_error_details_message(virus_scan_errors)}"
 msgstr ""
@@ -3890,6 +3989,9 @@ msgstr ""
 # AI translation - needs human review
 msgid "Whether this was a dry run (no actual changes made)."
 msgstr "Om detta var en testkörning (inga faktiska ändringar gjordes)."
+
+msgid "Whether this was a dry run (no files were deleted)."
+msgstr ""
 
 msgid "White"
 msgstr "Vitt"
@@ -4035,12 +4137,3 @@ msgstr "enhet"
 
 msgid "username"
 msgstr "användarnamn"
-
-msgid "No files selected"
-msgstr "Inga filer valda"
-
-msgid "Selected files"
-msgstr "Valda filer"
-
-msgid "Attachment files to be imported"
-msgstr "Bilagefiler som importeras"
