@@ -5,17 +5,22 @@ from django.apps import apps
 # Guarantee that certain settings are available for the tests
 @pytest.fixture(autouse=True)
 def settings(settings):
-    settings.RESILIENT_LOGGER["environment"] = "development"
-    settings.RESILIENT_LOGGER["targets"] = [
-        {
-            "class": "resilient_logger.targets.ElasticsearchLogTarget",
-            "es_url": "http://localhost:9200",
-            "es_username": "elastic",
-            "es_password": "elastic-password",
-            "es_index": "resilient-auditlog",
-            "required": True,
-        }
-    ]
+    # Assign a new dict instead of mutating the existing one: pytest-django only restores
+    # top-level settings, so in-place changes would leak into every later test.
+    settings.RESILIENT_LOGGER = {
+        **settings.RESILIENT_LOGGER,
+        "environment": "development",
+        "targets": [
+            {
+                "class": "resilient_logger.targets.ElasticsearchLogTarget",
+                "es_url": "http://localhost:9200",
+                "es_username": "elastic",
+                "es_password": "elastic-password",
+                "es_index": "resilient-auditlog",
+                "required": True,
+            }
+        ],
+    }
     return settings
 
 
