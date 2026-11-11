@@ -135,7 +135,7 @@ def multiple_rows_csv(tmp_path):
     return csv_path
 
 
-@pytest.mark.django_db(transaction=True)
+@pytest.mark.django_db
 class TestImportPlanGeometriesCommand:
     """Tests for import_plan_geometries management command."""
 
