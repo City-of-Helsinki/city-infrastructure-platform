@@ -119,8 +119,8 @@ class PlanFactory(factory.django.DjangoModelFactory):
     location = test_multi_polygon
     derive_location = False
     is_active = True
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"PLAN_SOURCE_NAME_{n}")
 
 
 def get_plan(location=test_multi_polygon, name="Test plan", derive_location=False) -> Plan:
@@ -179,8 +179,8 @@ class BarrierPlanFactory(factory.django.DjangoModelFactory):
         model = BarrierPlan
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"BARRIER_PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"BARRIER_PLAN_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
@@ -231,8 +231,8 @@ class BarrierRealFactory(factory.django.DjangoModelFactory):
         model = BarrierReal
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"BARRIER_REAL_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"BARRIER_REAL_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
@@ -305,8 +305,8 @@ class MountPlanFactory(factory.django.DjangoModelFactory):
         model = MountPlan
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"MOUNT_PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"MOUNT_PLAN_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
@@ -381,8 +381,8 @@ class RoadMarkingPlanFactory(factory.django.DjangoModelFactory):
         model = RoadMarkingPlan
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"ROAD_MARKING_PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"ROAD_MARKING_PLAN_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
@@ -426,8 +426,8 @@ class RoadMarkingRealFactory(factory.django.DjangoModelFactory):
         model = RoadMarkingReal
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"ROAD_MARKING_REAL_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"ROAD_MARKING_REAL_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
@@ -465,8 +465,8 @@ class SignpostPlanFactory(factory.django.DjangoModelFactory):
         model = SignpostPlan
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"SIGNPOST_PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SIGNPOST_PLAN_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
@@ -508,8 +508,8 @@ class SignpostRealFactory(factory.django.DjangoModelFactory):
         model = SignpostReal
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"SIGNPOST_REAL_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"SIGNPOST_REAL_SOURCE_NAME_{n}")
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
     signpost_plan = factory.SubFactory(SignpostPlanFactory)
     location = test_point
@@ -547,8 +547,8 @@ class TrafficLightPlanFactory(factory.django.DjangoModelFactory):
         model = TrafficLightPlan
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"TRAFFIC_LIGHT_PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"TRAFFIC_LIGHT_PLAN_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
@@ -590,8 +590,8 @@ class TrafficLightRealFactory(factory.django.DjangoModelFactory):
         model = TrafficLightReal
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"TRAFFIC_LIGHT_REAL_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"TRAFFIC_LIGHT_REAL_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
@@ -627,8 +627,8 @@ class TrafficSignPlanFactory(factory.django.DjangoModelFactory):
         model = TrafficSignPlan
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"TRAFFIC_SIGN_PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"TRAFFIC_SIGN_PLAN_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
@@ -665,8 +665,8 @@ class TrafficSignRealFactory(factory.django.DjangoModelFactory):
         model = TrafficSignReal
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"TRAFFIC_SIGN_REAL_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"TRAFFIC_SIGN_REAL_SOURCE_NAME_{n}")
     location = test_point
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
     road_name = None
@@ -724,8 +724,8 @@ class AdditionalSignPlanFactory(factory.django.DjangoModelFactory):
         model = AdditionalSignPlan
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"ADDITIONAL_SIGN_PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"ADDITIONAL_SIGN_PLAN_SOURCE_NAME_{n}")
     location = test_point
     owner = factory.SubFactory(OwnerFactory)
     plan = factory.SubFactory(PlanFactory)
@@ -784,8 +784,8 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
         model = AdditionalSignReal
         django_get_or_create = ["source_id", "source_name"]
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"ADDITIONAL_SIGN_REAL_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"ADDITIONAL_SIGN_REAL_SOURCE_NAME_{n}")
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
     content_s = None
     missing_content = True
