@@ -18,6 +18,8 @@ from traffic_control.tests.factories import (
     TrafficSignRealFactory,
 )
 
+pytestmark = pytest.mark.usefixtures("guarantee_owners_from_traffic_control_migrations")
+
 # ---------------------------------------------------------------------------
 # CSV helpers  (shared layout with signs / signpost test modules)
 # ---------------------------------------------------------------------------

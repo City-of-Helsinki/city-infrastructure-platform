@@ -25,6 +25,8 @@ from traffic_control.tests.factories import (
     TrafficControlDeviceTypeIconFactory,
 )
 
+pytestmark = pytest.mark.usefixtures("guarantee_device_type_from_traffic_control_migrations")
+
 # ==============================================================================
 # Fixtures
 # ==============================================================================

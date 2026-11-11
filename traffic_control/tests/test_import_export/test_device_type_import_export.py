@@ -9,6 +9,8 @@ from traffic_control.tests import DEVICE_TYPE_COUNT_OFFSET
 from traffic_control.tests.factories import TrafficControlDeviceTypeFactory, TrafficControlDeviceTypeIconFactory
 from traffic_control.tests.test_import_export.utils import file_formats, get_import_dataset
 
+pytestmark = pytest.mark.usefixtures("guarantee_device_type_from_traffic_control_migrations")
+
 
 @pytest.mark.parametrize(
     ("icon_file", "value", "unit", "size"),

@@ -3,7 +3,7 @@ from django.apps import apps
 
 
 # Guarantee that certain settings are available for the tests
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def settings(settings):
     # Assign a new dict instead of mutating the existing one: pytest-django only restores
     # top-level settings, so in-place changes would leak into every later test.
@@ -29,7 +29,7 @@ def settings(settings):
 # git grep -Irn "get_or_create" | grep migrations
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def guarantee_initial_colors_from_city_furniture_migrations(db):
     """
     Guarantee the existence of the colors from
@@ -65,7 +65,7 @@ def guarantee_initial_colors_from_city_furniture_migrations(db):
         CityFurnitureColor.objects.get_or_create(name=name, defaults=dict(rgb=rgb))
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def guarantee_device_type_from_city_furniture_migrations(db):
     """
     Guarantee the existence of city furniture device types from
@@ -87,7 +87,7 @@ def guarantee_device_type_from_city_furniture_migrations(db):
     )
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def guarantee_device_type_from_traffic_control_migrations(db):
     """
     Guarantee the existence of traffic control device types from
@@ -105,7 +105,7 @@ def guarantee_device_type_from_traffic_control_migrations(db):
     )
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def guarantee_owners_from_traffic_control_migrations(db):
     """
     Guarantee the existence of traffic control owners from

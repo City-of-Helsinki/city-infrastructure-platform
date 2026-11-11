@@ -4,6 +4,8 @@ from django.urls import reverse
 from traffic_control.tests import DEVICE_TYPE_COUNT_OFFSET
 from traffic_control.tests.factories import get_api_client, TrafficControlDeviceTypeFactory
 
+pytestmark = pytest.mark.usefixtures("guarantee_device_type_from_traffic_control_migrations")
+
 
 @pytest.mark.django_db
 def test_limit_offset_pagination():

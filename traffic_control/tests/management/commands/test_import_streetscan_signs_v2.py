@@ -11,6 +11,8 @@ from traffic_control.models import MountReal
 from traffic_control.models.streetscan_import import StreetScanImportRun
 from traffic_control.tests.factories import MountRealFactory, TrafficSignRealFactory
 
+pytestmark = pytest.mark.usefixtures("guarantee_owners_from_traffic_control_migrations")
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
