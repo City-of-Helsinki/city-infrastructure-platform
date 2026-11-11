@@ -153,7 +153,9 @@ class TrafficControlDeviceTypeFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ["code"]
         skip_postgeneration_save = True
 
-    code = factory.sequence(lambda n: str(n))
+    # Prefixed so generated codes never match real codes like "871" that tests create
+    # explicitly: get_or_create would return that device type instead of a new one.
+    code = factory.sequence(lambda n: f"DEVICE_TYPE_{n}")
     icon_file = factory.SubFactory(TrafficControlDeviceTypeIconFactory)
     description = factory.sequence(lambda n: f"description_{n}")
     value = factory.sequence(lambda n: f"value_{n}")
