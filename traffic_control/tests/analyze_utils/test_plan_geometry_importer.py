@@ -86,7 +86,7 @@ def invalid_geometry_csv(tmp_path):
     return str(csv_path)
 
 
-@pytest.mark.django_db(transaction=True)
+@pytest.mark.django_db
 class TestPlanGeometryImporter:
     """Tests for PlanGeometryImporter class."""
 
