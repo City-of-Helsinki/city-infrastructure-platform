@@ -330,6 +330,29 @@ docker compose run --rm --user root api ./scripts/compilemessages.sh
 1. (on the main view, right upper corner) Discover index
 1. (on the sidebar) Add fields you want to observe. It helps to include timestamp and to sort entries by timestamp, otherwise you might not see the latest entries. Old entries may be lacking important data.
 
+## Running tests
+
+Tests need the database to be running (see above). Tests run in parallel by default with
+[pytest-xdist](https://pytest-xdist.readthedocs.io/): one worker per physical CPU core, at most 8.
+Each worker uses its own test database.
+
+```bash
+# Run all tests
+pytest
+
+# Run tests serially, e.g. to see print() output with -s
+# (--pdb turns parallel runs off by itself)
+pytest -n 0 -s path/to/test_file.py
+
+# Use fewer workers, e.g. on a machine with 8 GB of RAM (each worker uses ~300-400 MB)
+pytest -n 4
+
+# Keep the test databases between runs to skip rebuilding them (~40 s)
+pytest --reuse-db
+# Rebuild them after editing existing migrations or switching branches
+pytest --create-db
+```
+
 ## Translations (fi)
 
 ```
