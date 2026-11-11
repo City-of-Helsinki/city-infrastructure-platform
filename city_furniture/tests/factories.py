@@ -111,8 +111,8 @@ class FurnitureSignpostPlanFactory(factory.django.DjangoModelFactory):
     direction = 90
     mount_type = factory.SubFactory(MountTypeFactory)
     mount_plan = factory.SubFactory(MountPlanFactory)
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"FURNITURE_SIGNPOST_PLAN_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"FURNITURE_SIGNPOST_PLAN_SOURCE_NAME_{n}")
     responsible_entity = None
     created_by = factory.SubFactory(UserFactory)
     updated_by = factory.SubFactory(UserFactory)
@@ -160,8 +160,8 @@ class FurnitureSignpostRealFactory(factory.django.DjangoModelFactory):
             "source_name",
         )
 
-    source_id = factory.Sequence(lambda n: f"SOURCE_ID_{n}")
-    source_name = factory.Sequence(lambda n: f"SOURCE_NAME_{n}")
+    source_id = factory.Sequence(lambda n: f"FURNITURE_SIGNPOST_REAL_SOURCE_ID_{n}")
+    source_name = factory.Sequence(lambda n: f"FURNITURE_SIGNPOST_REAL_SOURCE_NAME_{n}")
     device_type = factory.SubFactory(CityFurnitureDeviceTypeFactory)
     location = test_point_3d
     owner = factory.SubFactory(OwnerFactory)
