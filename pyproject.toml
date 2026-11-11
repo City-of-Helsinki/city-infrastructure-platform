@@ -71,6 +71,9 @@ dev = [
     "pytest-randomly>=5.0.0",
     "pytest-datadir>=1.8.0",
     "pytest-chdir>=0.2.1",
+    "pytest-xdist>=3.8.0",
+    # Lets pytest-xdist's "-n auto" count physical CPU cores instead of hyperthreads
+    "psutil>=7.2.2",
 ]
 
 [tool.uv]
@@ -128,6 +131,10 @@ ignore = ["D100", "D104", "D105", "D200", "D203", "D400"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "cityinfra.settings"
+# Run tests in parallel, one worker per physical CPU core. Gains flatten
+# above 8 workers while each worker still costs ~300-400 MB of RAM, so cap
+# there. Use "-n 0" to run serially, e.g. when using print() debugging.
+addopts = ["-n", "auto", "--maxprocesses=8"]
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
     "IGNORE_EXCEPTION_DETAIL",
