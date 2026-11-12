@@ -103,7 +103,7 @@ env = environ.Env(
     SENTRY_DEBUG=(bool, False),  # Enables debug view that fires sentry error
     SENTRY_DSN=(str, ""),  # Composes sentry-sdk DSN (https://docs.sentry.io/platforms/python/integrations/django/)
     # https://github.com/City-of-Helsinki/django-resilient-logger?tab=readme-ov-file#configuring-django-resilient-logger
-    AUDIT_LOG_ES_ENV=(str, ""),
+    AUDIT_LOG_ENV=(str, ""),
     AUDIT_LOG_ES_URL=(str, ""),
     AUDIT_LOG_ES_USERNAME=(str, ""),
     AUDIT_LOG_ES_PASSWORD=(str, ""),
@@ -198,7 +198,7 @@ AUDITLOG_DISABLE_REMOTE_ADDR = True
 # https://github.com/City-of-Helsinki/django-resilient-logger
 RESILIENT_LOGGER = {
     "origin": "cityinfra",
-    "environment": env("AUDIT_LOG_ES_ENV"),
+    "environment": env("AUDIT_LOG_ENV"),
     "sources": [
         {"class": "resilient_logger.sources.ResilientLogSource"},
         {"class": "resilient_logger.sources.DjangoAuditLogSource"},
