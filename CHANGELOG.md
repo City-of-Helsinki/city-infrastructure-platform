@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.51.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.50.0...city-infrastructure-platform-v1.51.0) (2026-11-12)
+
+
+### Features
+
+* **import:** Support attachment files in device imports ([ae1a46a](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ae1a46a03794b9ce42512a7e69fd03cb8e2b016f))
+* Indicate when a plan / cluster of plans has missing reals ([63c2c3f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/63c2c3f8e08fa0b49449ebc5af202324db5fbe8d))
+* Read GDAL/GEOS library paths from env ([ec2c41e](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/ec2c41e1344056c54aa53e880bb4bb3219f55c68))
+
+
+### Bug Fixes
+
+* **admin:** Report device validation errors inline instead of 500 ([c89c98c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c89c98cdadfdd29d4247afd6c4fa98c8ad8fb8e0))
+* Give each test factory its own source id prefix ([f7a31cb](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f7a31cb78d86baccbaa0a921d53d6c096a691544))
+* Operational Area import fail ([0dac4ac](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0dac4aca2c462e498511591fbc09dca9819ab752))
+* Stop device type factory reusing explicitly created types ([1427090](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/1427090cf216e94629a250b4c50d368897ce383e))
+* Stop test settings fixture leaking audit log config ([0752edb](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/0752edb301d109d320c7a9674356857484961b78))
+* Use azurite service name in azurite-init script ([d395238](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/d395238aadc5738f204e1b646f1b8453a4ee677d))
+
+
+### Performance Improvements
+
+* Make migration data test fixtures opt-in ([bf0cc3c](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/bf0cc3c49ad032069026a5553b2560ee47630dca))
+* Run plan geometry import tests in rolled back transactions ([dcba80d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/dcba80d825b3262336e916859763e03dc37f4b51))
+
+
+### Documentation
+
+* Add macOS setup instructions to README ([94afe2d](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/94afe2d69310d7df8e1e4c8da13cd70873efc18d))
+* Add test running instructions to README ([eb5ea37](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/eb5ea371526c7630ca6bae96a56e927bab2af232))
+* Clarify docker services setup in README ([c4fb286](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/c4fb2864803fe0a076817dac7cc2ad3309c47086))
+
 ## [1.50.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.49.0...city-infrastructure-platform-v1.50.0) (2026-11-05)
 
 
