@@ -1,5 +1,6 @@
 """Tests for SignpostPlan and SignpostReal soft-delete cascade to AdditionalSign objects."""
 import pytest
+from factory.django import DjangoModelFactory
 
 from traffic_control.models.signpost import SignpostPlan, SignpostReal
 from traffic_control.tests.factories import (
@@ -9,6 +10,7 @@ from traffic_control.tests.factories import (
     SignpostRealFactory,
     UserFactory,
 )
+from users.models import User
 from users.utils import get_system_user
 
 # ── Fixtures ───────────────────────────────────────────────────────────────────
@@ -264,3 +266,43 @@ def test_signpost_real_queryset_soft_delete_does_not_affect_unrelated_additional
 
     other_additional.refresh_from_db()
     assert other_additional.is_active is True
+
+
+# ── QuerySet filtered by is_active (as in the admin changelist) ────────────────
+
+
+@pytest.mark.parametrize(
+    ("signpost_factory", "additional_sign_factory", "fk_name"),
+    [
+        pytest.param(SignpostPlanFactory, AdditionalSignPlanFactory, "signpost_plan", id="plan"),
+        pytest.param(SignpostRealFactory, AdditionalSignRealFactory, "signpost_real", id="real"),
+    ],
+)
+@pytest.mark.django_db
+def test_signpost_queryset_soft_delete_cascades_when_queryset_is_filtered_by_is_active(
+    system_user: User,
+    signpost_factory: type[DjangoModelFactory],
+    additional_sign_factory: type[DjangoModelFactory],
+    fk_name: str,
+) -> None:
+    """Bulk soft-delete cascades even though the queryset no longer matches the signposts afterwards.
+
+    Args:
+        system_user (User): The system user fixture.
+        signpost_factory (type[DjangoModelFactory]): Factory for the signpost model under test.
+        additional_sign_factory (type[DjangoModelFactory]): Factory for the matching additional sign model.
+        fk_name (str): Name of the additional sign's foreign key to the signpost.
+
+    Returns:
+        None
+    """
+    signpost = signpost_factory()
+    additional = additional_sign_factory(parent=None, **{fk_name: signpost})
+
+    type(signpost).objects.active().filter(pk=signpost.pk).soft_delete(system_user)
+
+    signpost.refresh_from_db()
+    additional.refresh_from_db()
+    assert signpost.is_active is False
+    assert additional.is_active is False
+    assert additional.deleted_by == system_user

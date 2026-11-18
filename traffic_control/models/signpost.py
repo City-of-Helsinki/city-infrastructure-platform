@@ -49,9 +49,13 @@ class SignpostPlanQuerySet(SoftDeleteQuerySet):
         """
         from traffic_control.models.additional_sign import AdditionalSignPlan
 
-        additional_signs = AdditionalSignPlan.objects.filter(signpost_plan__in=self).active()
+        # Read the ids now. Callers such as the admin changelist pass a queryset filtered on is_active=True,
+        # which stops matching these rows once they are soft deleted.
+        additional_sign_ids = list(
+            AdditionalSignPlan.objects.filter(signpost_plan__in=self).active().values_list("pk", flat=True)
+        )
         super().soft_delete(user)
-        additional_signs.soft_delete(user)
+        AdditionalSignPlan.objects.filter(pk__in=additional_sign_ids).soft_delete(user)
 
 
 class SignpostRealQuerySet(SoftDeleteQuerySet):
@@ -65,9 +69,13 @@ class SignpostRealQuerySet(SoftDeleteQuerySet):
         """
         from traffic_control.models.additional_sign import AdditionalSignReal
 
-        additional_signs = AdditionalSignReal.objects.filter(signpost_real__in=self).active()
+        # Read the ids now. Callers such as the admin changelist pass a queryset filtered on is_active=True,
+        # which stops matching these rows once they are soft deleted.
+        additional_sign_ids = list(
+            AdditionalSignReal.objects.filter(signpost_real__in=self).active().values_list("pk", flat=True)
+        )
         super().soft_delete(user)
-        additional_signs.soft_delete(user)
+        AdditionalSignReal.objects.filter(pk__in=additional_sign_ids).soft_delete(user)
 
 
 class AbstractSignpost(

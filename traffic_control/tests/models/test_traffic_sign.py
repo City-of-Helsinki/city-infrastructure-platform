@@ -14,6 +14,7 @@ from traffic_control.tests.factories import (
     TrafficSignRealFactory,
 )
 from traffic_control.tests.utils import MIN_X, MIN_Y
+from users.models import User
 
 
 @pytest.fixture
@@ -90,6 +91,32 @@ def test_queryset_soft_delete_handles_additional_signs(sign_suite, user):
     assert additional_sign.deleted_by == user
     assert sign_suite.model_cls.objects.active().count() == 1
     assert sign_suite.add_model_cls.objects.active().count() == 1
+
+
+@pytest.mark.django_db
+def test_queryset_soft_delete_handles_additional_signs_when_queryset_is_filtered_by_is_active(
+    sign_suite: SimpleNamespace, user: User
+) -> None:
+    """Ensures that the cascade works for a queryset that stops matching the main signs once they are soft deleted.
+
+    The admin changelist passes such a queryset, as it is filtered by is_active.
+
+    Args:
+        sign_suite (SimpleNamespace): Models, factories and a main sign for the plan or real variant.
+        user (User): User performing the soft delete.
+
+    Returns:
+        None
+    """
+    additional_sign = sign_suite.add_factory(parent=sign_suite.main_sign)
+
+    sign_suite.model_cls.objects.active().filter(pk=sign_suite.main_sign.pk).soft_delete(user)
+    sign_suite.main_sign.refresh_from_db()
+    additional_sign.refresh_from_db()
+
+    assert sign_suite.main_sign.is_active is False
+    assert additional_sign.is_active is False
+    assert additional_sign.deleted_by == user
 
 
 @pytest.mark.django_db
