@@ -55,23 +55,55 @@ class LocationSpecifier(models.IntegerChoices):
 
 
 class TrafficSignPlanQuerySet(SoftDeleteQuerySet):
-    def soft_delete(self, user):
+    """QuerySet for TrafficSignPlan that cascades soft-delete to additional signs."""
+
+    def soft_delete(self, user: object) -> None:
+        """Soft-delete traffic sign plans and cascade to their un-re-parented additional sign plans.
+
+        Args:
+            user (object): The user performing the soft-delete.
+
+        Returns:
+            None
+        """
         from traffic_control.models.additional_sign import AdditionalSignPlan
 
-        additional_signs = AdditionalSignPlan.objects.filter(parent__in=self, signpost_plan__isnull=True).active()
+        # Read the ids now. Callers such as the admin changelist pass a queryset filtered on is_active=True,
+        # which stops matching these rows once they are soft deleted.
+        additional_sign_ids = list(
+            AdditionalSignPlan.objects.filter(parent__in=self, signpost_plan__isnull=True)
+            .active()
+            .values_list("pk", flat=True)
+        )
 
         super().soft_delete(user)
-        additional_signs.soft_delete(user)
+        AdditionalSignPlan.objects.filter(pk__in=additional_sign_ids).soft_delete(user)
 
 
 class TrafficSignRealQuerySet(SoftDeleteQuerySet):
-    def soft_delete(self, user):
+    """QuerySet for TrafficSignReal that cascades soft-delete to additional signs."""
+
+    def soft_delete(self, user: object) -> None:
+        """Soft-delete traffic sign reals and cascade to their un-re-parented additional sign reals.
+
+        Args:
+            user (object): The user performing the soft-delete.
+
+        Returns:
+            None
+        """
         from traffic_control.models.additional_sign import AdditionalSignReal
 
-        additional_signs = AdditionalSignReal.objects.filter(parent__in=self, signpost_real__isnull=True).active()
+        # Read the ids now. Callers such as the admin changelist pass a queryset filtered on is_active=True,
+        # which stops matching these rows once they are soft deleted.
+        additional_sign_ids = list(
+            AdditionalSignReal.objects.filter(parent__in=self, signpost_real__isnull=True)
+            .active()
+            .values_list("pk", flat=True)
+        )
 
         super().soft_delete(user)
-        additional_signs.soft_delete(user)
+        AdditionalSignReal.objects.filter(pk__in=additional_sign_ids).soft_delete(user)
 
 
 class AbstractTrafficSign(
