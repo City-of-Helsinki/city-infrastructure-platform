@@ -15,7 +15,7 @@ from city_furniture.views import (
     furniture_signpost as furniture_signpost_views,
 )
 from cityinfra.admin.views import FeatureDisabledView, MyAccountView
-from cityinfra.views import FileProxyView, HealthCheckView
+from cityinfra.views import AccountDeactivatedView, FileProxyView, HealthCheckView
 from map import views as map_views
 from traffic_control.views import (
     additional_sign as additional_sign_views,
@@ -120,6 +120,7 @@ furniture_signpost_operations_router.register(
 urlpatterns = [
     path("healthz", HealthCheckView.as_view(), name="health-check"),
     path("readiness", HealthCheckView.as_view(), name="readiness-check"),
+    path("account-deactivated/", AccountDeactivatedView.as_view(), name="account-deactivated"),
     path("ha/", include("helusers.urls", namespace="helusers")),
     path("v1/", include((router.urls, "traffic_control"), namespace="v1")),
     path("v1/", include(barrier_operations_router.urls)),

@@ -1,0 +1,33 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0" />
+        <title>{% trans "Account Deactivated" %}</title>
+        <link rel="stylesheet"
+              href="{% static 'cityinfra/css/account_deactivated.css' %}" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="icon"
+                 aria-hidden="true">🔒</div>
+            <h1>{% trans "Account Deactivated" %}</h1>
+            <div class="message">
+                {% blocktranslate trimmed %}
+                    Your account has been deactivated, likely due to prolonged inactivity or due to a manual
+                    deactivation by a system administrator.
+                {% endblocktranslate %}
+            </div>
+            <div class="info">
+                {% blocktranslate trimmed %}
+                    If you believe this is a mistake, please contact your system administrator to reactivate your account.
+                {% endblocktranslate %}
+            </div>
+            <div class="admin-login-link">
+                <a href="{% url 'admin:login' %}">{% trans "Back to login page" %}</a>
+            </div>
+        </div>
+    </body>
+</html>

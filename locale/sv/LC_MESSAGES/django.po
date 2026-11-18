@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-11 12:55+0200\n"
+"POT-Creation-Date: 2026-11-19 10:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,6 +53,9 @@ msgstr "Ovanför"
 
 msgid "Above the lanes"
 msgstr "Ovanför körfälten"
+
+msgid "Account Deactivated"
+msgstr ""
 
 msgid "Active"
 msgstr "Aktiv"
@@ -244,6 +247,9 @@ msgstr "Medelgott"
 # AI translation - needs human review
 msgid "Azure AD"
 msgstr "Azure AD"
+
+msgid "Back to login page"
+msgstr ""
 
 msgid "Backward"
 msgstr "Bakåt"
@@ -1409,6 +1415,11 @@ msgid ""
 msgstr ""
 "Om ej markerad begränsas åtkomsten till användare/grupper med lämpliga "
 "tabell‑ eller filbehörigheter"
+
+msgid ""
+"If you believe this is a mistake, please contact your system administrator "
+"to reactivate your account."
+msgstr ""
 
 #, python-format
 msgid "Illegal file types: %(types)s"
@@ -4053,6 +4064,11 @@ msgid ""
 msgstr ""
 "Du har manuellt ändrat platsen för planen medan alternativet 'härled läget' "
 "är aktiverat."
+
+msgid ""
+"Your account has been deactivated, likely due to prolonged inactivity or "
+"due to a manual deactivation by a system administrator."
+msgstr ""
 
 msgid "additional sign real"
 msgstr "Tilläggsskylt (implementering)"
