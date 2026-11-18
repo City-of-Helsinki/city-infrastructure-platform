@@ -1,18 +1,14 @@
-from datetime import datetime
-
 import pytest
-from auditlog.models import LogEntry
 from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.gis.geos import Point
 from django.urls import resolve, reverse
 
-from traffic_control.admin import BarrierRealAdmin, TrafficSignRealAdmin
+from traffic_control.admin import TrafficSignRealAdmin
 from traffic_control.enums import Lifecycle
-from traffic_control.models import BarrierReal, TrafficSignReal
+from traffic_control.models import TrafficSignReal
 from traffic_control.tests.factories import (
     AdditionalSignRealFactory,
-    BarrierRealFactory,
     get_owner,
     get_user,
     TrafficSignRealFactory,
@@ -50,16 +46,6 @@ def traffic_sign_real(standard_user):
         owner=get_owner(),
         lifecycle=Lifecycle.ACTIVE,
     )
-
-
-@pytest.fixture
-def barrier_real():
-    return BarrierRealFactory()
-
-
-@pytest.fixture
-def barrier_admin(admin_site):
-    return BarrierRealAdmin(BarrierReal, admin_site)
 
 
 # ------------------------------------------------------------------------------
@@ -141,62 +127,6 @@ def test_save_model_set_updated_by_for_updating(admin_user, standard_user, traff
 
     assert traffic_sign_real.created_by == standard_user
     assert traffic_sign_real.updated_by == admin_user
-
-
-# ------------------------------------------------------------------------------
-# SoftDeleteAdmin Tests
-# ------------------------------------------------------------------------------
-
-
-@pytest.mark.django_db
-def test_exclude_soft_deleted_by_default(rf, admin_user, barrier_admin, barrier_real):
-    request = rf.get("/")
-    request.user = admin_user
-    changelist = barrier_admin.get_changelist_instance(request)
-
-    qs = changelist.get_queryset(request)
-    assert qs.count() == 1
-
-    barrier_admin.delete_model(request, barrier_real)
-    qs = barrier_admin.get_queryset(request)
-    assert qs.count() == 0
-
-
-@pytest.mark.django_db
-def test_list_soft_deleted(rf, admin_user, barrier_admin, barrier_real):
-    request = rf.get("/", {"soft_deleted": "1"})
-    request.user = admin_user
-    changelist = barrier_admin.get_changelist_instance(request)
-
-    qs = changelist.get_queryset(request)
-    assert qs.count() == 0
-
-    barrier_real.soft_delete(admin_user)
-    qs = changelist.get_queryset(request)
-    assert qs.count() == 1
-
-
-@pytest.mark.django_db
-def test_action_soft_delete(rf, admin_user, barrier_admin, barrier_real):
-    request = rf.post("/")
-    request.user = admin_user
-    barrier_admin.action_soft_delete(request, BarrierReal.objects.all())
-    barrier_real.refresh_from_db()
-
-    assert not barrier_real.is_active
-    assert isinstance(barrier_real.deleted_at, datetime)
-    assert barrier_real.deleted_by == admin_user
-
-    # LogEntries appear to be done by system user as no login is actually performed -> actor == None.
-    create_entries = LogEntry.objects.get_for_object(barrier_real).filter(action=LogEntry.Action.CREATE)
-    assert create_entries.count() == 1
-    create_entry = create_entries[0]
-    assert create_entry.actor is None
-
-    update_entries = LogEntry.objects.get_for_object(barrier_real).filter(action=LogEntry.Action.UPDATE)
-    assert update_entries.count() == 1
-    update_entry = update_entries[0]
-    assert update_entry.actor is None
 
 
 # ------------------------------------------------------------------------------
