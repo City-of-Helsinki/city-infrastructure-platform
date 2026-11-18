@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-11 12:55+0200\n"
+"POT-Creation-Date: 2026-11-19 10:40+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,6 +49,9 @@ msgstr "Kaistan yläpuolella"
 
 msgid "Above the lanes"
 msgstr "Kaistojen yläpuolella"
+
+msgid "Account Deactivated"
+msgstr ""
 
 msgid "Active"
 msgstr "Käytössä pysyvästi"
@@ -235,6 +238,9 @@ msgstr "Tyydyttävä"
 # AI translation - needs human review
 msgid "Azure AD"
 msgstr "Azure AD"
+
+msgid "Back to login page"
+msgstr ""
 
 msgid "Backward"
 msgstr "Taaksepäin"
@@ -1385,6 +1391,11 @@ msgid ""
 msgstr ""
 "Jos ei valittuna, pääsy on rajattu käyttäjille/ryhmille, joilla on "
 "asianmukaiset taulu‑ tai tiedosto‑oikeudet"
+
+msgid ""
+"If you believe this is a mistake, please contact your system administrator "
+"to reactivate your account."
+msgstr ""
 
 #, python-format
 msgid "Illegal file types: %(types)s"
@@ -3975,6 +3986,11 @@ msgid ""
 msgstr ""
 "Olet käsin muuttanut suunnitelman sijaintia sijainnin johtamisen ollessa "
 "päällä."
+
+msgid ""
+"Your account has been deactivated, likely due to prolonged inactivity or "
+"due to a manual deactivation by a system administrator."
+msgstr ""
 
 msgid "additional sign real"
 msgstr "Lisäkilpi (toteuma)"

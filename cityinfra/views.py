@@ -14,9 +14,21 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.cache import never_cache
+from django.views.generic import TemplateView
 from health_check.views import MainView
 
 from traffic_control.file_registry import UPLOAD_PATH_TO_MODEL_MAP
+
+
+class AccountDeactivatedView(TemplateView):
+    """Shown when an AD/Tunnistamo user authenticates successfully but their account has been deactivated.
+
+    This is used as the `SOCIAL_AUTH_INACTIVE_USER_URL` redirect target, so the
+    requesting user is anonymous at this point (python-social-auth does not log
+    in deactivated users).
+    """
+
+    template_name = "account_deactivated.html"
 
 
 class HealthCheckView(MainView):

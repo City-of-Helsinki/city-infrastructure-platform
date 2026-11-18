@@ -324,6 +324,16 @@ AUTHENTICATION_BACKENDS = (
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "/admin/"
 LOGOUT_REDIRECT_URL = "/admin/login/"
+# Generic Django login redirect target, used by e.g. @login_required/staff_member_required
+# views. Also used by python-social-auth as the final fallback (via LOGIN_ERROR_URL ->
+# LOGIN_URL) when AD/Tunnistamo authentication fails outright (e.g. bad/expired token,
+# user cancels). Without this, Django's default ("/accounts/login/") is used, which this
+# project doesn't define, causing a redirect to a non-existent URL.
+LOGIN_URL = "/admin/login/"
+# Dedicated page shown when a deactivated (is_active=False) user successfully
+# authenticates via AD/Tunnistamo, explaining why they can't log in. For this specific
+# case, python-social-auth checks this setting before LOGIN_URL (see social_core.actions.do_complete).
+SOCIAL_AUTH_INACTIVE_USER_URL = "/account-deactivated/"
 SOCIAL_AUTH_TUNNISTAMO_AUTH_EXTRA_ARGUMENTS = {"ui_locales": "fi"}
 WAGTAIL_SITE_NAME = _("City Infrastructure Platform")
 
@@ -465,7 +475,7 @@ STORAGES = {
     },
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"},
 }
-STATICFILES_DIRS = [checkout_dir("map-view/build/static")]
+STATICFILES_DIRS = [checkout_dir("map-view/build/static"), checkout_dir("cityinfra/static")]
 
 # Whether to trust X-Forwarded-Host headers for all purposes
 # where Django would need to make use of its own hostname
