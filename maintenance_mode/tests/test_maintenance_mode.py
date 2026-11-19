@@ -1,6 +1,7 @@
 import pytest
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from pytest_django.asserts import assertContains
 
 from maintenance_mode.models import MaintenanceMode
 
@@ -45,7 +46,7 @@ class TestMaintenanceModeMiddleware:
         response = client.get("/")
         assert response.status_code == 503
         # Check that maintenance page is shown (check for message container)
-        assert '<div class="message">' in response.content.decode()
+        assert '<div class="message message--preserve-whitespace">' in response.content.decode()
 
     def test_maintenance_allows_admin_access(self, admin_client, maintenance_mode):
         """Test that superusers can access admin pages during maintenance"""
@@ -75,8 +76,9 @@ class TestMaintenanceModeMiddleware:
         assert response.status_code == 503
         # Check that the page has the maintenance structure (not checking specific language)
         content = response.content.decode()
-        assert '<div class="message">' in content
-        assert '<div class="icon">🔧</div>' in content
+        assert '<div class="message message--preserve-whitespace">' in content
+        assertContains(response, '<div class="icon" aria-hidden="true">🔧</div>', status_code=503, html=True)
+        assert "cityinfra/css/status_page.css" in content
 
     def test_admin_login_page_accessible_during_maintenance(self, client, maintenance_mode):
         """Test that admin login page is accessible even when maintenance mode is active"""

@@ -96,7 +96,7 @@ def test__account_deactivated__page_content(client: Client) -> None:
     assert "please contact your system administrator to reactivate your account" in content
     assert f'href="{reverse("admin:login")}"' in content
     assert "Back to login page" in content
-    assert "cityinfra/css/account_deactivated.css" in content
+    assert "cityinfra/css/status_page.css" in content
 
 
 @pytest.mark.django_db
