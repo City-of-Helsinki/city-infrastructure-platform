@@ -1,3 +1,5 @@
+/* Shared styles for standalone status pages: maintenance mode and account deactivated. */
+
 * {
     margin: 0;
     padding: 0;
@@ -41,6 +43,11 @@ h1 {
     color: #666;
     line-height: 1.6;
     margin-bottom: 30px;
+}
+
+/* Keeps line breaks in admin-entered text, e.g. the maintenance message. */
+.message--preserve-whitespace {
+    white-space: pre-wrap;
 }
 
 .info {
