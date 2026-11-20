@@ -126,7 +126,7 @@ def get_furniture_signpost_plan(
     device_type=None,
     parent=None,
     mount_plan=None,
-    location_name_en=None,
+    location_name_en="",
     plan=None,
 ) -> FurnitureSignpostPlan:
     user = get_user("test_user")
@@ -175,7 +175,7 @@ def get_furniture_signpost_real(
     furniture_signpost_plan=None,
     parent=None,
     mount_real=None,
-    location_name_en=None,
+    location_name_en="",
 ) -> FurnitureSignpostReal:
     user = get_user("test_user")
     location = location or test_point_3d

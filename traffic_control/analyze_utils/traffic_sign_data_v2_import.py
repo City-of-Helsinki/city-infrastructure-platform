@@ -1336,7 +1336,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction), source_id, details),
             "height": self._get_sign_height(row.get(CSVHeadersV2.height), source_id, details),
             "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition), source_id, details),
-            "txt": row.get(CSVHeadersV2.txt, "") or None,
+            "txt": row.get(CSVHeadersV2.txt, ""),
             "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at), source_id, details),
             "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
         }
@@ -2059,7 +2059,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "direction": self._get_sign_direction(row.get(CSVHeadersV2.direction), source_id, details),
             "height": self._get_sign_height(row.get(CSVHeadersV2.height), source_id, details),
             "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition), source_id, details),
-            "txt": row.get(CSVHeadersV2.txt, "") or None,
+            "txt": row.get(CSVHeadersV2.txt, ""),
             "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at), source_id, details),
             "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
         }
@@ -2107,7 +2107,7 @@ class TrafficSignImporterV2(CodeTransformMixin, DbBuilderMixin, DataLoadingMixin
             "condition": self._get_sign_condition(row.get(CSVHeadersV2.condition), source_id, details),
             "scanned_at": self._get_scanned_at(row.get(CSVHeadersV2.scanned_at), source_id, details),
             "attachment_url": row.get(CSVHeadersV2.attachment_url, ""),
-            "txt": row.get(CSVHeadersV2.txt, "") or None,
+            "txt": row.get(CSVHeadersV2.txt, ""),
         }
 
     def _signpost_fields_changed(

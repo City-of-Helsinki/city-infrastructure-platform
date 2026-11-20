@@ -233,6 +233,7 @@ class TestMoveTicketMachinesToAdditionalSignsCommand:
         assert new_sign.color == Color.BLUE
         assert new_sign.mount_real == mount
         assert new_sign.legacy_code == "LEGACY123"
+        assert new_sign.installed_by == ""
 
         # Verify tracking
         run = TicketMachineMigrationRun.objects.first()

@@ -398,7 +398,7 @@ class TrafficSignImporter:
                         if location_specifier
                         else None,
                         scanned_at=self._get_sign_scanned_at(mount_data.get(CSVHeaders.scanned_at)),
-                        attachment_url=mount_data.get(CSVHeaders.attachment_url),
+                        attachment_url=mount_data.get(CSVHeaders.attachment_url) or "",
                         created_by=get_system_user(),
                     )
 
@@ -440,7 +440,7 @@ class TrafficSignImporter:
             self._get_update_for_value(sign_real, "value", self._get_sign_value(csv_data[CSVHeaders.number_code]))
         )
 
-        update_data.update(self._get_update_for_value(sign_real, "txt", csv_data[CSVHeaders.txt]))
+        update_data.update(self._get_update_for_value(sign_real, "txt", csv_data[CSVHeaders.txt] or ""))
 
         return False, update_data
 
@@ -503,10 +503,10 @@ class TrafficSignImporter:
                                 sign_data[CSVHeaders.mount_id], sign_source_id, "sign"
                             ),
                             mount_type=self.mount_types_by_name[sign_data[CSVHeaders.sign_mount_type]],
-                            txt=sign_data[CSVHeaders.txt],
+                            txt=sign_data[CSVHeaders.txt] or "",
                             installation_status=get_default_installation_status(),
                             location_specifier=get_sign_location_specifier(sign_data),
-                            attachment_url=sign_data.get(CSVHeaders.attachment_url),
+                            attachment_url=sign_data.get(CSVHeaders.attachment_url) or "",
                             created_by=get_system_user(),
                         )
                 else:
@@ -559,7 +559,7 @@ class TrafficSignImporter:
                             sign_data[CSVHeaders.mount_id], sign_source_id, "signpost"
                         ),
                         mount_type=self.mount_types_by_name[CSVHeaders.sign_mount_type],
-                        txt=sign_data[CSVHeaders.txt],
+                        txt=sign_data[CSVHeaders.txt] or "",
                         installation_status=get_default_installation_status(),
                         location_specifier=get_sign_location_specifier(sign_data),
                         scanned_at=self._get_sign_scanned_at(sign_data.get(CSVHeaders.scanned_at)),
@@ -667,7 +667,7 @@ class TrafficSignImporter:
                     color=get_additional_sign_color(sign_data),
                     additional_information=get_additional_information(sign_data),
                     missing_content=True,
-                    attachment_url=sign_data.get(CSVHeaders.attachment_url),
+                    attachment_url=sign_data.get(CSVHeaders.attachment_url) or "",
                     created_by=get_system_user(),
                 )
             else:
@@ -942,7 +942,7 @@ class TrafficSignImporter:
         update_data.update(self._get_update_for_value(object_real, "location", csv_point))
 
         update_data.update(
-            self._get_update_for_value(object_real, "attachment_url", csv_data.get(CSVHeaders.attachment_url))
+            self._get_update_for_value(object_real, "attachment_url", csv_data.get(CSVHeaders.attachment_url) or "")
         )
 
         return update_data

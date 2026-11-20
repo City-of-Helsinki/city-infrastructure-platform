@@ -528,7 +528,7 @@ def test_update_signs_skips_unchanged_record(tmp_path: Path, default_owner, devi
         height=250,  # CSV korkeus="2.5" → int(2.5*100)=250
         scanned_at=None,
         attachment_url="",
-        txt=None,
+        txt="",
         value=None,
         condition=None,
         location_specifier=None,
@@ -566,7 +566,7 @@ def test_update_signs_force_update_bypasses_comparison(tmp_path: Path, default_o
         height=250,
         scanned_at=None,
         attachment_url="",
-        txt=None,
+        txt="",
         value=None,
         condition=None,
         location_specifier=None,

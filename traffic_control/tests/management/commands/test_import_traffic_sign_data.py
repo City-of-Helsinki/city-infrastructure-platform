@@ -397,6 +397,51 @@ def test__additional_sign_update():
     assert existing_sign.attachment_url == "updated_url"
 
 
+@pytest.mark.django_db
+def test__import_with_missing_csv_string_values_creates_objects_with_empty_strings() -> None:
+    """New mounts, signs and additional signs get "" for string columns missing from a short CSV row."""
+    _create_db_entries(["H24S", "C39"])
+    mount_data = _get_mount_dict({"ssurl": None})
+    sign_data = _get_sign_dict({"id": "dummyid", "kiinnityskohta_id": "mount_pylväs1", "ssurl": None, "teksti": None})
+    add_sign_data = _get_sign_dict({"merkkikoodi": "H24S", "lisäkilven_päämerkin_id": "dummyid", "ssurl": None})
+    importer = TrafficSignImporter(mount_data, sign_data, add_sign_data)
+    importer.import_data()
+
+    assert [mount.attachment_url for mount in MountReal.objects.all()] == [""]
+    sign = TrafficSignReal.objects.get()
+    assert (sign.txt, sign.attachment_url) == ("", "")
+    assert AdditionalSignReal.objects.get().attachment_url == ""
+
+
+@pytest.mark.django_db
+def test__sign_update_with_missing_csv_string_values_stores_empty_strings() -> None:
+    """csv.DictReader yields None for columns missing from a short row; string fields must get "" instead."""
+    existing_mount = MountRealFactory(
+        mount_type__code="Existing",
+        source_id="mount_pylväs1",
+        source_name=TrafficSignImporter.SOURCE_NAME,
+        attachment_url="https://old-mount",
+    )
+    existing_sign = TrafficSignRealFactory(
+        source_id="sign",
+        source_name=TrafficSignImporter.SOURCE_NAME,
+        device_type__code="Existing",
+        txt="Old text",
+        attachment_url="https://old-sign",
+    )
+    _create_db_entries(["C39"])
+    mount_data = _get_mount_dict({"ssurl": None})
+    sign_data = _get_sign_dict({"kiinnityskohta_id": "mount_pylväs1", "ssurl": None, "teksti": None})
+    importer = TrafficSignImporter(mount_data, sign_data, {}, update=True)
+    importer.import_data()
+
+    existing_mount.refresh_from_db()
+    existing_sign.refresh_from_db()
+    assert existing_mount.attachment_url == ""
+    assert existing_sign.attachment_url == ""
+    assert existing_sign.txt == ""
+
+
 def _get_sign_dict(update_params):
     base_dict = {
         "fid": 1,

@@ -487,7 +487,7 @@ class Command(BaseMigrationCommand):
             content_s=None,
             missing_content=False,
             additional_information="",
-            installed_by=None,
+            installed_by="",
             owner=ts_real.owner,
             validity_period_start=ts_real.validity_period_start,
             validity_period_end=ts_real.validity_period_end,

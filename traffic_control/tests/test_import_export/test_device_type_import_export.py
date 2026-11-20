@@ -58,7 +58,7 @@ def test__traffic_control_device_type__export(  # noqa: C901
     """Test simple export of a single traffic control device type with multiple variations
     One device type is created to database in migrations, that is why assert len(dataset) == 1 + 1
     """
-    kwargs = {"code": "123", "legacy_code": None, "legacy_description": None, "target_model": None}
+    kwargs = {"code": "123", "legacy_code": "", "legacy_description": "", "target_model": None}
     if icon_file:
         kwargs["icon_file"] = TrafficControlDeviceTypeIconFactory(file__filename=icon_file)
     if value:

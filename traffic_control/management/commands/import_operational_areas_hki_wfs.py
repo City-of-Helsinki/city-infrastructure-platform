@@ -41,14 +41,14 @@ class Command(TrackableCommand):
                         source_id=feature["id"].value,
                         defaults={
                             "name": feature["nimi"].value,
-                            "name_short": feature["nimi_lyhyt"].value,
-                            "area_type": feature["urakkamuoto"].value,
-                            "contractor": feature["urakoitsija"].value,
+                            "name_short": feature["nimi_lyhyt"].value or "",
+                            "area_type": feature["urakkamuoto"].value or "",
+                            "contractor": feature["urakoitsija"].value or "",
                             "start_date": start_date,
                             "end_date": end_date,
                             "updated_date": updated_date,
                             "task": feature["tehtavakokonaisuus"].value,
-                            "status": feature["status"].value,
+                            "status": feature["status"].value or "",
                             "location": gdal_geometry.geos,
                         },
                     )
