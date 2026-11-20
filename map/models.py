@@ -8,14 +8,16 @@ from map.validators import validate_layer_extra_feature_info
 
 
 class Layer(models.Model):
-    identifier = models.CharField(_("Identifier"), max_length=200)
-    app_name = models.CharField(_("App Name"), max_length=200, default="traffic_control")
-    name_fi = models.CharField(_("Finnish name"), max_length=200)
-    name_en = models.CharField(_("English name"), max_length=200)
-    name_sv = models.CharField(_("Swedish name"), max_length=200, default="Missing SW translation")
+    identifier = models.CharField(_("Identifier"), max_length=200, blank=False, null=False)
+    app_name = models.CharField(_("App Name"), max_length=200, default="traffic_control", blank=False, null=False)
+    name_fi = models.CharField(_("Finnish name"), max_length=200, blank=False, null=False)
+    name_en = models.CharField(_("English name"), max_length=200, blank=False, null=False)
+    name_sv = models.CharField(
+        _("Swedish name"), max_length=200, default="Missing SW translation", blank=False, null=False
+    )
     is_basemap = models.BooleanField(_("Is basemap"), default=False)
     order = models.IntegerField(_("Order"), default=1)
-    filter_fields = models.CharField(_("Filter fields"), max_length=200, blank=True)
+    filter_fields = models.CharField(_("Filter fields"), max_length=200, blank=True, null=False)
     use_traffic_sign_icons = models.BooleanField(_("Use Traffic Sign Icons"), default=False)
     clustered = models.BooleanField(_("Clustered"), default=True)
     extra_feature_info = models.JSONField(
@@ -81,7 +83,7 @@ class IconDrawingConfig(models.Model):
         EXTRA_LARGE = 256, _("Extra Large")
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    name = models.CharField(_("Name"), max_length=200, unique=True)
+    name = models.CharField(_("Name"), max_length=200, unique=True, blank=False, null=False)
     enabled = models.BooleanField(_("Enabled"), default=False)
     image_type = models.CharField(_("Image Type"), choices=ImageType.choices, max_length=10, null=False, blank=False)
     png_size = models.IntegerField(_("PNG Size"), choices=PngSize.choices, null=False, blank=False)

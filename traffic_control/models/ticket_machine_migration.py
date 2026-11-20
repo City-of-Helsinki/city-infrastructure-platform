@@ -91,6 +91,7 @@ class TicketMachineMigrationRun(models.Model):
     error_message = models.TextField(
         _("Error message"),
         blank=True,
+        null=False,
         default="",
         help_text=_("Error message if the migration failed."),
     )
@@ -177,6 +178,8 @@ class TicketMachineMigrationPlanRecord(TicketMachineFieldTrackingMixin):
         _("Device type code"),
         max_length=32,
         help_text=_("Device type code of the ticket machine."),
+        blank=False,
+        null=False,
     )
     parent_found = models.BooleanField(
         _("Parent found"),
@@ -193,6 +196,7 @@ class TicketMachineMigrationPlanRecord(TicketMachineFieldTrackingMixin):
         _("Parent sign code"),
         max_length=32,
         blank=True,
+        null=False,
         default="",
         help_text=_("Device type code of the parent sign (E2 or 521)."),
     )
@@ -260,6 +264,8 @@ class TicketMachineMigrationRealRecord(TicketMachineFieldTrackingMixin):
         _("Device type code"),
         max_length=32,
         help_text=_("Device type code of the ticket machine."),
+        blank=False,
+        null=False,
     )
     parent_found = models.BooleanField(
         _("Parent found"),
@@ -276,6 +282,7 @@ class TicketMachineMigrationRealRecord(TicketMachineFieldTrackingMixin):
         _("Parent sign code"),
         max_length=32,
         blank=True,
+        null=False,
         default="",
         help_text=_("Device type code of the parent sign (E2 or 521)."),
     )

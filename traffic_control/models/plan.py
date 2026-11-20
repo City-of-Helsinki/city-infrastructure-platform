@@ -29,11 +29,13 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
 
-    name = models.CharField(verbose_name=_("Name"), max_length=512)
+    name = models.CharField(verbose_name=_("Name"), max_length=512, blank=False, null=False)
     decision_id = models.CharField(
         verbose_name=_("Decision id"),
         max_length=16,
         help_text=_("Year and verdict section separated with a dash"),
+        blank=False,
+        null=False,
     )
     diary_number = models.CharField(
         verbose_name=_("Diary number"),
@@ -54,6 +56,8 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
                     _("A drawing number must not contain special characters"),
                 ),
             ],
+            blank=False,
+            null=False,
         ),
         verbose_name=_("Drawing numbers"),
         null=False,
@@ -211,8 +215,8 @@ class PlanGeometryImportLog(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     start_time = models.DateTimeField(verbose_name=_("Start time"))
     end_time = models.DateTimeField(verbose_name=_("End time"), null=True, blank=True)
-    file_path = models.CharField(verbose_name=_("File path"), max_length=500)
-    output_dir = models.CharField(verbose_name=_("Output directory"), max_length=500)
+    file_path = models.CharField(verbose_name=_("File path"), max_length=500, blank=False, null=False)
+    output_dir = models.CharField(verbose_name=_("Output directory"), max_length=500, blank=False, null=False)
     dry_run = models.BooleanField(verbose_name=_("Dry run"), default=False)
     results = models.JSONField(
         verbose_name=_("Results"),

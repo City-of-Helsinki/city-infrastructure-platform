@@ -67,6 +67,8 @@ class CityFurnitureDeviceType(models.Model, AbstractDeviceTypeMixin):
         unique=True,
         max_length=32,
         help_text=_("Code of the Device Type in the Helsinki Design Manual."),
+        blank=False,
+        null=False,
     )
     class_type = EnumIntegerField(
         CityFurnitureClassType,
@@ -111,6 +113,7 @@ class CityFurnitureDeviceType(models.Model, AbstractDeviceTypeMixin):
         _("Size"),
         max_length=50,
         blank=True,
+        null=False,
         help_text=_("Standard size of the Device Type."),
     )
     target_model = EnumField(
@@ -216,6 +219,8 @@ class CityFurnitureColor(models.Model):
         max_length=64,
         unique=True,
         help_text=_("Name of the color in Helsinki Design System or Manual."),
+        blank=False,
+        null=False,
     )
     rgb = ColorField(
         help_text=_("RGB Hex value of the color"),
@@ -239,6 +244,8 @@ class CityFurnitureTarget(SourceControlModel):
         _("Finnish name"),
         max_length=254,
         help_text=_("Name of the target in Finnish."),
+        blank=False,
+        null=False,
     )
     name_sw = models.CharField(
         _("Swedish name"),

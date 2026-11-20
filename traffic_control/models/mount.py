@@ -71,6 +71,7 @@ class MountType(models.Model):
         verbose_name=_("Digiroad description"),
         max_length=256,
         blank=True,
+        null=False,
     )
 
     class Meta:
@@ -85,9 +86,9 @@ class MountType(models.Model):
 
 class PortalType(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    structure = models.CharField(_("Portal structure"), max_length=64)
-    build_type = models.CharField(_("Portal build type"), max_length=64)
-    model = models.CharField(_("Portal model"), max_length=64)
+    structure = models.CharField(_("Portal structure"), max_length=64, blank=False, null=False)
+    build_type = models.CharField(_("Portal build type"), max_length=64, blank=False, null=False)
+    model = models.CharField(_("Portal model"), max_length=64, blank=False, null=False)
 
     class Meta:
         db_table = "portal_type"
@@ -124,7 +125,7 @@ class AbstractMount(
         null=True,
         on_delete=models.PROTECT,
     )
-    base = models.CharField(verbose_name=_("Base"), max_length=128, blank=True)
+    base = models.CharField(verbose_name=_("Base"), max_length=128, blank=True, null=False)
     portal_type = models.ForeignKey(
         PortalType,
         verbose_name=_("Portal type"),

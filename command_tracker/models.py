@@ -10,9 +10,11 @@ class TrackedManagementCommand(models.Model):
     time and are candidates for deletion from the codebase.
     """
 
-    id = models.CharField(primary_key=True, max_length=201, editable=False)  # Formatted as 'app_name-command_name'
-    app = models.CharField(max_length=100, editable=False)
-    command = models.CharField(max_length=100, editable=False)
+    id = models.CharField(
+        primary_key=True, max_length=201, editable=False, blank=False, null=False
+    )  # Formatted as 'app_name-command_name'
+    app = models.CharField(max_length=100, editable=False, blank=False, null=False)
+    command = models.CharField(max_length=100, editable=False, blank=False, null=False)
     comment = models.TextField(
         blank=True,
         null=False,

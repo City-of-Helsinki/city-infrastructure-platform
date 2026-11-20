@@ -37,8 +37,8 @@ class TicketMachineFieldTrackingMixin(BaseFieldTrackingMixin):
     """Extended field tracking for ticket machine migrations (includes lost fields specific to ticket machines)."""
 
     # Lost fields specific to ticket machines
-    lost_value = models.CharField(_("Lost value"), max_length=50, blank=True, default="")
-    lost_txt = models.CharField(_("Lost txt"), max_length=254, blank=True, default="")
+    lost_value = models.CharField(_("Lost value"), max_length=50, blank=True, null=False, default="")
+    lost_txt = models.CharField(_("Lost txt"), max_length=254, blank=True, null=False, default="")
     lost_double_sided = models.BooleanField(_("Lost double_sided"), default=False)
     lost_peak_fastened = models.BooleanField(_("Lost peak_fastened"), default=False)
 

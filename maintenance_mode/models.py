@@ -20,18 +20,21 @@ class MaintenanceMode(models.Model):
     message_fi = models.TextField(
         _("Message (Finnish)"),
         blank=True,
+        null=False,
         default="Järjestelmä on huoltotilassa. Yritä myöhemmin uudelleen.",
         help_text=_("Message to display on the maintenance page in Finnish."),
     )
     message_en = models.TextField(
         _("Message (English)"),
         blank=True,
+        null=False,
         default="System is under maintenance. Please try again later.",
         help_text=_("Message to display on the maintenance page in English."),
     )
     message_sv = models.TextField(
         _("Message (Swedish)"),
         blank=True,
+        null=False,
         default="Systemet är under underhåll. Försök igen senare.",
         help_text=_("Message to display on the maintenance page in Swedish."),
     )

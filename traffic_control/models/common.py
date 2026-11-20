@@ -61,8 +61,8 @@ class JSONSchemaField(models.JSONField):
 
 class Owner(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    name_fi = models.CharField(verbose_name=_("Name (fi)"), max_length=254)
-    name_en = models.CharField(verbose_name=_("Name (en)"), max_length=254)
+    name_fi = models.CharField(verbose_name=_("Name (fi)"), max_length=254, blank=False, null=False)
+    name_en = models.CharField(verbose_name=_("Name (en)"), max_length=254, blank=False, null=False)
 
     class Meta:
         verbose_name = _("Owner")
@@ -116,11 +116,14 @@ class TrafficControlDeviceTypeTag(models.Model):
         unique=True,
         max_length=64,
         help_text=_("Name of the tag."),
+        blank=False,
+        null=False,
     )
     description = models.CharField(
         _("Description"),
         max_length=254,
         blank=True,
+        null=False,
     )
 
     class Meta:
@@ -175,6 +178,8 @@ class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
         unique=True,
         max_length=32,
         help_text=_("Standardised code of the device type."),
+        blank=False,
+        null=False,
     )
     icon_file = models.ForeignKey(
         TrafficControlDeviceTypeIcon,
@@ -194,18 +199,21 @@ class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
         _("Value"),
         max_length=50,
         blank=True,
+        null=False,
         help_text=_("Numeric value on the sign."),
     )
     unit = models.CharField(
         _("Unit"),
         max_length=50,
         blank=True,
+        null=False,
         help_text=_("Unit, in which the numeric value is in."),
     )
     size = models.CharField(
         _("Size"),
         max_length=50,
         blank=True,
+        null=False,
     )
     legacy_code = models.CharField(
         _("Legacy code"),
@@ -367,7 +375,7 @@ auditlog.register(TrafficControlDeviceType, m2m_fields={"tags"})
 
 
 class OperationType(models.Model):
-    name = models.CharField(_("Name"), max_length=200, help_text=_("Name of the operation."))
+    name = models.CharField(_("Name"), max_length=200, help_text=_("Name of the operation."), blank=False, null=False)
     traffic_sign = models.BooleanField(_("Traffic sign"), default=False)
     additional_sign = models.BooleanField(_("Additional sign"), default=False)
     road_marking = models.BooleanField(_("Road marking"), default=False)

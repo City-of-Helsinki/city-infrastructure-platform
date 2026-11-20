@@ -65,6 +65,8 @@ class AbstractBarrier(
         _("Road name"),
         max_length=254,
         help_text=_("Name of the road this barrier is installed at."),
+        blank=False,
+        null=False,
     )
     lane_number = EnumField(
         LaneNumber,
