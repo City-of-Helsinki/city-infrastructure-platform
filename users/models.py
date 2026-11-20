@@ -3,6 +3,7 @@ from typing import Optional, Tuple, TYPE_CHECKING
 
 from auditlog.registry import auditlog
 from django.contrib.auth.models import Group
+from django.contrib.sessions.base_session import AbstractBaseSession
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -12,6 +13,7 @@ from admin_helper.decorators import requires_fields
 
 if TYPE_CHECKING:
     from traffic_control.models import ResponsibleEntity
+    from users.session_store import SessionStore
 
 
 class User(AbstractUser):
@@ -213,6 +215,54 @@ class UserDeactivationStatus(models.Model):
         """
         status = "deactivated" if self.deactivated_at else "pending"
         return f"{self.user.username} - {status}"
+
+
+class UserSession(AbstractBaseSession):
+    """Database-backed session that records which user it belongs to.
+
+    Replaces the default ``django.contrib.sessions`` model so that a user's sessions can be listed and
+    terminated without decoding every session in the database. The extra columns are copied from the
+    session data on every save by ``users.session_store.SessionStore``.
+    """
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="sessions",
+        verbose_name=_("User"),
+    )
+    user_agent = models.CharField(_("User agent"), max_length=512, blank=True)
+    logged_in_at = models.DateTimeField(_("Logged in at"), null=True, blank=True)
+
+    class Meta(AbstractBaseSession.Meta):
+        verbose_name = _("User session")
+        verbose_name_plural = _("User sessions")
+
+    def __str__(self) -> str:
+        """Returns a description that does not reveal the session key.
+
+        The inherited ``__str__`` returns the session key, which is a credential. It would be shown, for
+        example, on the admin's delete confirmation page of a user, which lists the objects to be deleted.
+
+        Returns:
+            str: The session's public identifier, shortened.
+        """
+        from users.sessions import session_public_id
+
+        return session_public_id(self.session_key)[:8]
+
+    @classmethod
+    def get_session_store_class(cls) -> type["SessionStore"]:
+        """Returns the session store class that uses this model.
+
+        Returns:
+            type: The ``users.session_store.SessionStore`` class.
+        """
+        from users.session_store import SessionStore
+
+        return SessionStore
 
 
 auditlog.register(

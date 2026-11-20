@@ -41,5 +41,27 @@
             </div>
         </fieldset>
 
+        <fieldset class="module aligned">
+
+            <h2>{% translate "Sessions" %}</h2>
+
+            <div class="form-row">
+                <label>{% translate "Active sessions" %}:</label>
+                <div class="readonly">
+                    {{ active_session_count }}
+                    (<a href="{% url "my-sessions" %}">{% translate "View and manage my sessions" %}</a>)
+                </div>
+            </div>
+
+            {% if user.is_superuser %}
+                <div class="form-row">
+                    <label>{% translate "All users" %}:</label>
+                    <div class="readonly">
+                        <a href="{% url "all-user-sessions" %}">{% translate "View active sessions of all users" %}</a>
+                    </div>
+                </div>
+            {% endif %}
+        </fieldset>
+
     </div>
 {% endblock %}

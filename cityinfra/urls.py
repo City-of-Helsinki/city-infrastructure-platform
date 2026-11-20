@@ -14,7 +14,13 @@ from city_furniture.views import (
     city_furniture_target as city_furniture_target_views,
     furniture_signpost as furniture_signpost_views,
 )
-from cityinfra.admin.views import FeatureDisabledView, MyAccountView
+from cityinfra.admin.views import (
+    AllUserSessionsView,
+    FeatureDisabledView,
+    MyAccountView,
+    MySessionsView,
+    UserSessionsView,
+)
 from cityinfra.views import AccountDeactivatedView, FileProxyView, HealthCheckView
 from map import views as map_views
 from traffic_control.views import (
@@ -194,6 +200,9 @@ urlpatterns += i18n_patterns(
     path("admin/reset/done/", FeatureDisabledView.as_view()),
     # Non-password views
     path("admin/account/", MyAccountView.as_view(), name="my-account"),
+    path("admin/account/sessions/", MySessionsView.as_view(), name="my-sessions"),
+    path("admin/user-sessions/", AllUserSessionsView.as_view(), name="all-user-sessions"),
+    path("admin/user-sessions/<uuid:user_id>/", UserSessionsView.as_view(), name="user-sessions"),
     path("admin/doc/", include("city_infra_instructions.urls")),
     path("admin/", admin.site.urls),
     path("map/", map_views.map_view, name="map-view"),

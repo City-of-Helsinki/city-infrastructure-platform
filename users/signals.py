@@ -2,11 +2,33 @@
 
 from typing import Optional
 
+from django.contrib.auth.signals import user_logged_in
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.http import HttpRequest
 from django.utils import timezone
 
-from users.models import User
+from users.models import User, UserSession
+from users.session_store import LOGGED_IN_AT_SESSION_KEY, USER_AGENT_MAX_LENGTH, USER_AGENT_SESSION_KEY
+
+
+@receiver(user_logged_in)
+def store_session_login_details(sender: type, request: HttpRequest | None, user: User, **kwargs: dict) -> None:
+    """Stores the browser's user agent and the login time in the new session.
+
+    The values let users recognise their sessions on the session management pages.
+
+    Args:
+        sender (type): The class of the user that logged in.
+        request (HttpRequest | None): The login request, if there is one.
+        user (User): The user that logged in.
+        **kwargs (dict): Additional keyword arguments from the signal.
+    """
+    session = getattr(request, "session", None)
+    if session is None:
+        return
+    session[USER_AGENT_SESSION_KEY] = request.META.get("HTTP_USER_AGENT", "")[:USER_AGENT_MAX_LENGTH]
+    session[LOGGED_IN_AT_SESSION_KEY] = timezone.now().isoformat()
 
 
 @receiver(post_save, sender=User)
@@ -49,3 +71,19 @@ def delete_deactivation_status_on_activity(
         elif activity_fields & update_fields:
             if hasattr(instance, "deactivation_status"):
                 instance.deactivation_status.delete()
+
+
+@receiver(post_save, sender=User)
+def delete_sessions_of_inactive_user(sender: type[User], instance: User, **kwargs: dict) -> None:
+    """Deletes the sessions of an inactive user.
+
+    Without this, a deactivated user's sessions would start working again if the user were reactivated
+    before the sessions expire.
+
+    Args:
+        sender (type[User]): The User model class.
+        instance (User): The User instance being saved.
+        **kwargs (dict): Additional keyword arguments from the signal.
+    """
+    if not instance.is_active:
+        UserSession.objects.filter(user=instance).delete()
