@@ -14488,11 +14488,6 @@ components:
       - files
     AdditionalSignPlanInput:
       type: object
-      description: |-
-        Mixin that validates parent field is provided for non-ticket-machine additional signs.
-
-        This mixin should be used with AdditionalSign serializers to enforce the business rule
-        that only ticket machine device types can have a null parent.
       properties:
         id:
           type: string
@@ -14639,7 +14634,6 @@ components:
           nullable: true
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -14777,11 +14771,6 @@ components:
       - updated_by
     AdditionalSignPlanInputRequest:
       type: object
-      description: |-
-        Mixin that validates parent field is provided for non-ticket-machine additional signs.
-
-        This mixin should be used with AdditionalSign serializers to enforce the business rule
-        that only ticket machine device types can have a null parent.
       properties:
         replaces:
           type: string
@@ -14917,7 +14906,6 @@ components:
           nullable: true
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -15203,7 +15191,6 @@ components:
           nullable: true
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -15345,11 +15332,6 @@ components:
       - updated_by
     AdditionalSignReal:
       type: object
-      description: |-
-        Mixin that validates parent field is provided for non-ticket-machine additional signs.
-
-        This mixin should be used with AdditionalSign serializers to enforce the business rule
-        that only ticket machine device types can have a null parent.
       properties:
         id:
           type: string
@@ -15550,7 +15532,6 @@ components:
           nullable: true
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -15642,37 +15623,30 @@ components:
             * `6` - Outside
         installation_id:
           type: string
-          nullable: true
           description: The id number of the installation record.
           maxLength: 254
         installation_details:
           type: string
-          nullable: true
           description: Additional details about the installation.
           maxLength: 254
         installed_by:
           type: string
-          nullable: true
           description: Name of the organization who installed this sign.
           maxLength: 254
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this sign.
           maxLength: 254
         rfid:
           type: string
-          nullable: true
           description: RFID tag of the sign (if any).
           maxLength: 254
         permit_decision_id:
           type: string
-          nullable: true
           description: The id number of the installation permit.
           maxLength: 254
         operation:
           type: string
-          nullable: true
           description: Maintenance operations done to the sign, e.g. washing, straightening
             or painting.
           maxLength: 64
@@ -15684,7 +15658,6 @@ components:
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this sign.
           maxLength: 500
         created_by:
@@ -15814,11 +15787,6 @@ components:
       - operation_type_id
     AdditionalSignRealRequest:
       type: object
-      description: |-
-        Mixin that validates parent field is provided for non-ticket-machine additional signs.
-
-        This mixin should be used with AdditionalSign serializers to enforce the business rule
-        that only ticket machine device types can have a null parent.
       properties:
         location:
           type: string
@@ -15993,7 +15961,6 @@ components:
           nullable: true
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -16085,37 +16052,30 @@ components:
             * `6` - Outside
         installation_id:
           type: string
-          nullable: true
           description: The id number of the installation record.
           maxLength: 254
         installation_details:
           type: string
-          nullable: true
           description: Additional details about the installation.
           maxLength: 254
         installed_by:
           type: string
-          nullable: true
           description: Name of the organization who installed this sign.
           maxLength: 254
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this sign.
           maxLength: 254
         rfid:
           type: string
-          nullable: true
           description: RFID tag of the sign (if any).
           maxLength: 254
         permit_decision_id:
           type: string
-          nullable: true
           description: The id number of the installation permit.
           maxLength: 254
         operation:
           type: string
-          nullable: true
           description: Maintenance operations done to the sign, e.g. washing, straightening
             or painting.
           maxLength: 64
@@ -16127,7 +16087,6 @@ components:
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this sign.
           maxLength: 500
         owner:
@@ -16346,7 +16305,6 @@ components:
             * `2` - Open out
         material:
           type: string
-          nullable: true
           description: Describes the material that the barrier is made of.
           maxLength: 254
         is_electric:
@@ -16388,7 +16346,6 @@ components:
           nullable: true
         txt:
           type: string
-          nullable: true
           description: Text written on the barrier.
         created_by:
           type: string
@@ -16564,7 +16521,6 @@ components:
             * `2` - Open out
         material:
           type: string
-          nullable: true
           description: Describes the material that the barrier is made of.
           maxLength: 254
         is_electric:
@@ -16606,7 +16562,6 @@ components:
           nullable: true
         txt:
           type: string
-          nullable: true
           description: Text written on the barrier.
         owner:
           type: string
@@ -16794,7 +16749,6 @@ components:
             * `2` - Open out
         material:
           type: string
-          nullable: true
           description: Describes the material that the barrier is made of.
           maxLength: 254
         is_electric:
@@ -16836,7 +16790,6 @@ components:
           nullable: true
         txt:
           type: string
-          nullable: true
           description: Text written on the barrier.
         created_by:
           type: string
@@ -17080,7 +17033,6 @@ components:
             * `2` - Open out
         material:
           type: string
-          nullable: true
           description: Describes the material that the barrier is made of.
           maxLength: 254
         is_electric:
@@ -17122,7 +17074,6 @@ components:
           nullable: true
         txt:
           type: string
-          nullable: true
           description: Text written on the barrier.
         created_by:
           type: string
@@ -17416,7 +17367,6 @@ components:
             * `2` - Open out
         material:
           type: string
-          nullable: true
           description: Describes the material that the barrier is made of.
           maxLength: 254
         is_electric:
@@ -17458,7 +17408,6 @@ components:
           nullable: true
         txt:
           type: string
-          nullable: true
           description: Text written on the barrier.
         owner:
           type: string
@@ -17522,11 +17471,6 @@ components:
       - plan
     BulkPlanInputSerializerAdditionalSignPlanItemRequest:
       type: object
-      description: |-
-        Mixin that validates parent field is provided for non-ticket-machine additional signs.
-
-        This mixin should be used with AdditionalSign serializers to enforce the business rule
-        that only ticket machine device types can have a null parent.
       properties:
         id:
           type: string
@@ -17680,7 +17624,6 @@ components:
           nullable: true
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -17840,17 +17783,14 @@ components:
           maxLength: 128
         material:
           type: string
-          nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
         txt:
           type: string
-          nullable: true
           description: Text written on the mount.
           maxLength: 254
         electric_accountable:
           type: string
-          nullable: true
           description: The entity responsible for the mount (if electric).
           maxLength: 254
         is_foldable:
@@ -17864,7 +17804,6 @@ components:
           description: Length of the cross bar for this mount in centimeters.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this mount is installed at.
           maxLength: 254
         location_specifier:
@@ -17966,7 +17905,6 @@ components:
         decision_url:
           type: string
           format: uri
-          nullable: true
           description: URL to decision web page
           maxLength: 500
       required:
@@ -18045,7 +17983,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -18138,7 +18075,6 @@ components:
           description: Numeric value on the sign.
         txt:
           type: string
-          nullable: true
           title: Signpost txt
           description: Text written on the device.
           maxLength: 254
@@ -18173,24 +18109,20 @@ components:
           title: Reflection
         attachment_class:
           type: string
-          nullable: true
           description: The attachment class of the sign according to the standard
             SFS-EN 12899-1.The possible values are P1, P2 and P3.
           maxLength: 254
         target_id:
           type: string
-          nullable: true
           description: The id number of the target the sign is guiding to (if available).
           maxLength: 254
         target_txt:
           type: string
-          nullable: true
           description: Free-form text description of the target the sign is guiding
             to, if the target has no id number.
           maxLength: 254
         electric_maintainer:
           type: string
-          nullable: true
           description: Organization in charge of electric maintenance of the device.
           maxLength: 254
         location_specifier:
@@ -18303,7 +18235,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic sign is installed at.
           maxLength: 254
         lane_number:
@@ -18438,7 +18369,6 @@ components:
           title: Surface
         txt:
           type: string
-          nullable: true
           description: Text written on the sign.
           maxLength: 254
         location_specifier:
@@ -18658,19 +18588,16 @@ components:
             * `1540` - Others
         description_fi:
           type: string
-          nullable: true
           title: Finnish Description
           description: Description of the Device Type in Finnish.
           maxLength: 254
         description_sw:
           type: string
-          nullable: true
           title: Swedish Description
           description: Description of the Device Type in Swedish.
           maxLength: 254
         description_en:
           type: string
-          nullable: true
           title: English Description
           description: Description of the Device Type in English.
           maxLength: 254
@@ -18843,19 +18770,16 @@ components:
             * `1540` - Others
         description_fi:
           type: string
-          nullable: true
           title: Finnish Description
           description: Description of the Device Type in Finnish.
           maxLength: 254
         description_sw:
           type: string
-          nullable: true
           title: Swedish Description
           description: Description of the Device Type in Swedish.
           maxLength: 254
         description_en:
           type: string
-          nullable: true
           title: English Description
           description: Description of the Device Type in English.
           maxLength: 254
@@ -18910,19 +18834,16 @@ components:
           maxLength: 254
         name_sw:
           type: string
-          nullable: true
           title: Swedish name
           description: Name of the target in Swedish.
           maxLength: 254
         name_en:
           type: string
-          nullable: true
           title: English name
           description: Name of the target in English.
           maxLength: 254
         description:
           type: string
-          nullable: true
           description: Description of the target.
           maxLength: 254
       required:
@@ -18950,19 +18871,16 @@ components:
           maxLength: 254
         name_sw:
           type: string
-          nullable: true
           title: Swedish name
           description: Name of the target in Swedish.
           maxLength: 254
         name_en:
           type: string
-          nullable: true
           title: English name
           description: Name of the target in English.
           maxLength: 254
         description:
           type: string
-          nullable: true
           description: Description of the target.
           maxLength: 254
       required:
@@ -19028,21 +18946,18 @@ components:
           maxLength: 254
         location_name_fi:
           type: string
-          nullable: true
           title: Finnish location name
           description: Verbose name for the furniture signposts location in Finnish,
             e.g. street, park or island.
           maxLength: 254
         location_name_sw:
           type: string
-          nullable: true
           title: Swedish location name
           description: Verbose name for the furniture signposts location in Swedish,
             e.g. street, park or island.
           maxLength: 254
         location_name_en:
           type: string
-          nullable: true
           title: English location name
           description: Verbose name for the furniture signposts location in English,
             e.g. street, park or island.
@@ -19057,13 +18972,11 @@ components:
             from which side the device is correctly visible.'
         location_additional_info:
           type: string
-          nullable: true
           title: Additional location info
           description: Additional information about the install location.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the signpost. Enter only if device has a non-standard
             size.
           maxLength: 254
@@ -19101,7 +19014,6 @@ components:
             * `8` - Bottom left
         pictogram:
           type: string
-          nullable: true
           description: Description of the pictogram on the sign.
           maxLength: 254
         value:
@@ -19113,22 +19025,18 @@ components:
           description: Numeric value on the sign.
         text_content_fi:
           type: string
-          nullable: true
           title: Finnish text content
           description: Content of the sign in Finnish.
         text_content_sw:
           type: string
-          nullable: true
           title: Swedish text content
           description: Content of the sign in Swedish.
         text_content_en:
           type: string
-          nullable: true
           title: English text content
           description: Content of the sign in English.
         content_responsible_entity:
           type: string
-          nullable: true
           title: Content's responsible entity
           description: Entity responsible for the device's content.
           maxLength: 254
@@ -19144,7 +19052,6 @@ components:
           description: Date after which this device becomes inactive.
         additional_material_url:
           type: string
-          nullable: true
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
@@ -19291,21 +19198,18 @@ components:
           maxLength: 254
         location_name_fi:
           type: string
-          nullable: true
           title: Finnish location name
           description: Verbose name for the furniture signposts location in Finnish,
             e.g. street, park or island.
           maxLength: 254
         location_name_sw:
           type: string
-          nullable: true
           title: Swedish location name
           description: Verbose name for the furniture signposts location in Swedish,
             e.g. street, park or island.
           maxLength: 254
         location_name_en:
           type: string
-          nullable: true
           title: English location name
           description: Verbose name for the furniture signposts location in English,
             e.g. street, park or island.
@@ -19320,13 +19224,11 @@ components:
             from which side the device is correctly visible.'
         location_additional_info:
           type: string
-          nullable: true
           title: Additional location info
           description: Additional information about the install location.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the signpost. Enter only if device has a non-standard
             size.
           maxLength: 254
@@ -19364,7 +19266,6 @@ components:
             * `8` - Bottom left
         pictogram:
           type: string
-          nullable: true
           description: Description of the pictogram on the sign.
           maxLength: 254
         value:
@@ -19376,22 +19277,18 @@ components:
           description: Numeric value on the sign.
         text_content_fi:
           type: string
-          nullable: true
           title: Finnish text content
           description: Content of the sign in Finnish.
         text_content_sw:
           type: string
-          nullable: true
           title: Swedish text content
           description: Content of the sign in Swedish.
         text_content_en:
           type: string
-          nullable: true
           title: English text content
           description: Content of the sign in English.
         content_responsible_entity:
           type: string
-          nullable: true
           title: Content's responsible entity
           description: Entity responsible for the device's content.
           maxLength: 254
@@ -19407,7 +19304,6 @@ components:
           description: Date after which this device becomes inactive.
         additional_material_url:
           type: string
-          nullable: true
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
@@ -19566,21 +19462,18 @@ components:
           maxLength: 254
         location_name_fi:
           type: string
-          nullable: true
           title: Finnish location name
           description: Verbose name for the furniture signposts location in Finnish,
             e.g. street, park or island.
           maxLength: 254
         location_name_sw:
           type: string
-          nullable: true
           title: Swedish location name
           description: Verbose name for the furniture signposts location in Swedish,
             e.g. street, park or island.
           maxLength: 254
         location_name_en:
           type: string
-          nullable: true
           title: English location name
           description: Verbose name for the furniture signposts location in English,
             e.g. street, park or island.
@@ -19595,13 +19488,11 @@ components:
             from which side the device is correctly visible.'
         location_additional_info:
           type: string
-          nullable: true
           title: Additional location info
           description: Additional information about the install location.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the signpost. Enter only if device has a non-standard
             size.
           maxLength: 254
@@ -19639,7 +19530,6 @@ components:
             * `8` - Bottom left
         pictogram:
           type: string
-          nullable: true
           description: Description of the pictogram on the sign.
           maxLength: 254
         value:
@@ -19651,22 +19541,18 @@ components:
           description: Numeric value on the sign.
         text_content_fi:
           type: string
-          nullable: true
           title: Finnish text content
           description: Content of the sign in Finnish.
         text_content_sw:
           type: string
-          nullable: true
           title: Swedish text content
           description: Content of the sign in Swedish.
         text_content_en:
           type: string
-          nullable: true
           title: English text content
           description: Content of the sign in English.
         content_responsible_entity:
           type: string
-          nullable: true
           title: Content's responsible entity
           description: Entity responsible for the device's content.
           maxLength: 254
@@ -19682,7 +19568,6 @@ components:
           description: Date after which this device becomes inactive.
         additional_material_url:
           type: string
-          nullable: true
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
@@ -19905,21 +19790,18 @@ components:
           maxLength: 254
         location_name_fi:
           type: string
-          nullable: true
           title: Finnish location name
           description: Verbose name for the furniture signposts location in Finnish,
             e.g. street, park or island.
           maxLength: 254
         location_name_sw:
           type: string
-          nullable: true
           title: Swedish location name
           description: Verbose name for the furniture signposts location in Swedish,
             e.g. street, park or island.
           maxLength: 254
         location_name_en:
           type: string
-          nullable: true
           title: English location name
           description: Verbose name for the furniture signposts location in English,
             e.g. street, park or island.
@@ -19934,13 +19816,11 @@ components:
             from which side the device is correctly visible.'
         location_additional_info:
           type: string
-          nullable: true
           title: Additional location info
           description: Additional information about the install location.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the signpost. Enter only if device has a non-standard
             size.
           maxLength: 254
@@ -19978,7 +19858,6 @@ components:
             * `8` - Bottom left
         pictogram:
           type: string
-          nullable: true
           description: Description of the pictogram on the sign.
           maxLength: 254
         value:
@@ -19990,22 +19869,18 @@ components:
           description: Numeric value on the sign.
         text_content_fi:
           type: string
-          nullable: true
           title: Finnish text content
           description: Content of the sign in Finnish.
         text_content_sw:
           type: string
-          nullable: true
           title: Swedish text content
           description: Content of the sign in Swedish.
         text_content_en:
           type: string
-          nullable: true
           title: English text content
           description: Content of the sign in English.
         content_responsible_entity:
           type: string
-          nullable: true
           title: Content's responsible entity
           description: Entity responsible for the device's content.
           maxLength: 254
@@ -20021,7 +19896,6 @@ components:
           description: Date after which this device becomes inactive.
         additional_material_url:
           type: string
-          nullable: true
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
@@ -20192,17 +20066,14 @@ components:
           maxLength: 128
         material:
           type: string
-          nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
         txt:
           type: string
-          nullable: true
           description: Text written on the mount.
           maxLength: 254
         electric_accountable:
           type: string
-          nullable: true
           description: The entity responsible for the mount (if electric).
           maxLength: 254
         is_foldable:
@@ -20216,7 +20087,6 @@ components:
           description: Length of the cross bar for this mount in centimeters.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this mount is installed at.
           maxLength: 254
         location_specifier:
@@ -20329,17 +20199,14 @@ components:
           maxLength: 128
         material:
           type: string
-          nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
         txt:
           type: string
-          nullable: true
           description: Text written on the mount.
           maxLength: 254
         electric_accountable:
           type: string
-          nullable: true
           description: The entity responsible for the mount (if electric).
           maxLength: 254
         is_foldable:
@@ -20353,7 +20220,6 @@ components:
           description: Length of the cross bar for this mount in centimeters.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this mount is installed at.
           maxLength: 254
         location_specifier:
@@ -20479,17 +20345,14 @@ components:
           maxLength: 128
         material:
           type: string
-          nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
         txt:
           type: string
-          nullable: true
           description: Text written on the mount.
           maxLength: 254
         electric_accountable:
           type: string
-          nullable: true
           description: The entity responsible for the mount (if electric).
           maxLength: 254
         is_foldable:
@@ -20503,7 +20366,6 @@ components:
           description: Length of the cross bar for this mount in centimeters.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this mount is installed at.
           maxLength: 254
         location_specifier:
@@ -20691,17 +20553,14 @@ components:
           maxLength: 128
         material:
           type: string
-          nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
         txt:
           type: string
-          nullable: true
           description: Text written on the mount.
           maxLength: 254
         electric_accountable:
           type: string
-          nullable: true
           description: The entity responsible for the mount (if electric).
           maxLength: 254
         is_foldable:
@@ -20715,7 +20574,6 @@ components:
           description: Length of the cross bar for this mount in centimeters.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this mount is installed at.
           maxLength: 254
         location_specifier:
@@ -20756,7 +20614,6 @@ components:
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this mount.
           maxLength: 500
         created_by:
@@ -20969,17 +20826,14 @@ components:
           maxLength: 128
         material:
           type: string
-          nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
         txt:
           type: string
-          nullable: true
           description: Text written on the mount.
           maxLength: 254
         electric_accountable:
           type: string
-          nullable: true
           description: The entity responsible for the mount (if electric).
           maxLength: 254
         is_foldable:
@@ -20993,7 +20847,6 @@ components:
           description: Length of the cross bar for this mount in centimeters.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this mount is installed at.
           maxLength: 254
         location_specifier:
@@ -21034,7 +20887,6 @@ components:
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this mount.
           maxLength: 500
         owner:
@@ -22210,11 +22062,6 @@ components:
             $ref: '#/components/schemas/TrafficSignRealOperation'
     PatchedAdditionalSignPlanInputRequest:
       type: object
-      description: |-
-        Mixin that validates parent field is provided for non-ticket-machine additional signs.
-
-        This mixin should be used with AdditionalSign serializers to enforce the business rule
-        that only ticket machine device types can have a null parent.
       properties:
         replaces:
           type: string
@@ -22350,7 +22197,6 @@ components:
           nullable: true
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -22478,11 +22324,6 @@ components:
           format: date
     PatchedAdditionalSignRealRequest:
       type: object
-      description: |-
-        Mixin that validates parent field is provided for non-ticket-machine additional signs.
-
-        This mixin should be used with AdditionalSign serializers to enforce the business rule
-        that only ticket machine device types can have a null parent.
       properties:
         location:
           type: string
@@ -22657,7 +22498,6 @@ components:
           nullable: true
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -22749,37 +22589,30 @@ components:
             * `6` - Outside
         installation_id:
           type: string
-          nullable: true
           description: The id number of the installation record.
           maxLength: 254
         installation_details:
           type: string
-          nullable: true
           description: Additional details about the installation.
           maxLength: 254
         installed_by:
           type: string
-          nullable: true
           description: Name of the organization who installed this sign.
           maxLength: 254
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this sign.
           maxLength: 254
         rfid:
           type: string
-          nullable: true
           description: RFID tag of the sign (if any).
           maxLength: 254
         permit_decision_id:
           type: string
-          nullable: true
           description: The id number of the installation permit.
           maxLength: 254
         operation:
           type: string
-          nullable: true
           description: Maintenance operations done to the sign, e.g. washing, straightening
             or painting.
           maxLength: 64
@@ -22791,7 +22624,6 @@ components:
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this sign.
           maxLength: 500
         owner:
@@ -22967,7 +22799,6 @@ components:
             * `2` - Open out
         material:
           type: string
-          nullable: true
           description: Describes the material that the barrier is made of.
           maxLength: 254
         is_electric:
@@ -23009,7 +22840,6 @@ components:
           nullable: true
         txt:
           type: string
-          nullable: true
           description: Text written on the barrier.
         owner:
           type: string
@@ -23213,7 +23043,6 @@ components:
             * `2` - Open out
         material:
           type: string
-          nullable: true
           description: Describes the material that the barrier is made of.
           maxLength: 254
         is_electric:
@@ -23255,7 +23084,6 @@ components:
           nullable: true
         txt:
           type: string
-          nullable: true
           description: Text written on the barrier.
         owner:
           type: string
@@ -23423,19 +23251,16 @@ components:
             * `1540` - Others
         description_fi:
           type: string
-          nullable: true
           title: Finnish Description
           description: Description of the Device Type in Finnish.
           maxLength: 254
         description_sw:
           type: string
-          nullable: true
           title: Swedish Description
           description: Description of the Device Type in Swedish.
           maxLength: 254
         description_en:
           type: string
-          nullable: true
           title: English Description
           description: Description of the Device Type in English.
           maxLength: 254
@@ -23483,19 +23308,16 @@ components:
           maxLength: 254
         name_sw:
           type: string
-          nullable: true
           title: Swedish name
           description: Name of the target in Swedish.
           maxLength: 254
         name_en:
           type: string
-          nullable: true
           title: English name
           description: Name of the target in English.
           maxLength: 254
         description:
           type: string
-          nullable: true
           description: Description of the target.
           maxLength: 254
     PatchedFileUploadSchemaRequest:
@@ -23547,21 +23369,18 @@ components:
           maxLength: 254
         location_name_fi:
           type: string
-          nullable: true
           title: Finnish location name
           description: Verbose name for the furniture signposts location in Finnish,
             e.g. street, park or island.
           maxLength: 254
         location_name_sw:
           type: string
-          nullable: true
           title: Swedish location name
           description: Verbose name for the furniture signposts location in Swedish,
             e.g. street, park or island.
           maxLength: 254
         location_name_en:
           type: string
-          nullable: true
           title: English location name
           description: Verbose name for the furniture signposts location in English,
             e.g. street, park or island.
@@ -23576,13 +23395,11 @@ components:
             from which side the device is correctly visible.'
         location_additional_info:
           type: string
-          nullable: true
           title: Additional location info
           description: Additional information about the install location.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the signpost. Enter only if device has a non-standard
             size.
           maxLength: 254
@@ -23620,7 +23437,6 @@ components:
             * `8` - Bottom left
         pictogram:
           type: string
-          nullable: true
           description: Description of the pictogram on the sign.
           maxLength: 254
         value:
@@ -23632,22 +23448,18 @@ components:
           description: Numeric value on the sign.
         text_content_fi:
           type: string
-          nullable: true
           title: Finnish text content
           description: Content of the sign in Finnish.
         text_content_sw:
           type: string
-          nullable: true
           title: Swedish text content
           description: Content of the sign in Swedish.
         text_content_en:
           type: string
-          nullable: true
           title: English text content
           description: Content of the sign in English.
         content_responsible_entity:
           type: string
-          nullable: true
           title: Content's responsible entity
           description: Entity responsible for the device's content.
           maxLength: 254
@@ -23663,7 +23475,6 @@ components:
           description: Date after which this device becomes inactive.
         additional_material_url:
           type: string
-          nullable: true
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
@@ -23794,21 +23605,18 @@ components:
           maxLength: 254
         location_name_fi:
           type: string
-          nullable: true
           title: Finnish location name
           description: Verbose name for the furniture signposts location in Finnish,
             e.g. street, park or island.
           maxLength: 254
         location_name_sw:
           type: string
-          nullable: true
           title: Swedish location name
           description: Verbose name for the furniture signposts location in Swedish,
             e.g. street, park or island.
           maxLength: 254
         location_name_en:
           type: string
-          nullable: true
           title: English location name
           description: Verbose name for the furniture signposts location in English,
             e.g. street, park or island.
@@ -23823,13 +23631,11 @@ components:
             from which side the device is correctly visible.'
         location_additional_info:
           type: string
-          nullable: true
           title: Additional location info
           description: Additional information about the install location.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the signpost. Enter only if device has a non-standard
             size.
           maxLength: 254
@@ -23867,7 +23673,6 @@ components:
             * `8` - Bottom left
         pictogram:
           type: string
-          nullable: true
           description: Description of the pictogram on the sign.
           maxLength: 254
         value:
@@ -23879,22 +23684,18 @@ components:
           description: Numeric value on the sign.
         text_content_fi:
           type: string
-          nullable: true
           title: Finnish text content
           description: Content of the sign in Finnish.
         text_content_sw:
           type: string
-          nullable: true
           title: Swedish text content
           description: Content of the sign in Swedish.
         text_content_en:
           type: string
-          nullable: true
           title: English text content
           description: Content of the sign in English.
         content_responsible_entity:
           type: string
-          nullable: true
           title: Content's responsible entity
           description: Entity responsible for the device's content.
           maxLength: 254
@@ -23910,7 +23711,6 @@ components:
           description: Date after which this device becomes inactive.
         additional_material_url:
           type: string
-          nullable: true
           description: Additional material about the device. This should be publicly
             available.
           maxLength: 254
@@ -24004,17 +23804,14 @@ components:
           maxLength: 128
         material:
           type: string
-          nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
         txt:
           type: string
-          nullable: true
           description: Text written on the mount.
           maxLength: 254
         electric_accountable:
           type: string
-          nullable: true
           description: The entity responsible for the mount (if electric).
           maxLength: 254
         is_foldable:
@@ -24028,7 +23825,6 @@ components:
           description: Length of the cross bar for this mount in centimeters.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this mount is installed at.
           maxLength: 254
         location_specifier:
@@ -24170,17 +23966,14 @@ components:
           maxLength: 128
         material:
           type: string
-          nullable: true
           description: Describes the material that the mount is made of.
           maxLength: 254
         txt:
           type: string
-          nullable: true
           description: Text written on the mount.
           maxLength: 254
         electric_accountable:
           type: string
-          nullable: true
           description: The entity responsible for the mount (if electric).
           maxLength: 254
         is_foldable:
@@ -24194,7 +23987,6 @@ components:
           description: Length of the cross bar for this mount in centimeters.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this mount is installed at.
           maxLength: 254
         location_specifier:
@@ -24235,7 +24027,6 @@ components:
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this mount.
           maxLength: 500
         owner:
@@ -24464,7 +24255,6 @@ components:
         decision_url:
           type: string
           format: uri
-          nullable: true
           description: URL to decision web page
           maxLength: 500
     PatchedPortalTypeRequest:
@@ -24575,7 +24365,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this road marking is installed at.
           maxLength: 254
         lane_number:
@@ -24704,13 +24493,11 @@ components:
             * `8` - Straight, right and left
         value:
           type: string
-          nullable: true
           title: Road Marking value
           description: Numeric value on the marking.
           maxLength: 254
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         color:
@@ -24726,17 +24513,14 @@ components:
           nullable: true
         type_specifier:
           type: string
-          nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
         symbol:
           type: string
-          nullable: true
           description: Symbol on the road marking.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the road marking.
           maxLength: 254
         length:
@@ -24759,10 +24543,8 @@ components:
           nullable: true
         additional_info:
           type: string
-          nullable: true
         amount:
           type: string
-          nullable: true
           maxLength: 254
         owner:
           type: string
@@ -24887,7 +24669,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this road marking is installed at.
           maxLength: 254
         lane_number:
@@ -25016,13 +24797,11 @@ components:
             * `8` - Straight, right and left
         value:
           type: string
-          nullable: true
           title: Road Marking value
           description: Numeric value on the marking.
           maxLength: 254
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         color:
@@ -25038,17 +24817,14 @@ components:
           nullable: true
         type_specifier:
           type: string
-          nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
         symbol:
           type: string
-          nullable: true
           description: Symbol on the road marking.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the road marking.
           maxLength: 254
         length:
@@ -25071,14 +24847,11 @@ components:
           nullable: true
         additional_info:
           type: string
-          nullable: true
         amount:
           type: string
-          nullable: true
           maxLength: 254
         missing_traffic_sign_real_txt:
           type: string
-          nullable: true
           description: Free-form text description of the traffic sign the road marking
             is connected to, if the road marking doesn't have a traffic sign real
             id.
@@ -25156,7 +24929,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -25249,7 +25021,6 @@ components:
           description: Numeric value on the sign.
         txt:
           type: string
-          nullable: true
           title: Signpost txt
           description: Text written on the device.
           maxLength: 254
@@ -25284,24 +25055,20 @@ components:
           title: Reflection
         attachment_class:
           type: string
-          nullable: true
           description: The attachment class of the sign according to the standard
             SFS-EN 12899-1.The possible values are P1, P2 and P3.
           maxLength: 254
         target_id:
           type: string
-          nullable: true
           description: The id number of the target the sign is guiding to (if available).
           maxLength: 254
         target_txt:
           type: string
-          nullable: true
           description: Free-form text description of the target the sign is guiding
             to, if the target has no id number.
           maxLength: 254
         electric_maintainer:
           type: string
-          nullable: true
           description: Organization in charge of electric maintenance of the device.
           maxLength: 254
         location_specifier:
@@ -25454,7 +25221,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -25547,7 +25313,6 @@ components:
           description: Numeric value on the sign.
         txt:
           type: string
-          nullable: true
           title: Signpost txt
           description: Text written on the device.
           maxLength: 254
@@ -25582,24 +25347,20 @@ components:
           title: Reflection
         attachment_class:
           type: string
-          nullable: true
           description: The attachment class of the sign according to the standard
             SFS-EN 12899-1.The possible values are P1, P2 and P3.
           maxLength: 254
         target_id:
           type: string
-          nullable: true
           description: The id number of the target the sign is guiding to (if available).
           maxLength: 254
         target_txt:
           type: string
-          nullable: true
           description: Free-form text description of the target the sign is guiding
             to, if the target has no id number.
           maxLength: 254
         electric_maintainer:
           type: string
-          nullable: true
           description: Organization in charge of electric maintenance of the device.
           maxLength: 254
         location_specifier:
@@ -25628,17 +25389,14 @@ components:
           description: Indicates if this object is double sided
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         organization:
           type: string
-          nullable: true
           description: The organization that installed the signpost.
           maxLength: 254
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this device.
           maxLength: 254
         scanned_at:
@@ -25648,7 +25406,6 @@ components:
           description: Date and time on which this signpost was last scanned at.
         attachment_url:
           type: string
-          nullable: true
           description: URL of the attachment associated with this signpost.
           maxLength: 500
         owner:
@@ -25689,7 +25446,6 @@ components:
           maxLength: 32
         description:
           type: string
-          nullable: true
           maxLength: 254
         value:
           type: string
@@ -25704,11 +25460,9 @@ components:
           maxLength: 50
         legacy_code:
           type: string
-          nullable: true
           maxLength: 32
         legacy_description:
           type: string
-          nullable: true
           maxLength: 254
         target_model:
           enum:
@@ -25801,7 +25555,6 @@ components:
           maxLength: 254
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic light is installed at.
           maxLength: 254
         lane_number:
@@ -25915,7 +25668,6 @@ components:
             * `11` - Lane signal
         txt:
           type: string
-          nullable: true
           description: Text on the traffic light.
           maxLength: 254
         push_button:
@@ -26093,7 +25845,6 @@ components:
           maxLength: 254
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic light is installed at.
           maxLength: 254
         lane_number:
@@ -26207,7 +25958,6 @@ components:
             * `11` - Lane signal
         txt:
           type: string
-          nullable: true
           description: Text on the traffic light.
           maxLength: 254
         push_button:
@@ -26359,7 +26109,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic sign is installed at.
           maxLength: 254
         lane_number:
@@ -26494,7 +26243,6 @@ components:
           title: Surface
         txt:
           type: string
-          nullable: true
           description: Text written on the sign.
           maxLength: 254
         location_specifier:
@@ -26644,7 +26392,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic sign is installed at.
           maxLength: 254
         lane_number:
@@ -26779,7 +26526,6 @@ components:
           title: Surface
         txt:
           type: string
-          nullable: true
           description: Text written on the sign.
           maxLength: 254
         location_specifier:
@@ -26811,17 +26557,14 @@ components:
           description: Indicates if this object is peak fastened
         installation_id:
           type: string
-          nullable: true
           description: The id number of the installation record.
           maxLength: 254
         installation_details:
           type: string
-          nullable: true
           description: Additional details about the installation.
           maxLength: 254
         permit_decision_id:
           type: string
-          nullable: true
           description: The id number of the installation permit.
           maxLength: 254
         scanned_at:
@@ -26831,24 +26574,20 @@ components:
           description: Date and time on which this sign was last scanned at.
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this sign.
           maxLength: 254
         rfid:
           type: string
-          nullable: true
           description: RFID tag of the sign (if any).
           maxLength: 254
         operation:
           type: string
-          nullable: true
           description: Maintenance operations done to the sign, e.g. washing, straightening
             or painting.
           maxLength: 64
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this sign.
           maxLength: 500
         owner:
@@ -26937,7 +26676,6 @@ components:
         decision_url:
           type: string
           format: uri
-          nullable: true
           description: URL to decision web page
           maxLength: 500
         created_by:
@@ -27077,7 +26815,6 @@ components:
         decision_url:
           type: string
           format: uri
-          nullable: true
           description: URL to decision web page
           maxLength: 500
       required:
@@ -27297,7 +27034,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this road marking is installed at.
           maxLength: 254
         lane_number:
@@ -27426,13 +27162,11 @@ components:
             * `8` - Straight, right and left
         value:
           type: string
-          nullable: true
           title: Road Marking value
           description: Numeric value on the marking.
           maxLength: 254
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         color:
@@ -27448,17 +27182,14 @@ components:
           nullable: true
         type_specifier:
           type: string
-          nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
         symbol:
           type: string
-          nullable: true
           description: Symbol on the road marking.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the road marking.
           maxLength: 254
         length:
@@ -27481,10 +27212,8 @@ components:
           nullable: true
         additional_info:
           type: string
-          nullable: true
         amount:
           type: string
-          nullable: true
           maxLength: 254
         created_by:
           type: string
@@ -27580,7 +27309,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this road marking is installed at.
           maxLength: 254
         lane_number:
@@ -27709,13 +27437,11 @@ components:
             * `8` - Straight, right and left
         value:
           type: string
-          nullable: true
           title: Road Marking value
           description: Numeric value on the marking.
           maxLength: 254
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         color:
@@ -27731,17 +27457,14 @@ components:
           nullable: true
         type_specifier:
           type: string
-          nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
         symbol:
           type: string
-          nullable: true
           description: Symbol on the road marking.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the road marking.
           maxLength: 254
         length:
@@ -27764,10 +27487,8 @@ components:
           nullable: true
         additional_info:
           type: string
-          nullable: true
         amount:
           type: string
-          nullable: true
           maxLength: 254
         owner:
           type: string
@@ -27876,7 +27597,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this road marking is installed at.
           maxLength: 254
         lane_number:
@@ -28005,13 +27725,11 @@ components:
             * `8` - Straight, right and left
         value:
           type: string
-          nullable: true
           title: Road Marking value
           description: Numeric value on the marking.
           maxLength: 254
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         color:
@@ -28027,17 +27745,14 @@ components:
           nullable: true
         type_specifier:
           type: string
-          nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
         symbol:
           type: string
-          nullable: true
           description: Symbol on the road marking.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the road marking.
           maxLength: 254
         length:
@@ -28060,10 +27775,8 @@ components:
           nullable: true
         additional_info:
           type: string
-          nullable: true
         amount:
           type: string
-          nullable: true
           maxLength: 254
         created_by:
           type: string
@@ -28228,7 +27941,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this road marking is installed at.
           maxLength: 254
         lane_number:
@@ -28357,13 +28069,11 @@ components:
             * `8` - Straight, right and left
         value:
           type: string
-          nullable: true
           title: Road Marking value
           description: Numeric value on the marking.
           maxLength: 254
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         color:
@@ -28379,17 +28089,14 @@ components:
           nullable: true
         type_specifier:
           type: string
-          nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
         symbol:
           type: string
-          nullable: true
           description: Symbol on the road marking.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the road marking.
           maxLength: 254
         length:
@@ -28412,14 +28119,11 @@ components:
           nullable: true
         additional_info:
           type: string
-          nullable: true
         amount:
           type: string
-          nullable: true
           maxLength: 254
         missing_traffic_sign_real_txt:
           type: string
-          nullable: true
           description: Free-form text description of the traffic sign the road marking
             is connected to, if the road marking doesn't have a traffic sign real
             id.
@@ -28636,7 +28340,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this road marking is installed at.
           maxLength: 254
         lane_number:
@@ -28765,13 +28468,11 @@ components:
             * `8` - Straight, right and left
         value:
           type: string
-          nullable: true
           title: Road Marking value
           description: Numeric value on the marking.
           maxLength: 254
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         color:
@@ -28787,17 +28488,14 @@ components:
           nullable: true
         type_specifier:
           type: string
-          nullable: true
           description: Additional device type codes specific to the local public authorities.
           maxLength: 254
         symbol:
           type: string
-          nullable: true
           description: Symbol on the road marking.
           maxLength: 254
         size:
           type: string
-          nullable: true
           description: Size of the road marking.
           maxLength: 254
         length:
@@ -28820,14 +28518,11 @@ components:
           nullable: true
         additional_info:
           type: string
-          nullable: true
         amount:
           type: string
-          nullable: true
           maxLength: 254
         missing_traffic_sign_real_txt:
           type: string
-          nullable: true
           description: Free-form text description of the traffic sign the road marking
             is connected to, if the road marking doesn't have a traffic sign real
             id.
@@ -28949,7 +28644,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -29042,7 +28736,6 @@ components:
           description: Numeric value on the sign.
         txt:
           type: string
-          nullable: true
           title: Signpost txt
           description: Text written on the device.
           maxLength: 254
@@ -29077,24 +28770,20 @@ components:
           title: Reflection
         attachment_class:
           type: string
-          nullable: true
           description: The attachment class of the sign according to the standard
             SFS-EN 12899-1.The possible values are P1, P2 and P3.
           maxLength: 254
         target_id:
           type: string
-          nullable: true
           description: The id number of the target the sign is guiding to (if available).
           maxLength: 254
         target_txt:
           type: string
-          nullable: true
           description: Free-form text description of the target the sign is guiding
             to, if the target has no id number.
           maxLength: 254
         electric_maintainer:
           type: string
-          nullable: true
           description: Organization in charge of electric maintenance of the device.
           maxLength: 254
         location_specifier:
@@ -29218,7 +28907,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -29311,7 +28999,6 @@ components:
           description: Numeric value on the sign.
         txt:
           type: string
-          nullable: true
           title: Signpost txt
           description: Text written on the device.
           maxLength: 254
@@ -29346,24 +29033,20 @@ components:
           title: Reflection
         attachment_class:
           type: string
-          nullable: true
           description: The attachment class of the sign according to the standard
             SFS-EN 12899-1.The possible values are P1, P2 and P3.
           maxLength: 254
         target_id:
           type: string
-          nullable: true
           description: The id number of the target the sign is guiding to (if available).
           maxLength: 254
         target_txt:
           type: string
-          nullable: true
           description: Free-form text description of the target the sign is guiding
             to, if the target has no id number.
           maxLength: 254
         electric_maintainer:
           type: string
-          nullable: true
           description: Organization in charge of electric maintenance of the device.
           maxLength: 254
         location_specifier:
@@ -29500,7 +29183,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -29593,7 +29275,6 @@ components:
           description: Numeric value on the sign.
         txt:
           type: string
-          nullable: true
           title: Signpost txt
           description: Text written on the device.
           maxLength: 254
@@ -29628,24 +29309,20 @@ components:
           title: Reflection
         attachment_class:
           type: string
-          nullable: true
           description: The attachment class of the sign according to the standard
             SFS-EN 12899-1.The possible values are P1, P2 and P3.
           maxLength: 254
         target_id:
           type: string
-          nullable: true
           description: The id number of the target the sign is guiding to (if available).
           maxLength: 254
         target_txt:
           type: string
-          nullable: true
           description: Free-form text description of the target the sign is guiding
             to, if the target has no id number.
           maxLength: 254
         electric_maintainer:
           type: string
-          nullable: true
           description: Organization in charge of electric maintenance of the device.
           maxLength: 254
         location_specifier:
@@ -29838,7 +29515,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -29931,7 +29607,6 @@ components:
           description: Numeric value on the sign.
         txt:
           type: string
-          nullable: true
           title: Signpost txt
           description: Text written on the device.
           maxLength: 254
@@ -29966,24 +29641,20 @@ components:
           title: Reflection
         attachment_class:
           type: string
-          nullable: true
           description: The attachment class of the sign according to the standard
             SFS-EN 12899-1.The possible values are P1, P2 and P3.
           maxLength: 254
         target_id:
           type: string
-          nullable: true
           description: The id number of the target the sign is guiding to (if available).
           maxLength: 254
         target_txt:
           type: string
-          nullable: true
           description: Free-form text description of the target the sign is guiding
             to, if the target has no id number.
           maxLength: 254
         electric_maintainer:
           type: string
-          nullable: true
           description: Organization in charge of electric maintenance of the device.
           maxLength: 254
         location_specifier:
@@ -30012,17 +29683,14 @@ components:
           description: Indicates if this object is double sided
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         organization:
           type: string
-          nullable: true
           description: The organization that installed the signpost.
           maxLength: 254
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this device.
           maxLength: 254
         scanned_at:
@@ -30032,7 +29700,6 @@ components:
           description: Date and time on which this signpost was last scanned at.
         attachment_url:
           type: string
-          nullable: true
           description: URL of the attachment associated with this signpost.
           maxLength: 500
         created_by:
@@ -30250,7 +29917,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this sign is installed at.
           maxLength: 254
         lane_number:
@@ -30343,7 +30009,6 @@ components:
           description: Numeric value on the sign.
         txt:
           type: string
-          nullable: true
           title: Signpost txt
           description: Text written on the device.
           maxLength: 254
@@ -30378,24 +30043,20 @@ components:
           title: Reflection
         attachment_class:
           type: string
-          nullable: true
           description: The attachment class of the sign according to the standard
             SFS-EN 12899-1.The possible values are P1, P2 and P3.
           maxLength: 254
         target_id:
           type: string
-          nullable: true
           description: The id number of the target the sign is guiding to (if available).
           maxLength: 254
         target_txt:
           type: string
-          nullable: true
           description: Free-form text description of the target the sign is guiding
             to, if the target has no id number.
           maxLength: 254
         electric_maintainer:
           type: string
-          nullable: true
           description: Organization in charge of electric maintenance of the device.
           maxLength: 254
         location_specifier:
@@ -30424,17 +30085,14 @@ components:
           description: Indicates if this object is double sided
         material:
           type: string
-          nullable: true
           description: Describes the material that the device is made of.
           maxLength: 254
         organization:
           type: string
-          nullable: true
           description: The organization that installed the signpost.
           maxLength: 254
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this device.
           maxLength: 254
         scanned_at:
@@ -30444,7 +30102,6 @@ components:
           description: Date and time on which this signpost was last scanned at.
         attachment_url:
           type: string
-          nullable: true
           description: URL of the attachment associated with this signpost.
           maxLength: 500
         owner:
@@ -30497,7 +30154,6 @@ components:
           maxLength: 32
         description:
           type: string
-          nullable: true
           maxLength: 254
         value:
           type: string
@@ -30512,11 +30168,9 @@ components:
           maxLength: 50
         legacy_code:
           type: string
-          nullable: true
           maxLength: 32
         legacy_description:
           type: string
-          nullable: true
           maxLength: 254
         target_model:
           enum:
@@ -30587,7 +30241,6 @@ components:
           maxLength: 32
         description:
           type: string
-          nullable: true
           maxLength: 254
         value:
           type: string
@@ -30602,11 +30255,9 @@ components:
           maxLength: 50
         legacy_code:
           type: string
-          nullable: true
           maxLength: 32
         legacy_description:
           type: string
-          nullable: true
           maxLength: 254
         target_model:
           enum:
@@ -30772,7 +30423,6 @@ components:
           maxLength: 254
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic light is installed at.
           maxLength: 254
         lane_number:
@@ -30886,7 +30536,6 @@ components:
             * `11` - Lane signal
         txt:
           type: string
-          nullable: true
           description: Text on the traffic light.
           maxLength: 254
         push_button:
@@ -31035,7 +30684,6 @@ components:
           maxLength: 254
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic light is installed at.
           maxLength: 254
         lane_number:
@@ -31149,7 +30797,6 @@ components:
             * `11` - Lane signal
         txt:
           type: string
-          nullable: true
           description: Text on the traffic light.
           maxLength: 254
         push_button:
@@ -31311,7 +30958,6 @@ components:
           maxLength: 254
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic light is installed at.
           maxLength: 254
         lane_number:
@@ -31425,7 +31071,6 @@ components:
             * `11` - Lane signal
         txt:
           type: string
-          nullable: true
           description: Text on the traffic light.
           maxLength: 254
         push_button:
@@ -31643,7 +31288,6 @@ components:
           maxLength: 254
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic light is installed at.
           maxLength: 254
         lane_number:
@@ -31757,7 +31401,6 @@ components:
             * `11` - Lane signal
         txt:
           type: string
-          nullable: true
           description: Text on the traffic light.
           maxLength: 254
         push_button:
@@ -32024,7 +31667,6 @@ components:
           maxLength: 254
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic light is installed at.
           maxLength: 254
         lane_number:
@@ -32138,7 +31780,6 @@ components:
             * `11` - Lane signal
         txt:
           type: string
-          nullable: true
           description: Text on the traffic light.
           maxLength: 254
         push_button:
@@ -32333,7 +31974,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic sign is installed at.
           maxLength: 254
         lane_number:
@@ -32468,7 +32108,6 @@ components:
           title: Surface
         txt:
           type: string
-          nullable: true
           description: Text written on the sign.
           maxLength: 254
         location_specifier:
@@ -32597,7 +32236,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic sign is installed at.
           maxLength: 254
         lane_number:
@@ -32732,7 +32370,6 @@ components:
           title: Surface
         txt:
           type: string
-          nullable: true
           description: Text written on the sign.
           maxLength: 254
         location_specifier:
@@ -32873,7 +32510,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic sign is installed at.
           maxLength: 254
         lane_number:
@@ -33008,7 +32644,6 @@ components:
           title: Surface
         txt:
           type: string
-          nullable: true
           description: Text written on the sign.
           maxLength: 254
         location_specifier:
@@ -33198,7 +32833,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic sign is installed at.
           maxLength: 254
         lane_number:
@@ -33333,7 +32967,6 @@ components:
           title: Surface
         txt:
           type: string
-          nullable: true
           description: Text written on the sign.
           maxLength: 254
         location_specifier:
@@ -33365,17 +32998,14 @@ components:
           description: Indicates if this object is peak fastened
         installation_id:
           type: string
-          nullable: true
           description: The id number of the installation record.
           maxLength: 254
         installation_details:
           type: string
-          nullable: true
           description: Additional details about the installation.
           maxLength: 254
         permit_decision_id:
           type: string
-          nullable: true
           description: The id number of the installation permit.
           maxLength: 254
         scanned_at:
@@ -33385,24 +33015,20 @@ components:
           description: Date and time on which this sign was last scanned at.
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this sign.
           maxLength: 254
         rfid:
           type: string
-          nullable: true
           description: RFID tag of the sign (if any).
           maxLength: 254
         operation:
           type: string
-          nullable: true
           description: Maintenance operations done to the sign, e.g. washing, straightening
             or painting.
           maxLength: 64
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this sign.
           maxLength: 500
         created_by:
@@ -33614,7 +33240,6 @@ components:
           description: Seasonal validity period information related to this device.
         road_name:
           type: string
-          nullable: true
           description: Name of the road this traffic sign is installed at.
           maxLength: 254
         lane_number:
@@ -33749,7 +33374,6 @@ components:
           title: Surface
         txt:
           type: string
-          nullable: true
           description: Text written on the sign.
           maxLength: 254
         location_specifier:
@@ -33781,17 +33405,14 @@ components:
           description: Indicates if this object is peak fastened
         installation_id:
           type: string
-          nullable: true
           description: The id number of the installation record.
           maxLength: 254
         installation_details:
           type: string
-          nullable: true
           description: Additional details about the installation.
           maxLength: 254
         permit_decision_id:
           type: string
-          nullable: true
           description: The id number of the installation permit.
           maxLength: 254
         scanned_at:
@@ -33801,24 +33422,20 @@ components:
           description: Date and time on which this sign was last scanned at.
         manufacturer:
           type: string
-          nullable: true
           description: Name of the organization that manufactured this sign.
           maxLength: 254
         rfid:
           type: string
-          nullable: true
           description: RFID tag of the sign (if any).
           maxLength: 254
         operation:
           type: string
-          nullable: true
           description: Maintenance operations done to the sign, e.g. washing, straightening
             or painting.
           maxLength: 64
         attachment_url:
           type: string
           format: uri
-          nullable: true
           description: URL to a file attachment related to this sign.
           maxLength: 500
         owner:
