@@ -95,3 +95,36 @@ def test_importer_created_operational_areas():
     assert "3 features found" in out.getvalue(), "The command lists the total count of features returned by the request"
     assert "1 synced from source" in out.getvalue(), "The command indicates the total count of features affected"
     assert "1 newly created" in out.getvalue(), "The command indicates the total count of new features recorded"
+
+
+@pytest.mark.django_db
+def test_importer_stores_unset_optional_attributes_as_empty_strings() -> None:
+    feature = MockFeature(
+        {
+            "id": MockAttribute(3),
+            "nimi": MockAttribute("feature 3"),
+            "nimi_lyhyt": MockAttribute(None),
+            "urakkamuoto": MockAttribute(None),
+            "urakoitsija": MockAttribute(None),
+            "alku_pvm": MockAttribute("2020-01-01"),
+            "loppu_pvm": MockAttribute("2020-12-31"),
+            "paivitetty_tietopalveluun": MockAttribute(parse_date("2020-08-01")),
+            "tehtavakokonaisuus": MockAttribute("KATU"),
+            "status": MockAttribute(None),
+        },
+        test_multi_polygon.ogr,
+    )
+    patch_url = patch(
+        "traffic_control.management.commands.import_operational_areas_hki_wfs.urlretrieve",
+        return_value=("dummy-file", {}),
+    )
+    patch_ds = patch(
+        "traffic_control.management.commands.import_operational_areas_hki_wfs.DataSource",
+        new=create_mock_data_source([feature]),
+    )
+
+    with patch_url, patch_ds:
+        call_command("import_operational_areas_hki_wfs", stdout=StringIO())
+
+    area = OperationalArea.objects.get(source_id=3)
+    assert (area.name_short, area.area_type, area.contractor, area.status) == ("", "", "", "")

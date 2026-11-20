@@ -6,8 +6,9 @@ from typing import Literal
 
 from auditlog.context import set_actor
 from django.apps import apps
+from django.core.exceptions import FieldDoesNotExist
 from django.core.management import CommandParser
-from django.db import transaction
+from django.db import models, transaction
 from django.utils import timezone
 
 from command_tracker.management.trackable_command import TrackableCommand
@@ -230,11 +231,34 @@ class Command(TrackableCommand):
 
     @staticmethod
     def revert_update(*, entry: ModelAffectedByImport, row: dict, timestamp: datetime, user: User) -> None:
-        """Restores previous field values and updates audit metadata."""
+        """Restores previous field values and updates audit metadata.
+
+        Revert files written before string fields became non-nullable can hold ``None``
+        for them, so ``None`` is restored as ``""`` for every non-nullable string field.
+        """
         for field, value in row["old"].items():
+            if value is None and Command._is_non_nullable_string_field(entry, field):
+                value = ""
             setattr(entry, field, value)
         entry.updated_by = user
         entry.updated_at = timestamp
+
+    @staticmethod
+    def _is_non_nullable_string_field(entry: ModelAffectedByImport, field_name: str) -> bool:
+        """Check whether a model field stores strings and does not accept NULL.
+
+        Args:
+            entry (ModelAffectedByImport): Model instance the field belongs to.
+            field_name (str): Name of the field.
+
+        Returns:
+            bool: True if the field is a non-nullable CharField or TextField.
+        """
+        try:
+            model_field = entry._meta.get_field(field_name)
+        except FieldDoesNotExist:
+            return False
+        return isinstance(model_field, (models.CharField, models.TextField)) and not model_field.null
 
     @staticmethod
     def detach_dependent_objects(

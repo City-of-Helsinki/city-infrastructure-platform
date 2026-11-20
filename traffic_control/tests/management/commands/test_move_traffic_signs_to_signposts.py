@@ -161,6 +161,8 @@ class TestMoveTrafficSignsToSignpostsCommand:
         assert new_real.manufacturer == "Test Manufacturer"
         assert new_real.mount_real == mount
         assert new_real.attachment_url == "https://example.com/attachment.pdf"
+        for field in ("material", "organization", "attachment_class", "target_id", "target_txt", "electric_maintainer"):
+            assert getattr(new_real, field) == "", field
 
         # Verify tracking
         run = SignpostMigrationRun.objects.first()
@@ -307,6 +309,15 @@ class TestMoveTrafficSignsToSignpostsCommand:
         assert "permit_decision_id" in run.lost_field_values
         assert "rfid" in run.lost_field_values
         assert "operation" in run.lost_field_values
+
+    def test_command_tracks_unset_string_fields_as_none(self, signpost_device_types) -> None:
+        """Unset string fields hold "" but are reported like the NULLs they used to be."""
+        TrafficSignRealFactory(device_type=signpost_device_types[0], mount_real=MountRealFactory(), rfid="")
+
+        call_command("move_traffic_signs_to_signposts", stdout=StringIO())
+
+        run = SignpostMigrationRun.objects.first()
+        assert run.lost_field_values["rfid"] == ["None"]
 
     def test_command_preserves_attachment_url(self, signpost_device_types):
         """Test that attachment_url is preserved during migration."""
@@ -527,7 +538,7 @@ class TestMoveTrafficSignsToSignpostsCommand:
             size=None,
             direction=None,
             value=None,
-            txt=None,
+            txt="",
         )
 
         out = StringIO()
@@ -541,6 +552,8 @@ class TestMoveTrafficSignsToSignpostsCommand:
         new_plan = SignpostPlan.objects.first()
         assert new_plan.plan is None
         assert new_plan.height is None
+        for field in ("txt", "attachment_class", "target_id", "target_txt", "electric_maintainer"):
+            assert getattr(new_plan, field) == "", field
 
     def test_command_preserves_user_fields(self, signpost_device_types):
         """Test that created_by and updated_by are preserved."""

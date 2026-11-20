@@ -101,7 +101,10 @@ class BaseMigrationCommand(TrackableCommand, ABC):
 
     def _record_lost_data(self, obj_type: str, obj_id: str, field_name: str, field_value: Any) -> None:
         """Record lost field data for audit trail and track unique values."""
-        # Record all values including None - NULL is also lost data worth tracking
+        # Record all values including None - NULL is also lost data worth tracking.
+        # Unset string fields hold "" instead of None; report them the same way.
+        if field_value == "":
+            field_value = None
         self.lost_data_records.append(f"{obj_type},{obj_id},{field_name},{field_value}")
 
         # Track unique values for each field

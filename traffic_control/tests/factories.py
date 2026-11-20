@@ -344,11 +344,11 @@ class MountRealFactory(factory.django.DjangoModelFactory):
     portal_type = factory.SubFactory(PortalTypeFactory)
     mount_type = factory.SubFactory(MountTypeFactory)
     material = "test material"
-    txt = None
-    electric_accountable = None
+    txt = ""
+    electric_accountable = ""
     is_foldable = None
     cross_bar_length = None
-    road_name = None
+    road_name = ""
     location_specifier = None
     mount_plan = None
     inspected_at = None
@@ -478,7 +478,7 @@ def get_signpost_plan(
     plan=None,
     parent=None,
     mount_plan=None,
-    txt=None,
+    txt="",
     replaces=None,
     **kwargs,
 ) -> SignpostPlanFactory:
@@ -523,7 +523,7 @@ def get_signpost_real(
     signpost_plan=None,
     parent=None,
     mount_real=None,
-    txt=None,
+    txt="",
 ) -> SignpostReal:
     user = get_user("test_user")
 
@@ -669,7 +669,7 @@ class TrafficSignRealFactory(factory.django.DjangoModelFactory):
     source_name = factory.Sequence(lambda n: f"TRAFFIC_SIGN_REAL_SOURCE_NAME_{n}")
     location = test_point
     device_type = factory.SubFactory(TrafficControlDeviceTypeFactory)
-    road_name = None
+    road_name = ""
     lane_number = None
     lane_type = None
     direction = None
@@ -679,7 +679,7 @@ class TrafficSignRealFactory(factory.django.DjangoModelFactory):
     size = None
     reflection_class = None
     surface_class = None
-    txt = None
+    txt = ""
     location_specifier = None
     validity_period_start = None
     validity_period_end = None
@@ -798,7 +798,7 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
     surface_class = None
     color = None
     mount_type = factory.SubFactory(MountTypeFactory)
-    road_name = None
+    road_name = ""
     lane_number = None
     lane_type = None
     location_specifier = None
@@ -811,12 +811,12 @@ class AdditionalSignRealFactory(factory.django.DjangoModelFactory):
     mount_real = factory.SubFactory(MountRealFactory)
     installation_id = factory.sequence(lambda n: f"installation_id{n}")
     installation_details = "Installation details"
-    installed_by = None
+    installed_by = ""
     manufacturer = factory.sequence(lambda n: f"Manufacturer{n}")
     rfid = factory.sequence(lambda n: f"rfid{n}")
     legacy_code = "TestLegacyCode"
     permit_decision_id = factory.sequence(lambda n: f"permit_decision{n}")
-    operation = None
+    operation = ""
     scanned_at = None
     attachment_url = factory.sequence(lambda n: f"https://attachment{n}.url")
 

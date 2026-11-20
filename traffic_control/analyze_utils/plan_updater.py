@@ -40,7 +40,7 @@ class PlanUpdater:
                     diary_number=row[CSVHeader.diary_number],
                     drawing_numbers=[dn.strip() for dn in row[CSVHeader.drawing_numbers].split(",")],
                     decision_date=self._get_decision_datetime(row[CSVHeader.decision_date]),
-                    decision_url=row[CSVHeader.decision_url],
+                    decision_url=row[CSVHeader.decision_url] or "",
                 )
 
         return update_data_by_decision_id

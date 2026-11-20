@@ -498,3 +498,34 @@ def test_command_execution_produces_execution_log(tmp_path, user, base_time_crea
     assert "Reverting 1 update operations for TrafficSignReal" in run.execution_log
     assert f"SignpostReal {UUID_8} does not exist" in run.execution_log
     assert "No secondary AdditionalSignReal objects orphaned" in run.execution_log
+
+
+@pytest.mark.django_db
+def test_revert_restores_null_as_empty_string_for_non_nullable_string_fields(
+    tmp_path, user, base_time_created, base_time_updated
+) -> None:
+    """Old revert files may hold null for string fields that no longer accept NULL; null must become "".
+
+    Nullable fields (here the `condition` enum) must still be restored as None.
+    """
+    traffic_sign = TrafficSignRealFactory(
+        id=UUID_2, created_by=user, updated_by=user, condition=1, seasonal_validity_period_information="Summer"
+    )
+    TrafficSignReal.objects.filter(id=UUID_2).update(updated_at=base_time_updated, created_at=base_time_created)
+    file_path = write_jsonl(
+        tmp_path,
+        [
+            {
+                "action": "update",
+                "object_type": "TrafficSignReal",
+                "db_id": UUID_2,
+                "old": {"seasonal_validity_period_information": None, "condition": None},
+            },
+        ],
+    )
+
+    call_command("revert_import_streetscan_signs_v2", file_path=file_path)
+
+    traffic_sign.refresh_from_db()
+    assert traffic_sign.seasonal_validity_period_information == ""
+    assert traffic_sign.condition is None
