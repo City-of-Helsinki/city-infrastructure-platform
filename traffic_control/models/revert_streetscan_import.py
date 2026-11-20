@@ -26,6 +26,8 @@ class RevertStreetScanImportRun(models.Model):
         _("Revert file"),
         max_length=512,
         help_text=_("Path or name of the JSON file containing the operations to be reverted."),
+        blank=False,
+        null=False,
     )
     ids_param = models.JSONField(blank=False, null=False, help_text=_("--ids parameter of the run."))
     models_param = models.JSONField(blank=False, null=False, help_text=_("--models parameter of the run."))

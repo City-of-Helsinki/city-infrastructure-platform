@@ -43,15 +43,15 @@ class OperationalArea(BoundaryCheckedLocationMixin, SourceControlModel):
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(_("Name"), max_length=256, blank=False)
-    name_short = models.CharField(_("Name short"), max_length=256, blank=True)
-    area_type = models.CharField(_("Area type"), max_length=256, blank=True)
-    contractor = models.CharField(_("Contractor"), max_length=256, blank=True)
+    name = models.CharField(_("Name"), max_length=256, blank=False, null=False)
+    name_short = models.CharField(_("Name short"), max_length=256, blank=True, null=False)
+    area_type = models.CharField(_("Area type"), max_length=256, blank=True, null=False)
+    contractor = models.CharField(_("Contractor"), max_length=256, blank=True, null=False)
     start_date = models.DateField(_("Start date"), null=True, blank=True)
     end_date = models.DateField(_("End date"), null=True, blank=True)
     updated_date = models.DateField(_("Updated date"), null=True, blank=True)
-    task = models.CharField(_("Task"), max_length=256, blank=True)
-    status = models.CharField(_("Status"), max_length=256, blank=True)
+    task = models.CharField(_("Task"), max_length=256, blank=True, null=False)
+    status = models.CharField(_("Status"), max_length=256, blank=True, null=False)
     location = models.MultiPolygonField(_("Location (3D)"), dim=3, srid=settings.SRID)
 
     class Meta:

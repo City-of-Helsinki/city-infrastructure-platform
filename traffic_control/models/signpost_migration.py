@@ -60,6 +60,7 @@ class SignpostMigrationRun(models.Model):
     error_message = models.TextField(
         _("Error message"),
         blank=True,
+        null=False,
         default="",
         help_text=_("Error message if migration failed."),
     )
@@ -150,6 +151,8 @@ class SignpostMigrationPlanRecord(BaseFieldTrackingMixin):
         _("Device type code"),
         max_length=32,
         help_text=_("Code of the device type being migrated."),
+        blank=False,
+        null=False,
     )
 
     # Plan-specific field tracking
@@ -161,6 +164,7 @@ class SignpostMigrationPlanRecord(BaseFieldTrackingMixin):
         _("Lost surface_class"),
         max_length=10,
         blank=True,
+        null=False,
         help_text=_("Value of surface_class field that was lost."),
     )
     lost_peak_fastened = models.BooleanField(
@@ -237,6 +241,8 @@ class SignpostMigrationRealRecord(BaseFieldTrackingMixin):
         _("Device type code"),
         max_length=32,
         help_text=_("Code of the device type being migrated."),
+        blank=False,
+        null=False,
     )
 
     # Plan mapping
@@ -261,6 +267,7 @@ class SignpostMigrationRealRecord(BaseFieldTrackingMixin):
         _("Lost surface_class"),
         max_length=10,
         blank=True,
+        null=False,
         help_text=_("Value of surface_class field that was lost."),
     )
     lost_peak_fastened = models.BooleanField(
@@ -272,36 +279,42 @@ class SignpostMigrationRealRecord(BaseFieldTrackingMixin):
         _("Lost installation_id"),
         max_length=254,
         blank=True,
+        null=False,
         help_text=_("Value of installation_id field that was lost."),
     )
     lost_installation_details = models.CharField(
         _("Lost installation_details"),
         max_length=254,
         blank=True,
+        null=False,
         help_text=_("Value of installation_details field that was lost."),
     )
     lost_permit_decision_id = models.CharField(
         _("Lost permit_decision_id"),
         max_length=254,
         blank=True,
+        null=False,
         help_text=_("Value of permit_decision_id field that was lost."),
     )
     lost_rfid = models.CharField(
         _("Lost rfid"),
         max_length=254,
         blank=True,
+        null=False,
         help_text=_("Value of rfid field that was lost."),
     )
     lost_operation = models.CharField(
         _("Lost operation"),
         max_length=64,
         blank=True,
+        null=False,
         help_text=_("Value of operation field that was lost."),
     )
     lost_attachment_url = models.URLField(
         _("Lost attachment_url"),
         max_length=500,
         blank=True,
+        null=False,
         help_text=_("Value of attachment_url field that was lost."),
     )
 

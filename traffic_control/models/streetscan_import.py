@@ -35,11 +35,15 @@ class StreetScanImportRun(models.Model):
         _("Mount file"),
         max_length=512,
         help_text=_("Path or name of the mount CSV file used for this run."),
+        blank=False,
+        null=False,
     )
     sign_file = models.CharField(
         _("Sign file"),
         max_length=512,
         help_text=_("Path or name of the sign CSV file used for this run."),
+        blank=False,
+        null=False,
     )
 
     # --- Per-object-type counters ---

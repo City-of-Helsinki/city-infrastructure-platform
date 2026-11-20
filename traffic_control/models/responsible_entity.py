@@ -24,7 +24,7 @@ class ResponsibleEntity(MPTTModel):
     """
 
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
-    name = models.CharField(_("Name"), max_length=254)
+    name = models.CharField(_("Name"), max_length=254, blank=False, null=False)
     external_id = models.CharField(
         _("External ID"),
         max_length=254,

@@ -63,6 +63,7 @@ class ImportAttachmentCleanupRun(models.Model):
     error_message = models.TextField(
         _("Error message"),
         blank=True,
+        null=False,
         default="",
         help_text=_("Error message if the cleanup failed."),
     )
@@ -72,6 +73,8 @@ class ImportAttachmentCleanupRun(models.Model):
         choices=ImportAttachmentCleanupStatus.choices,
         default=ImportAttachmentCleanupStatus.IN_PROGRESS,
         help_text=_("Outcome of the cleanup run."),
+        blank=False,
+        null=False,
     )
 
     class Meta:
