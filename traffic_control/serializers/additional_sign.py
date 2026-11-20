@@ -17,6 +17,7 @@ from traffic_control.serializers.common import (
     EwktPointField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
     StructuredContentValidator,
@@ -40,6 +41,7 @@ class AdditionalSignPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -108,6 +110,7 @@ class AdditionalSignPlanOutputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -208,6 +211,7 @@ class AdditionalSignRealSerializer(
     AdditionalSignParentValidationMixin,
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()

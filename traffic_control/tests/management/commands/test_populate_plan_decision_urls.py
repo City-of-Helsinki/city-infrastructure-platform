@@ -13,7 +13,6 @@ EXISTING_URL = "https://example.com/decision"
     "plan_kwargs, command_kwargs, expected_url",
     (
         ({"decision_url": ""}, {}, EXPECTED_URL),
-        ({"decision_url": None}, {}, EXPECTED_URL),
         ({"decision_url": EXISTING_URL}, {}, EXISTING_URL),
         ({"decision_url": EXISTING_URL}, {"force": True}, EXPECTED_URL),
         ({"decision_url": "", "diary_number": None}, {"force": True}, ""),
@@ -23,7 +22,6 @@ EXISTING_URL = "https://example.com/decision"
     ),
     ids=[
         "fills_empty_decision_url",
-        "fills_null_decision_url",
         "does_not_overwrite_existing_url",
         "force_overwrites_existing_url",
         "plan_without_diary_number_is_skipped",

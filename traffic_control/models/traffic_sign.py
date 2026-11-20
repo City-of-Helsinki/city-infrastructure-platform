@@ -135,7 +135,7 @@ class AbstractTrafficSign(
         _("Road name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the road this traffic sign is installed at."),
     )
     lane_number = EnumField(
@@ -205,7 +205,7 @@ class AbstractTrafficSign(
         _("Txt"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Text written on the sign."),
     )
     location_specifier = EnumIntegerField(
@@ -342,7 +342,7 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         _("Legacy Traffic Sign Code"),
         max_length=32,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The device type code of the sign in the old Finnish road traffic law."),
     )
     mount_real = models.ForeignKey(
@@ -357,21 +357,21 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         _("Installation id"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The id number of the installation record."),
     )
     installation_details = models.CharField(
         _("Installation details"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Additional details about the installation."),
     )
     permit_decision_id = models.CharField(
         _("Permit decision id"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The id number of the installation permit."),
     )
     scanned_at = models.DateTimeField(
@@ -384,28 +384,28 @@ class TrafficSignReal(DecimalValueFromDeviceTypeMixin, AbstractTrafficSign, Inst
         _("Manufacturer"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the organization that manufactured this sign."),
     )
     rfid = models.CharField(
         _("RFID"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("RFID tag of the sign (if any)."),
     )
     operation = models.CharField(
         _("Operation"),
         max_length=64,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Maintenance operations done to the sign, e.g. washing, straightening or painting."),
     )
     attachment_url = models.URLField(
         _("Attachment url"),
         max_length=500,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("URL to a file attachment related to this sign."),
     )
 

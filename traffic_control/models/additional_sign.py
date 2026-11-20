@@ -135,7 +135,7 @@ class AbstractAdditionalSign(
         _("Road name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the road this sign is installed at."),
     )
     lane_number = EnumField(
@@ -381,56 +381,56 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         _("Installation id"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The id number of the installation record."),
     )
     installation_details = models.CharField(
         _("Installation details"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Additional details about the installation."),
     )
     installed_by = models.CharField(
         _("Installed by"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the organization who installed this sign."),
     )
     manufacturer = models.CharField(
         _("Manufacturer"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the organization that manufactured this sign."),
     )
     rfid = models.CharField(
         _("RFID"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("RFID tag of the sign (if any)."),
     )
     legacy_code = models.CharField(
         _("Legacy Traffic Sign Code"),
         max_length=32,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The sign type code of the sign in the old Finnish road traffic law."),
     )
     permit_decision_id = models.CharField(
         _("Permit decision id"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The id number of the installation permit."),
     )
     operation = models.CharField(
         _("Operation"),
         max_length=64,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Maintenance operations done to the sign, e.g. washing, straightening or painting."),
     )
     scanned_at = models.DateTimeField(
@@ -443,7 +443,7 @@ class AdditionalSignReal(AbstractAdditionalSign, InstalledDeviceModel):
         _("Attachment url"),
         max_length=500,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("URL to a file attachment related to this sign."),
     )
 

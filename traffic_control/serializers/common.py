@@ -227,6 +227,84 @@ class HideFromAnonUserSerializerMixin:
         return representation
 
 
+class NullToEmptyStringFieldMixin:
+    """Serializer field mixin that accepts ``null`` input and turns it into ``""``."""
+
+    def validate_empty_values(self, data: object) -> tuple[bool, object]:
+        """Treat ``None`` as an empty string, defer everything else to the field.
+
+        Args:
+            data (object): Raw input value for the field.
+
+        Returns:
+            tuple[bool, object]: ``(True, "")`` for ``None`` input on a writable field,
+            otherwise the result of the wrapped field's own validation.
+        """
+        if data is None and not self.read_only:
+            return True, ""
+        return super().validate_empty_values(data)
+
+
+class NullToEmptyCharField(NullToEmptyStringFieldMixin, serializers.CharField):
+    """CharField that accepts ``null`` input and turns it into ``""``."""
+
+
+class NullToEmptyURLField(NullToEmptyStringFieldMixin, serializers.URLField):
+    """URLField that accepts ``null`` input and turns it into ``""``."""
+
+
+# Serializer field classes DRF builds for optional string model fields, and their null-tolerant replacements.
+NULL_TO_EMPTY_FIELD_CLASSES: dict[type[serializers.Field], type[serializers.Field]] = {
+    serializers.CharField: NullToEmptyCharField,
+    serializers.URLField: NullToEmptyURLField,
+}
+
+
+def accepts_null_as_empty_string(model_field: models.Field) -> bool:
+    """Check whether a model field's "no value" state is ``""`` (optional, non-nullable string field).
+
+    Args:
+        model_field (models.Field): Model field to check.
+
+    Returns:
+        bool: True for CharField/TextField subclasses with ``null=False``, ``blank=True`` and no choices.
+    """
+    return (
+        isinstance(model_field, (models.CharField, models.TextField))
+        and not model_field.null
+        and model_field.blank
+        and not model_field.choices
+    )
+
+
+# The empty description keeps drf-spectacular from publishing the docstring of this mixin (or of
+# another mixin further down the MRO) as the description of every serializer that uses it.
+@extend_schema_serializer(description="")
+class NullToEmptyStringSerializerMixin:
+    """ModelSerializer mixin that accepts ``null`` for optional string fields and saves it as ``""``.
+
+    Optional string model fields use ``null=False, blank=True``, so ``""`` is their only "no value"
+    state. API clients that still send ``null`` for them keep working: the value is stored as ``""``
+    instead of being rejected. The OpenAPI schema keeps documenting these fields as non-nullable,
+    because responses always contain a string.
+    """
+
+    def build_standard_field(self, field_name: str, model_field: models.Field) -> tuple[type, dict]:
+        """Build the serializer field and swap in a null-tolerant class for optional string fields.
+
+        Args:
+            field_name (str): Name of the field on the serializer.
+            model_field (models.Field): Model field the serializer field is built from.
+
+        Returns:
+            tuple[type, dict]: Serializer field class and its keyword arguments.
+        """
+        field_class, field_kwargs = super().build_standard_field(field_name, model_field)
+        if accepts_null_as_empty_string(model_field):
+            field_class = NULL_TO_EMPTY_FIELD_CLASSES.get(field_class, field_class)
+        return field_class, field_kwargs
+
+
 class AdditionalSignParentValidationMixin:
     """
     Mixin that validates parent field is provided for non-ticket-machine additional signs.
@@ -414,7 +492,9 @@ class TrafficControlDeviceTypeTagSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "description")
 
 
-class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class TrafficControlDeviceTypeSerializer(
+    EnumSupportSerializerMixin, NullToEmptyStringSerializerMixin, serializers.ModelSerializer
+):
     traffic_sign_type = serializers.SerializerMethodField(
         method_name="get_traffic_sign_type",
     )
@@ -480,7 +560,7 @@ class TrafficControlDeviceTypeSerializer(EnumSupportSerializerMixin, serializers
         return value
 
 
-class OperationalAreaSerializer(serializers.ModelSerializer):
+class OperationalAreaSerializer(NullToEmptyStringSerializerMixin, serializers.ModelSerializer):
     location = GeometryField()
 
     def validate_location(self, value):

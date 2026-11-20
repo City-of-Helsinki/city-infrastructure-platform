@@ -17,6 +17,7 @@ from traffic_control.serializers.common import (
     EwktPolygonField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
@@ -38,6 +39,7 @@ class TrafficSignPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -105,6 +107,7 @@ class TrafficSignPlanOutputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -204,6 +207,7 @@ class TrafficSignRealOperationSerializer(serializers.ModelSerializer):
 class TrafficSignRealSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()

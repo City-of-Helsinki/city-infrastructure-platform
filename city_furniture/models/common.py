@@ -90,21 +90,21 @@ class CityFurnitureDeviceType(models.Model, AbstractDeviceTypeMixin):
         _("Finnish Description"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Description of the Device Type in Finnish."),
     )
     description_sw = models.CharField(
         _("Swedish Description"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Description of the Device Type in Swedish."),
     )
     description_en = models.CharField(
         _("English Description"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Description of the Device Type in English."),
     )
     size = models.CharField(
@@ -244,21 +244,21 @@ class CityFurnitureTarget(SourceControlModel):
         _("Swedish name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the target in Swedish."),
     )
     name_en = models.CharField(
         _("English name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the target in English."),
     )
     description = models.CharField(
         _("Description"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Description of the target."),
     )
 

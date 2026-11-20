@@ -80,7 +80,7 @@ class AbstractRoadMarking(
         _("Road name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the road this road marking is installed at."),
     )
     lane_number = EnumField(
@@ -131,14 +131,14 @@ class AbstractRoadMarking(
         _("Road Marking value"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Numeric value on the marking."),
     )
     material = models.CharField(
         _("Material"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Describes the material that the device is made of."),
     )
     color = EnumIntegerField(
@@ -151,21 +151,21 @@ class AbstractRoadMarking(
         _("Type specifier"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Additional device type codes specific to the local public authorities."),
     )
     symbol = models.CharField(
         _("Symbol"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Symbol on the road marking."),
     )
     size = models.CharField(
         _("Size"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Size of the road marking."),
     )
     length = models.IntegerField(
@@ -182,8 +182,8 @@ class AbstractRoadMarking(
     )
     is_raised = models.BooleanField(_("Is raised"), null=True)
     is_grinded = models.BooleanField(_("Is grinded"), null=True)
-    additional_info = models.TextField(_("Additional info"), blank=True, null=True)
-    amount = models.CharField(_("Amount"), max_length=254, blank=True, null=True)
+    additional_info = models.TextField(_("Additional info"), blank=True, null=False)
+    amount = models.CharField(_("Amount"), max_length=254, blank=True, null=False)
 
     class Meta:
         abstract = True
@@ -268,7 +268,7 @@ class RoadMarkingReal(AbstractRoadMarking, InstalledDeviceModel):
         _("Missing Traffic Sign Real txt"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_(
             "Free-form text description of the traffic sign the road marking is connected to, "
             "if the road marking doesn't have a traffic sign real id."

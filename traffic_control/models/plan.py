@@ -39,7 +39,9 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
         verbose_name=_("Diary number"),
         max_length=20,
         unique=False,
-        # Diary number will be required field in the future
+        # Diary number will be required field in the future.
+        # Nullable on purpose: active plans have a unique constraint on diary_number. NULLs never
+        # collide in Postgres, but "" would, so plans without a diary number have to keep NULL.
         null=True,
         blank=True,
     )
@@ -81,7 +83,7 @@ class Plan(BoundaryCheckedLocationMixin, SourceControlModel, SoftDeleteModel, Us
         _("Decision url"),
         max_length=500,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("URL to decision web page"),
     )
 

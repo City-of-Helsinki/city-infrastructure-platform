@@ -7,7 +7,7 @@ from traffic_control.models import (
     TrafficControlDeviceTypeIcon,
 )
 from traffic_control.models.common import TrafficControlDeviceTypeTag
-from traffic_control.resources.common import EnumFieldResourceMixin
+from traffic_control.resources.common import EmptyStringTextFieldResourceMixin, EnumFieldResourceMixin
 
 TAG_SEPARATOR = ","
 
@@ -47,7 +47,7 @@ class TrafficControlDeviceTypeDiff(Diff):
         ]
 
 
-class TrafficControlDeviceTypeResource(EnumFieldResourceMixin, ModelResource):
+class TrafficControlDeviceTypeResource(EmptyStringTextFieldResourceMixin, EnumFieldResourceMixin, ModelResource):
     """Traffic control device type resource for import/export."""
 
     icon_file = Field(

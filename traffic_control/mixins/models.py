@@ -256,6 +256,9 @@ class UpdatePlanLocationMixin:
 
 
 class SourceControlModel(models.Model):
+    # source_id and source_name stay nullable on purpose: most models have a unique constraint on
+    # (source_name, source_id). NULLs never collide in Postgres, but "" would, so every row without
+    # a source has to keep NULL.
     source_id = models.CharField(
         _("Source id"),
         max_length=64,

@@ -84,7 +84,7 @@ class AbstractTrafficLight(
         _("Road name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the road this traffic light is installed at."),
     )
     lane_number = EnumField(
@@ -142,7 +142,7 @@ class AbstractTrafficLight(
         _("Txt"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Text on the traffic light."),
     )
     push_button = EnumIntegerField(

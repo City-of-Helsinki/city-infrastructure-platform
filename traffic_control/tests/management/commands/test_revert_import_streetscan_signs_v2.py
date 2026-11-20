@@ -509,7 +509,12 @@ def test_revert_restores_null_as_empty_string_for_non_nullable_string_fields(
     Nullable fields (here the `condition` enum) must still be restored as None.
     """
     traffic_sign = TrafficSignRealFactory(
-        id=UUID_2, created_by=user, updated_by=user, condition=1, seasonal_validity_period_information="Summer"
+        id=UUID_2,
+        created_by=user,
+        updated_by=user,
+        condition=1,
+        seasonal_validity_period_information="Summer",
+        txt="Old text",
     )
     TrafficSignReal.objects.filter(id=UUID_2).update(updated_at=base_time_updated, created_at=base_time_created)
     file_path = write_jsonl(
@@ -519,7 +524,7 @@ def test_revert_restores_null_as_empty_string_for_non_nullable_string_fields(
                 "action": "update",
                 "object_type": "TrafficSignReal",
                 "db_id": UUID_2,
-                "old": {"seasonal_validity_period_information": None, "condition": None},
+                "old": {"seasonal_validity_period_information": None, "txt": None, "condition": None},
             },
         ],
     )
@@ -528,4 +533,5 @@ def test_revert_restores_null_as_empty_string_for_non_nullable_string_fields(
 
     traffic_sign.refresh_from_db()
     assert traffic_sign.seasonal_validity_period_information == ""
+    assert traffic_sign.txt == ""
     assert traffic_sign.condition is None

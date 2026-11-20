@@ -137,21 +137,21 @@ class AbstractMount(
         _("Material"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Describes the material that the mount is made of."),
     )
     txt = models.CharField(
         _("Txt"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Text written on the mount."),
     )
     electric_accountable = models.CharField(
         _("Electric accountable"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The entity responsible for the mount (if electric)."),
     )
     is_foldable = models.BooleanField(
@@ -172,7 +172,7 @@ class AbstractMount(
         _("Road name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the road this mount is installed at."),
     )
 
@@ -279,7 +279,7 @@ class MountReal(AbstractMount, InstalledDeviceModel):
         _("Attachment url"),
         max_length=500,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("URL to a file attachment related to this mount."),
     )
 

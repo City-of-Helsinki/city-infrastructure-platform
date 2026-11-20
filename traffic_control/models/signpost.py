@@ -96,7 +96,7 @@ class AbstractSignpost(
         _("Road name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the road this sign is installed at."),
     )
     lane_number = EnumField(
@@ -156,7 +156,7 @@ class AbstractSignpost(
         _("Signpost txt"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Text written on the device."),
     )
     size = EnumField(
@@ -177,7 +177,7 @@ class AbstractSignpost(
         _("Attachment class"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_(
             "The attachment class of the sign according to the standard SFS-EN 12899-1."
             "The possible values are P1, P2 and P3."
@@ -187,21 +187,21 @@ class AbstractSignpost(
         _("Target ID"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The id number of the target the sign is guiding to (if available)."),
     )
     target_txt = models.CharField(
         _("Target txt"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Free-form text description of the target the sign is guiding to, if the target has no id number."),
     )
     electric_maintainer = models.CharField(
         _("Electric maintainer"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Organization in charge of electric maintenance of the device."),
     )
     location_specifier = EnumIntegerField(
@@ -336,21 +336,21 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledD
         _("Material"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Describes the material that the device is made of."),
     )
     organization = models.CharField(
         _("Organization"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("The organization that installed the signpost."),
     )
     manufacturer = models.CharField(
         _("Manufacturer"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Name of the organization that manufactured this device."),
     )
 
@@ -364,7 +364,7 @@ class SignpostReal(DecimalValueFromDeviceTypeMixin, AbstractSignpost, InstalledD
         _("Attachment URL"),
         max_length=500,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("URL of the attachment associated with this signpost."),
     )
 

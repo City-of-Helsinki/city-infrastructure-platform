@@ -188,7 +188,7 @@ class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
         _("Description"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
     )
     value = models.CharField(
         _("Value"),
@@ -211,13 +211,13 @@ class TrafficControlDeviceType(models.Model, AbstractDeviceTypeMixin):
         _("Legacy code"),
         max_length=32,
         blank=True,
-        null=True,
+        null=False,
     )
     legacy_description = models.CharField(
         _("Legacy description"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
     )
     target_model = EnumField(
         DeviceTypeTargetModel,
