@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url "admin:index" %}">{% translate "Home" %}</a>
+        &rsaquo; {{ title }}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        {% if users_with_sessions %}
+            <div class="module">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">{% translate "username"|capfirst %}</th>
+                            <th scope="col">{% translate "Name" %}</th>
+                            <th scope="col">{% translate "Active sessions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session_user in users_with_sessions %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "user-sessions" user_id=session_user.pk %}">{{ session_user.username }}</a>
+                                    {% if session_user == user %}({% translate "you" %}){% endif %}
+                                </td>
+                                <td>{{ session_user.get_full_name }}</td>
+                                <td>{{ session_user.active_session_count }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>{% translate "No users have active sessions." %}</p>
+        {% endif %}
+    </div>
+{% endblock %}

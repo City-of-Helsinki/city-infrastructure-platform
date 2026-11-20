@@ -1,0 +1,129 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        .session-table { width: 100%; }
+        .session-table tr.current-session td {
+            background: var(--message-success-bg);
+            font-weight: bold;
+        }
+        .current-session-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: var(--message-success-bg);
+            border: 1px solid #70bf2b;
+            color: var(--body-fg);
+            white-space: nowrap;
+        }
+        .session-user-agent {
+            display: block;
+            color: var(--body-quiet-color);
+            font-weight: normal;
+            font-size: 0.85em;
+            word-break: break-all;
+        }
+        .session-actions { margin: 15px 0; }
+        .session-actions form, .session-table form { display: inline; }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url "admin:index" %}">{% translate "Home" %}</a>
+        {% if is_own_sessions %}
+            &rsaquo; <a href="{% url "my-account" %}">{% translate "My account" %}</a>
+        {% else %}
+            &rsaquo; <a href="{% url "all-user-sessions" %}">{% translate "Active sessions of all users" %}</a>
+        {% endif %}
+        &rsaquo; {{ title }}
+    </div>
+{% endblock %}
+
+{% block content_title %}
+    <h1>
+        {{ title }}
+        {% if not is_own_sessions %}: {{ target_user.username }}{% endif %}
+    </h1>
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        <p>
+            {% blocktranslate count counter=sessions|length %}{{ counter }} active session.{% plural %}{{ counter }} active sessions.{% endblocktranslate %}
+            {% if is_own_sessions %}
+                {% translate "The session of the browser you are using now is highlighted and cannot be terminated here. To end it, log out." %}
+            {% endif %}
+        </p>
+        <p>
+            {% translate "Terminating a session logs it out of this service. It does not log the user out of the city's single sign-on service." %}
+        </p>
+
+        {% if sessions %}
+            <div class="module">
+                <table class="session-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">{% translate "Browser" %}</th>
+                            <th scope="col">{% translate "Logged in" %}</th>
+                            <th scope="col">{% translate "Expires" %}</th>
+                            <th scope="col">{% translate "Action" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session in sessions %}
+                            <tr class="{% if session.is_current %}current-session{% endif %}">
+                                <td>
+                                    {% if session.is_current %}
+                                        <span class="current-session-badge">&#10004; {% translate "This browser (current session)" %}</span>
+                                        <br>
+                                    {% endif %}
+                                    {{ session.description|default:_("Unknown browser") }}
+                                    {% if session.user_agent %}
+                                        <span class="session-user-agent">{{ session.user_agent }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ session.logged_in_at|default:_("Unknown") }}</td>
+                                <td>{{ session.expire_date }}</td>
+                                <td>
+                                    {% if session.is_current %}
+                                        {% translate "In use" %}
+                                    {% else %}
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="terminate">
+                                            <input type="hidden" name="session_id" value="{{ session.public_id }}">
+                                            <button type="submit" class="button">{% translate "Terminate" %}</button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="session-actions">
+                {% if is_own_sessions %}
+                    {% translate "Terminate all sessions except the one you are using now?" as confirm_text %}
+                {% else %}
+                    {% translate "Terminate all sessions of this user?" as confirm_text %}
+                {% endif %}
+                <form method="post"
+                      onsubmit="return confirm('{{ confirm_text|escapejs }}');">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="terminate_others">
+                    <button type="submit" class="button">
+                        {% if is_own_sessions %}
+                            {% translate "Terminate all my other sessions" %}
+                        {% else %}
+                            {% translate "Terminate all sessions of this user" %}
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

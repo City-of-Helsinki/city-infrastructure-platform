@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 10:40+0200\n"
+"POT-Creation-Date: 2026-11-20 12:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,18 @@ msgstr ""
 #, python-format
 msgid " By %(filter_title)s "
 msgstr " Efter %(filter_title)s "
+
+#, python-format
+msgid "%(count)d session was terminated."
+msgid_plural "%(count)d sessions were terminated."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(counter)s active session."
+msgid_plural "%(counter)s active sessions."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid ""
 "'Missing content' cannot be enabled when the content field (content_s) is "
@@ -57,8 +69,17 @@ msgstr "Ovanför körfälten"
 msgid "Account Deactivated"
 msgstr ""
 
+msgid "Action"
+msgstr ""
+
 msgid "Active"
 msgstr "Aktiv"
+
+msgid "Active sessions"
+msgstr ""
+
+msgid "Active sessions of all users"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Activity Tracking"
@@ -174,6 +195,9 @@ msgid "Alert level"
 msgstr "Varningsnivå"
 
 msgid "All of the selected tags"
+msgstr ""
+
+msgid "All users"
 msgstr ""
 
 msgid "Amount"
@@ -346,6 +370,9 @@ msgstr "Nedre högra"
 
 msgid "Boundary post"
 msgstr "Gränsstolpe"
+
+msgid "Browser"
+msgstr ""
 
 msgid "Bus stop"
 msgstr "Busshållplats"
@@ -950,6 +977,9 @@ msgstr ""
 
 msgid "Exit lane"
 msgstr "Avfartskörfält"
+
+msgid "Expires"
+msgstr ""
 
 msgid "Export template"
 msgstr "Exportmall"
@@ -1700,6 +1730,12 @@ msgstr "Platsspecifikation"
 msgid "Log out"
 msgstr "Logga ut"
 
+msgid "Logged in"
+msgstr ""
+
+msgid "Logged in at"
+msgstr ""
+
 msgid "Longitudinal"
 msgstr "Längsgående"
 
@@ -2005,6 +2041,9 @@ msgstr "Flera överordnade hittades"
 msgid "My account"
 msgstr "Egna uppgifter"
 
+msgid "My sessions"
+msgstr ""
+
 msgid "Name"
 msgstr "Namn"
 
@@ -2126,6 +2165,9 @@ msgid "No relations found."
 msgstr "Inga relationer hittades."
 
 msgid "No traffic signs"
+msgstr ""
+
+msgid "No users have active sessions."
 msgstr ""
 
 msgid "No, continue to edit"
@@ -2895,6 +2937,9 @@ msgstr "Valda filer"
 msgid "Service sign"
 msgstr "Serviceskylt"
 
+msgid "Sessions"
+msgstr ""
+
 # AI translation - needs human review
 msgid "Set additional_information to empty"
 msgstr "Ange additional_information till tom"
@@ -3241,6 +3286,26 @@ msgstr "Temporärt aktiv"
 msgid "Temporarily inactive"
 msgstr "Temporärt inaktiv"
 
+msgid "Terminate"
+msgstr ""
+
+msgid "Terminate all my other sessions"
+msgstr ""
+
+msgid "Terminate all sessions except the one you are using now?"
+msgstr ""
+
+msgid "Terminate all sessions of this user"
+msgstr ""
+
+msgid "Terminate all sessions of this user?"
+msgstr ""
+
+msgid ""
+"Terminating a session logs it out of this service. It does not log the user "
+"out of the city's single sign-on service."
+msgstr ""
+
 msgid "Text on the traffic light."
 msgstr "Text som är skriven på trafikljuset."
 
@@ -3350,6 +3415,17 @@ msgstr "Plan för detta trafikljus."
 msgid "The plan for this traffic sign."
 msgstr "Plan för detta vägmärke."
 
+msgid ""
+"The session of the browser you are using now is highlighted and cannot be "
+"terminated here. To end it, log out."
+msgstr ""
+
+msgid "The session was not found. It may already have ended."
+msgstr ""
+
+msgid "The session was terminated."
+msgstr ""
+
 msgid "The sign type code of the sign in the old Finnish road traffic law."
 msgstr "Anordningstypkod för skylten i Finlands gamla vägtrafiklag."
 
@@ -3389,6 +3465,9 @@ msgstr "Tredje extra körfält vänster"
 
 msgid "Third right additional lane"
 msgstr "Tredje extra körfält höger"
+
+msgid "This browser (current session)"
+msgstr ""
 
 msgid "This feature is disabled"
 msgstr ""
@@ -3747,6 +3826,12 @@ msgstr "Enhet"
 msgid "Unit, in which the numeric value is in."
 msgstr "Enhet för det numeriska värdet."
 
+msgid "Unknown"
+msgstr ""
+
+msgid "Unknown browser"
+msgstr ""
+
 msgid "Up"
 msgstr "Upp"
 
@@ -3783,11 +3868,20 @@ msgstr "Status för användarinaktivering"
 msgid "User Deactivation Statuses"
 msgstr "Statusar för användarinaktivering"
 
+msgid "User agent"
+msgstr ""
+
 #, python-format
 msgid "User is active, but last login was %(days)d days ago"
 msgstr ""
 "Användarnamnet är gällande, men den senaste inloggningen skedde för %(days)d "
 "dagar sedan"
+
+msgid "User session"
+msgstr ""
+
+msgid "User sessions"
+msgstr ""
 
 msgid "User who executed the cleanup command."
 msgstr ""
@@ -3886,6 +3980,12 @@ msgstr "Visa API"
 
 msgid "View API documentation"
 msgstr "Visa API-dokumentation"
+
+msgid "View active sessions of all users"
+msgstr ""
+
+msgid "View and manage my sessions"
+msgstr ""
 
 msgid "View map"
 msgstr "Visa karta"
@@ -4066,8 +4166,8 @@ msgstr ""
 "är aktiverat."
 
 msgid ""
-"Your account has been deactivated, likely due to prolonged inactivity or "
-"due to a manual deactivation by a system administrator."
+"Your account has been deactivated, likely due to prolonged inactivity or due "
+"to a manual deactivation by a system administrator."
 msgstr ""
 
 msgid "additional sign real"
@@ -4153,3 +4253,6 @@ msgstr "enhet"
 
 msgid "username"
 msgstr "användarnamn"
+
+msgid "you"
+msgstr ""
