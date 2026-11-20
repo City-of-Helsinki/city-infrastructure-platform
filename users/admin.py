@@ -374,6 +374,7 @@ class UserAdmin(BaseUserAdmin):
             "deactivation_status",
             "social_auth",
             "logentry",
+            "sessions",
             "userobjectpermission",
         }
 

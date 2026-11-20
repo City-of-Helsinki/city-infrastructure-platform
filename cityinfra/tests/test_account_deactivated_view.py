@@ -15,9 +15,7 @@ from traffic_control.tests.factories import UserFactory
 
 @pytest.fixture(autouse=True)
 def settings(settings: SettingsWrapper) -> SettingsWrapper:
-    """Use English and plain static file storage so the page renders without a static files manifest.
-
-    The page uses `{% static %}`, which fails with `ManifestStaticFilesStorage` when no manifest exists.
+    """Use English so that the tests can check page texts.
 
     Args:
         settings (SettingsWrapper): The pytest-django settings fixture.
@@ -26,11 +24,6 @@ def settings(settings: SettingsWrapper) -> SettingsWrapper:
         SettingsWrapper: The modified settings fixture.
     """
     settings.LANGUAGE_CODE = "en"
-    settings.STORAGES = {
-        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-        "icons": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
-    }
     return settings
 
 

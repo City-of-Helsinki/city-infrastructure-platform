@@ -5,7 +5,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
-from django.contrib.sessions.backends.db import SessionStore
+from django.contrib.auth import SESSION_KEY
 from django.db import connection, models
 from rest_framework.authtoken.models import Token
 
@@ -19,6 +19,7 @@ from traffic_control.services.sanitized_db_dump_rules import (
     SCRUB_TABLES,
 )
 from traffic_control.tests.factories import TrafficSignRealFactory, UserFactory
+from users.session_store import SessionStore, USER_AGENT_SESSION_KEY
 
 # Occurs nowhere in the schema, so any occurrence in a dump is leaked data.
 PERSONAL_DATA_MARKER = "qzxsecret"
@@ -90,6 +91,8 @@ def test_dump_and_restore_removes_personal_data(tmp_path: Path, restored_db_name
     Token.objects.create(user=user)
     session = SessionStore()
     session["secret"] = PERSONAL_EMAIL
+    session[SESSION_KEY] = str(user.pk)
+    session[USER_AGENT_SESSION_KEY] = PERSONAL_DATA_MARKER  # stored as plain text in users_usersession
     session.create()
     dump_path = tmp_path / "sanitized_db.sql"
 
@@ -103,6 +106,7 @@ def test_dump_and_restore_removes_personal_data(tmp_path: Path, restored_db_name
     # The marker check cannot see these: session data is encoded and token keys are random.
     assert _psql(restored_db_name, "-c", "SELECT count(*) FROM authtoken_token") == "0\n"
     assert _psql(restored_db_name, "-c", "SELECT count(*) FROM django_session") == "0\n"
+    assert _psql(restored_db_name, "-c", "SELECT count(*) FROM users_usersession") == "0\n"
     signs = _psql(restored_db_name, "-c", "SELECT id, created_by_id FROM traffic_sign_real")
     assert signs == f"{sign.id}|{user.id}\n"
 

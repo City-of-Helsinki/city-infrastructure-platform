@@ -1,0 +1,35 @@
+.session-table {
+    width: 100%;
+}
+
+.session-table tr.current-session td {
+    background: var(--message-success-bg);
+    font-weight: bold;
+}
+
+.current-session-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--message-success-bg);
+    border: 1px solid #70bf2b;
+    color: var(--body-fg);
+    white-space: nowrap;
+}
+
+.session-user-agent {
+    display: block;
+    color: var(--body-quiet-color);
+    font-weight: normal;
+    font-size: 0.85em;
+    word-break: break-all;
+}
+
+.session-actions {
+    margin: 15px 0;
+}
+
+.session-actions form,
+.session-table form {
+    display: inline;
+}

@@ -126,6 +126,8 @@ if os.path.exists(env_file):
     env.read_env(env_file)
 
 SESSION_SERIALIZER = "helusers.sessions.TunnistamoOIDCSerializer"
+# Stores sessions in users.UserSession so that users can see and terminate their own sessions.
+SESSION_ENGINE = "users.session_store"
 
 SOCIAL_AUTH_TUNNISTAMO_KEY = env("SOCIAL_AUTH_TUNNISTAMO_KEY")
 SOCIAL_AUTH_TUNNISTAMO_SECRET = env("SOCIAL_AUTH_TUNNISTAMO_SECRET")

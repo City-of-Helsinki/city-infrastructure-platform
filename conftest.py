@@ -1,3 +1,5 @@
+from typing import Any, Callable
+
 import pytest
 from django.apps import apps
 
@@ -125,3 +127,26 @@ def guarantee_owners_from_traffic_control_migrations(db):
 
     for name_en, name_fi in initial_owners:
         Owner.objects.get_or_create(name_en=name_en, name_fi=name_fi)
+
+
+@pytest.fixture
+def make_session() -> Callable[..., str]:
+    """Returns a function that creates a logged-in session for a user.
+
+    Returns:
+        Callable[..., str]: Function taking a user and an optional user agent, returning the session key.
+    """
+    from django.contrib.auth import SESSION_KEY
+    from django.utils import timezone
+
+    from users.session_store import LOGGED_IN_AT_SESSION_KEY, SessionStore, USER_AGENT_SESSION_KEY
+
+    def _make_session(user: Any, user_agent: str = "") -> str:
+        session = SessionStore()
+        session[SESSION_KEY] = str(user.pk)
+        session[USER_AGENT_SESSION_KEY] = user_agent
+        session[LOGGED_IN_AT_SESSION_KEY] = timezone.now().isoformat()
+        session.create()
+        return session.session_key
+
+    return _make_session
