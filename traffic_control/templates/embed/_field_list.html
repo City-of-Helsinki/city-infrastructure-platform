@@ -12,10 +12,10 @@ Arguments:
         <dd>
             {% if field.name == 'content_s' %}
                 {% include "embed/_content_s_rows.html" with content_s_rows=object.get_content_s_rows css_class="content-s-nested" %}
-            {% elif value != "" %}
-                {{ value|default_if_none:"-" }}
+            {% elif value is None or value == "" %}
+                -
             {% else %}
-                &nbsp;
+                {{ value }}
             {% endif %}
         </dd>
     {% endfor %}

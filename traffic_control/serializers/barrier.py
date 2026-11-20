@@ -16,6 +16,7 @@ from traffic_control.serializers.common import (
     EwktGeometryField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
@@ -37,6 +38,7 @@ class BarrierPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
@@ -98,6 +100,7 @@ class BarrierPlanOutputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
@@ -191,6 +194,7 @@ class BarrierRealOperationSerializer(serializers.ModelSerializer):
 class BarrierRealSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()

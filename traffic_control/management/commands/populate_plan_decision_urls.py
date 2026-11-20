@@ -94,6 +94,6 @@ class Command(TrackableCommand):
         """
         queryset = Plan.objects.active().exclude(Q(diary_number__isnull=True) | Q(diary_number=""))
         if not force:
-            queryset = queryset.filter(Q(decision_url__isnull=True) | Q(decision_url=""))
+            queryset = queryset.filter(decision_url="")
 
         return queryset

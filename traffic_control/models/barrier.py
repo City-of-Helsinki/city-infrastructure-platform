@@ -106,7 +106,7 @@ class AbstractBarrier(
         _("Material"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Describes the material that the barrier is made of."),
     )
     is_electric = models.BooleanField(
@@ -145,7 +145,7 @@ class AbstractBarrier(
     txt = models.TextField(
         _("Txt"),
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Text written on the barrier."),
     )
 

@@ -55,21 +55,21 @@ class FurnitureAbstractSignpost(
         _("Finnish location name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Verbose name for the furniture signposts location in Finnish, e.g. street, park or island."),
     )
     location_name_sw = models.CharField(
         _("Swedish location name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Verbose name for the furniture signposts location in Swedish, e.g. street, park or island."),
     )
     location_name_en = models.CharField(
         _("English location name"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Verbose name for the furniture signposts location in English, e.g. street, park or island."),
     )
     direction = models.IntegerField(
@@ -82,7 +82,7 @@ class FurnitureAbstractSignpost(
         _("Additional location info"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Additional information about the install location."),
     )
     device_type = models.ForeignKey(
@@ -101,7 +101,7 @@ class FurnitureAbstractSignpost(
         _("Size"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Size of the signpost. Enter only if device has a non-standard size."),
     )
     height = models.DecimalField(
@@ -141,7 +141,7 @@ class FurnitureAbstractSignpost(
         _("Pictogram"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Description of the pictogram on the sign."),
     )
     value = models.DecimalField(
@@ -155,26 +155,26 @@ class FurnitureAbstractSignpost(
     text_content_fi = models.TextField(
         _("Finnish text content"),
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Content of the sign in Finnish."),
     )
     text_content_sw = models.TextField(
         _("Swedish text content"),
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Content of the sign in Swedish."),
     )
     text_content_en = models.TextField(
         _("English text content"),
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Content of the sign in English."),
     )
     content_responsible_entity = models.CharField(
         _("Content's responsible entity"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Entity responsible for the device's content."),
     )
     target = models.ForeignKey(
@@ -204,7 +204,7 @@ class FurnitureAbstractSignpost(
         _("Additional material URL"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Additional material about the device. This should be publicly available."),
     )
 

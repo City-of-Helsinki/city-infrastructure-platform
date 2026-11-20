@@ -18,6 +18,7 @@ from traffic_control.serializers.common import (
     EwktGeometryField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
 )
@@ -35,7 +36,7 @@ class PortalTypeSerializer(serializers.ModelSerializer):
         )
 
 
-class MountTypeSerializer(serializers.ModelSerializer):
+class MountTypeSerializer(NullToEmptyStringSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MountType
         fields = (
@@ -64,6 +65,7 @@ class MountPlanInputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceInputSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
@@ -117,6 +119,7 @@ class MountPlanOutputSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
     ReplaceableDeviceOutputSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()
@@ -207,6 +210,7 @@ class OrderedTrafficSignsField(serializers.PrimaryKeyRelatedField):
 class MountRealSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktGeometryField()

@@ -29,7 +29,7 @@ class ResponsibleEntity(MPTTModel):
         _("External ID"),
         max_length=254,
         blank=True,
-        null=True,
+        null=False,
         help_text=_("Use Projectwise ID for projects, can also be an abbreviation if entity has no ID"),
     )
     organization_level = EnumIntegerField(

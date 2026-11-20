@@ -7,6 +7,7 @@ from traffic_control.serializers.common import (
     EwktGeometryField,
     HideFromAnonUserSerializerMixin,
     lazy_unique_error_message,
+    NullToEmptyStringSerializerMixin,
 )
 from traffic_control.services.plan import get_plan_decision_url
 
@@ -75,7 +76,7 @@ class PlanRelationSerializer(serializers.ModelSerializer):
         )
 
 
-class PlanSerializer(HideFromAnonUserSerializerMixin, serializers.ModelSerializer):
+class PlanSerializer(HideFromAnonUserSerializerMixin, NullToEmptyStringSerializerMixin, serializers.ModelSerializer):
     location = EwktGeometryField(required=False, allow_blank=True, allow_null=True)
     linked_objects = PlanRelationSerializer(source="*", required=False, read_only=True)
 

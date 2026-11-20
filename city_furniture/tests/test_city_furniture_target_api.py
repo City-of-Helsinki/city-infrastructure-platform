@@ -65,7 +65,9 @@ def test__city_furniture_target__create(admin_user):
         assert response_data["name_fi"] == data["name_fi"]
         assert response_data["name_sw"] == data["name_sw"]
         assert response_data["name_en"] == data["name_en"]
-        assert response_data["description"] == data["description"]
+        # null input is still accepted for optional string fields, but stored and returned as ""
+        assert response_data["description"] == ""
+        assert obj.description == ""
         assert response_data["source_id"] == data["source_id"]
         assert response_data["source_name"] == data["source_name"]
     else:

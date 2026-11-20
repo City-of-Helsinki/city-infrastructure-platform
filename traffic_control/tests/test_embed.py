@@ -2,6 +2,7 @@ import uuid
 
 import pytest
 from django.db import connection
+from django.template.loader import render_to_string
 from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 from django.utils.translation import activate
@@ -560,3 +561,16 @@ def test__embed__mount__query_count_does_not_grow_with_traffic_signs(
         assert client.get(reverse(url_name, kwargs={"pk": large_mount.id})).status_code == 200
 
     assert len(large_queries) == len(small_queries)
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    ((None, "-"), ("", "-"), ("Mannerheimintie", "Mannerheimintie"), (0, "0"), (False, "False")),
+    ids=("none", "empty_string", "string", "zero", "false"),
+)
+def test__embed__field_list__unset_values_render_as_dash(value: object, expected: str) -> None:
+    field = TrafficSignRealFactory._meta.model._meta.get_field("road_name")
+
+    html = render_to_string("embed/_field_list.html", {"fields_and_values": [(field, value)]})
+
+    assert html.split("<dd>")[1].split("</dd>")[0].strip() == expected

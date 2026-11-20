@@ -3,6 +3,7 @@ from uuid import UUID, uuid4
 
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.urls import path
 from django.utils.encoding import force_str
@@ -69,6 +70,58 @@ class EnumFieldResourceMixin:
             return super().field_from_django_field(field_name, django_field, readonly)
 
 
+def is_optional_non_nullable_text_field(django_field: object) -> bool:
+    """Check whether a model field is a TextField whose "no value" state is ``""``.
+
+    Args:
+        django_field (object): Model field (or other attribute) the resource field is built from.
+
+    Returns:
+        bool: True for TextFields with ``null=False`` and ``blank=True``.
+    """
+    return isinstance(django_field, models.TextField) and django_field.blank and not django_field.null
+
+
+class EmptyStringTextFieldResourceMixin:
+    """Mixin for ModelResource classes that imports blank TextField cells as ``""``.
+
+    django-import-export gives CharFields a ``CharWidget`` that turns blank cells into ``""``, but
+    TextFields get the plain ``Widget``, which passes ``None`` through. xlsx files yield ``None`` for
+    empty cells, so without this an import fails on the NOT NULL constraint of optional TextFields.
+    """
+
+    @classmethod
+    def widget_from_django_field(cls, f: object, default: type[widgets.Widget] = widgets.Widget) -> type:
+        """Use ``CharWidget`` for optional non-nullable TextFields.
+
+        Args:
+            f (object): Model field the resource field is built from.
+            default (type[widgets.Widget]): Widget class used when no mapping matches.
+
+        Returns:
+            type: Widget class for the field.
+        """
+        if is_optional_non_nullable_text_field(f):
+            return widgets.CharWidget
+        return super().widget_from_django_field(f, default=default)
+
+    @classmethod
+    def widget_kwargs_for_field(cls, field_name: str, django_field: object) -> dict:
+        """Make the ``CharWidget`` of optional non-nullable TextFields return ``""`` for blank cells.
+
+        Args:
+            field_name (str): Name of the resource field.
+            django_field (object): Model field the resource field is built from.
+
+        Returns:
+            dict: Keyword arguments for the widget.
+        """
+        widget_kwargs = super().widget_kwargs_for_field(field_name, django_field)
+        if is_optional_non_nullable_text_field(django_field):
+            widget_kwargs.update({"coerce_to_string": True, "allow_blank": True})
+        return widget_kwargs
+
+
 class UUIDWidget(widgets.Widget):
     def clean(self, value, row=None, **kwargs):
         if value in [None, ""]:
@@ -123,7 +176,7 @@ class ReplacementField(fields.Field):
                 self.unreplace_method(instance)
 
 
-class GenericDeviceBaseResource(EnumFieldResourceMixin, ModelResource):
+class GenericDeviceBaseResource(EmptyStringTextFieldResourceMixin, EnumFieldResourceMixin, ModelResource):
     id = ResourceUUIDField(attribute="id", column_name="id", default=None, widget=UUIDWidget())
 
     def get_queryset(self):

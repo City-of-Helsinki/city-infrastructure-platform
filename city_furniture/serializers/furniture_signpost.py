@@ -16,6 +16,7 @@ from traffic_control.serializers.common import (
     EwktPointField,
     FileProxySerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
 )
 
 
@@ -33,6 +34,7 @@ class FurnitureSignpostPlanFileSerializer(FileProxySerializerMixin, serializers.
 class FurnitureSignpostPlanSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()
@@ -138,6 +140,7 @@ class FurnitureSignpostRealOperationSerializer(serializers.ModelSerializer):
 class FurnitureSignpostRealSerializer(
     EnumSupportSerializerMixin,
     HideFromAnonUserSerializerMixin,
+    NullToEmptyStringSerializerMixin,
     serializers.ModelSerializer,
 ):
     location = EwktPointField()

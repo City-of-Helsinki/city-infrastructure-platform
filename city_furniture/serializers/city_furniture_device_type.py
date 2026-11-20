@@ -6,9 +6,12 @@ from rest_framework import serializers
 
 from city_furniture.enums import CityFurnitureDeviceTypeTargetModel
 from city_furniture.models.common import CityFurnitureDeviceType
+from traffic_control.serializers.common import NullToEmptyStringSerializerMixin
 
 
-class CityFurnitureDeviceTypeSerializer(EnumSupportSerializerMixin, serializers.ModelSerializer):
+class CityFurnitureDeviceTypeSerializer(
+    EnumSupportSerializerMixin, NullToEmptyStringSerializerMixin, serializers.ModelSerializer
+):
     class Meta:
         model = CityFurnitureDeviceType
         fields = (
