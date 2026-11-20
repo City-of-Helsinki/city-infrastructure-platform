@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.51.1](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.51.0...city-infrastructure-platform-v1.51.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* Cascade soft delete to additional signs from admin action ([6e1eeab](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/6e1eeab8b5868ec40c81373ed5a31ec70b7b0a0e))
+* Deactivated user successful AD login caused redirect to non existent page ([3546c2f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/3546c2f64f0fa6ee6f74dae3e22db517c9379518))
+
 ## [1.51.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.50.0...city-infrastructure-platform-v1.51.0) (2026-11-16)
 
 
