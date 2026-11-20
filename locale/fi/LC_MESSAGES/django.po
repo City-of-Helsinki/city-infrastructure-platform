@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 10:40+0200\n"
+"POT-Creation-Date: 2026-11-20 12:40+0200\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,6 +16,18 @@ msgstr ""
 #, python-format
 msgid " By %(filter_title)s "
 msgstr " Suodatin: %(filter_title)s "
+
+#, python-format
+msgid "%(count)d session was terminated."
+msgid_plural "%(count)d sessions were terminated."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(counter)s active session."
+msgid_plural "%(counter)s active sessions."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid ""
 "'Missing content' cannot be enabled when the content field (content_s) is "
@@ -53,8 +65,17 @@ msgstr "Kaistojen yläpuolella"
 msgid "Account Deactivated"
 msgstr ""
 
+msgid "Action"
+msgstr ""
+
 msgid "Active"
 msgstr "Käytössä pysyvästi"
+
+msgid "Active sessions"
+msgstr ""
+
+msgid "Active sessions of all users"
+msgstr ""
 
 # AI translation - needs human review
 msgid "Activity Tracking"
@@ -169,6 +190,9 @@ msgid "Alert level"
 msgstr "Ilmoitustaso"
 
 msgid "All of the selected tags"
+msgstr ""
+
+msgid "All users"
 msgstr ""
 
 msgid "Amount"
@@ -337,6 +361,9 @@ msgstr "Ala-oikealle"
 
 msgid "Boundary post"
 msgstr "Rajapyykki"
+
+msgid "Browser"
+msgstr ""
 
 msgid "Bus stop"
 msgstr "Pysäkki"
@@ -932,6 +959,9 @@ msgstr ""
 
 msgid "Exit lane"
 msgstr "Erkanemiskaista"
+
+msgid "Expires"
+msgstr ""
 
 msgid "Export template"
 msgstr "Vie malli"
@@ -1671,6 +1701,12 @@ msgstr "Sijaintitarkenne"
 msgid "Log out"
 msgstr "Kirjaudu ulos"
 
+msgid "Logged in"
+msgstr ""
+
+msgid "Logged in at"
+msgstr ""
+
 msgid "Longitudinal"
 msgstr "Pituussuuntainen"
 
@@ -1964,6 +2000,9 @@ msgstr "Useita ylätasoja löytyi"
 msgid "My account"
 msgstr "Omat tiedot"
 
+msgid "My sessions"
+msgstr ""
+
 msgid "Name"
 msgstr "Nimi"
 
@@ -2081,6 +2120,9 @@ msgid "No relations found."
 msgstr "Suhteita ei löytynyt."
 
 msgid "No traffic signs"
+msgstr ""
+
+msgid "No users have active sessions."
 msgstr ""
 
 msgid "No, continue to edit"
@@ -2833,6 +2875,9 @@ msgstr "Valitut tiedostot"
 msgid "Service sign"
 msgstr "Palvelukohteen opastusmerkki"
 
+msgid "Sessions"
+msgstr ""
+
 # AI translation - needs human review
 msgid "Set additional_information to empty"
 msgstr "Aseta additional_information tyhjäksi"
@@ -3169,6 +3214,26 @@ msgstr "Käytössä tilapäisesti"
 msgid "Temporarily inactive"
 msgstr "Tilapäisesti poissa käytöstä"
 
+msgid "Terminate"
+msgstr ""
+
+msgid "Terminate all my other sessions"
+msgstr ""
+
+msgid "Terminate all sessions except the one you are using now?"
+msgstr ""
+
+msgid "Terminate all sessions of this user"
+msgstr ""
+
+msgid "Terminate all sessions of this user?"
+msgstr ""
+
+msgid ""
+"Terminating a session logs it out of this service. It does not log the user "
+"out of the city's single sign-on service."
+msgstr ""
+
 msgid "Text on the traffic light."
 msgstr "Liikennevaloon kirjoitettu teksti."
 
@@ -3275,6 +3340,17 @@ msgstr "Tämän liikennevalon suunnitelma."
 msgid "The plan for this traffic sign."
 msgstr "Tämän liikennemerkin suunnitelma."
 
+msgid ""
+"The session of the browser you are using now is highlighted and cannot be "
+"terminated here. To end it, log out."
+msgstr ""
+
+msgid "The session was not found. It may already have ended."
+msgstr ""
+
+msgid "The session was terminated."
+msgstr ""
+
 msgid "The sign type code of the sign in the old Finnish road traffic law."
 msgstr "Kilven laitetyyppikoodi Suomen vanhassa tieliikennelaissa."
 
@@ -3314,6 +3390,9 @@ msgstr "Kolmas lisäkaista pääkaistan vasemmalla puolella"
 
 msgid "Third right additional lane"
 msgstr "Kolmas lisäkaista pääkaistan oikealla puolella"
+
+msgid "This browser (current session)"
+msgstr ""
 
 msgid "This feature is disabled"
 msgstr ""
@@ -3674,6 +3753,12 @@ msgstr "Mittayksikkö"
 msgid "Unit, in which the numeric value is in."
 msgstr "Numeroarvon mittayksikkö."
 
+msgid "Unknown"
+msgstr ""
+
+msgid "Unknown browser"
+msgstr ""
+
 msgid "Up"
 msgstr "Ylös"
 
@@ -3710,11 +3795,20 @@ msgstr "Käyttäjän käytöstäpoiston tila"
 msgid "User Deactivation Statuses"
 msgstr "Käyttäjien käytöstäpoiston tilat"
 
+msgid "User agent"
+msgstr ""
+
 #, python-format
 msgid "User is active, but last login was %(days)d days ago"
 msgstr ""
 "Käyttäjätunnus on voimassa, mutta viimeisin kirjautuminen on %(days)d päivää "
 "sitten"
+
+msgid "User session"
+msgstr ""
+
+msgid "User sessions"
+msgstr ""
 
 msgid "User who executed the cleanup command."
 msgstr ""
@@ -3813,6 +3907,12 @@ msgstr "Rajapinta"
 
 msgid "View API documentation"
 msgstr "Rajapinnan dokumentaatio"
+
+msgid "View active sessions of all users"
+msgstr ""
+
+msgid "View and manage my sessions"
+msgstr ""
 
 msgid "View map"
 msgstr "Näytä kartta"
@@ -3988,8 +4088,8 @@ msgstr ""
 "päällä."
 
 msgid ""
-"Your account has been deactivated, likely due to prolonged inactivity or "
-"due to a manual deactivation by a system administrator."
+"Your account has been deactivated, likely due to prolonged inactivity or due "
+"to a manual deactivation by a system administrator."
 msgstr ""
 
 msgid "additional sign real"
@@ -4075,3 +4175,6 @@ msgstr "yksikkö"
 
 msgid "username"
 msgstr "käyttäjätunnus"
+
+msgid "you"
+msgstr ""

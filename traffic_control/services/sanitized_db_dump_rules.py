@@ -69,6 +69,7 @@ EXCLUDE_DATA_TABLES = frozenset(
         "social_auth_partial",
         "social_auth_usersocialauth",
         "user_deactivation_status",
+        "users_usersession",
     }
 )
 
