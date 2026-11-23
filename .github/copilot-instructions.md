@@ -37,6 +37,11 @@ All generated Python code must comply with the project's ruff configuration (`py
 - **Migrations excluded**: Ruff rules do not apply to migration files — avoid modifying generated migration code to satisfy linting.
 - **Verification**: After generating or modifying Python code, mentally verify it would pass `ruff check` and `ruff format --check` with the project settings.
 
+## Linting Templates (djLint)
+All generated Django HTML templates must comply with the project's djLint configuration (`pyproject.toml`, `[tool.djlint]`, `profile = "django"`, `max_line_length = 120`, `max_attribute_length = 20`; `map-view` is excluded):
+- **Required checks**: Templates must pass both `djlint .` (lint) and `djlint --check .` (formatting); CI runs them.
+- **Formatting**: Follow djLint's formatting, e.g. split long attributes onto separate lines and omit the trailing semicolon in a `style` attribute. After generating or modifying a template, mentally verify it would pass both checks.
+
 ## Documentation
 - **Format**: Always use **Google-style** docstrings for all new functions, classes, and modules.
 - **Structure**:

@@ -48,6 +48,14 @@ export enum ClusterColor {
 
 type TurfPolygonFeature = TurfFeature<TurfPolygon | TurfMultiPolygon>;
 
+/**
+ * View fit options used when zooming to an inspected feature.
+ * Bottom padding leaves room for the FeatureInfo card, top padding for the inspect banner.
+ */
+const INSPECT_FIT_MAX_ZOOM = 10;
+const INSPECT_FIT_PADDING = [80, 80, 320, 80];
+const INSPECT_FIT_DURATION = 1000;
+
 type DeviceDistanceMap = {
   [id: string]: {
     id: string;
@@ -126,6 +134,16 @@ class Map {
   private highLightedFeatureLayer: VectorLayer<VectorSource>;
 
   /**
+   * A layer to draw the single feature shown in inspect mode (opened from a Django admin edit page)
+   */
+  private inspectedFeatureLayer: VectorLayer<VectorSource>;
+
+  /**
+   * Resolves the in-flight inspectFeature promise with null when inspect mode is exited before the feature has loaded
+   */
+  private cancelPendingInspect: (() => void) | null = null;
+
+  /**
    * A layer to draw selected address marker
    */
   private selectedAddressFeatureLayer: VectorLayer<VectorSource>;
@@ -195,6 +213,7 @@ class Map {
     const nonClusteredOverlayLayerGroup = this.createNonClusteredOverlayLayerGroup(mapConfig);
     this.planOfRealVectorLayer = Map.createPlanOfRealVectorLayer();
     this.highLightedFeatureLayer = Map.createHighLightLayer();
+    this.inspectedFeatureLayer = Map.createInspectedFeatureLayer();
     this.selectedAddressFeatureLayer = Map.createSelectedAddressLayer();
     const planRealDiffVectorLayerGroup = this.createPlanRealDiffVectorLayerGroup(mapConfig);
 
@@ -215,6 +234,8 @@ class Map {
         clusteredOverlayLayerGroup,
         nonClusteredOverlayLayerGroup,
         planRealDiffVectorLayerGroup,
+        // Above all overlays but below the highlight, so the highlight stays visible on the inspected feature
+        this.inspectedFeatureLayer,
         this.highLightedFeatureLayer,
         this.planOfRealVectorLayer,
         this.selectedAddressFeatureLayer,
@@ -281,20 +302,32 @@ class Map {
       });
     }
 
-    const getFeaturesFromLayer = async (layer: VectorLayer<VectorSource>, event: MapBrowserEvent) => {
+    /**
+     * Whether a feature of an overlay layer is shown, i.e. not hidden by the plan/real distance threshold
+     */
+    const isFeatureShownOnLayer = (layer: VectorLayer<VectorSource>, feature: FeatureLike): boolean => {
+      if (layer.getSource() instanceof Cluster) {
+        return feature.get("features")?.some((f: FeatureLike) => this.isFeatureVisible(f)) ?? false;
+      }
+      return this.isFeatureVisible(feature);
+    };
+
+    const getFeaturesFromLayer = async (
+      layer: VectorLayer<VectorSource>,
+      event: MapBrowserEvent,
+      checkVisibility: boolean = true,
+    ) => {
       /**
        * Getting features by pixel returns just the topmost one from a single layer, so coordinate check needs to be done
        * separately.
        * Return features from event coordinate and pixel.
        * Filter out duplicate feature, as in some cases same feature is found from both.
+       * `checkVisibility` false skips the plan/real distance filter (the inspected feature is always drawn).
        */
       // Get features from clicked coordinate
       const at_coordinate = getUnderlyingLayerFeatures(layer).filter((feature) => {
         // Don't allow selecting hidden features
-        if (layer.getSource() instanceof Cluster) {
-          const visible = feature.get("features")?.some((f: FeatureLike) => this.isFeatureVisible(f));
-          if (!visible) return false;
-        } else if (!this.isFeatureVisible(feature)) return false;
+        if (checkVisibility && !isFeatureShownOnLayer(layer, feature)) return false;
 
         const geometry = feature.getGeometry();
         return isCoordinateInsideFeature(event.coordinate, geometry);
@@ -313,22 +346,29 @@ class Map {
         ...this.nonClusteredOverlayLayers,
       };
       const visibleLayers = Object.values(layers).filter((layer) => layer.getVisible());
+      const layerFeatures = visibleLayers.map((layer) => getFeaturesFromLayer(layer, event));
+      // The inspected feature is on its own layer, outside the overlays
+      if (getUnderlyingLayerFeatures(this.inspectedFeatureLayer).length > 0) {
+        layerFeatures.push(getFeaturesFromLayer(this.inspectedFeatureLayer, event, false));
+      }
 
-      if (visibleLayers.length > 0) {
-        Promise.all(visibleLayers.map((layer) => getFeaturesFromLayer(layer, event))).then((features) => {
-          const transformedFeatures = features
-            .filter((f) => f.length > 0)
-            .map((feature) => {
-              if (feature.length && feature[0].get("features")) {
-                return feature[0].get("features");
-              } else {
-                return feature;
-              }
-            });
-          if (transformedFeatures.length > 0) {
-            this.featureInfoCallback(transformedFeatures.flat());
-          }
-        });
+      if (layerFeatures.length > 0) {
+        Promise.all(layerFeatures)
+          .then((features) => {
+            const transformedFeatures = features
+              .filter((f) => f.length > 0)
+              .map((feature) => {
+                if (feature.length && feature[0].get("features")) {
+                  return feature[0].get("features");
+                } else {
+                  return feature;
+                }
+              });
+            if (transformedFeatures.length > 0) {
+              this.featureInfoCallback(transformedFeatures.flat());
+            }
+          })
+          .catch((error) => console.error("Failed to get features at the clicked location", error));
       }
     });
   }
@@ -496,6 +536,95 @@ class Map {
   }
 
   /**
+   * Load a single feature from WFS and show it alone on the map ("inspect mode").
+   * The feature is styled like its overlay layer, highlighted and the view is fitted to it.
+   *
+   * @param identifier Overlay layer identifier (WFS TYPENAME) of the feature
+   * @param id Primary key of the feature
+   * @returns The loaded feature, or null if the layer is unknown, the feature was not found or loading failed
+   */
+  inspectFeature(identifier: string, id: string): Promise<Feature | null> {
+    const layerConfig = this.mapConfig.overlayConfig.layers.find((l) => l.identifier === identifier);
+    const url = layerConfig ? this.getWfsUrl(identifier, "id", id, true) : undefined;
+    if (!layerConfig || !url) {
+      return Promise.resolve(null);
+    }
+
+    const vectorSource = new VectorSource({ format: this.geojsonFormat, url });
+    this.inspectedFeatureLayer.setSource(vectorSource);
+
+    return new Promise((resolve) => {
+      // The source may never load if it is replaced before the layer renders, so exiting resolves the promise
+      this.cancelPendingInspect = () => resolve(null);
+
+      vectorSource.once("featuresloadend", (featureEvent: VectorSourceEvent) => {
+        const olFeature = featureEvent.features?.[0];
+        // Inspect mode may have been exited (source replaced) while the request was in flight
+        if (!olFeature || this.inspectedFeatureLayer.getSource() !== vectorSource) {
+          resolve(null);
+          return;
+        }
+        resolve(this.showInspectedFeature(olFeature, layerConfig));
+      });
+
+      vectorSource.once("featuresloaderror", () => {
+        resolve(null);
+      });
+    });
+  }
+
+  /**
+   * Leave inspect mode by removing the inspected feature from the map. Highlight is kept.
+   * A feature still loading is discarded and its inspectFeature promise resolves with null.
+   */
+  exitInspectMode() {
+    this.cancelPendingInspect?.();
+    this.cancelPendingInspect = null;
+    // Replace the source instead of clearing it: clearing a URL source would make it load the feature again
+    this.inspectedFeatureLayer.setSource(new VectorSource());
+  }
+
+  /**
+   * Show a loaded feature on the inspect layer, highlight it and fit the view to it.
+   *
+   * @param olFeature Feature to show
+   * @param layerConfig Config of the overlay layer the feature belongs to
+   * @returns The feature with `app_name` set, for FeatureInfo
+   */
+  private showInspectedFeature(olFeature: OlFeature<Geometry>, layerConfig: Layer): Feature {
+    const source = this.inspectedFeatureLayer.getSource();
+    if (source && !source.hasFeature(olFeature)) {
+      source.addFeature(olFeature);
+    }
+    this.inspectedFeatureLayer.setStyle((feature: FeatureLike) =>
+      this.getOverlayFeatureStyle(feature, layerConfig.use_traffic_sign_icons),
+    );
+
+    // Same app_name handling as in the map click handler, needed for the admin edit link in FeatureInfo
+    const feature = olFeature as unknown as Feature;
+    feature.app_name = layerConfig.app_name ?? "traffic_control";
+
+    this.highlightFeature(feature);
+    this.fitViewToFeature(olFeature);
+    return feature;
+  }
+
+  /**
+   * Fit the view to the extent of a feature's geometry (works for points, lines and polygons)
+   */
+  private fitViewToFeature(feature: OlFeature<Geometry>) {
+    const geometry = feature.getGeometry();
+    if (!geometry) {
+      return;
+    }
+    this.map.getView().fit(geometry.getExtent(), {
+      maxZoom: INSPECT_FIT_MAX_ZOOM,
+      padding: INSPECT_FIT_PADDING,
+      duration: INSPECT_FIT_DURATION,
+    });
+  }
+
+  /**
    *
    */
   getHighlightFeatureType() {
@@ -579,6 +708,12 @@ class Map {
     const highLightLayerSource = new VectorSource({});
     return new VectorLayer({
       source: highLightLayerSource,
+    });
+  }
+
+  private static createInspectedFeatureLayer() {
+    return new VectorLayer({
+      source: new VectorSource({}),
     });
   }
 
@@ -1009,6 +1144,19 @@ class Map {
     if (getUnderlyingLayerFeatures(this.highLightedFeatureLayer).length) {
       this.highLightedFeatureLayer.changed();
     }
+    if (getUnderlyingLayerFeatures(this.inspectedFeatureLayer).length) {
+      this.inspectedFeatureLayer.changed();
+    }
+  }
+
+  /**
+   * Style of a single (non-clustered) overlay feature with the current icon settings
+   */
+  private getOverlayFeatureStyle(feature: FeatureLike, useTrafficSignIcons: boolean) {
+    const iconUrl = this.getCurrentIconUrl();
+    const iconScale = this.getCurrentIconScale();
+    const iconType = this.getCurrentIconType();
+    return getSinglePointStyle(feature, useTrafficSignIcons, iconUrl, iconScale, iconType);
   }
 
   private async createBasemapLayerGroup(basemapConfig: LayerConfig) {
@@ -1161,11 +1309,7 @@ class Map {
         const vectorLayer = new VectorLayer({
           style: (feature: FeatureLike) => {
             if (!this.isFeatureVisible(feature)) return undefined;
-
-            const iconUrl = this.getCurrentIconUrl();
-            const iconScale = this.getCurrentIconScale();
-            const iconType = this.getCurrentIconType();
-            return getSinglePointStyle(feature, use_traffic_sign_icons, iconUrl, iconScale, iconType);
+            return this.getOverlayFeatureStyle(feature, use_traffic_sign_icons);
           },
           visible: false,
           opacity: identifier.includes("plan") ? 0.5 : 1,

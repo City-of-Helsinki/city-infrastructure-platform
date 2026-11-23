@@ -1,0 +1,17 @@
+/* "Inspect feature in map view" link next to or below the admin map widget.
+   The gap is set on the map wrapper (floated left by gis/css/ol3.css) instead of the link: the link sits beside the
+   map on wide screens and wraps below it on narrow ones, and a margin on the link would only fit one of those. */
+.dj_map_wrapper:has(~ .map-view-inspect-link) {
+    margin-right: 16px;
+    margin-bottom: 8px;
+}
+
+.map-view-inspect-link .button {
+    display: inline-block;
+}
+
+/* Align the field's help text (e.g. the plan value of a real device) with the link instead of Django's 160px indent */
+form .aligned .map-view-inspect-link ~ div.help {
+    margin-left: 0;
+    padding-left: 0;
+}

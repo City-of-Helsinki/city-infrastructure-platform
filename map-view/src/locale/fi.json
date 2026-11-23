@@ -29,6 +29,9 @@
     "Cancel": "Peruuta",
     "Reset": "Palauta",
     "Real-plan distance display threshold (in meters)": "",
-    "Distances below threshold will not be displayed": ""
+    "Distances below threshold will not be displayed": "",
+    "Inspecting a single feature": "Tarkastellaan yksittäistä kohdetta",
+    "Show all features in this layer": "Näytä tason kaikki kohteet",
+    "Inspected feature not found": "Kohdetta ei löytynyt. Se on voitu poistaa, tai se ei ole suunnitelman nykyinen versio."
   }
 }

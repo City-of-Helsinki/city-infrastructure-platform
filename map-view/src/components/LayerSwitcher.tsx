@@ -25,9 +25,8 @@ import { styled } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 import Map from "../common/Map";
-import { IconSize, MapConfig } from "../models";
+import { IconSize, MapConfig, OverlayVisibility } from "../models";
 import { useTranslation } from "react-i18next";
-import { getDiffLayerIdentifierFromLayerIdentifier } from "../common/MapUtils";
 
 const MINIMUM_REAL_PLAN_DISTANCE_THRESHOLD = 0;
 
@@ -51,7 +50,10 @@ const StyledLayersDiv = styled("div")({
 interface LayerSwitcherProps {
   mapConfig: MapConfig;
   onClose: () => void;
-  onOverlayToggle: (checked: boolean, diffLayerIdentifier: string, layerIdentifier: string) => void;
+  /** Overlay visibility, owned by the parent so it can also change overlays (e.g. when leaving inspect mode) */
+  visibleOverlays: OverlayVisibility;
+  /** Called when the user toggles an overlay. The parent updates the map and `visibleOverlays`. */
+  onOverlayVisibilityChange: (layerIdentifier: string, visible: boolean) => void;
   realPlanDistanceThreshold: number;
   iconScale: number;
   iconType: string;
@@ -66,7 +68,8 @@ interface LayerSwitcherProps {
 const LayerSwitcher = ({
   mapConfig,
   onClose,
-  onOverlayToggle,
+  visibleOverlays,
+  onOverlayVisibilityChange,
   realPlanDistanceThreshold,
   iconScale,
   iconType,
@@ -83,13 +86,6 @@ const LayerSwitcher = ({
   const [visibleBasemap, setVisibleBasemap] = useState<string>(
     basemapConfig.layers.length > 0 ? basemapConfig.layers[0].identifier : "",
   );
-  const [visibleOverlays, setVisibleOverlays] = useState<{ [identifier: string]: boolean }>(() => {
-    const overlays: { [identifier: string]: boolean } = {};
-    overlayConfig.layers.forEach(({ identifier }) => {
-      overlays[identifier] = false;
-    });
-    return overlays;
-  });
   const [displayRealPlanDifference, setDisplayRealPlanDifference] = useState<boolean>(true);
   const [resetDialogOpen, setResetDialogOpen] = useState<boolean>(false);
   const [iconScaleInput, setIconScaleInput] = useState<string>(iconScale.toString());
@@ -133,14 +129,7 @@ const LayerSwitcher = ({
     const { name, layers } = overlayConfig;
 
     const changeOverlayVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const identifier = event.target.name;
-      const checked = event.target.checked;
-      setVisibleOverlays((prev) => ({
-        ...prev,
-        [identifier]: checked,
-      }));
-      Map.setOverlayVisible(identifier, checked);
-      onOverlayToggle(checked, getDiffLayerIdentifierFromLayerIdentifier(identifier), identifier);
+      onOverlayVisibilityChange(event.target.name, event.target.checked);
     };
 
     return (
@@ -152,7 +141,7 @@ const LayerSwitcher = ({
               key={layer.identifier}
               control={
                 <Checkbox
-                  checked={visibleOverlays[layer.identifier]}
+                  checked={visibleOverlays[layer.identifier] ?? false}
                   onChange={changeOverlayVisibility}
                   name={layer.identifier}
                 />

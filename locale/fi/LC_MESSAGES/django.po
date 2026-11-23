@@ -1479,6 +1479,10 @@ msgstr "Opastusmerkki"
 msgid "Infrared sensor"
 msgstr "Infrapunailmaisin"
 
+# AI translation - needs human review
+msgid "Inspect feature in map view"
+msgstr "Tarkastele kohdetta karttanäkymässä"
+
 msgid "Inspected at"
 msgstr "Tarkastettu-aikaleima"
 
@@ -2238,6 +2242,10 @@ msgstr "Viikon varoitussähköposti lähetetty"
 
 msgid "Open out"
 msgstr "Avattava yhteys"
+
+# AI translation - needs human review
+msgid "Opens the saved location in a new tab. Unsaved changes are not shown."
+msgstr "Avaa tallennetun sijainnin uudessa välilehdessä. Tallentamattomia muutoksia ei näytetä."
 
 msgid "Operation"
 msgstr "Toimenpide"

@@ -29,6 +29,9 @@
     "Cancel": "Avbryt",
     "Reset": "Återställ",
     "Real-plan distance display threshold (in meters)": "",
-    "Distances below threshold will not be displayed": ""
+    "Distances below threshold will not be displayed": "",
+    "Inspecting a single feature": "Granskar ett enskilt objekt",
+    "Show all features in this layer": "Visa alla objekt i skiktet",
+    "Inspected feature not found": "Objektet kunde inte hittas. Det kan ha tagits bort, eller så är det inte den aktuella planversionen."
   }
 }
