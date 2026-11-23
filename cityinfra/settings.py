@@ -111,6 +111,7 @@ env = environ.Env(
     # --- External APIs & App Settings ---
     ADDRESS_SEARCH_BASE_URL=(str, "https://api.hel.fi/servicemap/v2/search"),
     BASEMAP_SOURCE_URL=(str, "https://kartta.hel.fi/ws/geoserver/avoindata/gwc/service/wmts"),
+    MAP_VIEW_URL=(str, ""),
     CITYINFRA_MAXIMUM_RESULTS_PER_PAGE=(int, 10000),
     # --- Maintenance Mode ---
     # https://github.com/City-of-Helsinki/city-infrastructure-platform/tree/master/maintenance_mode
@@ -628,6 +629,10 @@ SRID_BOUNDARIES = {3879: (25487917.144, 6645439.071, 25514074.175, 6687278.623)}
 
 BASEMAP_SOURCE_URL = env.str("BASEMAP_SOURCE_URL")
 ADDRESS_SEARCH_BASE_URL = env.str("ADDRESS_SEARCH_BASE_URL")
+# Base URL of the map-view used by the admin "Inspect feature in map view" link.
+# Empty means the map-view served by this Django instance (/map/). For local frontend
+# development point it to the Vite dev server, e.g. http://localhost:5173/
+MAP_VIEW_URL = env.str("MAP_VIEW_URL")
 
 # Import / Export
 IMPORT_EXPORT_USE_TRANSACTIONS = True
