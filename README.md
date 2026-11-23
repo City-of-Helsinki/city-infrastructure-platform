@@ -81,7 +81,7 @@ Install [uv](https://docs.astral.sh/uv/#installation) for managing python depend
 pipx install uv
 
 # Or anchor installation to specific version
-pipx install "uv==0.12.1"
+pipx install "uv==0.13.9"
 ```
 
 #### Common dependencies - python environment
