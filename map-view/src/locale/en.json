@@ -29,6 +29,9 @@
     "Cancel": "Cancel",
     "Reset": "Reset",
     "Real-plan distance display threshold (in meters)": "Real-plan distance display threshold (in meters)",
-    "Distances below threshold will not be displayed": "Distances below threshold will not be displayed"
+    "Distances below threshold will not be displayed": "Distances below threshold will not be displayed",
+    "Inspecting a single feature": "Inspecting a single feature",
+    "Show all features in this layer": "Show all features in this layer",
+    "Inspected feature not found": "The feature could not be found. It may have been deleted, or it is not the current plan version."
   }
 }

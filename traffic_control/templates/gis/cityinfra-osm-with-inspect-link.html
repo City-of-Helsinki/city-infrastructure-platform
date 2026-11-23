@@ -1,0 +1,18 @@
+{% load i18n %}
+{% include "gis/cityinfra-osm.html" %}
+{% if disabled %}
+    <script>
+        {# Read-only map: the geometry can be viewed but not drawn, moved or deleted #}
+        {{ module }}.interactions.modify.setActive(false);
+        {{ module }}.disableDrawing();
+    </script>
+{% endif %}
+{% if map_view_inspect_url %}
+    <div class="map-view-inspect-link">
+        <a class="button"
+           href="{{ map_view_inspect_url }}"
+           target="_blank"
+           rel="noopener"
+           title="{% trans "Opens the saved location in a new tab. Unsaved changes are not shown." %}">{% trans "Inspect feature in map view" %}</a>
+    </div>
+{% endif %}

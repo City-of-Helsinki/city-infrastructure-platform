@@ -1,0 +1,11 @@
+.inspectBannerContainer {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    /* Leave room for the search and layer buttons on both sides */
+    max-width: calc(100% - 240px);
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}

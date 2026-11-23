@@ -3,17 +3,23 @@ import { styled } from "@mui/material/styles";
 import LayersIcon from "@mui/icons-material/Layers";
 import SearchIcon from "@mui/icons-material/Search";
 import "ol/ol.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MapConfigAPI from "./api/MapConfigAPI";
 import "./App.css";
 import LayerSwitcher from "./components/LayerSwitcher";
 import FeatureInfo from "./components/FeatureInfo";
 import Map from "./common/Map";
-import { Feature, IconSize, MapConfig } from "./models";
+import { Feature, IconSize, MapConfig, OverlayVisibility } from "./models";
 import OngoingFetchInfo from "./components/OngoingFetchInfo";
 import AddressInput from "./components/AddressInput";
+import InspectBanner, { InspectStatus } from "./components/InspectBanner";
 import { Address, convertToEPSG3879OL, getAddressSearchResults, getNameFromAddress } from "./common/AddressSearchUtils";
-import { getFeatureType } from "./common/MapUtils";
+import {
+  getDiffLayerIdentifierFromLayerIdentifier,
+  getFeatureType,
+  getInitialOverlayVisibility,
+} from "./common/MapUtils";
+import { clearInspectParams, getInspectParams, InspectParams, isValidInspectId } from "./common/inspectParams";
 
 const drawerWidth = "400px";
 
@@ -21,6 +27,59 @@ const ICON_SCALE_STORAGE_KEY = "mapview_icon_scale";
 const ICON_TYPE_STORAGE_KEY = "mapview_icon_type";
 const ICON_SIZE_STORAGE_KEY = "mapview_icon_size";
 const REAL_PLAN_DISTANCE_THRESHOLD_STORAGE_KEY = "real_plan_distance_threshold";
+
+interface InspectState {
+  /** Overlay layer identifier from the URL */
+  layer: string;
+  status: InspectStatus;
+}
+
+interface DisplaySettings {
+  iconScale: number;
+  iconType: string;
+  iconSize: IconSize;
+  realPlanDistanceThreshold: number;
+}
+
+/**
+ * Read icon and plan/real distance threshold settings saved in localStorage.
+ * Missing or invalid values fall back to the map config defaults (threshold falls back to 0).
+ *
+ * @returns Validated settings
+ */
+function loadSavedSettings(config: MapConfig): DisplaySettings {
+  const savedScale = localStorage.getItem(ICON_SCALE_STORAGE_KEY);
+  const savedType = localStorage.getItem(ICON_TYPE_STORAGE_KEY);
+  const savedSize = localStorage.getItem(ICON_SIZE_STORAGE_KEY);
+  const savedThreshold = localStorage.getItem(REAL_PLAN_DISTANCE_THRESHOLD_STORAGE_KEY);
+
+  // Parse saved values
+  const scale = savedScale ? Number.parseFloat(savedScale) : config.icon_scale;
+  const type = savedType || config.icon_type;
+  const size = savedSize ? Number.parseInt(savedSize, 10) : config.icon_size;
+  const threshold = savedThreshold ? Number.parseFloat(savedThreshold) : 0;
+
+  // Validate ranges and allowed values
+  return {
+    iconScale: !Number.isNaN(scale) && scale >= 0.01 && scale <= 2 ? scale : config.icon_scale,
+    iconType: type === "svg" || type === "png" ? type : config.icon_type,
+    iconSize: [32, 64, 128, 256].includes(size) ? (size as IconSize) : (config.icon_size as IconSize),
+    realPlanDistanceThreshold: !Number.isNaN(threshold) && threshold >= 0 ? threshold : 0,
+  };
+}
+
+/**
+ * Load and show the feature requested by the inspect URL parameters
+ *
+ * @returns The inspected feature, or null if the layer is unknown, the id is invalid or the feature was not found
+ */
+async function loadInspectedFeature(config: MapConfig, { layer, id }: InspectParams): Promise<Feature | null> {
+  const layerExists = config.overlayConfig.layers.some(({ identifier }) => identifier === layer);
+  if (!layerExists || !isValidInspectId(id)) {
+    return null;
+  }
+  return Map.inspectFeature(layer, id);
+}
 
 const StyledSearchFab = styled(Fab)(() => ({
   position: "absolute",
@@ -56,44 +115,48 @@ const App = () => {
   const [iconType, setIconType] = useState<string>("svg");
   const [iconSize, setIconSize] = useState<IconSize>(128);
   const [realPlanDistanceThreshold, setRealPlanDistanceThreshold] = useState<number>(0);
+  const [visibleOverlays, setVisibleOverlays] = useState<OverlayVisibility>({});
+  const [inspect, setInspect] = useState<InspectState | null>(null);
+  // True while the inspected feature is loading; cleared if the user leaves inspect mode before it has loaded
+  const inspectLoadingRef = useRef<boolean>(false);
 
   useEffect(() => {
     const mapId = "map";
     MapConfigAPI.getMapConfig().then(async (config: MapConfig) => {
       setMapConfig(config);
+      setVisibleOverlays(getInitialOverlayVisibility(config.overlayConfig));
 
-      // Try to load icon / threshold settings from localStorage
-      const savedScale = localStorage.getItem(ICON_SCALE_STORAGE_KEY);
-      const savedType = localStorage.getItem(ICON_TYPE_STORAGE_KEY);
-      const savedSize = localStorage.getItem(ICON_SIZE_STORAGE_KEY);
-      const savedThreshold = localStorage.getItem(REAL_PLAN_DISTANCE_THRESHOLD_STORAGE_KEY);
-
-      // Parse and validate saved values
-      const scale = savedScale ? Number.parseFloat(savedScale) : config.icon_scale;
-      const type = savedType || config.icon_type;
-      const size = savedSize ? Number.parseInt(savedSize, 10) : config.icon_size;
-      const threshold = savedThreshold ? Number.parseFloat(savedThreshold) : 0;
-
-      // Validate ranges and allowed values
-      const validScale = !Number.isNaN(scale) && scale >= 0.01 && scale <= 2 ? scale : config.icon_scale;
-      const validType = type === "svg" || type === "png" ? type : config.icon_type;
-      const validSize = [32, 64, 128, 256].includes(size) ? (size as IconSize) : (config.icon_size as IconSize);
-      const validThreshold = !Number.isNaN(threshold) && threshold >= 0 ? threshold : 0;
-
-      setIconScale(validScale);
-      setIconType(validType);
-      setIconSize(validSize);
-      setRealPlanDistanceThreshold(validThreshold);
+      const settings = loadSavedSettings(config);
+      setIconScale(settings.iconScale);
+      setIconType(settings.iconType);
+      setIconSize(settings.iconSize);
+      setRealPlanDistanceThreshold(settings.realPlanDistanceThreshold);
 
       await Map.initialize(mapId, config);
 
       // Apply loaded settings to map after initialization
-      Map.updateIconSettings(validScale, validType, validSize);
-      Map.setRealPlanDistanceThreshold(validThreshold);
+      Map.updateIconSettings(settings.iconScale, settings.iconType, settings.iconSize);
+      Map.setRealPlanDistanceThreshold(settings.realPlanDistanceThreshold);
       Map.registerFeatureInfoCallback((newFeatures: Feature[]) => setFeatures(newFeatures));
       Map.registerOngoingFeatureFetchesCallback((fetches: Set<string>) => {
         setOngoingFeatureFetches(new Set(fetches));
       });
+
+      const inspectParams = getInspectParams(window.location.search);
+      if (inspectParams) {
+        inspectLoadingRef.current = true;
+        const inspectedFeature = await loadInspectedFeature(config, inspectParams);
+        if (!inspectLoadingRef.current) {
+          // The user changed layers while the feature was loading
+          return;
+        }
+        inspectLoadingRef.current = false;
+        if (inspectedFeature) {
+          // Opens FeatureInfo for the inspected feature
+          setFeatures([inspectedFeature]);
+        }
+        setInspect({ layer: inspectParams.layer, status: inspectedFeature ? "found" : "notFound" });
+      }
     });
   }, []);
 
@@ -119,12 +182,48 @@ const App = () => {
   };
 
   const removeFeatures = (removeLayerIdentifier: string) => {
-    if (features.length === 0) {
-      // Do nothing as there is nothing to remove
-      return;
-    }
-    setFeatures(features.filter((feature) => getFeatureType(feature) !== removeLayerIdentifier));
+    setFeatures((prev) =>
+      // Keep the same array when there is nothing to remove
+      prev.length === 0 ? prev : prev.filter((feature) => getFeatureType(feature) !== removeLayerIdentifier),
+    );
   };
+
+  const setOverlayVisibility = (layerIdentifier: string, visible: boolean) => {
+    setVisibleOverlays((prev) => ({ ...prev, [layerIdentifier]: visible }));
+    Map.setOverlayVisible(layerIdentifier, visible);
+    if (!visible) {
+      removeFeatures(layerIdentifier);
+      Map.clearPlanRealDiffVectorLayer(getDiffLayerIdentifierFromLayerIdentifier(layerIdentifier));
+      if (Object.keys(Map.getVisibleLayers()).length === 0 || Map.getHighlightFeatureType() === layerIdentifier) {
+        Map.clearHighlightLayer();
+      }
+    }
+  };
+
+  const exitInspectMode = () => {
+    inspectLoadingRef.current = false;
+    Map.exitInspectMode();
+    clearInspectParams();
+    setInspect(null);
+  };
+
+  const handleOverlayVisibilityChange = (layerIdentifier: string, visible: boolean) => {
+    // Any layer change by the user means they are back to normal use
+    if (inspect || inspectLoadingRef.current) {
+      exitInspectMode();
+    }
+    setOverlayVisibility(layerIdentifier, visible);
+  };
+
+  const handleInspectShowLayer = () => {
+    if (!inspect) return;
+    exitInspectMode();
+    // View, highlight and FeatureInfo are kept; the inspected feature's own layer is turned on in its place
+    setOverlayVisibility(inspect.layer, true);
+  };
+
+  const getInspectedLayerName = (layerIdentifier: string) =>
+    mapConfig?.overlayConfig.layers.find(({ identifier }) => identifier === layerIdentifier)?.name ?? layerIdentifier;
 
   const handleIconScaleChange = (scale: number) => {
     setIconScale(scale);
@@ -168,6 +267,14 @@ const App = () => {
     <React.StrictMode>
       <div className="App">
         <div id="map" />
+        {inspect && (
+          <InspectBanner
+            status={inspect.status}
+            layerName={getInspectedLayerName(inspect.layer)}
+            onShowLayer={handleInspectShowLayer}
+            onClose={exitInspectMode}
+          />
+        )}
         {features.length > 0 && mapConfig && (
           <FeatureInfo
             features={features}
@@ -214,18 +321,8 @@ const App = () => {
             <LayerSwitcher
               mapConfig={mapConfig}
               onClose={() => setOpen(false)}
-              onOverlayToggle={(checked: boolean, diffLayerIdentifier: string, layerIdentifier: string) => {
-                if (!checked) {
-                  removeFeatures(layerIdentifier);
-                  Map.clearPlanRealDiffVectorLayer(diffLayerIdentifier);
-                  if (
-                    Object.keys(Map.getVisibleLayers()).length === 0 ||
-                    Map.getHighlightFeatureType() === layerIdentifier
-                  ) {
-                    Map.clearHighlightLayer();
-                  }
-                }
-              }}
+              visibleOverlays={visibleOverlays}
+              onOverlayVisibilityChange={handleOverlayVisibilityChange}
               iconScale={iconScale}
               iconType={iconType}
               iconSize={iconSize}

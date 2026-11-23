@@ -17,6 +17,11 @@ export interface Layer {
   extra_feature_info: Record<string, ExtraFeatureInfo>;
 }
 
+/**
+ * Visibility of each overlay layer, keyed by layer identifier
+ */
+export type OverlayVisibility = Record<string, boolean>;
+
 export interface LayerConfig {
   name: string;
   layers: Layer[];

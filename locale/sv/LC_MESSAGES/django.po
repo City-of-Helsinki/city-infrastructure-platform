@@ -1504,6 +1504,10 @@ msgstr "Upplysningsskylt"
 msgid "Infrared sensor"
 msgstr "Infraröd detektor"
 
+# AI translation - needs human review
+msgid "Inspect feature in map view"
+msgstr "Granska objektet i kartvyn"
+
 msgid "Inspected at"
 msgstr "Inspekterades den"
 
@@ -2284,6 +2288,10 @@ msgstr "E-post med enveckasvarning skickad"
 
 msgid "Open out"
 msgstr "Öppnas utåt"
+
+# AI translation - needs human review
+msgid "Opens the saved location in a new tab. Unsaved changes are not shown."
+msgstr "Öppnar den sparade platsen i en ny flik. Osparade ändringar visas inte."
 
 msgid "Operation"
 msgstr "Åtgärd"
