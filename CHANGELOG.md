@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.52.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.51.0...city-infrastructure-platform-v1.52.0) (2026-11-26)
+
+
+### Features
+
+* Add "Inspect feature in map view" link to admin edit views ([6c5b666](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/6c5b666f67242e7676b0cdba382012752fe99a52))
+* Make optional string fields non-nullable ([f7df1c5](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/f7df1c54e3f6e36c02d5e08630e09336e2f48320))
+* Show and terminate active user sessions in admin ([359a8c2](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/359a8c2b7a6edafa0b1f02b5f7dba4d0e9d7cd51))
+
+
+### Bug Fixes
+
+* Cascade soft delete to additional signs from admin action ([6e1eeab](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/6e1eeab8b5868ec40c81373ed5a31ec70b7b0a0e))
+* Deactivated user successful AD login caused redirect to non existent page ([3546c2f](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/3546c2f64f0fa6ee6f74dae3e22db517c9379518))
+* Stop writing None to optional string fields ([03f5714](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/03f571424555e0f24a02d4328752f6129c023899))
+
+
+### Documentation
+
+* Regenerate OpenAPI schema for non-nullable string fields ([3524353](https://github.com/City-of-Helsinki/city-infrastructure-platform/commit/3524353a528b4116f151f77243c55408e4fe6eed))
+
 ## [1.51.0](https://github.com/City-of-Helsinki/city-infrastructure-platform/compare/city-infrastructure-platform-v1.50.0...city-infrastructure-platform-v1.51.0) (2026-11-16)
 
 
